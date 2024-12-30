@@ -234,7 +234,7 @@ const PDFLavori = () => {
           <label className='labelForm'>Ultimo giorno</label>
           <input className='inputFormModifica' type='date' name='ultimoGiorno' />
           <span className='spanErrore'></span>
-
+          {/* bottoni */}
           <button className='buttonForm' onClick={(e) => ottieniLavoriPDF(e)}>Ottieni file PDF</button>
           <button className='buttonForm' onClick={(e) => ottieniLavoriExcel(e)}>Ottieni file Excel</button>
         </form>
