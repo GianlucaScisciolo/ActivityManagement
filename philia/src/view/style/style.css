@@ -1,0 +1,369 @@
+* {
+  font-size: 25px;
+}
+
+body {
+  background-image: url('../img/immagine_sfondo1.jpg');
+  /* background-image: url('../img/immagine_sfondo2.png');  */
+  background-repeat: no-repeat;
+  background-size: 100%; /* Dimensione dello sfondo ridotta */
+  background-attachment: fixed; /* Sfondo fissato in posizione */
+  background-position: center; /* Centra lo sfondo */
+  height: 2000px;
+ } 
+
+/* Aggiungi un po' di altezza al contenuto della pagina per poter scrollare */
+
+
+
+/**************************************** Stile dei Form ****************************************/
+
+.containerForm, .containerTitle, .containerButtons {
+  /* border: 5px solid #000000; */
+  display: grid;
+  padding-top: 2%;
+  margin-top: 2%;
+  border-radius: 100px;
+  margin-left: 35%;
+  margin-right: 35%;
+  /* width: 40%; Larghezza del contenitore */
+  /* min-width: 300px; Larghezza minima per evitare che sia troppo stretto */
+}
+
+.titoloForm {
+  all: unset;
+  text-align: center;
+  /* margin-left: 15%; */
+  /* margin-right: 15%; */
+  margin-bottom: 5%;
+  /* border: 5px solid #000000; */
+  border-radius: 40px;
+  /* background-color: #000000; */
+  color: #FFFFFF;
+  background-color: #000000;
+  border: 5px solid #000000;
+  font-size: 35px;
+}
+
+.labelForm {
+  all: unset;
+  text-align: center;
+  margin-bottom: 1%;
+  /* border: 5px solid #000000; */
+  border-radius: 40px;
+  /* background-color: #000000; */
+  color: #FFFFFF;
+  /* font-size: 25px; */
+  background-color: #000000;
+  border: 5px solid #000000;
+}
+
+.inputFormModifica {
+  all: unset;
+  text-align: center;
+  border: 5px solid #000000;
+  margin-bottom: 1%;
+  background-color: #0050EF;
+  color: #FFFFFF;
+  border-radius: 40px;
+  /* font-size: 25px; */
+} 
+
+.textAreaFormModifica {
+  text-align: center;
+  border: 5px solid #000000;
+  margin-bottom: 1%;
+  background-color: #0050EF;
+  color: #FFFFFF;
+  border-radius: 40px;
+  /* font-size: 25px; */
+  resize: vertical;
+}
+
+.spanErrore {
+  color: #FF0000;
+  text-align: center;
+  margin-bottom: 5%;
+  /* font-size: 25px; */
+}
+
+.buttonForm {
+  border-radius: 40px;
+  border: 5px solid #000000;
+  background-color: #000000;
+  color: #FFFFFF;
+  margin-left: 30%;
+  margin-right: 30%;
+  margin-bottom: 5%;
+  text-align: center;
+  cursor: pointer;  
+  /* font-size: 25px; */
+  transition: 0.5s all ease-out;
+    &:hover {
+    background-color: #0050EF;
+    color: #FFFFFF;
+  }
+}
+
+/**************************************** Stile degli items ****************************************/
+
+.containerItems {
+  display: grid;
+  padding-top: 2%;
+  padding-left: 2%;
+  padding-right: 2%;
+  margin-top: 15%;
+}
+
+.titoloItems {
+  all: unset;
+  text-align: center;
+  margin-left: 15%;
+  margin-right: 15%;
+  margin-bottom: 5%;
+  /* border: 5px solid #000000; */
+  border-radius: 40px;
+  /* background-color: #000000; */
+  color: #FFFFFF;
+  /* font-size: 30px; */
+}
+
+.iconButtonItem {
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;  /* Modifica la dimensione come necessario */
+  height: 24px; /* Modifica la dimensione come necessario */
+  margin: auto;
+  margin-bottom: 5%;
+  background-color: #000000;
+  color:#FFFFFF
+  
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;  /* Questo permette agli elementi di andare su una nuova riga se necessario */
+  gap: 16px;  /* Spazio tra gli elementi */
+  justify-content: space-between;  /* Spazio tra gli elementi */
+  margin-bottom: 2%;
+}
+
+.cell {
+  flex: 1 1 200px;  /* Gli elementi si espanderanno e contrarranno ma non saranno più piccoli di 200px */
+  box-sizing: border-box;  /* Assicura che padding e border siano inclusi nella larghezza e altezza totali */
+  border: 1px solid #000000;  /* Aggiungi un bordo per visualizzare meglio gli elementi */
+  padding: 16px;  /* Aggiungi padding */
+  background-color: #000000;
+  color:#FFFFFF;
+  text-align: center;
+}
+
+.cellOperations {
+  flex: 1 1 200px;  /* Gli elementi si espanderanno e contrarranno ma non saranno più piccoli di 200px */
+  box-sizing: border-box;  /* Assicura che padding e border siano inclusi nella larghezza e altezza totali */
+  padding: 16px;  /* Aggiungi padding */
+  color:#FFFFFF;
+  text-align: center;
+}
+
+/**************************************** Stile del bootstrap ****************************************/
+
+.custom-row {
+  display: flex;
+  justify-content: center; /* Centra i Col */
+  flex-wrap: wrap;
+}
+
+.custom-col, .custom-col-black, .custom-col-blue, .custom-col-red {
+  position: relative; 
+  color: #FFFFFF;
+  border-radius: 40px;
+  padding: 0;
+  /* border: 5px solid #000000; */
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  height: auto;
+  min-height: 60px;
+}
+
+.custom-col-black, .custom-col-blue, .custom-col-red {
+  border: 5px solid #000000;
+}
+
+.custom-textarea-block, .custom-textarea-modifica, .custom-textarea-elimina, 
+.custom-input-block,    .custom-input-modifica,    .custom-input-elimina, 
+.col-button-modifica, .col-button-elimina {
+  flex: 1;
+  display: flex;
+  align-items: center; /* Centro verticale */
+  justify-content: center; /* Centro orizzontale */
+  width: 100%;
+  height: 100%;
+  border: none;
+  outline: none;
+  background-color: transparent;
+  color: inherit;
+  padding: 0; /* Aggiungi un padding se necessario */
+  margin: 0;
+  text-align: center; /* Centro orizzontale del testo */
+  overflow: hidden; /* Nasconde l'overflow */
+  resize: vertical;
+  border-radius: 40px;
+  min-height: 60px;
+  border: 5px solid #000000; 
+}
+
+.custom-col-black, .custom-textarea-block, .custom-input-block { 
+  background-color: #000000;
+}
+
+.custom-col-blue, .custom-textarea-modifica, .custom-input-modifica  { 
+  background-color: #0050EF;
+}
+
+.custom-col-red, .custom-textarea-elimina, .custom-input-elimina { 
+  background-color: #500000;
+}
+
+.col-button-modifica, .col-button-elimina {
+  margin-left: 10%;
+  margin-right: 10%;
+  border: 5px solid #000000;
+  background-color: #000000;
+  cursor: pointer;  
+  transition: 0.5s all ease-out;
+}
+
+.col-button-modifica {
+  &:hover {
+    background-color: #0050EF;
+    color: #FFFFFF;
+  }
+}
+
+.col-button-elimina {
+  &:hover {
+    background-color: #500000;
+    color: #FFFFFF;
+  }
+}
+
+.icon-view-style, .pencil-style-not-selected, .trash-style-not-selected {
+  fill: none; /* nessun colore di riempimento nell'elemento di tipo svg  */
+  stroke: #FFFFFF; /* impostiamo il colore del contorno dell'elemento di tipo svg  */
+  cursor: pointer;
+  transition: 0.5s all ease-out;
+}
+
+.icon-view-style {
+  margin-left: auto; /* Spinge l'icona a destra */
+  &:hover {
+    stroke: #0050EF;
+  }
+}
+
+.pencil-style-not-selected {
+  margin-left: auto; /* Spinge l'icona a destra */
+  /* &:hover {
+    fill: #0050EF;
+    stroke: #0050EF;
+  } */
+}
+
+.trash-style-not-selected {
+  margin-right: auto; /* Spinge l'icona a sinistra */ 
+  /* &:hover {
+    fill: #500000;
+    stroke: #500000;
+  } */
+}
+
+.pencil-style-selected {
+  transition: 0.5s all ease-out;
+  cursor: pointer;
+  margin-left: auto;
+  fill: #0050EF;
+  stroke: #0050EF;
+  /* &:hover {
+    fill: none;
+    stroke: #FFFFFF;
+  } */
+}
+
+.trash-style-selected {
+  transition: 0.5s all ease-out;
+  cursor: pointer;
+  margin-right: auto;
+  fill: #500000;
+  stroke: #500000; 
+  /* &:hover {
+    fill: none;
+    stroke: #FFFFFF;
+  } */
+}
+
+/* setPencilStyle(isActive ? { fill: '#0050EF', stroke: '#0050EF' } : { fill: 'none', stroke: 'white' }); */
+
+/* .nav-logo {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+} */
+
+.navbar-class {
+  background-color: #000000;
+  color: #FFFFFF;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+.nav-left,
+.nav-right,
+.nav-center {
+  color: #FFFFFF;
+}
+
+.nav-left {
+  margin-right: auto;
+}
+
+.nav-right {
+  margin-left: auto;
+}
+
+.nav-link,
+.nav-dropdown .dropdown-toggle,
+.nav-dropdown .dropdown-item {
+  color: #FFFFFF !important; /* Ensure text color is white */
+}
+
+.nav-dropdown .dropdown-menu {
+  background-color: #000000; /* Background color of dropdown menu */
+}
+
+.nav-link:hover,
+.nav-dropdown .dropdown-item:hover {
+  color: #BBBBBB; /* Hover state color */
+}
+
+
+
+
+
+
+
+
+
+
+
+

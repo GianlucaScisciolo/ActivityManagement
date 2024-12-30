@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "flux": "^4.0.4"
+  }
+}
