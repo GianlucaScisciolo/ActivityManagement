@@ -2,6 +2,21 @@
   font-size: 25px;
 }
 
+.header-fixed {
+  background-color: #000000;
+  color: #FFFFFF;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+/* Assicurati di aggiungere un margine superiore sufficiente */
+.main-content {
+  margin-top: 200px; /* Regola l'altezza secondo l'altezza della tua navbar */
+}
+
+
 body {
   background-image: url('../img/immagine_sfondo1.jpg');
   /* background-image: url('../img/immagine_sfondo2.png');  */
@@ -310,28 +325,11 @@ body {
   } */
 }
 
-/* setPencilStyle(isActive ? { fill: '#0050EF', stroke: '#0050EF' } : { fill: 'none', stroke: 'white' }); */
-
-/* .nav-logo {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-} */
-
-.navbar-class {
-  background-color: #000000;
-  color: #FFFFFF;
-  position: fixed;
-  top: 0;
-  width: 100%;
-  z-index: 1000;
-}
-
-.nav-left,
+/* .nav-left,
 .nav-right,
 .nav-center {
   color: #FFFFFF;
-}
+} */
 
 .nav-left {
   margin-right: auto;

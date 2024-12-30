@@ -69,6 +69,9 @@ const Profilo = () => {
   return (
     <>
       <Header />
+
+      <div className="main-content"></div>
+
       <div className='visible'>
         <form className='containerForm' onSubmit={(e) => modificaProfilo(e, setUtenti)}>
           <label className='titoloForm'>Profilo</label>

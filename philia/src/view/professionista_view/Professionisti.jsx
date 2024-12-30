@@ -59,6 +59,8 @@ const Professionisti = () => {
     <>
       <Header />
 
+      <div className="main-content"></div>
+
       <FormRicerca 
         tipoLista={'professionisti'} 
         setterLista1={setProfessionisti} 

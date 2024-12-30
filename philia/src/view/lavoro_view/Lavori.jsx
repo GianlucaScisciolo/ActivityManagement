@@ -62,18 +62,20 @@ const Lavori = () => {
   return (
     <>
       <Header />
+      
+      <div className="main-content"></div>
 
-      <FormRicerca 
+      <FormRicerca
         tipoLista={'lavori'} 
         setterLista1={setLavoriClienti} 
         setterLista2={setLavoriProfessionisti}
         setterDatiLastSearch={updateDatiLastSearch}
-      />
+        />
 
       <TypeView
         viewElements={viewElements}
         setViewElements={setViewElements}
-      />
+        />
       
       <div className='containerTitle'><label className='titoloForm'>Lavori clienti</label></div>
       
@@ -88,7 +90,7 @@ const Lavori = () => {
         setSelectedIds={setSelectedIds}
         selectedIdsModifica={selectedIdsModifica}
         setSelectedIdsModifica={setSelectedIdsModifica}
-      />
+        />
 
       <div className='containerTitle'><label className='titoloForm'>Lavori professionisti</label></div>
       
@@ -103,7 +105,7 @@ const Lavori = () => {
         setSelectedIds={setSelectedIds}
         selectedIdsModifica={selectedIdsModifica}
         setSelectedIdsModifica={setSelectedIdsModifica}
-      />
+        />
 
       <div className='containerButtons'>
         <Row className='custom-row'>

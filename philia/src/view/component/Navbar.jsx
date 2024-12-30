@@ -21,7 +21,7 @@ const NavbarSito = () => {
 
   return (
     <>
-      <Navbar expand="lg" className='navbar-class'>
+      <Navbar expand="lg">
         <Nav className='nav-left'>
           {(autenticazioneSession.isLogged === true) && (
             <>
@@ -36,7 +36,7 @@ const NavbarSito = () => {
               <NavDropdown title="Lavori" className='nav-dropdown'>
                 <NavDropdown.Item as={NavLink} to="/nuovo-lavoro">Nuovo lavoro</NavDropdown.Item>
                 <NavDropdown.Item as={NavLink} to="/lavori">Lavori</NavDropdown.Item>
-                <NavDropdown.Item as={NavLink} to="/pdf-lavori">PDF lavori</NavDropdown.Item>
+                <NavDropdown.Item as={NavLink} to="/file-lavori">File lavori</NavDropdown.Item>
               </NavDropdown>
             </>
           )}
@@ -62,10 +62,6 @@ const NavbarSito = () => {
           </>
         </Nav>  
       </Navbar>
-      <br />
-      <br />
-      <button>{autenticazioneSession.ruolo}</button>
-      <button>{autenticazioneSession.isLogged.toString()}</button>
     </>
   );
 }

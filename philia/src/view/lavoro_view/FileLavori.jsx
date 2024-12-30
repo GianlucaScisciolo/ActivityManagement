@@ -9,7 +9,7 @@ import autoTable from 'jspdf-autotable';
 import ExcelJS from 'exceljs';
 import { saveAs } from 'file-saver';
 
-const PDFLavori = () => {
+const FileLavori = () => {
   const [lavoriClienti, setLavoriClienti] = useState([]);
   const [lavoriProfessionisti, setLavoriProfessionisti] = useState([]);
   const [aggiornamentoCompletato, setAggiornamentoCompletato] = useState(false);
@@ -223,7 +223,7 @@ const PDFLavori = () => {
   return (
     <>
       <Header />
-      <div>
+      <div className="main-content">
         <form className='containerForm'>
           <label className='titoloForm'>Creazione PDF lavori</label>
 
@@ -238,10 +238,10 @@ const PDFLavori = () => {
           <button className='buttonForm' onClick={(e) => ottieniLavoriPDF(e)}>Ottieni file PDF</button>
           <button className='buttonForm' onClick={(e) => ottieniLavoriExcel(e)}>Ottieni file Excel</button>
         </form>
-        <button onClick={controllo}>Controllo</button>
+        {/* <button onClick={controllo}>Controllo</button> */}
       </div>
     </>
   );
 };
 
-export default PDFLavori;
+export default FileLavori;

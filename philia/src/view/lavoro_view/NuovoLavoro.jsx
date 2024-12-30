@@ -129,6 +129,7 @@ const NuovoLavoro = () => {
   return (
     <>
       <Header />
+      <div className="main-content"></div>
       <div>
         <form className='containerForm' onSubmit={(e) => {
           e.preventDefault();

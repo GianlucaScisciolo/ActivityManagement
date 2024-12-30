@@ -56,6 +56,8 @@ const Clienti = () => {
     <>
       <Header />
 
+      <div className="main-content"></div>
+
       <FormRicerca 
         tipoLista={'clienti'} 
         setterLista1={setClienti} 

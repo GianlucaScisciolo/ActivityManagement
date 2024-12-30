@@ -8,10 +8,6 @@ function App() {
   
   return (
     <>
-      {/* <button>{counter}</button>
-      <button>{autenticazioneSession[0].role}</button>
-      <button>{autenticazioneSession[0].isLogged.toString()}</button> */}
-      {/* <Navbar></Navbar> */}
       <Home />
     </>
   );

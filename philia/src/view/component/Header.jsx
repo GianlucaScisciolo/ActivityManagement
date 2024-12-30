@@ -3,7 +3,9 @@ import NavbarSito from "./Navbar";
 function Header() {
   return (
     <>
-      <NavbarSito></NavbarSito>
+      <div className="header-fixed">
+        <NavbarSito />
+      </div>
     </>
   )
 }
