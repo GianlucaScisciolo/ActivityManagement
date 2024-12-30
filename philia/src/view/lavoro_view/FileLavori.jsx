@@ -218,39 +218,39 @@ const FileLavori = () => {
     await ottieniLavori(primoGiorno, ultimoGiorno);
   };
 
-  const ottieniLavoriMesePDF = async (e) => {
+  const ottieniLavoriUltimoMesePDF = async (e) => {
     e.preventDefault();
     const dataCorrente = new Date();
-    const primoGiorno = new Date(dataCorrente.getFullYear(), dataCorrente.getMonth(), 1);
-    const ultimoGiorno = new Date(dataCorrente.getFullYear(), dataCorrente.getMonth() + 1, 0);
+    const primoGiorno = new Date(dataCorrente.getFullYear(), dataCorrente.getMonth()-1, 1);
+    const ultimoGiorno = new Date(dataCorrente.getFullYear(), dataCorrente.getMonth(), 0);
     setTipoFile("PDF");
     await ottieniLavori(primoGiorno, ultimoGiorno);
   };
   
   
-  const ottieniLavoriMeseExcel = async (e) => {
+  const ottieniLavoriUltimoMeseExcel = async (e) => {
     e.preventDefault();
     const dataCorrente = new Date();
-    const primoGiorno = new Date(dataCorrente.getFullYear(), dataCorrente.getMonth(), 1);
-    const ultimoGiorno = new Date(dataCorrente.getFullYear(), dataCorrente.getMonth() + 1, 0);
+    const primoGiorno = new Date(dataCorrente.getFullYear(), dataCorrente.getMonth() -1, 1);
+    const ultimoGiorno = new Date(dataCorrente.getFullYear(), dataCorrente.getMonth(), 0);
     setTipoFile("Excel");
     await ottieniLavori(primoGiorno, ultimoGiorno);
   };
 
-  const ottieniLavoriAnnoPDF = async (e) => {
+  const ottieniLavoriUltimoAnnoPDF = async (e) => {
     e.preventDefault();
     const dataCorrente = new Date();
-    const primoGiorno = new Date(dataCorrente.getFullYear(), 0, 1);
-    const ultimoGiorno = new Date(dataCorrente.getFullYear(), 11, 31);
+    const primoGiorno = new Date(dataCorrente.getFullYear() - 1, 0, 1);
+    const ultimoGiorno = new Date(dataCorrente.getFullYear() - 1, 11, 31);
     setTipoFile("PDF");
     await ottieniLavori(primoGiorno, ultimoGiorno);
   };
   
-  const ottieniLavoriAnnoExcel = async (e) => {
+  const ottieniLavoriUltimoAnnoExcel = async (e) => {
     e.preventDefault();
     const dataCorrente = new Date();
-    const primoGiorno = new Date(dataCorrente.getFullYear(), 0, 1);
-    const ultimoGiorno = new Date(dataCorrente.getFullYear(), 11, 31);
+    const primoGiorno = new Date(dataCorrente.getFullYear() - 1, 0, 1);
+    const ultimoGiorno = new Date(dataCorrente.getFullYear() - 1, 11, 31);
     setTipoFile("Excel");
     await ottieniLavori(primoGiorno, ultimoGiorno);
   };
@@ -284,18 +284,18 @@ const FileLavori = () => {
           </Row>
           <Row className='custom-row'>
             <Col>
-              <button className='buttonForm' onClick={(e) => ottieniLavoriMesePDF(e)}>Ottieni file PDF ultimo mese</button>
+              <button className='buttonForm' onClick={(e) => ottieniLavoriUltimoMesePDF(e)}>Ottieni file PDF ultimo mese</button>
             </Col>
             <Col>
-              <button className='buttonForm' onClick={(e) => ottieniLavoriMeseExcel(e)}>Ottieni file Excel ultimo mese</button>
+              <button className='buttonForm' onClick={(e) => ottieniLavoriUltimoMeseExcel(e)}>Ottieni file Excel ultimo mese</button>
             </Col>
           </Row>
           <Row className='custom-row'>
             <Col>
-              <button className='buttonForm' onClick={(e) => ottieniLavoriAnnoPDF(e)}>Ottieni file PDF ultimo anno</button>
+              <button className='buttonForm' onClick={(e) => ottieniLavoriUltimoAnnoPDF(e)}>Ottieni file PDF ultimo anno</button>
             </Col>
             <Col>
-              <button className='buttonForm' onClick={(e) => ottieniLavoriAnnoExcel(e)}>Ottieni file Excel ultimo anno</button>
+              <button className='buttonForm' onClick={(e) => ottieniLavoriUltimoAnnoExcel(e)}>Ottieni file Excel ultimo anno</button>
             </Col>
           </Row>
         </form>
