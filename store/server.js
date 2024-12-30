@@ -86,7 +86,7 @@ app.post("/LOGIN", async (req, res) => {
 /**
  * Modifica profilo
  */
-app.post("/MODIFICA_PROFILO", (req, res) => {
+app.post("/MODIFICA_PROFILO", async (req, res) => {
   const { 
     username_attuale = '', nuovo_username = '', ruolo = '', 
     note = '', password_attuale = '', nuova_password = ''
@@ -104,15 +104,14 @@ app.post("/MODIFICA_PROFILO", (req, res) => {
   `;
   
   const params = [`${nuovo_username}`, `${ruolo}`, `${note}`, `${nuova_password}`, `${username_attuale}`, `${password_attuale}`];
-  executeQuery(sql, params, (err, result) => {
-    if (err) {
-      res.status(500).send("Modifica profilo fallita.");
-    } else if (result.affectedRows === 0) {
-      res.status(400).send("Username e/o password errati");
-    } else {
-      res.send("Modifica profilo eseguita con successo");
-    }
-  });
+
+  try {
+    const data = await executeQuery(sql, params);
+    return res.json(data);
+  } catch (err) {
+    console.error('Errore durante l\'esecuzione della query:', err);
+    return res.json(err);
+  }
 });
 
 
@@ -124,7 +123,7 @@ app.post("/MODIFICA_PROFILO", (req, res) => {
 /**
  * Inserisci cliente:
  */
-app.post("/INSERISCI_CLIENTE", (req, res) => {
+app.post("/INSERISCI_CLIENTE", async (req, res) => {
   const { nome = '', cognome = '', contatto = '', note = '' } = req.body;
 
   // Aggiungi un log per vedere i dati ricevuti
@@ -136,13 +135,19 @@ app.post("/INSERISCI_CLIENTE", (req, res) => {
   `;
 
   const params = [nome, cognome, contatto, note];
-  executeQuery(sql, params, res);
+  try {
+    const data = await executeQuery(sql, params);
+    return res.json(data);
+  } catch (err) {
+    console.error('Errore durante l\'esecuzione della query:', err);
+    return res.json(err);
+  }
 });
 
 /**
  * Visualizza clienti:
  */
-app.post("/VISUALIZZA_CLIENTI", (req, res) => {
+app.post("/VISUALIZZA_CLIENTI", async (req, res) => {
   const { nome = '', cognome = '', contatto = '', note = '' } = req.body;
   
   // Aggiungi un log per vedere i dati ricevuti
@@ -159,14 +164,20 @@ app.post("/VISUALIZZA_CLIENTI", (req, res) => {
 
   const params = [`${nome}%`, `${cognome}%`, `${contatto}%`, `${note}%`];
 
-  executeQuery(sql, params, res);
+  try {
+    const data = await executeQuery(sql, params);
+    return res.json(data);
+  } catch (err) {
+    console.error('Errore durante l\'esecuzione della query:', err);
+    return res.json(err);
+  }
 });
 
 
 /**
  * Ottieni tutti i clienti:
  */
-app.post("/OTTIENI_TUTTI_I_CLIENTI", (req, res) => {
+app.post("/OTTIENI_TUTTI_I_CLIENTI", async (req, res) => {
   const sql = `
     SELECT 
       id, nome, cognome, contatto 
@@ -176,13 +187,19 @@ app.post("/OTTIENI_TUTTI_I_CLIENTI", (req, res) => {
 
   const params = [];
 
-  executeQuery(sql, params, res);
+  try {
+    const data = await executeQuery(sql, params);
+    return res.json(data);
+  } catch (err) {
+    console.error('Errore durante l\'esecuzione della query:', err);
+    return res.json(err);
+  }
 });
 
 /**
  * Elimina clienti
  */
-app.post("/ELIMINA_CLIENTI", (req, res) => {
+app.post("/ELIMINA_CLIENTI", async (req, res) => {
   const { ids = [] } = req.body;
 
   // Aggiungi un log per vedere i dati ricevuti
@@ -198,13 +215,19 @@ app.post("/ELIMINA_CLIENTI", (req, res) => {
       id IN (${placeholders}); 
   `;
 
-  executeQuery(sql, ids, res);
+  try {
+    const data = await executeQuery(sql, ids);
+    return res.json(data);
+  } catch (err) {
+    console.error('Errore durante l\'esecuzione della query:', err);
+    return res.json(err);
+  }
 });
 
 /**
  * Modifica clienti
  */
-app.post("/MODIFICA_CLIENTI", (req, res) => {
+app.post("/MODIFICA_CLIENTI", async (req, res) => {
   const [id, contatto, note] = [req.body.id, req.body.contatto, req.body.note];
   
   console.log("Dati ricevuti per la modifica: ", [id, contatto, note]);
@@ -219,7 +242,13 @@ app.post("/MODIFICA_CLIENTI", (req, res) => {
   `;
   
   const params = [`${contatto}`, `${note}`, `${id}`];
-  executeQuery(sql, params, res);
+  try {
+    const data = await executeQuery(sql, params);
+    return res.json(data);
+  } catch (err) {
+    console.error('Errore durante l\'esecuzione della query:', err);
+    return res.json(err);
+  }
 });
 
 
@@ -230,7 +259,7 @@ app.post("/MODIFICA_CLIENTI", (req, res) => {
 /**
  * Inserisci professionista
  */
-app.post("/INSERISCI_PROFESSIONISTA", (req, res) => {
+app.post("/INSERISCI_PROFESSIONISTA", async (req, res) => {
   const { nome = '', professione = '', contatto = '', email = '', note = '' } = req.body;
   
   const sql = ` 
@@ -239,13 +268,19 @@ app.post("/INSERISCI_PROFESSIONISTA", (req, res) => {
   `;
 
   const params = [`${nome}`, `${professione}`, `${contatto}`, `${email}`, `${note}`];
-  executeQuery(sql, params, res);
+  try {
+    const data = await executeQuery(sql, params);
+    return res.json(data);
+  } catch (err) {
+    console.error('Errore durante l\'esecuzione della query:', err);
+    return res.json(err);
+  }
 });
 
 /**
  * Visualizza professionisti 
  */
-app.post("/VISUALIZZA_PROFESSIONISTI", (req, res) => {
+app.post("/VISUALIZZA_PROFESSIONISTI", async (req, res) => {
   const { nome = '', professione = '', contatto = '', email = '', note = '' } = req.body;
 
   const sql = ` 
@@ -258,13 +293,19 @@ app.post("/VISUALIZZA_PROFESSIONISTI", (req, res) => {
   `;
 
   const params = [`${nome}%`, `${professione}%`, `${contatto}%`, `${email}%`, `${note}%`];
-  executeQuery(sql, params, res);
+  try {
+    const data = await executeQuery(sql, params);
+    return res.json(data);
+  } catch (err) {
+    console.error('Errore durante l\'esecuzione della query:', err);
+    return res.json(err);
+  }
 });
 
 /**
  * Ottieni tutti i professionisti:
  */
-app.post("/OTTIENI_TUTTI_I_PROFESSIONISTI", (req, res) => {
+app.post("/OTTIENI_TUTTI_I_PROFESSIONISTI", async (req, res) => {
   const sql = `
     SELECT 
       id, nome, professione, contatto, email 
@@ -274,13 +315,19 @@ app.post("/OTTIENI_TUTTI_I_PROFESSIONISTI", (req, res) => {
 
   const params = [];
 
-  executeQuery(sql, params, res);
+  try {
+    const data = await executeQuery(sql, params);
+    return res.json(data);
+  } catch (err) {
+    console.error('Errore durante l\'esecuzione della query:', err);
+    return res.json(err);
+  }
 });
 
 /**
  * Elimina professionisti
  */
-app.post("/ELIMINA_PROFESSIONISTI", (req, res) => {
+app.post("/ELIMINA_PROFESSIONISTI", async (req, res) => {
   const { ids = [] } = req.body;
 
   // Aggiungi un log per vedere i dati ricevuti
@@ -296,13 +343,19 @@ app.post("/ELIMINA_PROFESSIONISTI", (req, res) => {
       id IN (${placeholders}); 
   `;
 
-  executeQuery(sql, ids, res);
+  try {
+    const data = await executeQuery(sql, params);
+    return res.json(data);
+  } catch (err) {
+    console.error('Errore durante l\'esecuzione della query:', err);
+    return res.json(err);
+  }
 });
 
 /**
  * Modifica professionisti
  */
-app.post("/MODIFICA_PROFESSIONISTI", (req, res) => {
+app.post("/MODIFICA_PROFESSIONISTI", async (req, res) => {
   const [id, contatto, email, note] = [req.body.id, req.body.contatto, req.body.email, req.body.note];
 
   console.log("Dati ricevuti per la modifica: ", [id, contatto, email, note]);
@@ -317,7 +370,13 @@ app.post("/MODIFICA_PROFESSIONISTI", (req, res) => {
   `;
 
   const params = [`${contatto}`, `${email}`, `${note}`, `${id}`];
-  executeQuery(sql, params, res);
+  try {
+    const data = await executeQuery(sql, params);
+    return res.json(data);
+  } catch (err) {
+    console.error('Errore durante l\'esecuzione della query:', err);
+    return res.json(err);
+  }
 });
 
 /*************************************************************************************************************/
@@ -327,7 +386,7 @@ app.post("/MODIFICA_PROFESSIONISTI", (req, res) => {
 /**
  * Inserisci lavoro
  */
-app.post("/INSERISCI_LAVORO", (req, res) => {
+app.post("/INSERISCI_LAVORO", async (req, res) => {
   const { descrizione = '', giorno = '', orario_inizio = '', orario_fine = '', note = '', id_cliente = '', id_professionista = '' } = req.body;
   
   const sql = ` 
@@ -342,7 +401,13 @@ app.post("/INSERISCI_LAVORO", (req, res) => {
   else
     params = [`${descrizione}`, `${giorno}`, `${orario_inizio}`, `${orario_fine}`, `${note}`, null, `${id_professionista}`];
   
-  executeQuery(sql, params, res);
+  try {
+    const data = await executeQuery(sql, params);
+    return res.json(data);
+  } catch (err) {
+    console.error('Errore durante l\'esecuzione della query:', err);
+    return res.json(err);
+  }
 });
 
 /**
@@ -440,7 +505,7 @@ app.post("/VISUALIZZA_LAVORI_PROFESSIONISTI", async (req, res) => {
 /**
  * Elimina lavori
  */
-app.post("/ELIMINA_LAVORI", (req, res) => {
+app.post("/ELIMINA_LAVORI", async (req, res) => {
   const { ids = [] } = req.body;
 
   // Aggiungi un log per vedere i dati ricevuti
@@ -456,10 +521,16 @@ app.post("/ELIMINA_LAVORI", (req, res) => {
       id IN (${placeholders}); 
   `;
   
-  executeQuery(sql, ids, res);
+  try {
+    const data = await executeQuery(sql, params);
+    return res.json(data);
+  } catch (err) {
+    console.error('Errore durante l\'esecuzione della query:', err);
+    return res.json(err);
+  }
 });
 
-app.post("/MODIFICA_LAVORI", (req, res) => {
+app.post("/MODIFICA_LAVORI", async (req, res) => {
   const [id, descrizione, giorno, orario_inizio, orario_fine, note] = [
     req.body.id, req.body.descrizione, req.body.giorno, req.body.orario_inizio, req.body.orario_fine, req.body.note
   ];
@@ -479,7 +550,13 @@ app.post("/MODIFICA_LAVORI", (req, res) => {
   `;
 
   const params = [descrizione, giornoFormattato, orario_inizio, orario_fine, note, id];
-  executeQuery(sql, params, res);
+  try {
+    const data = await executeQuery(sql, params);
+    return res.json(data);
+  } catch (err) {
+    console.error('Errore durante l\'esecuzione della query:', err);
+    return res.json(err);
+  }
 });
 
 

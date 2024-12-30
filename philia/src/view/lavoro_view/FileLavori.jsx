@@ -8,6 +8,8 @@ import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import ExcelJS from 'exceljs';
 import { saveAs } from 'file-saver';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 
 const FileLavori = () => {
   const [lavoriClienti, setLavoriClienti] = useState([]);
@@ -198,7 +200,7 @@ const FileLavori = () => {
     }
   }, [lavoriClienti, lavoriProfessionisti]);
 
-  const ottieniLavoriPDF = async (e) => {
+  const ottieniLavoriRangePDF = async (e) => {
     e.preventDefault();
     const form = e.currentTarget.closest('form'); // Trova il form più vicino
     const primoGiorno = form.querySelector('input[name="primoGiorno"]').value;
@@ -207,11 +209,48 @@ const FileLavori = () => {
     await ottieniLavori(primoGiorno, ultimoGiorno);
   };
   
-  const ottieniLavoriExcel = async (e) => {
+  const ottieniLavoriRangeExcel = async (e) => {
     e.preventDefault();
     const form = e.currentTarget.closest('form'); // Trova il form più vicino
     const primoGiorno = form.querySelector('input[name="primoGiorno"]').value;
     const ultimoGiorno = form.querySelector('input[name="ultimoGiorno"]').value;
+    setTipoFile("Excel");
+    await ottieniLavori(primoGiorno, ultimoGiorno);
+  };
+
+  const ottieniLavoriMesePDF = async (e) => {
+    e.preventDefault();
+    const dataCorrente = new Date();
+    const primoGiorno = new Date(dataCorrente.getFullYear(), dataCorrente.getMonth(), 1);
+    const ultimoGiorno = new Date(dataCorrente.getFullYear(), dataCorrente.getMonth() + 1, 0);
+    setTipoFile("PDF");
+    await ottieniLavori(primoGiorno, ultimoGiorno);
+  };
+  
+  
+  const ottieniLavoriMeseExcel = async (e) => {
+    e.preventDefault();
+    const dataCorrente = new Date();
+    const primoGiorno = new Date(dataCorrente.getFullYear(), dataCorrente.getMonth(), 1);
+    const ultimoGiorno = new Date(dataCorrente.getFullYear(), dataCorrente.getMonth() + 1, 0);
+    setTipoFile("Excel");
+    await ottieniLavori(primoGiorno, ultimoGiorno);
+  };
+
+  const ottieniLavoriAnnoPDF = async (e) => {
+    e.preventDefault();
+    const dataCorrente = new Date();
+    const primoGiorno = new Date(dataCorrente.getFullYear(), 0, 1);
+    const ultimoGiorno = new Date(dataCorrente.getFullYear(), 11, 31);
+    setTipoFile("PDF");
+    await ottieniLavori(primoGiorno, ultimoGiorno);
+  };
+  
+  const ottieniLavoriAnnoExcel = async (e) => {
+    e.preventDefault();
+    const dataCorrente = new Date();
+    const primoGiorno = new Date(dataCorrente.getFullYear(), 0, 1);
+    const ultimoGiorno = new Date(dataCorrente.getFullYear(), 11, 31);
     setTipoFile("Excel");
     await ottieniLavori(primoGiorno, ultimoGiorno);
   };
@@ -225,7 +264,7 @@ const FileLavori = () => {
       <Header />
       <div className="main-content">
         <form className='containerForm'>
-          <label className='titoloForm'>Creazione PDF lavori</label>
+          <label className='titoloForm'>Creazione file lavori</label>
 
           <label className='labelForm'>Primo giorno</label>
           <input className='inputFormModifica' type='date' name='primoGiorno' />
@@ -235,8 +274,30 @@ const FileLavori = () => {
           <input className='inputFormModifica' type='date' name='ultimoGiorno' />
           <span className='spanErrore'></span>
           {/* bottoni */}
-          <button className='buttonForm' onClick={(e) => ottieniLavoriPDF(e)}>Ottieni file PDF</button>
-          <button className='buttonForm' onClick={(e) => ottieniLavoriExcel(e)}>Ottieni file Excel</button>
+          <Row className='custom-row'>
+            <Col>
+              <button className='buttonForm' onClick={(e) => ottieniLavoriRangePDF(e)}>Ottieni file PDF</button>
+            </Col>
+            <Col>
+              <button className='buttonForm' onClick={(e) => ottieniLavoriRangeExcel(e)}>Ottieni file Excel</button>
+            </Col>
+          </Row>
+          <Row className='custom-row'>
+            <Col>
+              <button className='buttonForm' onClick={(e) => ottieniLavoriMesePDF(e)}>Ottieni file PDF ultimo mese</button>
+            </Col>
+            <Col>
+              <button className='buttonForm' onClick={(e) => ottieniLavoriMeseExcel(e)}>Ottieni file Excel ultimo mese</button>
+            </Col>
+          </Row>
+          <Row className='custom-row'>
+            <Col>
+              <button className='buttonForm' onClick={(e) => ottieniLavoriAnnoPDF(e)}>Ottieni file PDF ultimo anno</button>
+            </Col>
+            <Col>
+              <button className='buttonForm' onClick={(e) => ottieniLavoriAnnoExcel(e)}>Ottieni file Excel ultimo anno</button>
+            </Col>
+          </Row>
         </form>
         {/* <button onClick={controllo}>Controllo</button> */}
       </div>
@@ -245,3 +306,23 @@ const FileLavori = () => {
 };
 
 export default FileLavori;
+
+
+
+
+
+
+
+
+
+{/* <Row className='custom-row'>
+      <Col style={{marginLeft:'45%', marginRight:'45%'}} className='custom-col-black'>
+        <div className='icon-container' onClick={() => handleClickChangeViewElements({viewElements, setViewElements})}>
+          {
+            viewElements === "list" 
+              ? <WalletCards className='icon-view-style' id='walletCards' size={40} />
+              : <List className='icon-view-style' id='walletCards' size={40} />
+          }
+        </div>
+      </Col>
+    </Row> */}
