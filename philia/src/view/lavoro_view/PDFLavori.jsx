@@ -6,12 +6,27 @@ import lavoroStore from "../../store/lavoro_store/LavoroStore";
 import { aggiornamentoLista } from "../../vario/OperazioniRicerca";
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import ExcelJS from 'exceljs';
+import { saveAs } from 'file-saver';
 
 const PDFLavori = () => {
   const [lavoriClienti, setLavoriClienti] = useState([]);
   const [lavoriProfessionisti, setLavoriProfessionisti] = useState([]);
   const [aggiornamentoCompletato, setAggiornamentoCompletato] = useState(false);
   const [tipoFile, setTipoFile] = useState('');
+
+    const formatDate = (dateStr) => {
+    const date = new Date(dateStr);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${day}-${month}-${year}`;
+  }
+
+  function formatTime(timeStr) {
+    const [hours, minutes] = timeStr.split(':');
+    return `${hours}:${minutes}`;
+  }
 
   const generatePDF = (lavoriClienti, lavoriProfessionisti) => {
     const doc = new jsPDF();
@@ -72,21 +87,72 @@ const PDFLavori = () => {
     // Salva il PDF
     doc.save('lavori.pdf');
   };
-  
-  
 
-  const formatDate = (dateStr) => {
-    const date = new Date(dateStr);
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
-  }
-
-  function formatTime(timeStr) {
-    const [hours, minutes] = timeStr.split(':');
-    return `${hours}:${minutes}`;
-  }
+  const generateExcel = async (lavoriClienti, lavoriProfessionisti) => {
+    const workbook = new ExcelJS.Workbook();
+    const clientiSheet = workbook.addWorksheet('Lavori clienti');
+    const professionistiSheet = workbook.addWorksheet('Lavori professionisti');
+  
+    // Aggiungi dati a clientiSheet
+    if (lavoriClienti.length > 0) {
+      clientiSheet.columns = [
+        { header: 'Nome', key: 'nome', width: 20 },
+        { header: 'Cognome', key: 'cognome', width: 20 },
+        { header: 'Descrizione', key: 'descrizione', width: 30 },
+        { header: 'Giorno', key: 'giorno', width: 15 },
+        { header: 'Orario inizio', key: 'orario_inizio', width: 15 },
+        { header: 'Orario fine', key: 'orario_fine', width: 15 },
+        { header: 'Note', key: 'note', width: 30 }
+      ];
+      lavoriClienti.forEach(lavoro => {
+        clientiSheet.addRow({
+          nome: lavoro.nome_cliente,
+          cognome: lavoro.cognome_cliente,
+          descrizione: lavoro.descrizione,
+          giorno: formatDate(lavoro.giorno),
+          orario_inizio: formatTime(lavoro.orario_inizio),
+          orario_fine: formatTime(lavoro.orario_fine),
+          note: lavoro.note
+        });
+      });
+    } else {
+      clientiSheet.addRow(['Nessun lavoro cliente trovato.']);
+    }
+  
+    // Aggiungi dati a professionistiSheet
+    if (lavoriProfessionisti.length > 0) {
+      professionistiSheet.columns = [
+        { header: 'Nome', key: 'nome', width: 20 },
+        { header: 'Professione', key: 'professione', width: 20 },
+        { header: 'Descrizione', key: 'descrizione', width: 30 },
+        { header: 'Giorno', key: 'giorno', width: 15 },
+        { header: 'Orario inizio', key: 'orario_inizio', width: 15 },
+        { header: 'Orario fine', key: 'orario_fine', width: 15 },
+        { header: 'Note', key: 'note', width: 30 }
+      ];
+      lavoriProfessionisti.forEach(lavoro => {
+        professionistiSheet.addRow({
+          nome: lavoro.nome_professionista,
+          professione: lavoro.professione,
+          descrizione: lavoro.descrizione,
+          giorno: formatDate(lavoro.giorno),
+          orario_inizio: formatTime(lavoro.orario_inizio),
+          orario_fine: formatTime(lavoro.orario_fine),
+          note: lavoro.note
+        });
+      });
+    } else {
+      professionistiSheet.addRow(['Nessun lavoro professionista trovato.']);
+    }
+  
+    // Genera il file Excel come blob
+    const buffer = await workbook.xlsx.writeBuffer();
+    const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+  
+    // Salva il file usando FileSaver.js
+    saveAs(blob, 'lavori.xlsx');
+    console.log('File Excel generato con successo.');
+  };
 
   const updateDatiLastSearch = () => {
     console.log("Dati aggiornati.");
@@ -134,16 +200,18 @@ const PDFLavori = () => {
 
   const ottieniLavoriPDF = async (e) => {
     e.preventDefault();
-    const primoGiorno = e.target.primoGiorno.value;
-    const ultimoGiorno = e.target.ultimoGiorno.value;
+    const form = e.currentTarget.closest('form'); // Trova il form più vicino
+    const primoGiorno = form.querySelector('input[name="primoGiorno"]').value;
+    const ultimoGiorno = form.querySelector('input[name="ultimoGiorno"]').value;
     setTipoFile("PDF");
     await ottieniLavori(primoGiorno, ultimoGiorno);
   };
-
+  
   const ottieniLavoriExcel = async (e) => {
     e.preventDefault();
-    const primoGiorno = e.target.primoGiorno.value;
-    const ultimoGiorno = e.target.ultimoGiorno.value;
+    const form = e.currentTarget.closest('form'); // Trova il form più vicino
+    const primoGiorno = form.querySelector('input[name="primoGiorno"]').value;
+    const ultimoGiorno = form.querySelector('input[name="ultimoGiorno"]').value;
     setTipoFile("Excel");
     await ottieniLavori(primoGiorno, ultimoGiorno);
   };
