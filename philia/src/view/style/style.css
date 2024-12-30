@@ -2,15 +2,6 @@
   font-size: 25px;
 }
 
-.header-fixed {
-  background-color: #000000;
-  color: #FFFFFF;
-  position: fixed;
-  top: 0;
-  width: 100%;
-  z-index: 1000;
-}
-
 /* Assicurati di aggiungere un margine superiore sufficiente */
 .main-content {
   margin-top: 200px; /* Regola l'altezza secondo l'altezza della tua navbar */
@@ -325,12 +316,6 @@ body {
   } */
 }
 
-/* .nav-left,
-.nav-right,
-.nav-center {
-  color: #FFFFFF;
-} */
-
 .nav-left {
   margin-right: auto;
 }
@@ -339,20 +324,106 @@ body {
   margin-left: auto;
 }
 
-.nav-link,
-.nav-dropdown .dropdown-toggle,
-.nav-dropdown .dropdown-item {
-  color: #FFFFFF !important; /* Ensure text color is white */
+.nav-left .nav-link, .nav-right .nav-link {
+  color: #FFFFFF;
 }
 
-.nav-dropdown .dropdown-menu {
-  background-color: #000000; /* Background color of dropdown menu */
+.header-fixed {
+  background-color: #000000;
+  color: #FFFFFF;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
 }
 
-.nav-link:hover,
-.nav-dropdown .dropdown-item:hover {
-  color: #BBBBBB; /* Hover state color */
+/* Styles for Navbar */
+/* .navbar, .nav, .nav-dropdown {
+  color: white;
+} */
+
+.nav-link, .nav-dropdown-item {
+  color: white !important;
 }
+
+.nav-link.active, .nav-dropdown-item.active {
+  background-color: #0050EF !important; /* Colore di sfondo del pulsante selezionato */
+  font-weight: bold; /* Mantieni il testo in grassetto se desiderato */
+}
+
+.nav-link:hover, .nav-dropdown-item:hover {
+  background-color: #0050EF !important; /* Colore di sfondo quando il pulsante è in hover */
+  color: white; /* Assicurati che il testo sia visibile */
+  font-weight: bold;
+}
+
+/* Add background color on hover */
+/* .navbar-nav .nav-item:hover .nav-link, 
+.navbar-nav .nav-item:hover .nav-dropdown-item {
+  background-color: blue !important;
+} */
+
+/* Ensure dropdown menu shows on hover */
+.nav-item:hover .dropdown-menu {
+  display: block;
+  position: absolute;
+  background-color: #000000;
+}
+
+.nav-home .nav-link-home {
+  background-color: transparent !important; /* Sfondo trasparente */
+  color: inherit; /* Mantiene il colore del testo */
+}
+
+.nav-home .nav-link-home:hover {
+  background-color: transparent !important; /* Sfondo trasparente al passaggio del mouse */
+  color: inherit; /* Mantiene il colore del testo al passaggio del mouse */
+}
+
+.nav-home .icon-view-style {
+  color: inherit; /* Mantiene il colore dell'icona */
+}
+
+.nav-home .nav-link-home.active, .nav-home .nav-link-home:hover .icon-view-style {
+  background-color: transparent !important; /* Sfondo trasparente per l'icona */
+  color: inherit; /* Mantiene il colore originale dell'icona */
+}
+
+
+
+.nav-link.active, .nav-dropdown-item.active {
+  background-color: transparent !important; /* Sfondo trasparente quando il pulsante è attivo */
+  font-weight: bold; /* Mantieni il testo in grassetto se desiderato */
+  color: inherit; /* Mantieni il colore del testo */
+}
+
+.nav-link:hover, .nav-dropdown-item:hover {
+  background-color: #0050EF !important; /* Colore di sfondo quando il pulsante è in hover */
+  color: white; /* Assicurati che il testo sia visibile */
+  font-weight: bold;
+}
+
+.nav-home .nav-link-home {
+  background-color: transparent !important; /* Sfondo trasparente */
+  color: inherit; /* Mantiene il colore del testo */
+}
+
+.nav-home .nav-link-home:hover {
+  background-color: transparent !important; /* Sfondo trasparente al passaggio del mouse */
+  color: inherit; /* Mantiene il colore del testo al passaggio del mouse */
+}
+
+.nav-home .icon-view-style {
+  color: inherit; /* Mantiene il colore dell'icona */
+}
+
+.nav-home .nav-link-home.active, .nav-home .nav-link-home:hover .icon-view-style {
+  background-color: transparent !important; /* Sfondo trasparente per l'icona */
+  color: inherit; /* Mantiene il colore originale dell'icona */
+}
+
+
+
 
 
 
