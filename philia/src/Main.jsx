@@ -14,6 +14,7 @@ import Clienti from "./view/persona_view/Clienti.jsx";
 import Professionisti from "./view/professionista_view/Professionisti.jsx";
 import Lavori from "./view/lavoro_view/Lavori.jsx";
 import Profilo from "./view/persona_view/Profilo.jsx";
+import PDFLavori from "./view/lavoro_view/PDFLavori.jsx";
 
 console.log("Store:", store.getState());
 
@@ -36,6 +37,7 @@ const Root = () => {
             <Route path="/nuovo-professionista" element={<NuovoProfessionista />} />
             <Route path="/lavori" element={<Lavori />} />
             <Route path="/nuovo-lavoro" element={<NuovoLavoro />} />
+            <Route path="/pdf-lavori" element={<PDFLavori />} />
           </>
         )}
       </Routes>

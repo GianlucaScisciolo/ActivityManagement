@@ -39,22 +39,24 @@ db.connect(err => {
   console.log('Connesso al database.');
 });
 
-const executeQuery = (sql, params, res) => {
-  db.query(sql, params, (err, data) => {
-    if (err) {
-      console.error('Errore durante l\'esecuzione della query:', err);
-      return res.json(err);
-    }
-    return res.json(data);
+const executeQuery = (sql, params) => {
+  return new Promise((resolve, reject) => {
+    db.query(sql, params, (err, data) => {
+      if (err) {
+        return reject(err);
+      }
+      return resolve(data);
+    });
   });
 };
+
 
 /*************************************************** Autenticazione **************************************************/
 
 /**
  * Login:
  */
-app.post("/LOGIN", (req, res) => {
+app.post("/LOGIN", async (req, res) => {
   const { username = '', password = '' } = req.body;
 
   // Aggiungi un log per vedere i dati ricevuti
@@ -70,8 +72,16 @@ app.post("/LOGIN", (req, res) => {
   `;
 
   const params = [username, password];
-  executeQuery(sql, params, res);
+
+  try {
+    const data = await executeQuery(sql, params);
+    return res.json(data);
+  } catch (err) {
+    console.error('Errore durante l\'esecuzione della query:', err);
+    return res.json(err);
+  }
 });
+
 
 /**
  * Modifica profilo
@@ -338,7 +348,7 @@ app.post("/INSERISCI_LAVORO", (req, res) => {
 /**
  * Visualizza lavori clienti
  */
-app.post("/VISUALIZZA_LAVORI_CLIENTI", (req, res) => {
+app.post("/VISUALIZZA_LAVORI_CLIENTI", async (req, res) => {
   let { 
     nome_cliente = '', cognome_cliente = '', nome_professionista = '', professione = '', 
     descrizione = '', primo_giorno = '', ultimo_giorno = '', note = '',
@@ -372,13 +382,19 @@ app.post("/VISUALIZZA_LAVORI_CLIENTI", (req, res) => {
 
   const params = [`${descrizione}%`, `${primo_giorno}%`, `${ultimo_giorno}%`, `${note}%`, `${nome_cliente}%`, `${cognome_cliente}%`];
 
-  executeQuery(selectSQL, params, res);
+  try {
+    const data = await executeQuery(selectSQL, params);
+    return res.json(data);
+  } catch (err) {
+    console.error('Errore durante l\'esecuzione della query:', err);
+    return res.json(err);
+  }
 });
 
 /**
  * Visualizza lavori professionisti
  */
-app.post("/VISUALIZZA_LAVORI_PROFESSIONISTI", (req, res) => {
+app.post("/VISUALIZZA_LAVORI_PROFESSIONISTI", async (req, res) => {
   let { 
     nome_cliente = '', cognome_cliente = '', nome_professionista = '', professione = '', 
     descrizione = '', primo_giorno = '', ultimo_giorno = '', note = '',
@@ -412,7 +428,13 @@ app.post("/VISUALIZZA_LAVORI_PROFESSIONISTI", (req, res) => {
 
   const params = [`${descrizione}%`, `${primo_giorno}%`, `${ultimo_giorno}%`, `${note}%`, `${nome_professionista}%`, `${professione}%`];
 
-  executeQuery(selectSQL, params, res);
+  try {
+    const data = await executeQuery(selectSQL, params);
+    return res.json(data);
+  } catch (err) {
+    console.error('Errore durante l\'esecuzione della query:', err);
+    return res.json(err);
+  }
 });
 
 /**

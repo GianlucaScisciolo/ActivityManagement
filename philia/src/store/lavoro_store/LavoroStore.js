@@ -35,34 +35,38 @@ class LavoroStore extends EventEmitter {
     }
   }
 
-  runOperation(data, operazione) {
-    axios.post("/" + operazione, data).then(response => {
-      if(operazione === operazioniLavori.VISUALIZZA_LAVORI_CLIENTI)
+  async runOperation(data, operazione) {
+    try {
+      const response = await axios.post("/" + operazione, data);
+      if (operazione === operazioniLavori.VISUALIZZA_LAVORI_CLIENTI)
         lavoriClienti = response.data;
-      else if(operazione === operazioniLavori.VISUALIZZA_LAVORI_PROFESSIONISTI)
+      else if (operazione === operazioniLavori.VISUALIZZA_LAVORI_PROFESSIONISTI)
         lavoriProfessionisti = response.data;
       this.emitChange(operazione);
-    }).catch(error => {
-      console.error(  "Errore durante l\'operazione " + operazione + ": " 
-                    + error.response ? error.response.data : error.message);
-    });
+    } catch (error) {
+      console.error("Errore durante l'operazione " + operazione + ": " + (error.response ? error.response.data : error.message));
+    }
   }
 
-  modificaLavori(data) {
+  async modificaLavori(data) {
     for (let i = 0; i < data.length; i++) {
       const lavoro = data[i];
-      //alert(professionista[0] + " " + professionista[1] + " " + professionista[2] + " " + professionista[3] + "\n");
-      axios.post('/MODIFICA_LAVORI', lavoro).then(response => {
-        // lavori = response.data;
+      try {
+        const response = await axios.post('/MODIFICA_LAVORI', lavoro);
         this.emitChange(operazioniLavori.MODIFICA_LAVORI);
-      }).catch(error => {
+      } catch (error) {
         console.error('Errore durante la modifica dei lavori: ', error);
-      });
+      }
     }
   }
 
   emitChange(eventType) {
     this.emit(eventType);
+  }
+
+  azzeraLavori() {
+    lavoriClienti = -1;
+    lavoriProfessionisti = -1;
   }
 
   getLavoriClienti() {
@@ -84,12 +88,3 @@ class LavoroStore extends EventEmitter {
 
 const lavoroStore = new LavoroStore();
 export default lavoroStore;
-
-
-
-
-
-
-
-
-

@@ -36,6 +36,7 @@ const NavbarSito = () => {
               <NavDropdown title="Lavori" className='nav-dropdown'>
                 <NavDropdown.Item as={NavLink} to="/nuovo-lavoro">Nuovo lavoro</NavDropdown.Item>
                 <NavDropdown.Item as={NavLink} to="/lavori">Lavori</NavDropdown.Item>
+                <NavDropdown.Item as={NavLink} to="/pdf-lavori">PDF lavori</NavDropdown.Item>
               </NavDropdown>
             </>
           )}
