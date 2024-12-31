@@ -12,8 +12,8 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
 const FileLavori = () => {
-  const [lavoriClienti, setLavoriClienti] = useState([]);
-  const [lavoriProfessionisti, setLavoriProfessionisti] = useState([]);
+  const [lavoriClienti, setLavoriClienti] = useState(-1);
+  const [lavoriProfessionisti, setLavoriProfessionisti] = useState(-1);
   const [aggiornamentoCompletato, setAggiornamentoCompletato] = useState(false);
   const [tipoFile, setTipoFile] = useState('');
 
@@ -191,7 +191,7 @@ const FileLavori = () => {
   }, [aggiornamentoCompletato]);
 
   useEffect(() => {
-    if (aggiornamentoCompletato && (lavoriClienti !== -1 || lavoriProfessionisti !== -1)) {
+    if (aggiornamentoCompletato && (lavoriClienti !== -1 && lavoriProfessionisti !== -1)) {
       setAggiornamentoCompletato(false);
       if(tipoFile === "PDF")
         generatePDF(lavoriClienti, lavoriProfessionisti);
@@ -249,8 +249,8 @@ const FileLavori = () => {
   const ottieniLavoriUltimoAnnoExcel = async (e) => {
     e.preventDefault();
     const dataCorrente = new Date();
-    const primoGiorno = new Date(dataCorrente.getFullYear() - 1, 0, 1);
-    const ultimoGiorno = new Date(dataCorrente.getFullYear() - 1, 11, 31);
+    const primoGiorno = new Date(dataCorrente.getFullYear() -1, 0, 1);
+    const ultimoGiorno = new Date(dataCorrente.getFullYear() -1, 11, 31);
     setTipoFile("Excel");
     await ottieniLavori(primoGiorno, ultimoGiorno);
   };

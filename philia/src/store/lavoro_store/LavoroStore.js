@@ -88,3 +88,16 @@ class LavoroStore extends EventEmitter {
 
 const lavoroStore = new LavoroStore();
 export default lavoroStore;
+
+///////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
