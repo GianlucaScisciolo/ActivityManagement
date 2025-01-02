@@ -1,260 +1,248 @@
-export const isEmpty = (str) => {
-  return ((str === null) || (str === ""));
+const isEmpty = (value) => {
+  return ((value === null) || (value === ""));
 }
 
-export const matchRegex = (str, regexStr) => {
-  const regex = new RegExp(regexStr);
-  return regex.test(str);
-};
-
-export const isInRange = (num, min, max) => {
+const isInRange = (num, min, max) => {
   return (num >= min && num <= max);
 }
 
-export const clienteIsValid = (nome, cognome, contatto, note) => {
-  return (!isEmpty(nome) && !isEmpty(cognome) && isInRange(contatto.length, 10, 10));
-  // controlli sul nome
-  // controlli sul cognome
-  // per il momento nessun controllo sulle note
+const matchRegex = (value, regexStr) => {
+  const regex = new RegExp(regexStr);
+  return regex.test(value);
+};
+
+const setErrore = (settersErrori, nomeErrore, messaggioErrore) => {
+  settersErrori(prevErrori => ({
+    ...prevErrori, 
+    [nomeErrore]: messaggioErrore
+    }));
 }
 
 export const controlloNuovoCliente = (data, settersErrori) => {
+  /*
+  Controlli clienti:
+  empty:
+    nome != empty FATTO
+    cognome != empty FATTO
+    contatto != enpty FATTO
+  length:
+    1 <= nome.length <= 30 FATTO
+    1 <= cognome.length <= 30 FATTO
+    1 <= contatto.length <= 11 FATTO
+    0 <= note <= 65535 FATTO
+  */
+  
   let numErrori = 0;
 
-  // controllo se il nome non è vuoto
-  if(isEmpty(data.nome)) {
-    settersErrori(prevErrori => ({
-      ...prevErrori, 
-      erroreNome: "Il nome non puo\' essere vuoto."
-    }));
-    numErrori += 1;
+  // controllo sul nome
+  let messagioErrore = "";
+  if (isEmpty(data.nome)) {
+    numErrori += 1; 
+    messagioErrore = "Inserire il nome";
   }
-  else {
-    settersErrori(prevErrori => ({
-      ...prevErrori, 
-      erroreNome: ""
-    }));
+  else if(!isInRange(data.nome.length, 1, 30)) {
+    numErrori += 1; 
+    messagioErrore = "Lunghezza nome non valido, deve avere un numero di caratteri tra 1 e 30 estremi inclusi.";
   }
+  setErrore(settersErrori, "erroreNome", messagioErrore);
 
-  // controllo se il cognome non è vuoto
-  if(isEmpty(data.cognome)) {
-    settersErrori(prevErrori => ({
-      ...prevErrori, 
-      erroreCognome: "Il cognome non puo\' essere vuoto."
-    }));
-    numErrori += 1;
+  // controllo sul cognome
+  messagioErrore = "";
+  if (isEmpty(data.cognome)) {
+    numErrori += 1; 
+    messagioErrore = "Inserire il cognome";
   }
-  else {
-    settersErrori(prevErrori => ({
-      ...prevErrori, 
-      erroreCognome: ""
-    }));
+  else if(!isInRange(data.nome.length, 1, 30)) {
+    numErrori += 1; 
+    messagioErrore = "Lunghezza cognome non valido, deve avere un numero di caratteri tra 1 e 30 estremi inclusi.";
   }
+  setErrore(settersErrori, "erroreCognome", messagioErrore);
 
-  // controllo se il contatto è valido
-  if(isEmpty(data.contatto)) {
-    settersErrori(prevErrori => ({
-      ...prevErrori, 
-      erroreContatto: "Il contatto non puo\' essere vuoto."
-    }));
-    numErrori += 1;
+  // controllo sul contatto
+  messagioErrore = "";
+  if (isEmpty(data.contatto)) {
+    numErrori += 1; 
+    messagioErrore = "Inserire il contatto";
   }
   else if(!matchRegex(data.contatto, "^3[0-9]{9}") && !matchRegex(data.contatto, "^0\\d{9,10}$")) {
-    settersErrori(prevErrori => ({
-      ...prevErrori, 
-      erroreContatto: "Il contatto non e\' valido, deve essere un numero di cellulare o un numero di telefono fisso italiano."
-    }));
     numErrori += 1;
+    messagioErrore = "Contatto non valido. Inserire un numero di cellulare o un numero di telefono valido:\n";
+    messagioErrore += "- numero di cellulare valido: 3XXXXXXXXX\n";
+    messagioErrore += "- numero di telefono valido: 0XXXXXXXXX oppure 0XXXXXXXXXX\n";
+    messagioErrore += "X è un numero tra 0 e 9 estremi inclusi.";
   }
-  else {
-    settersErrori(prevErrori => ({
-      ...prevErrori, 
-      erroreContatto: ""
-    }));
+  setErrore(settersErrori, "erroreContatto", messagioErrore);
+  
+  // controllo sulle note
+  messagioErrore = "";
+  if(!isInRange(data.note.length, 0, 65535)) {
+    numErrori += 1;
+    messagioErrore = "Lunghezza note non valida, deve avere un numero di caratteri tra 1 e 65.535 estremi inclusi.";
   }
-
+  setErrore(settersErrori, "erroreNote", messagioErrore);
+  
   return numErrori;
 }  
 
 export const controlloNuovoProfessionista = (data, settersErrori) => {
+  /*
+  controllo professionisti:
+  empty:
+    nome != empty FATTO
+    professione != empty FATTO
+    contatto != empty or email != empty FATTO
+  length:
+    1 <= nome.length <= 60 FATTO
+    1 <= professione.length <= 30 FATTO
+    0 <= contatto.length <= 11 FATTO
+    0 <= email <= 254 FATTO
+    0 <= note <= 65535 FATTO
+  */
+
   let numErrori = 0;
 
-  // controllo se il nome non è vuoto
-  if(isEmpty(data.nome)) {
-    settersErrori(prevErrori => ({
-      ...prevErrori, 
-      erroreNome: "Il nome non puo\' essere vuoto."
-    }));
-    numErrori += 1;
+  // controllo sul nome
+  let messagioErrore = "";
+  if (isEmpty(data.nome)) {
+    numErrori += 1; 
+    messagioErrore = "Inserire il nome.";
   }
-  else {
-    settersErrori(prevErrori => ({
-      ...prevErrori, 
-      erroreNome: ""
-    }));
+  else if(!isInRange(data.nome.length, 1, 60)) {
+    numErrori += 1; 
+    messagioErrore = "Lunghezza nome non valido, deve avere un numero di caratteri tra 1 e 60 estremi inclusi.";
   }
+  setErrore(settersErrori, "erroreNome", messagioErrore);
 
-  // controllo se la professione non è vuota
-  if(isEmpty(data.professione)) {
-    settersErrori(prevErrori => ({
-      ...prevErrori, 
-      erroreProfessione: "La professione non puo\' essere vuota."
-    }));
-    numErrori += 1;
+  // controllo sulla professione
+  messagioErrore = "";
+  if (isEmpty(data.professione)) {
+    numErrori += 1; 
+    messagioErrore = "Inserire la professione.";
   }
-  else {
-    settersErrori(prevErrori => ({
-      ...prevErrori, 
-      erroreProfessione: ""
-    }));
+  else if(!isInRange(data.professione.length, 1, 30)) {
+    numErrori += 1; 
+    messagioErrore = "Lunghezza professione non valida, deve avere un numero di caratteri tra 1 e 30 estremi inclusi.";
   }
+  setErrore(settersErrori, "erroreProfessione", messagioErrore);
 
-  // controllo se il contatto e l'email sono vuoti
-  if(isEmpty(data.contatto) && isEmpty(data.email)) {
-    settersErrori(prevErrori => ({
-      ...prevErrori, 
-      erroreContattoEEmail: "Inserire il contatto e/o l'email"
-    }));
-    numErrori += 1;
+  // controllo sul contatto e sull'email
+  messagioErrore = "";
+  if (isEmpty(data.contatto) && isEmpty(data.email)) {
+    numErrori += 1; 
+    messagioErrore = "Inserire il contatto e/o l\'email.";
   }
-  else {
-    settersErrori(prevErrori => ({
-      ...prevErrori, 
-      erroreContattoEEmail: ""
-    }));
-  }
+  setErrore(settersErrori, "erroreContattoEEmail", messagioErrore);
 
-  // controllo se il contatto è valido
-  if(!isEmpty(data.contatto) && (!matchRegex(data.contatto, "^3[0-9]{9}$") && !matchRegex(data.contatto, "^0\\d{9,10}$"))) {
-    settersErrori(prevErrori => ({
-      ...prevErrori, 
-      erroreContatto: "Il contatto inserito non e\' valido. Deve essere un numero di cellulare o un numero di telefono fisso italiano."
-    }));
+  // controllo sul contatto
+  messagioErrore = "";
+  if(!isEmpty(data.contatto) && !matchRegex(data.contatto, "^3[0-9]{9}") && !matchRegex(data.contatto, "^0\\d{9,10}$")) {
     numErrori += 1;
+    messagioErrore = "Contatto non valido. Inserire un numero di cellulare o un numero di telefono valido:\n";
+    messagioErrore += "- numero di cellulare valido: 3XXXXXXXXX\n";
+    messagioErrore += "- numero di telefono valido: 0XXXXXXXXX oppure 0XXXXXXXXXX\n";
+    messagioErrore += "X è un numero tra 0 e 9 estremi inclusi.";
   }
-  else {
-    settersErrori(prevErrori => ({
-      ...prevErrori, 
-      erroreContatto: ""
-    }));
-  }
+  setErrore(settersErrori, "erroreContatto", messagioErrore);
 
-  // controllo se l'email è valida
+  // controllo sull'email
+  messagioErrore = "";
   if(!isEmpty(data.email) && !matchRegex(data.email, "^([a-z\\d\\._-]+)@([a-z\\d-]+)\\.([a-z]{2,8})(\\.[a-z]{2,8})?$")) {
-    settersErrori(prevErrori => ({
-      ...prevErrori, 
-      erroreEmail: "L\'email inserita non e\' valida."
-    }));
     numErrori += 1;
+    messagioErrore = "Email non valida.";
   }
-  else {
-    settersErrori(prevErrori => ({
-      ...prevErrori, 
-      erroreEmail: ""
-    }));
+  setErrore(settersErrori, "erroreEmail", messagioErrore);
+
+  // controllo sulle note
+  messagioErrore = "";
+  if(!isInRange(data.note.length, 0, 65535)) {
+    numErrori += 1;
+    messagioErrore = "Lunghezza note non valida, deve avere un numero di caratteri tra 1 e 65.535 estremi inclusi.";
   }
+  setErrore(settersErrori, "erroreNote", messagioErrore);
 
   return numErrori;
 }
 
 export const controlloNuovoLavoro = (data, settersErrori) => {  
+  /*
+  lavoro:
+    empty:
+      solo id_cliente oppure solo id_professionista != empty FATTO
+      descrizione != empty FATTO
+      giorno != empty FATTO
+      orario_inizio != empty FATTO
+      orario_fine != empty FATTO
+    length:
+      1 <= descrizione <= 100 FATTO
+      0 <= note <= 65535 FATTO
+    validità:
+      orario_fine > orario_inizio FATTO
+  */
+
   let numErrori = 0;
 
-  // controllo se solo il cliente o il professionista è stato selezionato
-  if(
-           !((isEmpty(data.id_cliente) && !isEmpty(data.id_professionista)) 
-        || (!isEmpty(data.id_cliente) && isEmpty(data.id_professionista)))) {
-    
-    settersErrori(prevErrori => ({
-      ...prevErrori, 
-      erroreClienteEProfessionista: "Selezionare un cliente oppure un professionista (non entrambi)."
-    }));
-    numErrori += 1;
+  // controllo sull'id_cliente e sull'id_professionista
+  let messagioErrore = "";
+  if (   (isEmpty(data.id_cliente) && !isEmpty(data.id_professionista)) 
+      || (!isEmpty(data.id_cliente) && isEmpty(data.id_professionista))) {
+    numErrori += 1; 
+    messagioErrore = "Selezionare un cliente oppure un profesionista (non entrambi).";
   }
-  else {
-    settersErrori(prevErrori => ({
-      ...prevErrori, 
-      erroreClienteEProfessionista: ""
-    }));
-  }
+  setErrore(settersErrori, "erroreClienteEProfessionista", messagioErrore);
 
-  // controllo se la descrizione non è vuota
-  if(isEmpty(data.descrizione)) {
-    settersErrori(prevErrori => ({
-      ...prevErrori, 
-      erroreDescrizione: "La descrizione non puo\' essere vuota."
-    }));
-    numErrori += 1;
+  // controllo sulla descrizione
+  messagioErrore = "";
+  if (isEmpty(data.descrizione)) {
+    numErrori += 1; 
+    messagioErrore = "Inserire la descrizione.";
   }
-  else {
-    settersErrori(prevErrori => ({
-      ...prevErrori, 
-      erroreDescrizione: ""
-    }));
+  else if(!isInRange(data.descrizione.length, 1, 100)) {
+    numErrori += 1; 
+    messagioErrore = "Lunghezza descrizione non valida, deve avere un numero di caratteri tra 1 e 100 estremi inclusi.";
   }
+  setErrore(settersErrori, "erroreDescrizione", messagioErrore);
 
-  // controllo se è stato selezionato il giorno
-  if(isEmpty(data.giorno)) {
-    settersErrori(prevErrori => ({
-      ...prevErrori, 
-      erroreGiorno: "Selezionare il giorno."
-    }));
-    numErrori += 1;
+  // controllo sul giorno
+  messagioErrore = "";
+  if (isEmpty(data.giorno)) {
+    numErrori += 1; 
+    messagioErrore = "Inserire il giorno.";
   }
-  else {
-    settersErrori(prevErrori => ({
-      ...prevErrori, 
-      erroreGiorno: ""
-    }));
-  }
+  setErrore(settersErrori, "erroreGiorno", messagioErrore);
 
-  // controllo se è stato selezionato l'orario iniziale
-  if(isEmpty(data.orario_inizio)) {
-    settersErrori(prevErrori => ({
-      ...prevErrori, 
-      erroreOrarioInizio: "Selezionare l\'orario iniziale."
-    }));
-    numErrori += 1;
+  // controllo sull'orario iniziale
+  messagioErrore = "";
+  if (isEmpty(data.orario_inizio)) {
+    numErrori += 1; 
+    messagioErrore = "Inserire l\'orario iniziale.";
   }
-  else {
-    settersErrori(prevErrori => ({
-      ...prevErrori, 
-      erroreOrarioInizio: ""
-    }));
-  }
+  setErrore(settersErrori, "erroreOrarioInizio", messagioErrore);
 
-  // controllo se è stato selezionato l'orario finale
-  if(isEmpty(data.orario_fine)) {
-    settersErrori(prevErrori => ({
-      ...prevErrori, 
-      erroreOrarioFine: "Selezionare l\'orario finale."
-    }));
-    numErrori += 1;
+  // controllo sull'orario finale
+  messagioErrore = "";
+  if (isEmpty(data.orario_fine)) {
+    numErrori += 1; 
+    messagioErrore = "Inserire l\'orario finale.";
   }
-  else {
-    settersErrori(prevErrori => ({
-      ...prevErrori, 
-      erroreOrarioFine: ""
-    }));
-  }
+  setErrore(settersErrori, "erroreOrarioFine", messagioErrore);
 
-  // controllo se l'orario iniziale e l'orario finale sono validi
-  if(data.orario_fine <= data.orario_inizio) {
-    settersErrori(prevErrori => ({
-      ...prevErrori, 
-      erroreOrari: "L\'orario finale non può venire prima dell'orario iniziale."
-    }));
+  // controllo sull'orario iniziale e sull'orario finale
+  messagioErrore = "";
+  if(!isEmpty(data.orario_inizio) && !isEmpty(data.orario_fine) && data.orario_inizio >= data.orario_fine) {
+    numErrori += 1; 
+    messagioErrore = "L\'orario iniziale deve avvenire prima dell\'orario finale e non possono essere uguali.";
+  }
+  setErrore(settersErrori, "erroreOrari", messagioErrore);
+
+  // controllo sulle note
+  messagioErrore = "";
+  if(!isInRange(data.note.length, 0, 65535)) {
     numErrori += 1;
+    messagioErrore = "Lunghezza note non valida, deve avere un numero di caratteri tra 1 e 65.535 estremi inclusi.";
   }
-  else {
-    settersErrori(prevErrori => ({
-      ...prevErrori, 
-      erroreOrari: ""
-    }));
-  }
+  setErrore(settersErrori, "erroreNote", messagioErrore);
 
   return numErrori;
-
 }
 
 

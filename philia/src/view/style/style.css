@@ -91,6 +91,8 @@ body {
   text-align: center;
   margin-bottom: 5%;
   /* font-size: 25px; */
+  background-color: #000000;
+  border-radius: 40px;
 }
 
 .buttonForm {
