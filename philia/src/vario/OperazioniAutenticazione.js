@@ -9,7 +9,7 @@ export const login = async (e, setUtenti) => {
   const formData = new FormData(e.target);
   const data = {
     username: formData.get('username'),
-    password: (formData.get('password') !== null ? formData.get('password') : formData.get('passwordAttuale')),
+    password: formData.get('password')
   };
 
   try {
@@ -57,28 +57,36 @@ export const login = async (e, setUtenti) => {
   // alert(utenti.length);
 // };
 
-export const modificaProfilo = async (e, setUtenti) => {
-  e.preventDefault();
-  autenticazioneStore.setUtenti([]);
-  const datiForm = {
-    username_attuale: e.target.usernameAttuale.value,
-    nuovo_username: e.target.nuovoUsername.value,
-    ruolo: e.target.ruolo.value,
-    note: e.target.note.value,
-    password_attuale: e.target.passwordAttuale.value,
-    nuova_password: e.target.nuovaPassword.value,
-  };
+export const eseguiModificaProfilo = async (datiModifica) => {
+  // e.preventDefault();
+  // autenticazioneStore.setUtenti([]);
+  // const datiForm = {
+  //   username_attuale: e.target.usernameAttuale.value,
+  //   nuovo_username: e.target.nuovoUsername.value,
+  //   ruolo: e.target.ruolo.value,
+  //   note: e.target.note.value,
+  //   password_attuale: e.target.passwordAttuale.value,
+  //   nuova_password: e.target.nuovaPassword.value,
+  // };
 
+  // try {
+  //   await AutenticazioneAction.dispatchAction(datiForm, operazioniAutenticazione.MODIFICA_PROFILO);
+  //   alert("Modifica profilo eseguita con successo");
+  // } catch (error) {
+  //   console.error("Errore durante la modifica del profilo: ", error);
+  //   if (error.message === 'Username e/o password errati') {
+  //     alert("Username e/o password errati");
+  //   } else {
+  //     alert("Modifica profilo fallita.");
+  //   }
+  // }
+  // alert("Facciamo qualcosa!!");
   try {
-    await AutenticazioneAction.dispatchAction(datiForm, operazioniAutenticazione.MODIFICA_PROFILO);
+    await AutenticazioneAction.dispatchAction(datiModifica, operazioniAutenticazione.MODIFICA_PROFILO);
     alert("Modifica profilo eseguita con successo");
-  } catch (error) {
-    console.error("Errore durante la modifica del profilo: ", error);
-    if (error.message === 'Username e/o password errati') {
-      alert("Username e/o password errati");
-    } else {
-      alert("Modifica profilo fallita.");
-    }
+  }
+  catch (error) {
+    alert("Modifica profilo fallita, riprova piu\' tardi.");
   }
 }
 

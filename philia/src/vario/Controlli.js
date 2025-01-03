@@ -15,7 +15,7 @@ const setErrore = (settersErrori, nomeErrore, messaggioErrore) => {
   settersErrori(prevErrori => ({
     ...prevErrori, 
     [nomeErrore]: messaggioErrore
-    }));
+  }));
 }
 
 export const controlloNuovoCliente = (data, settersErrori) => {
@@ -64,7 +64,7 @@ export const controlloNuovoCliente = (data, settersErrori) => {
     numErrori += 1; 
     messagioErrore = "Inserire il contatto";
   }
-  else if(!matchRegex(data.contatto, "^3[0-9]{9}") && !matchRegex(data.contatto, "^0\\d{9,10}$")) {
+  else if(!matchRegex(data.contatto, "^3[0-9]{9}$") && !matchRegex(data.contatto, "^0\\d{9,10}$")) {
     numErrori += 1;
     messagioErrore = "Contatto non valido. Inserire un numero di cellulare o un numero di telefono valido:\n";
     messagioErrore += "- numero di cellulare valido: 3XXXXXXXXX\n";
@@ -135,7 +135,7 @@ export const controlloNuovoProfessionista = (data, settersErrori) => {
 
   // controllo sul contatto
   messagioErrore = "";
-  if(!isEmpty(data.contatto) && !matchRegex(data.contatto, "^3[0-9]{9}") && !matchRegex(data.contatto, "^0\\d{9,10}$")) {
+  if(!isEmpty(data.contatto) && !matchRegex(data.contatto, "^3[0-9]{9}$") && !matchRegex(data.contatto, "^0\\d{9,10}$")) {
     numErrori += 1;
     messagioErrore = "Contatto non valido. Inserire un numero di cellulare o un numero di telefono valido:\n";
     messagioErrore += "- numero di cellulare valido: 3XXXXXXXXX\n";
@@ -183,8 +183,8 @@ export const controlloNuovoLavoro = (data, settersErrori) => {
 
   // controllo sull'id_cliente e sull'id_professionista
   let messagioErrore = "";
-  if (   (isEmpty(data.id_cliente) && !isEmpty(data.id_professionista)) 
-      || (!isEmpty(data.id_cliente) && isEmpty(data.id_professionista))) {
+  if (   (!isEmpty(data.id_cliente) && !isEmpty(data.id_professionista)) 
+      || (isEmpty(data.id_cliente) && isEmpty(data.id_professionista))) {
     numErrori += 1; 
     messagioErrore = "Selezionare un cliente oppure un profesionista (non entrambi).";
   }
@@ -237,13 +237,113 @@ export const controlloNuovoLavoro = (data, settersErrori) => {
   // controllo sulle note
   messagioErrore = "";
   if(!isInRange(data.note.length, 0, 65535)) {
-    numErrori += 1;
+    numErrori += 1; 
     messagioErrore = "Lunghezza note non valida, deve avere un numero di caratteri tra 1 e 65.535 estremi inclusi.";
   }
   setErrore(settersErrori, "erroreNote", messagioErrore);
 
   return numErrori;
 }
+
+export const controlloProfilo = (data, utente_trovato, settersErrori) => {
+  let numErrori = 0;
+  setErrore(settersErrori, "erroreUsername", "");
+  setErrore(settersErrori, "erroreRuolo", "");
+  setErrore(settersErrori, "erroreNote", "");
+  setErrore(settersErrori, "errore2Password", "");
+  setErrore(settersErrori, "erroreNuovaPassword", "");
+  setErrore(settersErrori, "erroreConfermaNuovaPassword", "");
+  setErrore(settersErrori, "erroreLogin", "");
+
+  // controllo sullo username e sulla password attuale
+  let messaggioErrore = "";
+  // alert(utente_trovato);
+  if(!utente_trovato) {
+    numErrori += 1;
+    messaggioErrore = "Username e/o password errati.";
+    setErrore(settersErrori, "erroreLogin", messaggioErrore);
+    return numErrori;
+  }
+
+  // controllo sul nuovo username
+  messaggioErrore = "";
+  if (isEmpty(data.nuovo_username)) {
+    numErrori += 1; 
+    messaggioErrore = "Inserire lo username.";
+  }
+  else if(!isInRange(data.nuovo_username.length, 1, 10)) {
+    numErrori += 1; 
+    messaggioErrore = "Lunghezza username non valida, deve avere un numero di caratteri tra 1 e 10 estremi inclusi.";
+  }
+  setErrore(settersErrori, "erroreUsername", messaggioErrore);
+
+  // controllo sul ruolo
+  messaggioErrore = "";
+  if (data.ruolo !== "Dipendente" && data.ruolo !== "Amministratore") {
+    numErrori += 1; 
+    messaggioErrore = "Ruolo non valido. Selezionare uno dei seguenti ruoli: \'Dipendente\' oppure \'Amministratore\'.";
+  }
+  setErrore(settersErrori, "erroreRuolo", messaggioErrore);
+
+  // controllo sulle note
+  messaggioErrore = "";
+  if(!isInRange(data.note.length, 0, 65535)) {
+    numErrori += 1; 
+    messaggioErrore = "Lunghezza note non valida, deve avere un numero di caratteri tra 1 e 65.535 estremi inclusi.";
+  }
+  setErrore(settersErrori, "erroreNote", messaggioErrore);
+
+  data.nuova_password = (data.nuova_password === null) ? "" : data.nuova_password;
+  data.conferma_nuova_password = (data.conferma_nuova_password === null) ? "" : data.conferma_nuova_password;
+  
+  // controllo sulle 2 password
+  messaggioErrore = "";
+  if(data.nuova_password !== data.conferma_nuova_password) {
+    numErrori += 1;
+    messaggioErrore = "La nuova password e la conferma della nuova password non combaciano.";
+  }
+  setErrore(settersErrori, "errore2Password", messaggioErrore);
+
+  const regexPassword = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*])[A-Za-z\\d!@#$%^&*]{8,128}$";
+  
+  // controllo sulla nuova password
+  messaggioErrore = "";
+  if(isEmpty(data.nuova_password)) {
+    numErrori += 1;
+    messaggioErrore = "Inserire la nuova password.";
+  }
+  else if(!matchRegex(data.nuova_password, regexPassword)) {
+    numErrori += 1;
+    messaggioErrore =  "Nuova password non valida. deve avere:<br>";
+    messaggioErrore += "- minimo 8 e massimo 128 caratteri alfanumerici.<br>";
+    messaggioErrore += "- almeno 1 numero.<br>";
+    messaggioErrore += "- almeno 1 lettera maiuscola.<br>";
+    messaggioErrore += "- almeno 1 lettera minuscola.<br>";
+    messaggioErrore += "- almeno 1 dei seguenti caratteri speciali: !@#$%^&*<br>";
+  }
+  setErrore(settersErrori, "erroreNuovaPassword", messaggioErrore);
+
+  // controllo sulla conferma della nuova password
+  messaggioErrore = "";
+  if(isEmpty(data.conferma_nuova_password)) {
+    numErrori += 1;
+    messaggioErrore = "Inserire la conferma della nuova password.";
+  }
+  else if(!matchRegex(data.conferma_nuova_password, regexPassword)) {
+    numErrori += 1;
+    messaggioErrore =  "Conferma nuova password non valida. deve avere:<br>";
+    messaggioErrore += "- minimo 8 e massimo 128 caratteri alfanumerici.<br>";
+    messaggioErrore += "- almeno 1 numero.<br>";
+    messaggioErrore += "- almeno 1 lettera maiuscola.<br>";
+    messaggioErrore += "- almeno 1 lettera minuscola.<br>";
+    messaggioErrore += "- almeno 1 dei seguenti caratteri speciali: !@#$%^&*<br>";
+  }
+  setErrore(settersErrori, "erroreConfermaNuovaPassword", messaggioErrore);
+
+  return numErrori;
+}
+
+
 
 
 

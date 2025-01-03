@@ -35,6 +35,30 @@ const Lavori = () => {
     })
   }
 
+  const [errori1, setErrori1] = useState ({
+    erroreCliente: "",
+    erroreProfessionista: "",
+    erroreClienteEProfessionista: "",
+    erroreDescrizione: "",
+    erroreGiorno: "",
+    erroreOrarioInizio: "",
+    erroreOrarioFine: "",
+    erroreOrari: "",
+    erroreNote: ""
+  })
+
+const [errori2, setErrori2] = useState ({
+  erroreCliente: "",
+  erroreProfessionista: "",
+  erroreClienteEProfessionista: "",
+  erroreDescrizione: "",
+  erroreGiorno: "",
+  erroreOrarioInizio: "",
+  erroreOrarioFine: "",
+  erroreOrari: "",
+  erroreNote: ""
+})
+
   const controllo = () => {
     console.log(datiLavoriLastSearch);
 
@@ -90,7 +114,9 @@ const Lavori = () => {
         setSelectedIds={setSelectedIds}
         selectedIdsModifica={selectedIdsModifica}
         setSelectedIdsModifica={setSelectedIdsModifica}
-        />
+        errori={errori1}
+        setErrori={setErrori1}
+      />
 
       <div className='containerTitle'><label className='titoloForm'>Lavori professionisti</label></div>
       
@@ -105,12 +131,14 @@ const Lavori = () => {
         setSelectedIds={setSelectedIds}
         selectedIdsModifica={selectedIdsModifica}
         setSelectedIdsModifica={setSelectedIdsModifica}
+        errori={errori2}
+        setErrori={setErrori2}
         />
 
       <div className='containerButtons'>
         <Row className='custom-row'>
           <Col className='custom-col'>
-            {selectedIdsModifica.length > 0 && <button className='col-button-modifica' onClick={() => modifica("lavori", datiLavoriLastSearch, selectedIdsModifica, setSelectedIdsModifica, lavoriClienti, setLavoriClienti, lavoriProfessionisti, setLavoriProfessionisti)}>Modifica</button>}
+            {selectedIdsModifica.length > 0 && <button className='col-button-modifica' onClick={() => modifica("lavori", datiLavoriLastSearch, selectedIdsModifica, setSelectedIdsModifica, lavoriClienti, setLavoriClienti, lavoriProfessionisti, setLavoriProfessionisti, setErrori1, setErrori2)}>Modifica</button>}
           </Col>
           <Col className='custom-col'>
             {selectedIds.length > 0 && <button className='col-button-elimina' onClick={() => elimina("lavori", datiLavoriLastSearch, selectedIds, setSelectedIds, lavoriClienti, setLavoriClienti, lavoriProfessionisti, setLavoriProfessionisti)}>Elimina</button>}

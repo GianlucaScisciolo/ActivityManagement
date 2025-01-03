@@ -95,7 +95,7 @@ app.post("/MODIFICA_PROFILO", async (req, res) => {
     username_attuale = '', nuovo_username = '', ruolo = '', 
     note = '', password_attuale = '', nuova_password = ''
   } = req.body;
-  
+
   console.log("Dati ricevuti per la modifica: ", [username_attuale, nuovo_username, ruolo, note, password_attuale, nuova_password]);
   
   const sql = ` 
@@ -132,7 +132,7 @@ app.post("/INSERISCI_CLIENTE", async (req, res) => {
     VALUES (?, ?, ?, ?); 
   `;
 
-  const params = [`$nome}`, `$cognome}`, `$contatto}`, `$note}`];
+  const params = [`${nome}`, `${cognome}`, `${contatto}`, `${note}`];
   
   return getResults(sql, params, res);
 });

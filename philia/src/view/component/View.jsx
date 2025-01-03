@@ -282,7 +282,8 @@ const formattedOrarioFine = formatTimeWithoutSeconds(orarioFine);
 }
 
 export const RenderItemsInRowsList = ({tipoItem, items, setterItems, viewElements, setSelectedTrashCount, setSelectedPencilCount, 
-                                       selectedIds, setSelectedIds, selectedIdsModifica, setSelectedIdsModifica}) => {
+                                       selectedIds, setSelectedIds, selectedIdsModifica, setSelectedIdsModifica, 
+                                       errori, setErrori}) => {
   if (items.length === 0) {
     return <center><div>Nessun {tipoItem} trovato.</div></center>;
   }
@@ -356,8 +357,69 @@ export const RenderItemsInRowsList = ({tipoItem, items, setterItems, viewElement
       />
     )
   }
+  rows.push(
+    <>
+      <Row className='custom-row'>
+        <Col className='custom-col'><span className='span-errore-col'></span></Col>
+        {(tipoItem === "cliente") && (
+          <>
+            <Col className='custom-col'><span className='span-errore-col'></span></Col>
+            <Col className='custom-col'><span className='span-errore-col'></span></Col>
+            <Col className='custom-col'><span className='span-errore-col'>{errori.erroreContatto}</span></Col>
+            <Col className='custom-col'><span className='span-errore-col'>{errori.erroreNote}</span></Col>
+          </>
+        )}
+        {(tipoItem === "professionista") && (
+          <>
+            <Col className='custom-col'><span className='span-errore-col'></span></Col>
+            <Col className='custom-col'><span className='span-errore-col'></span></Col>
+            {(tipoItem === "lavoro cliente") && (
+              <>
+                <Col className='custom-col'><span className='span-errore-col'>{errori.erroreContatto}</span></Col>
+                <Col className='custom-col'><span className='span-errore-col'>{errori.erroreEmail}</span></Col>
+              </>
+            )}
+            {(tipoItem === "lavoro cliente") && (
+              <Col className='custom-col'><span className='span-errore-col'>{errori.erroreContattoEEmail}</span></Col>
+            )}
+            <Col className='custom-col'><span className='span-errore-col'>{errori.erroreNote}</span></Col>
+          </>
+        )}
+        {(tipoItem === "lavoro cliente" || tipoItem === "lavoro professionista") && (
+          <>
+            <Col className='custom-col'><span className='span-errore-col'></span></Col>
+            <Col className='custom-col'><span className='span-errore-col'></span></Col>
+            <Col className='custom-col'><span className='span-errore-col'>{errori.erroreDescrizione}</span></Col>
+            <Col className='custom-col'><span className='span-errore-col'>{errori.erroreGiorno}</span></Col>
+            {(errori.erroreOrari === "") && (
+              <>
+                <Col className='custom-col'><span className='span-errore-col'>{errori.erroreOrarioInizio}</span></Col>
+                <Col className='custom-col'><span className='span-errore-col'>{errori.erroreOrarioFine}</span></Col>
+              </>
+            )}
+            {(errori.erroreOrari !== "") && (
+              <Col className='custom-col'><span className='span-errore-col'>{errori.erroreOrari}</span></Col>
+            )}
+            <Col className='custom-col'><span className='span-errore-col'>{errori.erroreNote}</span></Col>
+          </>
+        )}
+      </Row>
+    </>
+  )
   return rows;
 };
+/*
+    : "",
+    : "",
+    : "",
+    : "",
+    : "",
+    : "",
+    : "",
+    : "",
+    : ""
+*/
+
 
 
 

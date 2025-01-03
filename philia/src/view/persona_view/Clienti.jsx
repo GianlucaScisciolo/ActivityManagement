@@ -31,6 +31,13 @@ const Clienti = () => {
     })
   }
 
+  const [errori, setErrori] = useState({
+    "erroreNome": "",
+    "erroreCognome": "",
+    "erroreContatto": "",
+    "erroreNote": ""
+  })
+
   const controllo = () => {
     console.log(datiClienteLastSearch);
 
@@ -83,12 +90,14 @@ const Clienti = () => {
         setSelectedIds={setSelectedIds}
         selectedIdsModifica={selectedIdsModifica}
         setSelectedIdsModifica={setSelectedIdsModifica}
+        errori={errori}
+        setErrori={setErrori}
       />
 
       <div className='containerButtons'>
         <Row className='custom-row'>
           <Col className='custom-col'>
-            {selectedIdsModifica.length > 0 && <button className='col-button-modifica' onClick={() => modifica("clienti", datiClienteLastSearch, selectedIdsModifica, setSelectedIdsModifica, clienti, setClienti, null, null)}>Modifica</button>}
+            {selectedIdsModifica.length > 0 && <button className='col-button-modifica' onClick={() => modifica("clienti", datiClienteLastSearch, selectedIdsModifica, setSelectedIdsModifica, clienti, setClienti, null, null, setErrori, null)}>Modifica</button>}
           </Col>
           <Col className='custom-col'>
             {selectedIds.length > 0 && <button className='col-button-elimina' onClick={() => elimina("clienti", datiClienteLastSearch, selectedIds, setSelectedIds, clienti, setClienti, null, null)}>Elimina</button>}
