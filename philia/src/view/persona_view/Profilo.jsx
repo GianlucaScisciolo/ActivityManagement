@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import Header from "../component/Header";
 import { login, eseguiModificaProfilo } from "../../vario/OperazioniAutenticazione";
 import autenticazioneStore from "../../store/autenticazione_store/AutenticazioneStore";
 import { operazioniAutenticazione } from "../../vario/Operazioni";
 import { controlloProfilo } from "../../vario/Controlli";
+import { eseguiModificaAutenticazioneSession } from "../../store/redux/AutenticazioneSessionSlice";
 
 const Profilo = () => {
   const autenticazioneSession = useSelector((state) => state.autenticazioneSession.value);
@@ -14,58 +15,58 @@ const Profilo = () => {
   const [ruolo, setRuolo] = useState(autenticazioneSession.ruolo);
   const [ruoloSelezionato, setRuoloSelezionato] = useState(autenticazioneSession.ruolo);
   const [note, setNote] = useState(autenticazioneSession.note);
+  const [password, setPassword] = useState('');
+  const [nuovaPassword, setNuovaPassword] = useState('');
+  const [confermaNuovaPassword, setConfermaNuovaPassword] = useState('');
+  const dispatch = useDispatch();
   const [errori, setErrori] = useState({
-    "erroreUsername": "",
-    "erroreRuolo": "",
-    "erroreNote": "",
-    "errore2Password": "",
+    "erroreNuovoUsername": "",
+    "erroreNuovoRuolo": "",
+    "erroreNuoveNote": "",
+    "errorePasswordAttuale": "",
     "erroreNuovaPassword": "",
     "erroreConfermaNuovaPassword": "",
+    "errore2Password": "",
     "erroreLogin": ""
   });
   const [aggiornamentoCompletato, setAggiornamentoCompletato] = useState(false);
-  const [dati, setDati] = useState({
-    utente_trovato: "",
-    username_attuale: "",
-    nuovo_username: "",
-    ruolo: "",
-    note: "",
-    password_attuale: "",
-    nuova_password: "",
-    conferma_nuova_password: ""
-  });
-
-  // const controlloLogin = async (e) => {
-  //   await login(e, setUtenti);
-  //   // setAggiornamentoCompletato(true);
-  // };
-
-  // useEffect(() => {
-  //   if (utenti !== -1) {
-  //     console.log("Aggiornamento in corso...");
-  //   } else {
-  //     console.log("Aggiornamento effettuato.");
-  //     console.log(
-  //       `${dati.utente_trovato}\n${dati.username_attuale}\n${dati.nuovo_username}\n${dati.ruolo}\n${dati.note}\n${dati.password_attuale}\n${dati.nuova_password}\n${dati.conferma_nuova_password}`
-  //     );
-  //   }
-  // }, [utenti]);
+  // const [dati, setDati] = useState({
+  //   utente_trovato: "",
+  //   username_attuale: "",
+  //   nuovo_username: "",
+  //   ruolo: "",
+  //   note: "",
+  //   password_attuale: "",
+  //   nuova_password: "",
+  //   conferma_nuova_password: ""
+  // });
 
   const modificaProfilo = async (e) => {
     e.preventDefault();
     autenticazioneStore.setUtenti(-1);
     setUtenti(-1);
-    const formData = new FormData(e.target);
-    setDati({
-      // utente_trovato: (utenti.length === 1),
-      username_attuale: formData.get("username"),
-      nuovo_username: formData.get("nuovoUsername"),
-      ruolo: formData.get("ruolo"),
-      note: formData.get("note"),
-      password_attuale: formData.get("password"),
-      nuova_password: formData.get("nuovaPassword"),
-      conferma_nuova_password: formData.get("confermaNuovaPassword")
-    });
+    /*
+      const formData = new FormData(e.target);
+      const password_db = (utenti.length === 1) ? utenti[0].password : null;
+      const salt_hex_db = (utenti.length === 1) ? utenti[0].salt_hex : null;
+      const dati = {
+        "username_inserito": usernameInserito,
+        "password_inserita": passwordInserita,
+        "password_db": password_db,
+        "salt_hex_db": salt_hex_db
+      }
+    */
+    
+    // setDati({
+    //   // utente_trovato: (utenti.length === 1),
+    //   username_attuale: formData.get("username"),
+    //   nuovo_username: formData.get("nuovoUsername"),
+    //   ruolo: formData.get("ruolo"),
+    //   note: formData.get("note"),
+    //   password_attuale: formData.get("password"),
+    //   nuova_password: formData.get("nuovaPassword"),
+    //   conferma_nuova_password: formData.get("confermaNuovaPassword")
+    // });
     await login(e, setUtenti);
     setAggiornamentoCompletato(true);
   };
@@ -82,6 +83,15 @@ const Profilo = () => {
         break;
       case 'note':
         setNote(value);
+        break;
+      case 'password': 
+        setPassword(value);
+        break;
+      case 'nuovaPassword':
+        setNuovaPassword(value);
+        break;
+      case 'confermaNuovaPassword':
+        setConfermaNuovaPassword(value);
         break;
       default:
         break;
@@ -109,15 +119,42 @@ const Profilo = () => {
     if (aggiornamentoCompletato && utenti !== -1) {
       setAggiornamentoCompletato(false);
       console.log("Aggiornamento effettuato.");
-
-      alert(utenti.length === 1);
+      console.log(utenti.length === 1);
+      /*
+      const dati = {
+        "username_inserito": usernameInserito,
+        "password_inserita": passwordInserita,
+        "password_db": password_db,
+        "salt_hex_db": salt_hex_db
+      }
+      */
+      const password_db = (utenti.length === 1) ? utenti[0].password : null;
+      const salt_hex_db = (utenti.length === 1) ? utenti[0].salt_hex : null;
+      const dati = {
+        "username": usernameAttuale,
+        "nuovo_username": nuovoUsername,
+        "nuovo_ruolo": ruolo,
+        "nuove_note": note,
+        "password_attuale": password,
+        "nuova_password": nuovaPassword,
+        "conferma_nuova_password": confermaNuovaPassword,
+        "password_db": password_db,
+        "salt_hex_db": salt_hex_db
+      }
       console.log(
-        `${dati.username_attuale}\n${dati.nuovo_username}\n${dati.ruolo}\n${dati.note}\n${dati.password_attuale}\n${dati.nuova_password}\n${dati.conferma_nuova_password}`
+        `${dati.username}\n${dati.nuovo_username}\n${dati.nuovo_ruolo}\n${dati.nuove_note}\n${dati.password_attuale}\n${dati.nuova_password}\n${dati.conferma_nuova_password}\n${dati.password_db}\n${dati.salt_hex_db}`
       );
-      if(controlloProfilo(dati, (utenti.length === 1), setErrori) > 0) {
+      if(controlloProfilo(dati, setErrori) > 0) {
         return;
       }
+      
       eseguiModificaProfilo(dati);
+
+      dispatch(eseguiModificaAutenticazioneSession({
+        username: dati.nuovo_username,
+        ruolo: dati.nuovo_ruolo,
+        note: dati.nuove_note
+      }));
     }
   }, [utenti]);
   
@@ -142,38 +179,22 @@ const Profilo = () => {
         
           <label className='labelForm'>Username</label>
           <input className='inputFormModifica' type='text' name='nuovoUsername' value={nuovoUsername} onChange={handleInputChange} />
-          <span className='spanErrore'>{errori.erroreUsername}</span>
+          <span className='spanErrore'>{errori.erroreNuovoUsername}</span>
 
-          <label className='labelForm'>Ruolo</label>
-          <select
-            className='inputFormModifica'
-            name='ruolo'
-            value={ruoloSelezionato}
-            onChange={(e) => {
-              setRuoloSelezionato(e.target.value);
-              setRuolo(e.target.value);
-            }}
-          >
-            <option value=''>Seleziona un ruolo</option>
-            <option value='Amministratore'>Amministratore</option>
-            <option value='Dipendente'>Dipendente</option>
-          </select>
-          <span className='spanErrore'>{errori.erroreRuolo}</span>
-          
           <label className='labelForm'>Note</label>
           <textarea className='textAreaFormModifica' name='note' value={note} onChange={handleInputChange} />
-          <span className='spanErrore'>{errori.erroreNote}</span>
+          <span className='spanErrore'>{errori.erroreNuoveNote}</span>
 
           <label className='labelForm'>Password attuale</label>
-          <input className='inputFormModifica' type='password' name='password' />
-          <span className='spanErrore'></span>
+          <input className='inputFormModifica' type='password' name='password' value={password} onChange={handleInputChange} />
+          <span className='spanErrore'>{errori.errorePasswordAttuale}</span>
 
           <label className='labelForm'>Nuova password</label>
-          <input className='inputFormModifica' type='password' name='nuovaPassword' />
+          <input className='inputFormModifica' type='password' name='nuovaPassword' value={nuovaPassword} onChange={handleInputChange} />
           <span className='spanErrore'>{errori.erroreNuovaPassword}</span>
           
           <label className='labelForm'>Conferma nuova password</label>
-          <input className='inputFormModifica' type='password' name='confermaNuovaPassword' />
+          <input className='inputFormModifica' type='password' name='confermaNuovaPassword' value={confermaNuovaPassword} onChange={handleInputChange} />
           <span className='spanErrore'>{errori.erroreConfermaNuovaPassword}</span>
 
           <span className='spanErrore'>{errori.errore2Password}</span>

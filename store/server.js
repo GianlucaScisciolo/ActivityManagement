@@ -74,11 +74,11 @@ app.post("/LOGIN", async (req, res) => {
 
   const sql = ` 
     SELECT 
-      \`username\`, \`ruolo\`, \`note\` 
+      \`username\`, \`ruolo\`, \`note\`, \`password\`, \`salt_hex\` 
     FROM 
       \`utente\` 
     WHERE 
-      \`username\` = ? AND \`password\` = ?;  
+      \`username\` = ?; 
   `;
 
   const params = [`${username}`, `${password}`];
@@ -92,22 +92,40 @@ app.post("/LOGIN", async (req, res) => {
  */
 app.post("/MODIFICA_PROFILO", async (req, res) => {
   const { 
-    username_attuale = '', nuovo_username = '', ruolo = '', 
-    note = '', password_attuale = '', nuova_password = ''
+    username_attuale = '', password_attuale = '', nuovo_username = '', nuova_password = '', 
+    nuovo_ruolo = '', nuove_note = '', nuovo_salt_hex = ''
   } = req.body;
 
-  console.log("Dati ricevuti per la modifica: ", [username_attuale, nuovo_username, ruolo, note, password_attuale, nuova_password]);
+  console.log("Dati ricevuti per la modifica: ", [
+    username_attuale, password_attuale, nuovo_username, nuova_password, nuovo_ruolo, nuove_note, nuovo_salt_hex
+  ]);
   
-  const sql = ` 
+  const sql = `
     UPDATE 
       \`utente\` 
-      SET 
-        \`username\` = ?, \`ruolo\` = ?, \`note\` = ?, \`password\` = ? 
-      WHERE 
-        \`username\` = ? AND \`password\` = ?; 
+    SET 
+      \`username\` = ?, 
+      \`ruolo\` = ?, 
+      \`note\` = ? 
+      ${nuova_password !== "" ? ", \`password\` = ?, \`salt_hex\` = ? " : ""} 
+    WHERE 
+      \`username\` = ? AND \`password\` = ?; 
   `;
   
-  const params = [`${nuovo_username}`, `${ruolo}`, `${note}`, `${nuova_password}`, `${username_attuale}`, `${password_attuale}`];
+  const params = [
+    `${nuovo_username}`, 
+    `${nuovo_ruolo}`, 
+    `${nuove_note}`
+  ];
+
+  if (nuova_password !== "") {
+    params.push(`${nuova_password}`);
+    params.push(`${nuovo_salt_hex}`);
+  }
+
+  params.push(`${username_attuale}`);
+  params.push(`${password_attuale}`);
+
 
   return getResults(sql, params, res);
 });

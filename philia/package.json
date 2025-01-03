@@ -13,7 +13,7 @@
     "@reduxjs/toolkit": "^2.5.0",
     "axios": "^1.7.9",
     "bootstrap": "^5.3.3",
-    "crypto": "^1.0.1",
+    "crypto-js": "^4.2.0",
     "events": "^3.3.0",
     "exceljs": "^4.4.0",
     "file-saver": "^2.0.5",

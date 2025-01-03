@@ -1,3 +1,5 @@
+import { passwordIsCorrect, PEPPER_HEX } from "./Sicurezza";
+
 const isEmpty = (value) => {
   return ((value === null) || (value === ""));
 }
@@ -245,100 +247,156 @@ export const controlloNuovoLavoro = (data, settersErrori) => {
   return numErrori;
 }
 
-export const controlloProfilo = (data, utente_trovato, settersErrori) => {
+export const controlloLogin = (dati, settersErrori) => {
+  /*
+    "password_db": password_db,
+    "salt_hex_db": salt_hex_db
+  */ 
+
   let numErrori = 0;
-  setErrore(settersErrori, "erroreUsername", "");
-  setErrore(settersErrori, "erroreRuolo", "");
-  setErrore(settersErrori, "erroreNote", "");
-  setErrore(settersErrori, "errore2Password", "");
-  setErrore(settersErrori, "erroreNuovaPassword", "");
-  setErrore(settersErrori, "erroreConfermaNuovaPassword", "");
-  setErrore(settersErrori, "erroreLogin", "");
-
-  // controllo sullo username e sulla password attuale
   let messaggioErrore = "";
-  // alert(utente_trovato);
-  if(!utente_trovato) {
-    numErrori += 1;
-    messaggioErrore = "Username e/o password errati.";
-    setErrore(settersErrori, "erroreLogin", messaggioErrore);
-    return numErrori;
-  }
 
-  // controllo sul nuovo username
+  const regexPassword = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*])[A-Za-z\\d!@#$%^&*]{8,128}$";
+
+  // controllo sullo username inserito
   messaggioErrore = "";
-  if (isEmpty(data.nuovo_username)) {
+  if (isEmpty(dati.username_inserito)) {
     numErrori += 1; 
     messaggioErrore = "Inserire lo username.";
   }
-  else if(!isInRange(data.nuovo_username.length, 1, 10)) {
+  else if(!isInRange(dati.username_inserito.length, 1, 10)) {
     numErrori += 1; 
     messaggioErrore = "Lunghezza username non valida, deve avere un numero di caratteri tra 1 e 10 estremi inclusi.";
   }
   setErrore(settersErrori, "erroreUsername", messaggioErrore);
 
-  // controllo sul ruolo
+  // constrollo sulla password inserita
   messaggioErrore = "";
-  if (data.ruolo !== "Dipendente" && data.ruolo !== "Amministratore") {
+  if(isEmpty(dati.password_inserita)) {
+    numErrori += 1;
+    messaggioErrore = "Inserire la password.";
+  }
+  else if(!matchRegex(dati.password_inserita, regexPassword)) {
+    numErrori += 1;
+    messaggioErrore =  "Password non valida. deve avere:<br>";
+    messaggioErrore += "- minimo 8 e massimo 128 caratteri alfanumerici.<br>";
+    messaggioErrore += "- almeno 1 numero.<br>";
+    messaggioErrore += "- almeno 1 lettera maiuscola.<br>";
+    messaggioErrore += "- almeno 1 lettera minuscola.<br>";
+    messaggioErrore += "- almeno 1 dei seguenti caratteri speciali: !@#$%^&*<br>";
+  }
+  setErrore(settersErrori, "errorePassword", messaggioErrore);
+
+  if(numErrori === 0) {
+    // controllo sullo username e sulla password inserita
+    messaggioErrore = "";
+    if(dati.password_db === null || dati.salt_hex_db === null) {
+      numErrori += 1;
+      messaggioErrore = "Username e/o password errati.";
+    }
+    else if(!passwordIsCorrect(dati.password_inserita, dati.password_db, dati.salt_hex_db)) {
+      numErrori += 1;
+      messaggioErrore = "Username e/o password errati.";
+    }
+    setErrore(settersErrori, "erroreLogin", messaggioErrore);
+  }
+
+  return numErrori;
+}
+
+export const controlloProfilo = (dati, settersErrori) => {
+  let numErrori = 0;
+  let messaggioErrore = "";
+
+  // setErrore(settersErrori, "erroreUsername", "");
+  // setErrore(settersErrori, "erroreRuolo", "");
+  // setErrore(settersErrori, "erroreNote", "");
+  // setErrore(settersErrori, "errore2Password", "");
+  // setErrore(settersErrori, "erroreNuovaPassword", "");
+  // setErrore(settersErrori, "erroreConfermaNuovaPassword", "");
+  // setErrore(settersErrori, "erroreLogin", "");
+  
+  // controllo sul nuovo username
+  messaggioErrore = "";
+  if (isEmpty(dati.nuovo_username)) {
+    numErrori += 1; 
+    messaggioErrore = "Inserire lo username.";
+  }
+  else if(!isInRange(dati.nuovo_username.length, 1, 10)) {
+    numErrori += 1; 
+    messaggioErrore = "Lunghezza username non valida, deve avere un numero di caratteri tra 1 e 10 estremi inclusi.";
+  }
+  setErrore(settersErrori, "erroreNuovoUsername", messaggioErrore);
+
+  // controllo sul nuovo ruolo
+  messaggioErrore = "";
+  if (dati.nuovo_ruolo !== "Dipendente" && dati.nuovo_ruolo !== "Amministratore") {
     numErrori += 1; 
     messaggioErrore = "Ruolo non valido. Selezionare uno dei seguenti ruoli: \'Dipendente\' oppure \'Amministratore\'.";
   }
-  setErrore(settersErrori, "erroreRuolo", messaggioErrore);
+  setErrore(settersErrori, "erroreNuovoRuolo", messaggioErrore);
 
-  // controllo sulle note
+  // controllo sulle nuove note
   messaggioErrore = "";
-  if(!isInRange(data.note.length, 0, 65535)) {
+  if(!isInRange(dati.nuove_note.length, 0, 65535)) {
     numErrori += 1; 
     messaggioErrore = "Lunghezza note non valida, deve avere un numero di caratteri tra 1 e 65.535 estremi inclusi.";
   }
-  setErrore(settersErrori, "erroreNote", messaggioErrore);
-
-  data.nuova_password = (data.nuova_password === null) ? "" : data.nuova_password;
-  data.conferma_nuova_password = (data.conferma_nuova_password === null) ? "" : data.conferma_nuova_password;
+  setErrore(settersErrori, "erroreNuoveNote", messaggioErrore);
   
-  // controllo sulle 2 password
+
+  // // controllo sullo username e sulla password attuale
+  // messaggioErrore = "";
+  // // alert(utente_trovato);
+  // if(!utente_trovato) {
+  //   numErrori += 1;
+  //   messaggioErrore = "Username e/o password errati.";
+  //   setErrore(settersErrori, "erroreLogin", messaggioErrore);
+  //   return numErrori;
+  // }
+
+  const regexPassword = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*])[A-Za-z\\d!@#$%^&*]{8,128}$";
+
+  // controllo sulle 2 nuove password
+  dati.nuova_password = (dati.nuova_password === null) ? "" : dati.nuova_password;
+  dati.conferma_nuova_password = (dati.conferma_nuova_password === null) ? "" : dati.conferma_nuova_password;
   messaggioErrore = "";
-  if(data.nuova_password !== data.conferma_nuova_password) {
-    numErrori += 1;
-    messaggioErrore = "La nuova password e la conferma della nuova password non combaciano.";
+  if(!isEmpty(dati.nuova_password) || !isEmpty(dati.conferma_nuova_password)) {
+    if(dati.nuova_password !== dati.conferma_nuova_password) {
+      numErrori += 1;
+      messaggioErrore = "La nuova password e la conferma della nuova password non combaciano.";
+    }
+    else if(!matchRegex(dati.nuova_password, regexPassword)) {
+      numErrori += 1;
+      messaggioErrore =  "Nuova password non valida. deve avere:<br>";
+      messaggioErrore += "- minimo 8 e massimo 128 caratteri alfanumerici.<br>";
+      messaggioErrore += "- almeno 1 numero.<br>";
+      messaggioErrore += "- almeno 1 lettera maiuscola.<br>";
+      messaggioErrore += "- almeno 1 lettera minuscola.<br>";
+      messaggioErrore += "- almeno 1 dei seguenti caratteri speciali: !@#$%^&*<br>";
+    }
   }
   setErrore(settersErrori, "errore2Password", messaggioErrore);
 
-  const regexPassword = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*])[A-Za-z\\d!@#$%^&*]{8,128}$";
+  // controllo sullo username e sulla password attuale
+  messaggioErrore = "";
+  if(dati.password_db === null || dati.salt_hex_db === null) {
+    numErrori += 1;
+    messaggioErrore = "Username e/o password errati.";
+  }
+  setErrore(settersErrori, "erroreLogin", messaggioErrore);
   
-  // controllo sulla nuova password
+  // controllo sulla password attuale inserita
   messaggioErrore = "";
-  if(isEmpty(data.nuova_password)) {
+  if(isEmpty(dati.password_attuale)) {
     numErrori += 1;
-    messaggioErrore = "Inserire la nuova password.";
+    messaggioErrore = "Inserire la password attuale.";
   }
-  else if(!matchRegex(data.nuova_password, regexPassword)) {
+  else if(!passwordIsCorrect(dati.password_attuale, dati.password_db, dati.salt_hex_db)) {
     numErrori += 1;
-    messaggioErrore =  "Nuova password non valida. deve avere:<br>";
-    messaggioErrore += "- minimo 8 e massimo 128 caratteri alfanumerici.<br>";
-    messaggioErrore += "- almeno 1 numero.<br>";
-    messaggioErrore += "- almeno 1 lettera maiuscola.<br>";
-    messaggioErrore += "- almeno 1 lettera minuscola.<br>";
-    messaggioErrore += "- almeno 1 dei seguenti caratteri speciali: !@#$%^&*<br>";
+    messaggioErrore = "Password attuale errata.";
   }
-  setErrore(settersErrori, "erroreNuovaPassword", messaggioErrore);
-
-  // controllo sulla conferma della nuova password
-  messaggioErrore = "";
-  if(isEmpty(data.conferma_nuova_password)) {
-    numErrori += 1;
-    messaggioErrore = "Inserire la conferma della nuova password.";
-  }
-  else if(!matchRegex(data.conferma_nuova_password, regexPassword)) {
-    numErrori += 1;
-    messaggioErrore =  "Conferma nuova password non valida. deve avere:<br>";
-    messaggioErrore += "- minimo 8 e massimo 128 caratteri alfanumerici.<br>";
-    messaggioErrore += "- almeno 1 numero.<br>";
-    messaggioErrore += "- almeno 1 lettera maiuscola.<br>";
-    messaggioErrore += "- almeno 1 lettera minuscola.<br>";
-    messaggioErrore += "- almeno 1 dei seguenti caratteri speciali: !@#$%^&*<br>";
-  }
-  setErrore(settersErrori, "erroreConfermaNuovaPassword", messaggioErrore);
+  setErrore(settersErrori, "errorePasswordAttuale", messaggioErrore);
 
   return numErrori;
 }

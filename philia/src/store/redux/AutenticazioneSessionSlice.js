@@ -46,8 +46,15 @@ export const autenticazioneSessionSlice = createSlice({
       state.value.isLogged = false;
       saveToLocalStorage(state);
     },
+    eseguiModificaAutenticazioneSession : (state, action) => {
+      state.value.username = action.payload.username;
+      state.value.ruolo = action.payload.ruolo;
+      state.value.note = action.payload.note;
+      state.value.isLogged = true;
+      saveToLocalStorage(state);
+    },
   },
 });
 
-export const { eseguiLogin, eseguiLogout } = autenticazioneSessionSlice.actions;
+export const { eseguiLogin, eseguiLogout, eseguiModificaAutenticazioneSession } = autenticazioneSessionSlice.actions;
 export const autenticazioneSessionReducer = autenticazioneSessionSlice.reducer;
