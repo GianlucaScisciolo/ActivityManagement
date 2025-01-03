@@ -16,13 +16,22 @@ const FileLavori = () => {
   const [lavoriProfessionisti, setLavoriProfessionisti] = useState(-1);
   const [aggiornamentoCompletato, setAggiornamentoCompletato] = useState(false);
   const [tipoFile, setTipoFile] = useState('');
+  const [fileAnno, setFileAnno] = useState(false);
 
-    const formatDate = (dateStr) => {
+  const formatDate = (dateStr) => {
     const date = new Date(dateStr);
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
     return `${day}-${month}-${year}`;
+  }
+
+  const formatDate_AAAA_MM_GG = (dateStr) => {
+    const date = new Date(dateStr);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
   }
 
   function formatTime(timeStr) {
@@ -197,62 +206,105 @@ const FileLavori = () => {
         generatePDF(lavoriClienti, lavoriProfessionisti);
       else if(tipoFile === "Excel")
         generateExcel(lavoriClienti, lavoriProfessionisti);
+      if(fileAnno === true) {
+        setFileAnno(false);
+        const dataCorrente = new Date();
+        const primoGiorno = new Date(dataCorrente.getFullYear() - 1, 0, 1);
+        const ultimoGiorno = new Date(dataCorrente.getFullYear() - 1, 11, 31);
+        const dati = {
+          primo_giorno: formatDate_AAAA_MM_GG(primoGiorno),
+          ultimo_giorno: formatDate_AAAA_MM_GG(ultimoGiorno)
+        }
+        LavoroAction.dispatchAction(dati, operazioniLavori.ELIMINA_LAVORI_RANGE_GIORNI);
+      }
     }
   }, [lavoriClienti, lavoriProfessionisti]);
 
   const ottieniLavoriRangePDF = async (e) => {
     e.preventDefault();
-    const form = e.currentTarget.closest('form'); // Trova il form più vicino
-    const primoGiorno = form.querySelector('input[name="primoGiorno"]').value;
-    const ultimoGiorno = form.querySelector('input[name="ultimoGiorno"]').value;
-    setTipoFile("PDF");
-    await ottieniLavori(primoGiorno, ultimoGiorno);
+    if (confirm("Sei sicuro di voler ottenere il file?")) {
+      const form = e.currentTarget.closest('form'); // Trova il form più vicino
+      const primoGiorno = form.querySelector('input[name="primoGiorno"]').value;
+      const ultimoGiorno = form.querySelector('input[name="ultimoGiorno"]').value;
+      setTipoFile("PDF");
+      await ottieniLavori(primoGiorno, ultimoGiorno);
+    }
+    else {
+      alert("Operazione annullata.");
+    }
   };
   
   const ottieniLavoriRangeExcel = async (e) => {
     e.preventDefault();
-    const form = e.currentTarget.closest('form'); // Trova il form più vicino
-    const primoGiorno = form.querySelector('input[name="primoGiorno"]').value;
-    const ultimoGiorno = form.querySelector('input[name="ultimoGiorno"]').value;
-    setTipoFile("Excel");
-    await ottieniLavori(primoGiorno, ultimoGiorno);
+    if (confirm("Sei sicuro di voler ottenere il file?")) {
+      const form = e.currentTarget.closest('form'); // Trova il form più vicino
+      const primoGiorno = form.querySelector('input[name="primoGiorno"]').value;
+      const ultimoGiorno = form.querySelector('input[name="ultimoGiorno"]').value;
+      setTipoFile("Excel");
+      await ottieniLavori(primoGiorno, ultimoGiorno);
+    }
+    else {
+      alert("Operazione annullata.");
+    }
   };
 
   const ottieniLavoriUltimoMesePDF = async (e) => {
     e.preventDefault();
-    const dataCorrente = new Date();
-    const primoGiorno = new Date(dataCorrente.getFullYear(), dataCorrente.getMonth()-1, 1);
-    const ultimoGiorno = new Date(dataCorrente.getFullYear(), dataCorrente.getMonth(), 0);
-    setTipoFile("PDF");
-    await ottieniLavori(primoGiorno, ultimoGiorno);
+    if (confirm("Sei sicuro di voler ottenere il file?")) {
+      const dataCorrente = new Date();
+      const primoGiorno = new Date(dataCorrente.getFullYear(), dataCorrente.getMonth()-1, 1);
+      const ultimoGiorno = new Date(dataCorrente.getFullYear(), dataCorrente.getMonth(), 0);
+      setTipoFile("PDF");
+      await ottieniLavori(primoGiorno, ultimoGiorno);
+    }
+    else {
+      alert("Operazione annullata.");
+    }
   };
   
   
   const ottieniLavoriUltimoMeseExcel = async (e) => {
     e.preventDefault();
-    const dataCorrente = new Date();
-    const primoGiorno = new Date(dataCorrente.getFullYear(), dataCorrente.getMonth() -1, 1);
-    const ultimoGiorno = new Date(dataCorrente.getFullYear(), dataCorrente.getMonth(), 0);
-    setTipoFile("Excel");
-    await ottieniLavori(primoGiorno, ultimoGiorno);
+    if (confirm("Sei sicuro di voler ottenere il file?")) {
+      const dataCorrente = new Date();
+      const primoGiorno = new Date(dataCorrente.getFullYear(), dataCorrente.getMonth() -1, 1);
+      const ultimoGiorno = new Date(dataCorrente.getFullYear(), dataCorrente.getMonth(), 0);
+      setTipoFile("Excel");
+      await ottieniLavori(primoGiorno, ultimoGiorno);
+    }
+    else {
+      alert("Operazione annullata.");
+    }
   };
 
   const ottieniLavoriUltimoAnnoPDF = async (e) => {
     e.preventDefault();
-    const dataCorrente = new Date();
-    const primoGiorno = new Date(dataCorrente.getFullYear() - 1, 0, 1);
-    const ultimoGiorno = new Date(dataCorrente.getFullYear() - 1, 11, 31);
-    setTipoFile("PDF");
-    await ottieniLavori(primoGiorno, ultimoGiorno);
+    if (confirm("Sei sicuro di voler ottenere il file ed eliminare i lavori?")) {
+      setFileAnno(true);
+      const dataCorrente = new Date();
+      const primoGiorno = new Date(dataCorrente.getFullYear() - 1, 0, 1);
+      const ultimoGiorno = new Date(dataCorrente.getFullYear() - 1, 11, 31);
+      setTipoFile("PDF");
+      await ottieniLavori(primoGiorno, ultimoGiorno);
+    }
+    else {
+      alert("Operazione annullata.");
+    }
   };
   
   const ottieniLavoriUltimoAnnoExcel = async (e) => {
     e.preventDefault();
-    const dataCorrente = new Date();
-    const primoGiorno = new Date(dataCorrente.getFullYear() -1, 0, 1);
-    const ultimoGiorno = new Date(dataCorrente.getFullYear() -1, 11, 31);
-    setTipoFile("Excel");
-    await ottieniLavori(primoGiorno, ultimoGiorno);
+    if (confirm("Sei sicuro di voler ottenere il file ed eliminare i lavori?")) {
+      setFileAnno(true);
+      const dataCorrente = new Date();
+      const primoGiorno = new Date(dataCorrente.getFullYear() -1, 0, 1);
+      const ultimoGiorno = new Date(dataCorrente.getFullYear() -1, 11, 31);
+      setTipoFile("Excel");
+      await ottieniLavori(primoGiorno, ultimoGiorno);
+    }
+    else {
+      alert("Operazione annullata.");
+    }
   };
 
   const controllo = () => {
@@ -292,10 +344,10 @@ const FileLavori = () => {
           </Row>
           <Row className='custom-row'>
             <Col>
-              <button className='buttonForm' onClick={(e) => ottieniLavoriUltimoAnnoPDF(e)}>Ottieni file PDF ultimo anno</button>
+              <button className='buttonForm' onClick={(e) => ottieniLavoriUltimoAnnoPDF(e)}>Ottieni file PDF ultimo anno ed elimina i lavori</button>
             </Col>
             <Col>
-              <button className='buttonForm' onClick={(e) => ottieniLavoriUltimoAnnoExcel(e)}>Ottieni file Excel ultimo anno</button>
+              <button className='buttonForm' onClick={(e) => ottieniLavoriUltimoAnnoExcel(e)}>Ottieni file Excel ultimo anno ed elimina i lavori</button>
             </Col>
           </Row>
         </form>

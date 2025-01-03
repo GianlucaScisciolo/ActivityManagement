@@ -13,34 +13,40 @@ const NuovoCliente = () => {
 
 
   const handleInsert = async (data, form) => {
-    if (controlloNuovoCliente(data, setErrori) > 0) 
-      return;
+    if (confirm("Sei sicuro di voler salvare il cliente?")) {
+      if (controlloNuovoCliente(data, setErrori) > 0) 
+        return;
+      
+      try {
+        const response = await fetch('/INSERISCI_CLIENTE', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+        });
     
-    try {
-      const response = await fetch('/INSERISCI_CLIENTE', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      });
-  
-      if (!response.ok) {
-        throw new Error('Errore durante l\'inserimento del cliente');
+        if (!response.ok) {
+          throw new Error('Errore durante l\'inserimento del cliente');
+        }
+    
+        const result = await response.json();
+    
+        // Mostra l'alert di successo
+        alert("L'inserimento del cliente e\' andato a buon fine!!");
+    
+        // Reset del form
+        form.reset();
+      } 
+      catch (error) {
+        console.error('Errore:', error);
+    
+        // Mostra l'alert di errore
+        alert("C\'e\' stato un errore durante l\'inserimento del cliente. Riprova piu\' tardi.");
       }
-  
-      const result = await response.json();
-  
-      // Mostra l'alert di successo
-      alert("L'inserimento del cliente e\' andato a buon fine!!");
-  
-      // Reset del form
-      form.reset();
-    } catch (error) {
-      console.error('Errore:', error);
-  
-      // Mostra l'alert di errore
-      alert("C\'e\' stato un errore durante l\'inserimento del cliente. Riprova piu\' tardi.");
+    }
+    else {
+      alert("Salvataggio annullato.");
     }
   };
   

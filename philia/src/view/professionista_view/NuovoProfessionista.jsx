@@ -14,33 +14,38 @@ const NuovoProfessionista = () => {
   })
 
   const handleInsert = async (data, form) => {
-    if (controlloNuovoProfessionista(data, setErrori) > 0) 
-      return;
+    if (confirm("Sei sicuro di voler salvare il professionista?")) {
+      if (controlloNuovoProfessionista(data, setErrori) > 0) 
+        return;
 
-    try {
-      const response = await fetch('/INSERISCI_PROFESSIONISTA', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      });
+      try {
+        const response = await fetch('/INSERISCI_PROFESSIONISTA', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+        });
 
-      if (!response.ok) {
-        throw new Error('Errore durante l\'inserimento del professionista');
+        if (!response.ok) {
+          throw new Error('Errore durante l\'inserimento del professionista');
+        }
+
+        const result = await response.json();
+
+        // Mostra l'alert
+        alert("L'inserimento del professionista e\' andato a buon fine!!");
+
+        // Reset del form
+        form.reset();
+      } catch (error) {
+        console.error('Errore:', error);
+        // Mostra l'alert di errore
+        alert("C\'e\' stato un errore durante l\'inserimento del professionista. Riprova piu\' tardi.");
       }
-
-      const result = await response.json();
-
-      // Mostra l'alert
-      alert("L'inserimento del professionista e\' andato a buon fine!!");
-
-      // Reset del form
-      form.reset();
-    } catch (error) {
-      console.error('Errore:', error);
-      // Mostra l'alert di errore
-      alert("C\'e\' stato un errore durante l\'inserimento del professionista. Riprova piu\' tardi.");
+    }
+    else {
+      alert("Salvataggio annullato.");
     }
   };
 

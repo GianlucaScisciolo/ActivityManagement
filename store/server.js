@@ -467,6 +467,27 @@ app.post("/ELIMINA_LAVORI", async (req, res) => {
   return getResults(sql, params, res);
 });
 
+/**
+ * Elimina lavori range giorni
+ */
+app.post("/ELIMINA_LAVORI_RANGE_GIORNI", async (req, res) => {
+  const { primo_giorno = '', ultimo_giorno = '' } = req.body;
+
+  // Aggiungi un log per vedere i dati ricevuti
+  console.log("Dati ricevuti per l\'eliminazione: ", [primo_giorno, ultimo_giorno]);
+
+  const sql = ` 
+    DELETE FROM 
+      lavoro 
+    WHERE 
+      giorno BETWEEN ? AND ?; 
+  `;
+
+  const params = [`${primo_giorno}`, `${ultimo_giorno}`];
+
+  return getResults(sql, params, res);
+});
+
 app.post("/MODIFICA_LAVORI", async (req, res) => {
   const [id, descrizione, giorno, orario_inizio, orario_fine, note] = [
     req.body.id, req.body.descrizione, req.body.giorno, req.body.orario_inizio, req.body.orario_fine, req.body.note

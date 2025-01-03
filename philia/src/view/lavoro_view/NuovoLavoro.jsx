@@ -33,29 +33,34 @@ const NuovoLavoro = () => {
   const [selectedProfessionistaId, setSelectedProfessionistaId] = useState('');
   
   const handleInsert = async (data, form) => {
-    if (controlloNuovoLavoro(data, setErrori) > 0) 
-      return;
-  
-    try {
-      const response = await fetch('/INSERISCI_LAVORO', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      });
+    if (confirm("Sei sicuro di voler salvare il lavoro?")) {
+      if (controlloNuovoLavoro(data, setErrori) > 0) 
+        return;
+    
+      try {
+        const response = await fetch('/INSERISCI_LAVORO', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+        });
 
-      if (!response.ok) {
-        throw new Error('Errore durante l\'inserimento del lavoro');
+        if (!response.ok) {
+          throw new Error('Errore durante l\'inserimento del lavoro');
+        }
+
+        const result = await response.json();
+        alert("L'inserimento del lavoro è andato a buon fine!!");
+
+        form.reset();
+      } catch (error) {
+        console.error('Errore:', error);
+        alert("C'è stato un errore durante l'inserimento del lavoro. Riprova più tardi.");
       }
-
-      const result = await response.json();
-      alert("L'inserimento del lavoro è andato a buon fine!!");
-
-      form.reset();
-    } catch (error) {
-      console.error('Errore:', error);
-      alert("C'è stato un errore durante l'inserimento del lavoro. Riprova più tardi.");
+    }
+    else {
+      alert("Salvataggio annullato.");
     }
   };
 

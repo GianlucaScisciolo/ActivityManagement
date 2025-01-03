@@ -144,17 +144,22 @@ const Profilo = () => {
       console.log(
         `${dati.username}\n${dati.nuovo_username}\n${dati.nuovo_ruolo}\n${dati.nuove_note}\n${dati.password_attuale}\n${dati.nuova_password}\n${dati.conferma_nuova_password}\n${dati.password_db}\n${dati.salt_hex_db}`
       );
-      if(controlloProfilo(dati, setErrori) > 0) {
-        return;
-      }
-      
-      eseguiModificaProfilo(dati);
+      if (confirm("Sei sicuro di voler modificare il profilo?")) {
+        if(controlloProfilo(dati, setErrori) > 0) {
+          return;
+        }
+        
+        eseguiModificaProfilo(dati);
 
-      dispatch(eseguiModificaAutenticazioneSession({
-        username: dati.nuovo_username,
-        ruolo: dati.nuovo_ruolo,
-        note: dati.nuove_note
-      }));
+        dispatch(eseguiModificaAutenticazioneSession({
+          username: dati.nuovo_username,
+          ruolo: dati.nuovo_ruolo,
+          note: dati.nuove_note
+        }));
+      } 
+      else {
+        alert("Modifica annullata.");
+      }
     }
   }, [utenti]);
   

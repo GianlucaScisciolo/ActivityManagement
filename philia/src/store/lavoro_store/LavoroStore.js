@@ -26,6 +26,9 @@ class LavoroStore extends EventEmitter {
       case operazioniLavori.ELIMINA_LAVORI:
         this.runOperation(action.payload, operazioniLavori.ELIMINA_LAVORI);
         break;
+      case operazioniLavori.ELIMINA_LAVORI_RANGE_GIORNI:
+        this.runOperation(action.payload, operazioniLavori.ELIMINA_LAVORI_RANGE_GIORNI);
+        break;
       case operazioniLavori.MODIFICA_LAVORI:
         this.modificaLavori(action.payload);
         break;
