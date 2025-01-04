@@ -40,6 +40,7 @@ export default defineConfig({
       '/VISUALIZZA_LAVORI_CLIENTI': 'http://localhost:3000',
       '/VISUALIZZA_LAVORI_PROFESSIONISTI': 'http://localhost:3000',
       '/ELIMINA_LAVORI': 'http://localhost:3000',
+      '/ELIMINA_LAVORI_RANGE_GIORNI': 'http://localhost:3000',
       '/MODIFICA_LAVORI': 'http://localhost:3000',
     }
   }
