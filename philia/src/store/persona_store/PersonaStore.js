@@ -49,6 +49,7 @@ class PersonaStore extends EventEmitter {
     }).catch(error => {
       console.error(  "Errore durante l\'operazione " + operazione + ": " 
                     + error.response ? error.response.data : error.message);
+      alert("Operazione fallita, riprova più tardi.");
     });
   }
 

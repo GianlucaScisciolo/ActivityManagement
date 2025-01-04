@@ -54,7 +54,8 @@ const getResults = async (sql, params, res) => {
   try {
     const data = await executeQuery(sql, params);
     return res.json(data);
-  } catch (err) {
+  } 
+  catch (err) {
     console.error('Errore durante l\'esecuzione della query: ', err);
     return res.json(err);
   }
@@ -199,14 +200,15 @@ app.post("/OTTIENI_TUTTI_I_CLIENTI", async (req, res) => {
  * Elimina clienti
  */
 app.post("/ELIMINA_CLIENTI", async (req, res) => {
-  const { params = [] } = req.body;
+  const { ids = [] } = req.body;
 
   // Aggiungi un log per vedere i dati ricevuti
-  console.log("Dati ricevuti per la ricerca:", req.body);
+  console.log("Dati ricevuti per l\'eliminazione:", [ids]);
 
   // Creare una stringa di parametri di placeholder per la query
-  const placeholders = params.map(() => '?').join(', ');
+  const placeholders = ids.map(() => '?').join(', ');
   
+
   const sql = ` 
     DELETE FROM 
       cliente 
@@ -214,7 +216,7 @@ app.post("/ELIMINA_CLIENTI", async (req, res) => {
       id IN (${placeholders}); 
   `;
 
-  return getResults(sql, params, res);
+  return getResults(sql, ids, res);
 });
 
 /**
@@ -300,13 +302,13 @@ app.post("/OTTIENI_TUTTI_I_PROFESSIONISTI", async (req, res) => {
  * Elimina professionisti
  */
 app.post("/ELIMINA_PROFESSIONISTI", async (req, res) => {
-  const { params = [] } = req.body;
+  const { ids = [] } = req.body;
 
   // Aggiungi un log per vedere i dati ricevuti
-  console.log("Dati ricevuti per l\'eliminazione: ", req.body);
+  console.log("Dati ricevuti per l\'eliminazione: ", ids);
 
   // Creare una stringa di parametri di placeholder per la query
-  const placeholders = params.map(() => '?').join(', ');
+  const placeholders = ids.map(() => '?').join(', ');
 
   const sql = ` 
     DELETE FROM 
@@ -315,7 +317,7 @@ app.post("/ELIMINA_PROFESSIONISTI", async (req, res) => {
       id IN (${placeholders}); 
   `;
 
-  return getResults(sql, params, res);
+  return getResults(sql, ids, res);
 });
 
 /**
@@ -449,13 +451,13 @@ app.post("/VISUALIZZA_LAVORI_PROFESSIONISTI", async (req, res) => {
  * Elimina lavori
  */
 app.post("/ELIMINA_LAVORI", async (req, res) => {
-  const { params = [] } = req.body;
+  const { ids = [] } = req.body;
 
   // Aggiungi un log per vedere i dati ricevuti
-  console.log("Dati ricevuti per l\'eliminazione: ", req.body);
+  console.log("Dati ricevuti per l\'eliminazione: ", ids);
 
   // Creare una stringa di parametri di placeholder per la query
-  const placeholders = params.map(() => '?').join(', ');
+  const placeholders = ids.map(() => '?').join(', ');
   
   const sql = ` 
     DELETE FROM 
@@ -464,7 +466,7 @@ app.post("/ELIMINA_LAVORI", async (req, res) => {
       id IN (${placeholders}); 
   `;
   
-  return getResults(sql, params, res);
+  return getResults(sql, ids, res);
 });
 
 /**
