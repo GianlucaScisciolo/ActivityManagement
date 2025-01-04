@@ -30,43 +30,14 @@ const Profilo = () => {
     "erroreLogin": ""
   });
   const [aggiornamentoCompletato, setAggiornamentoCompletato] = useState(false);
-  // const [dati, setDati] = useState({
-  //   utente_trovato: "",
-  //   username_attuale: "",
-  //   nuovo_username: "",
-  //   ruolo: "",
-  //   note: "",
-  //   password_attuale: "",
-  //   nuova_password: "",
-  //   conferma_nuova_password: ""
-  // });
-
+  
   const modificaProfilo = async (e) => {
     e.preventDefault();
+    if(nuovoUsername === undefined) {
+      setNuovoUsername(usernameAttuale);
+    }
     autenticazioneStore.setUtenti(-1);
     setUtenti(-1);
-    /*
-      const formData = new FormData(e.target);
-      const password_db = (utenti.length === 1) ? utenti[0].password : null;
-      const salt_hex_db = (utenti.length === 1) ? utenti[0].salt_hex : null;
-      const dati = {
-        "username_inserito": usernameInserito,
-        "password_inserita": passwordInserita,
-        "password_db": password_db,
-        "salt_hex_db": salt_hex_db
-      }
-    */
-    
-    // setDati({
-    //   // utente_trovato: (utenti.length === 1),
-    //   username_attuale: formData.get("username"),
-    //   nuovo_username: formData.get("nuovoUsername"),
-    //   ruolo: formData.get("ruolo"),
-    //   note: formData.get("note"),
-    //   password_attuale: formData.get("password"),
-    //   nuova_password: formData.get("nuovaPassword"),
-    //   conferma_nuova_password: formData.get("confermaNuovaPassword")
-    // });
     await login(e, setUtenti);
     setAggiornamentoCompletato(true);
   };
@@ -120,14 +91,6 @@ const Profilo = () => {
       setAggiornamentoCompletato(false);
       console.log("Aggiornamento effettuato.");
       console.log(utenti.length === 1);
-      /*
-      const dati = {
-        "username_inserito": usernameInserito,
-        "password_inserita": passwordInserita,
-        "password_db": password_db,
-        "salt_hex_db": salt_hex_db
-      }
-      */
       const password_db = (utenti.length === 1) ? utenti[0].password : null;
       const salt_hex_db = (utenti.length === 1) ? utenti[0].salt_hex : null;
       const dati = {
