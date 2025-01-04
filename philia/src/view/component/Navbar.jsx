@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
@@ -9,18 +9,73 @@ import { useSelector, useDispatch } from 'react-redux';
 import { operazioniAutenticazione } from '../../vario/Operazioni';
 import { eseguiLogout } from '../../store/redux/AutenticazioneSessionSlice';
 import { useNavigate } from 'react-router-dom';
+import { changeWithImg, changeWithColoreRGB } from '../../store/redux/SfondoSlice';
+import immagineSfondo1 from "../img/immagine_sfondo1.jpg";
+import immagineSfondo2 from "../img/immagine_sfondo2.png";
 
 const NavbarSito = () => {
   const autenticazioneSession = useSelector((state) => state.autenticazioneSession.value);
+  const sfondoSession = useSelector((state) => state.sfondoSession.value);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const [dropdownClienti, setDropdownClienti] = useState(false);
   const [dropdownProfessionisti, setDropdownProfessionisti] = useState(false);
   const [dropdownLavori, setDropdownLavori] = useState(false);
+  const [dropdownStile, setDropdownStile] = useState(false);
+  const [dropdownSfondo, setDropdownSfondo] = useState(false);
 
   const logout = () => {
     dispatch(eseguiLogout());
+  }
+
+  const applicaStileBody = () => {
+    if (sfondoSession.pathImg !== null) {
+      document.body.style.backgroundImage = `url(${sfondoSession.pathImg})`;
+      document.body.style.backgroundRepeat = 'no-repeat';
+      document.body.style.backgroundSize = '100%';
+      document.body.style.backgroundAttachment = 'fixed';
+      document.body.style.backgroundPosition = 'center';
+      document.body.style.height = '2000px';
+    } else if (sfondoSession.coloreRGB !== null) {
+      document.body.style.backgroundImage = 'none';
+      document.body.style.backgroundColor = sfondoSession.coloreRGB;
+    } else {
+      alert("Errore.");
+    }
+  }
+
+  useEffect(() => {
+    applicaStileBody();
+  }, [sfondoSession]);
+
+  // Thunk function
+  const cambioSfondo = (nomeSfondo) => (dispatch) => {
+    switch(nomeSfondo) {
+      case "immagine_1":
+        dispatch(changeWithImg({
+          pathImg: immagineSfondo1
+        }));
+        break;
+      case "immagine_2":
+        dispatch(changeWithImg({
+          pathImg: immagineSfondo2
+        }));
+        break;
+      case "sfondo_scuro":
+        dispatch(changeWithColoreRGB({
+          coloreRGB: "#111111"
+        }));
+        break;
+      case "sfondo_chiaro":
+        dispatch(changeWithColoreRGB({
+          coloreRGB: "#FFFFFF"
+        }));
+        break;
+      default:
+        alert("Errore, nome sfondo non trovato.");
+        break;
+    }
   }
 
   return (
@@ -72,6 +127,58 @@ const NavbarSito = () => {
 
         <Nav className='nav-right'>
           <>
+            <NavDropdown 
+              title="Stile" 
+              className="nav-dropdown"
+              show={dropdownStile}
+              onMouseEnter={() => setDropdownStile(true)}
+              onMouseLeave={() => setDropdownStile(false)}
+            >
+              <NavDropdown 
+                title="Sfondo" 
+                className="nav-dropdown"
+                show={dropdownSfondo}
+                onMouseEnter={() => setDropdownSfondo(true)}
+                onMouseLeave={() => setDropdownSfondo(false)}
+              >
+                {(dropdownSfondo === true) && (
+                  <>
+                    <NavDropdown.Item 
+                      as={NavLink} 
+                      to="#" 
+                      className="nav-dropdown-item" 
+                      onClick={() => dispatch(cambioSfondo("immagine_1"))}
+                    >
+                      Immagine 1
+                    </NavDropdown.Item>
+                    <NavDropdown.Item 
+                      as={NavLink} 
+                      to="#" 
+                      className="nav-dropdown-item" 
+                      onClick={() => dispatch(cambioSfondo("immagine_2"))}
+                    >
+                      Immagine 2
+                    </NavDropdown.Item>
+                    <NavDropdown.Item 
+                      as={NavLink} 
+                      to="#" 
+                      className="nav-dropdown-item" 
+                      onClick={() => dispatch(cambioSfondo("sfondo_scuro"))}
+                    >
+                      Sfondo scuro
+                    </NavDropdown.Item>
+                    <NavDropdown.Item 
+                      as={NavLink} 
+                      to="#" 
+                      className="nav-dropdown-item" 
+                      onClick={() => dispatch(cambioSfondo("sfondo_chiaro"))}
+                    >
+                      Sfondo chiaro
+                    </NavDropdown.Item>
+                  </>
+                )}
+              </NavDropdown>
+            </NavDropdown>
             {(autenticazioneSession.isLogged === false) && (
               <Nav.Link as={NavLink} to="/login" className="nav-link">Login</Nav.Link>
             )}

@@ -8,15 +8,14 @@
 }
 
 
-body {
+/* body {
   background-image: url('../img/immagine_sfondo1.jpg');
-  /* background-image: url('../img/immagine_sfondo2.png');  */
   background-repeat: no-repeat;
-  background-size: 100%; /* Dimensione dello sfondo ridotta */
-  background-attachment: fixed; /* Sfondo fissato in posizione */
-  background-position: center; /* Centra lo sfondo */
+  background-size: 100%;
+  background-attachment: fixed; 
+  background-position: center; 
   height: 2000px;
- } 
+}  */
 
 /* Aggiungi un po' di altezza al contenuto della pagina per poter scrollare */
 
