@@ -14,6 +14,8 @@ export const modifica = async (tipo, datiLastSearch, selectedIdsModifica, setSel
   try {
     if (tipo === "clienti") {
       const itemsDaModificare1 = items1.filter(item => data.ids.includes(item.id));
+      const itemsRestanti1 = items1.filter(item => !data.ids.includes(item.id));
+      const itemsUniti1 = itemsDaModificare1.concat(itemsRestanti1);
       for(let i = 0; i < itemsDaModificare1.length; i++) {
         let datiModifica = {
           "nome": itemsDaModificare1[i].nome,
@@ -26,11 +28,15 @@ export const modifica = async (tipo, datiLastSearch, selectedIdsModifica, setSel
         }
       }
       await PersonaAction.dispatchAction(itemsDaModificare1, operazioniPersone.MODIFICA_CLIENTI);
-      setterItems1(prevItems => prevItems.filter(item => !itemsDaModificare1.some(modItem => modItem.id === item.id)));
-      await PersonaAction.dispatchAction(datiLastSearch, operazioniPersone.VISUALIZZA_CLIENTI);
+      // setterItems1([]);
+      // setterItems1(itemsUniti1);
+      // setterItems1(prevItems => prevItems.filter(item => !itemsDaModificare1.some(modItem => modItem.id === item.id)));
+      // setterItems1(itemsRestanti1);
+      // await PersonaAction.dispatchAction(datiLastSearch, operazioniPersone.VISUALIZZA_CLIENTI);
     }
     else if (tipo === "professionisti") {
       const itemsDaModificare1 = items1.filter(item => data.ids.includes(item.id));
+      const itemsRestanti1 = items1.filter(item => !data.ids.includes(item.id));
       for(let i = 0; i < itemsDaModificare1.length; i++) {
         let datiModifica = {
           "nome": itemsDaModificare1[i].nome,
@@ -44,8 +50,9 @@ export const modifica = async (tipo, datiLastSearch, selectedIdsModifica, setSel
         }
       }
       await ProfessionistaAction.dispatchAction(itemsDaModificare1, operazioniProfessionisti.MODIFICA_PROFESSIONISTI);
-      setterItems1(prevItems => prevItems.filter(item => !itemsDaModificare1.some(modItem => modItem.id === item.id)));
-      await ProfessionistaAction.dispatchAction(datiLastSearch, operazioniProfessionisti.VISUALIZZA_PROFESSIONISTI);
+      // setterItems1(prevItems => prevItems.filter(item => !itemsDaModificare1.some(modItem => modItem.id === item.id)));
+      // setterItems1(itemsRestanti1);
+      // await ProfessionistaAction.dispatchAction(datiLastSearch, operazioniProfessionisti.VISUALIZZA_PROFESSIONISTI);
     }
     else if (tipo === "lavori") {
       const itemsDaModificare1 = items1.filter(item => data.ids.includes(item.id));
@@ -87,10 +94,10 @@ export const modifica = async (tipo, datiLastSearch, selectedIdsModifica, setSel
       }
       await LavoroAction.dispatchAction(itemsDaModificare1, operazioniLavori.MODIFICA_LAVORI);
       await LavoroAction.dispatchAction(itemsDaModificare2, operazioniLavori.MODIFICA_LAVORI);
-      setterItems1(prevItems => prevItems.filter(item => !itemsDaModificare1.some(modItem => modItem.id === item.id)));
-      setterItems2(prevItems => prevItems.filter(item => !itemsDaModificare2.some(modItem => modItem.id === item.id)));
-      await LavoroAction.dispatchAction(datiLastSearch, operazioniLavori.VISUALIZZA_LAVORI_CLIENTI);
-      await LavoroAction.dispatchAction(datiLastSearch, operazioniLavori.VISUALIZZA_LAVORI_PROFESSIONISTI);
+      // setterItems1(prevItems => prevItems.filter(item => !itemsDaModificare1.some(modItem => modItem.id === item.id)));
+      // setterItems2(prevItems => prevItems.filter(item => !itemsDaModificare2.some(modItem => modItem.id === item.id)));
+      // await LavoroAction.dispatchAction(datiLastSearch, operazioniLavori.VISUALIZZA_LAVORI_CLIENTI);
+      // await LavoroAction.dispatchAction(datiLastSearch, operazioniLavori.VISUALIZZA_LAVORI_PROFESSIONISTI);
     }
     alert("Modifica completata con successo.")
   }
