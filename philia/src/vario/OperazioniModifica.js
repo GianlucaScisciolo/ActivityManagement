@@ -6,16 +6,25 @@ import autenticazioneStore from "../store/autenticazione_store/AutenticazioneSto
 import { operazioniAutenticazione, operazioniLavori, operazioniPersone, operazioniProfessionisti } from "./Operazioni";
 import { controlloNuovoCliente, controlloNuovoProfessionista, controlloNuovoLavoro } from "./Controlli";
 
+const aggiornaItems = (items, data, setterItems) => {
+  const updatedItems = items.map(item => {
+    if (data.ids.includes(item.id)) {
+      return { ...item, tipo_selezione: 0 };
+    }
+    return item;
+  });
+  setterItems(updatedItems);
+};
+
 export const modifica = async (tipo, datiLastSearch, selectedIdsModifica, setSelectedIdsModifica, 
                                items1, setterItems1, items2, setterItems2, settersErrori1, settersErrori2) => {
   const data = { ids: selectedIdsModifica };
-
+  
   // Trova gli elementi i cui id sono in data.ids
   try {
     if (tipo === "clienti") {
       const itemsDaModificare1 = items1.filter(item => data.ids.includes(item.id));
       const itemsRestanti1 = items1.filter(item => !data.ids.includes(item.id));
-      const itemsUniti1 = itemsDaModificare1.concat(itemsRestanti1);
       for(let i = 0; i < itemsDaModificare1.length; i++) {
         let datiModifica = {
           "nome": itemsDaModificare1[i].nome,
@@ -27,7 +36,9 @@ export const modifica = async (tipo, datiLastSearch, selectedIdsModifica, setSel
           return;
         }
       }
+      // setterItems1(voglio settare item.tipo_selezione = 0 per ogni item il cui item.id è incluso in data.ids);
       await PersonaAction.dispatchAction(itemsDaModificare1, operazioniPersone.MODIFICA_CLIENTI);
+      aggiornaItems(items1, data, setterItems1);
       // setterItems1([]);
       // setterItems1(itemsUniti1);
       // setterItems1(prevItems => prevItems.filter(item => !itemsDaModificare1.some(modItem => modItem.id === item.id)));
@@ -50,6 +61,7 @@ export const modifica = async (tipo, datiLastSearch, selectedIdsModifica, setSel
         }
       }
       await ProfessionistaAction.dispatchAction(itemsDaModificare1, operazioniProfessionisti.MODIFICA_PROFESSIONISTI);
+      aggiornaItems(items1, data, setterItems1);
       // setterItems1(prevItems => prevItems.filter(item => !itemsDaModificare1.some(modItem => modItem.id === item.id)));
       // setterItems1(itemsRestanti1);
       // await ProfessionistaAction.dispatchAction(datiLastSearch, operazioniProfessionisti.VISUALIZZA_PROFESSIONISTI);
@@ -94,6 +106,8 @@ export const modifica = async (tipo, datiLastSearch, selectedIdsModifica, setSel
       }
       await LavoroAction.dispatchAction(itemsDaModificare1, operazioniLavori.MODIFICA_LAVORI);
       await LavoroAction.dispatchAction(itemsDaModificare2, operazioniLavori.MODIFICA_LAVORI);
+      aggiornaItems(items1, data, setterItems1);
+      aggiornaItems(items2, data, setterItems2);
       // setterItems1(prevItems => prevItems.filter(item => !itemsDaModificare1.some(modItem => modItem.id === item.id)));
       // setterItems2(prevItems => prevItems.filter(item => !itemsDaModificare2.some(modItem => modItem.id === item.id)));
       // await LavoroAction.dispatchAction(datiLastSearch, operazioniLavori.VISUALIZZA_LAVORI_CLIENTI);

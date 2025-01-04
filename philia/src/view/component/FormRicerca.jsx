@@ -182,7 +182,7 @@ export const FormRicerca = ({tipoLista, setterLista1, setterLista2, setterDatiLa
     return (
       <>
         <label className='labelForm'>Primo giorno</label>
-        <textarea className='textAreaFormModifica' name='primoGiorno' value={primoGiorno} onChange={handleInputChange} />
+        <input className='textAreaFormModifica' type="date" name='primoGiorno' value={primoGiorno} onChange={handleInputChange} />
         <span className='spanErrore'></span>
       </>
     )
@@ -192,7 +192,7 @@ export const FormRicerca = ({tipoLista, setterLista1, setterLista2, setterDatiLa
     return (
       <>
         <label className='labelForm'>Ultimo giorno</label>
-        <textarea className='textAreaFormModifica' name='ultimoGiorno' value={ultimoGiorno} onChange={handleInputChange} />
+        <input className='textAreaFormModifica' type="date" name='ultimoGiorno' value={ultimoGiorno} onChange={handleInputChange} />
         <span className='spanErrore'></span>
       </>
     )

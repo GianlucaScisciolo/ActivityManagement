@@ -166,27 +166,29 @@ export const HookItems = () => {
     
     if(icon === "trash") {
       if(selectedIds.includes(item.id)) {
+        item.tipo_selezione = 0;
         // alert("Presente");
         // Elimino id da selectedIds
         setSelectedIds(prevIds => prevIds.filter(itemId => itemId !== item.id));
         // Decremento selectedTrashCount di 1, se maggiore di 0
         setSelectedTrashCount(prevCount => Math.max(prevCount - 1, 0));
-        setTextAreaClassBlock("custom-textarea-block");
-        setTextAreaClass("custom-textarea-block");
-        setInputClassBlock("custom-input-block");
-        setInputClass("custom-input-block");
+        // setTextAreaClassBlock("custom-textarea-block");
+        // setTextAreaClass("custom-textarea-block");
+        // setInputClassBlock("custom-input-block");
+        // setInputClass("custom-input-block");
         setTrashStyle("trash-style-not-selected");
       }
       else {
         // alert("Non presente");
+        item.tipo_selezione = 2;
         // Aggiungo id a selectedIds
         setSelectedIds(prevIds => [...prevIds, item.id]);
         // Incremento selectedTrashCount di 1
         setSelectedTrashCount(prevCount => prevCount + 1);
-        setTextAreaClassBlock("custom-textarea-elimina");
-        setTextAreaClass("custom-textarea-elimina");
-        setInputClassBlock("custom-input-elimina");
-        setInputClass("custom-input-elimina");
+        // setTextAreaClassBlock("custom-textarea-elimina");
+        // setTextAreaClass("custom-textarea-elimina");
+        // setInputClassBlock("custom-input-elimina");
+        // setInputClass("custom-input-elimina");
         setTrashStyle("trash-style-selected");
         setPencilStyle("pencil-style-not-selected");
         setSelectedIdsModifica(prevIdsModifica => prevIdsModifica.filter(itemId => itemId !== item.id));
@@ -196,22 +198,24 @@ export const HookItems = () => {
     else if(icon === "pencil") {
       if(selectedIdsModifica.includes(item.id)) {
         // alert("Presente");
+        item.tipo_selezione = 0;
         setSelectedIdsModifica(prevIdsModifica => prevIdsModifica.filter(itemId => itemId !== item.id));
         setSelectedPencilCount(prevCount => Math.max(prevCount - 1, 0));
-        setTextAreaClassBlock("custom-textarea-block");
-        setTextAreaClass("custom-textarea-block");
-        setInputClassBlock("custom-input-block");
-        setInputClass("custom-input-block");
+        // setTextAreaClassBlock("custom-textarea-block");
+        // setTextAreaClass("custom-textarea-block");
+        // setInputClassBlock("custom-input-block");
+        // setInputClass("custom-input-block");
         setPencilStyle("pencil-style-not-selected");
       }
       else {
         // alert("Non presente");
+        item.tipo_selezione = 1;
         setSelectedIdsModifica(prevIdsModifica => [...prevIdsModifica, item.id]);
         setSelectedPencilCount(prevCount => prevCount + 1);
-        setTextAreaClassBlock("custom-textarea-block");
-        setTextAreaClass("custom-textarea-modifica");
-        setInputClassBlock("custom-input-block");
-        setInputClass("custom-input-modifica");
+        // setTextAreaClassBlock("custom-textarea-block");
+        // setTextAreaClass("custom-textarea-modifica");
+        // setInputClassBlock("custom-input-block");
+        // setInputClass("custom-input-modifica");
         setPencilStyle("pencil-style-selected");
         setTrashStyle("trash-style-not-selected");
         setSelectedIds(prevIds => prevIds.filter(itemId => itemId !== item.id));

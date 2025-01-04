@@ -69,7 +69,7 @@ const NavbarSito = () => {
         break;
       case "sfondo_chiaro":
         dispatch(changeWithColoreRGB({
-          coloreRGB: "#FFFFFF"
+          coloreRGB: "#8F8F8F"
         }));
         break;
       default:

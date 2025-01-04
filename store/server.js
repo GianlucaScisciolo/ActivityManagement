@@ -167,11 +167,11 @@ app.post("/VISUALIZZA_CLIENTI", async (req, res) => {
 
   const sql = `
     SELECT 
-      id, nome, cognome, contatto, note, 0 AS tipo_selezione
+      id, nome, cognome, contatto, note, 0 AS tipo_selezione 
     FROM 
       cliente 
     WHERE 
-      nome LIKE ? AND cognome LIKE ? AND contatto LIKE ? AND note LIKE ?;
+      nome LIKE ? AND cognome LIKE ? AND contatto LIKE ? AND note LIKE ?; 
   `;
 
   const params = [`${nome}%`, `${cognome}%`, `${contatto}%`, `${note}%`];
@@ -270,7 +270,7 @@ app.post("/VISUALIZZA_PROFESSIONISTI", async (req, res) => {
 
   const sql = ` 
     SELECT 
-      id, nome, professione, contatto, email, note 
+      id, nome, professione, contatto, email, note, 0 AS tipo_selezione 
     FROM 
       professionista 
     WHERE 
@@ -389,6 +389,7 @@ app.post("/VISUALIZZA_LAVORI_CLIENTI", async (req, res) => {
 
   const sql = `
     SELECT 
+      0 AS tipo_selezione, 
       l.id AS id, l.descrizione AS descrizione, 
       l.giorno AS giorno, 
       l.orario_inizio AS orario_inizio, 
@@ -429,6 +430,7 @@ app.post("/VISUALIZZA_LAVORI_PROFESSIONISTI", async (req, res) => {
 
   const sql = `
     SELECT 
+      0 AS tipo_selezione, 
       l.id AS id, l.descrizione AS descrizione, 
       l.giorno AS giorno, 
       l.orario_inizio AS orario_inizio, 
