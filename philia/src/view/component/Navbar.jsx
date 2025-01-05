@@ -33,17 +33,31 @@ const NavbarSito = () => {
     if (sfondoSession.pathImg !== null) {
       document.body.style.backgroundImage = `url(${sfondoSession.pathImg})`;
       document.body.style.backgroundRepeat = 'no-repeat';
-      document.body.style.backgroundSize = '100%';
+      document.body.style.backgroundSize = 'cover';
       document.body.style.backgroundAttachment = 'fixed';
       document.body.style.backgroundPosition = 'center';
-      document.body.style.height = '2000px';
-    } else if (sfondoSession.coloreRGB !== null) {
+      document.body.style.height = '100vh';
+  
+      // Nascondi solo lo scorrimento orizzontale
+      document.documentElement.style.overflowX = 'hidden';
+      document.documentElement.style.maxWidth = '100%';
+      document.documentElement.style.maxHeight = '100%';
+    } 
+    else if (sfondoSession.coloreRGB !== null) {
       document.body.style.backgroundImage = 'none';
       document.body.style.backgroundColor = sfondoSession.coloreRGB;
-    } else {
+  
+      // Nascondi solo lo scorrimento orizzontale
+      document.documentElement.style.overflowX = 'hidden';
+      document.documentElement.style.maxWidth = '100%';
+      document.documentElement.style.maxHeight = '100%';
+    } 
+    else {
       alert("Errore.");
     }
   }
+  
+  
 
   useEffect(() => {
     applicaStileBody();

@@ -7,20 +7,6 @@
   margin-top: 200px; /* Regola l'altezza secondo l'altezza della tua navbar */
 }
 
-
-/* body {
-  background-image: url('../img/immagine_sfondo1.jpg');
-  background-repeat: no-repeat;
-  background-size: 100%;
-  background-attachment: fixed; 
-  background-position: center; 
-  height: 2000px;
-}  */
-
-/* Aggiungi un po' di altezza al contenuto della pagina per poter scrollare */
-
-
-
 /**************************************** Stile dei Form ****************************************/
 
 .containerForm, .containerTitle, .containerButtons {
