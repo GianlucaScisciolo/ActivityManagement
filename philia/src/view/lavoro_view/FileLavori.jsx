@@ -4,177 +4,25 @@ import LavoroAction from "../../action/lavoro_action/LavoroAction";
 import { operazioniLavori } from "../../vario/Operazioni";
 import lavoroStore from "../../store/lavoro_store/LavoroStore";
 import { aggiornamentoLista } from "../../vario/OperazioniRicerca";
-import jsPDF from 'jspdf';
-import autoTable from 'jspdf-autotable';
-import ExcelJS from 'exceljs';
-import { saveAs } from 'file-saver';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import { formatoDate, formatoTime } from "../../vario/Tempo";
+import { generaFileLavoriPDF, generaFileLavoriExcel } from "../../vario/File";
 
 const FileLavori = () => {
   const [lavoriClienti, setLavoriClienti] = useState(-1);
   const [lavoriProfessionisti, setLavoriProfessionisti] = useState(-1);
-  const [aggiornamentoCompletato, setAggiornamentoCompletato] = useState(false);
+  const [aggiornamentoCompletato, setAggiornamentoCompletato] = useState("");
   const [tipoFile, setTipoFile] = useState('');
-  const [fileAnno, setFileAnno] = useState(false);
-
-  const formatDate = (dateStr) => {
-    const date = new Date(dateStr);
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    return `${day}-${month}-${year}`;
-  }
-
-  const formatDate_AAAA_MM_GG = (dateStr) => {
-    const date = new Date(dateStr);
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
-  }
-
-  function formatTime(timeStr) {
-    const [hours, minutes] = timeStr.split(':');
-    return `${hours}:${minutes}`;
-  }
-
-  const generatePDF = (lavoriClienti, lavoriProfessionisti) => {
-    const doc = new jsPDF();
+  const [eliminaLavori, setEliminaLavori] = useState(false);
+  const [primoGiorno, setPrimoGiorno] = useState("");
+  const [ultimoGiorno, setUltimoGiorno] = useState("");
   
-    // Aggiungi titolo
-    doc.setFontSize(18);
-    doc.text('Lavori clienti', 14, 22);
-    doc.setFontSize(11);
-    doc.setTextColor(100);
-  
-    // Aggiungi tabella lavori clienti
-    if (lavoriClienti.length > 0) {
-      const clientiColumns = ["Nome", "Cognome", "Descrizione", "Giorno", "Orario inizio", "Orario fine", "Note"];
-      const clientiRows = lavoriClienti.map(lavoro => [
-        lavoro.nome_cliente,
-        lavoro.cognome_cliente,
-        lavoro.descrizione,
-        formatDate(lavoro.giorno),
-        formatTime(lavoro.orario_inizio),
-        formatTime(lavoro.orario_fine),
-        lavoro.note
-      ]);
-      autoTable(doc, {
-        head: [clientiColumns],
-        body: clientiRows,
-        startY: 26,
-      });
-    } else {
-      doc.text('Nessun lavoro cliente trovato.', 14, 30);
-    }
-  
-    // Aggiungi titolo lavori professionisti
-    let finalY = doc.lastAutoTable.finalY || 40;
-    doc.setFontSize(18);
-    doc.text('Lavori professionisti', 14, finalY + 20);
-  
-    // Aggiungi tabella lavori professionisti
-    if (lavoriProfessionisti.length > 0) {
-      const professionistiColumns = ["Nome", "Professione", "Descrizione", "Giorno", "Orario inizio", "Orario fine", "Note"];
-      const professionistiRows = lavoriProfessionisti.map(lavoro => [
-        lavoro.nome_professionista,
-        lavoro.professione,
-        lavoro.descrizione,
-        formatDate(lavoro.giorno),
-        formatTime(lavoro.orario_inizio),
-        formatTime(lavoro.orario_fine),
-        lavoro.note
-      ]);
-      autoTable(doc, {
-        head: [professionistiColumns],
-        body: professionistiRows,
-        startY: finalY + 26,
-      });
-    } else {
-      doc.text('Nessun lavoro professionista trovato.', 14, finalY + 30);
-    }
-  
-    // Salva il PDF
-    doc.save('lavori.pdf');
-  };
-
-  const generateExcel = async (lavoriClienti, lavoriProfessionisti) => {
-    const workbook = new ExcelJS.Workbook();
-    const clientiSheet = workbook.addWorksheet('Lavori clienti');
-    const professionistiSheet = workbook.addWorksheet('Lavori professionisti');
-  
-    // Aggiungi dati a clientiSheet
-    if (lavoriClienti.length > 0) {
-      clientiSheet.columns = [
-        { header: 'Nome', key: 'nome', width: 20 },
-        { header: 'Cognome', key: 'cognome', width: 20 },
-        { header: 'Descrizione', key: 'descrizione', width: 30 },
-        { header: 'Giorno', key: 'giorno', width: 15 },
-        { header: 'Orario inizio', key: 'orario_inizio', width: 15 },
-        { header: 'Orario fine', key: 'orario_fine', width: 15 },
-        { header: 'Note', key: 'note', width: 30 }
-      ];
-      lavoriClienti.forEach(lavoro => {
-        clientiSheet.addRow({
-          nome: lavoro.nome_cliente,
-          cognome: lavoro.cognome_cliente,
-          descrizione: lavoro.descrizione,
-          giorno: formatDate(lavoro.giorno),
-          orario_inizio: formatTime(lavoro.orario_inizio),
-          orario_fine: formatTime(lavoro.orario_fine),
-          note: lavoro.note
-        });
-      });
-    } else {
-      clientiSheet.addRow(['Nessun lavoro cliente trovato.']);
-    }
-  
-    // Aggiungi dati a professionistiSheet
-    if (lavoriProfessionisti.length > 0) {
-      professionistiSheet.columns = [
-        { header: 'Nome', key: 'nome', width: 20 },
-        { header: 'Professione', key: 'professione', width: 20 },
-        { header: 'Descrizione', key: 'descrizione', width: 30 },
-        { header: 'Giorno', key: 'giorno', width: 15 },
-        { header: 'Orario inizio', key: 'orario_inizio', width: 15 },
-        { header: 'Orario fine', key: 'orario_fine', width: 15 },
-        { header: 'Note', key: 'note', width: 30 }
-      ];
-      lavoriProfessionisti.forEach(lavoro => {
-        professionistiSheet.addRow({
-          nome: lavoro.nome_professionista,
-          professione: lavoro.professione,
-          descrizione: lavoro.descrizione,
-          giorno: formatDate(lavoro.giorno),
-          orario_inizio: formatTime(lavoro.orario_inizio),
-          orario_fine: formatTime(lavoro.orario_fine),
-          note: lavoro.note
-        });
-      });
-    } else {
-      professionistiSheet.addRow(['Nessun lavoro professionista trovato.']);
-    }
-  
-    // Genera il file Excel come blob
-    const buffer = await workbook.xlsx.writeBuffer();
-    const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-  
-    // Salva il file usando FileSaver.js
-    saveAs(blob, 'lavori.xlsx');
-    console.log('File Excel generato con successo.');
-  };
-
   const updateDatiLastSearch = () => {
     console.log("Dati aggiornati.");
   };
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    // Aggiornamenti per gestire i campi input possono essere aggiunti qui.
-  };
-
-  const ottieniLavori = async (primoGiorno, ultimoGiorno) => {
+  const ottieniLavori = async () => {
     lavoroStore.azzeraLavori(); // rende lavoriClienti e lavoriProfessionisti === -1
     const datiRicerca = {
       nome_cliente: "",
@@ -190,117 +38,44 @@ const FileLavori = () => {
     await LavoroAction.dispatchAction(datiRicerca, operazioniLavori.VISUALIZZA_LAVORI_CLIENTI);
     await LavoroAction.dispatchAction(datiRicerca, operazioniLavori.VISUALIZZA_LAVORI_PROFESSIONISTI);
 
-    setAggiornamentoCompletato(true);
+    setAggiornamentoCompletato(false);
   };
 
   useEffect(() => {
-    if (aggiornamentoCompletato) {
+    if (!aggiornamentoCompletato) {
       aggiornamentoLista("lavori", setLavoriClienti, setLavoriProfessionisti, updateDatiLastSearch);
+      console.log("Aggiornamento in corso ...");
     }
-  }, [aggiornamentoCompletato]);
+  }, [!aggiornamentoCompletato]);
 
   useEffect(() => {
-    if (aggiornamentoCompletato && (lavoriClienti !== -1 && lavoriProfessionisti !== -1)) {
-      setAggiornamentoCompletato(false);
-      if(tipoFile === "PDF")
-        generatePDF(lavoriClienti, lavoriProfessionisti);
-      else if(tipoFile === "Excel")
-        generateExcel(lavoriClienti, lavoriProfessionisti);
-      if(fileAnno === true) {
-        setFileAnno(false);
-        const dataCorrente = new Date();
-        const primoGiorno = new Date(dataCorrente.getFullYear() - 1, 0, 1);
-        const ultimoGiorno = new Date(dataCorrente.getFullYear() - 1, 11, 31);
+    if (!aggiornamentoCompletato && (lavoriClienti !== -1 && lavoriProfessionisti !== -1)) {
+      setAggiornamentoCompletato(true);
+      console.log("Aggiornamento completato.")
+      if(tipoFile === "pdf")
+        generaFileLavoriPDF(lavoriClienti, lavoriProfessionisti);
+      else if(tipoFile === "excel")
+        generaFileLavoriExcel(lavoriClienti, lavoriProfessionisti);
+      if(eliminaLavori === true) {
         const dati = {
-          primo_giorno: formatDate_AAAA_MM_GG(primoGiorno),
-          ultimo_giorno: formatDate_AAAA_MM_GG(ultimoGiorno)
+          "primo_giorno": primoGiorno,
+          "ultimo_giorno": ultimoGiorno
         }
         LavoroAction.dispatchAction(dati, operazioniLavori.ELIMINA_LAVORI_RANGE_GIORNI);
       }
     }
   }, [lavoriClienti, lavoriProfessionisti]);
 
-  const ottieniLavoriRangePDF = async (e) => {
+  const ottieniLavoriRange = async (e, tipoFile, eliminaLavori) => {
     e.preventDefault();
+    setEliminaLavori(false);
     if (confirm("Sei sicuro di voler ottenere il file?")) {
       const form = e.currentTarget.closest('form'); // Trova il form più vicino
-      const primoGiorno = form.querySelector('input[name="primoGiorno"]').value;
-      const ultimoGiorno = form.querySelector('input[name="ultimoGiorno"]').value;
-      setTipoFile("PDF");
-      await ottieniLavori(primoGiorno, ultimoGiorno);
-    }
-    else {
-      alert("Operazione annullata.");
-    }
-  };
-  
-  const ottieniLavoriRangeExcel = async (e) => {
-    e.preventDefault();
-    if (confirm("Sei sicuro di voler ottenere il file?")) {
-      const form = e.currentTarget.closest('form'); // Trova il form più vicino
-      const primoGiorno = form.querySelector('input[name="primoGiorno"]').value;
-      const ultimoGiorno = form.querySelector('input[name="ultimoGiorno"]').value;
-      setTipoFile("Excel");
-      await ottieniLavori(primoGiorno, ultimoGiorno);
-    }
-    else {
-      alert("Operazione annullata.");
-    }
-  };
-
-  const ottieniLavoriUltimoMesePDF = async (e) => {
-    e.preventDefault();
-    if (confirm("Sei sicuro di voler ottenere il file?")) {
-      const dataCorrente = new Date();
-      const primoGiorno = new Date(dataCorrente.getFullYear(), dataCorrente.getMonth()-1, 1);
-      const ultimoGiorno = new Date(dataCorrente.getFullYear(), dataCorrente.getMonth(), 0);
-      setTipoFile("PDF");
-      await ottieniLavori(primoGiorno, ultimoGiorno);
-    }
-    else {
-      alert("Operazione annullata.");
-    }
-  };
-  
-  
-  const ottieniLavoriUltimoMeseExcel = async (e) => {
-    e.preventDefault();
-    if (confirm("Sei sicuro di voler ottenere il file?")) {
-      const dataCorrente = new Date();
-      const primoGiorno = new Date(dataCorrente.getFullYear(), dataCorrente.getMonth() -1, 1);
-      const ultimoGiorno = new Date(dataCorrente.getFullYear(), dataCorrente.getMonth(), 0);
-      setTipoFile("Excel");
-      await ottieniLavori(primoGiorno, ultimoGiorno);
-    }
-    else {
-      alert("Operazione annullata.");
-    }
-  };
-
-  const ottieniLavoriUltimoAnnoPDF = async (e) => {
-    e.preventDefault();
-    if (confirm("Sei sicuro di voler ottenere il file ed eliminare i lavori?")) {
-      setFileAnno(true);
-      const dataCorrente = new Date();
-      const primoGiorno = new Date(dataCorrente.getFullYear() - 1, 0, 1);
-      const ultimoGiorno = new Date(dataCorrente.getFullYear() - 1, 11, 31);
-      setTipoFile("PDF");
-      await ottieniLavori(primoGiorno, ultimoGiorno);
-    }
-    else {
-      alert("Operazione annullata.");
-    }
-  };
-  
-  const ottieniLavoriUltimoAnnoExcel = async (e) => {
-    e.preventDefault();
-    if (confirm("Sei sicuro di voler ottenere il file ed eliminare i lavori?")) {
-      setFileAnno(true);
-      const dataCorrente = new Date();
-      const primoGiorno = new Date(dataCorrente.getFullYear() -1, 0, 1);
-      const ultimoGiorno = new Date(dataCorrente.getFullYear() -1, 11, 31);
-      setTipoFile("Excel");
-      await ottieniLavori(primoGiorno, ultimoGiorno);
+      setPrimoGiorno(formatoDate(form.querySelector('input[name="primoGiorno"]').value, "AAAA-MM-GG"));
+      setUltimoGiorno(formatoDate(form.querySelector('input[name="ultimoGiorno"]').value, "AAAA-MM-GG"));
+      setTipoFile(tipoFile);
+      setEliminaLavori(eliminaLavori);
+      await ottieniLavori();
     }
     else {
       alert("Operazione annullata.");
@@ -328,26 +103,18 @@ const FileLavori = () => {
           {/* bottoni */}
           <Row className='custom-row'>
             <Col>
-              <button className='buttonForm' onClick={(e) => ottieniLavoriRangePDF(e)}>Ottieni file PDF</button>
+              <button className='buttonForm' onClick={(e) => ottieniLavoriRange(e, "pdf", false)}>Ottieni file PDF</button>
             </Col>
             <Col>
-              <button className='buttonForm' onClick={(e) => ottieniLavoriRangeExcel(e)}>Ottieni file Excel</button>
-            </Col>
-          </Row>
-          <Row className='custom-row'>
-            <Col>
-              <button className='buttonForm' onClick={(e) => ottieniLavoriUltimoMesePDF(e)}>Ottieni file PDF ultimo mese</button>
-            </Col>
-            <Col>
-              <button className='buttonForm' onClick={(e) => ottieniLavoriUltimoMeseExcel(e)}>Ottieni file Excel ultimo mese</button>
+              <button className='buttonForm' onClick={(e) => ottieniLavoriRange(e, "excel", false)}>Ottieni file Excel</button>
             </Col>
           </Row>
           <Row className='custom-row'>
             <Col>
-              <button className='buttonForm' onClick={(e) => ottieniLavoriUltimoAnnoPDF(e)}>Ottieni file PDF ultimo anno ed elimina i lavori</button>
+              <button className='buttonForm' onClick={(e) => ottieniLavoriRange(e, "pdf", true)}>Ottieni file PDF ed elimina i lavori</button>
             </Col>
             <Col>
-              <button className='buttonForm' onClick={(e) => ottieniLavoriUltimoAnnoExcel(e)}>Ottieni file Excel ultimo anno ed elimina i lavori</button>
+              <button className='buttonForm' onClick={(e) => ottieniLavoriRange(e, "excel", true)}>Ottieni file Excel ed elimina i lavori</button>
             </Col>
           </Row>
         </form>

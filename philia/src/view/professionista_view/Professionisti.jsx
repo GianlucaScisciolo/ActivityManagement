@@ -78,11 +78,6 @@ const Professionisti = () => {
       />
 
       <div className='containerTitle'><label className='titoloForm'>Professionisti</label></div>
-
-      <TypeView
-        viewElements={viewElements}
-        setViewElements={setViewElements}
-      />
       
       <RenderItemsInRowsList
         tipoItem={"professionista"} 

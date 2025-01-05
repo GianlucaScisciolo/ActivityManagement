@@ -2,21 +2,15 @@ import { configureStore } from "@reduxjs/toolkit";
 import { counterReducer } from "./CounterSlice";
 import { autenticazioneSessionReducer } from "./AutenticazioneSessionSlice";
 import { sfondoReducer } from "./SfondoSlice";
+import { itemReducer } from "./ItemSlice";
 
 const store = configureStore({
   reducer: {
     counter: counterReducer,
     autenticazioneSession: autenticazioneSessionReducer,
     sfondoSession: sfondoReducer,
+    itemSession: itemReducer,
   },
 });
 
 export default store;
-
-
-
-
-
-
-
-

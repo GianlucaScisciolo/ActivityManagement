@@ -10,12 +10,14 @@ import { operazioniAutenticazione } from '../../vario/Operazioni';
 import { eseguiLogout } from '../../store/redux/AutenticazioneSessionSlice';
 import { useNavigate } from 'react-router-dom';
 import { changeWithImg, changeWithColoreRGB } from '../../store/redux/SfondoSlice';
+import { changeView } from '../../store/redux/ItemSlice';
 import immagineSfondo1 from "../img/immagine_sfondo1.jpg";
 import immagineSfondo2 from "../img/immagine_sfondo2.png";
 
 const NavbarSito = () => {
   const autenticazioneSession = useSelector((state) => state.autenticazioneSession.value);
   const sfondoSession = useSelector((state) => state.sfondoSession.value);
+  const itemSession = useSelector((state) => state.itemSession.value);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -24,6 +26,7 @@ const NavbarSito = () => {
   const [dropdownLavori, setDropdownLavori] = useState(false);
   const [dropdownStile, setDropdownStile] = useState(false);
   const [dropdownSfondo, setDropdownSfondo] = useState(false);
+  const [dropdownItem, setDropdownItem] = useState(false);
 
   const logout = () => {
     dispatch(eseguiLogout());
@@ -91,6 +94,13 @@ const NavbarSito = () => {
         break;
     }
   }
+
+    // Thunk function
+    const cambioView = (tipoView) => (dispatch) => {
+      dispatch(changeView({
+        view: tipoView
+      }));
+    }
 
   return (
     <>
@@ -192,7 +202,37 @@ const NavbarSito = () => {
                   </>
                 )}
               </NavDropdown>
+              <NavDropdown 
+                title="Item" 
+                className="nav-dropdown"
+                show={dropdownItem}
+                onMouseEnter={() => setDropdownItem(true)}
+                onMouseLeave={() => setDropdownItem(false)}
+              >
+                {(dropdownItem === true) && (
+                  <>
+                    <NavDropdown.Item 
+                      as={NavLink} 
+                      to="#" 
+                      className="nav-dropdown-item" 
+                      onClick={() => dispatch(cambioView("list"))}
+                    >
+                      Riga
+                    </NavDropdown.Item>
+                    <NavDropdown.Item 
+                      as={NavLink} 
+                      to="#" 
+                      className="nav-dropdown-item" 
+                      onClick={() => dispatch(cambioView("card"))}
+                    >
+                      Carta
+                    </NavDropdown.Item>
+                  </>
+                )}
+              </NavDropdown>
             </NavDropdown>
+
+               
             {(autenticazioneSession.isLogged === false) && (
               <Nav.Link as={NavLink} to="/login" className="nav-link">Login</Nav.Link>
             )}

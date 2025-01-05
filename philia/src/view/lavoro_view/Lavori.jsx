@@ -94,12 +94,7 @@ const [errori2, setErrori2] = useState ({
         setterLista1={setLavoriClienti} 
         setterLista2={setLavoriProfessionisti}
         setterDatiLastSearch={updateDatiLastSearch}
-        />
-
-      <TypeView
-        viewElements={viewElements}
-        setViewElements={setViewElements}
-        />
+      />
       
       <div className='containerTitle'><label className='titoloForm'>Lavori clienti</label></div>
       

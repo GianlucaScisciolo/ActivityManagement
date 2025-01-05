@@ -170,6 +170,8 @@
   display: flex;
   justify-content: center; /* Centra i Col */
   flex-wrap: wrap;
+  padding-left: 5%;
+  padding-right: 5%;
 }
 
 .custom-col, .custom-col-black, .custom-col-blue, .custom-col-red {

@@ -475,7 +475,12 @@ app.post("/ELIMINA_LAVORI", async (req, res) => {
  * Elimina lavori range giorni
  */
 app.post("/ELIMINA_LAVORI_RANGE_GIORNI", async (req, res) => {
-  const { primo_giorno = '', ultimo_giorno = '' } = req.body;
+  let { primo_giorno = '', ultimo_giorno = '' } = req.body;
+
+  if (primo_giorno === "")
+    primo_giorno = "1111-01-01";
+  if (ultimo_giorno === "")
+    ultimo_giorno = "9999-01-01";
 
   // Aggiungi un log per vedere i dati ricevuti
   console.log("Dati ricevuti per l\'eliminazione: ", [primo_giorno, ultimo_giorno]);

@@ -6,6 +6,7 @@ import Row from 'react-bootstrap/esm/Row';
 import Col from 'react-bootstrap/esm/Col';
 import { elimina } from '../../vario/OperazioniEliminazione';
 import { modifica } from '../../vario/OperazioniModifica';
+import { useSelector, useDispatch } from 'react-redux';
 
 const Clienti = () => {
   const [clienti, setClienti] = useState([]);
@@ -14,6 +15,8 @@ const Clienti = () => {
   const [selectedPencilCount, setSelectedPencilCount] = useState(0);
   const [selectedIds, setSelectedIds] = useState([]);
   const [selectedIdsModifica, setSelectedIdsModifica] = useState([]);
+
+  const itemSession = useSelector((state) => state.itemSession.value);
   
   const [datiClienteLastSearch, setDatiClienteLastSearch] = useState({
     "nome": "", 
@@ -40,6 +43,7 @@ const Clienti = () => {
 
   const controllo = () => {
     console.log(datiClienteLastSearch);
+    alert(itemSession.view);
 
     // console.log(selectedIds.length);
     // for (let i = 0; i < selectedIds.length; i++) {
@@ -74,11 +78,6 @@ const Clienti = () => {
 
       <div className='containerTitle'><label className='titoloForm'>Clienti</label></div>
 
-      <TypeView
-        viewElements={viewElements}
-        setViewElements={setViewElements}
-      />
-      
       <RenderItemsInRowsList
         tipoItem={"cliente"} 
         items={clienti}

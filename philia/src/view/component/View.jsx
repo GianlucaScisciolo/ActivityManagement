@@ -3,6 +3,8 @@ import { List, WalletCards, Trash2, Pencil } from 'lucide-react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { HookItems } from '../../vario/HookItems';
+import CardItem from './CardItem';
+import { useSelector, useDispatch } from 'react-redux';
 
 const handleClickChangeViewElements = ({viewElements, setViewElements}) => {
   setViewElements(viewElements === "list" ? "cards" : "list");
@@ -43,6 +45,8 @@ const Item = ({tipoItem, item, setterItems, viewElements, setSelectedTrashCount,
   const [textAreaClass, setTextAreaClass] = useState("");
   const [inputClassBlock, setInputClassBlock] = useState("");
   const [inputClass, setInputClass] = useState("");
+
+  const itemSession = useSelector((state) => state.itemSession.value);
   
   const formatDate = (dateStr) => {
     const date = new Date(dateStr);
@@ -133,21 +137,8 @@ const Item = ({tipoItem, item, setterItems, viewElements, setSelectedTrashCount,
   }
   
   const {
-    // trashStyle,
-    // setTrashStyle,
-    // pencilStyle,
-    // setPencilStyle,
     isPencilSelected,
     isTrashSelected,
-    // textAreaClassBlock,
-    // textAreaClass,
-    // inputClassBlock,
-    // inputClass,
-    // setTextAreaClassBlock,
-    // setTextAreaClass,
-    // setInputClassBlock,
-    // setInputClass,
-    handlePencilClickWrapperClienti, 
     handlePencilClickWrapperProfessionisti, 
     handlePencilClickWrapperLavori, 
     handleTrashClickWrapper,
@@ -155,27 +146,9 @@ const Item = ({tipoItem, item, setterItems, viewElements, setSelectedTrashCount,
     selectOperation,
   } = HookItems();
 
-  // if(!selectedIdsModifica.includes(item.id)) {
-  //   setTextAreaClassBlock("custom-textarea-block");
-  //   setTextAreaClass("custom-textarea-block");
-  //   setInputClassBlock("custom-input-block");
-  //   setInputClass("custom-input-block");
-  // }
-  // selectOperation(
-  //   "pencil",
-  //   item,
-  //   setterItems,
-  //   setSelectedTrashCount,
-  //   setSelectedPencilCount,
-  //   selectedIds,
-  //   setSelectedIds,
-  //   selectedIdsModifica,
-  //   setSelectedIdsModifica
-  // )
-
   return (
     <>
-      {viewElements === "list" && (
+      {itemSession.view === "list" && (
         <Row className='custom-row'>
           <Col className='custom-col-black'>
             <Pencil 
@@ -333,9 +306,13 @@ const Item = ({tipoItem, item, setterItems, viewElements, setSelectedTrashCount,
           )}
         </Row>
       )}
-      {viewElements === "card" && (
+      {itemSession.view === "card" && (
         <>
-        ciao
+          {/* <Row className='custom-row'> */}
+            <Col className='custom-col' key={0}>
+              <CardItem tipoItem={tipoItem} item={item} />
+            </Col>
+          {/* </Row> */}
         </>
       )}
     </>
@@ -345,49 +322,56 @@ const Item = ({tipoItem, item, setterItems, viewElements, setSelectedTrashCount,
 export const RenderItemsInRowsList = ({tipoItem, items, setterItems, viewElements, setSelectedTrashCount, setSelectedPencilCount, 
                                        selectedIds, setSelectedIds, selectedIdsModifica, setSelectedIdsModifica, 
                                        errori, setErrori}) => {
+  
+  const itemSession = useSelector((state) => state.itemSession.value);
+  
   if (items.length === 0) {
-    return <center><div>Nessun {tipoItem} trovato.</div></center>;
+    return (
+      <div className='containerTitle'><label className='titoloForm'>Nessun {tipoItem} trovato.</label></div>
+    )
   }
 
   return (
     <>
-      <Row className='custom-row'>
-        <Col className='custom-col-black'>Operazione</Col>
-        {(tipoItem === "cliente") && (
-          <>
-            <Col className='custom-col-black'>Nome</Col>
-            <Col className='custom-col-black'>Cognome</Col>
-            <Col className='custom-col-black'>Contatto</Col>
-            <Col className='custom-col-black'>Note</Col>
-          </>
-        )}
-        {(tipoItem === "professionista") && (
-          <>
-            <Col className='custom-col-black'>Nome</Col>
-            <Col className='custom-col-black'>Professione</Col>
-            <Col className='custom-col-black'>Contatto</Col>
-            <Col className='custom-col-black'>Email</Col>
-            <Col className='custom-col-black'>Note</Col>
-          </>
-        )}
-        {(tipoItem === "lavoro cliente" || tipoItem === "lavoro professionista") && (
-          <>
-            <Col className='custom-col-black'>Nome</Col>
-            {(tipoItem === "lavoro cliente") && (
+      {(itemSession.view === "list") &&(
+        <Row className='custom-row'>
+          <Col className='custom-col-black'>Operazione</Col>
+          {(tipoItem === "cliente") && (
+            <>
+              <Col className='custom-col-black'>Nome</Col>
               <Col className='custom-col-black'>Cognome</Col>
-            )}
-            {(tipoItem === "lavoro professionista") && (
+              <Col className='custom-col-black'>Contatto</Col>
+              <Col className='custom-col-black'>Note</Col>
+            </>
+          )}
+          {(tipoItem === "professionista") && (
+            <>
+              <Col className='custom-col-black'>Nome</Col>
               <Col className='custom-col-black'>Professione</Col>
-            )}
-            <Col className='custom-col-black'>Descrizione</Col>
-            <Col className='custom-col-black'>Giorno</Col>
-            <Col className='custom-col-black'>Orario inizio</Col>
-            <Col className='custom-col-black'>Orario fine</Col>
-            <Col className='custom-col-black'>Note</Col>
-          </>
-        )}
-      </Row>
-      
+              <Col className='custom-col-black'>Contatto</Col>
+              <Col className='custom-col-black'>Email</Col>
+              <Col className='custom-col-black'>Note</Col>
+            </>
+          )}
+          {(tipoItem === "lavoro cliente" || tipoItem === "lavoro professionista") && (
+            <>
+              <Col className='custom-col-black'>Nome</Col>
+              {(tipoItem === "lavoro cliente") && (
+                <Col className='custom-col-black'>Cognome</Col>
+              )}
+              {(tipoItem === "lavoro professionista") && (
+                <Col className='custom-col-black'>Professione</Col>
+              )}
+              <Col className='custom-col-black'>Descrizione</Col>
+              <Col className='custom-col-black'>Giorno</Col>
+              <Col className='custom-col-black'>Orario inizio</Col>
+              <Col className='custom-col-black'>Orario fine</Col>
+              <Col className='custom-col-black'>Note</Col>
+            </>
+          )}
+        </Row>
+      )}
+      <Row className='custom-row'>
       {items.map((item) => (
         <Item 
           key={`${item.id}`}
@@ -404,6 +388,7 @@ export const RenderItemsInRowsList = ({tipoItem, items, setterItems, viewElement
           setSelectedIdsModifica={setSelectedIdsModifica}
         />
       ))}
+      </Row>
       <Row className='custom-row'>
         <Col className='custom-col'><span className='span-errore-col'></span></Col>
         {(tipoItem === "cliente") && (
