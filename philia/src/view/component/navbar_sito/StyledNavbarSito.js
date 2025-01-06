@@ -1,0 +1,105 @@
+import styled from 'styled-components';
+import Nav from 'react-bootstrap/Nav';
+import NavDropdown from 'react-bootstrap/NavDropdown';
+
+export const StyledNavLeft = styled(Nav)`
+  background-color: transparent;
+  margin-right: auto;
+`
+
+export const StyledNavCenter = styled(Nav)`
+  background-color: transparent;
+  margin: auto;
+  align-items: center;
+  height: 100%;
+`
+
+export const StyledNavRight = styled(Nav)`
+  background-color: transparent;
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  height: 100%;
+`
+
+
+export const StyledNavDropdown = styled(NavDropdown)`
+  .dropdown-menu {
+    background-color: #000000;
+  }
+  margin-right: 20px;
+
+  .dropdown-toggle {
+    color: #FFFFFF !important;
+    font-weight: bold !important;
+
+    &.show, 
+    &:hover,
+    &:focus,
+    &:active {
+      background-color: #0050EF !important;
+    }
+  }
+`;
+
+export const StyledNavDropdownItem = styled(NavDropdown.Item)`
+  color: #FFFFFF;
+  font-weight: bold;
+  text-decoration: none;
+  display: block;
+  text-align: center;
+  &:hover {
+    background-color: #0050EF;
+    color: white;
+  }
+`;
+
+export const StyledDropdownContainer = styled.div`
+  display: flex;
+  text-align: center;
+`
+
+export const StyledSubMenuContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  text-align: center;
+`
+
+export const StyledNavLink = styled(Nav.Link)`
+  color: #FFFFFF;
+  font-weight: bold;
+  text-decoration: none;
+  display: block;
+  display: flex;
+  text-align: center;
+  padding: 10px 20px;
+  margin-left: 20px;
+  &:hover {
+    background-color: #0050EF;
+    color: white;
+  }
+`
+
+export const StyledNavLinkHome = styled(Nav.Link)`
+  color: #FFFFFF;
+  font-weight: bold;
+  text-decoration: none;
+  display: block;
+  display: flex;
+  text-align: center;
+  padding-bottom: 0;
+  margin-left: 20px;
+  transition: 0.5s all ease-out;
+  &:hover {
+    color: #0050EF;
+  }
+`
+
+
+
+
+
+
+
+
+

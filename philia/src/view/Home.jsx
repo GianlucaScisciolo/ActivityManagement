@@ -1,7 +1,6 @@
 import Header from "./component/Header";
 import Row from 'react-bootstrap/esm/Row';
 import Col from 'react-bootstrap/esm/Col';
-import CardItem from "./component/CardItem";
 
 function Home() {
   return (

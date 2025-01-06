@@ -3,8 +3,8 @@ import { List, WalletCards, Trash2, Pencil } from 'lucide-react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { HookItems } from '../../vario/HookItems';
-import CardItem from './CardItem';
 import { useSelector, useDispatch } from 'react-redux';
+import CardItem from './card_item/CardItem';
 
 const handleClickChangeViewElements = ({viewElements, setViewElements}) => {
   setViewElements(viewElements === "list" ? "cards" : "list");
@@ -184,20 +184,20 @@ const Item = ({tipoItem, item, setterItems, viewElements, setSelectedTrashCount,
               )}
             />
           </Col>
-          {(tipoItem === "cliente" || tipoItem === "professionista") && (
+          {(tipoItem === "cliente") && (
             <Col className='custom-col'>
               <textarea 
                 className={getClassTextAreaBlock(item.tipo_selezione)} 
-                value={nome} 
+                value={nome + " " + cognome} 
                 onChange={(e) => onChangeValue(e, getClassTextAreaBlock(item.tipo_selezione), setNome, item, setterItems, "nome")} 
               />
             </Col>
           )}
-          {(tipoItem === "cliente") && (
+          {(tipoItem === "professionista") && (
             <Col className='custom-col'>
               <textarea 
                 className={getClassTextAreaBlock(item.tipo_selezione)}
-                value={cognome} 
+                value={nome} 
                 onChange={(e) => onChangeValue(e, getClassTextAreaBlock(item.tipo_selezione), setCognome, item, setterItems, "cognome")} 
               />
             </Col>
@@ -206,17 +206,8 @@ const Item = ({tipoItem, item, setterItems, viewElements, setSelectedTrashCount,
             <Col className='custom-col'>
               <textarea 
                 className={getClassTextAreaBlock(item.tipo_selezione)}
-                value={nomeCliente} 
+                value={nomeCliente + " " + cognomeCliente} 
                 onChange={(e) => onChangeValue(e, getClassTextAreaBlock(item.tipo_selezione), setNomeCliente, item, setterItems, "nomeCliente")} 
-              />
-            </Col>
-          )}
-          {(tipoItem === "lavoro cliente") && (
-            <Col className='custom-col'>
-              <textarea 
-                className={getClassTextAreaBlock(item.tipo_selezione)}
-                value={cognomeCliente} 
-                onChange={(e) => onChangeValue(e, getClassTextAreaBlock(item.tipo_selezione), setCognomeCliente, item, setterItems, "cognomeCliente")} 
               />
             </Col>
           )}
@@ -295,7 +286,7 @@ const Item = ({tipoItem, item, setterItems, viewElements, setSelectedTrashCount,
               />
             </Col>
           )}
-          {(tipoItem === "cliente" || tipoItem === "professionista" || tipoItem === "lavoro cliente" || tipoItem === "lavoro professionista") && (
+          {(tipoItem === "cliente" || tipoItem === "professionista" || tipoItem.startsWith("lavoro")) && (
             <Col className='custom-col'>
               <textarea 
                 className={getClassTextArea(item.tipo_selezione)}
@@ -308,11 +299,9 @@ const Item = ({tipoItem, item, setterItems, viewElements, setSelectedTrashCount,
       )}
       {itemSession.view === "card" && (
         <>
-          {/* <Row className='custom-row'> */}
-            <Col className='custom-col' key={0}>
-              <CardItem tipoItem={tipoItem} item={item} />
-            </Col>
-          {/* </Row> */}
+          <Col className='custom-col' key={item.id}>
+            <CardItem tipoItem={tipoItem} item={item} header="" />
+          </Col>
         </>
       )}
     </>
@@ -333,7 +322,7 @@ export const RenderItemsInRowsList = ({tipoItem, items, setterItems, viewElement
 
   return (
     <>
-      {(itemSession.view === "list") &&(
+      {/* {(itemSession.view === "list") &&(
         <Row className='custom-row'>
           <Col className='custom-col-black'>Operazione</Col>
           {(tipoItem === "cliente") && (
@@ -370,7 +359,7 @@ export const RenderItemsInRowsList = ({tipoItem, items, setterItems, viewElement
             </>
           )}
         </Row>
-      )}
+      )}*/}
       <Row className='custom-row'>
       {items.map((item) => (
         <Item 
@@ -388,7 +377,7 @@ export const RenderItemsInRowsList = ({tipoItem, items, setterItems, viewElement
           setSelectedIdsModifica={setSelectedIdsModifica}
         />
       ))}
-      </Row>
+      </Row> 
       <Row className='custom-row'>
         <Col className='custom-col'><span className='span-errore-col'></span></Col>
         {(tipoItem === "cliente") && (

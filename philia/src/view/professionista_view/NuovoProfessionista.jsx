@@ -2,8 +2,14 @@ import React, { useState } from 'react';
 import Header from '../component/Header';
 import ProfessionistaAction from '../../action/professionista_action/ProfessionistaAction';
 import { controlloNuovoProfessionista } from '../../vario/Controlli';
+import Row from 'react-bootstrap/esm/Row';
+import Col from 'react-bootstrap/esm/Col';
+import CardItem from '../component/card_item/CardItem';
+import { useSelector } from 'react-redux';
 
 const NuovoProfessionista = () => {
+  const formSession = useSelector((state) => state.formSession.value);
+
   const[errori, setErrori] = useState({
     erroreNome: "",
     erroreProfessione: "",
@@ -61,42 +67,57 @@ const NuovoProfessionista = () => {
       <div className="main-content"></div>
 
       <div>
-        <form className='containerForm' onSubmit={(e) => {
-          e.preventDefault();
-          const formData = new FormData(e.target);
-          const data = {
-            nome: formData.get('nome'),
-            professione: formData.get('professione'),
-            contatto: formData.get('contatto'),
-            email: formData.get('email'),
-            note: formData.get('note'),
+        <form 
+          className={formSession.view === "form" ? 'containerForm' : ''}  
+          onSubmit={(e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const data = {
+              nome: formData.get('nome'),
+              professione: formData.get('professione'),
+              contatto: formData.get('contatto'),
+              email: formData.get('email'),
+              note: formData.get('note'),
           };
           handleInsert(data, e.target);
         }}>
-          
-          <label className='titoloForm'>Nuovo professionista</label>
+          {(formSession.view === "form") && (
+            <>
+              <label className='titoloForm'>Nuovo professionista</label>
 
-          <label className='labelForm'>Nome</label>
-          <input className='inputFormModifica' type='text' name='nome' />
-          <span className='spanErrore'>{errori.erroreNome}</span>
-          
-          <label className='labelForm'>Professione</label>
-          <input className='inputFormModifica' type='text' name='professione' />
-          <span className='spanErrore'>{errori.erroreProfessione}</span>
+              <label className='labelForm'>Nome</label>
+              <input className='inputFormModifica' type='text' name='nome' />
+              <span className='spanErrore'>{errori.erroreNome}</span>
+              
+              <label className='labelForm'>Professione</label>
+              <input className='inputFormModifica' type='text' name='professione' />
+              <span className='spanErrore'>{errori.erroreProfessione}</span>
 
-          <label className='labelForm'>Contatto*</label>
-          <input className='inputFormModifica' type='text' name='contatto' onChange={handleChangeInsertJustNumber} />
-          <span className='spanErrore'>{errori.erroreContatto}</span>
+              <label className='labelForm'>Contatto*</label>
+              <input className='inputFormModifica' type='text' name='contatto' onChange={handleChangeInsertJustNumber} />
+              <span className='spanErrore'>{errori.erroreContatto}</span>
 
-          <label className='labelForm'>Email</label>
-          <input className='inputFormModifica' type='text' name='email' />
-          <span className='spanErrore'>{errori.erroreEmail}</span>
+              <label className='labelForm'>Email</label>
+              <input className='inputFormModifica' type='text' name='email' />
+              <span className='spanErrore'>{errori.erroreEmail}</span>
 
-          <span className='spanErrore'>{errori.erroreContattoEEmail}</span>
+              <span className='spanErrore'>{errori.erroreContattoEEmail}</span>
 
-          <label className='labelForm'>Note*</label>
-          <textarea className='textAreaFormModifica' name='note'></textarea>
-          <span className='spanErrore'>{errori.erroreNote}</span>
+              <label className='labelForm'>Note*</label>
+              <textarea className='textAreaFormModifica' name='note'></textarea>
+              <span className='spanErrore'>{errori.erroreNote}</span>
+            </>
+          )}
+
+          {(formSession.view === "card") && (
+            <>
+              <Row className='custom-row'>
+                <Col className='custom-col'>
+                  <CardItem tipoItem={"nuovo professionista"} item={null} header="Nuovo professionista" />
+                </Col>
+              </Row>
+            </>
+          )}
 
           <button className='buttonForm' type='submit'>Salva professionista</button>
         </form>

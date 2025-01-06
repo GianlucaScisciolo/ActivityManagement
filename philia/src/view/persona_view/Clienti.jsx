@@ -17,6 +17,7 @@ const Clienti = () => {
   const [selectedIdsModifica, setSelectedIdsModifica] = useState([]);
 
   const itemSession = useSelector((state) => state.itemSession.value);
+  const formSession = useSelector((state) => state.formSession.value);
   
   const [datiClienteLastSearch, setDatiClienteLastSearch] = useState({
     "nome": "", 
@@ -44,6 +45,7 @@ const Clienti = () => {
   const controllo = () => {
     console.log(datiClienteLastSearch);
     alert(itemSession.view);
+    alert(formSession.view);
 
     // console.log(selectedIds.length);
     // for (let i = 0; i < selectedIds.length; i++) {

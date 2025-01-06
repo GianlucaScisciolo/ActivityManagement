@@ -8,8 +8,14 @@ import professionistaStore from '../../store/professionista_store/Professionista
 import lavoroStore from '../../store/lavoro_store/LavoroStore';
 import { operazioniPersone, operazioniProfessionisti, operazioniLavori } from '../../vario/Operazioni';
 import { controlloNuovoLavoro } from '../../vario/Controlli';
+import Row from 'react-bootstrap/esm/Row';
+import Col from 'react-bootstrap/esm/Col';
+import CardItem from '../component/card_item/CardItem';
+import { useSelector } from 'react-redux';
 
 const NuovoLavoro = () => {
+  const formSession = useSelector((state) => state.formSession.value);
+
   const [errori, setErrori] = useState ({
     erroreCliente: "",
     erroreProfessionista: "",
@@ -136,112 +142,152 @@ const NuovoLavoro = () => {
       <Header />
       <div className="main-content"></div>
       <div>
-        <form className='containerForm' onSubmit={(e) => {
-          e.preventDefault();
-          const formData = new FormData(e.target);
-          const data = {
-            id_cliente: formData.get('id_cliente'),
-            id_professionista: formData.get('id_professionista'),
-            descrizione: formData.get('descrizione'),
-            giorno: formData.get('giorno'),
-            orario_inizio: formData.get('orario_inizio'),
-            orario_fine: formData.get('orario_fine'),
-            note: formData.get('note'),
-          };
-          handleInsert(data, e.target);
-        }}>
-          <label className='titoloForm'>Nuovo lavoro</label>
+        <form 
+          className={formSession.view === "form" ? 'containerForm' : ''} 
+          onSubmit={(e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const data = {
+              id_cliente: formData.get('id_cliente'),
+              id_professionista: formData.get('id_professionista'),
+              descrizione: formData.get('descrizione'),
+              giorno: formData.get('giorno'),
+              orario_inizio: formData.get('orario_inizio'),
+              orario_fine: formData.get('orario_fine'),
+              note: formData.get('note'),
+            };
+            handleInsert(data, e.target);
+          }}
+        >
 
-          <label className='labelForm'>Cliente</label>
-          <input 
-            className='inputFormModifica' 
-            type='text' 
-            placeholder='Cerca cliente'
-            value={searchTermCliente}
-            onChange={onChangeCliente} 
-          />
-          {filteredClienti.length > 0 && (
-            <ul>
-              {filteredClienti.map(cliente => (
-                <button className='buttonForm'  key={cliente.id} onClick={(e) => handleClienteClick(e, cliente)}>
-                  {cliente.cognome} {cliente.nome} - {cliente.contatto}
-                </button>
-              ))}
-            </ul>
+          {(formSession.view === "form") && (
+            <>
+              <label className='titoloForm'>Nuovo lavoro</label>
+
+              <label className='labelForm'>Cliente</label>
+              <input 
+                className='inputFormModifica' 
+                type='text' 
+                placeholder='Cerca cliente'
+                value={searchTermCliente}
+                onChange={onChangeCliente} 
+              />
+              {filteredClienti.length > 0 && (
+                <ul>
+                  {filteredClienti.map(cliente => (
+                    <button className='buttonForm'  key={cliente.id} onClick={(e) => handleClienteClick(e, cliente)}>
+                      {cliente.cognome} {cliente.nome} - {cliente.contatto}
+                    </button>
+                  ))}
+                </ul>
+              )}
+              <select
+                className='inputFormModifica' // Aggiungi la classe qui
+                name='cliente'
+                value={selectedClienteId}
+                onChange={(e) => setSelectedClienteId(e.target.value)}
+              >
+                <option value=''>Seleziona un cliente</option>
+                {filteredClienti.map(cliente => (
+                  <option key={cliente.id} value={cliente.id}>
+                    {cliente.cognome} {cliente.nome} - {cliente.contatto}
+                  </option>
+                ))}
+              </select>
+
+              <span className='spanErrore'>{errori.erroreCliente}</span>
+
+              <label className='labelForm'>Professionista</label>
+              <input 
+                className='inputFormModifica' 
+                type='text' 
+                placeholder='Cerca professionista'
+                value={searchTermProfessionista}
+                onChange={onChangeProfessionista} 
+              />
+              {filteredProfessionisti.length > 0 && (
+                <ul>
+                  {filteredProfessionisti.map(professionista => (
+                    <button className='buttonForm'  key={professionista.id} onClick={(e) => handleProfessionistaClick(e, professionista)}>
+                      {professionista.nome} - {professionista.professione} - {professionista.contatto} - {professionista.email}
+                    </button>
+                  ))}
+                </ul>
+              )}
+              <select
+                className='inputFormModifica' // Aggiungi la classe qui
+                name='professionista'
+                value={selectedProfessionistaId}
+                onChange={(e) => setSelectedProfessionistaId(e.target.value)}
+              >
+                <option value=''>Seleziona un professionista</option>
+                {filteredProfessionisti.map(professionista => (
+                  <option key={professionista.id} value={professionista.id}>
+                    {professionista.nome} - {professionista.professione} - {professionista.contatto} - {professionista.email}
+                  </option>
+                ))}
+              </select>
+              <input type='hidden' name='id_cliente' value={selectedClienteId} />
+              <input type='hidden' name='id_professionista' value={selectedProfessionistaId} />
+              <span className='spanErrore'>{errori.erroreProfessionista}</span>
+              <span className='spanErrore'>{errori.erroreClienteEProfessionista}</span>
+              
+              <label className='labelForm'>Descrizione*</label>
+              <textarea className='textAreaFormModifica' type='text' name='descrizione' />
+              <span className='spanErrore'>{errori.erroreDescrizione}</span>
+
+              <label className='labelForm'>Giorno*</label>
+              <input className='inputFormModifica' type='date' name='giorno' />
+              <span className='spanErrore'>{errori.erroreGiorno}</span>
+
+              <label className='labelForm'>Orario inizio*</label>
+              <input className='inputFormModifica' type='time' name='orario_inizio' />
+              <span className='spanErrore'>{errori.erroreOrarioInizio}</span>
+
+              <label className='labelForm'>Orario fine*</label>
+              <input className='inputFormModifica' type='time' name='orario_fine' />
+              <span className='spanErrore'>{errori.erroreOrarioFine}</span>
+              <span className='spanErrore'>{errori.erroreOrari}</span>
+
+              <label className='labelForm'>Note</label>
+              <textarea className='textAreaFormModifica' name='note'></textarea>
+              <span className='spanErrore'>{errori.erroreNote}</span>
+            </>
           )}
-          <select
-            className='inputFormModifica' // Aggiungi la classe qui
-            name='cliente'
-            value={selectedClienteId}
-            onChange={(e) => setSelectedClienteId(e.target.value)}
-          >
-            <option value=''>Seleziona un cliente</option>
-            {filteredClienti.map(cliente => (
-              <option key={cliente.id} value={cliente.id}>
-                {cliente.cognome} {cliente.nome} - {cliente.contatto}
-              </option>
-            ))}
-          </select>
 
-          <span className='spanErrore'>{errori.erroreCliente}</span>
-
-          <label className='labelForm'>Professionista</label>
-          <input 
-            className='inputFormModifica' 
-            type='text' 
-            placeholder='Cerca professionista'
-            value={searchTermProfessionista}
-            onChange={onChangeProfessionista} 
-          />
-          {filteredProfessionisti.length > 0 && (
-            <ul>
-              {filteredProfessionisti.map(professionista => (
-                <button className='buttonForm'  key={professionista.id} onClick={(e) => handleProfessionistaClick(e, professionista)}>
-                  {professionista.nome} - {professionista.professione} - {professionista.contatto} - {professionista.email}
-                </button>
-              ))}
-            </ul>
+          {(formSession.view === "card") && (
+            <>
+              <Row>
+                <Col className='custom-col'>
+                  <span>
+                    <CardItem tipoItem={"nuovo lavoro"} item={null} header="Nuovo lavoro cliente"/>
+                    <button className='buttonForm' type='submit' 
+                      style={{
+                        width:"100%", marginLeft: "0", marginRight: "0", 
+                        marginTop: "35px", marginBottom:"0"
+                      }}
+                    >
+                      Salva lavoro
+                    </button>
+                  </span>
+                </Col>
+                <Col className='custom-col'>
+                  <span>
+                    <CardItem tipoItem={"nuovo lavoro"} item={null} header="Nuovo lavoro professionista"/>
+                    <button className='buttonForm' type='submit' 
+                      style={{
+                        width:"100%", marginLeft: "0", marginRight: "0", 
+                        marginTop: "35px", marginBottom:"0"
+                      }}
+                    >
+                      Salva lavoro
+                    </button>
+                  </span>
+                </Col>
+              </Row>
+            </>
           )}
-          <select
-            className='inputFormModifica' // Aggiungi la classe qui
-            name='professionista'
-            value={selectedProfessionistaId}
-            onChange={(e) => setSelectedProfessionistaId(e.target.value)}
-          >
-            <option value=''>Seleziona un professionista</option>
-            {filteredProfessionisti.map(professionista => (
-              <option key={professionista.id} value={professionista.id}>
-                {professionista.nome} - {professionista.professione} - {professionista.contatto} - {professionista.email}
-              </option>
-            ))}
-          </select>
-          <input type='hidden' name='id_cliente' value={selectedClienteId} />
-          <input type='hidden' name='id_professionista' value={selectedProfessionistaId} />
-          <span className='spanErrore'>{errori.erroreProfessionista}</span>
-          <span className='spanErrore'>{errori.erroreClienteEProfessionista}</span>
-          
-          <label className='labelForm'>Descrizione*</label>
-          <textarea className='textAreaFormModifica' type='text' name='descrizione' />
-          <span className='spanErrore'>{errori.erroreDescrizione}</span>
 
-          <label className='labelForm'>Giorno*</label>
-          <input className='inputFormModifica' type='date' name='giorno' />
-          <span className='spanErrore'>{errori.erroreGiorno}</span>
-
-          <label className='labelForm'>Orario inizio*</label>
-          <input className='inputFormModifica' type='time' name='orario_inizio' />
-          <span className='spanErrore'>{errori.erroreOrarioInizio}</span>
-
-          <label className='labelForm'>Orario fine*</label>
-          <input className='inputFormModifica' type='time' name='orario_fine' />
-          <span className='spanErrore'>{errori.erroreOrarioFine}</span>
-          <span className='spanErrore'>{errori.erroreOrari}</span>
-
-          <label className='labelForm'>Note</label>
-          <textarea className='textAreaFormModifica' name='note'></textarea>
-          <span className='spanErrore'>{errori.erroreNote}</span>
-
-          <button className='buttonForm' type='submit'>Salva lavoro</button>        
         </form>
       </div>
     </>

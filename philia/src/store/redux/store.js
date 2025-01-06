@@ -3,6 +3,7 @@ import { counterReducer } from "./CounterSlice";
 import { autenticazioneSessionReducer } from "./AutenticazioneSessionSlice";
 import { sfondoReducer } from "./SfondoSlice";
 import { itemReducer } from "./ItemSlice";
+import { formReducer } from "./FormSlice";
 
 const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ const store = configureStore({
     autenticazioneSession: autenticazioneSessionReducer,
     sfondoSession: sfondoReducer,
     itemSession: itemReducer,
+    formSession: formReducer,
   },
 });
 
