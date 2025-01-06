@@ -1,7 +1,12 @@
 import { useState, useEffect, useRef } from "react";
+import { useSelector } from "react-redux";
 import { aggiornamentoLista, eseguiRicerca } from "../../vario/OperazioniRicerca";
+import Row from 'react-bootstrap/esm/Row';
+import Col from 'react-bootstrap/esm/Col';
+import CardItem from "../component/card_item/CardItem";
 
 export const FormRicerca = ({tipoLista, setterLista1, setterLista2, setterDatiLastSearch}) => {
+  const formSession = useSelector((state) => state.formSession.value);
   const [nome, setNome] = useState('');
   const [cognome, setCognome] = useState('');
   const [contatto, setContatto] = useState('');
@@ -249,18 +254,54 @@ export const FormRicerca = ({tipoLista, setterLista1, setterLista2, setterDatiLa
 
   return (
     <div className='visible'>
-      <form className='containerForm' onSubmit={(e) => eseguiRicerca(e, tipoLista, setterLista1, setterLista2, setterDatiLastSearch)}>
+      <form 
+        className={formSession.view === "form" ? 'containerForm' : ''}
+        onSubmit={(e) => eseguiRicerca(e, tipoLista, setterLista1, setterLista2, setterDatiLastSearch)}
+      >
         <>
+          
           {(formIsVisible) && (tipoLista === "clienti") && (
-            getFormCercaClienti()
+            <>
+              {(formSession.view === "form") && (
+                getFormCercaClienti()
+              )}
+              {(formSession.view === "card") && (
+                <Row className='custom-row'>
+                  <Col className='custom-col'>
+                    <CardItem tipoItem={"cerca clienti"} item={null} header="Cerca clienti"/>
+                  </Col>
+                </Row>
+              )}
+            </>
           )}
           {(formIsVisible) && (tipoLista === "professionisti") && (
-            getFormCercaProfessionisti()
+            <>
+              {(formSession.view === "form") && (
+                getFormCercaProfessionisti()
+              )}
+              {(formSession.view === "card") && (
+                <Row className='custom-row'>
+                  <Col className='custom-col'>
+                    <CardItem tipoItem={"cerca professionisti"} item={null} header="Cerca professionisti"/>
+                  </Col>
+                </Row>
+              )}
+            </>
           )}
           {(formIsVisible) && (tipoLista === "lavori") && (
-            getFormCercaLavori()
+            <>
+              {(formSession.view === "form") && (
+                getFormCercaLavori()
+              )}
+              {(formSession.view === "card") && (
+                <Row className='custom-row'>
+                  <Col className='custom-col'>
+                    <CardItem tipoItem={"cerca lavori"} item={null} header="Cerca lavori"/>
+                  </Col>
+                </Row>
+              )}
+            </>
           )}
-
           <button className='buttonForm' onClick={handleClickNascondiForm}>
             {formIsVisible ? 'Nascondi ricerca' : 'Mostra ricerca'}
           </button>

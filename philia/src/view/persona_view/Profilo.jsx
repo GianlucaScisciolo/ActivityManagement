@@ -6,8 +6,12 @@ import autenticazioneStore from "../../store/autenticazione_store/Autenticazione
 import { operazioniAutenticazione } from "../../vario/Operazioni";
 import { controlloProfilo } from "../../vario/Controlli";
 import { eseguiModificaAutenticazioneSession } from "../../store/redux/AutenticazioneSessionSlice";
+import Row from 'react-bootstrap/esm/Row';
+import Col from 'react-bootstrap/esm/Col';
+import CardItem from "../component/card_item/CardItem";
 
 const Profilo = () => {
+  const formSession = useSelector((state) => state.formSession.value);
   const autenticazioneSession = useSelector((state) => state.autenticazioneSession.value);
   const [utenti, setUtenti] = useState(-1);
   const [usernameAttuale, setUsernameAttuale] = useState(autenticazioneSession.username);
@@ -142,35 +146,51 @@ const Profilo = () => {
       <div className="main-content"></div>
 
       <div className='visible'>
-        <form className='containerForm' onSubmit={(e) => modificaProfilo(e)}>
-          <label className='titoloForm'>Profilo</label>
-        
-          <label className='labelForm'>Username</label>
-          <input className='inputFormModifica' type='text' name='nuovoUsername' value={nuovoUsername} onChange={handleInputChange} />
-          <span className='spanErrore'>{errori.erroreNuovoUsername}</span>
+        <form 
+          className={formSession.view === "form" ? 'containerForm' : ''} 
+          onSubmit={(e) => modificaProfilo(e)}
+        >
+          {(formSession.view === "form") && (
+            <>
+              <label className='titoloForm'>Profilo</label>
+            
+              <label className='labelForm'>Username</label>
+              <input className='inputFormModifica' type='text' name='nuovoUsername' value={nuovoUsername} onChange={handleInputChange} />
+              <span className='spanErrore'>{errori.erroreNuovoUsername}</span>
 
-          <label className='labelForm'>Note</label>
-          <textarea className='textAreaFormModifica' name='note' value={note} onChange={handleInputChange} />
-          <span className='spanErrore'>{errori.erroreNuoveNote}</span>
+              <label className='labelForm'>Note</label>
+              <textarea className='textAreaFormModifica' name='note' value={note} onChange={handleInputChange} />
+              <span className='spanErrore'>{errori.erroreNuoveNote}</span>
 
-          <label className='labelForm'>Password attuale</label>
-          <input className='inputFormModifica' type='password' name='password' value={password} onChange={handleInputChange} />
-          <span className='spanErrore'>{errori.errorePasswordAttuale}</span>
+              <label className='labelForm'>Password attuale</label>
+              <input className='inputFormModifica' type='password' name='password' value={password} onChange={handleInputChange} />
+              <span className='spanErrore'>{errori.errorePasswordAttuale}</span>
 
-          <label className='labelForm'>Nuova password</label>
-          <input className='inputFormModifica' type='password' name='nuovaPassword' value={nuovaPassword} onChange={handleInputChange} />
-          <span className='spanErrore'>{errori.erroreNuovaPassword}</span>
-          
-          <label className='labelForm'>Conferma nuova password</label>
-          <input className='inputFormModifica' type='password' name='confermaNuovaPassword' value={confermaNuovaPassword} onChange={handleInputChange} />
-          <span className='spanErrore'>{errori.erroreConfermaNuovaPassword}</span>
+              <label className='labelForm'>Nuova password</label>
+              <input className='inputFormModifica' type='password' name='nuovaPassword' value={nuovaPassword} onChange={handleInputChange} />
+              <span className='spanErrore'>{errori.erroreNuovaPassword}</span>
+              
+              <label className='labelForm'>Conferma nuova password</label>
+              <input className='inputFormModifica' type='password' name='confermaNuovaPassword' value={confermaNuovaPassword} onChange={handleInputChange} />
+              <span className='spanErrore'>{errori.erroreConfermaNuovaPassword}</span>
 
-          <span className='spanErrore'>{errori.errore2Password}</span>
+              <span className='spanErrore'>{errori.errore2Password}</span>
 
-          <input type="hidden" name="username" value={usernameAttuale} />
+              <input type="hidden" name="username" value={usernameAttuale} />
 
-          <span className='spanErrore'>{errori.erroreLogin}</span>
-          
+              <span className='spanErrore'>{errori.erroreLogin}</span>
+            </>
+          )}
+
+          {(formSession.view === "card") && (
+            <>
+              <Row className='custom-row'>
+                <Col className='custom-col'>
+                  <CardItem tipoItem={"modifica profilo"} item={null} header="Profilo" />
+                </Col>
+              </Row>
+            </>
+          )}
           <button className='buttonForm' type='submit'>Esegui modifica</button>
         </form>
       </div>

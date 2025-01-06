@@ -118,8 +118,9 @@ const NuovoProfessionista = () => {
               </Row>
             </>
           )}
-
-          <button className='buttonForm' type='submit'>Salva professionista</button>
+          <center>
+            <button className='buttonForm' type='submit'>Salva professionista</button>
+          </center>
         </form>
       </div>
     </>

@@ -23,6 +23,17 @@ function CardNuovoCliente({ item }) {
   );
 }
 
+function CardCercaClienti({ item }) {
+  return (
+    <>
+      <StyledTextArea rows="1" placeholder='Nome'/>
+      <StyledTextArea rows="1" placeholder='Cognome'/>
+      <StyledInput rows="1" type="text" placeholder='Contatto'/>
+      <StyledTextArea rows="1" placeholder='Note'/>
+    </>
+  );
+}
+
 function CardProfessionista({ item }) {
   return (
     <>
@@ -40,6 +51,18 @@ function CardNuovoProfessionista({ item }) {
     <>
       <StyledTextArea rows="1" placeholder='Nome*'/>
       <StyledTextArea rows="1" placeholder='Professione*'/>
+      <StyledInput rows="1" type="text" placeholder='Contatto'/>
+      <StyledInput rows="1" type="text" placeholder='Email'/>
+      <StyledTextArea rows="1" placeholder='Note'/>
+    </>
+  );
+}
+
+function CardCercaProfessionisti({ item }) {
+  return (
+    <>
+      <StyledTextArea rows="1" placeholder='Nome'/>
+      <StyledTextArea rows="1" placeholder='Professione'/>
       <StyledInput rows="1" type="text" placeholder='Contatto'/>
       <StyledInput rows="1" type="text" placeholder='Email'/>
       <StyledTextArea rows="1" placeholder='Note'/>
@@ -86,6 +109,33 @@ function CardNuovoLavoro({ item }) {
   );
 }
 
+function CardCercaLavori({ item }) {
+  return (
+    <>
+      <StyledTextArea rows="1" placeholder='Nome cliente'/>
+      <StyledTextArea rows="1" placeholder='Cognome cliente'/>
+      <StyledTextArea rows="1" placeholder='Nome professionista'/>
+      <StyledTextArea rows="1" placeholder='Professione'/>
+      <StyledTextArea rows="1" placeholder='Descrizione'/>
+      <StyledTextArea rows="1" placeholder='Primo giorno'/>
+      <StyledTextArea rows="1" placeholder='Ultimo giorno'/>
+      <StyledTextArea rows="1" placeholder='Note'/>
+    </>
+  );
+}
+
+function CardModificaProfilo({ item }) {
+  return (
+    <>
+      <StyledTextArea rows="1" placeholder='Username*'/>
+      <StyledTextArea rows="1" placeholder='Note'/>
+      <StyledTextArea rows="1" placeholder='Password attuale*'/>
+      <StyledTextArea rows="1" placeholder='Nuova password'/>
+      <StyledTextArea rows="1" placeholder='Conferma nuova password'/>
+    </>
+  );
+}
+
 function CardItem({ tipoItem, item, header }) {
   return (
     <StyledCard>
@@ -99,17 +149,29 @@ function CardItem({ tipoItem, item, header }) {
         {(tipoItem === "nuovo cliente") &&(
           <CardNuovoCliente item={item} />
         )}
+        {(tipoItem === "cerca clienti") &&(
+          <CardCercaClienti item={item} />
+        )}
         {(tipoItem === "professionista") &&(
           <CardProfessionista item={item} />
         )}
         {(tipoItem === "nuovo professionista") &&(
           <CardNuovoProfessionista item={item} />
         )}
+        {(tipoItem === "cerca professionisti") &&(
+          <CardCercaProfessionisti item={item} />
+        )}
         {(tipoItem.startsWith("lavoro")) &&(
           <CardLavoro tipoItem={tipoItem} item={item} />
         )}
         {(tipoItem.startsWith("nuovo lavoro")) &&(
           <CardNuovoLavoro item={item} />
+        )}
+        {(tipoItem.startsWith("cerca lavori")) &&(
+          <CardCercaLavori item={item} />
+        )}
+        {(tipoItem.startsWith("modifica profilo")) &&(
+          <CardModificaProfilo item={item} />
         )}
       </ListGroup>
     </StyledCard>
