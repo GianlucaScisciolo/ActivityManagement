@@ -4,6 +4,7 @@ import { aggiornamentoLista, eseguiRicerca } from "../../vario/OperazioniRicerca
 import Row from 'react-bootstrap/esm/Row';
 import Col from 'react-bootstrap/esm/Col';
 import CardItem from "../component/card_item/CardItem";
+import RowItem from "./row_item/RowItem";
 
 export const FormRicerca = ({tipoLista, setterLista1, setterLista2, datiLastSearch, setterDatiLastSearch}) => {
   const formSession = useSelector((state) => state.formSession.value);
@@ -265,6 +266,13 @@ export const FormRicerca = ({tipoLista, setterLista1, setterLista2, datiLastSear
               {(formSession.view === "form") && (
                 getFormCercaClienti()
               )}
+              {formSession.view === "row" && (
+                <>
+                  <Col className="custom-col">
+                    <RowItem tipoItem={"cerca clienti"} item={datiLastSearch}/>
+                  </Col>
+                </>
+              )}
               {(formSession.view === "card") && (
                 <Row className='custom-row'>
                   <Col className='custom-col'>
@@ -279,6 +287,13 @@ export const FormRicerca = ({tipoLista, setterLista1, setterLista2, datiLastSear
               {(formSession.view === "form") && (
                 getFormCercaProfessionisti()
               )}
+              {formSession.view === "row" && (
+                <>
+                  <Col className="custom-col">
+                    <RowItem tipoItem={"cerca professionisti"} item={datiLastSearch}/>
+                  </Col>
+                </>
+              )}
               {(formSession.view === "card") && (
                 <Row className='custom-row'>
                   <Col className='custom-col'>
@@ -292,6 +307,11 @@ export const FormRicerca = ({tipoLista, setterLista1, setterLista2, datiLastSear
             <>
               {(formSession.view === "form") && (
                 getFormCercaLavori()
+              )}
+              {formSession.view === "row" && (
+                <>
+                  <RowItem tipoItem={"cerca lavori"} item={datiLastSearch}/>
+                </>
               )}
               {(formSession.view === "card") && (
                 <Row className='custom-row'>

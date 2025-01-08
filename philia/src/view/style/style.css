@@ -166,21 +166,19 @@
 
 /**************************************** Stile del bootstrap ****************************************/
 
-.custom-row {
+/* .custom-row {
   display: flex;
-  /* justify-content: center; Centra i Col */
   flex-wrap: wrap;
   padding-left: 5%;
   padding-right: 5%;
   width: 100%;
-}
+} */
 
-.custom-col, .custom-col-black, .custom-col-blue, .custom-col-red {
+/* .custom-col, .custom-col-black, .custom-col-blue, .custom-col-red {
   position: relative; 
   color: #FFFFFF;
   border-radius: 40px;
   padding: 0;
-  /* border: 5px solid #000000; */
   flex: 1;
   display: flex;
   align-items: center;
@@ -188,23 +186,22 @@
   text-align: center;
   height: auto;
   min-height: 60px;
-}
+} */
 
-.span-errore-col {
+/* .span-errore-col {
   color: #FF0000;
   text-align: center;
   margin-bottom: 5%;
-  /* font-size: 25px; */
   background-color: #000000;
   border-radius: 40px;
-}
+} */
 
-.custom-col-black, .custom-col-blue, .custom-col-red {
+/* .custom-col-black, .custom-col-blue, .custom-col-red {
   border: 5px solid #000000;
-}
+} */
 
-.custom-textarea-block, .custom-textarea-modifica, .custom-textarea-elimina, 
-.custom-input-block,    .custom-input-modifica,    .custom-input-elimina, 
+/* .custom-textarea-block, .custom-textarea-modifica, .custom-textarea-elimina, 
+.custom-input-block,    .custom-input-modifica,    .custom-input-elimina,  */
 .col-button-modifica, .col-button-elimina {
   flex: 1;
   display: flex;
@@ -226,40 +223,40 @@
   border: 5px solid #000000; 
 }
 
-.custom-col-black, .custom-textarea-block, .custom-input-block { 
+/*.custom-col-black, .custom-textarea-block, .custom-input-block { 
   background-color: #000000;
-}
+}/*
 
-.custom-col-blue, .custom-textarea-modifica, .custom-input-modifica  { 
+/*.custom-col-blue, .custom-textarea-modifica, .custom-input-modifica  { 
   background-color: #0050EF;
-}
+}*/
 
-.custom-col-red, .custom-textarea-elimina, .custom-input-elimina { 
+/*.custom-col-red, .custom-textarea-elimina, .custom-input-elimina { 
   background-color: #500000;
-}
+}*/
 
-.col-button-modifica, .col-button-elimina {
+/* .col-button-modifica, .col-button-elimina {
   margin-left: 10%;
   margin-right: 10%;
   border: 5px solid #000000;
   background-color: #000000;
   cursor: pointer;  
   transition: 0.5s all ease-out;
-}
+} */
 
-.col-button-modifica {
+/* .col-button-modifica {
   &:hover {
     background-color: #0050EF;
     color: #FFFFFF;
   }
-}
+} */
 
-.col-button-elimina {
+/* .col-button-elimina {
   &:hover {
     background-color: #500000;
     color: #FFFFFF;
   }
-}
+} */
 
 .icon-view-style, .pencil-style-not-selected, .trash-style-not-selected {
   fill: none; /* nessun colore di riempimento nell'elemento di tipo svg  */
@@ -315,18 +312,6 @@
   } */
 }
 
-/* .nav-left {
-  margin-right: auto;
-}
-
-.nav-right {
-  margin-left: auto;
-}
-
-.nav-left .nav-link, .nav-right .nav-link {
-  color: #FFFFFF;
-} */
-
 .header-fixed {
   background-color: #000000;
   color: #FFFFFF;
@@ -338,10 +323,6 @@
   padding-right: 5%;
 }
 
-/* Styles for Navbar */
-/* .navbar, .nav, .nav-dropdown {
-  color: white;
-} */
 
 
 

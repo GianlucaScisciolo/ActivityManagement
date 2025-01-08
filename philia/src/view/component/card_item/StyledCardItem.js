@@ -1,7 +1,9 @@
 import styled from 'styled-components';
 import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
-import { Trash2, Pencil, Plus, Search } from 'lucide-react';
+import { Trash2, Pencil, Save, Search } from 'lucide-react';
+
+export const grandezzaIcona = 50;
 
 export const StyledCard = styled(Card)`
   width: 18rem;
@@ -78,7 +80,7 @@ const styledIconNotSelected = `
   cursor: pointer;
 `;
 
-export const StyledPlusNotSelected = styled(Plus)`
+export const StyledSaveNotSelected = styled(Save)`
   ${styledIconNotSelected}
   transition: 0.5s all ease-out;
   &:hover {

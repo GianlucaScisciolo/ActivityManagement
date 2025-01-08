@@ -5,6 +5,7 @@ import Col from 'react-bootstrap/Col';
 import { HookItems } from '../../vario/HookItems';
 import { useSelector, useDispatch } from 'react-redux';
 import CardItem from './card_item/CardItem';
+import RowItem from './row_item/RowItem';
 
 const handleClickChangeViewElements = ({viewElements, setViewElements}) => {
   setViewElements(viewElements === "list" ? "cards" : "list");
@@ -49,10 +50,6 @@ const Item = ({tipoItem, item, setterItems, viewElements, setSelectedTrashCount,
   const itemSession = useSelector((state) => state.itemSession.value);
   
   const selectOperation = (icon) => {
-    /*
-    (icon, item, setterItems, setSelectedTrashCount, setSelectedPencilCount, selectedIds, setSelectedIds, 
-                           selectedIdsModifica, setSelectedIdsModifica)
-    */
     if(icon === "trash") {
       if(selectedIds.includes(item.id)) {
         item.tipo_selezione = 0;
@@ -184,153 +181,13 @@ const Item = ({tipoItem, item, setterItems, viewElements, setSelectedTrashCount,
   return (
     <>
       {itemSession.view === "list" && (
-        <Row className='custom-row'>
-          <Col className='custom-col-black'>
-            <Pencil 
-              className={getClassPencil(item.tipo_selezione)} 
-              id='pencil' 
-              size={35} 
-              onClick={() => selectOperation("pencil")}
-              // ,
-              //   item,
-              //   setterItems,
-              //   setSelectedTrashCount,
-              //   setSelectedPencilCount,
-              //   selectedIds,
-              //   setSelectedIds,
-              //   selectedIdsModifica,
-              //   setSelectedIdsModifica
-              // )} 
-            />
-            <Trash2 
-              className={getClassTrash(item.tipo_selezione)} 
-              id='trash' 
-              size={35} 
-              onClick={() => selectOperation("trash")}
-              // ,
-              //   item,
-              //   setterItems,
-              //   setSelectedTrashCount,
-              //   setSelectedPencilCount,
-              //   selectedIds,
-              //   setSelectedIds,
-              //   selectedIdsModifica,
-              //   setSelectedIdsModifica
-              // )}
-            />
-          </Col>
-          {(tipoItem === "cliente") && (
-            <Col className='custom-col'>
-              <textarea 
-                className={getClassTextAreaBlock(item.tipo_selezione)} 
-                value={nome + " " + cognome} 
-                onChange={(e) => onChangeValue(e, getClassTextAreaBlock(item.tipo_selezione), setNome, item, setterItems, "nome")} 
-              />
-            </Col>
-          )}
-          {(tipoItem === "professionista") && (
-            <Col className='custom-col'>
-              <textarea 
-                className={getClassTextAreaBlock(item.tipo_selezione)}
-                value={nome} 
-                onChange={(e) => onChangeValue(e, getClassTextAreaBlock(item.tipo_selezione), setCognome, item, setterItems, "cognome")} 
-              />
-            </Col>
-          )}
-          {(tipoItem === "lavoro cliente") && (
-            <Col className='custom-col'>
-              <textarea 
-                className={getClassTextAreaBlock(item.tipo_selezione)}
-                value={nomeCliente + " " + cognomeCliente} 
-                onChange={(e) => onChangeValue(e, getClassTextAreaBlock(item.tipo_selezione), setNomeCliente, item, setterItems, "nomeCliente")} 
-              />
-            </Col>
-          )}
-          {(tipoItem === "lavoro professionista") && (
-            <Col className='custom-col'>
-              <textarea 
-                className={getClassTextAreaBlock(item.tipo_selezione)}
-                value={nomeProfessionista} 
-                onChange={(e) => onChangeValue(e, getClassTextAreaBlock(item.tipo_selezione), setNomeProfessionista, item, setterItems, "nomeProfessionista")} 
-              />
-            </Col>
-          )}
-          {(tipoItem === "professionista" || tipoItem === "lavoro professionista") && (
-            <Col className='custom-col'>
-              <textarea 
-                className={getClassTextAreaBlock(item.tipo_selezione)}
-                value={professione} 
-                onChange={(e) => onChangeValue(e, getClassTextAreaBlock(item.tipo_selezione), setProfessione, item, setterItems, "professione")} 
-              />
-            </Col>
-          )}
-          {(tipoItem === "cliente" || tipoItem === "professionista") && (
-            <Col className='custom-col'>
-              <input 
-                className={getClassInput(item.tipo_selezione)}
-                type="text" 
-                value={contatto} 
-                onChange={(e) => onChangeValue(e, getClassInput(item.tipo_selezione), setContatto, item, setterItems, "contatto")}
-              />
-            </Col>
-          )}
-          {(tipoItem === "professionista") && (
-            <Col className='custom-col'>
-              <textarea 
-                className={getClassTextArea(item.tipo_selezione)}
-                value={email} 
-                onChange={(e) => onChangeValue(e, getClassTextArea(item.tipo_selezione), setEmail, item, setterItems, "email")} 
-              />
-            </Col>
-          )}
-          {(tipoItem === "lavoro cliente" || tipoItem === "lavoro professionista") && (
-            <Col className='custom-col'>
-              <textarea 
-                className={getClassTextArea(item.tipo_selezione)}
-                value={descrizione} 
-                onChange={(e) => onChangeValue(e, getClassTextArea(item.tipo_selezione), setDescrizione, item, setterItems, "descrizione")} 
-              />
-            </Col>
-          )}
-          {(tipoItem === "lavoro cliente" || tipoItem === "lavoro professionista") && (
-            <Col className='custom-col'>
-              <input 
-                className={getClassInput(item.tipo_selezione)} 
-                value={formatDate(giorno)} 
-                type='date'
-                onChange={(e) => onChangeValue(e, getClassInput(item.tipo_selezione), setGiorno, item, setterItems, "giorno")} 
-              />
-            </Col>
-          )}
-          {(tipoItem === "lavoro cliente" || tipoItem === "lavoro professionista") && (
-            <Col className='custom-col'>
-              <input 
-                className={getClassInput(item.tipo_selezione)}
-                value={formatTime(orarioInizio)} 
-                onChange={(e) => onChangeValue(e, getClassInput(item.tipo_selezione), setOrarioInizio, item, setterItems, "orarioInizio")} 
-              />
-            </Col>
-          )}
-          {(tipoItem === "lavoro cliente" || tipoItem === "lavoro professionista") && (
-            <Col className='custom-col'>
-              <input 
-                className={getClassInput(item.tipo_selezione)}
-                value={formatTime(orarioFine)}
-                type='time' 
-                onChange={(e) => onChangeValue(e, getClassInput(item.tipo_selezione), setOrarioFine, item, setterItems, "orarioFine")} 
-              />
-            </Col>
-          )}
-          {(tipoItem === "cliente" || tipoItem === "professionista" || tipoItem.startsWith("lavoro")) && (
-            <Col className='custom-col'>
-              <textarea 
-                className={getClassTextArea(item.tipo_selezione)}
-                value={note} 
-                onChange={(e) => onChangeValue(e, getClassTextArea(item.tipo_selezione), setNote, item, setterItems, "note")} 
-              />
-            </Col>
-          )}
-        </Row>
+        <>
+          <RowItem key={item.id}
+            selectOperation={selectOperation}
+            tipoItem={tipoItem}
+            item={item} 
+          />
+        </>
       )}
       {itemSession.view === "card" && (
         <>

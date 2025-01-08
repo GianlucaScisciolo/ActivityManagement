@@ -7,11 +7,11 @@ import { HookItems } from '../../../vario/HookItems';
 import { useSelector, useDispatch } from 'react-redux';
 import { formatoDate, formatoTime } from '../../../vario/Tempo';
 import { 
-  StyledCard, StyledCardHeader, 
+  StyledCard, StyledCardHeader, grandezzaIcona,
   StyledTextAreaBlock, StyledTextAreaModifica, StyledTextAreaElimina,
   StyledInputBlock, StyledInputModifica, StyledInputElimina, 
   StyledListGroupItem, 
-  StyledPlusNotSelected, StyledSearchNotSelected, 
+  StyledSaveNotSelected, StyledSearchNotSelected, 
   StyledPencilNotSelected, StyledPencilSelected, 
   StyledTrashNotSelected, StyledTrashSelected
 } from './StyledCardItem';
@@ -20,9 +20,9 @@ const PencilTag = ({ tipoSelezione, selectOperation }) => {
   switch(tipoSelezione) {
     case 0:
     case 2:
-      return <StyledPencilNotSelected size={35} onClick={() => selectOperation("pencil")} />;
+      return <StyledPencilNotSelected size={grandezzaIcona} onClick={() => selectOperation("pencil")} />;
     case 1:
-      return <StyledPencilSelected size={35} onClick={() => selectOperation("pencil")} />;
+      return <StyledPencilSelected size={grandezzaIcona} onClick={() => selectOperation("pencil")} />;
     default:
       return <></>;
   }
@@ -32,9 +32,9 @@ const TrashTag = ({ tipoSelezione, selectOperation }) => {
   switch(tipoSelezione) {
     case 0:
     case 1:
-      return <StyledTrashNotSelected size={35} onClick={() => selectOperation("trash")} />;
+      return <StyledTrashNotSelected size={grandezzaIcona} onClick={() => selectOperation("trash")} />;
     case 2:
-      return <StyledTrashSelected size={35} onClick={() => selectOperation("trash")} />;
+      return <StyledTrashSelected size={grandezzaIcona} onClick={() => selectOperation("trash")} />;
     default:
       return <></>;
   }
@@ -54,7 +54,6 @@ const TextAreaTag = ({ tipoSelezione, nome, valore, modificabile }) => {
   }
 }
 
-// <InputTag rows="1" type="text" name="contatto" value={item.contatto} />
 const InputTag = ({ tipoSelezione, tipo, nome, valore, modificabile }) => {
   switch(tipoSelezione) {
     case 0:
@@ -95,7 +94,7 @@ const OperazioniNuovoItem = () => {
     <StyledListGroupItem style={{border: "5px solid #000000"}}>
       <Row>
         <Col className='custom-col'>
-          <StyledPlusNotSelected size={35} />
+          <StyledSaveNotSelected size={grandezzaIcona} />
         </Col>
       </Row>
     </StyledListGroupItem>
@@ -107,7 +106,7 @@ const OperazioniCercaItems = () => {
     <StyledListGroupItem style={{border: "5px solid #000000"}}>
       <Row>
         <Col className='custom-col'>
-          <StyledSearchNotSelected size={35} />
+          <StyledSearchNotSelected size={grandezzaIcona} />
         </Col>
       </Row>
     </StyledListGroupItem>
@@ -204,7 +203,6 @@ function CardLavoro({ tipoItem, item, selectOperation }) {
       {(tipoItem.startsWith("lavoro")) && (
         <>
           <TextAreaTag tipoSelezione={item.tipo_selezione} nome="descrizione" valore={item.descrizione} modificabile={true} />
-          {/* <div>{formatDate(item.giorno)}</div> */}
           <InputTag tipoSelezione={item.tipo_selezione} tipo="date" nome="giorno" valore={formatoDate(item.giorno, "AAAA-MM-GG")} modificabile={true} />
           <InputTag tipoSelezione={item.tipo_selezione} tipo="time" nome="orario_inizio" valore={formatoTime(item.orario_inizio)} modificabile={true} />
           <InputTag tipoSelezione={item.tipo_selezione} tipo="time" nome="orario_fine" valore={formatoTime(item.orario_inizio)} modificabile={true} />
@@ -234,16 +232,7 @@ function CardNuovoLavoro({ item }) {
     </>
   );
 }
-/*
-  const [datiLavoriLastSearch, setDatiLavoriLastSearch] = useState({
-    "nomeCliente": "Mario", 
-    "cognomeCliente": "Rossi", 
-    "nomeProfessionista": "Paolo Bonolis",
-    "descrizione": "Descrizione sul lavoro", 
-    "primoGiorno": "2025-10-06",
-    "ultimoGiorno": "2026-12-08",
-  });
-*/
+
 function CardCercaLavori({ item }) {
   return (
     <>

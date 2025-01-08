@@ -1,0 +1,205 @@
+import styled from 'styled-components';
+import Row from 'react-bootstrap/esm/Row';
+import Col from 'react-bootstrap/esm/Col';
+import Card from 'react-bootstrap/Card';
+import { Trash2, Pencil, Save, Search, ChevronUp, ChevronDown } from 'lucide-react';
+
+export const grandezzaIcona = 50;
+
+export const StyledRow = styled(Row)`
+  display: flex;
+  flex-wrap: wrap;
+  /* background-color: #111111; */
+  padding-left: 3%;
+  padding-right: 3%;
+`;
+
+export const StyledCol = styled(Col)`
+  position: relative; 
+  color: #FFFFFF;
+  border-radius: 40px;
+  padding: 0;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  height: auto;
+  min-height: 50px;
+  min-width: 300px;
+  /* max-width: 300px; */
+`;
+
+export const StyledColBlack = styled(StyledCol)`
+  border: 5px solid #000000;
+  background-color: #000000;
+`;
+
+export const StyledColOperazioni = styled(StyledCol)`
+  border: 5px solid #000000;
+  background-color: #000000;
+  max-width: 1px;
+`;
+
+export const StyledColBlue = styled(StyledCol)`
+  border: 5px solid #000000;
+  background-color: #0050EF;
+`;
+
+export const StyledColRed = styled(StyledCol)`
+  border: 5px solid #000000;
+  background-color: #500000;
+`;
+
+export const StyledSpanErrore = styled.span`
+  color: #500000;
+  text-align: center;
+  margin-bottom: 5%;
+  background-color: #000000;
+  border-radius: 40px;
+`
+
+const StyledTextAreaInputAndColButtons = `
+  flex: 1;
+  display: flex;
+  align-items: center; /* Centro verticale */
+  justify-content: center; /* Centro orizzontale */
+  width: 100%;
+  height: 100%;
+  border: none;
+  outline: none;
+  background-color: transparent;
+  color: inherit;
+  padding: 0; /* Aggiungi un padding se necessario */
+  margin: 0;
+  text-align: center; /* Centro orizzontale del testo */
+  overflow: hidden; /* Nasconde l'overflow */
+  resize: vertical;
+  border-radius: 40px;
+  min-height: 50px;
+  border: 5px solid #000000; 
+  color: #FFFFFF;
+  padding: auto;
+`
+
+export const StyledTextArea = styled.textarea`
+  ${StyledTextAreaInputAndColButtons}
+`
+
+export const StyledTextAreaBlock = styled(StyledTextArea)`
+  background-color: #000000;
+`
+
+export const StyledTextAreaModifica = styled(StyledTextArea)`
+  background-color: #0050EF;
+`
+
+export const StyledTextAreaElimina = styled(StyledTextArea)`
+  background-color: #500000;
+`
+
+export const StyledInput = styled.input`
+  ${StyledTextAreaInputAndColButtons}
+`
+
+export const StyledInputBlock = styled(StyledInput)`
+  background-color: #000000;
+`
+
+export const StyledInputModifica = styled(StyledInput)`
+  background-color: #0050EF;
+`
+
+export const StyledInputElimina = styled(StyledInput)`
+  background-color: #500000;
+`
+
+export const StyledButton = styled.button`
+  ${StyledTextAreaInputAndColButtons}
+`
+
+const StyledButtonsModificaAndElimina = `
+  margin-left: 10%;
+  margin-right: 10%;
+  border: 5px solid #000000;
+  background-color: #000000;
+  cursor: pointer;  
+  transition: 0.5s all ease-out;
+`;
+
+export const StyledButtonModifica = styled(StyledButton)`
+  ${StyledButtonsModificaAndElimina}
+  &:hover {
+    background-color: #0050EF;
+    color: #FFFFFF;
+  }
+`
+
+export const StyledButtonElimina = styled(StyledButton)`
+  ${StyledButtonsModificaAndElimina}
+  &:hover {
+    background-color: #500000;
+    color: #FFFFFF;
+  }
+`
+
+const styledIconNotSelected = `
+  color: #FFFFFF;
+  cursor: pointer;
+`;
+
+export const StyledSaveNotSelected = styled(Save)`
+  ${styledIconNotSelected}
+  transition: 0.5s all ease-out;
+  &:hover {
+    color: #0050EF;
+  }
+`;
+
+export const StyledSearchNotSelected = styled(Search)`
+  ${styledIconNotSelected}
+  transition: 0.5s all ease-out;
+  &:hover {
+    color: #0050EF;
+  }
+`;
+
+export const StyledArrowTopNotSelected = styled(ChevronUp)`
+  ${styledIconNotSelected}
+  transition: 0.5s all ease-out;
+  &:hover {
+    color: #0050EF;
+  }
+`;
+
+export const StyledArrowBottomNotSelected = styled(ChevronDown)`
+  ${styledIconNotSelected}
+  transition: 0.5s all ease-out;
+  &:hover {
+    color: #0050EF;
+  }
+`;
+
+export const StyledPencilNotSelected = styled(Pencil)`
+  ${styledIconNotSelected}
+`;
+
+export const StyledPencilSelected = styled(Pencil)`
+  color: #0050EF;
+  cursor: pointer;
+`;
+
+export const StyledTrashNotSelected = styled(Trash2)`
+  ${styledIconNotSelected}
+`;
+
+export const StyledTrashSelected = styled(Trash2)`
+  color: #500000;
+  cursor: pointer;
+`;
+
+
+
+
+
+

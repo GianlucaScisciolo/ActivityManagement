@@ -6,6 +6,7 @@ import Row from 'react-bootstrap/esm/Row';
 import Col from 'react-bootstrap/esm/Col';
 import CardItem from '../component/card_item/CardItem';
 import { useSelector } from 'react-redux';
+import RowItem from '../component/row_item/RowItem';
 
 const NuovoProfessionista = () => {
   const formSession = useSelector((state) => state.formSession.value);
@@ -116,7 +117,11 @@ const NuovoProfessionista = () => {
               <span className='spanErrore'>{errori.erroreNote}</span>
             </>
           )}
-
+          {formSession.view === "row" && (
+            <>
+              <RowItem tipoItem={"nuovo professionista"} item={item}/>
+            </>
+          )}
           {(formSession.view === "card") && (
             <>
               <Row className='custom-row'>
