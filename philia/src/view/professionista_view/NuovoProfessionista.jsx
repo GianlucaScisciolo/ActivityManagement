@@ -19,6 +19,14 @@ const NuovoProfessionista = () => {
     erroreNote: ""
   })
 
+  const [item, setItem] = useState({
+    nome: "Ciao",
+    professione: "Mondo",
+    contatto: "Hello",
+    email: "Hi",
+    note: "World"
+  })
+
   const handleInsert = async (data, form) => {
     if (confirm("Sei sicuro di voler salvare il professionista?")) {
       if (controlloNuovoProfessionista(data, setErrori) > 0) 
@@ -113,7 +121,7 @@ const NuovoProfessionista = () => {
             <>
               <Row className='custom-row'>
                 <Col className='custom-col'>
-                  <CardItem tipoItem={"nuovo professionista"} item={null} header="Nuovo professionista" />
+                  <CardItem tipoItem={"nuovo professionista"} item={item} header="Nuovo professionista" />
                 </Col>
               </Row>
             </>

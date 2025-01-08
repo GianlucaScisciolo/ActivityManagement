@@ -153,39 +153,41 @@ export const HookItems = () => {
   
   
 
-  const selectOperation = (icon, item, setterItems, setSelectedTrashCount, setSelectedPencilCount, selectedIds, setSelectedIds, 
-                           selectedIdsModifica, setSelectedIdsModifica) => {
-    
-    if(icon === "trash") {
-      if(selectedIds.includes(item.id)) {
-        item.tipo_selezione = 0;
-        setSelectedIds(prevIds => prevIds.filter(itemId => itemId !== item.id));
-        setSelectedTrashCount(prevCount => Math.max(prevCount - 1, 0));
-      }
-      else {
-        item.tipo_selezione = 2;
-        setSelectedIds(prevIds => [...prevIds, item.id]);
-        setSelectedTrashCount(prevCount => prevCount + 1);
-        setSelectedIdsModifica(prevIdsModifica => prevIdsModifica.filter(itemId => itemId !== item.id));
-        setSelectedPencilCount(prevCount => Math.max(prevCount - 1, 0));
-      }
-    }
-    else if(icon === "pencil") {
-      if(selectedIdsModifica.includes(item.id)) {
-        item.tipo_selezione = 0;
-        setSelectedIdsModifica(prevIdsModifica => prevIdsModifica.filter(itemId => itemId !== item.id));
-        setSelectedPencilCount(prevCount => Math.max(prevCount - 1, 0));
-      }
-      else {
-        item.tipo_selezione = 1;
-        setSelectedIdsModifica(prevIdsModifica => [...prevIdsModifica, item.id]);
-        setSelectedPencilCount(prevCount => prevCount + 1);
-        setSelectedIds(prevIds => prevIds.filter(itemId => itemId !== item.id));
-        setSelectedTrashCount(prevCount => Math.max(prevCount - 1, 0));
-      }
-    }
+  // const selectOperation = (icon, parametri) => {
+  //   /*
+  //   (icon, item, setterItems, setSelectedTrashCount, setSelectedPencilCount, selectedIds, setSelectedIds, 
+  //                          selectedIdsModifica, setSelectedIdsModifica)
+  //   */
+  //   if(icon === "trash") {
+  //     if(parametri.selectedIds.includes(parametri.item.id)) {
+  //       parametri.item.tipo_selezione = 0;
+  //       parametri.setSelectedIds(prevIds => prevIds.filter(itemId => itemId !== parametri.item.id));
+  //       parametri.setSelectedTrashCount(prevCount => Math.max(prevCount - 1, 0));
+  //     }
+  //     else {
+  //       parametri.item.tipo_selezione = 2;
+  //       parametri.setSelectedIds(prevIds => [...prevIds, parametri.item.id]);
+  //       parametri.setSelectedTrashCount(prevCount => prevCount + 1);
+  //       parametri.setSelectedIdsModifica(prevIdsModifica => prevIdsModifica.filter(itemId => itemId !== parametri.item.id));
+  //       parametri.setSelectedPencilCount(prevCount => Math.max(prevCount - 1, 0));
+  //     }
+  //   }
+  //   else if(icon === "pencil") {
+  //     if(parametri.selectedIdsModifica.includes(parametri.item.id)) {
+  //       parametri.item.tipo_selezione = 0;
+  //       parametri.setSelectedIdsModifica(prevIdsModifica => prevIdsModifica.filter(itemId => itemId !== parametri.item.id));
+  //       parametri.setSelectedPencilCount(prevCount => Math.max(prevCount - 1, 0));
+  //     }
+  //     else {
+  //       parametri.item.tipo_selezione = 1;
+  //       parametri.setSelectedIdsModifica(prevIdsModifica => [...prevIdsModifica, parametri.item.id]);
+  //       parametri.setSelectedPencilCount(prevCount => prevCount + 1);
+  //       parametri.setSelectedIds(prevIds => prevIds.filter(itemId => itemId !== item.id));
+  //       parametri.setSelectedTrashCount(prevCount => Math.max(prevCount - 1, 0));
+  //     }
+  //   }
 
-  }
+  // }
 
   return {
     isPencilSelected,
@@ -195,7 +197,7 @@ export const HookItems = () => {
     handlePencilClickWrapperLavori, 
     handleTrashClickWrapper,
     onChangeValue,
-    selectOperation,
+    // selectOperation,
   };
 };
 

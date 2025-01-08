@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
+import { Trash2, Pencil, Plus, Search } from 'lucide-react';
 
 export const StyledCard = styled(Card)`
   width: 18rem;
@@ -36,6 +37,18 @@ export const StyledTextArea = styled.textarea`
   min-height: 70px;
 `;
 
+export const StyledTextAreaBlock = styled(StyledTextArea)`
+  background-color: #111111;
+`;
+
+export const StyledTextAreaModifica = styled(StyledTextArea)`
+  background-color: #0050EF;
+`;
+
+export const StyledTextAreaElimina = styled(StyledTextArea)`
+  background-color: #500000;
+`;
+
 export const StyledInput = styled.input`
   width: 100%;
   color: #ffffff;
@@ -47,6 +60,61 @@ export const StyledInput = styled.input`
   text-align: center;
   min-height: 70px;
 `;
+
+export const StyledInputBlock = styled(StyledInput)`
+  background-color: #111111;
+`;
+
+export const StyledInputModifica = styled(StyledInput)`
+  background-color: #0050EF;
+`;
+
+export const StyledInputElimina = styled(StyledInput)`
+  background-color: #500000;
+`;
+
+const styledIconNotSelected = `
+  color: #FFFFFF;
+  cursor: pointer;
+`;
+
+export const StyledPlusNotSelected = styled(Plus)`
+  ${styledIconNotSelected}
+  transition: 0.5s all ease-out;
+  &:hover {
+    color: #0050EF;
+  }
+`;
+
+export const StyledSearchNotSelected = styled(Search)`
+  ${styledIconNotSelected}
+  transition: 0.5s all ease-out;
+  &:hover {
+    color: #0050EF;
+  }
+`;
+
+export const StyledPencilNotSelected = styled(Pencil)`
+  ${styledIconNotSelected}
+`;
+
+export const StyledPencilSelected = styled(Pencil)`
+  color: #0050EF;
+  cursor: pointer;
+`;
+
+export const StyledTrashNotSelected = styled(Trash2)`
+  ${styledIconNotSelected}
+`;
+
+export const StyledTrashSelected = styled(Trash2)`
+  color: #500000;
+  cursor: pointer;
+`;
+
+
+
+
 
 
 

@@ -48,6 +48,41 @@ const Item = ({tipoItem, item, setterItems, viewElements, setSelectedTrashCount,
 
   const itemSession = useSelector((state) => state.itemSession.value);
   
+  const selectOperation = (icon) => {
+    /*
+    (icon, item, setterItems, setSelectedTrashCount, setSelectedPencilCount, selectedIds, setSelectedIds, 
+                           selectedIdsModifica, setSelectedIdsModifica)
+    */
+    if(icon === "trash") {
+      if(selectedIds.includes(item.id)) {
+        item.tipo_selezione = 0;
+        setSelectedIds(prevIds => prevIds.filter(itemId => itemId !== item.id));
+        setSelectedTrashCount(prevCount => Math.max(prevCount - 1, 0));
+      }
+      else {
+        item.tipo_selezione = 2;
+        setSelectedIds(prevIds => [...prevIds, item.id]);
+        setSelectedTrashCount(prevCount => prevCount + 1);
+        setSelectedIdsModifica(prevIdsModifica => prevIdsModifica.filter(itemId => itemId !== item.id));
+        setSelectedPencilCount(prevCount => Math.max(prevCount - 1, 0));
+      }
+    }
+    else if(icon === "pencil") {
+      if(selectedIdsModifica.includes(item.id)) {
+        item.tipo_selezione = 0;
+        setSelectedIdsModifica(prevIdsModifica => prevIdsModifica.filter(itemId => itemId !== item.id));
+        setSelectedPencilCount(prevCount => Math.max(prevCount - 1, 0));
+      }
+      else {
+        item.tipo_selezione = 1;
+        setSelectedIdsModifica(prevIdsModifica => [...prevIdsModifica, item.id]);
+        setSelectedPencilCount(prevCount => prevCount + 1);
+        setSelectedIds(prevIds => prevIds.filter(itemId => itemId !== item.id));
+        setSelectedTrashCount(prevCount => Math.max(prevCount - 1, 0));
+      }
+    }
+  }
+
   const formatDate = (dateStr) => {
     const date = new Date(dateStr);
     const year = date.getFullYear();
@@ -143,7 +178,7 @@ const Item = ({tipoItem, item, setterItems, viewElements, setSelectedTrashCount,
     handlePencilClickWrapperLavori, 
     handleTrashClickWrapper,
     onChangeValue,
-    selectOperation,
+    // selectOperation,
   } = HookItems();
 
   return (
@@ -155,33 +190,33 @@ const Item = ({tipoItem, item, setterItems, viewElements, setSelectedTrashCount,
               className={getClassPencil(item.tipo_selezione)} 
               id='pencil' 
               size={35} 
-              onClick={() => selectOperation(
-                "pencil",
-                item,
-                setterItems,
-                setSelectedTrashCount,
-                setSelectedPencilCount,
-                selectedIds,
-                setSelectedIds,
-                selectedIdsModifica,
-                setSelectedIdsModifica
-              )} 
+              onClick={() => selectOperation("pencil")}
+              // ,
+              //   item,
+              //   setterItems,
+              //   setSelectedTrashCount,
+              //   setSelectedPencilCount,
+              //   selectedIds,
+              //   setSelectedIds,
+              //   selectedIdsModifica,
+              //   setSelectedIdsModifica
+              // )} 
             />
             <Trash2 
               className={getClassTrash(item.tipo_selezione)} 
               id='trash' 
               size={35} 
-              onClick={() => selectOperation(
-                "trash",
-                item,
-                setterItems,
-                setSelectedTrashCount,
-                setSelectedPencilCount,
-                selectedIds,
-                setSelectedIds,
-                selectedIdsModifica,
-                setSelectedIdsModifica
-              )}
+              onClick={() => selectOperation("trash")}
+              // ,
+              //   item,
+              //   setterItems,
+              //   setSelectedTrashCount,
+              //   setSelectedPencilCount,
+              //   selectedIds,
+              //   setSelectedIds,
+              //   selectedIdsModifica,
+              //   setSelectedIdsModifica
+              // )}
             />
           </Col>
           {(tipoItem === "cliente") && (
@@ -299,8 +334,13 @@ const Item = ({tipoItem, item, setterItems, viewElements, setSelectedTrashCount,
       )}
       {itemSession.view === "card" && (
         <>
-          <Col className='custom-col' key={item.id}>
-            <CardItem tipoItem={tipoItem} item={item} header="" />
+          <Col className='custom-col'>
+            <CardItem key={item.id}
+              selectOperation={selectOperation}
+              tipoItem={tipoItem}
+              item={item}
+              header="" 
+            />
           </Col>
         </>
       )}
@@ -322,44 +362,6 @@ export const RenderItemsInRowsList = ({tipoItem, items, setterItems, viewElement
 
   return (
     <>
-      {/* {(itemSession.view === "list") &&(
-        <Row className='custom-row'>
-          <Col className='custom-col-black'>Operazione</Col>
-          {(tipoItem === "cliente") && (
-            <>
-              <Col className='custom-col-black'>Nome</Col>
-              <Col className='custom-col-black'>Cognome</Col>
-              <Col className='custom-col-black'>Contatto</Col>
-              <Col className='custom-col-black'>Note</Col>
-            </>
-          )}
-          {(tipoItem === "professionista") && (
-            <>
-              <Col className='custom-col-black'>Nome</Col>
-              <Col className='custom-col-black'>Professione</Col>
-              <Col className='custom-col-black'>Contatto</Col>
-              <Col className='custom-col-black'>Email</Col>
-              <Col className='custom-col-black'>Note</Col>
-            </>
-          )}
-          {(tipoItem === "lavoro cliente" || tipoItem === "lavoro professionista") && (
-            <>
-              <Col className='custom-col-black'>Nome</Col>
-              {(tipoItem === "lavoro cliente") && (
-                <Col className='custom-col-black'>Cognome</Col>
-              )}
-              {(tipoItem === "lavoro professionista") && (
-                <Col className='custom-col-black'>Professione</Col>
-              )}
-              <Col className='custom-col-black'>Descrizione</Col>
-              <Col className='custom-col-black'>Giorno</Col>
-              <Col className='custom-col-black'>Orario inizio</Col>
-              <Col className='custom-col-black'>Orario fine</Col>
-              <Col className='custom-col-black'>Note</Col>
-            </>
-          )}
-        </Row>
-      )}*/}
       <Row className='custom-row'>
       {items.map((item) => (
         <Item 

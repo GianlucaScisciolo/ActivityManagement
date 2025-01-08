@@ -20,10 +20,10 @@ const Clienti = () => {
   const formSession = useSelector((state) => state.formSession.value);
   
   const [datiClienteLastSearch, setDatiClienteLastSearch] = useState({
-    "nome": "", 
-    "cognome": "", 
-    "contatto": "", 
-    "note": ""
+    "nome": "Mario", 
+    "cognome": "Rossi", 
+    "contatto": "3334445556", 
+    "note": "Note su Mario Rossi"
   });
 
   const updateDatiLastSearch = (nomeLastSearch, cognomeLastSearch, contattoLastSearch, noteLastSearch) => {
@@ -75,6 +75,7 @@ const Clienti = () => {
         tipoLista={'clienti'} 
         setterLista1={setClienti} 
         setterLista2={''}
+        datiLastSearch={datiClienteLastSearch}
         setterDatiLastSearch={updateDatiLastSearch}
       />
 

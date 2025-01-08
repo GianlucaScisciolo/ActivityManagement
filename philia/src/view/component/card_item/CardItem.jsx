@@ -1,24 +1,139 @@
 import React from 'react';
 import ListGroup from 'react-bootstrap/ListGroup';
-import { StyledCard, StyledCardHeader, StyledTextArea, StyledInput } from './StyledCardItem';
+import Row from 'react-bootstrap/esm/Row';
+import Col from 'react-bootstrap/esm/Col';
+import { Trash2, Pencil, Plus, Search } from 'lucide-react';
+import { HookItems } from '../../../vario/HookItems';
+import { useSelector, useDispatch } from 'react-redux';
+import { formatoDate, formatoTime } from '../../../vario/Tempo';
+import { 
+  StyledCard, StyledCardHeader, 
+  StyledTextAreaBlock, StyledTextAreaModifica, StyledTextAreaElimina,
+  StyledInputBlock, StyledInputModifica, StyledInputElimina, 
+  StyledListGroupItem, 
+  StyledPlusNotSelected, StyledSearchNotSelected, 
+  StyledPencilNotSelected, StyledPencilSelected, 
+  StyledTrashNotSelected, StyledTrashSelected
+} from './StyledCardItem';
 
-function CardCliente({ item }) {
+const PencilTag = ({ tipoSelezione, selectOperation }) => {
+  switch(tipoSelezione) {
+    case 0:
+    case 2:
+      return <StyledPencilNotSelected size={35} onClick={() => selectOperation("pencil")} />;
+    case 1:
+      return <StyledPencilSelected size={35} onClick={() => selectOperation("pencil")} />;
+    default:
+      return <></>;
+  }
+}
+
+const TrashTag = ({ tipoSelezione, selectOperation }) => {
+  switch(tipoSelezione) {
+    case 0:
+    case 1:
+      return <StyledTrashNotSelected size={35} onClick={() => selectOperation("trash")} />;
+    case 2:
+      return <StyledTrashSelected size={35} onClick={() => selectOperation("trash")} />;
+    default:
+      return <></>;
+  }
+}
+
+const TextAreaTag = ({ tipoSelezione, nome, valore, modificabile }) => {
+  switch(tipoSelezione) {
+    case 0:
+      return <StyledTextAreaBlock rows="1" name={nome} value={valore} />;
+    case 1:
+      return (modificabile) ? <StyledTextAreaModifica rows="1" name={nome} value={valore} />
+                            : <StyledTextAreaBlock rows="1" name={nome} value={valore} />;
+    case 2:
+      return <StyledTextAreaElimina rows="1" name={nome} value={valore} />;
+    default:
+      return <></>;
+  }
+}
+
+// <InputTag rows="1" type="text" name="contatto" value={item.contatto} />
+const InputTag = ({ tipoSelezione, tipo, nome, valore, modificabile }) => {
+  switch(tipoSelezione) {
+    case 0:
+      return <StyledInputBlock rows="1" type={tipo} name={nome} value={valore} />;
+    case 1:
+      return (modificabile) ? <StyledInputModifica rows="1" type={tipo} name={nome} value={valore} />
+                            : <StyledInputBlock rows="1" type={tipo} name={nome} value={valore} />;
+    case 2:
+      return <StyledInputElimina rows="1" type={tipo} name={nome} value={valore} />;
+    default:
+      return <></>;
+  }
+}
+
+const OperazioniItemEsistente = ({ tipoSelezione, selectOperation }) => {
+  return (
+    <StyledListGroupItem style={{border: "5px solid #000000"}}>
+      <Row>
+        <Col className='custom-col'>
+          <PencilTag 
+            tipoSelezione={tipoSelezione}
+            selectOperation={selectOperation}  
+          />
+        </Col>
+        <Col className='custom-col'>
+          <TrashTag 
+            tipoSelezione={tipoSelezione}
+            selectOperation={selectOperation} 
+          />
+        </Col>
+      </Row>
+    </StyledListGroupItem>
+  )
+}
+
+const OperazioniNuovoItem = () => {
+  return (
+    <StyledListGroupItem style={{border: "5px solid #000000"}}>
+      <Row>
+        <Col className='custom-col'>
+          <StyledPlusNotSelected size={35} />
+        </Col>
+      </Row>
+    </StyledListGroupItem>
+  )
+}
+
+const OperazioniCercaItems = () => {
+  return (
+    <StyledListGroupItem style={{border: "5px solid #000000"}}>
+      <Row>
+        <Col className='custom-col'>
+          <StyledSearchNotSelected size={35} />
+        </Col>
+      </Row>
+    </StyledListGroupItem>
+  )
+}
+
+function CardCliente({ item, selectOperation }) {
   return (
     <>
-      <StyledTextArea rows="1" value={item.nome + " " + item.cognome}/>
-      <StyledInput rows="1" type="text" value={item.contatto}/>
-      <StyledTextArea rows="1" value={item.note}/>
+      <TextAreaTag tipoSelezione={item.tipo_selezione} nome="nome_cognome" valore={item.nome + " " + item.cognome} modificabile={false} />
+      <InputTag tipoSelezione={item.tipo_selezione} tipo="text" nome="contatto" valore={item.contatto} modificabile={true} />
+      <TextAreaTag tipoSelezione={item.tipo_selezione} nome="note" valore={item.note} modificabile={true} />
+      <OperazioniItemEsistente tipoSelezione={item.tipo_selezione} selectOperation={selectOperation} />
     </>
   );
 }
 
 function CardNuovoCliente({ item }) {
   return (
+    // aggiungere placeholder
     <>
-      <StyledTextArea rows="1" placeholder='Nome*'/>
-      <StyledTextArea rows="1" placeholder='Cognome*'/>
-      <StyledInput rows="1" type="text" placeholder='Contatto*'/>
-      <StyledTextArea rows="1" placeholder='Note'/>
+      <StyledTextAreaModifica rows="1" placeholder='Nome*' name="nome" value={item.nome} />
+      <StyledTextAreaModifica rows="1" placeholder='Cognome*' name="cognome" value={item.cognome} />
+      <StyledInputModifica rows="1" type="text" placeholder='Contatto*' name="contatto" value={item.contatto} />
+      <StyledTextAreaModifica rows="1" placeholder='Note' name="note" value={item.note} />
+      <OperazioniNuovoItem  />
     </>
   );
 }
@@ -26,22 +141,24 @@ function CardNuovoCliente({ item }) {
 function CardCercaClienti({ item }) {
   return (
     <>
-      <StyledTextArea rows="1" placeholder='Nome'/>
-      <StyledTextArea rows="1" placeholder='Cognome'/>
-      <StyledInput rows="1" type="text" placeholder='Contatto'/>
-      <StyledTextArea rows="1" placeholder='Note'/>
+      <StyledTextAreaModifica rows="1" placeholder='Nome*' name="nome" value={item.nome} />
+      <StyledTextAreaModifica rows="1" placeholder='Cognome*' name="cognome" value={item.cognome} />
+      <StyledInputModifica rows="1" type="text" placeholder='Contatto*' name="contatto" value={item.contatto} />
+      <StyledTextAreaModifica rows="1" placeholder='Note' name="note" value={item.note} />
+      <OperazioniCercaItems />
     </>
   );
 }
 
-function CardProfessionista({ item }) {
+function CardProfessionista({ item, selectOperation }) {
   return (
     <>
-      <StyledTextArea rows="1" value={item.nome}/>
-      <StyledTextArea rows="1" value={item.professione}/>
-      <StyledInput rows="1" type="text" value={item.contatto}/>
-      <StyledInput rows="1" type="text" value={item.email}/>
-      <StyledTextArea rows="1" value={item.note}/>
+      <TextAreaTag tipoSelezione={item.tipo_selezione} nome="nome" valore={item.nome} modificabile={false} />
+      <TextAreaTag tipoSelezione={item.tipo_selezione} nome="professione" valore={item.professione} modificabile={false} />
+      <InputTag tipoSelezione={item.tipo_selezione} tipo="text" nome="contatto" valore={item.contatto} modificabile={true} />
+      <InputTag tipoSelezione={item.tipo_selezione} tipo="email" nome="email" valore={item.email} modificabile={true} />
+      <TextAreaTag tipoSelezione={item.tipo_selezione} nome="note" valore={item.note} modificabile={true} />
+      <OperazioniItemEsistente tipoSelezione={item.tipo_selezione} selectOperation={selectOperation} />
     </>
   );
 }
@@ -49,11 +166,12 @@ function CardProfessionista({ item }) {
 function CardNuovoProfessionista({ item }) {
   return (
     <>
-      <StyledTextArea rows="1" placeholder='Nome*'/>
-      <StyledTextArea rows="1" placeholder='Professione*'/>
-      <StyledInput rows="1" type="text" placeholder='Contatto'/>
-      <StyledInput rows="1" type="text" placeholder='Email'/>
-      <StyledTextArea rows="1" placeholder='Note'/>
+      <StyledTextAreaModifica rows="1" name="nome" placeholder='Nome*' value={item.nome} />
+      <StyledTextAreaModifica rows="1" name="professione" placeholder='Professione*' value={item.professione} />
+      <StyledInputModifica rows="1" type="text" name="contatto" placeholder='Contatto' value={item.contatto} />
+      <StyledInputModifica rows="1" type="text" name="email" placeholder='Email' value={item.email} />
+      <StyledTextAreaModifica rows="1" name="note" placeholder='Note' value={item.note} />
+      <OperazioniNuovoItem />
     </>
   );
 }
@@ -61,65 +179,82 @@ function CardNuovoProfessionista({ item }) {
 function CardCercaProfessionisti({ item }) {
   return (
     <>
-      <StyledTextArea rows="1" placeholder='Nome'/>
-      <StyledTextArea rows="1" placeholder='Professione'/>
-      <StyledInput rows="1" type="text" placeholder='Contatto'/>
-      <StyledInput rows="1" type="text" placeholder='Email'/>
-      <StyledTextArea rows="1" placeholder='Note'/>
+      <StyledTextAreaModifica rows="1" name="nome" placeholder='Nome*' value={item.nome} />
+      <StyledTextAreaModifica rows="1" name="professione" placeholder='Professione*' value={item.professione} />
+      <StyledInputModifica rows="1" type="text" name="contatto" placeholder='Contatto' value={item.contatto} />
+      <StyledInputModifica rows="1" type="text" name="email" placeholder='Email' value={item.email} />
+      <StyledTextAreaModifica rows="1" name="note" placeholder='Note' value={item.note} />
+      <OperazioniCercaItems />
     </>
   );
 }
 
-function CardLavoro({ tipoItem, item }) {
+function CardLavoro({ tipoItem, item, selectOperation }) {
   return (
     <>
       {(tipoItem === "lavoro cliente") && (
-        <StyledTextArea rows="1" value={item.nome_cliente + " " + item.cognome_cliente}/>
+        <TextAreaTag tipoSelezione={item.tipo_selezione} nome="nome_cognome_cliente" valore={item.nome_cliente + " " + item.cognome_cliente} modificabile={false} />
       )}
       {(tipoItem === "lavoro professionista") && (
         <>
-          <StyledTextArea rows="1" value={item.nome_professionista}/>
-          <StyledTextArea rows="1" value={item.professione}/>
+          <TextAreaTag tipoSelezione={item.tipo_selezione} nome="nome_professionista" valore={item.nome_professionista} modificabile={false} />
+          <TextAreaTag tipoSelezione={item.tipo_selezione} nome="professione" valore={item.professione} modificabile={false} />
         </>
       )}
       {(tipoItem.startsWith("lavoro")) && (
         <>
-          <StyledTextArea rows="1" value={item.descrizione}/>
-          <StyledTextArea rows="1" value={item.giorno}/>
-          <StyledTextArea rows="1" value={item.orario_inizio}/>
-          <StyledTextArea rows="1" value={item.orario_fine}/>
-          <StyledTextArea rows="1" value={item.note}/>
+          <TextAreaTag tipoSelezione={item.tipo_selezione} nome="descrizione" valore={item.descrizione} modificabile={true} />
+          {/* <div>{formatDate(item.giorno)}</div> */}
+          <InputTag tipoSelezione={item.tipo_selezione} tipo="date" nome="giorno" valore={formatoDate(item.giorno, "AAAA-MM-GG")} modificabile={true} />
+          <InputTag tipoSelezione={item.tipo_selezione} tipo="time" nome="orario_inizio" valore={formatoTime(item.orario_inizio)} modificabile={true} />
+          <InputTag tipoSelezione={item.tipo_selezione} tipo="time" nome="orario_fine" valore={formatoTime(item.orario_inizio)} modificabile={true} />
+          <TextAreaTag tipoSelezione={item.tipo_selezione} nome="note" valore={item.note} modificabile={true} />
         </>
       )}
+      <OperazioniItemEsistente tipoSelezione={item.tipo_selezione} selectOperation={selectOperation} />
     </>
   );
 }
 
 function CardNuovoLavoro({ item }) {
+
   return (
     <>
-      <StyledTextArea rows="1" placeholder='Cliente'/>
-      <StyledTextArea rows="1" placeholder='Professionista'/>
-      <StyledTextArea rows="1" placeholder='Descrizione*'/>
-      <StyledTextArea rows="1" placeholder='Giorno*'/>
-      <StyledTextArea rows="1" placeholder='Orario inizio*'/>
-      <StyledTextArea rows="1" placeholder='Orario fine*'/>
-      <StyledTextArea rows="1" placeholder='Note'/>
+      <StyledTextAreaModifica rows="1" name="cliente" placeholder='cliente' value="Mario Rossi" />
+      <StyledTextAreaModifica rows="1" name="professionista" placeholder='professionista' value="Alessandro Volta SRL" />
+      <StyledTextAreaModifica rows="1" name="professione" placeholder='professione' value="Elettricisti" />
+      {/* <StyledTextAreaModifica rows="1" name="id_cliente" placeholder='Cliente'/> */}
+      {/* <StyledTextArea rows="1" name="id_professionista" placeholder='Professionista'/> */}
+      <StyledTextAreaModifica rows="1" name="descrizione" placeholder='Descrizione*' value={item.descrizione} />
+      <StyledTextAreaModifica rows="1" name="giorno" placeholder='Giorno*' value={formatoDate(item.giorno, "AAAA-MM-GG")} />
+      <StyledTextAreaModifica rows="1" name="orario_inizio" placeholder='Orario inizio*' value={formatoTime(item.orario_inizio)} />
+      <StyledTextAreaModifica rows="1" name="orario_fine" placeholder='Orario fine*' value={formatoTime(item.orario_fine)} />
+      <StyledTextAreaModifica rows="1" name="note" placeholder='Note' value={item.note} />
+      <OperazioniNuovoItem />
     </>
   );
 }
-
+/*
+  const [datiLavoriLastSearch, setDatiLavoriLastSearch] = useState({
+    "nomeCliente": "Mario", 
+    "cognomeCliente": "Rossi", 
+    "nomeProfessionista": "Paolo Bonolis",
+    "descrizione": "Descrizione sul lavoro", 
+    "primoGiorno": "2025-10-06",
+    "ultimoGiorno": "2026-12-08",
+  });
+*/
 function CardCercaLavori({ item }) {
   return (
     <>
-      <StyledTextArea rows="1" placeholder='Nome cliente'/>
-      <StyledTextArea rows="1" placeholder='Cognome cliente'/>
-      <StyledTextArea rows="1" placeholder='Nome professionista'/>
-      <StyledTextArea rows="1" placeholder='Professione'/>
-      <StyledTextArea rows="1" placeholder='Descrizione'/>
-      <StyledTextArea rows="1" placeholder='Primo giorno'/>
-      <StyledTextArea rows="1" placeholder='Ultimo giorno'/>
-      <StyledTextArea rows="1" placeholder='Note'/>
+      <StyledTextAreaModifica rows="1" name="nome_cliente" placeholder='Nome cliente' value={item.nomeCliente} />
+      <StyledTextAreaModifica rows="1" name="cognome_cliente" placeholder='Cognome cliente' value={item.cognomeCliente} />
+      <StyledTextAreaModifica rows="1" name="nome_professionista" placeholder='Nome professionista' value={item.nomeProfessionista} />
+      <StyledTextAreaModifica rows="1" name="descrizione" placeholder='Descrizione' value={item.descrizione} />
+      <StyledInputModifica rows="1" type="date" name="primo_giorno" placeholder='Primo giorno' value={item.primoGiorno} />
+      <StyledInputModifica rows="1" type="date" name="ultimo_giorno" placeholder='Ultimo giorno' value={item.ultimoGiorno} />
+      <StyledTextAreaModifica rows="1" name="note" placeholder='Note' value={item.note} />
+      <OperazioniCercaItems />
     </>
   );
 }
@@ -127,24 +262,24 @@ function CardCercaLavori({ item }) {
 function CardModificaProfilo({ item }) {
   return (
     <>
-      <StyledTextArea rows="1" placeholder='Username*'/>
-      <StyledTextArea rows="1" placeholder='Note'/>
-      <StyledTextArea rows="1" placeholder='Password attuale*'/>
-      <StyledTextArea rows="1" placeholder='Nuova password'/>
-      <StyledTextArea rows="1" placeholder='Conferma nuova password'/>
+      <StyledTextArea rows="1" name="username" placeholder='Username*'/>
+      <StyledTextArea rows="1" name="note" placeholder='Note'/>
+      <StyledTextArea rows="1" name="password_attuale" placeholder='Password attuale*'/>
+      <StyledTextArea rows="1" name="nuova_password" placeholder='Nuova password'/>
+      <StyledTextArea rows="1" name="conferma_nuova_password" placeholder='Conferma nuova password'/>
     </>
   );
 }
 
-function CardItem({ tipoItem, item, header }) {
+function CardItem({ selectOperation, tipoItem, item, header }) {
   return (
     <StyledCard>
       {(header !== "") && (
         <StyledCardHeader>{header}</StyledCardHeader>
       )}
-      <ListGroup variant="flush">
+       <ListGroup variant="flush">
         {(tipoItem === "cliente") &&(
-          <CardCliente item={item} />
+          <CardCliente item={item} selectOperation={selectOperation} />
         )}
         {(tipoItem === "nuovo cliente") &&(
           <CardNuovoCliente item={item} />
@@ -153,7 +288,7 @@ function CardItem({ tipoItem, item, header }) {
           <CardCercaClienti item={item} />
         )}
         {(tipoItem === "professionista") &&(
-          <CardProfessionista item={item} />
+          <CardProfessionista item={item} selectOperation={selectOperation} />
         )}
         {(tipoItem === "nuovo professionista") &&(
           <CardNuovoProfessionista item={item} />
@@ -162,7 +297,7 @@ function CardItem({ tipoItem, item, header }) {
           <CardCercaProfessionisti item={item} />
         )}
         {(tipoItem.startsWith("lavoro")) &&(
-          <CardLavoro tipoItem={tipoItem} item={item} />
+          <CardLavoro tipoItem={tipoItem} item={item} selectOperation={selectOperation} />
         )}
         {(tipoItem.startsWith("nuovo lavoro")) &&(
           <CardNuovoLavoro item={item} />

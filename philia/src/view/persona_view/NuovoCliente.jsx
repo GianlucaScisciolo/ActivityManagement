@@ -17,6 +17,13 @@ const NuovoCliente = () => {
     erroreNote: ""
   })
 
+  const [item, setItem] = useState({
+    nome: "Ciao",
+    cognome: "Mondo",
+    contatto: "Hello",
+    note: "World"
+  })
+
 
   const handleInsert = async (data, form) => {
     if (confirm("Sei sicuro di voler salvare il cliente?")) {
@@ -111,7 +118,7 @@ const NuovoCliente = () => {
             <>
               <Row className='custom-row'>
                 <Col className='custom-col'>
-                  <CardItem tipoItem={"nuovo cliente"} item={null} header="Nuovo cliente" />
+                  <CardItem tipoItem={"nuovo cliente"} item={item} header="Nuovo cliente" />
                 </Col>
               </Row>
             </>

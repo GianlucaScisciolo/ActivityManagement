@@ -16,11 +16,11 @@ const Professionisti = () => {
   const [selectedIdsModifica, setSelectedIdsModifica] = useState([]);
   
   const [datiProfessionistiLastSearch, setDatiProfessionistiLastSearch] = useState({
-    "nome": "", 
-    "professione": "", 
-    "contatto": "",
-    "email": "", 
-    "note": ""
+    "nome": "Paolo", 
+    "professione": "Bonolis", 
+    "contatto": "0818882266",
+    "email": "pb@gmail.com", 
+    "note": "Note su Paolo Bonolis"
   });
 
   const updateDatiLastSearch = (nomeLastSearch, professioneLastSearch, contattoLastSearch, emailLastSearch, noteLastSearch) => {
@@ -74,6 +74,7 @@ const Professionisti = () => {
         tipoLista={'professionisti'} 
         setterLista1={setProfessionisti} 
         setterLista2={''}
+        datiLastSearch={datiProfessionistiLastSearch}
         setterDatiLastSearch={updateDatiLastSearch}
       />
 

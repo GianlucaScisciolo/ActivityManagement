@@ -27,6 +27,29 @@ const NuovoLavoro = () => {
     erroreOrari: "",
     erroreNote: ""
   })
+
+  const [lavoroCliente, setLavoroCliente] = useState ({
+    id_cliente: 0,
+    nome_cliente: "Mario",
+    cognome_cliente: "Rossi",
+    descrizione: "descrizione lavoro cliente",
+    giorno: "2025-05-10",
+    orario_inizio: "10:10:00",
+    orario_fine: "20:20:00",
+    note: "Note lavoro cliente"
+  })
+
+  const [lavoroProfessionista, setLavoroProfessionista] = useState ({
+    id_professionista: 0,
+    nome_professionista: "Alessandro Volta SRL",
+    professione: "Elettricisti",
+    descrizione: "Controllo impianto elettrico",
+    giorno: "2025-02-05",
+    orario_inizio: "20:10:00",
+    orario_fine: "22:20:00",
+    note: "Note lavoro professionista"
+  })
+
   const [clienti, setClienti] = useState([]);
   const [professionisti, setProfessionisti] = useState([]);
   const [filteredClienti, setFilteredClienti] = useState([]);
@@ -259,35 +282,14 @@ const NuovoLavoro = () => {
             <>
               <Row>
                 <Col className='custom-col'>
-                  <span>
-                    <CardItem tipoItem={"nuovo lavoro"} item={null} header="Nuovo lavoro cliente"/>
-                    <button className='buttonForm' type='submit' 
-                      style={{
-                        width:"100%", marginLeft: "0", marginRight: "0", 
-                        marginTop: "35px", marginBottom:"0"
-                      }}
-                    >
-                      Salva lavoro
-                    </button>
-                  </span>
+                  <CardItem selectOperation={null} tipoItem={"nuovo lavoro"} item={lavoroCliente} header="Nuovo lavoro cliente"/>
                 </Col>
                 <Col className='custom-col'>
-                  <span>
-                    <CardItem tipoItem={"nuovo lavoro"} item={null} header="Nuovo lavoro professionista"/>
-                    <button className='buttonForm' type='submit' 
-                      style={{
-                        width:"100%", marginLeft: "0", marginRight: "0", 
-                        marginTop: "35px", marginBottom:"0"
-                      }}
-                    >
-                      Salva lavoro
-                    </button>
-                  </span>
+                  <CardItem selectOperation={null} tipoItem={"nuovo lavoro"} item={lavoroProfessionista} header="Nuovo lavoro professionista"/>
                 </Col>
               </Row>
             </>
           )}
-
         </form>
       </div>
     </>

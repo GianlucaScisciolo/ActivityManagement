@@ -5,7 +5,7 @@ import Row from 'react-bootstrap/esm/Row';
 import Col from 'react-bootstrap/esm/Col';
 import CardItem from "../component/card_item/CardItem";
 
-export const FormRicerca = ({tipoLista, setterLista1, setterLista2, setterDatiLastSearch}) => {
+export const FormRicerca = ({tipoLista, setterLista1, setterLista2, datiLastSearch, setterDatiLastSearch}) => {
   const formSession = useSelector((state) => state.formSession.value);
   const [nome, setNome] = useState('');
   const [cognome, setCognome] = useState('');
@@ -268,7 +268,7 @@ export const FormRicerca = ({tipoLista, setterLista1, setterLista2, setterDatiLa
               {(formSession.view === "card") && (
                 <Row className='custom-row'>
                   <Col className='custom-col'>
-                    <CardItem tipoItem={"cerca clienti"} item={null} header="Cerca clienti"/>
+                    <CardItem tipoItem={"cerca clienti"} item={datiLastSearch} header="Cerca clienti"/>
                   </Col>
                 </Row>
               )}
@@ -282,7 +282,7 @@ export const FormRicerca = ({tipoLista, setterLista1, setterLista2, setterDatiLa
               {(formSession.view === "card") && (
                 <Row className='custom-row'>
                   <Col className='custom-col'>
-                    <CardItem tipoItem={"cerca professionisti"} item={null} header="Cerca professionisti"/>
+                    <CardItem tipoItem={"cerca professionisti"} item={datiLastSearch} header="Cerca professionisti"/>
                   </Col>
                 </Row>
               )}
@@ -296,7 +296,7 @@ export const FormRicerca = ({tipoLista, setterLista1, setterLista2, setterDatiLa
               {(formSession.view === "card") && (
                 <Row className='custom-row'>
                   <Col className='custom-col'>
-                    <CardItem tipoItem={"cerca lavori"} item={null} header="Cerca lavori"/>
+                    <CardItem tipoItem={"cerca lavori"} item={datiLastSearch} header="Cerca lavori"/>
                   </Col>
                 </Row>
               )}

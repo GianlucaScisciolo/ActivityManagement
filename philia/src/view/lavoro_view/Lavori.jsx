@@ -16,12 +16,13 @@ const Lavori = () => {
   const [selectedIds, setSelectedIds] = useState([]);
   const [selectedIdsModifica, setSelectedIdsModifica] = useState([]);
   const [datiLavoriLastSearch, setDatiLavoriLastSearch] = useState({
-    "nomeCliente": "", 
-    "cognomeCliente": "", 
-    "nomeProfessionista": "",
-    "descrizione": "", 
-    "primoGiorno": "",
-    "ultimoGiorno": "",
+    "nomeCliente": "Mario", 
+    "cognomeCliente": "Rossi", 
+    "nomeProfessionista": "Paolo Bonolis",
+    "descrizione": "Descrizione sul lavoro", 
+    "primoGiorno": "2025-10-06",
+    "ultimoGiorno": "2026-12-08",
+    "note": "Note sul lavoro"
   });
 
   const updateDatiLastSearch = (nomeClienteLastSearch, cognomeClienteLastSearch, nomeProfessionistaLastSearch, descrizioneLastSearch, primoGiornoLastSearch, ultimoGiornoLastSearch) => {
@@ -88,11 +89,11 @@ const [errori2, setErrori2] = useState ({
       <Header />
       
       <div className="main-content"></div>
-
       <FormRicerca
         tipoLista={'lavori'} 
         setterLista1={setLavoriClienti} 
         setterLista2={setLavoriProfessionisti}
+        datiLastSearch={datiLavoriLastSearch}
         setterDatiLastSearch={updateDatiLastSearch}
       />
       
