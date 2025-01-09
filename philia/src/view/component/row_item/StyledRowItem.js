@@ -1,18 +1,19 @@
-import styled from 'styled-components';
+import styled, {keyframes} from 'styled-components';
 import Row from 'react-bootstrap/esm/Row';
 import Col from 'react-bootstrap/esm/Col';
-import Card from 'react-bootstrap/Card';
-import { Trash2, Pencil, Save, Search, ChevronUp, ChevronDown } from 'lucide-react';
+import { Trash2, Pencil, Save, Search, ChevronLeft, ChevronRight } from 'lucide-react';
 
 export const grandezzaIcona = 50;
 
 export const StyledRow = styled(Row)`
   display: flex;
-  flex-wrap: wrap;
-  /* background-color: #111111; */
+  align-items: center;  /* Allinea verticalmente */
+  justify-content: space-between;  /* Distribuisce lo spazio tra gli elementi */
+  flex-wrap: wrap;  /* Evita il wrapping degli elementi */
   padding-left: 3%;
   padding-right: 3%;
 `;
+
 
 export const StyledCol = styled(Col)`
   position: relative; 
@@ -28,7 +29,19 @@ export const StyledCol = styled(Col)`
   min-height: 50px;
   min-width: 300px;
   /* max-width: 300px; */
+  @media (max-width: 600px) {
+    min-width: 300px;
+  }
 `;
+
+export const StyledColAnimato = styled(StyledCol)`
+  /* color: #FFFFFF; */
+  /* transition: max-height 1s ease-out; */
+  max-height: ${(props) => (props.isVisible ? '1000px' : '0')}; 
+  overflow: hidden;
+  transition: max-height 1s ease-out;
+`;
+
 
 export const StyledColBlack = styled(StyledCol)`
   border: 5px solid #000000;
@@ -58,6 +71,12 @@ export const StyledSpanErrore = styled.span`
   background-color: #000000;
   border-radius: 40px;
 `
+
+export const SlideContainer = styled.div`
+  display: flex;
+  flex-direction: row-reverse;  // Aggiungi questa riga
+`;
+
 
 const StyledTextAreaInputAndColButtons = `
   flex: 1;
@@ -164,7 +183,7 @@ export const StyledSearchNotSelected = styled(Search)`
   }
 `;
 
-export const StyledArrowTopNotSelected = styled(ChevronUp)`
+export const StyledArrowLeftNotSelected = styled(ChevronLeft)`
   ${styledIconNotSelected}
   transition: 0.5s all ease-out;
   &:hover {
@@ -172,7 +191,7 @@ export const StyledArrowTopNotSelected = styled(ChevronUp)`
   }
 `;
 
-export const StyledArrowBottomNotSelected = styled(ChevronDown)`
+export const StyledArrowRightNotSelected = styled(ChevronRight)`
   ${styledIconNotSelected}
   transition: 0.5s all ease-out;
   &:hover {

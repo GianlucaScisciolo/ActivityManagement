@@ -7,6 +7,7 @@ import CardItem from '../component/card_item/CardItem';
 import Row from 'react-bootstrap/esm/Row';
 import Col from 'react-bootstrap/esm/Col';
 import RowItem from '../component/row_item/RowItem';
+import FormItem from '../component/form_item/FormItem';
 
 const NuovoCliente = () => {
   const formSession = useSelector((state) => state.formSession.value);
@@ -78,7 +79,6 @@ const NuovoCliente = () => {
 
       <div>
         <form 
-          className={formSession.view === "form" ? 'containerForm' : ''} 
           onSubmit={(e) => {
             e.preventDefault();
             const formData = new FormData(e.target);
@@ -90,7 +90,7 @@ const NuovoCliente = () => {
           };
           handleInsert(data, e.target);
         }}>
-          {(formSession.view === "form") && (
+          {(formSession.view === "tmp") && (
             <>
               <label className='titoloForm'>Nuovo cliente</label>
 
@@ -109,6 +109,13 @@ const NuovoCliente = () => {
               <label className='labelForm'>Note</label>
               <textarea className='textAreaFormModifica' name='note'></textarea>
               <span className='spanErrore'>{errori.erroreNote}</span>
+            </>
+          )}
+          {formSession.view === "form" && (
+            <>
+              <Col className="custom-col">
+                <FormItem tipoItem={"nuovo cliente"} item={item} header="Nuovo cliente" />
+              </Col>
             </>
           )}
           {formSession.view === "row" && (

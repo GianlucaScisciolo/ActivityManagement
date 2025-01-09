@@ -36,20 +36,17 @@
   font-size: 35px;
 }
 
-.labelForm {
+/* .labelForm {
   all: unset;
   text-align: center;
   margin-bottom: 1%;
-  /* border: 5px solid #000000; */
   border-radius: 40px;
-  /* background-color: #000000; */
   color: #FFFFFF;
-  /* font-size: 25px; */
   background-color: #000000;
   border: 5px solid #000000;
-}
+} */
 
-.inputFormModifica {
+/* .inputFormModifica {
   all: unset;
   text-align: center;
   border: 5px solid #000000;
@@ -57,19 +54,17 @@
   background-color: #0050EF;
   color: #FFFFFF;
   border-radius: 40px;
-  /* font-size: 25px; */
-} 
+}  */
 
-.textAreaFormModifica {
+/* .textAreaFormModifica {
   text-align: center;
   border: 5px solid #000000;
   margin-bottom: 1%;
   background-color: #0050EF;
   color: #FFFFFF;
   border-radius: 40px;
-  /* font-size: 25px; */
   resize: vertical;
-}
+} */
 
 .spanErrore {
   color: #FF0000;
@@ -165,98 +160,6 @@
 }
 
 /**************************************** Stile del bootstrap ****************************************/
-
-/* .custom-row {
-  display: flex;
-  flex-wrap: wrap;
-  padding-left: 5%;
-  padding-right: 5%;
-  width: 100%;
-} */
-
-/* .custom-col, .custom-col-black, .custom-col-blue, .custom-col-red {
-  position: relative; 
-  color: #FFFFFF;
-  border-radius: 40px;
-  padding: 0;
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  height: auto;
-  min-height: 60px;
-} */
-
-/* .span-errore-col {
-  color: #FF0000;
-  text-align: center;
-  margin-bottom: 5%;
-  background-color: #000000;
-  border-radius: 40px;
-} */
-
-/* .custom-col-black, .custom-col-blue, .custom-col-red {
-  border: 5px solid #000000;
-} */
-
-/* .custom-textarea-block, .custom-textarea-modifica, .custom-textarea-elimina, 
-.custom-input-block,    .custom-input-modifica,    .custom-input-elimina,  */
-.col-button-modifica, .col-button-elimina {
-  flex: 1;
-  display: flex;
-  align-items: center; /* Centro verticale */
-  justify-content: center; /* Centro orizzontale */
-  width: 100%;
-  height: 100%;
-  border: none;
-  outline: none;
-  background-color: transparent;
-  color: inherit;
-  padding: 0; /* Aggiungi un padding se necessario */
-  margin: 0;
-  text-align: center; /* Centro orizzontale del testo */
-  overflow: hidden; /* Nasconde l'overflow */
-  resize: vertical;
-  border-radius: 40px;
-  min-height: 60px;
-  border: 5px solid #000000; 
-}
-
-/*.custom-col-black, .custom-textarea-block, .custom-input-block { 
-  background-color: #000000;
-}/*
-
-/*.custom-col-blue, .custom-textarea-modifica, .custom-input-modifica  { 
-  background-color: #0050EF;
-}*/
-
-/*.custom-col-red, .custom-textarea-elimina, .custom-input-elimina { 
-  background-color: #500000;
-}*/
-
-/* .col-button-modifica, .col-button-elimina {
-  margin-left: 10%;
-  margin-right: 10%;
-  border: 5px solid #000000;
-  background-color: #000000;
-  cursor: pointer;  
-  transition: 0.5s all ease-out;
-} */
-
-/* .col-button-modifica {
-  &:hover {
-    background-color: #0050EF;
-    color: #FFFFFF;
-  }
-} */
-
-/* .col-button-elimina {
-  &:hover {
-    background-color: #500000;
-    color: #FFFFFF;
-  }
-} */
 
 .icon-view-style, .pencil-style-not-selected, .trash-style-not-selected {
   fill: none; /* nessun colore di riempimento nell'elemento di tipo svg  */

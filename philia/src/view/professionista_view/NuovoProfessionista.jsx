@@ -7,6 +7,7 @@ import Col from 'react-bootstrap/esm/Col';
 import CardItem from '../component/card_item/CardItem';
 import { useSelector } from 'react-redux';
 import RowItem from '../component/row_item/RowItem';
+import FormItem from '../component/form_item/FormItem';
 
 const NuovoProfessionista = () => {
   const formSession = useSelector((state) => state.formSession.value);
@@ -77,7 +78,6 @@ const NuovoProfessionista = () => {
 
       <div>
         <form 
-          className={formSession.view === "form" ? 'containerForm' : ''}  
           onSubmit={(e) => {
             e.preventDefault();
             const formData = new FormData(e.target);
@@ -90,7 +90,7 @@ const NuovoProfessionista = () => {
           };
           handleInsert(data, e.target);
         }}>
-          {(formSession.view === "form") && (
+          {(formSession.view === "tmp") && (
             <>
               <label className='titoloForm'>Nuovo professionista</label>
 
@@ -115,6 +115,13 @@ const NuovoProfessionista = () => {
               <label className='labelForm'>Note*</label>
               <textarea className='textAreaFormModifica' name='note'></textarea>
               <span className='spanErrore'>{errori.erroreNote}</span>
+            </>
+          )}
+          {formSession.view === "form" && (
+            <>
+              <Col className="custom-col">
+                <FormItem tipoItem={"nuovo professionista"} item={item} header="Nuovo professionista" />
+              </Col>
             </>
           )}
           {formSession.view === "row" && (

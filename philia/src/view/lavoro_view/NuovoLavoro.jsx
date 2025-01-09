@@ -13,6 +13,7 @@ import Col from 'react-bootstrap/esm/Col';
 import CardItem from '../component/card_item/CardItem';
 import { useSelector } from 'react-redux';
 import RowItem from '../component/row_item/RowItem';
+import FormItem from '../component/form_item/FormItem';
 
 const NuovoLavoro = () => {
   const formSession = useSelector((state) => state.formSession.value);
@@ -27,6 +28,17 @@ const NuovoLavoro = () => {
     erroreOrarioFine: "",
     erroreOrari: "",
     erroreNote: ""
+  })
+
+  const [lavoro, setLavoro] = useState ({
+    id_cliente: 0,
+    nome_cliente: "Mario",
+    cognome_cliente: "Rossi",
+    descrizione: "descrizione lavoro cliente",
+    giorno: "2025-05-10",
+    orario_inizio: "10:10:00",
+    orario_fine: "20:20:00",
+    note: "Note lavoro cliente"
   })
 
   const [lavoroCliente, setLavoroCliente] = useState ({
@@ -167,7 +179,6 @@ const NuovoLavoro = () => {
       <div className="main-content"></div>
       <div>
         <form 
-          className={formSession.view === "form" ? 'containerForm' : ''} 
           onSubmit={(e) => {
             e.preventDefault();
             const formData = new FormData(e.target);
@@ -184,7 +195,7 @@ const NuovoLavoro = () => {
           }}
         >
 
-          {(formSession.view === "form") && (
+          {(formSession.view === "tmp") && (
             <>
               <label className='titoloForm'>Nuovo lavoro</label>
 
@@ -278,6 +289,13 @@ const NuovoLavoro = () => {
               <span className='spanErrore'>{errori.erroreNote}</span>
             </>
           )}
+          {formSession.view === "form" && (
+            <>
+              <Col className="custom-col">
+                <FormItem tipoItem={"nuovo lavoro"} item={lavoro} header="Nuovo lavoro" />
+              </Col>
+            </>
+          )}
           {formSession.view === "row" && (
             <>
               <RowItem tipoItem={"nuovo lavoro"} item={lavoroCliente}/>
@@ -287,10 +305,10 @@ const NuovoLavoro = () => {
           {(formSession.view === "card") && (
             <>
               <Row>
-                <Col className='custom-col'>
+                <Col>
                   <CardItem selectOperation={null} tipoItem={"nuovo lavoro"} item={lavoroCliente} header="Nuovo lavoro cliente"/>
                 </Col>
-                <Col className='custom-col'>
+                <Col>
                   <CardItem selectOperation={null} tipoItem={"nuovo lavoro"} item={lavoroProfessionista} header="Nuovo lavoro professionista"/>
                 </Col>
               </Row>

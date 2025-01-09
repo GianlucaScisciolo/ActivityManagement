@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Row from 'react-bootstrap/esm/Row';
 import Col from 'react-bootstrap/esm/Col';
@@ -7,14 +7,24 @@ import { HookItems } from '../../../vario/HookItems';
 import { useSelector, useDispatch } from 'react-redux';
 import { formatoDate, formatoTime } from '../../../vario/Tempo';
 import { 
-  StyledCard, StyledCardHeader, grandezzaIcona,
+  StyledCard, StyledRow, StyledCol, StyledCardHeader, grandezzaIcona,
   StyledTextAreaBlock, StyledTextAreaModifica, StyledTextAreaElimina,
   StyledInputBlock, StyledInputModifica, StyledInputElimina, 
-  StyledListGroupItem, 
+  StyledListGroupItem, SlideContainer, 
   StyledSaveNotSelected, StyledSearchNotSelected, 
   StyledPencilNotSelected, StyledPencilSelected, 
-  StyledTrashNotSelected, StyledTrashSelected
+  StyledTrashNotSelected, StyledTrashSelected, 
+  StyledArrowTopNotSelected, StyledArrowBottomNotSelected
 } from './StyledCardItem';
+
+const nascondiForm = (setIsVisible, setArrowUp) => {
+  setIsVisible(prev => !prev);
+  
+  setTimeout(() => {
+    setArrowUp(prev => !prev);
+  }, 450); 
+};
+
 
 const PencilTag = ({ tipoSelezione, selectOperation }) => {
   switch(tipoSelezione) {
@@ -70,48 +80,44 @@ const InputTag = ({ tipoSelezione, tipo, nome, valore, modificabile }) => {
 
 const OperazioniItemEsistente = ({ tipoSelezione, selectOperation }) => {
   return (
-    <StyledListGroupItem style={{border: "5px solid #000000"}}>
-      <Row>
-        <Col className='custom-col'>
-          <PencilTag 
-            tipoSelezione={tipoSelezione}
-            selectOperation={selectOperation}  
-          />
-        </Col>
-        <Col className='custom-col'>
-          <TrashTag 
-            tipoSelezione={tipoSelezione}
-            selectOperation={selectOperation} 
-          />
-        </Col>
-      </Row>
+    <StyledListGroupItem style={{border: "5px solid #000000", backgroundColor:"#000000"}}>
+      <StyledRow>
+        <StyledCol>
+          <PencilTag tipoSelezione={tipoSelezione} selectOperation={selectOperation} />
+        </StyledCol>
+        <StyledCol>
+          <TrashTag tipoSelezione={tipoSelezione} selectOperation={selectOperation} />
+        </StyledCol>
+      </StyledRow>
     </StyledListGroupItem>
   )
 }
 
 const OperazioniNuovoItem = () => {
   return (
-    <StyledListGroupItem style={{border: "5px solid #000000"}}>
-      <Row>
-        <Col className='custom-col'>
+    <StyledListGroupItem style={{border: "5px solid #000000", backgroundColor:"#000000"}}>
+      <StyledRow>
+        <StyledCol>
           <StyledSaveNotSelected size={grandezzaIcona} />
-        </Col>
-      </Row>
+        </StyledCol>
+      </StyledRow>
     </StyledListGroupItem>
   )
 }
 
-const OperazioniCercaItems = () => {
+const OperazioniCercaItems = ({ isVisible, setIsVisible, arrowUp, setArrowUp }) => {
   return (
-    <StyledListGroupItem style={{border: "5px solid #000000"}}>
-      <Row>
-        <Col className='custom-col'>
-          <StyledSearchNotSelected size={grandezzaIcona} />
-        </Col>
-      </Row>
+    <StyledListGroupItem style={{ border: "5px solid #000000", backgroundColor: "#000000", paddingTop: "3%" }}>
+      <StyledSearchNotSelected size={grandezzaIcona} style={{ marginRight: "50%" }} />
+      {arrowUp && (
+        <StyledArrowTopNotSelected size={grandezzaIcona} onClick={() => nascondiForm(setIsVisible, setArrowUp)} />
+      )}
+      {!arrowUp && (
+        <StyledArrowBottomNotSelected size={grandezzaIcona} onClick={() => nascondiForm(setIsVisible, setArrowUp)} />
+      )}
     </StyledListGroupItem>
-  )
-}
+  );
+};
 
 function CardCliente({ item, selectOperation }) {
   return (
@@ -137,17 +143,23 @@ function CardNuovoCliente({ item }) {
   );
 }
 
-function CardCercaClienti({ item }) {
+function CardCercaClienti({ item, isVisible, setIsVisible, arrowUp, setArrowUp }) {
   return (
     <>
-      <StyledTextAreaModifica rows="1" placeholder='Nome*' name="nome" value={item.nome} />
-      <StyledTextAreaModifica rows="1" placeholder='Cognome*' name="cognome" value={item.cognome} />
-      <StyledInputModifica rows="1" type="text" placeholder='Contatto*' name="contatto" value={item.contatto} />
-      <StyledTextAreaModifica rows="1" placeholder='Note' name="note" value={item.note} />
-      <OperazioniCercaItems />
+      <SlideContainer isVisible={isVisible}>
+        <StyledTextAreaModifica rows="1" placeholder='Nome*' name="nome" value={item.nome} />
+        <StyledTextAreaModifica rows="1" placeholder='Cognome*' name="cognome" value={item.cognome} />
+        <StyledInputModifica rows="1" type="text" placeholder='Contatto*' name="contatto" value={item.contatto} />
+        <StyledTextAreaModifica rows="1" placeholder='Note' name="note" value={item.note} />
+      </SlideContainer>
+      <OperazioniCercaItems 
+        isVisible={isVisible} setIsVisible={setIsVisible} 
+        arrowUp={arrowUp} setArrowUp={setArrowUp}
+      />
     </>
   );
 }
+
 
 function CardProfessionista({ item, selectOperation }) {
   return (
@@ -175,15 +187,20 @@ function CardNuovoProfessionista({ item }) {
   );
 }
 
-function CardCercaProfessionisti({ item }) {
+function CardCercaProfessionisti({ item, isVisible, setIsVisible, arrowUp, setArrowUp }) {
   return (
     <>
-      <StyledTextAreaModifica rows="1" name="nome" placeholder='Nome*' value={item.nome} />
-      <StyledTextAreaModifica rows="1" name="professione" placeholder='Professione*' value={item.professione} />
-      <StyledInputModifica rows="1" type="text" name="contatto" placeholder='Contatto' value={item.contatto} />
-      <StyledInputModifica rows="1" type="text" name="email" placeholder='Email' value={item.email} />
-      <StyledTextAreaModifica rows="1" name="note" placeholder='Note' value={item.note} />
-      <OperazioniCercaItems />
+      <SlideContainer isVisible={isVisible}>
+        <StyledTextAreaModifica rows="1" name="nome" placeholder='Nome*' value={item.nome} />
+        <StyledTextAreaModifica rows="1" name="professione" placeholder='Professione*' value={item.professione} />
+        <StyledInputModifica rows="1" type="text" name="contatto" placeholder='Contatto' value={item.contatto} />
+        <StyledInputModifica rows="1" type="text" name="email" placeholder='Email' value={item.email} />
+        <StyledTextAreaModifica rows="1" name="note" placeholder='Note' value={item.note} />
+      </SlideContainer>
+      <OperazioniCercaItems 
+        isVisible={isVisible} setIsVisible={setIsVisible} 
+        arrowUp={arrowUp} setArrowUp={setArrowUp}
+      />
     </>
   );
 }
@@ -233,17 +250,22 @@ function CardNuovoLavoro({ item }) {
   );
 }
 
-function CardCercaLavori({ item }) {
+function CardCercaLavori({ item, isVisible, setIsVisible, arrowUp, setArrowUp }) {
   return (
     <>
-      <StyledTextAreaModifica rows="1" name="nome_cliente" placeholder='Nome cliente' value={item.nomeCliente} />
-      <StyledTextAreaModifica rows="1" name="cognome_cliente" placeholder='Cognome cliente' value={item.cognomeCliente} />
-      <StyledTextAreaModifica rows="1" name="nome_professionista" placeholder='Nome professionista' value={item.nomeProfessionista} />
-      <StyledTextAreaModifica rows="1" name="descrizione" placeholder='Descrizione' value={item.descrizione} />
-      <StyledInputModifica rows="1" type="date" name="primo_giorno" placeholder='Primo giorno' value={item.primoGiorno} />
-      <StyledInputModifica rows="1" type="date" name="ultimo_giorno" placeholder='Ultimo giorno' value={item.ultimoGiorno} />
-      <StyledTextAreaModifica rows="1" name="note" placeholder='Note' value={item.note} />
-      <OperazioniCercaItems />
+      <SlideContainer isVisible={isVisible}>
+        <StyledTextAreaModifica rows="1" name="nome_cliente" placeholder='Nome cliente' value={item.nomeCliente} />
+        <StyledTextAreaModifica rows="1" name="cognome_cliente" placeholder='Cognome cliente' value={item.cognomeCliente} />
+        <StyledTextAreaModifica rows="1" name="nome_professionista" placeholder='Nome professionista' value={item.nomeProfessionista} />
+        <StyledTextAreaModifica rows="1" name="descrizione" placeholder='Descrizione' value={item.descrizione} />
+        <StyledInputModifica rows="1" type="date" name="primo_giorno" placeholder='Primo giorno' value={item.primoGiorno} />
+        <StyledInputModifica rows="1" type="date" name="ultimo_giorno" placeholder='Ultimo giorno' value={item.ultimoGiorno} />
+        <StyledTextAreaModifica rows="1" name="note" placeholder='Note' value={item.note} />
+      </SlideContainer>
+      <OperazioniCercaItems 
+        isVisible={isVisible} setIsVisible={setIsVisible} 
+        arrowUp={arrowUp} setArrowUp={setArrowUp}
+      />
     </>
   );
 }
@@ -261,12 +283,15 @@ function CardModificaProfilo({ item }) {
 }
 
 function CardItem({ selectOperation, tipoItem, item, header }) {
+  const [isVisible, setIsVisible] = useState(true);
+  const [arrowUp, setArrowUp] = useState(true);
+
   return (
     <StyledCard>
       {(header !== "") && (
-        <StyledCardHeader>{header}</StyledCardHeader>
+        <StyledCardHeader style={{backgroundColor: "#000000"}}>{(header !== "") ? header : " "}</StyledCardHeader>
       )}
-       <ListGroup variant="flush">
+      <StyledListGroupItem variant="flush">
         {(tipoItem === "cliente") &&(
           <CardCliente item={item} selectOperation={selectOperation} />
         )}
@@ -274,7 +299,10 @@ function CardItem({ selectOperation, tipoItem, item, header }) {
           <CardNuovoCliente item={item} />
         )}
         {(tipoItem === "cerca clienti") &&(
-          <CardCercaClienti item={item} />
+          <CardCercaClienti item={item} 
+            isVisible={isVisible} setIsVisible={setIsVisible} 
+            arrowUp={arrowUp} setArrowUp={setArrowUp}
+          />
         )}
         {(tipoItem === "professionista") &&(
           <CardProfessionista item={item} selectOperation={selectOperation} />
@@ -283,7 +311,10 @@ function CardItem({ selectOperation, tipoItem, item, header }) {
           <CardNuovoProfessionista item={item} />
         )}
         {(tipoItem === "cerca professionisti") &&(
-          <CardCercaProfessionisti item={item} />
+          <CardCercaProfessionisti item={item} 
+          isVisible={isVisible} setIsVisible={setIsVisible} 
+          arrowUp={arrowUp} setArrowUp={setArrowUp}
+        />
         )}
         {(tipoItem.startsWith("lavoro")) &&(
           <CardLavoro tipoItem={tipoItem} item={item} selectOperation={selectOperation} />
@@ -292,12 +323,15 @@ function CardItem({ selectOperation, tipoItem, item, header }) {
           <CardNuovoLavoro item={item} />
         )}
         {(tipoItem.startsWith("cerca lavori")) &&(
-          <CardCercaLavori item={item} />
+          <CardCercaLavori item={item} 
+          isVisible={isVisible} setIsVisible={setIsVisible} 
+          arrowUp={arrowUp} setArrowUp={setArrowUp}
+        />
         )}
         {(tipoItem.startsWith("modifica profilo")) &&(
           <CardModificaProfilo item={item} />
         )}
-      </ListGroup>
+      </StyledListGroupItem>
     </StyledCard>
   );
 }

@@ -50,7 +50,7 @@ export const StyledNavDropdownItem = styled(NavDropdown.Item)`
   text-align: center;
   &:hover {
     background-color: #0050EF;
-    color: white;
+    color: #FFFFFF;
   }
 `;
 

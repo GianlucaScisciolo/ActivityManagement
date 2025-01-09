@@ -1,29 +1,50 @@
 import styled from 'styled-components';
-import Row from 'react-bootstrap/esm/Row';
-import Col from 'react-bootstrap/esm/Col';
 import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
+import Row from 'react-bootstrap/esm/Row';
+import Col from 'react-bootstrap/esm/Col';
 import { Trash2, Pencil, Save, Search, ChevronUp, ChevronDown } from 'lucide-react';
 
 export const grandezzaIcona = 50;
 
-export const StyledCard = styled(Card)`
-  width: 18rem;
+export const StyledForm = styled(Card)`
   background-color: #111111;
   overflow: hidden;
   border: 5px solid #000000;
   border-radius: 40px;
-  margin: auto;
+  margin-left: 30%;
+  margin-right: 30%;
+
   color: white;
   text-align: center;
-  padding: 0;
 `;
+
+export const StyledHeader = styled(Card.Header)`
+  color: #ffffff;
+  background-color: transparent;
+  border: 5px solid #000000;
+  min-height: 70px;
+`;
+
+export const StyledListGroupItem = styled(ListGroup.Item)`
+  color: #ffffff;
+  background-color: transparent;
+  border: 5px solid #000000;
+  min-height: 70px;
+`;
+
+export const SlideContainer = styled.div`
+  max-height: ${(props) => (props.isVisible ? '2000px' : '0px')}; 
+  overflow: hidden;
+  transition: max-height 1.5s ease-out;
+`;
+
 
 export const StyledRow = styled(Row)`
   display: flex;
   flex-wrap: wrap;
-  /* padding-left: 3%; */
-  /* padding-right: 3%; */
+  padding-left: 3%;
+  padding-right: 3%;
 `;
 
 export const StyledCol = styled(Col)`
@@ -39,27 +60,18 @@ export const StyledCol = styled(Col)`
   height: auto;
   min-height: 50px;
   min-width: 300px;
-  /* max-width: 300px; */
 `;
 
-export const StyledCardHeader = styled(Card.Header)`
+export const StyledLabel = styled.label`
+  width: 100%;
   color: #ffffff;
   background-color: transparent;
-  border: 5px solid #000000;
+  border-radius: 40px;
+  padding: 10px;
+  box-sizing: border-box;
+  text-align: center;
   min-height: 70px;
-`;
-
-export const StyledListGroupItem = styled(ListGroup.Item)`
-  color: #ffffff;
-  background-color: transparent;
-  border: 5px solid #000000;
-  min-height: 70px;
-`;
-
-export const SlideContainer = styled.div`
-  max-height: ${(props) => (props.isVisible ? '1000px' : '0')}; 
-  overflow: hidden;
-  transition: max-height 1s ease-out;
+  margin-top: 2%;
 `;
 
 export const StyledTextArea = styled.textarea`
@@ -67,7 +79,6 @@ export const StyledTextArea = styled.textarea`
   color: #ffffff;
   background-color: transparent;
   border: 5px solid #000000;
-  border-radius: 5px;
   padding: 10px;
   box-sizing: border-box;
   text-align: center;
@@ -75,7 +86,7 @@ export const StyledTextArea = styled.textarea`
 `;
 
 export const StyledTextAreaBlock = styled(StyledTextArea)`
-  background-color: #111111;
+  background-color: #000000;
 `;
 
 export const StyledTextAreaModifica = styled(StyledTextArea)`
@@ -91,15 +102,15 @@ export const StyledInput = styled.input`
   color: #ffffff;
   background-color: transparent;
   border: 5px solid #000000;
-  border-radius: 5px;
   padding: 10px;
   box-sizing: border-box;
   text-align: center;
   min-height: 70px;
+  margin-bottom: 2%;
 `;
 
 export const StyledInputBlock = styled(StyledInput)`
-  background-color: #111111;
+  background-color: #000000;
 `;
 
 export const StyledInputModifica = styled(StyledInput)`
@@ -146,34 +157,3 @@ export const StyledArrowBottomNotSelected = styled(ChevronDown)`
     color: #0050EF;
   }
 `;
-
-export const StyledPencilNotSelected = styled(Pencil)`
-  ${styledIconNotSelected}
-`;
-
-export const StyledPencilSelected = styled(Pencil)`
-  color: #0050EF;
-  cursor: pointer;
-`;
-
-export const StyledTrashNotSelected = styled(Trash2)`
-  ${styledIconNotSelected}
-`;
-
-export const StyledTrashSelected = styled(Trash2)`
-  color: #500000;
-  cursor: pointer;
-`;
-
-
-
-
-
-
-
-
-
-
-
-
-

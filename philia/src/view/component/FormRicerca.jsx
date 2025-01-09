@@ -5,6 +5,7 @@ import Row from 'react-bootstrap/esm/Row';
 import Col from 'react-bootstrap/esm/Col';
 import CardItem from "../component/card_item/CardItem";
 import RowItem from "./row_item/RowItem";
+import FormItem from "./form_item/FormItem";
 
 export const FormRicerca = ({tipoLista, setterLista1, setterLista2, datiLastSearch, setterDatiLastSearch}) => {
   const formSession = useSelector((state) => state.formSession.value);
@@ -256,15 +257,21 @@ export const FormRicerca = ({tipoLista, setterLista1, setterLista2, datiLastSear
   return (
     <div className='visible'>
       <form 
-        className={formSession.view === "form" ? 'containerForm' : ''}
         onSubmit={(e) => eseguiRicerca(e, tipoLista, setterLista1, setterLista2, setterDatiLastSearch)}
       >
         <>
           
           {(formIsVisible) && (tipoLista === "clienti") && (
             <>
-              {(formSession.view === "form") && (
+              {(formSession.view === "tmp") && (
                 getFormCercaClienti()
+              )}
+              {formSession.view === "form" && (
+                <>
+                  <Col className="custom-col">
+                    <FormItem tipoItem={"cerca clienti"} item={datiLastSearch} header="Cerca clienti" />
+                  </Col>
+                </>
               )}
               {formSession.view === "row" && (
                 <>
@@ -284,8 +291,15 @@ export const FormRicerca = ({tipoLista, setterLista1, setterLista2, datiLastSear
           )}
           {(formIsVisible) && (tipoLista === "professionisti") && (
             <>
-              {(formSession.view === "form") && (
+              {(formSession.view === "tmp") && (
                 getFormCercaProfessionisti()
+              )}
+              {formSession.view === "form" && (
+                <>
+                  <Col className="custom-col">
+                    <FormItem tipoItem={"cerca professionisti"} item={datiLastSearch} header="Cerca professionisti" />
+                  </Col>
+                </>
               )}
               {formSession.view === "row" && (
                 <>
@@ -305,8 +319,15 @@ export const FormRicerca = ({tipoLista, setterLista1, setterLista2, datiLastSear
           )}
           {(formIsVisible) && (tipoLista === "lavori") && (
             <>
-              {(formSession.view === "form") && (
+              {(formSession.view === "tmp") && (
                 getFormCercaLavori()
+              )}
+              {formSession.view === "form" && (
+                <>
+                  <Col className="custom-col">
+                    <FormItem tipoItem={"cerca lavori"} item={datiLastSearch} header="Cerca lavori" />
+                  </Col>
+                </>
               )}
               {formSession.view === "row" && (
                 <>
