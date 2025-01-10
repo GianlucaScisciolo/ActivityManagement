@@ -18,6 +18,18 @@ import FormItem from '../component/form_item/FormItem';
 const NuovoLavoro = () => {
   const formSession = useSelector((state) => state.formSession.value);
 
+  const [nuovoLavoro, setNuovoLavoro] = useState ({
+    id_cliente: 0,
+    nome_cliente: "",
+    cognome_cliente: "",
+    nome_professionista: "",
+    descrizione: "",
+    giorno: "",
+    orario_inizio: "",
+    orario_fine: "",
+    note: ""
+  })
+
   const [errori, setErrori] = useState ({
     erroreCliente: "",
     erroreProfessionista: "",
@@ -30,37 +42,29 @@ const NuovoLavoro = () => {
     erroreNote: ""
   })
 
-  const [lavoro, setLavoro] = useState ({
+  const [nuovoLavoroCliente, setNuovoLavoroCliente] = useState ({
     id_cliente: 0,
-    nome_cliente: "Mario",
-    cognome_cliente: "Rossi",
-    descrizione: "descrizione lavoro cliente",
-    giorno: "2025-05-10",
-    orario_inizio: "10:10:00",
-    orario_fine: "20:20:00",
-    note: "Note lavoro cliente"
+    nome_cliente: "",
+    cognome_cliente: "",
+    nome_professionista: "",
+    descrizione: "",
+    giorno: "",
+    orario_inizio: "",
+    orario_fine: "",
+    note: ""
   })
 
-  const [lavoroCliente, setLavoroCliente] = useState ({
-    id_cliente: 0,
-    nome_cliente: "Mario",
-    cognome_cliente: "Rossi",
-    descrizione: "descrizione lavoro cliente",
-    giorno: "2025-05-10",
-    orario_inizio: "10:10:00",
-    orario_fine: "20:20:00",
-    note: "Note lavoro cliente"
-  })
-
-  const [lavoroProfessionista, setLavoroProfessionista] = useState ({
+  const [nuovoLavoroProfessionista, setNuovoLavoroProfessionista] = useState ({
     id_professionista: 0,
-    nome_professionista: "Alessandro Volta SRL",
-    professione: "Elettricisti",
-    descrizione: "Controllo impianto elettrico",
-    giorno: "2025-02-05",
-    orario_inizio: "20:10:00",
-    orario_fine: "22:20:00",
-    note: "Note lavoro professionista"
+    nome_cliente: "",
+    cognome_cliente: "",
+    nome_professionista: "",
+    professione: "",
+    descrizione: "",
+    giorno: "",
+    orario_inizio: "",
+    orario_fine: "",
+    note: ""
   })
 
   const [clienti, setClienti] = useState([]);
@@ -291,25 +295,23 @@ const NuovoLavoro = () => {
           )}
           {formSession.view === "form" && (
             <>
-              <Col className="custom-col">
-                <FormItem tipoItem={"nuovo lavoro"} item={lavoro} header="Nuovo lavoro" />
-              </Col>
+              <FormItem tipoItem={"nuovo lavoro"} item={nuovoLavoro} setItem={setNuovoLavoro} header="Nuovo lavoro" />
             </>
           )}
           {formSession.view === "row" && (
             <>
-              <RowItem tipoItem={"nuovo lavoro"} item={lavoroCliente}/>
-              <RowItem tipoItem={"nuovo lavoro"} item={lavoroProfessionista}/>
+              <RowItem tipoItem={"nuovo lavoro"} item={nuovoLavoroCliente} setItem={setNuovoLavoroCliente} />
+              <RowItem tipoItem={"nuovo lavoro"} item={nuovoLavoroProfessionista} setItem={setNuovoLavoroProfessionista} />
             </>
           )}
           {(formSession.view === "card") && (
             <>
               <Row>
                 <Col>
-                  <CardItem selectOperation={null} tipoItem={"nuovo lavoro"} item={lavoroCliente} header="Nuovo lavoro cliente"/>
+                  <CardItem tipoItem={"nuovo lavoro"} item={nuovoLavoroCliente} setItem={setNuovoLavoroCliente} header="Nuovo lavoro cliente"/>
                 </Col>
                 <Col>
-                  <CardItem selectOperation={null} tipoItem={"nuovo lavoro"} item={lavoroProfessionista} header="Nuovo lavoro professionista"/>
+                  <CardItem tipoItem={"nuovo lavoro"} item={nuovoLavoroProfessionista} setItem={setNuovoLavoroProfessionista} header="Nuovo lavoro professionista"/>
                 </Col>
               </Row>
             </>

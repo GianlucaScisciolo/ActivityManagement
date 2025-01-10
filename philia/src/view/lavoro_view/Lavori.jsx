@@ -15,26 +15,27 @@ const Lavori = () => {
   const [selectedPencilCount, setSelectedPencilCount] = useState(0);
   const [selectedIds, setSelectedIds] = useState([]);
   const [selectedIdsModifica, setSelectedIdsModifica] = useState([]);
-  const [datiLavoriLastSearch, setDatiLavoriLastSearch] = useState({
-    "nomeCliente": "Mario", 
-    "cognomeCliente": "Rossi", 
-    "nomeProfessionista": "Paolo Bonolis",
-    "descrizione": "Descrizione sul lavoro", 
-    "primoGiorno": "2025-10-06",
-    "ultimoGiorno": "2026-12-08",
-    "note": "Note sul lavoro"
+
+  const [datiRicerca, setDatiRicerca] = useState({
+    "nome_cliente": "", 
+    "cognome_cliente": "", 
+    "nome_professionista": "",
+    "descrizione": "", 
+    "primo_giorno": "",
+    "ultimo_giorno": "",
+    "note": ""
   });
 
-  const updateDatiLastSearch = (nomeClienteLastSearch, cognomeClienteLastSearch, nomeProfessionistaLastSearch, descrizioneLastSearch, primoGiornoLastSearch, ultimoGiornoLastSearch) => {
-    setDatiLavoriLastSearch({ 
-      "nomeCliente": nomeClienteLastSearch, 
-      "cognomeCliente": cognomeClienteLastSearch, 
-      "nomeProfessionista": nomeProfessionistaLastSearch,
-      "descrizione": descrizioneLastSearch, 
-      "primoGiorno": primoGiornoLastSearch,
-      "ultimoGiorno": ultimoGiornoLastSearch,
-    })
-  }
+  // const updateDatiLastSearch = (nomeClienteLastSearch, cognomeClienteLastSearch, nomeProfessionistaLastSearch, descrizioneLastSearch, primoGiornoLastSearch, ultimoGiornoLastSearch) => {
+  //   setDatiLavoriLastSearch({ 
+  //     "nomeCliente": nomeClienteLastSearch, 
+  //     "cognomeCliente": cognomeClienteLastSearch, 
+  //     "nomeProfessionista": nomeProfessionistaLastSearch,
+  //     "descrizione": descrizioneLastSearch, 
+  //     "primoGiorno": primoGiornoLastSearch,
+  //     "ultimoGiorno": ultimoGiornoLastSearch,
+  //   })
+  // }
 
   const [errori1, setErrori1] = useState ({
     erroreCliente: "",
@@ -89,12 +90,20 @@ const [errori2, setErrori2] = useState ({
       <Header />
       
       <div className="main-content"></div>
-      <FormRicerca
+      {/* <FormRicerca
         tipoLista={'lavori'} 
         setterLista1={setLavoriClienti} 
         setterLista2={setLavoriProfessionisti}
         datiLastSearch={datiLavoriLastSearch}
         setterDatiLastSearch={updateDatiLastSearch}
+      /> */}
+
+      <FormRicerca 
+        tipoLista={'lavori'} 
+        setLista1={setLavoriClienti}
+        setLista2={setLavoriProfessionisti}
+        datiRicerca={datiRicerca}
+        setDatiRicerca={setDatiRicerca}
       />
       
       <div className='containerTitle'><label className='titoloForm'>Lavori clienti</label></div>

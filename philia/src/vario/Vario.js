@@ -1,44 +1,18 @@
-export const handleInputChange = (e) => {
+export const handleInputChange = (e, setItem) => {
+  const nome_campi = [
+    "nome", "cognome", "contatto", "note", "professione", "email", 
+    "nome_cliente", "cognome_cliente", "nome_professionista", "descrizione", 
+    "giorno", "primo_giorno", "ultimo_giorno", "orario_inizio", "orario_fine"
+  ]
   const { name, value } = e.target;
-  switch (name) {
-    case 'nome':
-      setNome(value);
-      break;
-    case 'cognome':
-      setCognome(value);
-      break;
-    case 'contatto':
-      setContatto(value);
-      break;
-    case 'note':
-      setNote(value);
-      break;
-    case 'professione':
-      setProfessione(value);
-      break;
-    case 'email':
-      setEmail(value);
-      break;
-    case 'nomeCliente':
-      setNomeCliente(value);
-      break;
-    case 'cognomeCliente':
-      setCognomeCliente(value);
-      break;
-    case 'nomeProfessionista':
-      setNomeProfessionista(value);
-      break;
-    case 'descrizione':
-      setDescrizione(value);
-      break;
-    case 'primoGiorno':
-      setPrimoGiorno(value);
-      break;
-    case 'ultimoGiorno':
-      setUltimoGiorno(value);
-      break;
-    default:
-      break;
+  if(nome_campi.includes(name)) {
+    setItem(prevState => ({
+      ...prevState, 
+      [name]: value
+    }));
+  }
+  else {
+    alert("Errore, nome campo non valido.");
   }
 };
 
@@ -90,24 +64,6 @@ export const getCampiRicerca = (tipoItem, item) => {
   }
 };
 
-/*
-function FormNuovoCliente({item}) {
-  return (
-    <>
-      <StyledLabel>Nome</StyledLabel>
-      <StyledTextAreaModifica rows="1" placeholder='Nome*' name="nome" value={item.nome} />
-      <StyledLabel>Cognome</StyledLabel>
-      <StyledTextAreaModifica rows="1" placeholder='Cognome*' name="cognome" value={item.cognome} />
-      <StyledLabel>Contatto</StyledLabel>
-      <StyledInputModifica rows="1" type="text" placeholder='Contatto*' name="contatto" value={item.contatto} />
-      <StyledLabel>Note</StyledLabel>
-      <StyledTextAreaModifica rows="1" placeholder='Note' name="note" value={item.note} style={{marginBottom: "10px"}} />
-      <OperazioniNuovoItem />   
-    </>
-  );
-}
-*/
-
 export const getCampiNuovoCliente = (item) => {
   return [
     // label, placeholder, name, value, type
@@ -136,8 +92,9 @@ const getCampiNuovoLavoro = (item) => {
     ["Cognome cliente", "Cognome cliente", "cognome_cliente", item.cognome_cliente, null],
     ["Nome professionista", "Nome professionista", "nome_professionista", item.nome_professionista, null],
     ["Descrizione", "Descrizione", "descrizione", item.descrizione, null],
-    ["Primo giorno", "Primo giorno", "primo_giorno", item.primo_giorno, "date"],
-    ["Ultimo giorno", "Ultimo giorno", "ultimo_giorno", item.ultimo_giorno, "date"],
+    ["Giorno", "Giorno", "giorno", item.giorno, "date"],
+    ["Orario inizio", "Orario inizio", "orario_inizio", item.orario_inizio, "time"],
+    ["Orario fine", "Orario fine", "orario_fine", item.orario_fine, "time"],
     ["Note", "Note", "note", item.note, null]
   ];
 };

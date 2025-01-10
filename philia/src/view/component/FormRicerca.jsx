@@ -7,7 +7,7 @@ import CardItem from "../component/card_item/CardItem";
 import RowItem from "./row_item/RowItem";
 import FormItem from "./form_item/FormItem";
 
-export const FormRicerca = ({tipoLista, setLista1, setLista2, datiLastSearch, setDatiLastSearch}) => {
+export const FormRicerca = ({tipoLista, setLista1, setLista2, datiRicerca, setDatiRicerca}) => {
   const formSession = useSelector((state) => state.formSession.value);
   const tipoItem = `cerca ${tipoLista}`;
   const header = `Ricerca ${tipoLista}`;
@@ -17,15 +17,15 @@ export const FormRicerca = ({tipoLista, setLista1, setLista2, datiLastSearch, se
   }, []);
 
   return (
-    <form onSubmit={(e) => eseguiRicerca(e, tipoLista, setLista1, setLista2, setDatiLastSearch)}>
+    <form onSubmit={(e) => eseguiRicerca(e, tipoLista, setLista1, setLista2, setDatiRicerca)}>
       {formSession.view === "form" && (
-        <FormItem tipoItem={tipoItem} item={datiLastSearch} header={header} setDatiLastSearch={setDatiLastSearch} />
+        <FormItem tipoItem={tipoItem} item={datiRicerca} setItem={setDatiRicerca} header={header} />
       )}
       {(formSession.view === "row") && (
-        <RowItem tipoItem={tipoItem} item={datiLastSearch} setDatiLastSearch={setDatiLastSearch} />
+        <RowItem tipoItem={tipoItem} item={datiRicerca} setItem={setDatiRicerca} setDatiLastSearch={setDatiRicerca} />
       )}
       {(formSession.view === "card") && (
-        <CardItem tipoItem={tipoItem} item={datiLastSearch} header={header} setDatiLastSearch={setDatiLastSearch} />
+        <CardItem tipoItem={tipoItem} item={datiRicerca} setItem={setDatiRicerca} header={header} setDatiLastSearch={setDatiRicerca} />
       )}
     </form>
   );

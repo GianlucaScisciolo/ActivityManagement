@@ -11,6 +11,14 @@ import FormItem from '../component/form_item/FormItem';
 
 const NuovoProfessionista = () => {
   const formSession = useSelector((state) => state.formSession.value);
+  
+  const [nuovoProfessionista, setNuovoProfessionista] = useState({
+    nome: "",
+    professione: "",
+    contatto: "",
+    email: "",
+    note: ""
+  })
 
   const[errori, setErrori] = useState({
     erroreNome: "",
@@ -19,14 +27,6 @@ const NuovoProfessionista = () => {
     erroreEmail: "",
     erroreContattoEEmail: "",
     erroreNote: ""
-  })
-
-  const [item, setItem] = useState({
-    nome: "Ciao",
-    professione: "Mondo",
-    contatto: "Hello",
-    email: "Hi",
-    note: "World"
   })
 
   const handleInsert = async (data, form) => {
@@ -90,57 +90,21 @@ const NuovoProfessionista = () => {
           };
           handleInsert(data, e.target);
         }}>
-          {(formSession.view === "tmp") && (
-            <>
-              <label className='titoloForm'>Nuovo professionista</label>
-
-              <label className='labelForm'>Nome</label>
-              <input className='inputFormModifica' type='text' name='nome' />
-              <span className='spanErrore'>{errori.erroreNome}</span>
-              
-              <label className='labelForm'>Professione</label>
-              <input className='inputFormModifica' type='text' name='professione' />
-              <span className='spanErrore'>{errori.erroreProfessione}</span>
-
-              <label className='labelForm'>Contatto*</label>
-              <input className='inputFormModifica' type='text' name='contatto' onChange={handleChangeInsertJustNumber} />
-              <span className='spanErrore'>{errori.erroreContatto}</span>
-
-              <label className='labelForm'>Email</label>
-              <input className='inputFormModifica' type='text' name='email' />
-              <span className='spanErrore'>{errori.erroreEmail}</span>
-
-              <span className='spanErrore'>{errori.erroreContattoEEmail}</span>
-
-              <label className='labelForm'>Note*</label>
-              <textarea className='textAreaFormModifica' name='note'></textarea>
-              <span className='spanErrore'>{errori.erroreNote}</span>
-            </>
-          )}
           {formSession.view === "form" && (
             <>
-              <Col className="custom-col">
-                <FormItem tipoItem={"nuovo professionista"} item={item} header="Nuovo professionista" />
-              </Col>
+              <FormItem tipoItem={"nuovo professionista"} item={nuovoProfessionista} setItem={setNuovoProfessionista} header="Nuovo professionista" />
             </>
           )}
           {formSession.view === "row" && (
             <>
-              <RowItem tipoItem={"nuovo professionista"} item={item}/>
+              <RowItem tipoItem={"nuovo professionista"} item={nuovoProfessionista} setItem={setNuovoProfessionista} />
             </>
           )}
           {(formSession.view === "card") && (
             <>
-              <Row className='custom-row'>
-                <Col className='custom-col'>
-                  <CardItem tipoItem={"nuovo professionista"} item={item} header="Nuovo professionista" />
-                </Col>
-              </Row>
+              <CardItem tipoItem={"nuovo professionista"} item={nuovoProfessionista} setItem={setNuovoProfessionista} header="Nuovo professionista" />
             </>
           )}
-          <center>
-            <button className='buttonForm' type='submit'>Salva professionista</button>
-          </center>
         </form>
       </div>
     </>

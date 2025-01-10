@@ -17,7 +17,7 @@ import {
   StyledArrowTopNotSelected, StyledArrowBottomNotSelected
 } from './StyledCardItem';
 import { 
-  getCampiRicerca, getCampiNuovoItem 
+  handleInputChange, getCampiRicerca, getCampiNuovoItem
 } from '../../../vario/Vario';
 
 const nascondiForm = (setIsVisible, setArrowUp) => {
@@ -184,42 +184,41 @@ function CardModificaProfilo({ item }) {
   );
 }
 
-function CardNuovoItem({tipoItem, item}) {
+function CampiItem({campiItem, setItem}) {
+  return (
+    <>
+      {campiItem.map(([label, placeholder, name, value, type], index) => (
+        <React.Fragment key={index}>
+          {(type === null) && (
+            <StyledTextAreaModifica rows="1" placeholder={placeholder} name={name} value={value} onChange={(e) => handleInputChange(e, setItem)} />
+          )}
+          {(type !== null) && (
+            <StyledInputModifica rows="1" type={type} placeholder={placeholder} name={name} value={value} onChange={(e) => handleInputChange(e, setItem)} />
+          )}
+        </React.Fragment>
+      ))}
+    </>
+  );
+}
+
+function CardNuovoItem({tipoItem, item, setItem}) {
   const campiNuovoItem = getCampiNuovoItem(tipoItem, item);
   return (
     <>
       <SlideContainer isVisible={true}>
-        {campiNuovoItem.map(([label, placeholder, name, value, type], index) => (
-          <React.Fragment key={index}>
-            {(type === null) && (
-              <StyledTextAreaModifica rows="1" placeholder={placeholder} name={name} value={value} />
-            )}
-            {(type !== null) && (
-              <StyledInputModifica rows="1" type={type} placeholder={placeholder} name={name} value={value} />
-            )}
-          </React.Fragment>
-        ))}
+        <CampiItem campiItem={campiNuovoItem} setItem={setItem} />
       </SlideContainer>
       <OperazioniNuovoItem  />
     </>
   );
 }
 
-function CardRicerca({tipoItem, item, isVisible, setIsVisible, arrowUp, setArrowUp}) {
-  const campiRicerca = getCampiRicerca(tipoItem, item);
+function CardRicerca({tipoItem, item, setItem, isVisible, setIsVisible, arrowUp, setArrowUp}) {
+  const campiRicercaItems = getCampiRicerca(tipoItem, item);
   return (
     <>
       <SlideContainer isVisible={isVisible}>
-        {campiRicerca.map(([label, placeholder, name, value, type], index) => (
-          <React.Fragment key={index}>
-            {(type === null) && (
-              <StyledTextAreaModifica rows="1" placeholder={placeholder} name={name} value={value} />
-            )}
-            {(type !== null) && (
-              <StyledInputModifica rows="1" type={type} placeholder={placeholder} name={name} value={value} />
-            )}
-          </React.Fragment>
-        ))}
+        <CampiItem campiItem={campiRicercaItems} setItem={setItem} />
       </SlideContainer>
       <OperazioniCercaItems setIsVisible={setIsVisible} arrowUp={arrowUp} setArrowUp={setArrowUp}
       />
@@ -227,21 +226,19 @@ function CardRicerca({tipoItem, item, isVisible, setIsVisible, arrowUp, setArrow
   );
 }
 
-function CardItem({ selectOperation, tipoItem, item, header }) {
+function CardItem({ selectOperation, tipoItem, item, setItem, header }) {
   const [isVisible, setIsVisible] = useState(true);
   const [arrowUp, setArrowUp] = useState(true);
 
   return (
     <StyledCard>
-      {(header !== "") && (
-        <StyledCardHeader style={{backgroundColor: "#000000"}}>{(header !== "") ? header : " "}</StyledCardHeader>
-      )}
+      <StyledCardHeader style={{backgroundColor: "#000000"}}>{(header !== "") ? header : " "}</StyledCardHeader>
       <StyledListGroupItem variant="flush">
         {(tipoItem.startsWith("nuovo")) && (
-          <CardNuovoItem tipoItem={tipoItem} item={item} />
+          <CardNuovoItem tipoItem={tipoItem} item={item} setItem={setItem} />
         )}
         {(tipoItem.startsWith("cerca")) && (
-          <CardRicerca tipoItem={tipoItem} item={item} 
+          <CardRicerca tipoItem={tipoItem} item={item} setItem={setItem}
             isVisible={isVisible} setIsVisible={setIsVisible} 
             arrowUp={arrowUp} setArrowUp={setArrowUp} 
           />

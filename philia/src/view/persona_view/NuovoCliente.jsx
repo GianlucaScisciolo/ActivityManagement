@@ -12,20 +12,19 @@ import FormItem from '../component/form_item/FormItem';
 const NuovoCliente = () => {
   const formSession = useSelector((state) => state.formSession.value);
 
+  const [nuovoCliente, setNuovoCliente] = useState({
+    nome: "",
+    cognome: "",
+    contatto: "",
+    note: ""
+  })
+
   const [errori, setErrori] = useState({
     erroreNome: "",
     erroreCognome: "",
     erroreContatto: "",
     erroreNote: ""
   })
-
-  const [item, setItem] = useState({
-    nome: "Ciao",
-    cognome: "Mondo",
-    contatto: "Hello",
-    note: "World"
-  })
-
 
   const handleInsert = async (data, form) => {
     if (confirm("Sei sicuro di voler salvare il cliente?")) {
@@ -90,49 +89,21 @@ const NuovoCliente = () => {
           };
           handleInsert(data, e.target);
         }}>
-          {(formSession.view === "tmp") && (
-            <>
-              <label className='titoloForm'>Nuovo cliente</label>
-
-              <label className='labelForm'>Nome*</label>
-              <input className='inputFormModifica' type='text' name='nome' />
-              <span className='spanErrore'>{errori.erroreNome}</span>
-
-              <label className='labelForm'>Cognome*</label>
-              <input className='inputFormModifica' type='text' name='cognome' />
-              <span className='spanErrore'>{errori.erroreCognome}</span>
-
-              <label className='labelForm'>Contatto*</label>
-              <input className='inputFormModifica' type='text' name='contatto' onChange={handleChangeInsertJustNumber} />
-              <span className='spanErrore'>{errori.erroreContatto}</span>
-
-              <label className='labelForm'>Note</label>
-              <textarea className='textAreaFormModifica' name='note'></textarea>
-              <span className='spanErrore'>{errori.erroreNote}</span>
-            </>
-          )}
           {formSession.view === "form" && (
             <>
-              <Col className="custom-col">
-                <FormItem tipoItem={"nuovo cliente"} item={item} header="Nuovo cliente" />
-              </Col>
+              <FormItem tipoItem={"nuovo cliente"} item={nuovoCliente} setItem={setNuovoCliente} header="Nuovo cliente" />
             </>
           )}
           {formSession.view === "row" && (
             <>
-              <RowItem tipoItem={"nuovo cliente"} item={item}/>
+              <RowItem tipoItem={"nuovo cliente"} item={nuovoCliente} setItem={setNuovoCliente} />
             </>
           )}
           {(formSession.view === "card") && (
             <>
-              <Row className='custom-row'>
-                <Col className='custom-col'>
-                  <CardItem tipoItem={"nuovo cliente"} item={item} header="Nuovo cliente" />
-                </Col>
-              </Row>
+              <CardItem tipoItem={"nuovo cliente"} item={nuovoCliente} setItem={setNuovoCliente} header="Nuovo cliente" />
             </>
           )}
-            <button className='buttonForm' type='submit'>Salva cliente</button>
         </form>
       </div>
     </>

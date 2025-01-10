@@ -15,23 +15,23 @@ const Professionisti = () => {
   const [selectedIds, setSelectedIds] = useState([]);
   const [selectedIdsModifica, setSelectedIdsModifica] = useState([]);
   
-  const [datiProfessionistiLastSearch, setDatiProfessionistiLastSearch] = useState({
-    "nome": "Paolo", 
-    "professione": "Bonolis", 
-    "contatto": "0818882266",
-    "email": "pb@gmail.com", 
-    "note": "Note su Paolo Bonolis"
+  const [datiRicerca, setDatiRicerca] = useState({
+    "nome": "", 
+    "professione": "", 
+    "contatto": "",
+    "email": "", 
+    "note": ""
   });
 
-  const updateDatiLastSearch = (nomeLastSearch, professioneLastSearch, contattoLastSearch, emailLastSearch, noteLastSearch) => {
-    setDatiProfessionistiLastSearch({ 
-      "nome": nomeLastSearch, 
-      "professione": professioneLastSearch, 
-      "contatto": contattoLastSearch,
-      "email": emailLastSearch, 
-      "note": noteLastSearch
-    })
-  }
+  // const updateDatiLastSearch = (nomeLastSearch, professioneLastSearch, contattoLastSearch, emailLastSearch, noteLastSearch) => {
+  //   setDatiProfessionistiLastSearch({ 
+  //     "nome": nomeLastSearch, 
+  //     "professione": professioneLastSearch, 
+  //     "contatto": contattoLastSearch,
+  //     "email": emailLastSearch, 
+  //     "note": noteLastSearch
+  //   })
+  // }
 
   const[errori, setErrori] = useState({
     erroreNome: "",
@@ -70,12 +70,19 @@ const Professionisti = () => {
 
       <div className="main-content"></div>
 
-      <FormRicerca 
+      {/* <FormRicerca 
         tipoLista={'professionisti'} 
         setterLista1={setProfessionisti} 
         setterLista2={''}
         datiLastSearch={datiProfessionistiLastSearch}
         setterDatiLastSearch={updateDatiLastSearch}
+      /> */}
+
+      <FormRicerca 
+        tipoLista={'professionisti'} 
+        setLista1={setProfessionisti}
+        datiRicerca={datiRicerca}
+        setDatiRicerca={setDatiRicerca}
       />
 
       <div className='containerTitle'><label className='titoloForm'>Professionisti</label></div>

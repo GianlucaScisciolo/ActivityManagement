@@ -19,21 +19,12 @@ const Clienti = () => {
   const itemSession = useSelector((state) => state.itemSession.value);
   const formSession = useSelector((state) => state.formSession.value);
   
-  const [datiClienteLastSearch, setDatiClienteLastSearch] = useState({
-    "nome": "Mario", 
-    "cognome": "Rossi", 
-    "contatto": "3334445556", 
-    "note": "Note su Mario Rossi"
+  const [datiRicerca, setDatiRicerca] = useState({
+    "nome": "", 
+    "cognome": "", 
+    "contatto": "", 
+    "note": ""
   });
-
-  const updateDatiLastSearch = (nomeLastSearch, cognomeLastSearch, contattoLastSearch, noteLastSearch) => {
-    setDatiClienteLastSearch({
-      "nome": nomeLastSearch, 
-      "cognome": cognomeLastSearch, 
-      "contatto": contattoLastSearch, 
-      "note": noteLastSearch
-    })
-  }
 
   const [errori, setErrori] = useState({
     "erroreNome": "",
@@ -42,28 +33,28 @@ const Clienti = () => {
     "erroreNote": ""
   })
 
-  const controllo = () => {
-    console.log(datiClienteLastSearch);
-    alert(itemSession.view);
-    alert(formSession.view);
+  // const controllo = () => {
+  //   console.log(datiClienteLastSearch);
+  //   alert(itemSession.view);
+  //   alert(formSession.view);
 
-    // console.log(selectedIds.length);
-    // for (let i = 0; i < selectedIds.length; i++) {
-    //   const cliente = clienti.find(c => c.id === selectedIds[i]);
-    //   if (cliente) {
-    //     console.log(`\t${selectedIds[i]} ${JSON.stringify(cliente)}`);
-    //   }
-    // }
+  //   // console.log(selectedIds.length);
+  //   // for (let i = 0; i < selectedIds.length; i++) {
+  //   //   const cliente = clienti.find(c => c.id === selectedIds[i]);
+  //   //   if (cliente) {
+  //   //     console.log(`\t${selectedIds[i]} ${JSON.stringify(cliente)}`);
+  //   //   }
+  //   // }
 
-    console.log(selectedIdsModifica.length);
-    // for (let i = 0; i < selectedIdsModifica.length; i++) {
-    //   const cliente = clienti.find(c => c.id === selectedIdsModifica[i]);
-    //   if (cliente) {
-    //     console.log(`\t${selectedIdsModifica[i]} ${JSON.stringify(cliente)}`);
-    //   }
-    // }
-    // console.log("\n");
-  };
+  //   console.log(selectedIdsModifica.length);
+  //   // for (let i = 0; i < selectedIdsModifica.length; i++) {
+  //   //   const cliente = clienti.find(c => c.id === selectedIdsModifica[i]);
+  //   //   if (cliente) {
+  //   //     console.log(`\t${selectedIdsModifica[i]} ${JSON.stringify(cliente)}`);
+  //   //   }
+  //   // }
+  //   // console.log("\n");
+  // };
 
   return (
     <>
@@ -71,15 +62,22 @@ const Clienti = () => {
 
       <div className="main-content"></div>
 
-      <FormRicerca 
+      {/* <FormRicerca 
         tipoLista={'clienti'} 
         setterLista1={setClienti} 
         setterLista2={''}
         datiLastSearch={datiClienteLastSearch}
         setterDatiLastSearch={updateDatiLastSearch}
+      /> */}
+      {/* ({tipoLista, setLista1, setLista2, datiLastSearch, setDatiLastSearch}) */}
+      <FormRicerca 
+        tipoLista={'clienti'} 
+        setLista1={setClienti}
+        datiRicerca={datiRicerca}
+        setDatiRicerca={setDatiRicerca}
       />
 
-      <div className='containerTitle'><label className='titoloForm'>Clienti</label></div>
+      {/* <div className='containerTitle'><label className='titoloForm'>Clienti</label></div>
 
       <RenderItemsInRowsList
         tipoItem={"cliente"} 
@@ -105,9 +103,9 @@ const Clienti = () => {
             {selectedIds.length > 0 && <button className='col-button-elimina' onClick={() => elimina("clienti", datiClienteLastSearch, selectedIds, setSelectedIds, clienti, setClienti, null, null)}>Elimina</button>}
           </Col>
         </Row>
-      </div>
+      </div> */}
       
-      <button onClick={controllo}>Controllo</button>
+      {/* <button onClick={controllo}>Controllo</button> */}
     </>
   );
 }

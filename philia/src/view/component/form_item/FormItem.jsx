@@ -11,8 +11,9 @@ import {
   StyledArrowTopNotSelected, StyledArrowBottomNotSelected
 } from "./StyledFormItem";
 import { 
-  getCampiRicerca, getCampiNuovoItem
+  handleInputChange, getCampiRicerca, getCampiNuovoItem
 } from '../../../vario/Vario';
+
 
 const nascondiForm = (setIsVisible, setArrowUp) => {
   setIsVisible(prev => !prev);
@@ -52,9 +53,7 @@ const InputTag = ({ tipoSelezione, tipo, nome, valore, modificabile }) => {
 
 const OperazioniNuovoItem = () => {
   return (
-    <StyledListGroupItem 
-      style={{border: "5px solid #000000", backgroundColor: "#000000", paddingTop: "3%"}}
-    >
+    <StyledListGroupItem style={{border: "5px solid #000000", backgroundColor: "#000000", paddingTop: "3%"}}>
       <StyledRow>
         <StyledCol className='custom-col'>
           <StyledSaveNotSelected size={grandezzaIcona} />
@@ -96,46 +95,43 @@ function FormModificaProfilo({ item }) {
   );
 }
 
-function FormNuovoItem({tipoItem, item}) {
+function CampiItem({campiItem, setItem}) {
+  return (
+    <>
+      {campiItem.map(([label, placeholder, name, value, type], index) => (
+        <React.Fragment key={index}>
+          <StyledLabel htmlFor={name}>{label}</StyledLabel>
+          {(type === null) && (
+            <StyledTextAreaModifica rows="1" placeholder={placeholder} name={name} value={value} onChange={(e) => handleInputChange(e, setItem)} />
+          )}
+          {(type !== null) && (
+            <StyledInputModifica rows="1" type={type} placeholder={placeholder} name={name} value={value} onChange={(e) => handleInputChange(e, setItem)} />
+          )}
+        </React.Fragment>
+      ))}
+      <br /> <br />
+    </>
+  );
+}
+
+function FormNuovoItem({tipoItem, item, setItem}) {
   const campiNuovoItem = getCampiNuovoItem(tipoItem, item);
   return (
     <>
       <SlideContainer isVisible={true}>
-        {campiNuovoItem.map(([label, placeholder, name, value, type], index) => (
-          <React.Fragment key={index}>
-            <StyledLabel htmlFor={name}>{label}</StyledLabel>
-            {(type === null) && (
-              <StyledTextAreaModifica rows="1" placeholder={placeholder} name={name} value={value} />
-            )}
-            {(type !== null) && (
-              <StyledInputModifica rows="1" type={type} placeholder={placeholder} name={name} value={value} />
-            )}
-          </React.Fragment>
-        ))}
-      <br /> <br />
+        <CampiItem campiItem={campiNuovoItem} setItem={setItem} />
       </SlideContainer>
       <OperazioniNuovoItem  />
     </>
   );
 }
 
-function FormRicerca({tipoItem, item, isVisible, setIsVisible, arrowUp, setArrowUp}) {
-  const campiRicerca = getCampiRicerca(tipoItem, item);
+function FormRicercaItems({tipoItem, item, setItem, isVisible, setIsVisible, arrowUp, setArrowUp}) {
+  const campiRicercaItems = getCampiRicerca(tipoItem, item);
   return (
     <>
       <SlideContainer isVisible={isVisible}>
-        {campiRicerca.map(([label, placeholder, name, value, type], index) => (
-          <React.Fragment key={index}>
-            <StyledLabel htmlFor={name}>{label}</StyledLabel>
-            {(type === null) && (
-              <StyledTextAreaModifica rows="1" placeholder={placeholder} name={name} value={value} />
-            )}
-            {(type !== null) && (
-              <StyledInputModifica rows="1" type={type} placeholder={placeholder} name={name} value={value} />
-            )}
-          </React.Fragment>
-        ))}
-      <br /> <br />
+        <CampiItem campiItem={campiRicercaItems} setItem={setItem} />
       </SlideContainer>
       <OperazioniCercaItems setIsVisible={setIsVisible} arrowUp={arrowUp} setArrowUp={setArrowUp}
       />
@@ -143,21 +139,19 @@ function FormRicerca({tipoItem, item, isVisible, setIsVisible, arrowUp, setArrow
   );
 }
 
-function FormItem({selectOperation, tipoItem, item, header, setDatiLastSearch}) {
+function FormItem({tipoItem, item, setItem, header, selectOperation}) {
   const [isVisible, setIsVisible] = useState(true);
   const [arrowUp, setArrowUp] = useState(true);
   
   return (
     <StyledForm>
-      {(header !== "") && (
-        <StyledHeader style={{backgroundColor: "#000000"}}>{header}</StyledHeader>
-      )}
+      <StyledHeader style={{backgroundColor: "#000000"}}>{(header !== "") ? header : " "}</StyledHeader>         
       <StyledListGroupItem variant="flush">
         {(tipoItem.startsWith("nuovo")) && (
-          <FormNuovoItem tipoItem={tipoItem} item={item} />
+          <FormNuovoItem tipoItem={tipoItem} item={item} setItem={setItem} />
         )}
         {(tipoItem.startsWith("cerca")) && (
-          <FormRicerca tipoItem={tipoItem} item={item} 
+          <FormRicercaItems tipoItem={tipoItem} item={item} setItem={setItem} 
             isVisible={isVisible} setIsVisible={setIsVisible} 
             arrowUp={arrowUp} setArrowUp={setArrowUp} 
           />

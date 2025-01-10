@@ -10,7 +10,7 @@ import {
   StyledTrashNotSelected, StyledTrashSelected,
 } from "./StyledRowItem";
 import { 
-  getCampiRicerca, getCampiNuovoItem 
+  handleInputChange, getCampiRicerca, getCampiNuovoItem
 } from '../../../vario/Vario';
 
 const nascondiForm = (visibilita, setVisibilita, setArrowUp) => {
@@ -180,7 +180,7 @@ function RowLavoro({tipoItem, item, selectOperation}) {
   );
 }
 
-function RowNuovoItem({tipoItem, item}) {
+function RowNuovoItem({tipoItem, item, setItem}) {
   const campiNuovoItem = getCampiNuovoItem(tipoItem, item);
   return (
     <>
@@ -189,10 +189,10 @@ function RowNuovoItem({tipoItem, item}) {
         <React.Fragment key={index}>
           <StyledCol>
             {(type === null) && (
-              <StyledTextAreaModifica rows="1" placeholder={placeholder} name={name} value={value} />
+              <StyledTextAreaModifica rows="1" placeholder={placeholder} name={name} value={value} onChange={(e) => handleInputChange(e, setItem)} />
             )}
             {(type !== null) && (
-              <StyledInputModifica rows="1" type={type} placeholder={placeholder} name={name} value={value} />
+              <StyledInputModifica rows="1" type={type} placeholder={placeholder} name={name} value={value} onChange={(e) => handleInputChange(e, setItem)} />
             )}
           </StyledCol>
         </React.Fragment>
@@ -201,7 +201,7 @@ function RowNuovoItem({tipoItem, item}) {
   );
 }
 
-function RowRicerca({tipoItem, item, arrowUp, setArrowUp}) {
+function RowRicerca({tipoItem, item, setItem, arrowUp, setArrowUp}) {
   const [visibilita, setVisibilita] = useState(Array(Object.keys(item).length).fill(true));
   const campiRicerca = getCampiRicerca(tipoItem, item);
 
@@ -217,10 +217,10 @@ function RowRicerca({tipoItem, item, arrowUp, setArrowUp}) {
             {(visibilita[index]) && (
               <>
                 {(type === null) && (
-                  <StyledTextAreaModifica rows="1" placeholder={placeholder} name={name} value={value} />
+                  <StyledTextAreaModifica rows="1" placeholder={placeholder} name={name} value={value} onChange={(e) => handleInputChange(e, setItem)} />
                 )}
                 {(type !== null) && (
-                  <StyledInputModifica rows="1" type={type} placeholder={placeholder} name={name} value={value} />
+                  <StyledInputModifica rows="1" type={type} placeholder={placeholder} name={name} value={value} onChange={(e) => handleInputChange(e, setItem)} />
                 )}
               </>
             )}
@@ -231,7 +231,7 @@ function RowRicerca({tipoItem, item, arrowUp, setArrowUp}) {
   );
 }
 
-function RowItem({selectOperation, tipoItem, item}) {
+function RowItem({selectOperation, tipoItem, item, setItem}) {
   const [isVisible, setIsVisible] = useState(true);
   const [arrowUp, setArrowUp] = useState(true);
 
@@ -239,12 +239,12 @@ function RowItem({selectOperation, tipoItem, item}) {
     <>
       {(tipoItem.startsWith("nuovo")) && (
         <StyledRow>
-          <RowNuovoItem tipoItem={tipoItem} item={item} />
+          <RowNuovoItem tipoItem={tipoItem} item={item} setItem={setItem} />
         </StyledRow>
       )}
       {(tipoItem.startsWith("cerca")) && (
         <StyledRow>
-          <RowRicerca tipoItem={tipoItem} item={item} arrowUp={arrowUp} setArrowUp={setArrowUp} />
+          <RowRicerca tipoItem={tipoItem} item={item} setItem={setItem} arrowUp={arrowUp} setArrowUp={setArrowUp} />
         </StyledRow>
       )}
       {(tipoItem === "cliente") && (
