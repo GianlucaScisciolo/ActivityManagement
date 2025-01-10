@@ -6,11 +6,10 @@ import ProfessionistaAction from "../action/professionista_action/Professionista
 import LavoroAction from "../action/lavoro_action/LavoroAction.js";
 import { operazioniPersone, operazioniProfessionisti, operazioniLavori } from "./Operazioni.js";
 
-export const aggiornamentoLista = (tipoLista, setterLista1, setterLista2, updateContentHeight) => {
+export const aggiornamentoLista = (tipoLista, setterLista1, setterLista2) => {
   if(tipoLista === "clienti") {
     const onChange = () => setterLista1(personaStore.getClienti());
     personaStore.addChangeListener(operazioniPersone.VISUALIZZA_CLIENTI, onChange);
-    updateContentHeight();
     return () => {
       personaStore.removeChangeListener(operazioniPersone.VISUALIZZA_CLIENTI, onChange);
     };
@@ -18,7 +17,6 @@ export const aggiornamentoLista = (tipoLista, setterLista1, setterLista2, update
   else if(tipoLista === "professionisti") {
     const onChange = () => setterLista1(professionistaStore.getProfessionisti());
     professionistaStore.addChangeListener(operazioniProfessionisti.VISUALIZZA_PROFESSIONISTI, onChange);
-    updateContentHeight();
     return () => {
       professionistaStore.removeChangeListener(operazioniProfessionisti.VISUALIZZA_PROFESSIONISTI, onChange);
     };
@@ -26,10 +24,8 @@ export const aggiornamentoLista = (tipoLista, setterLista1, setterLista2, update
   else if(tipoLista === "lavori") {
     let onChange = () => setterLista1(lavoroStore.getLavoriClienti());
     lavoroStore.addChangeListener(operazioniLavori.VISUALIZZA_LAVORI_CLIENTI, onChange);
-    updateContentHeight();
     onChange = () => setterLista2(lavoroStore.getLavoriProfessionisti());
     lavoroStore.addChangeListener(operazioniLavori.VISUALIZZA_LAVORI_PROFESSIONISTI, onChange);
-    updateContentHeight();
     return () => {
       lavoroStore.removeChangeListener(operazioniLavori.VISUALIZZA_LAVORI_CLIENTI, onChange);
       lavoroStore.removeChangeListener(operazioniLavori.VISUALIZZA_LAVORI_PROFESSIONISTI, onChange);

@@ -10,12 +10,9 @@ import {
   StyledSaveNotSelected, StyledSearchNotSelected, 
   StyledArrowTopNotSelected, StyledArrowBottomNotSelected
 } from "./StyledFormItem";
-
-const SlideContainerComponent = React.forwardRef((props, ref) => (
-  <SlideContainer ref={ref} {...props}>
-    {props.children}
-  </SlideContainer>
-));
+import { 
+  getCampiRicerca, getCampiNuovoItem
+} from '../../../vario/Vario';
 
 const nascondiForm = (setIsVisible, setArrowUp) => {
   setIsVisible(prev => !prev);
@@ -67,7 +64,7 @@ const OperazioniNuovoItem = () => {
   )
 }
 
-const OperazioniCercaItems = ({ isVisible, setIsVisible, arrowUp, setArrowUp }) => {
+const OperazioniCercaItems = ({ setIsVisible, arrowUp, setArrowUp }) => {
   return (
     <StyledListGroupItem style={{ border: "5px solid #000000", backgroundColor: "#000000", paddingTop: "3%", paddingBottom: "3%" }}>
       <StyledSearchNotSelected size={grandezzaIcona} style={{ marginRight: "50%" }} />
@@ -80,138 +77,6 @@ const OperazioniCercaItems = ({ isVisible, setIsVisible, arrowUp, setArrowUp }) 
     </StyledListGroupItem>
   );
 };
-
-function FormNuovoCliente({item}) {
-  return (
-    <>
-      <StyledLabel>Nome</StyledLabel>
-      <StyledTextAreaModifica rows="1" placeholder='Nome*' name="nome" value={item.nome} />
-      <StyledLabel>Cognome</StyledLabel>
-      <StyledTextAreaModifica rows="1" placeholder='Cognome*' name="cognome" value={item.cognome} />
-      <StyledLabel>Contatto</StyledLabel>
-      <StyledInputModifica rows="1" type="text" placeholder='Contatto*' name="contatto" value={item.contatto} />
-      <StyledLabel>Note</StyledLabel>
-      <StyledTextAreaModifica rows="1" placeholder='Note' name="note" value={item.note} style={{marginBottom: "10px"}} />
-      <OperazioniNuovoItem />   
-    </>
-  );
-}
-
-function FormCercaClienti({ item, isVisible, setIsVisible, arrowUp, setArrowUp }) {
-  return (
-    <>
-      <SlideContainer isVisible={isVisible}>
-        <StyledLabel>Nome</StyledLabel>
-        <StyledTextAreaModifica rows="1" placeholder='Nome*' name="nome" value={item.nome} />
-        <StyledLabel>Cognome</StyledLabel>
-        <StyledTextAreaModifica rows="1" placeholder='Cognome*' name="cognome" value={item.cognome} />
-        <StyledLabel>Contatto</StyledLabel>
-        <StyledInputModifica rows="1" type="text" placeholder='Contatto*' name="contatto" value={item.contatto} />
-        <StyledLabel>Note</StyledLabel>
-        <StyledTextAreaModifica rows="1" placeholder='Note' name="note" value={item.note} /> 
-        <br /> <br />
-      </SlideContainer>
-      <OperazioniCercaItems 
-        isVisible={isVisible} setIsVisible={setIsVisible} 
-        arrowUp={arrowUp} setArrowUp={setArrowUp}
-      />
-    </>
-  );
-}
-
-function FormNuovoProfessionista({item}) {
-  return (
-    <>
-      <StyledLabel>Nome</StyledLabel>
-      <StyledTextAreaModifica rows="1" name="nome" placeholder='Nome*' value={item.nome} />
-      <StyledLabel>Professione</StyledLabel>
-      <StyledTextAreaModifica rows="1" name="professione" placeholder='Professione*' value={item.professione} />
-      <StyledLabel>Contatto</StyledLabel>
-      <StyledInputModifica rows="1" type="text" name="contatto" placeholder='Contatto' value={item.contatto} />
-      <StyledLabel>Email</StyledLabel>
-      <StyledInputModifica rows="1" type="text" name="email" placeholder='Email' value={item.email} />
-      <StyledLabel>Note</StyledLabel>
-      <StyledTextAreaModifica rows="1" name="note" placeholder='Note' value={item.note} />
-      <br /> <br />
-      <OperazioniNuovoItem  />
-    </>
-  );
-}
-
-function FormCercaProfessionisti({ item, isVisible, setIsVisible, arrowUp, setArrowUp }) {
-  return (
-    <>
-      <SlideContainer isVisible={isVisible}>
-        <StyledLabel>Nome</StyledLabel>
-        <StyledTextAreaModifica rows="1" name="nome" placeholder='Nome*' value={item.nome} />
-        <StyledLabel>Professione</StyledLabel>
-        <StyledTextAreaModifica rows="1" name="professione" placeholder='Professione*' value={item.professione} />
-        <StyledLabel>Contatto</StyledLabel>
-        <StyledInputModifica rows="1" type="text" name="contatto" placeholder='Contatto' value={item.contatto} />
-        <StyledLabel>Email</StyledLabel>
-        <StyledInputModifica rows="1" type="text" name="email" placeholder='Email' value={item.email} />
-        <StyledLabel>Note</StyledLabel>
-        <StyledTextAreaModifica rows="1" name="note" placeholder='Note' value={item.note} />
-        <br /> <br />
-      </SlideContainer>
-      <OperazioniCercaItems 
-        isVisible={isVisible} setIsVisible={setIsVisible} 
-        arrowUp={arrowUp} setArrowUp={setArrowUp}
-      />
-    </>
-  );
-}
-
-function FormNuovoLavoro({tipoItem, item}) {
-  return (
-    <>
-      <StyledLabel>Cliente</StyledLabel>
-      <StyledTextAreaModifica rows="1" name="cliente" placeholder='cliente' value="Mario Rossi" />
-      <StyledLabel>Professionista</StyledLabel>
-      <StyledTextAreaModifica rows="1" name="professionista" placeholder='professionista' value="Alessandro Volta SRL" />
-      <StyledLabel>Descrizione</StyledLabel>
-      <StyledTextAreaModifica rows="1" name="descrizione" placeholder='Descrizione*' value={item.descrizione} />
-      <StyledLabel>Giorno</StyledLabel>
-      <StyledTextAreaModifica rows="1" name="giorno" placeholder='Giorno*' value={formatoDate(item.giorno, "AAAA-MM-GG")} />
-      <StyledLabel>Orario inizio</StyledLabel>
-      <StyledTextAreaModifica rows="1" name="orario_inizio" placeholder='Orario inizio*' value={formatoTime(item.orario_inizio)} />
-      <StyledLabel>Orario fine</StyledLabel>
-      <StyledTextAreaModifica rows="1" name="orario_fine" placeholder='Orario fine*' value={formatoTime(item.orario_fine)} />
-      <StyledLabel>Note</StyledLabel>
-      <StyledTextAreaModifica rows="1" name="note" placeholder='Note' value={item.note} />
-      <br /> <br />
-      <OperazioniNuovoItem  />
-    </>
-  );
-}
-
-function FormCercaLavori({ item, isVisible, setIsVisible, arrowUp, setArrowUp }) {
-  return (
-    <>
-      <SlideContainer isVisible={isVisible}>
-        <StyledLabel>Nome cliente</StyledLabel>
-        <StyledTextAreaModifica rows="1" name="nome_cliente" placeholder='Nome cliente' value={item.nomeCliente} />
-        <StyledLabel>Cognome cliente</StyledLabel>
-        <StyledTextAreaModifica rows="1" name="cognome_cliente" placeholder='Cognome cliente' value={item.cognomeCliente} />
-        <StyledLabel>Nome professionista</StyledLabel>
-        <StyledTextAreaModifica rows="1" name="nome_professionista" placeholder='Nome professionista' value={item.nomeProfessionista} />
-        <StyledLabel>Descrizione</StyledLabel>
-        <StyledTextAreaModifica rows="1" name="descrizione" placeholder='Descrizione' value={item.descrizione} />
-        <StyledLabel>Primo giorno</StyledLabel>
-        <StyledInputModifica rows="1" type="date" name="primo_giorno" placeholder='Primo giorno' value={item.primoGiorno} />
-        <StyledLabel>Ultimo giorno</StyledLabel>
-        <StyledInputModifica rows="1" type="date" name="ultimo_giorno" placeholder='Ultimo giorno' value={item.ultimoGiorno} />
-        <StyledLabel>Note</StyledLabel>
-        <StyledTextAreaModifica rows="1" name="note" placeholder='Note' value={item.note} />
-        <br /> <br />
-      </SlideContainer>
-      <OperazioniCercaItems 
-        isVisible={isVisible} setIsVisible={setIsVisible} 
-        arrowUp={arrowUp} setArrowUp={setArrowUp}
-      />
-    </>
-  );
-}
 
 function FormModificaProfilo({ item }) {
   return (
@@ -231,56 +96,70 @@ function FormModificaProfilo({ item }) {
   );
 }
 
-function FormItem({selectOperation, tipoItem, item, header}) {
+function FormNuovoItem({tipoItem, item}) {
+  const campiNuovoItem = getCampiNuovoItem(tipoItem, item);
+  return (
+    <>
+      <SlideContainer isVisible={true}>
+        {campiNuovoItem.map(([label, placeholder, name, value, type], index) => (
+          <React.Fragment key={index}>
+            <StyledLabel htmlFor={name}>{label}</StyledLabel>
+            {(type === null) && (
+              <StyledTextAreaModifica rows="1" placeholder={placeholder} name={name} value={value} />
+            )}
+            {(type !== null) && (
+              <StyledInputModifica rows="1" type={type} placeholder={placeholder} name={name} value={value} />
+            )}
+          </React.Fragment>
+        ))}
+      <br /> <br />
+      </SlideContainer>
+      <OperazioniNuovoItem  />
+    </>
+  );
+}
+
+function FormRicerca({tipoItem, item, isVisible, setIsVisible, arrowUp, setArrowUp}) {
+  const campiRicerca = getCampiRicerca(tipoItem, item);
+  return (
+    <>
+      <SlideContainer isVisible={isVisible}>
+        {campiRicerca.map(([label, placeholder, name, value, type], index) => (
+          <React.Fragment key={index}>
+            <StyledLabel htmlFor={name}>{label}</StyledLabel>
+            {(type === null) && (
+              <StyledTextAreaModifica rows="1" placeholder={placeholder} name={name} value={value} />
+            )}
+            {(type !== null) && (
+              <StyledInputModifica rows="1" type={type} placeholder={placeholder} name={name} value={value} />
+            )}
+          </React.Fragment>
+        ))}
+      <br /> <br />
+      </SlideContainer>
+      <OperazioniCercaItems setIsVisible={setIsVisible} arrowUp={arrowUp} setArrowUp={setArrowUp}
+      />
+    </>
+  );
+}
+
+function FormItem({selectOperation, tipoItem, item, header, setDatiLastSearch}) {
   const [isVisible, setIsVisible] = useState(true);
   const [arrowUp, setArrowUp] = useState(true);
-  // const [height, setHeight] = useState("100%");
-  // const slideRef = useRef(null);
-
-  // useEffect(() => {
-  //   // alert(height);
-  //   if (slideRef.current) {
-  //     if (isVisible) {
-  //       setHeight(`${slideRef.current.scrollHeight}px`);
-  //     } else {
-  //       setHeight("0px");
-  //     }
-  //   }
-  // }, [isVisible, slideRef.current]);
   
-  
-
   return (
     <StyledForm>
       {(header !== "") && (
         <StyledHeader style={{backgroundColor: "#000000"}}>{header}</StyledHeader>
       )}
       <StyledListGroupItem variant="flush">
-        {(tipoItem === "nuovo cliente") &&(
-          <FormNuovoCliente item={item} />
+        {(tipoItem.startsWith("nuovo")) && (
+          <FormNuovoItem tipoItem={tipoItem} item={item} />
         )}
-        {(tipoItem === "cerca clienti") &&(
-          <FormCercaClienti item={item} 
+        {(tipoItem.startsWith("cerca")) && (
+          <FormRicerca tipoItem={tipoItem} item={item} 
             isVisible={isVisible} setIsVisible={setIsVisible} 
-            arrowUp={arrowUp} setArrowUp={setArrowUp}
-          />
-        )}
-        {(tipoItem === "nuovo professionista") &&(
-          <FormNuovoProfessionista item={item} />
-        )}
-        {(tipoItem === "cerca professionisti") &&(
-          <FormCercaProfessionisti item={item} 
-            isVisible={isVisible} setIsVisible={setIsVisible} 
-            arrowUp={arrowUp} setArrowUp={setArrowUp}
-          />
-        )}
-        {(tipoItem.startsWith("nuovo lavoro")) &&(
-          <FormNuovoLavoro item={item} />
-        )}
-        {(tipoItem.startsWith("cerca lavori")) &&(
-          <FormCercaLavori item={item} 
-            isVisible={isVisible} setIsVisible={setIsVisible} 
-            arrowUp={arrowUp} setArrowUp={setArrowUp}
+            arrowUp={arrowUp} setArrowUp={setArrowUp} 
           />
         )}
         {(tipoItem.startsWith("modifica profilo")) &&(

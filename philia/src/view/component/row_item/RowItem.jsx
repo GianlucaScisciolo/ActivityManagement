@@ -9,6 +9,9 @@ import {
   StyledPencilNotSelected, StyledPencilSelected, 
   StyledTrashNotSelected, StyledTrashSelected,
 } from "./StyledRowItem";
+import { 
+  getCampiRicerca, getCampiNuovoItem 
+} from '../../../vario/Vario';
 
 const nascondiForm = (visibilita, setVisibilita, setArrowUp) => {
   const steps = visibilita.length;
@@ -138,53 +141,6 @@ function RowCliente({item, selectOperation}) {
   );
 }
 
-function RowNuovoCliente({item}) {
-  return (
-    <>
-      <OperazioniNuovoItem />
-      <StyledCol><StyledTextAreaModifica rows="1" placeholder='Nome*' name="nome" value={item.nome} /></StyledCol>
-      <StyledCol><StyledTextAreaModifica rows="1" placeholder='Cognome*' name="cognome" value={item.cognome} /></StyledCol>
-      <StyledCol><StyledInputModifica rows="1" type="text" placeholder='Contatto*' name="contatto" value={item.contatto} /></StyledCol>
-      <StyledCol><StyledTextAreaModifica rows="1" placeholder='Note' name="note" value={item.note} /></StyledCol>
-    </>
-  );
-}
-
-function RowCercaClienti({ item, isVisible, setIsVisible, arrowUp, setArrowUp }) {
-  const [visibilita, setVisibilita] = useState(Array(Object.keys(item).length).fill(true));
-  
-  return (
-    <>
-      <OperazioniCercaItems 
-        visibilita={visibilita} setVisibilita={setVisibilita} 
-        arrowUp={arrowUp} setArrowUp={setArrowUp}
-      />
-      {/* <SlideContainer> */}
-        <StyledCol>
-          {(visibilita[0]) && (
-            <StyledTextAreaModifica rows="1" placeholder='Note' name="note" value={item.note} />
-          )}
-        </StyledCol>
-        <StyledCol>
-          {(visibilita[1]) && (
-            <StyledInputModifica rows="1" type="text" placeholder='Contatto' name="contatto" value={item.contatto} />
-          )}
-        </StyledCol>
-        <StyledCol>
-          {(visibilita[2]) && (
-            <StyledTextAreaModifica rows="1" placeholder='Cognome' name="cognome" value={item.cognome} />
-          )}
-        </StyledCol>
-        <StyledCol>
-          {(visibilita[3]) && (
-            <StyledTextAreaModifica rows="1" placeholder='Nome' name="nome" value={item.nome} />
-          )}
-        </StyledCol>
-      {/* </SlideContainer> */}
-    </>
-  );
-}
-
 function RowProfessionista({item, selectOperation}) {
   return (
     <>
@@ -194,59 +150,6 @@ function RowProfessionista({item, selectOperation}) {
       <InputTag tipoSelezione={item.tipo_selezione} tipo="text" nome="contatto" valore={item.contatto} modificabile={true} />
       <InputTag tipoSelezione={item.tipo_selezione} tipo="email" nome="email" valore={item.email} modificabile={true} />
       <TextAreaTag tipoSelezione={item.tipo_selezione} nome="note" valore={item.note} modificabile={true} />
-    </>
-  );
-}
-
-function RowNuovoProfessionista({item}) {
-  return (
-    <>
-      <OperazioniNuovoItem />
-      <StyledCol><StyledTextAreaModifica rows="1" name="nome" placeholder='Nome*' value={item.nome} /></StyledCol>
-      <StyledCol><StyledInputModifica rows="1" type="text" name="contatto" placeholder='Contatto' value={item.contatto} /></StyledCol>
-      <StyledCol><StyledInputModifica rows="1" type="text" name="email" placeholder='Email' value={item.email} /></StyledCol>
-      <StyledCol><StyledTextAreaModifica rows="1" name="note" placeholder='Note' value={item.note} /></StyledCol>
-    </>
-  );
-}
-
-function RowCercaProfessionisti({ item, isVisible, setIsVisible, arrowUp, setArrowUp }) {
-  const [visibilita, setVisibilita] = useState(Array(Object.keys(item).length).fill(true));
-
-  return (
-    <>        
-      {/* <div style={{display:"flex"}}> */}
-        <OperazioniCercaItems 
-          visibilita={visibilita} setVisibilita={setVisibilita} 
-          arrowUp={arrowUp} setArrowUp={setArrowUp}
-        />
-
-        <StyledCol>
-          {(visibilita[0]) && (
-            <StyledTextAreaModifica rows="1" name="nome" placeholder='Nome*' value={item.nome} />
-          )}
-        </StyledCol>
-        <StyledCol>
-          {(visibilita[1]) && (
-            <StyledTextAreaModifica rows="1" name="professione" placeholder='Professione*' value={item.professione} />
-          )}
-        </StyledCol>
-        <StyledCol>
-          {(visibilita[2]) && (
-            <StyledInputModifica rows="1" type="text" name="contatto" placeholder='Contatto' value={item.contatto} />
-          )}
-        </StyledCol>
-        <StyledCol>
-          {(visibilita[3]) && (
-            <StyledInputModifica rows="1" type="text" name="email" placeholder='Email' value={item.email} />
-          )}
-        </StyledCol>
-        <StyledCol>
-          {(visibilita[4]) && (
-            <StyledTextAreaModifica rows="1" name="note" placeholder='Note' value={item.note} />
-          )}
-        </StyledCol>
-      {/* </div> */}
     </>
   );
 }
@@ -277,26 +180,30 @@ function RowLavoro({tipoItem, item, selectOperation}) {
   );
 }
 
-function RowNuovoLavoro({item}) {
+function RowNuovoItem({tipoItem, item}) {
+  const campiNuovoItem = getCampiNuovoItem(tipoItem, item);
   return (
     <>
-      <OperazioniNuovoItem />
-      <StyledCol><StyledTextAreaModifica rows="1" name="cliente" placeholder='cliente' value="Mario Rossi" /></StyledCol>
-      <StyledCol><StyledTextAreaModifica rows="1" name="professionista" placeholder='professionista' value="Alessandro Volta SRL" /></StyledCol>
-      <StyledCol><StyledTextAreaModifica rows="1" name="professione" placeholder='professione' value="Elettricisti" /></StyledCol>
-      {/* <StyledTextAreaModifica rows="1" name="id_cliente" placeholder='Cliente'/> */}
-      {/* <StyledTextArea rows="1" name="id_professionista" placeholder='Professionista'/> */}
-      <StyledCol><StyledTextAreaModifica rows="1" name="descrizione" placeholder='Descrizione*' value={item.descrizione} /></StyledCol>
-      <StyledCol><StyledTextAreaModifica rows="1" name="giorno" placeholder='Giorno*' value={formatoDate(item.giorno, "AAAA-MM-GG")} /></StyledCol>
-      <StyledCol><StyledTextAreaModifica rows="1" name="orario_inizio" placeholder='Orario inizio*' value={formatoTime(item.orario_inizio)} /></StyledCol>
-      <StyledCol><StyledTextAreaModifica rows="1" name="orario_fine" placeholder='Orario fine*' value={formatoTime(item.orario_fine)} /></StyledCol>
-      <StyledCol><StyledTextAreaModifica rows="1" name="note" placeholder='Note' value={item.note} /></StyledCol>
+      <OperazioniNuovoItem  />
+      {campiNuovoItem.map(([label, placeholder, name, value, type], index) => (
+        <React.Fragment key={index}>
+          <StyledCol>
+            {(type === null) && (
+              <StyledTextAreaModifica rows="1" placeholder={placeholder} name={name} value={value} />
+            )}
+            {(type !== null) && (
+              <StyledInputModifica rows="1" type={type} placeholder={placeholder} name={name} value={value} />
+            )}
+          </StyledCol>
+        </React.Fragment>
+      ))}
     </>
   );
 }
 
-function RowCercaLavori({ item, isVisible, setIsVisible, arrowUp, setArrowUp }) {
+function RowRicerca({tipoItem, item, arrowUp, setArrowUp}) {
   const [visibilita, setVisibilita] = useState(Array(Object.keys(item).length).fill(true));
+  const campiRicerca = getCampiRicerca(tipoItem, item);
 
   return (
     <>
@@ -304,41 +211,22 @@ function RowCercaLavori({ item, isVisible, setIsVisible, arrowUp, setArrowUp }) 
         visibilita={visibilita} setVisibilita={setVisibilita} 
         arrowUp={arrowUp} setArrowUp={setArrowUp}
       />
-      <StyledCol>
-        {(visibilita[0]) && (
-          <StyledTextAreaModifica rows="1" name="nome_cliente" placeholder='Nome cliente' value={item.nomeCliente} />
-        )}
-        </StyledCol>
-      <StyledCol>
-        {(visibilita[1]) && (
-          <StyledTextAreaModifica rows="1" name="cognome_cliente" placeholder='Cognome cliente' value={item.cognomeCliente} />
-        )}
-      </StyledCol>
-      <StyledCol>
-        {(visibilita[2]) && (
-          <StyledTextAreaModifica rows="1" name="nome_professionista" placeholder='Nome professionista' value={item.nomeProfessionista} />
-        )}
-      </StyledCol>
-      <StyledCol>
-        {(visibilita[3]) && (
-          <StyledTextAreaModifica rows="1" name="descrizione" placeholder='Descrizione' value={item.descrizione} />
-        )}
-      </StyledCol>
-      <StyledCol>
-        {(visibilita[4]) && (
-          <StyledInputModifica rows="1" type="date" name="primo_giorno" placeholder='Primo giorno' value={item.primoGiorno} />
-        )}
-      </StyledCol>
-      <StyledCol>
-        {(visibilita[5]) && (
-          <StyledInputModifica rows="1" type="date" name="ultimo_giorno" placeholder='Ultimo giorno' value={item.ultimoGiorno} />
-        )}
-      </StyledCol>
-      <StyledCol>
-        {(visibilita[6]) && (
-          <StyledTextAreaModifica rows="1" name="note" placeholder='Note' value={item.note} />
-        )}
-      </StyledCol>
+      {campiRicerca.map(([label, placeholder, name, value, type], index) => (
+        <React.Fragment key={index}>
+          <StyledCol>
+            {(visibilita[index]) && (
+              <>
+                {(type === null) && (
+                  <StyledTextAreaModifica rows="1" placeholder={placeholder} name={name} value={value} />
+                )}
+                {(type !== null) && (
+                  <StyledInputModifica rows="1" type={type} placeholder={placeholder} name={name} value={value} />
+                )}
+              </>
+            )}
+          </StyledCol>
+        </React.Fragment>
+      ))}
     </>
   );
 }
@@ -349,47 +237,28 @@ function RowItem({selectOperation, tipoItem, item}) {
 
   return (
     <>
-      <StyledRow>
-      {(tipoItem === "cliente") &&(
+      {(tipoItem.startsWith("nuovo")) && (
+        <StyledRow>
+          <RowNuovoItem tipoItem={tipoItem} item={item} />
+        </StyledRow>
+      )}
+      {(tipoItem.startsWith("cerca")) && (
+        <StyledRow>
+          <RowRicerca tipoItem={tipoItem} item={item} arrowUp={arrowUp} setArrowUp={setArrowUp} />
+        </StyledRow>
+      )}
+      {(tipoItem === "cliente") && (
         <RowCliente item={item} selectOperation={selectOperation} />
-      )}
-      {(tipoItem === "nuovo cliente") &&(
-        <RowNuovoCliente item={item} />
-      )}
-      {(tipoItem === "cerca clienti") &&(
-        <RowCercaClienti item={item} 
-          isVisible={isVisible} setIsVisible={setIsVisible} 
-          arrowUp={arrowUp} setArrowUp={setArrowUp}
-        />
       )}
       {(tipoItem === "professionista") &&(
         <RowProfessionista item={item} selectOperation={selectOperation} />
       )}
-      {(tipoItem === "nuovo professionista") &&(
-        <RowNuovoProfessionista item={item} />
-      )}
-      {(tipoItem === "cerca professionisti") &&(
-        <RowCercaProfessionisti item={item} 
-          isVisible={isVisible} setIsVisible={setIsVisible} 
-          arrowUp={arrowUp} setArrowUp={setArrowUp}
-        />
-      )}
       {(tipoItem.startsWith("lavoro")) &&(
         <RowLavoro tipoItem={tipoItem} item={item} selectOperation={selectOperation} />
-      )}
-      {(tipoItem.startsWith("nuovo lavoro")) &&(
-        <RowNuovoLavoro item={item} />
-      )}
-      {(tipoItem.startsWith("cerca lavori")) &&(
-        <RowCercaLavori item={item} 
-          isVisible={isVisible} setIsVisible={setIsVisible} 
-          arrowUp={arrowUp} setArrowUp={setArrowUp}
-        />
       )}
       {(tipoItem.startsWith("modifica profilo")) &&(
         <RowModificaProfilo item={item} />
       )}
-      </StyledRow>
     </>
   );
 }
