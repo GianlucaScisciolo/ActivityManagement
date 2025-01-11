@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { formatoDate, formatoTime } from "../../../vario/Tempo";
 import { 
-  StyledRow, StyledCol, StyledColOperazioni, StyledColAnimato, SlideContainer, grandezzaIcona, 
+  StyledRow, StyledCol, StyledColBlack, StyledColOperazioni, StyledColAnimato, SlideContainer, grandezzaIcona, 
   StyledTextAreaBlock, StyledTextAreaModifica, StyledTextAreaElimina, 
   StyledInputBlock, StyledInputModifica, StyledInputElimina, 
   StyledSaveNotSelected, StyledSearchNotSelected, 
   StyledArrowLeftNotSelected, StyledArrowRightNotSelected,  
   StyledPencilNotSelected, StyledPencilSelected, 
-  StyledTrashNotSelected, StyledTrashSelected,
+  StyledTrashNotSelected, StyledTrashSelected
 } from "./StyledRowItem";
 import { 
   handleInputChange, getCampiRicerca, getCampiNuovoItem
@@ -45,25 +45,25 @@ const mostraForm = (visibilita, setVisibilita, setArrowUp) => {
   }, steps * 250);
 };
 
-const PencilTag = ({ tipoSelezione, selectOperation }) => {
+const PencilTag = ({ tipoSelezione, selectOperation, item }) => {
   switch(tipoSelezione) {
     case 0:
     case 2:
-      return <StyledPencilNotSelected size={grandezzaIcona} onClick={() => selectOperation("pencil")} style={{marginRight: "50%"}} />;
+      return <StyledPencilNotSelected size={grandezzaIcona} onClick={() => selectOperation("pencil", item)} style={{marginRight: "50%"}} />;
     case 1:
-      return <StyledPencilSelected size={grandezzaIcona} onClick={() => selectOperation("pencil")} style={{marginRight: "50%"}} />;
+      return <StyledPencilSelected size={grandezzaIcona} onClick={() => selectOperation("pencil", item)} style={{marginRight: "50%"}} />;
     default:
       return <></>;
   }
 }
 
-const TrashTag = ({ tipoSelezione, selectOperation }) => {
+const TrashTag = ({ tipoSelezione, selectOperation, item }) => {
   switch(tipoSelezione) {
     case 0:
     case 1:
-      return <StyledTrashNotSelected size={grandezzaIcona} onClick={() => selectOperation("trash")} />;
+      return <StyledTrashNotSelected size={grandezzaIcona} onClick={() => selectOperation("trash", item)} />;
     case 2:
-      return <StyledTrashSelected size={grandezzaIcona} onClick={() => selectOperation("trash")} />;
+      return <StyledTrashSelected size={grandezzaIcona} onClick={() => selectOperation("trash", item)} />;
     default:
       return <></>;
   }
@@ -99,11 +99,11 @@ const InputTag = ({ tipoSelezione, tipo, nome, valore, modificabile }) => {
   }
 }
 
-const OperazioniItemEsistente = ({ tipoSelezione, selectOperation }) => {
+const OperazioniItemEsistente = ({ tipoSelezione, selectOperation, item }) => {
   return (
     <StyledColOperazioni>
-      <PencilTag tipoSelezione={tipoSelezione} selectOperation={selectOperation} />
-      <TrashTag tipoSelezione={tipoSelezione} selectOperation={selectOperation} />
+      <PencilTag tipoSelezione={tipoSelezione} selectOperation={selectOperation} item={item} />
+      <TrashTag tipoSelezione={tipoSelezione} selectOperation={selectOperation} item={item} />
     </StyledColOperazioni>
   )
 }
@@ -130,26 +130,28 @@ const OperazioniCercaItems = ({ visibilita, setVisibilita, arrowUp, setArrowUp }
   );
 };
 
-function RowCliente({item, selectOperation}) {
+function RowCliente({tipoItem, item, selectOperation}) {
   return (
     <>
-        <OperazioniItemEsistente tipoSelezione={item.tipo_selezione} selectOperation={selectOperation} />
-        <StyledCol><TextAreaTag tipoSelezione={item.tipo_selezione} nome="nome_cognome" valore={item.nome + " " + item.cognome} modificabile={false} /></StyledCol>
-        <StyledCol><InputTag tipoSelezione={item.tipo_selezione} tipo="text" nome="contatto" valore={item.contatto} modificabile={true} /></StyledCol>
-        <StyledCol><TextAreaTag tipoSelezione={item.tipo_selezione} nome="note" valore={item.note} modificabile={true} /></StyledCol>
+      <OperazioniItemEsistente tipoSelezione={item.tipo_selezione} selectOperation={selectOperation} item={item} />
+      <StyledCol style={{maxWidth:"1px"}}><InputTag tipoSelezione={item.tipo_selezione} tipo="text" nome="contatto" valore={tipoItem.charAt(0).toUpperCase() + tipoItem.slice(1)} modificabile={false} /></StyledCol>
+      <StyledCol><TextAreaTag tipoSelezione={item.tipo_selezione} nome="nome_cognome" valore={item.nome + " " + item.cognome} modificabile={false} /></StyledCol>
+      <StyledCol><InputTag tipoSelezione={item.tipo_selezione} tipo="text" nome="contatto" valore={item.contatto} modificabile={true} /></StyledCol>
+      <StyledCol><TextAreaTag tipoSelezione={item.tipo_selezione} nome="note" valore={item.note} modificabile={true} /></StyledCol>
     </>
   );
 }
 
-function RowProfessionista({item, selectOperation}) {
+function RowProfessionista({tipoItem, item, selectOperation}) {
   return (
     <>
-      <OperazioniItemEsistente tipoSelezione={item.tipo_selezione} selectOperation={selectOperation} />
-      <TextAreaTag tipoSelezione={item.tipo_selezione} nome="nome" valore={item.nome} modificabile={false} />
-      <TextAreaTag tipoSelezione={item.tipo_selezione} nome="professione" valore={item.professione} modificabile={false} />
-      <InputTag tipoSelezione={item.tipo_selezione} tipo="text" nome="contatto" valore={item.contatto} modificabile={true} />
-      <InputTag tipoSelezione={item.tipo_selezione} tipo="email" nome="email" valore={item.email} modificabile={true} />
-      <TextAreaTag tipoSelezione={item.tipo_selezione} nome="note" valore={item.note} modificabile={true} />
+      <OperazioniItemEsistente tipoSelezione={item.tipo_selezione} selectOperation={selectOperation} item={item} />
+      <StyledCol style={{maxWidth:"1px"}}><InputTag tipoSelezione={item.tipo_selezione} tipo="text" nome="contatto" valore={tipoItem.charAt(0).toUpperCase() + tipoItem.slice(1)} modificabile={false} /></StyledCol>
+      <StyledCol><TextAreaTag tipoSelezione={item.tipo_selezione} nome="nome" valore={item.nome} modificabile={false} /></StyledCol>
+      <StyledCol><TextAreaTag tipoSelezione={item.tipo_selezione} nome="professione" valore={item.professione} modificabile={false} /></StyledCol>
+      <StyledCol><InputTag tipoSelezione={item.tipo_selezione} tipo="text" nome="contatto" valore={item.contatto} modificabile={true} /></StyledCol>
+      <StyledCol><InputTag tipoSelezione={item.tipo_selezione} tipo="email" nome="email" valore={item.email} modificabile={true} /></StyledCol>
+      <StyledCol><TextAreaTag tipoSelezione={item.tipo_selezione} nome="note" valore={item.note} modificabile={true} /></StyledCol>
     </>
   );
 }
@@ -157,25 +159,21 @@ function RowProfessionista({item, selectOperation}) {
 function RowLavoro({tipoItem, item, selectOperation}) {
   return (
     <>
-      <OperazioniItemEsistente tipoSelezione={item.tipo_selezione} selectOperation={selectOperation} />
-      {(tipoItem === "lavoro cliente") && (
-        <TextAreaTag tipoSelezione={item.tipo_selezione} nome="nome_cognome_cliente" valore={item.nome_cliente + " " + item.cognome_cliente} modificabile={false} />
+      <OperazioniItemEsistente tipoSelezione={item.tipo_selezione} selectOperation={selectOperation} item={item} />
+      <StyledCol><InputTag tipoSelezione={item.tipo_selezione} tipo="text" nome="tipo_lavoro" valore={item.tipo_lavoro} modificabile={false} /></StyledCol>
+      {(item.nome_cliente !== null) && (item.cognome_cliente !== null) && (
+        <StyledCol><TextAreaTag tipoSelezione={item.tipo_selezione} nome="nome_cognome_cliente" valore={item.nome_cliente + " " + item.cognome_cliente} modificabile={false} /></StyledCol>
       )}
-      {(tipoItem === "lavoro professionista") && (
+      {(item.nome_professionista !== null) && (item.professione !== null) && (
         <>
-          <TextAreaTag tipoSelezione={item.tipo_selezione} nome="nome_professionista" valore={item.nome_professionista} modificabile={false} />
-          <TextAreaTag tipoSelezione={item.tipo_selezione} nome="professione" valore={item.professione} modificabile={false} />
+          <StyledCol><TextAreaTag tipoSelezione={item.tipo_selezione} nome="professionista_e_professione" valore={item.nome_professionista + " - " + item.professione} modificabile={false} /></StyledCol>
         </>
       )}
-      {(tipoItem.startsWith("lavoro")) && (
-        <>
-          <TextAreaTag tipoSelezione={item.tipo_selezione} nome="descrizione" valore={item.descrizione} modificabile={true} />
-          <InputTag tipoSelezione={item.tipo_selezione} tipo="date" nome="giorno" valore={formatoDate(item.giorno, "AAAA-MM-GG")} modificabile={true} />
-          <InputTag tipoSelezione={item.tipo_selezione} tipo="time" nome="orario_inizio" valore={formatoTime(item.orario_inizio)} modificabile={true} />
-          <InputTag tipoSelezione={item.tipo_selezione} tipo="time" nome="orario_fine" valore={formatoTime(item.orario_inizio)} modificabile={true} />
-          <TextAreaTag tipoSelezione={item.tipo_selezione} nome="note" valore={item.note} modificabile={true} />
-        </>
-      )}
+      <StyledCol><TextAreaTag tipoSelezione={item.tipo_selezione} nome="descrizione" valore={item.descrizione} modificabile={true} /></StyledCol>
+      <StyledCol><InputTag tipoSelezione={item.tipo_selezione} tipo="date" nome="giorno" valore={formatoDate(item.giorno, "AAAA-MM-GG")} modificabile={true} /></StyledCol>
+      <StyledCol><InputTag tipoSelezione={item.tipo_selezione} tipo="time" nome="orario_inizio" valore={formatoTime(item.orario_inizio)} modificabile={true} /></StyledCol>
+      <StyledCol><InputTag tipoSelezione={item.tipo_selezione} tipo="time" nome="orario_fine" valore={formatoTime(item.orario_inizio)} modificabile={true} /></StyledCol>
+      <StyledCol><TextAreaTag tipoSelezione={item.tipo_selezione} nome="note" valore={item.note} modificabile={true} /></StyledCol>
     </>
   );
 }
@@ -248,13 +246,19 @@ function RowItem({selectOperation, tipoItem, item, setItem}) {
         </StyledRow>
       )}
       {(tipoItem === "cliente") && (
-        <RowCliente item={item} selectOperation={selectOperation} />
+        <StyledRow>
+          <RowCliente tipoItem={tipoItem} item={item} selectOperation={selectOperation} />
+        </StyledRow>
       )}
       {(tipoItem === "professionista") &&(
-        <RowProfessionista item={item} selectOperation={selectOperation} />
+        <StyledRow>
+          <RowProfessionista tipoItem={tipoItem} item={item} selectOperation={selectOperation} />
+        </StyledRow>
       )}
-      {(tipoItem.startsWith("lavoro")) &&(
-        <RowLavoro tipoItem={tipoItem} item={item} selectOperation={selectOperation} />
+      {(tipoItem === "lavoro") &&(
+        <StyledRow>
+          <RowLavoro tipoItem={tipoItem} item={item} selectOperation={selectOperation} />
+        </StyledRow>
       )}
       {(tipoItem.startsWith("modifica profilo")) &&(
         <RowModificaProfilo item={item} />

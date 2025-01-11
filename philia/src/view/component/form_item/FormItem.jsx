@@ -1,17 +1,19 @@
 import React, { useState, useEffect, useRef } from 'react';
+import Row from 'react-bootstrap/esm/Row';
+import Col from 'react-bootstrap/esm/Col';
 import ListGroup from 'react-bootstrap/ListGroup';
 import { formatoDate, formatoTime } from "../../../vario/Tempo";
 import { 
   StyledForm, StyledListGroupItem, StyledRow, StyledCol, 
   StyledLabel, StyledHeader, grandezzaIcona, 
-  SlideContainer, 
+  SlideContainer, StyledButton, 
   StyledTextAreaBlock, StyledTextAreaModifica, StyledTextAreaElimina, 
   StyledInputBlock, StyledInputModifica, StyledInputElimina, 
   StyledSaveNotSelected, StyledSearchNotSelected, 
   StyledArrowTopNotSelected, StyledArrowBottomNotSelected
 } from "./StyledFormItem";
 import { 
-  handleInputChange, getCampiRicerca, getCampiNuovoItem
+  handleInputChange, getCampiRicerca, getCampiNuovoItem, selezionaInserimentoLavoroCliente, selezionaInserimentoLavoroProfessionista
 } from '../../../vario/Vario';
 
 
@@ -63,10 +65,10 @@ const OperazioniNuovoItem = () => {
   )
 }
 
-const OperazioniCercaItems = ({ setIsVisible, arrowUp, setArrowUp }) => {
+const OperazioniCercaItems = ({ setIsVisible, arrowUp, setArrowUp, eseguiRicerca }) => {
   return (
     <StyledListGroupItem style={{ border: "5px solid #000000", backgroundColor: "#000000", paddingTop: "3%", paddingBottom: "3%" }}>
-      <StyledSearchNotSelected size={grandezzaIcona} style={{ marginRight: "50%" }} />
+      <StyledSearchNotSelected size={grandezzaIcona} style={{ marginRight: "50%" }} onClick={eseguiRicerca} />
       {arrowUp && (
         <StyledArrowTopNotSelected size={grandezzaIcona} onClick={() => nascondiForm(setIsVisible, setArrowUp)} />
       )}
@@ -95,17 +97,68 @@ function FormModificaProfilo({ item }) {
   );
 }
 
-function CampiItem({campiItem, setItem}) {
+function addElemento(queue, elemento) {
+  queue.push(elemento);
+}
+
+function eseguiFunzione(e, setItem, nomeFunzione) {
+  e.preventDefault();
+  if(nomeFunzione === "selezionaInserimentoLavoroCliente") {
+    selezionaInserimentoLavoroCliente(setItem);
+  }
+  else if(nomeFunzione === "selezionaInserimentoLavoroProfessionista") {
+    selezionaInserimentoLavoroProfessionista(setItem);
+  }
+}
+
+function CampiItem({ campiItem, setItem }) {
+  let queue = [];
+
   return (
     <>
-      {campiItem.map(([label, placeholder, name, value, type], index) => (
+      {campiItem.map(([label, placeholder, name, value, type, onClickFunction], index) => (
         <React.Fragment key={index}>
-          <StyledLabel htmlFor={name}>{label}</StyledLabel>
-          {(type === null) && (
-            <StyledTextAreaModifica rows="1" placeholder={placeholder} name={name} value={value} onChange={(e) => handleInputChange(e, setItem)} />
+          {type === "button" && (
+            addElemento(queue, [label, placeholder, name, value, type, onClickFunction])
           )}
-          {(type !== null) && (
-            <StyledInputModifica rows="1" type={type} placeholder={placeholder} name={name} value={value} onChange={(e) => handleInputChange(e, setItem)} />
+          {type !== "button" && (
+            <>
+              {queue.length !== 0 && (
+                <Row>
+                  {queue.map(([label2, placeholder2, name2, value2, type2, onClickFunction2], index2) => (
+                    <Col key={index2}><StyledButton onClick={(e) => eseguiFunzione(e, setItem, onClickFunction2)}>{label2}</StyledButton></Col>
+                  ))}
+                </Row>
+              )}
+              {queue = []}
+              {type === "br" && (
+                <br />
+              )}
+              {type === null && (
+                <>
+                  <StyledLabel htmlFor={name}>{label}</StyledLabel>
+                  <StyledTextAreaModifica
+                    rows="1"
+                    placeholder={placeholder}
+                    name={name}
+                    value={value}
+                    onChange={(e) => handleInputChange(e, setItem)}
+                  />
+                </>
+              )}
+                {type !== null && type !== "br" && type !== "button" && (
+                <>
+                  <StyledLabel htmlFor={name}>{label}</StyledLabel>
+                  <StyledInputModifica
+                    type={type}
+                    placeholder={placeholder}
+                    name={name}
+                    value={value}
+                      onChange={(e) => handleInputChange(e, setItem)}
+                  />
+                </>
+              )}
+            </>
           )}
         </React.Fragment>
       ))}
@@ -126,20 +179,20 @@ function FormNuovoItem({tipoItem, item, setItem}) {
   );
 }
 
-function FormRicercaItems({tipoItem, item, setItem, isVisible, setIsVisible, arrowUp, setArrowUp}) {
+function FormRicercaItems({tipoItem, item, setItem, eseguiRicerca, isVisible, setIsVisible, arrowUp, setArrowUp}) {
   const campiRicercaItems = getCampiRicerca(tipoItem, item);
   return (
     <>
       <SlideContainer isVisible={isVisible}>
         <CampiItem campiItem={campiRicercaItems} setItem={setItem} />
       </SlideContainer>
-      <OperazioniCercaItems setIsVisible={setIsVisible} arrowUp={arrowUp} setArrowUp={setArrowUp}
+      <OperazioniCercaItems setIsVisible={setIsVisible} arrowUp={arrowUp} setArrowUp={setArrowUp} eseguiRicerca={eseguiRicerca}
       />
     </>
   );
 }
 
-function FormItem({tipoItem, item, setItem, header, selectOperation}) {
+function FormItem({tipoItem, item, setItem, header, selectOperation, eseguiRicerca}) {
   const [isVisible, setIsVisible] = useState(true);
   const [arrowUp, setArrowUp] = useState(true);
   
@@ -151,7 +204,7 @@ function FormItem({tipoItem, item, setItem, header, selectOperation}) {
           <FormNuovoItem tipoItem={tipoItem} item={item} setItem={setItem} />
         )}
         {(tipoItem.startsWith("cerca")) && (
-          <FormRicercaItems tipoItem={tipoItem} item={item} setItem={setItem} 
+          <FormRicercaItems tipoItem={tipoItem} item={item} setItem={setItem} eseguiRicerca={eseguiRicerca} 
             isVisible={isVisible} setIsVisible={setIsVisible} 
             arrowUp={arrowUp} setArrowUp={setArrowUp} 
           />

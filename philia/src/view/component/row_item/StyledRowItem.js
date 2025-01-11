@@ -29,6 +29,7 @@ export const StyledCol = styled(Col)`
   min-height: 50px;
   min-width: 300px;
   /* max-width: 300px; */
+  margin: 10px;
   @media (max-width: 600px) {
     min-width: 300px;
   }
@@ -106,7 +107,7 @@ export const StyledTextArea = styled.textarea`
 `
 
 export const StyledTextAreaBlock = styled(StyledTextArea)`
-  background-color: #000000;
+  background-color: #111111;
 `
 
 export const StyledTextAreaModifica = styled(StyledTextArea)`
@@ -122,7 +123,7 @@ export const StyledInput = styled.input`
 `
 
 export const StyledInputBlock = styled(StyledInput)`
-  background-color: #000000;
+  background-color: #111111;
 `
 
 export const StyledInputModifica = styled(StyledInput)`

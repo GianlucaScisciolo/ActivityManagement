@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Header from '../component/Header';
 import { FormRicerca } from '../component/FormRicerca';
-import { TypeView, RenderItemsInRowsList } from '../component/View';
+import { Items } from '../component/View';
 import Row from 'react-bootstrap/esm/Row';
 import Col from 'react-bootstrap/esm/Col';
 import { elimina } from '../../vario/OperazioniEliminazione';
 import { modifica } from '../../vario/OperazioniModifica';
 
 const Professionisti = () => {
-  const [professionisti, setProfessionisti] = useState([]);
+  const [professionisti, setProfessionisti] = useState(-1);
   const [viewElements, setViewElements] = useState("list");
   const [selectedTrashCount, setSelectedTrashCount] = useState(0);
   const [selectedPencilCount, setSelectedPencilCount] = useState(0);
@@ -85,9 +85,50 @@ const Professionisti = () => {
         setDatiRicerca={setDatiRicerca}
       />
 
-      <div className='containerTitle'><label className='titoloForm'>Professionisti</label></div>
+      {(professionisti.length === 0) && (
+        <div className='contenitore-1'>Nessun professionista trovato!!</div>
+      )}
+
+      {(professionisti.length > 0) && (
+        <>
+            <div className="main-content"></div>
+            <Items
+              tipoItem={"professionista"} 
+              items={professionisti}
+              setterItems={setProfessionisti}
+              viewElements={viewElements}
+              setSelectedTrashCount={setSelectedTrashCount}
+              setSelectedPencilCount={setSelectedPencilCount}
+              selectedIds={selectedIds}
+              setSelectedIds={setSelectedIds}
+              selectedIdsModifica={selectedIdsModifica}
+              setSelectedIdsModifica={setSelectedIdsModifica}
+              errori={errori}
+              setErrori={setErrori}
+            />      
+        </>
+      )}
+
+      <div className="main-content"></div>
+
+      <div className='contenitore-2'>
+        <Row>
+          {selectedIdsModifica.length > 0 && (
+            <Col>
+              <button className='bottone-blu-non-selezionato'>Modifica</button>
+            </Col>
+          )}        
+          {selectedIds.length > 0 && (
+            <Col>
+              <button className='bottone-rosso-non-selezionato'>Elimina</button>
+            </Col>
+          )}
+        </Row>
+      </div>
+
+      {/* <div className='containerTitle'><label className='titoloForm'>Professionisti</label></div> */}
       
-      <RenderItemsInRowsList
+      {/* <RenderItemsInRowsList
         tipoItem={"professionista"} 
         items={professionisti}
         setterItems={setProfessionisti}
@@ -100,9 +141,9 @@ const Professionisti = () => {
         setSelectedIdsModifica={setSelectedIdsModifica}
         errori={errori}
         setErrori={setErrori}
-      />
+      /> */}
 
-      <div className='containerButtons'>
+      {/* <div className='containerButtons'>
         <Row className='custom-row'>
           <Col className='custom-col'>
             {selectedIdsModifica.length > 0 && <button className='col-button-modifica' onClick={() => modifica("professionisti", datiProfessionistiLastSearch, selectedIdsModifica, setSelectedIdsModifica, professionisti, setProfessionisti, null, null, setErrori, null)}>Modifica</button>}
@@ -111,9 +152,9 @@ const Professionisti = () => {
             {selectedIds.length > 0 && <button className='col-button-elimina' onClick={() => elimina("professionisti", datiProfessionistiLastSearch, selectedIds, setSelectedIds, professionisti, setProfessionisti, null, null)}>Elimina</button>}
           </Col>
         </Row>
-      </div>
+      </div> */}
       
-      <button onClick={controllo}>Controllo</button>
+      {/* <button onClick={controllo}>Controllo</button> */}
     </>
   );
 }

@@ -19,6 +19,8 @@ const NuovoLavoro = () => {
   const formSession = useSelector((state) => state.formSession.value);
 
   const [nuovoLavoro, setNuovoLavoro] = useState ({
+    lavoro_cliente_selezionato: false, 
+    lavoro_professionista_selezionato: false,
     id_cliente: 0,
     nome_cliente: "",
     cognome_cliente: "",
@@ -43,6 +45,8 @@ const NuovoLavoro = () => {
   })
 
   const [nuovoLavoroCliente, setNuovoLavoroCliente] = useState ({
+    lavoro_cliente_selezionato: false, 
+    lavoro_professionista_selezionato: false,
     id_cliente: 0,
     nome_cliente: "",
     cognome_cliente: "",
@@ -55,6 +59,8 @@ const NuovoLavoro = () => {
   })
 
   const [nuovoLavoroProfessionista, setNuovoLavoroProfessionista] = useState ({
+    lavoro_cliente_selezionato: false, 
+    lavoro_professionista_selezionato: false,
     id_professionista: 0,
     nome_cliente: "",
     cognome_cliente: "",

@@ -3,8 +3,7 @@ import LavoroDispatcher from "../../dispatcher/lavoro_dispatcher/LavoroDispatche
 import axios from "axios";
 import { operazioniLavori } from "../../vario/Operazioni";
 
-let lavoriClienti = [];
-let lavoriProfessionisti = [];
+let lavori = [];
 
 class LavoroStore extends EventEmitter {
   constructor() {
@@ -17,11 +16,8 @@ class LavoroStore extends EventEmitter {
       case operazioniLavori.INSERISCI_LAVORO:
         this.runOperation(action.payload, operazioniLavori.INSERISCI_LAVORO);
         break;
-      case operazioniLavori.VISUALIZZA_LAVORI_CLIENTI: 
-        this.runOperation(action.payload, operazioniLavori.VISUALIZZA_LAVORI_CLIENTI);
-        break;
-      case operazioniLavori.VISUALIZZA_LAVORI_PROFESSIONISTI: 
-        this.runOperation(action.payload, operazioniLavori.VISUALIZZA_LAVORI_PROFESSIONISTI);
+      case operazioniLavori.VISUALIZZA_LAVORI: 
+        this.runOperation(action.payload, operazioniLavori.VISUALIZZA_LAVORI);
         break;
       case operazioniLavori.ELIMINA_LAVORI:
         this.runOperation(action.payload, operazioniLavori.ELIMINA_LAVORI);
@@ -41,10 +37,8 @@ class LavoroStore extends EventEmitter {
   async runOperation(data, operazione) {
     try {
       const response = await axios.post("/" + operazione, data);
-      if (operazione === operazioniLavori.VISUALIZZA_LAVORI_CLIENTI)
-        lavoriClienti = response.data;
-      else if (operazione === operazioniLavori.VISUALIZZA_LAVORI_PROFESSIONISTI)
-        lavoriProfessionisti = response.data;
+      if (operazione === operazioniLavori.VISUALIZZA_LAVORI)
+        lavori = response.data;
       this.emitChange(operazione);
     } catch (error) {
       console.error("Errore durante l'operazione " + operazione + ": " + (error.response ? error.response.data : error.message));
@@ -68,16 +62,11 @@ class LavoroStore extends EventEmitter {
   }
 
   azzeraLavori() {
-    lavoriClienti = -1;
-    lavoriProfessionisti = -1;
+    lavori = -1;
   }
 
-  getLavoriClienti() {
-    return lavoriClienti;
-  }
-
-  getLavoriProfessionisti() {
-    return lavoriProfessionisti;
+  getLavori() {
+    return lavori;
   }
 
   addChangeListener(event, callback) {

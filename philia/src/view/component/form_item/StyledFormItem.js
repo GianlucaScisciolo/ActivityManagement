@@ -157,3 +157,20 @@ export const StyledArrowBottomNotSelected = styled(ChevronDown)`
     color: #0050EF;
   }
 `;
+
+export const StyledButton =  styled.button`
+  border-radius: 40px;
+  border: 5px solid #000000;
+  background-color: #000000;
+  color: #FFFFFF;
+  text-align: center;
+  cursor: pointer;  
+  /* font-size: 25px; */
+  margin-top: 50px;
+  padding: 2%;
+  transition: 0.5s all ease-out;
+    &:hover {
+    background-color: #0050EF;
+    color: #FFFFFF;
+  }
+`

@@ -29,25 +29,25 @@ const nascondiForm = (setIsVisible, setArrowUp) => {
 };
 
 
-const PencilTag = ({ tipoSelezione, selectOperation }) => {
+const PencilTag = ({ tipoSelezione, selectOperation, item }) => {
   switch(tipoSelezione) {
     case 0:
     case 2:
-      return <StyledPencilNotSelected size={grandezzaIcona} onClick={() => selectOperation("pencil")} />;
+      return <StyledPencilNotSelected size={grandezzaIcona} style={{ marginRight: "50%" }}  onClick={() => selectOperation("pencil", item)} />;
     case 1:
-      return <StyledPencilSelected size={grandezzaIcona} onClick={() => selectOperation("pencil")} />;
+      return <StyledPencilSelected size={grandezzaIcona} style={{ marginRight: "50%" }}  onClick={() => selectOperation("pencil", item)} />;
     default:
       return <></>;
   }
 }
 
-const TrashTag = ({ tipoSelezione, selectOperation }) => {
+const TrashTag = ({ tipoSelezione, selectOperation, item }) => {
   switch(tipoSelezione) {
     case 0:
     case 1:
-      return <StyledTrashNotSelected size={grandezzaIcona} onClick={() => selectOperation("trash")} />;
+      return <StyledTrashNotSelected size={grandezzaIcona} onClick={() => selectOperation("trash", item)} />;
     case 2:
-      return <StyledTrashSelected size={grandezzaIcona} onClick={() => selectOperation("trash")} />;
+      return <StyledTrashSelected size={grandezzaIcona} onClick={() => selectOperation("trash", item)} />;
     default:
       return <></>;
   }
@@ -81,17 +81,11 @@ const InputTag = ({ tipoSelezione, tipo, nome, valore, modificabile }) => {
   }
 }
 
-const OperazioniItemEsistente = ({ tipoSelezione, selectOperation }) => {
+const OperazioniItemEsistente = ({ tipoSelezione, selectOperation, item }) => {
   return (
-    <StyledListGroupItem style={{border: "5px solid #000000", backgroundColor:"#000000"}}>
-      <StyledRow>
-        <StyledCol>
-          <PencilTag tipoSelezione={tipoSelezione} selectOperation={selectOperation} />
-        </StyledCol>
-        <StyledCol>
-          <TrashTag tipoSelezione={tipoSelezione} selectOperation={selectOperation} />
-        </StyledCol>
-      </StyledRow>
+    <StyledListGroupItem style={{ border: "5px solid #000000", backgroundColor: "#000000", paddingTop: "3%" }}>
+      <PencilTag tipoSelezione={tipoSelezione} selectOperation={selectOperation} item={item} />
+      <TrashTag tipoSelezione={tipoSelezione} selectOperation={selectOperation} item={item} />
     </StyledListGroupItem>
   )
 }
@@ -128,7 +122,7 @@ function CardCliente({ item, selectOperation }) {
       <TextAreaTag tipoSelezione={item.tipo_selezione} nome="nome_cognome" valore={item.nome + " " + item.cognome} modificabile={false} />
       <InputTag tipoSelezione={item.tipo_selezione} tipo="text" nome="contatto" valore={item.contatto} modificabile={true} />
       <TextAreaTag tipoSelezione={item.tipo_selezione} nome="note" valore={item.note} modificabile={true} />
-      <OperazioniItemEsistente tipoSelezione={item.tipo_selezione} selectOperation={selectOperation} />
+      <OperazioniItemEsistente tipoSelezione={item.tipo_selezione} selectOperation={selectOperation} item={item} />
     </>
   );
 }
@@ -141,7 +135,7 @@ function CardProfessionista({ item, selectOperation }) {
       <InputTag tipoSelezione={item.tipo_selezione} tipo="text" nome="contatto" valore={item.contatto} modificabile={true} />
       <InputTag tipoSelezione={item.tipo_selezione} tipo="email" nome="email" valore={item.email} modificabile={true} />
       <TextAreaTag tipoSelezione={item.tipo_selezione} nome="note" valore={item.note} modificabile={true} />
-      <OperazioniItemEsistente tipoSelezione={item.tipo_selezione} selectOperation={selectOperation} />
+      <OperazioniItemEsistente tipoSelezione={item.tipo_selezione} selectOperation={selectOperation} item={item} />
     </>
   );
 }
@@ -167,7 +161,7 @@ function CardLavoro({ tipoItem, item, selectOperation }) {
           <TextAreaTag tipoSelezione={item.tipo_selezione} nome="note" valore={item.note} modificabile={true} />
         </>
       )}
-      <OperazioniItemEsistente tipoSelezione={item.tipo_selezione} selectOperation={selectOperation} />
+      <OperazioniItemEsistente tipoSelezione={item.tipo_selezione} selectOperation={selectOperation} item={item} />
     </>
   );
 }
@@ -229,7 +223,7 @@ function CardRicerca({tipoItem, item, setItem, isVisible, setIsVisible, arrowUp,
 function CardItem({ selectOperation, tipoItem, item, setItem, header }) {
   const [isVisible, setIsVisible] = useState(true);
   const [arrowUp, setArrowUp] = useState(true);
-
+  header = (tipoItem === "lavoro") ? item.tipo_lavoro : header;
   return (
     <StyledCard>
       <StyledCardHeader style={{backgroundColor: "#000000"}}>{(header !== "") ? header : " "}</StyledCardHeader>

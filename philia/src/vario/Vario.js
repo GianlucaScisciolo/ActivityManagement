@@ -16,6 +16,23 @@ export const handleInputChange = (e, setItem) => {
   }
 };
 
+export const selezionaInserimentoLavoroCliente = (setItem) => {
+  setItem(prevState => ({
+    ...prevState, 
+    "lavoro_cliente_selezionato": true,
+    "lavoro_professionista_selezionato": false,
+  }));
+};
+
+
+export const selezionaInserimentoLavoroProfessionista = (setItem) => {
+  setItem(prevState => ({
+    ...prevState, 
+    "lavoro_cliente_selezionato": false,
+    "lavoro_professionista_selezionato": true,
+  }));
+};
+
 const getCampiRicercaClienti = (item) => {
   return [
     // label, placeholder, name, value, type
@@ -86,17 +103,31 @@ const getCampiNuovoProfessionista = (item) => {
 };
 
 const getCampiNuovoLavoro = (item) => {
-  return [
-    // label, placeholder, name, value, type
-    ["Nome cliente", "Nome cliente", "nome_cliente", item.nome_cliente, null],
-    ["Cognome cliente", "Cognome cliente", "cognome_cliente", item.cognome_cliente, null],
-    ["Nome professionista", "Nome professionista", "nome_professionista", item.nome_professionista, null],
-    ["Descrizione", "Descrizione", "descrizione", item.descrizione, null],
-    ["Giorno", "Giorno", "giorno", item.giorno, "date"],
-    ["Orario inizio", "Orario inizio", "orario_inizio", item.orario_inizio, "time"],
-    ["Orario fine", "Orario fine", "orario_fine", item.orario_fine, "time"],
-    ["Note", "Note", "note", item.note, null]
+  const campi = [
+    ["Lavoro cliente", "", "lavoro_cliente", item.lavoro_cliente_selezionato, "button", "selezionaInserimentoLavoroCliente"],
+    ["Lavoro professionista", "", "lavoro_professionista", item.lavoro_professionista_selezionato, "button", "selezionaInserimentoLavoroProfessionista"]
   ];
+  // campi.push(["Nome cliente", "Nome cliente", "nome_cliente", item.nome_cliente, null, null]);
+
+  if (item.lavoro_cliente_selezionato) {
+    campi.push(["Nome cliente", "Nome cliente", "nome_cliente", item.nome_cliente, null, null]);
+    campi.push(["Cognome cliente", "Cognome cliente", "cognome_cliente", item.cognome_cliente, null, null]);
+  }
+
+  if (item.lavoro_professionista_selezionato) {
+    campi.push(["Nome professionista", "Nome professionista", "nome_professionista", item.nome_professionista, null, null]);
+  }
+  if (item.lavoro_cliente_selezionato || item.lavoro_professionista_selezionato) {
+    campi.push(["Descrizione", "Descrizione", "descrizione", item.descrizione, null, null]);
+    campi.push(["Giorno", "Giorno", "giorno", item.giorno, "date", null]);
+    campi.push(["Orario inizio", "Orario inizio", "orario_inizio", item.orario_inizio, "time", null]);
+    campi.push(["Orario fine", "Orario fine", "orario_fine", item.orario_fine, "time", null]);
+    campi.push(["Note", "Note", "note", item.note, null, null]);
+  }
+  else {
+    campi.push(["", "", "", null, "br", null]);
+  }
+  return campi;
 };
 
 

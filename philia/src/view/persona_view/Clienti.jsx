@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Header from '../component/Header';
 import { FormRicerca } from '../component/FormRicerca';
-import { TypeView, RenderItemsInRowsList } from '../component/View';
+import { Items } from '../component/View';
 import Row from 'react-bootstrap/esm/Row';
 import Col from 'react-bootstrap/esm/Col';
 import { elimina } from '../../vario/OperazioniEliminazione';
@@ -9,7 +9,7 @@ import { modifica } from '../../vario/OperazioniModifica';
 import { useSelector, useDispatch } from 'react-redux';
 
 const Clienti = () => {
-  const [clienti, setClienti] = useState([]);
+  const [clienti, setClienti] = useState(-1);
   const [viewElements, setViewElements] = useState("list");
   const [selectedTrashCount, setSelectedTrashCount] = useState(0);
   const [selectedPencilCount, setSelectedPencilCount] = useState(0);
@@ -56,30 +56,49 @@ const Clienti = () => {
   //   // console.log("\n");
   // };
 
+
+
   return (
     <>
       <Header />
 
       <div className="main-content"></div>
 
-      {/* <FormRicerca 
-        tipoLista={'clienti'} 
-        setterLista1={setClienti} 
-        setterLista2={''}
-        datiLastSearch={datiClienteLastSearch}
-        setterDatiLastSearch={updateDatiLastSearch}
-      /> */}
-      {/* ({tipoLista, setLista1, setLista2, datiLastSearch, setDatiLastSearch}) */}
       <FormRicerca 
         tipoLista={'clienti'} 
         setLista1={setClienti}
         datiRicerca={datiRicerca}
-        setDatiRicerca={setDatiRicerca}
+        setDatiRicerca={setDatiRicerca} 
       />
 
-      {/* <div className='containerTitle'><label className='titoloForm'>Clienti</label></div>
+      {(clienti.length === 0) && (
+        <div className='contenitore-1'>Nessun cliente trovato!!</div>
+      )}
 
-      <RenderItemsInRowsList
+      {(clienti.length > 0) && (
+        <>
+          <div className="main-content"></div>
+          <Items
+            tipoItem={"cliente"} 
+            items={clienti}
+            setterItems={setClienti}
+            viewElements={viewElements}
+            setSelectedTrashCount={setSelectedTrashCount}
+            setSelectedPencilCount={setSelectedPencilCount}
+            selectedIds={selectedIds}
+            setSelectedIds={setSelectedIds}
+            selectedIdsModifica={selectedIdsModifica}
+            setSelectedIdsModifica={setSelectedIdsModifica}
+            errori={errori}
+            setErrori={setErrori}
+          />    
+        </>
+      )}
+
+      <div className="main-content"></div>
+      
+
+      {/* <RenderItemsInRowsList
         tipoItem={"cliente"} 
         items={clienti}
         setterItems={setClienti}
@@ -92,18 +111,22 @@ const Clienti = () => {
         setSelectedIdsModifica={setSelectedIdsModifica}
         errori={errori}
         setErrori={setErrori}
-      />
+      /> */}
 
-      <div className='containerButtons'>
-        <Row className='custom-row'>
-          <Col className='custom-col'>
-            {selectedIdsModifica.length > 0 && <button className='col-button-modifica' onClick={() => modifica("clienti", datiClienteLastSearch, selectedIdsModifica, setSelectedIdsModifica, clienti, setClienti, null, null, setErrori, null)}>Modifica</button>}
-          </Col>
-          <Col className='custom-col'>
-            {selectedIds.length > 0 && <button className='col-button-elimina' onClick={() => elimina("clienti", datiClienteLastSearch, selectedIds, setSelectedIds, clienti, setClienti, null, null)}>Elimina</button>}
-          </Col>
+      <div className='contenitore-2'>
+        <Row>
+          {selectedIdsModifica.length > 0 && (
+            <Col>
+              <button className='bottone-blu-non-selezionato' onClick={() => modifica("clienti", datiClienteLastSearch, selectedIdsModifica, setSelectedIdsModifica, clienti, setClienti, null, null, setErrori, null)}>Modifica</button>
+            </Col>
+          )}        
+          {selectedIds.length > 0 && (
+            <Col>
+              <button className='bottone-rosso-non-selezionato' onClick={() => elimina("clienti", datiClienteLastSearch, selectedIds, setSelectedIds, clienti, setClienti, null, null)}>Elimina</button>
+            </Col>
+          )}
         </Row>
-      </div> */}
+      </div>
       
       {/* <button onClick={controllo}>Controllo</button> */}
     </>

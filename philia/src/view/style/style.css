@@ -7,212 +7,13 @@
   margin-top: 200px; /* Regola l'altezza secondo l'altezza della tua navbar */
 }
 
-/**************************************** Stile dei Form ****************************************/
-
-.containerForm, .containerTitle, .containerButtons {
-  /* border: 5px solid #000000; */
-  display: grid;
-  padding-top: 2%;
-  margin-top: 2%;
-  border-radius: 100px;
-  margin-left: 35%;
-  margin-right: 35%;
-  /* width: 40%; Larghezza del contenitore */
-  /* min-width: 300px; Larghezza minima per evitare che sia troppo stretto */
-}
-
-.titoloForm {
-  all: unset;
-  text-align: center;
-  /* margin-left: 15%; */
-  /* margin-right: 15%; */
-  margin-bottom: 5%;
-  /* border: 5px solid #000000; */
-  border-radius: 40px;
-  /* background-color: #000000; */
-  color: #FFFFFF;
-  background-color: #000000;
-  border: 5px solid #000000;
-  font-size: 35px;
-}
-
-/* .labelForm {
-  all: unset;
-  text-align: center;
-  margin-bottom: 1%;
-  border-radius: 40px;
-  color: #FFFFFF;
-  background-color: #000000;
-  border: 5px solid #000000;
-} */
-
-/* .inputFormModifica {
-  all: unset;
-  text-align: center;
-  border: 5px solid #000000;
-  margin-bottom: 1%;
-  background-color: #0050EF;
-  color: #FFFFFF;
-  border-radius: 40px;
-}  */
-
-/* .textAreaFormModifica {
-  text-align: center;
-  border: 5px solid #000000;
-  margin-bottom: 1%;
-  background-color: #0050EF;
-  color: #FFFFFF;
-  border-radius: 40px;
-  resize: vertical;
-} */
-
 .spanErrore {
-  color: #FF0000;
+  color: #500000;
   text-align: center;
   margin-bottom: 5%;
   /* font-size: 25px; */
   background-color: #000000;
   border-radius: 40px;
-}
-
-.buttonForm {
-  border-radius: 40px;
-  border: 5px solid #000000;
-  background-color: #000000;
-  color: #FFFFFF;
-  margin-left: 30%;
-  margin-right: 30%;
-  margin-bottom: 5%;
-  text-align: center;
-  cursor: pointer;  
-  /* font-size: 25px; */
-  transition: 0.5s all ease-out;
-    &:hover {
-    background-color: #0050EF;
-    color: #FFFFFF;
-  }
-}
-
-/**************************************** Stile degli items ****************************************/
-
-.containerItems {
-  display: grid;
-  padding-top: 2%;
-  padding-left: 2%;
-  padding-right: 2%;
-  margin-top: 15%;
-}
-
-.titoloItems {
-  all: unset;
-  text-align: center;
-  margin-left: 15%;
-  margin-right: 15%;
-  margin-bottom: 5%;
-  /* border: 5px solid #000000; */
-  border-radius: 40px;
-  /* background-color: #000000; */
-  color: #FFFFFF;
-  /* font-size: 30px; */
-}
-
-.iconButtonItem {
-  background: transparent;
-  border: none;
-  padding: 0;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 24px;  /* Modifica la dimensione come necessario */
-  height: 24px; /* Modifica la dimensione come necessario */
-  margin: auto;
-  margin-bottom: 5%;
-  background-color: #000000;
-  color:#FFFFFF
-  
-}
-
-.row {
-  display: flex;
-  flex-wrap: wrap;  /* Questo permette agli elementi di andare su una nuova riga se necessario */
-  gap: 16px;  /* Spazio tra gli elementi */
-  justify-content: space-between;  /* Spazio tra gli elementi */
-  margin-bottom: 2%;
-}
-
-.cell {
-  flex: 1 1 200px;  /* Gli elementi si espanderanno e contrarranno ma non saranno più piccoli di 200px */
-  box-sizing: border-box;  /* Assicura che padding e border siano inclusi nella larghezza e altezza totali */
-  border: 1px solid #000000;  /* Aggiungi un bordo per visualizzare meglio gli elementi */
-  padding: 16px;  /* Aggiungi padding */
-  background-color: #000000;
-  color:#FFFFFF;
-  text-align: center;
-}
-
-.cellOperations {
-  flex: 1 1 200px;  /* Gli elementi si espanderanno e contrarranno ma non saranno più piccoli di 200px */
-  box-sizing: border-box;  /* Assicura che padding e border siano inclusi nella larghezza e altezza totali */
-  padding: 16px;  /* Aggiungi padding */
-  color:#FFFFFF;
-  text-align: center;
-}
-
-/**************************************** Stile del bootstrap ****************************************/
-
-.icon-view-style, .pencil-style-not-selected, .trash-style-not-selected {
-  fill: none; /* nessun colore di riempimento nell'elemento di tipo svg  */
-  stroke: #FFFFFF; /* impostiamo il colore del contorno dell'elemento di tipo svg  */
-  cursor: pointer;
-  transition: 0.5s all ease-out;
-}
-
-.icon-view-style {
-  margin-left: auto; /* Spinge l'icona a destra */
-  &:hover {
-    stroke: #0050EF;
-  }
-}
-
-.pencil-style-not-selected {
-  margin-left: auto; /* Spinge l'icona a destra */
-  /* &:hover {
-    fill: #0050EF;
-    stroke: #0050EF;
-  } */
-}
-
-.trash-style-not-selected {
-  margin-right: auto; /* Spinge l'icona a sinistra */ 
-  /* &:hover {
-    fill: #500000;
-    stroke: #500000;
-  } */
-}
-
-.pencil-style-selected {
-  transition: 0.5s all ease-out;
-  cursor: pointer;
-  margin-left: auto;
-  fill: #0050EF;
-  stroke: #0050EF;
-  /* &:hover {
-    fill: none;
-    stroke: #FFFFFF;
-  } */
-}
-
-.trash-style-selected {
-  transition: 0.5s all ease-out;
-  cursor: pointer;
-  margin-right: auto;
-  fill: #500000;
-  stroke: #500000; 
-  /* &:hover {
-    fill: none;
-    stroke: #FFFFFF;
-  } */
 }
 
 .header-fixed {
@@ -226,8 +27,69 @@
   padding-right: 5%;
 }
 
+.contenitore-1 {
+  background-color: #000000;
+  overflow: hidden;
+  border: 5px solid #000000;
+  border-radius: 40px;
+  margin-top: 40px;
+  margin-left: 30%;
+  margin-right: 30%;
+  color: white;
+  text-align: center;
+  font-size: 40px;
+}
 
+.contenitore-2 {
+  /* background-color: #000000; */
+  overflow: hidden;
+  /* border: 5px solid #000000; */
+  border-radius: 40px;
+  /* margin-top: 40px; */
+  margin-left: 30%;
+  margin-right: 30%;
+  color: white;
+  text-align: center;
+  font-size: 40px;
+  /* padding: 10px; */
+}
 
+.bottone-blu-non-selezionato, .bottone-blu-selezionato, 
+.bottone-rosso-non-selezionato, .bottone-rosso-selezionato {
+  border-radius: 40px;
+  border: 5px solid #000000;
+  background-color: #000000;
+  color: #FFFFFF;
+  text-align: center;  
+  /* margin-top: 50px; */
+  padding: 2% 15%;
+}
+
+.bottone-blu-non-selezionato {
+  cursor: pointer;
+  transition: 0.5s all ease-out;
+    &:hover {
+    background-color: #0050EF;
+    color: #FFFFFF;
+  }
+}
+
+.bottone-rosso-non-selezionato {
+  cursor: pointer;
+  transition: 0.5s all ease-out;
+    &:hover {
+    background-color: #500000;
+    color: #FFFFFF;
+  }
+}
+
+.bottone-blu-selezionato {
+  background-color: #0050EF;
+}
+
+.bottone-rosso-selezionato {
+  background-color: #500000;
+}
 
 
 

@@ -22,13 +22,10 @@ export const aggiornamentoLista = (tipoLista, setLista1, setLista2) => {
     };
   }
   else if(tipoLista === "lavori") {
-    let onChange = () => setLista1(lavoroStore.getLavoriClienti());
-    lavoroStore.addChangeListener(operazioniLavori.VISUALIZZA_LAVORI_CLIENTI, onChange);
-    onChange = () => setLista2(lavoroStore.getLavoriProfessionisti());
-    lavoroStore.addChangeListener(operazioniLavori.VISUALIZZA_LAVORI_PROFESSIONISTI, onChange);
+    let onChange = () => setLista1(lavoroStore.getLavori());
+    lavoroStore.addChangeListener(operazioniLavori.VISUALIZZA_LAVORI, onChange);
     return () => {
-      lavoroStore.removeChangeListener(operazioniLavori.VISUALIZZA_LAVORI_CLIENTI, onChange);
-      lavoroStore.removeChangeListener(operazioniLavori.VISUALIZZA_LAVORI_PROFESSIONISTI, onChange);
+      lavoroStore.removeChangeListener(operazioniLavori.VISUALIZZA_LAVORI, onChange);
     };
   }
   else {
@@ -36,82 +33,32 @@ export const aggiornamentoLista = (tipoLista, setLista1, setLista2) => {
   } 
 }
 
-const eseguiRicercaClienti = (e, setLista1, setDatiRicerca) => {
-  e.preventDefault();
-  const formData = new FormData(e.target);
-  const data = {
-    nome: formData.get('nome'),
-    cognome: formData.get('cognome'),
-    contatto: formData.get('contatto'),
-    note: formData.get('note'),
-  };
-  PersonaAction.dispatchAction(data, operazioniPersone.VISUALIZZA_CLIENTI);//.visualizzaClienti(data);
-  setDatiRicerca(data.nome, data.cognome, data.contatto, data.note);
-  console.log(personaStore.getClienti().length);
-  setLista1(personaStore.getClienti());
+const eseguiRicercaClienti = (e, setLista1, datiRicerca) => {
+  PersonaAction.dispatchAction(datiRicerca, operazioniPersone.VISUALIZZA_CLIENTI);//.visualizzaClienti(data);
 };
 
-const eseguiRicercaProfessionisti = (e, setLista1, setDatiRicerca) => {
-  e.preventDefault();
-  const formData = new FormData(e.target);
-  const data = {
-    nome: formData.get('nome'),
-    professione: formData.get('professione'),
-    contatto: formData.get('contatto'),
-    email: formData.get('email'),
-    note: formData.get('note'),
-  };
-  ProfessionistaAction.dispatchAction(data, operazioniProfessionisti.VISUALIZZA_PROFESSIONISTI);
-  setDatiRicerca(data.nome, data.professione, data.contatto, data.email, data.note);
-  console.log(professionistaStore.getProfessionisti().length);
-  setLista1(professionistaStore.getProfessionisti());
+const eseguiRicercaProfessionisti = (e, setLista1, datiRicerca) => {
+  ProfessionistaAction.dispatchAction(datiRicerca, operazioniProfessionisti.VISUALIZZA_PROFESSIONISTI);
 };
 
-const eseguiRicercaLavori = (e, setLista1, setLista2, setDatiRicerca) => {
-  e.preventDefault();
-  const formData = new FormData(e.target);
-  const data = {
-    nome_cliente: formData.get('nomeCliente'),
-    cognome_cliente: formData.get('cognomeCliente'),
-    nome_professionista: formData.get('nomeProfessionista'),
-    professione: formData.get('professione'),
-    descrizione: formData.get('descrizione'),
-    primo_giorno: formData.get('primoGiorno'),
-    ultimo_giorno: formData.get('ultimoGiorno'),
-    note: formData.get('note'),
-  };
-  
-  // alert(
-  //   `Nome Cliente: ${data.nome_cliente}\n` +
-  //   `Cognome Cliente: ${data.cognome_cliente}\n` +
-  //   `Nome Professionista: ${data.nome_professionista}\n` +
-  //   `Professione: ${data.professione}\n` +
-  //   `Descrizione: ${data.descrizione}\n` +
-  //   `Primo Giorno: ${data.primo_giorno}\n` +
-  //   `Ultimo Giorno: ${data.ultimo_giorno}\n` +
-  //   `Note: ${data.note}\n`
-  // );
-  
-  LavoroAction.dispatchAction(data, operazioniLavori.VISUALIZZA_LAVORI_CLIENTI);
-  LavoroAction.dispatchAction(data, operazioniLavori.VISUALIZZA_LAVORI_PROFESSIONISTI);
-  setDatiRicerca(data.nome_cliente, data.cognome_cliente, data.nome_professionista, data.professione, data.descrizione, data.primo_giorno, data.ultimo_giorno, data.note);
-  console.log(lavoroStore.getLavoriClienti().length);
-  console.log(lavoroStore.getLavoriProfessionisti().length);
-  setLista1(lavoroStore.getLavoriClienti());
-  setLista2(lavoroStore.getLavoriProfessionisti());
+const eseguiRicercaLavori = (e, setLista1, datiRicerca) => {
+  LavoroAction.dispatchAction(datiRicerca, operazioniLavori.VISUALIZZA_LAVORI);
 };
+
 // eseguiRicerca(e, tipoLista, setLista1, setLista2, setDatiRicerca)
-export const eseguiRicerca = (e, tipoLista, setLista1, setLista2, setDatiRicerca) => {
-  if (tipoLista === "clienti") {
-    eseguiRicercaClienti(e, setLista1, setDatiRicerca);
+export const eseguiRicerca = (e, tipoLista, setLista1, setLista2, datiRicerca) => {
+  e.preventDefault();
+
+  if(tipoLista === "clienti") {
+    eseguiRicercaClienti(e, setLista1, datiRicerca);
   }
-  else if (tipoLista === "professionisti") {
-    eseguiRicercaProfessionisti(e, setLista1, setDatiRicerca);
+  else if(tipoLista === "professionisti") {
+    eseguiRicercaProfessionisti(e, setLista1, datiRicerca)
   }
-  else if (tipoLista === "lavori") {
-    eseguiRicercaLavori(e, setLista1, setLista2, setDatiRicerca);
+  else if(tipoLista === "lavori") {
+    eseguiRicercaLavori(e, setLista1, datiRicerca)
   }
   else {
-    alert("Errore: tipo ricerca non valido!!");
+    alert("Errore, tipo lista non valido.");
   }
 }

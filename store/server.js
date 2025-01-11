@@ -368,11 +368,11 @@ app.post("/INSERISCI_LAVORO", async (req, res) => {
 });
 
 /**
- * Visualizza lavori clienti
+ * Visualizza lavori 
  */
-app.post("/VISUALIZZA_LAVORI_CLIENTI", async (req, res) => {
+app.post("/VISUALIZZA_LAVORI", async (req, res) => {
   let { 
-    nome_cliente = '', cognome_cliente = '', nome_professionista = '', professione = '', 
+    nome_cliente = '', cognome_cliente = '', nome_professionista = '', 
     descrizione = '', primo_giorno = '', ultimo_giorno = '', note = '',
   } = req.body;
 
@@ -381,70 +381,41 @@ app.post("/VISUALIZZA_LAVORI_CLIENTI", async (req, res) => {
   if(ultimo_giorno === '')
     ultimo_giorno = '9999-01-01';
 
-  // Aggiungi un log per vedere i dati ricevuti
   console.log("Dati ricevuti per la ricerca dei lavori dei clienti: ", { 
-    nome_cliente, cognome_cliente, nome_professionista, professione, 
-    descrizione, primo_giorno, ultimo_giorno, note,
+    nome_cliente, cognome_cliente, nome_professionista, descrizione, primo_giorno, ultimo_giorno, note,
   });
-
+  
   const sql = `
-    SELECT 
-      0 AS tipo_selezione, 
-      l.id AS id, l.descrizione AS descrizione, 
-      l.giorno AS giorno, 
-      l.orario_inizio AS orario_inizio, 
-      l.orario_fine AS orario_fine, 
-      l.note AS note, l.id_cliente AS id_cliente, c.nome AS nome_cliente, c.cognome AS cognome_cliente 
-    FROM cliente AS c 
-    INNER JOIN lavoro AS l 
-      ON c.id = l.id_cliente 
-    WHERE 
-      (l.descrizione LIKE ?) AND (l.giorno BETWEEN ? AND ?) AND (l.note LIKE ?) AND 
-      (c.nome LIKE ?) AND (c.cognome LIKE ?); 
-  `;
+  SELECT 
+    0 AS tipo_selezione, 
+    l.id AS id, 
+    l.descrizione AS descrizione, 
+    l.giorno AS giorno, 
+    l.orario_inizio AS orario_inizio, 
+    l.orario_fine AS orario_fine, 
+    l.note AS note, 
+    l.id_cliente AS id_cliente, 
+    c.nome AS nome_cliente, 
+    c.cognome AS cognome_cliente, 
+    l.id_professionista AS id_professionista, 
+    p.nome AS nome_professionista, 
+    p.professione AS professione,
+    CASE 
+      WHEN l.id_cliente IS NOT NULL THEN 'Lavoro cliente'
+      WHEN l.id_professionista IS NOT NULL THEN 'Lavoro professionista'
+      ELSE 'Lavoro'
+    END AS tipo_lavoro
+  FROM 
+    lavoro AS l 
+    LEFT JOIN cliente AS c ON c.id = l.id_cliente 
+    LEFT JOIN professionista AS p ON p.id = l.id_professionista 
+  WHERE 
+    (l.descrizione LIKE ?) AND (l.giorno BETWEEN ? AND ?) AND (l.note LIKE ?) 
+    AND ((c.nome LIKE ? AND c.cognome LIKE ?) OR (p.nome LIKE ?));
+`;
 
-  const params = [`${descrizione}%`, `${primo_giorno}%`, `${ultimo_giorno}%`, `${note}%`, `${nome_cliente}%`, `${cognome_cliente}%`];
 
-  return getResults(sql, params, res);
-});
-
-/**
- * Visualizza lavori professionisti
- */
-app.post("/VISUALIZZA_LAVORI_PROFESSIONISTI", async (req, res) => {
-  let { 
-    nome_cliente = '', cognome_cliente = '', nome_professionista = '', professione = '', 
-    descrizione = '', primo_giorno = '', ultimo_giorno = '', note = '',
-  } = req.body;
-
-  if (primo_giorno === '')
-    primo_giorno = '1111-01-01';
-  if (ultimo_giorno === '')
-    ultimo_giorno = '9999-01-01';
-
-  // Aggiungo un log per vedere i dati ricevuti
-  console.log("Dati ricevuti per la ricerca dei lavori dei professionisti: ", { 
-    nome_cliente, cognome_cliente, nome_professionista, professione, 
-    descrizione, primo_giorno, ultimo_giorno, note,
-  });
-
-  const sql = `
-    SELECT 
-      0 AS tipo_selezione, 
-      l.id AS id, l.descrizione AS descrizione, 
-      l.giorno AS giorno, 
-      l.orario_inizio AS orario_inizio, 
-      l.orario_fine AS orario_fine, 
-      l.note AS note, l.id_professionista AS id_professionista, p.nome AS nome_professionista, p.professione AS professione 
-    FROM professionista AS p 
-    INNER JOIN lavoro AS l 
-      ON p.id = l.id_professionista 
-    WHERE 
-      (l.descrizione LIKE ?) AND (l.giorno BETWEEN ? AND ?) AND (l.note LIKE ?) AND 
-      (p.nome LIKE ?) AND (p.professione LIKE ?); 
-  `;
-
-  const params = [`${descrizione}%`, `${primo_giorno}%`, `${ultimo_giorno}%`, `${note}%`, `${nome_professionista}%`, `${professione}%`];
+  const params = [`${descrizione}%`, `${primo_giorno}%`, `${ultimo_giorno}%`, `${note}%`, `${nome_cliente}%`, `${cognome_cliente}%`, `${nome_professionista}%`];
 
   return getResults(sql, params, res);
 });
