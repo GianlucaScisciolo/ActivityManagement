@@ -19,7 +19,7 @@ export const handleInputChange = (e, setItem) => {
 export const selezionaInserimentoLavoroCliente = (setItem) => {
   setItem(prevState => ({
     ...prevState, 
-    "lavoro_cliente_selezionato": true,
+    "lavoro_cliente_selezionato": !prevState.lavoro_cliente_selezionato,
     "lavoro_professionista_selezionato": false,
   }));
 };
@@ -29,41 +29,41 @@ export const selezionaInserimentoLavoroProfessionista = (setItem) => {
   setItem(prevState => ({
     ...prevState, 
     "lavoro_cliente_selezionato": false,
-    "lavoro_professionista_selezionato": true,
+    "lavoro_professionista_selezionato": !prevState.lavoro_professionista_selezionato,
   }));
 };
 
 const getCampiRicercaClienti = (item) => {
   return [
     // label, placeholder, name, value, type
-    ["Nome", "Nome", "nome", item.nome, null],
-    ["Cognome", "Cognome", "cognome", item.cognome, null],
+    ["Nome", "Nome", "nome", item.nome, ""],
+    ["Cognome", "Cognome", "cognome", item.cognome, ""],
     ["Contatto", "Contatto", "contatto", item.contatto, "text"],
-    ["Note", "Note", "note", item.note, null]
+    ["Note", "Note", "note", item.note, ""]
   ];
 };
 
 const getCampiRicercaProfessionisti = (item) => {
   return [
     // label, placeholder, name, value, type
-    ["Nome", "Nome", "nome", item.nome, null],
-    ["Professione", "Professione", "professione", item.professione, null],
+    ["Nome", "Nome", "nome", item.nome, ""],
+    ["Professione", "Professione", "professione", item.professione, ""],
     ["Contatto", "Contatto", "contatto", item.contatto, "text"],
     ["Email", "Email", "email", item.email, "text"],
-    ["Note", "Note", "note", item.note, null]
+    ["Note", "Note", "note", item.note, ""]
   ];
 };
 
 const getCampiRicercaLavori = (item) => {
   return [
     // label, placeholder, name, value, type
-    ["Nome cliente", "Nome cliente", "nome_cliente", item.nome_cliente, null],
-    ["Cognome cliente", "Cognome cliente", "cognome_cliente", item.cognome_cliente, null],
-    ["Nome professionista", "Nome professionista", "nome_professionista", item.nome_professionista, null],
-    ["Descrizione", "Descrizione", "descrizione", item.descrizione, null],
+    ["Nome cliente", "Nome cliente", "nome_cliente", item.nome_cliente, ""],
+    ["Cognome cliente", "Cognome cliente", "cognome_cliente", item.cognome_cliente, ""],
+    ["Nome professionista", "Nome professionista", "nome_professionista", item.nome_professionista, ""],
+    ["Descrizione", "Descrizione", "descrizione", item.descrizione, ""],
     ["Primo giorno", "Primo giorno", "primo_giorno", item.primo_giorno, "date"],
     ["Ultimo giorno", "Ultimo giorno", "ultimo_giorno", item.ultimo_giorno, "date"],
-    ["Note", "Note", "note", item.note, null]
+    ["Note", "Note", "note", item.note, ""]
   ];
 };
 
@@ -84,45 +84,47 @@ export const getCampiRicerca = (tipoItem, item) => {
 export const getCampiNuovoCliente = (item) => {
   return [
     // label, placeholder, name, value, type
-    ["Nome*", "Nome*", "nome", item.nome, null],
-    ["Cognome*", "Cognome*", "cognome", item.cognome, null],
+    ["Nome*", "Nome*", "nome", item.nome, ""],
+    ["Cognome*", "Cognome*", "cognome", item.cognome, ""],
     ["Contatto*", "Contatto*", "contatto", item.contatto, "text"],
-    ["Note", "Note", "note", item.note, null]
+    ["Note", "Note", "note", item.note, ""]
   ];
 }
 
 const getCampiNuovoProfessionista = (item) => {
   return [
     // label, placeholder, name, value, type
-    ["Nome*", "Nome*", "nome", item.nome, null],
-    ["Professione*", "Professione*", "professione", item.professione, null],
+    ["Nome*", "Nome*", "nome", item.nome, ""],
+    ["Professione*", "Professione*", "professione", item.professione, ""],
     ["Contatto", "Contatto", "contatto", item.contatto, "text"],
     ["Email", "Email", "email", item.email, "text"],
-    ["Note", "Note", "note", item.note, null]
+    ["Note", "Note", "note", item.note, ""]
   ];
 };
 
 const getCampiNuovoLavoro = (item) => {
+  const tipo_bottone_1 = (item.lavoro_cliente_selezionato) ? "bottoneBluSelezionato" : "bottoneBluNonSelezionato";
+  const tipo_bottone_2 = (item.lavoro_professionista_selezionato) ? "bottoneBluSelezionato" : "bottoneBluNonSelezionato";
   const campi = [
-    ["Lavoro cliente", "", "lavoro_cliente", item.lavoro_cliente_selezionato, "button", "selezionaInserimentoLavoroCliente"],
-    ["Lavoro professionista", "", "lavoro_professionista", item.lavoro_professionista_selezionato, "button", "selezionaInserimentoLavoroProfessionista"]
+    ["Lavoro cliente", "", "lavoro_cliente", item.lavoro_cliente_selezionato, tipo_bottone_1, "selezionaInserimentoLavoroCliente"],
+    ["Lavoro professionista", "", "lavoro_professionista", item.lavoro_professionista_selezionato, tipo_bottone_2, "selezionaInserimentoLavoroProfessionista"]
   ];
   // campi.push(["Nome cliente", "Nome cliente", "nome_cliente", item.nome_cliente, null, null]);
 
   if (item.lavoro_cliente_selezionato) {
-    campi.push(["Nome cliente", "Nome cliente", "nome_cliente", item.nome_cliente, null, null]);
-    campi.push(["Cognome cliente", "Cognome cliente", "cognome_cliente", item.cognome_cliente, null, null]);
+    campi.push(["Nome cliente", "Nome cliente", "nome_cliente", item.nome_cliente, "", null]);
+    campi.push(["Cognome cliente", "Cognome cliente", "cognome_cliente", item.cognome_cliente, "", null]);
   }
 
   if (item.lavoro_professionista_selezionato) {
-    campi.push(["Nome professionista", "Nome professionista", "nome_professionista", item.nome_professionista, null, null]);
+    campi.push(["Nome professionista", "Nome professionista", "nome_professionista", item.nome_professionista, "", null]);
   }
   if (item.lavoro_cliente_selezionato || item.lavoro_professionista_selezionato) {
-    campi.push(["Descrizione", "Descrizione", "descrizione", item.descrizione, null, null]);
-    campi.push(["Giorno", "Giorno", "giorno", item.giorno, "date", null]);
+    campi.push(["Descrizione", "Descrizione", "descrizione", item.descrizione, "", null]);
+    campi.push(["Giorno", "Giorno", "giorno", item.giorno, "date", ""]);
     campi.push(["Orario inizio", "Orario inizio", "orario_inizio", item.orario_inizio, "time", null]);
     campi.push(["Orario fine", "Orario fine", "orario_fine", item.orario_fine, "time", null]);
-    campi.push(["Note", "Note", "note", item.note, null, null]);
+    campi.push(["Note", "Note", "note", item.note, "", null]);
   }
   else {
     campi.push(["", "", "", null, "br", null]);

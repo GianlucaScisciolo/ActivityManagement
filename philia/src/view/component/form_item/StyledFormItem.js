@@ -163,14 +163,33 @@ export const StyledButton =  styled.button`
   border: 5px solid #000000;
   background-color: #000000;
   color: #FFFFFF;
-  text-align: center;
-  cursor: pointer;  
-  /* font-size: 25px; */
-  margin-top: 50px;
-  padding: 2%;
+  text-align: center;  
+  padding: 2% 15%;
+  cursor: pointer;
+`;
+
+export const BottoneBluNonSelezionato =  styled(StyledButton)`
   transition: 0.5s all ease-out;
-    &:hover {
+  &:hover {
     background-color: #0050EF;
     color: #FFFFFF;
   }
-`
+`;
+
+export const BottoneRossoNonSelezionato =  styled(StyledButton)`
+  transition: 0.5s all ease-out;
+  &:hover {
+    background-color: #500000;
+    color: #FFFFFF;
+  }
+`;
+
+export const BottoneBluSelezionato =  styled(StyledButton)`
+  background-color: #0050EF;
+`;
+
+export const BottoneRossoSelezionato =  styled(StyledButton)`
+  background-color: #500000;
+`;
+
+

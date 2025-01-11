@@ -5,12 +5,12 @@ import ListGroup from 'react-bootstrap/ListGroup';
 import { formatoDate, formatoTime } from "../../../vario/Tempo";
 import { 
   StyledForm, StyledListGroupItem, StyledRow, StyledCol, 
-  StyledLabel, StyledHeader, grandezzaIcona, 
-  SlideContainer, StyledButton, 
+  StyledLabel, StyledHeader, grandezzaIcona, SlideContainer, 
   StyledTextAreaBlock, StyledTextAreaModifica, StyledTextAreaElimina, 
   StyledInputBlock, StyledInputModifica, StyledInputElimina, 
   StyledSaveNotSelected, StyledSearchNotSelected, 
-  StyledArrowTopNotSelected, StyledArrowBottomNotSelected
+  StyledArrowTopNotSelected, StyledArrowBottomNotSelected, 
+  BottoneBluNonSelezionato, BottoneBluSelezionato, BottoneRossoNonSelezionato, BottoneRossoSelezionato
 } from "./StyledFormItem";
 import { 
   handleInputChange, getCampiRicerca, getCampiNuovoItem, selezionaInserimentoLavoroCliente, selezionaInserimentoLavoroProfessionista
@@ -55,7 +55,7 @@ const InputTag = ({ tipoSelezione, tipo, nome, valore, modificabile }) => {
 
 const OperazioniNuovoItem = () => {
   return (
-    <StyledListGroupItem style={{border: "5px solid #000000", backgroundColor: "#000000", paddingTop: "3%"}}>
+    <StyledListGroupItem style={{border: "5px solid #000000", backgroundColor: "#000000", paddingTop: "3%", paddingBottom: "3%"}}>
       <StyledRow>
         <StyledCol className='custom-col'>
           <StyledSaveNotSelected size={grandezzaIcona} />
@@ -113,20 +113,36 @@ function eseguiFunzione(e, setItem, nomeFunzione) {
 
 function CampiItem({ campiItem, setItem }) {
   let queue = [];
-
   return (
     <>
       {campiItem.map(([label, placeholder, name, value, type, onClickFunction], index) => (
         <React.Fragment key={index}>
-          {type === "button" && (
+          {/* {type = (type === null) ? "" : type} */}
+          {/* <button>{name + ": " + type}</button> */}
+          <br />
+          {type.startsWith("bottone") && (
             addElemento(queue, [label, placeholder, name, value, type, onClickFunction])
           )}
-          {type !== "button" && (
+          {!type.startsWith("bottone") && (
             <>
               {queue.length !== 0 && (
                 <Row>
                   {queue.map(([label2, placeholder2, name2, value2, type2, onClickFunction2], index2) => (
-                    <Col key={index2}><StyledButton onClick={(e) => eseguiFunzione(e, setItem, onClickFunction2)}>{label2}</StyledButton></Col>
+                    <Col key={index2}>
+                      
+                      {(type2 === "bottoneBluNonSelezionato") && (
+                        <BottoneBluNonSelezionato onClick={(e) => eseguiFunzione(e, setItem, onClickFunction2)}>{label2}</BottoneBluNonSelezionato>
+                      )}
+                      {(type2 === "bottoneBluSelezionato") && (
+                        <BottoneBluSelezionato onClick={(e) => eseguiFunzione(e, setItem, onClickFunction2)}>{label2}</BottoneBluSelezionato>
+                      )}
+                      {(type2 === "bottoneRossoNonSelezionato") && (
+                        <BottoneRossoNonSelezionato onClick={(e) => eseguiFunzione(e, setItem, onClickFunction2)}>{label2}</BottoneRossoNonSelezionato>
+                      )}
+                      {(type2 === "bottoneRossoSelezionato") && (
+                        <BottoneRossoSelezionato onClick={(e) => eseguiFunzione(e, setItem, onClickFunction2)}>{label2}</BottoneRossoSelezionato>
+                      )}
+                    </Col>
                   ))}
                 </Row>
               )}
@@ -134,7 +150,7 @@ function CampiItem({ campiItem, setItem }) {
               {type === "br" && (
                 <br />
               )}
-              {type === null && (
+              {type === "" && (
                 <>
                   <StyledLabel htmlFor={name}>{label}</StyledLabel>
                   <StyledTextAreaModifica
