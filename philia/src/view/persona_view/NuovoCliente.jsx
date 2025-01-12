@@ -8,9 +8,12 @@ import Row from 'react-bootstrap/esm/Row';
 import Col from 'react-bootstrap/esm/Col';
 import RowItem from '../component/row_item/RowItem';
 import FormItem from '../component/form_item/FormItem';
+import { Items } from '../component/Items';
 
 const NuovoCliente = () => {
   const formSession = useSelector((state) => state.formSession.value);
+
+  const [clienti, setClienti] = useState([]);
 
   const [nuovoCliente, setNuovoCliente] = useState({
     nome: "",
@@ -25,10 +28,10 @@ const NuovoCliente = () => {
     erroreContatto: "",
     erroreNote: ""
   })
-
-  const handleInsert = async (data, form) => {
+  
+  const handleInsert = async (nuovoCliente, setNuovoCliente, setClienti) => {
     if (confirm("Sei sicuro di voler salvare il cliente?")) {
-      if (controlloNuovoCliente(data, setErrori) > 0) 
+      if (controlloNuovoCliente(nuovoCliente, setErrori) > 0) 
         return;
       
       try {
@@ -37,7 +40,7 @@ const NuovoCliente = () => {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify(data),
+          body: JSON.stringify(nuovoCliente),
         });
     
         if (!response.ok) {
@@ -46,79 +49,71 @@ const NuovoCliente = () => {
     
         const result = await response.json();
     
-        // Mostra l'alert di successo
-        alert("L'inserimento del cliente e\' andato a buon fine!!");
-    
-        // Reset del form
-        form.reset();
+        setClienti(prevClienti => [...prevClienti, nuovoCliente]);
+          // Resetta il nuovo cliente dopo l'aggiunta
+          setNuovoCliente({
+            nome: "",
+            cognome: "",
+            contatto: "",
+            note: ""
+          });
+
+        alert("L'inserimento del cliente è andato a buon fine!!");
       } 
       catch (error) {
         console.error('Errore:', error);
-    
-        // Mostra l'alert di errore
-        alert("C\'e\' stato un errore durante l\'inserimento del cliente. Riprova piu\' tardi.");
+        alert("C'è stato un errore durante l'inserimento del cliente. Riprova più tardi.");
       }
     }
     else {
       alert("Salvataggio annullato.");
     }
   };
-  
 
   const handleChangeInsertJustNumber = (e) => {
     e.target.value = e.target.value.replace(/\D/g, '');
     e.target.value = e.target.value.slice(0, 11);
   };
 
+  const eseguiSalvataggio = (e) => {
+    e.preventDefault();
+    handleInsert(nuovoCliente, setNuovoCliente, setClienti);
+  }
+
   return (
     <>
       <Header />
       
-      <div className="main-content"></div>
+      <div className="main-content" />
 
-      <div>
-        <form 
-          onSubmit={(e) => {
-            e.preventDefault();
-            const formData = new FormData(e.target);
-            const data = {
-              nome: formData.get('nome'),
-              cognome: formData.get('cognome'),
-              contatto: formData.get('contatto'),
-              note: formData.get('note'),
-          };
-          handleInsert(data, e.target);
-        }}>
-          {formSession.view === "form" && (
-            <>
-              <FormItem tipoItem={"nuovo cliente"} item={nuovoCliente} setItem={setNuovoCliente} header="Nuovo cliente" />
-            </>
-          )}
-          {formSession.view === "row" && (
-            <>
-              <RowItem tipoItem={"nuovo cliente"} item={nuovoCliente} setItem={setNuovoCliente} />
-            </>
-          )}
-          {(formSession.view === "card") && (
-            <>
-              <CardItem tipoItem={"nuovo cliente"} item={nuovoCliente} setItem={setNuovoCliente} header="Nuovo cliente" />
-            </>
-          )}
-        </form>
-      </div>
+      <form>
+        {formSession.view === "form" && (
+          <>
+            <FormItem tipoItem={"nuovo cliente"} item={nuovoCliente} setItem={setNuovoCliente} header="Nuovo cliente" eseguiSalvataggio={(e) => eseguiSalvataggio(e)} />
+          </>
+        )}
+        {formSession.view === "row" && (
+          <>
+            <RowItem tipoItem={"nuovo cliente"} item={nuovoCliente} setItem={setNuovoCliente} />
+          </>
+        )}
+        {(formSession.view === "card") && (
+          <>
+            <CardItem tipoItem={"nuovo cliente"} item={nuovoCliente} setItem={setNuovoCliente} header="Nuovo cliente" />
+          </>
+        )}
+      </form>
+
+      <div className="main-content" />
+
+      {(clienti.length > 0) && (
+        <>
+          <div className="main-content"></div>
+          <Items tipoItem={"cliente"} items={clienti} setterItems={setClienti} errori={errori} setErrori={setErrori}/>    
+        </>
+      )}
     </>
   );
 };
 
 export default NuovoCliente;
-
-
-
-
-
-
-
-
-
-
-

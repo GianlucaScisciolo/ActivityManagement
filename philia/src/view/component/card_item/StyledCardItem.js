@@ -7,13 +7,19 @@ import { Trash2, Pencil, Save, Search, ChevronUp, ChevronDown } from 'lucide-rea
 
 export const grandezzaIcona = 50;
 
+// export const Container = styled.div`
+//   display: flex;
+//   flex-wrap: wrap;
+//   gap: 10px; /* Regola lo spazio tra le card */
+// `;
+
+
 export const StyledCard = styled(Card)`
   width: 18rem;
   background-color: #111111;
   overflow: hidden;
   border: 5px solid #000000;
   border-radius: 40px;
-  margin: auto;
   color: white;
   text-align: center;
   padding: 0;
@@ -57,9 +63,9 @@ export const StyledListGroupItem = styled(ListGroup.Item)`
 `;
 
 export const SlideContainer = styled.div`
-  max-height: ${(props) => (props.isVisible ? '1000px' : '0')}; 
+  /* max-height: ${(props) => (props.isVisible ? '1000px' : '0')};  */
   overflow: hidden;
-  transition: max-height 1s ease-out;
+  transition: max-height 2s ease-out;
 `;
 
 export const StyledTextArea = styled.textarea`

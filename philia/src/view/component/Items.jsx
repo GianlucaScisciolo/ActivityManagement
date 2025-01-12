@@ -6,26 +6,13 @@ import { HookItems } from '../../vario/HookItems';
 import { useSelector, useDispatch } from 'react-redux';
 import CardItem from './card_item/CardItem';
 import RowItem from './row_item/RowItem';
+import { modifica } from '../../vario/OperazioniModifica';
 
-export const Items = ({tipoItem, items, setterItems, viewElements, setSelectedTrashCount, setSelectedPencilCount, 
-                       selectedIds, setSelectedIds, selectedIdsModifica, setSelectedIdsModifica, errori, setErrori}) => {
-
-  // const [cognome, setCognome] = useState(item.cognome);
-  // const [contatto, setContatto] = useState(item.contatto);
-  // const [note, setNote] = useState(item.note);
-  // const [professione, setProfessione] = useState(item.professione);
-  // const [email, setEmail] = useState(item.email);
-  // const [nomeCliente, setNomeCliente] = useState(item.nome_cliente);
-  // const [cognomeCliente, setCognomeCliente] = useState(item.cognome_cliente);
-  // const [nomeProfessionista, setNomeProfessionista] = useState(item.nome_professionista);
-  // const [descrizione, setDescrizione] = useState(item.descrizione);
-  // const [giorno, setGiorno] = useState(item.giorno);
-  // const [orarioInizio, setOrarioInizio] = useState(item.orario_inizio);
-  // const [orarioFine, setOrarioFine] = useState(item.orario_fine);
-  // const [textAreaClassBlock, setTextAreaClassBlock] = useState("");
-  // const [textAreaClass, setTextAreaClass] = useState("");
-  // const [inputClassBlock, setInputClassBlock] = useState("");
-  // const [inputClass, setInputClass] = useState("");
+export const Items = ({tipoItem, items, setterItems, errori, setErrori}) => {
+  const [selectedTrashCount, setSelectedTrashCount] = useState(0);
+  const [selectedPencilCount, setSelectedPencilCount] = useState(0);
+  const [selectedIds, setSelectedIds] = useState([]);
+  const [selectedIdsModifica, setSelectedIdsModifica] = useState([]);
   
   const selectOperation = (icon, item) => {
     if(icon === "trash") {
@@ -62,22 +49,45 @@ export const Items = ({tipoItem, items, setterItems, viewElements, setSelectedTr
   
   return (
     <>
-      <Row>
-        {items.map((item) => (
-          <>
-            {itemSession.view === "list" && (
-              <>
-                {/* <div className='contenitore-1'>Clienti</div> */}
-                <RowItem key={item.id} selectOperation={selectOperation} tipoItem={tipoItem} item={item} />
-              </>
-            )}
-            {itemSession.view === "card" && (
-              <Col><CardItem key={item.id} selectOperation={selectOperation} tipoItem={tipoItem} item={item} header={tipoItem.charAt(0).toUpperCase() + tipoItem.slice(1)} /></Col>
-            )}
-          </>
-        ))}
-      </Row> 
-      <Row className='custom-row'>
+      {itemSession.view === "list" && (
+        <>
+          {items.map((item, index) => (
+            <RowItem key={index} selectOperation={selectOperation} tipoItem={tipoItem} item={item} />
+          ))}
+        </>
+      )}
+      {itemSession.view === "card" && (
+        <>
+          <div className='contenitore-3'>
+            {items.map((item, index) => (
+              <CardItem key={index} selectOperation={selectOperation} tipoItem={tipoItem} item={item} header={tipoItem.charAt(0).toUpperCase() + tipoItem.slice(1)} />
+            ))}
+          </div>
+        </>
+      )}
+
+      <div className="main-content"></div>
+      
+      <div className='contenitore-2'>
+        <Row>
+          {selectedIdsModifica.length > 0 && (
+            <Col>
+              {/* <button className='bottone-blu-non-selezionato' onClick={() => modifica("tipoItem"ClienteLastSearch, selectedIdsModifica, setSelectedIdsModifica, clienti, setClienti, null, null, setErrori, null)}>Modifica</button> */}
+              <button className="bottone-blu-non-selezionato">Modifica</button>
+            </Col>
+          )}        
+          {selectedIds.length > 0 && (
+            <Col>
+              {/* <button className='bottone-rosso-non-selezionato' onClick={() => elimina("clienti", datiClienteLastSearch, selectedIds, setSelectedIds, clienti, setClienti, null, null)}>Elimina</button> */}
+              <button className='bottone-rosso-non-selezionato'>Elimina</button>
+            </Col>
+          )}
+        </Row>
+      </div>
+
+      <br /> <br />
+
+      {/* <Row className='custom-row'>
         <Col className='custom-col'><span className='span-errore-col'></span></Col>
         {(tipoItem === "cliente") && (
           <>
@@ -121,7 +131,9 @@ export const Items = ({tipoItem, items, setterItems, viewElements, setSelectedTr
             <Col className='custom-col'><span className='span-errore-col'>{errori.erroreNote}</span></Col>
           </>
         )}
-      </Row>
+      </Row> */}
+
+      {/* <div className="main-content" /> */}
     </>
   )
 };

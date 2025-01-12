@@ -167,13 +167,18 @@ app.post("/VISUALIZZA_CLIENTI", async (req, res) => {
 
   const sql = `
     SELECT 
-      id, nome, cognome, contatto, note, 0 AS tipo_selezione 
+      id, 
+      nome, 
+      cognome, 
+      contatto, 
+      IFNULL(NULLIF(note, ''), 'Nota non inserita.') AS note, 
+      0 AS tipo_selezione 
     FROM 
       cliente 
     WHERE 
       nome LIKE ? AND cognome LIKE ? AND contatto LIKE ? AND note LIKE ?; 
   `;
-
+  
   const params = [`${nome}%`, `${cognome}%`, `${contatto}%`, `${note}%`];
 
   return getResults(sql, params, res);
@@ -270,7 +275,13 @@ app.post("/VISUALIZZA_PROFESSIONISTI", async (req, res) => {
 
   const sql = ` 
     SELECT 
-      id, nome, professione, contatto, email, note, 0 AS tipo_selezione 
+      id, 
+      nome, 
+      professione, 
+      IFNULL(NULLIF(contatto, ''), 'Contatto non inserito.') AS contatto, 
+      IFNULL(NULLIF(email, ''), 'Email non inserita.') AS email, 
+      IFNULL(NULLIF(note, ''), 'Nota non inserita.') AS note, 
+      0 AS tipo_selezione 
     FROM 
       professionista 
     WHERE 
@@ -350,19 +361,32 @@ app.post("/MODIFICA_PROFESSIONISTI", async (req, res) => {
  * Inserisci lavoro
  */
 app.post("/INSERISCI_LAVORO", async (req, res) => {
-  const { descrizione = '', giorno = '', orario_inizio = '', orario_fine = '', note = '', id_cliente = '', id_professionista = '' } = req.body;
+  const {
+    lavoro_cliente_selezionato = '', 
+    lavoro_professionista_selezionato = '',
+    id_cliente = '',
+    id_professionista = '',
+    descrizione = '',
+    giorno = '',
+    orario_inizio = '',
+    orario_fine = '',
+    note = ''
+  } = req.body;
   
   const sql = ` 
     INSERT INTO lavoro (descrizione, giorno, orario_inizio, orario_fine, note, id_cliente, id_professionista) 
     VALUES (?, ?, ?, ?, ?, ?, ?); 
   `;
   
-  let params;
-
-  if(id_cliente !== '' && id_cliente !== null)
-    params = [`${descrizione}`, `${giorno}`, `${orario_inizio}`, `${orario_fine}`, `${note}`, `${id_cliente}`, null];
-  else
-    params = [`${descrizione}`, `${giorno}`, `${orario_inizio}`, `${orario_fine}`, `${note}`, null, `${id_professionista}`];
+  const params = [
+    `${descrizione}`, 
+    `${giorno}`, 
+    `${orario_inizio}`, 
+    `${orario_fine}`, 
+    `${note}`, 
+    id_cliente ? `${id_cliente}` : null, 
+    id_professionista ? `${id_professionista}` : null
+  ];
   
   return getResults(sql, params, res);
 });

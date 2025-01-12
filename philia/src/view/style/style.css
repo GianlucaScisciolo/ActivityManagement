@@ -41,17 +41,28 @@
 }
 
 .contenitore-2 {
-  /* background-color: #000000; */
   overflow: hidden;
-  /* border: 5px solid #000000; */
   border-radius: 40px;
-  /* margin-top: 40px; */
   margin-left: 30%;
   margin-right: 30%;
   color: white;
   text-align: center;
   font-size: 40px;
-  /* padding: 10px; */
+}
+
+.contenitore-3 {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 100px; /* regola lo spazio tra gli elementi figli */
+  /* border: 5px solid #000000; */
+  overflow: hidden;
+  border-radius: 40px;
+  margin-left: 3%;
+  margin-right: 3%;
+  color: white;
+  text-align: center;
+  font-size: 40px;
+  margin-bottom: 100px;
 }
 
 .bottone-blu-non-selezionato, .bottone-blu-selezionato, 

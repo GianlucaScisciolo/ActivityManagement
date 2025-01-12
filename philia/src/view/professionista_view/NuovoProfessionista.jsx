@@ -8,9 +8,12 @@ import CardItem from '../component/card_item/CardItem';
 import { useSelector } from 'react-redux';
 import RowItem from '../component/row_item/RowItem';
 import FormItem from '../component/form_item/FormItem';
+import { Items } from '../component/Items';
 
 const NuovoProfessionista = () => {
   const formSession = useSelector((state) => state.formSession.value);
+
+  const [professionisti, setProfessionisti] = useState([]);
   
   const [nuovoProfessionista, setNuovoProfessionista] = useState({
     nome: "",
@@ -18,20 +21,20 @@ const NuovoProfessionista = () => {
     contatto: "",
     email: "",
     note: ""
-  })
+  });
 
-  const[errori, setErrori] = useState({
+  const [errori, setErrori] = useState({
     erroreNome: "",
     erroreProfessione: "",
     erroreContatto: "",
     erroreEmail: "",
     erroreContattoEEmail: "",
     erroreNote: ""
-  })
+  });
 
-  const handleInsert = async (data, form) => {
+  const handleInsert = async (nuovoProfessionista, setNuovoProfessionista, setProfessionisti) => {
     if (confirm("Sei sicuro di voler salvare il professionista?")) {
-      if (controlloNuovoProfessionista(data, setErrori) > 0) 
+      if (controlloNuovoProfessionista(nuovoProfessionista, setErrori) > 0) 
         return;
 
       try {
@@ -40,7 +43,7 @@ const NuovoProfessionista = () => {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify(data),
+          body: JSON.stringify(nuovoProfessionista),
         });
 
         if (!response.ok) {
@@ -49,18 +52,21 @@ const NuovoProfessionista = () => {
 
         const result = await response.json();
 
-        // Mostra l'alert
-        alert("L'inserimento del professionista e\' andato a buon fine!!");
+        setProfessionisti(prevProfessionisti => [...prevProfessionisti, nuovoProfessionista]);
+        setNuovoProfessionista({
+          nome: "",
+          professione: "",
+          contatto: "",
+          email: "",
+          note: ""
+        });
 
-        // Reset del form
-        form.reset();
+        alert("L'inserimento del professionista è andato a buon fine!!");
       } catch (error) {
         console.error('Errore:', error);
-        // Mostra l'alert di errore
-        alert("C\'e\' stato un errore durante l\'inserimento del professionista. Riprova piu\' tardi.");
+        alert("C'è stato un errore durante l'inserimento del professionista. Riprova più tardi.");
       }
-    }
-    else {
+    } else {
       alert("Salvataggio annullato.");
     }
   };
@@ -70,54 +76,45 @@ const NuovoProfessionista = () => {
     e.target.value = e.target.value.slice(0, 11);
   };
 
+  const eseguiSalvataggio = (e) => {
+    e.preventDefault();
+    handleInsert(nuovoProfessionista, setNuovoProfessionista, setProfessionisti);
+  };
+
   return (
     <>
       <Header />
 
       <div className="main-content"></div>
 
-      <div>
-        <form 
-          onSubmit={(e) => {
-            e.preventDefault();
-            const formData = new FormData(e.target);
-            const data = {
-              nome: formData.get('nome'),
-              professione: formData.get('professione'),
-              contatto: formData.get('contatto'),
-              email: formData.get('email'),
-              note: formData.get('note'),
-          };
-          handleInsert(data, e.target);
-        }}>
-          {formSession.view === "form" && (
-            <>
-              <FormItem tipoItem={"nuovo professionista"} item={nuovoProfessionista} setItem={setNuovoProfessionista} header="Nuovo professionista" />
-            </>
-          )}
-          {formSession.view === "row" && (
-            <>
-              <RowItem tipoItem={"nuovo professionista"} item={nuovoProfessionista} setItem={setNuovoProfessionista} />
-            </>
-          )}
-          {(formSession.view === "card") && (
-            <>
-              <CardItem tipoItem={"nuovo professionista"} item={nuovoProfessionista} setItem={setNuovoProfessionista} header="Nuovo professionista" />
-            </>
-          )}
-        </form>
-      </div>
+      <form>
+        {formSession.view === "form" && (
+          <>
+            <FormItem tipoItem={"nuovo professionista"} item={nuovoProfessionista} setItem={setNuovoProfessionista} header="Nuovo professionista" eseguiSalvataggio={(e) => eseguiSalvataggio(e)} />
+          </>
+        )}
+        {formSession.view === "row" && (
+          <>
+            <RowItem tipoItem={"nuovo professionista"} item={nuovoProfessionista} setItem={setNuovoProfessionista} />
+          </>
+        )}
+        {(formSession.view === "card") && (
+          <>
+            <CardItem tipoItem={"nuovo professionista"} item={nuovoProfessionista} setItem={setNuovoProfessionista} header="Nuovo professionista" />
+          </>
+        )}
+      </form>
+
+      <div className="main-content" />
+
+      {(professionisti.length > 0) && (
+        <>
+          <div className="main-content"></div>
+          <Items tipoItem={"professionista"} items={professionisti} setterItems={setProfessionisti} errori={errori} setErrori={setErrori}/>    
+        </>
+      )}
     </>
-  )
-}
+  );
+};
 
 export default NuovoProfessionista;
-
-
-
-
-
-
-
-
-

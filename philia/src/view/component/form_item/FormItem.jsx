@@ -9,7 +9,7 @@ import {
   StyledTextAreaBlock, StyledTextAreaModifica, StyledTextAreaElimina, 
   StyledInputBlock, StyledInputModifica, StyledInputElimina, 
   StyledSaveNotSelected, StyledSearchNotSelected, 
-  StyledArrowTopNotSelected, StyledArrowBottomNotSelected, 
+  StyledArrowTopNotSelected, StyledArrowBottomNotSelected, StyledSelect, StyledOption, 
   BottoneBluNonSelezionato, BottoneBluSelezionato, BottoneRossoNonSelezionato, BottoneRossoSelezionato
 } from "./StyledFormItem";
 import { 
@@ -53,12 +53,12 @@ const InputTag = ({ tipoSelezione, tipo, nome, valore, modificabile }) => {
   }
 }
 
-const OperazioniNuovoItem = () => {
+const OperazioniNuovoItem = ({eseguiSalvataggio}) => {
   return (
     <StyledListGroupItem style={{border: "5px solid #000000", backgroundColor: "#000000", paddingTop: "3%", paddingBottom: "3%"}}>
       <StyledRow>
         <StyledCol className='custom-col'>
-          <StyledSaveNotSelected size={grandezzaIcona} />
+          <StyledSaveNotSelected size={grandezzaIcona} onClick={eseguiSalvataggio} />
         </StyledCol>
       </StyledRow>
     </StyledListGroupItem>
@@ -111,113 +111,199 @@ function eseguiFunzione(e, setItem, nomeFunzione) {
   }
 }
 
-function CampiItem({ campiItem, setItem }) {
-  let queue = [];
+function FormNuovoCliente({ item, setItem, eseguiSalvataggio }) {
   return (
     <>
-      {campiItem.map(([label, placeholder, name, value, type, onClickFunction], index) => (
-        <React.Fragment key={index}>
-          {/* {type = (type === null) ? "" : type} */}
-          {/* <button>{name + ": " + type}</button> */}
-          <br />
-          {type.startsWith("bottone") && (
-            addElemento(queue, [label, placeholder, name, value, type, onClickFunction])
-          )}
-          {!type.startsWith("bottone") && (
-            <>
-              {queue.length !== 0 && (
-                <Row>
-                  {queue.map(([label2, placeholder2, name2, value2, type2, onClickFunction2], index2) => (
-                    <Col key={index2}>
-                      
-                      {(type2 === "bottoneBluNonSelezionato") && (
-                        <BottoneBluNonSelezionato onClick={(e) => eseguiFunzione(e, setItem, onClickFunction2)}>{label2}</BottoneBluNonSelezionato>
-                      )}
-                      {(type2 === "bottoneBluSelezionato") && (
-                        <BottoneBluSelezionato onClick={(e) => eseguiFunzione(e, setItem, onClickFunction2)}>{label2}</BottoneBluSelezionato>
-                      )}
-                      {(type2 === "bottoneRossoNonSelezionato") && (
-                        <BottoneRossoNonSelezionato onClick={(e) => eseguiFunzione(e, setItem, onClickFunction2)}>{label2}</BottoneRossoNonSelezionato>
-                      )}
-                      {(type2 === "bottoneRossoSelezionato") && (
-                        <BottoneRossoSelezionato onClick={(e) => eseguiFunzione(e, setItem, onClickFunction2)}>{label2}</BottoneRossoSelezionato>
-                      )}
-                    </Col>
-                  ))}
-                </Row>
-              )}
-              {queue = []}
-              {type === "br" && (
-                <br />
-              )}
-              {type === "" && (
-                <>
-                  <StyledLabel htmlFor={name}>{label}</StyledLabel>
-                  <StyledTextAreaModifica
-                    rows="1"
-                    placeholder={placeholder}
-                    name={name}
-                    value={value}
-                    onChange={(e) => handleInputChange(e, setItem)}
-                  />
-                </>
-              )}
-                {type !== null && type !== "br" && type !== "button" && (
-                <>
-                  <StyledLabel htmlFor={name}>{label}</StyledLabel>
-                  <StyledInputModifica
-                    type={type}
-                    placeholder={placeholder}
-                    name={name}
-                    value={value}
-                      onChange={(e) => handleInputChange(e, setItem)}
-                  />
-                </>
-              )}
-            </>
-          )}
-        </React.Fragment>
-      ))}
+      <StyledLabel>Nome</StyledLabel>
+      <StyledTextAreaModifica rows="1" name="nome" placeholder='Nome*' value={item.nome} onChange={(e) => handleInputChange(e, setItem)} />
+      <StyledLabel>Cognome</StyledLabel>
+      <StyledTextAreaModifica rows="1" name="cognome" placeholder='Cognome*' value={item.cognome} onChange={(e) => handleInputChange(e, setItem)} />
+      <StyledLabel>Contatto</StyledLabel>
+      <StyledInputModifica rows="1" type="text" name="contatto" placeholder='Contatto' value={item.contatto} onChange={(e) => handleInputChange(e, setItem)} />
+      <StyledLabel>Note</StyledLabel>
+      <StyledTextAreaModifica rows="1" name="note" placeholder='Note' value={item.note} onChange={(e) => handleInputChange(e, setItem)} />
       <br /> <br />
+      <OperazioniNuovoItem eseguiSalvataggio={eseguiSalvataggio} />
     </>
   );
 }
 
-function FormNuovoItem({tipoItem, item, setItem}) {
+function FormNuovoProfessionista({ item, setItem, eseguiSalvataggio }) {
+  return (
+    <>
+      <StyledLabel>Nome</StyledLabel>
+      <StyledTextAreaModifica rows="1" name="nome" placeholder='Nome*' value={item.nome} onChange={(e) => handleInputChange(e, setItem)} />
+      <StyledLabel>Professione</StyledLabel>
+      <StyledTextAreaModifica rows="1" name="professione" placeholder='Professione*' value={item.professione} onChange={(e) => handleInputChange(e, setItem)} />
+      <StyledLabel>Contatto</StyledLabel>
+      <StyledInputModifica rows="1" type="text" name="contatto" placeholder='Contatto' value={item.contatto} onChange={(e) => handleInputChange(e, setItem)} />
+      <StyledLabel>Email</StyledLabel>
+      <StyledInputModifica rows="1" type="text" name="email" placeholder='Email' value={item.email} onChange={(e) => handleInputChange(e, setItem)} />
+      <StyledLabel>Note</StyledLabel>
+      <StyledTextAreaModifica rows="1" name="note" placeholder='Note' value={item.note} onChange={(e) => handleInputChange(e, setItem)} />
+      <br /> <br />
+      <OperazioniNuovoItem eseguiSalvataggio={eseguiSalvataggio} />
+    </>
+  );
+}
+
+function getClientiFiltrati(e, clienti, setClientiFiltrati) {
+  e.preventDefault();
+  const { value } = e.target;
+  console.log(clienti);
+  setClientiFiltrati(clienti.filter(cliente => {
+    return ((cliente.cognome + " " + cliente.nome).toUpperCase()).includes((value).toUpperCase());
+  }));
+}
+
+function getProfessionistiFiltrati(e, professionisti, setProfessionistiFiltrati) {
+  e.preventDefault();
+  const { value } = e.target;
+  console.log(professionisti);
+  setProfessionistiFiltrati(professionisti.filter(professionista => {
+    return ((professionista.nome).toUpperCase()).includes((value).toUpperCase());
+  }));
+}
+
+function FormNuovoLavoro({ clienti, professionisti, item, setItem, eseguiSalvataggio }) {
+  const [clientiFiltrati, setClientiFiltrati] = useState(clienti);
+  const [professionistiFiltrati, setProfessionistiFiltrati] = useState(professionisti);
+
+  return (
+    <>
+      <br /> <br />
+      <Row>
+        <Col>
+          {(item.lavoro_cliente_selezionato) && (
+            <BottoneBluSelezionato onClick={(e) => eseguiFunzione(e, setItem, "selezionaInserimentoLavoroCliente")}>Lavoro cliente</BottoneBluSelezionato>
+          )}
+          {(!item.lavoro_cliente_selezionato) && (
+            <BottoneBluNonSelezionato onClick={(e) => eseguiFunzione(e, setItem, "selezionaInserimentoLavoroCliente")}>Lavoro cliente</BottoneBluNonSelezionato>
+          )}
+        </Col>
+        <Col>
+          {(item.lavoro_professionista_selezionato) && (
+            <BottoneBluSelezionato onClick={(e) => eseguiFunzione(e, setItem, "selezionaInserimentoLavoroProfessionista")}>Lavoro professionista</BottoneBluSelezionato>
+          )}
+          {(!item.lavoro_professionista_selezionato) && (
+            <BottoneBluNonSelezionato onClick={(e) => eseguiFunzione(e, setItem, "selezionaInserimentoLavoroProfessionista")}>Lavoro professionista</BottoneBluNonSelezionato>
+          )}
+        </Col>
+      </Row>
+      {(item.lavoro_cliente_selezionato) && (
+        <>
+          <StyledLabel>Cliente</StyledLabel>
+          <div>{item.id_cliente}</div>
+          <StyledTextAreaModifica rows="1" name="cliente" placeholder='Cliente' onChange={(e) => getClientiFiltrati(e, clienti, setClientiFiltrati)} />
+          <StyledSelect value={item.id_cliente} name="id_cliente" onChange={(e) => handleInputChange(e, setItem)}>
+            <StyledOption key={0} value={null}>Seleziona un cliente*</StyledOption>
+              {clientiFiltrati.map((clienteFiltrato, index) => (
+                <StyledOption key={index + 1} value={clienteFiltrato.id}>
+                  {clienteFiltrato.nome + " " + clienteFiltrato.cognome + " - " + clienteFiltrato.contatto}
+                </StyledOption>
+              ))}
+          </StyledSelect>
+        </>
+      )}
+      {(item.lavoro_professionista_selezionato) && (
+        <>
+          <StyledLabel>Professionista</StyledLabel>
+          <div>{item.id_professionista}</div>
+          <StyledTextAreaModifica rows="1" name="professionista" placeholder='Professionista' onChange={(e) => getProfessionistiFiltrati(e, professionisti, setProfessionistiFiltrati)} />
+          <StyledSelect value={item.id_professionista} name="id_professionista" onChange={(e) => handleInputChange(e, setItem)}>
+            <StyledOption key={0} value={null}>Seleziona un professionista*</StyledOption>
+            {professionistiFiltrati.map((professionistaFiltrato, index) => (
+              <StyledOption key={index} value={professionistaFiltrato.id}>{professionistaFiltrato.nome + " - " + professionistaFiltrato.professione + " - " + professionistaFiltrato.contatto + " - " + professionistaFiltrato.email}</StyledOption>  
+            ))}
+          </StyledSelect>
+        </>
+      )}
+      {(item.lavoro_cliente_selezionato || item.lavoro_professionista_selezionato) && (
+        <>
+          <StyledLabel>Descrizione</StyledLabel>
+          <StyledTextAreaModifica rows="1" name="descrizione" placeholder='Descrizione*' value={item.descrizione} onChange={(e) => handleInputChange(e, setItem)} />
+          <StyledLabel>Giorno</StyledLabel>
+          <StyledInputModifica rows="1" type="date" name="giorno" placeholder='Giorno*' value={item.giorno} onChange={(e) => handleInputChange(e, setItem)} />
+          <StyledLabel>Orario inizio</StyledLabel>
+          <StyledInputModifica rows="1" type="time" name="orario_inizio" placeholder='Orario inizio' value={item.orario_inizio} onChange={(e) => handleInputChange(e, setItem)} />
+          <StyledLabel>orario fine</StyledLabel>
+          <StyledInputModifica rows="1" type="time" name="orario_fine" placeholder='Orario fine' value={item.orario_fine} onChange={(e) => handleInputChange(e, setItem)} />
+          <StyledLabel>Note</StyledLabel>
+          <StyledTextAreaModifica rows="1" name="note" placeholder='Note' value={item.note} onChange={(e) => handleInputChange(e, setItem)} />
+        </>
+      )}
+      <br /> <br />
+      <OperazioniNuovoItem eseguiSalvataggio={eseguiSalvataggio} />
+    </>
+  );
+}
+
+function CampiItem({ campiItem, setItem }) {
+  let queue = [];
+  return (
+    <>
+      {campiItem.map(([label, placeholder, name, value, type], index) => (
+        <React.Fragment key={index}>
+          {(type === "" || type === null) && (
+            <>
+              <StyledLabel htmlFor={name}>{label}</StyledLabel>
+              <StyledTextAreaModifica rows="1" placeholder={placeholder} name={name} value={value} onChange={(e) => handleInputChange(e, setItem)} />
+            </>
+          )}
+          {(type !== "" && type !== null) && (
+            <>
+              <StyledLabel htmlFor={name}>{label}</StyledLabel>
+              <StyledInputModifica type={type} placeholder={placeholder} name={name} value={value} onChange={(e) => handleInputChange(e, setItem)} />
+            </>
+          )}
+          <br /> <br />
+        </React.Fragment>
+      ))}
+    </>
+  );
+}
+
+function FormNuovoItem({tipoItem, item, setItem, eseguiSalvataggio}) {
   const campiNuovoItem = getCampiNuovoItem(tipoItem, item);
   return (
     <>
       <SlideContainer isVisible={true}>
         <CampiItem campiItem={campiNuovoItem} setItem={setItem} />
       </SlideContainer>
-      <OperazioniNuovoItem  />
+      <OperazioniNuovoItem eseguiSalvataggio={eseguiSalvataggio} />
     </>
   );
 }
 
 function FormRicercaItems({tipoItem, item, setItem, eseguiRicerca, isVisible, setIsVisible, arrowUp, setArrowUp}) {
   const campiRicercaItems = getCampiRicerca(tipoItem, item);
+  let maxHeight = (isVisible) ? "2000px" : "0px";
   return (
     <>
-      <SlideContainer isVisible={isVisible}>
+      <SlideContainer style={{maxHeight: `${maxHeight}`}}>
         <CampiItem campiItem={campiRicercaItems} setItem={setItem} />
       </SlideContainer>
-      <OperazioniCercaItems setIsVisible={setIsVisible} arrowUp={arrowUp} setArrowUp={setArrowUp} eseguiRicerca={eseguiRicerca}
-      />
+      <OperazioniCercaItems setIsVisible={setIsVisible} arrowUp={arrowUp} setArrowUp={setArrowUp} eseguiRicerca={eseguiRicerca} />
     </>
   );
 }
 
-function FormItem({tipoItem, item, setItem, header, selectOperation, eseguiRicerca}) {
-  const [isVisible, setIsVisible] = useState(true);
+function FormItem({clienti, professionisti, tipoItem, item, setItem, header, selectOperation, eseguiRicerca, eseguiSalvataggio}) {
+  const [isVisible, setIsVisible] = useState("true");
   const [arrowUp, setArrowUp] = useState(true);
   
   return (
     <StyledForm>
-      <StyledHeader style={{backgroundColor: "#000000"}}>{(header !== "") ? header : " "}</StyledHeader>         
+      <StyledHeader style={{backgroundColor: "#000000"}}>{(header !== "") ? header : " "}</StyledHeader>  
       <StyledListGroupItem variant="flush">
-        {(tipoItem.startsWith("nuovo")) && (
-          <FormNuovoItem tipoItem={tipoItem} item={item} setItem={setItem} />
+        {(tipoItem === "nuovo cliente") && (
+          <FormNuovoCliente item={item} eseguiSalvataggio={eseguiSalvataggio} setItem={setItem} />
+        )}
+        {(tipoItem === "nuovo professionista") && (
+          <FormNuovoProfessionista item={item} eseguiSalvataggio={eseguiSalvataggio} setItem={setItem} />
+        )}
+        {(tipoItem === "nuovo lavoro") && (
+          <FormNuovoLavoro clienti={clienti} professionisti={professionisti} item={item} eseguiSalvataggio={eseguiSalvataggio} setItem={setItem} />
         )}
         {(tipoItem.startsWith("cerca")) && (
           <FormRicercaItems tipoItem={tipoItem} item={item} setItem={setItem} eseguiRicerca={eseguiRicerca} 

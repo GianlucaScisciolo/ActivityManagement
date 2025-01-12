@@ -34,7 +34,7 @@ export const StyledListGroupItem = styled(ListGroup.Item)`
 `;
 
 export const SlideContainer = styled.div`
-  max-height: ${(props) => (props.isVisible ? '2000px' : '0px')}; 
+  /* max-height: ${(props) => ((props.$isvisible === "true") ? '2000px' : '0px')};  */
   overflow: hidden;
   transition: max-height 1.5s ease-out;
 `;
@@ -192,4 +192,17 @@ export const BottoneRossoSelezionato =  styled(StyledButton)`
   background-color: #500000;
 `;
 
+export const StyledSelect =  styled.select`
+  background-color: #0050EF;
+  border: 5px solid #000000;
+  color: #FFFFFF;
+  text-align: center;
+`;
+
+export const StyledOption =  styled.option`
+  background-color: #0050EF;
+  &:hover {
+    background-color: #0050EF;
+  }
+`;
 

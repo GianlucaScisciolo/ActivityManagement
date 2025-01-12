@@ -14,6 +14,7 @@ import CardItem from '../component/card_item/CardItem';
 import { useSelector } from 'react-redux';
 import RowItem from '../component/row_item/RowItem';
 import FormItem from '../component/form_item/FormItem';
+import { Items } from '../component/Items';
 
 const NuovoLavoro = () => {
   const formSession = useSelector((state) => state.formSession.value);
@@ -21,16 +22,14 @@ const NuovoLavoro = () => {
   const [nuovoLavoro, setNuovoLavoro] = useState ({
     lavoro_cliente_selezionato: false, 
     lavoro_professionista_selezionato: false,
-    id_cliente: 0,
-    nome_cliente: "",
-    cognome_cliente: "",
-    nome_professionista: "",
+    id_cliente: null,
+    id_professionista: null,
     descrizione: "",
     giorno: "",
     orario_inizio: "",
     orario_fine: "",
     note: ""
-  })
+  });
 
   const [errori, setErrori] = useState ({
     erroreCliente: "",
@@ -42,39 +41,11 @@ const NuovoLavoro = () => {
     erroreOrarioFine: "",
     erroreOrari: "",
     erroreNote: ""
-  })
-
-  const [nuovoLavoroCliente, setNuovoLavoroCliente] = useState ({
-    lavoro_cliente_selezionato: false, 
-    lavoro_professionista_selezionato: false,
-    id_cliente: 0,
-    nome_cliente: "",
-    cognome_cliente: "",
-    nome_professionista: "",
-    descrizione: "",
-    giorno: "",
-    orario_inizio: "",
-    orario_fine: "",
-    note: ""
-  })
-
-  const [nuovoLavoroProfessionista, setNuovoLavoroProfessionista] = useState ({
-    lavoro_cliente_selezionato: false, 
-    lavoro_professionista_selezionato: false,
-    id_professionista: 0,
-    nome_cliente: "",
-    cognome_cliente: "",
-    nome_professionista: "",
-    professione: "",
-    descrizione: "",
-    giorno: "",
-    orario_inizio: "",
-    orario_fine: "",
-    note: ""
-  })
+  });
 
   const [clienti, setClienti] = useState([]);
   const [professionisti, setProfessionisti] = useState([]);
+  const [lavori, setLavori] = useState([]);
   const [filteredClienti, setFilteredClienti] = useState([]);
   const [searchTermCliente, setSearchTermCliente] = useState('');
   const [searchTermProfessionista, setSearchTermProfessionista] = useState('');
@@ -84,9 +55,9 @@ const NuovoLavoro = () => {
   const [selectedProfessionista, setSelectedProfessionista] = useState('');
   const [selectedProfessionistaId, setSelectedProfessionistaId] = useState('');
   
-  const handleInsert = async (data, form) => {
+  const handleInsert = async (nuovoLavoro, setNuovoLavoro, setLavori) => {
     if (confirm("Sei sicuro di voler salvare il lavoro?")) {
-      if (controlloNuovoLavoro(data, setErrori) > 0) 
+      if (controlloNuovoLavoro(nuovoLavoro, setErrori) > 0) 
         return;
     
       try {
@@ -95,7 +66,7 @@ const NuovoLavoro = () => {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify(data),
+          body: JSON.stringify(nuovoLavoro),
         });
 
         if (!response.ok) {
@@ -103,10 +74,23 @@ const NuovoLavoro = () => {
         }
 
         const result = await response.json();
-        alert("L'inserimento del lavoro è andato a buon fine!!");
 
-        form.reset();
-      } catch (error) {
+        setLavori(prevLavori => [...prevLavori, nuovoLavoro]);
+        
+        setNuovoLavoro(prevState => ({
+          ...prevState,
+          id_cliente: null,
+          id_professionista: null,
+          descrizione: "",
+          giorno: "",
+          orario_inizio: "",
+          orario_fine: "",
+          note: ""
+        }));
+
+        alert("L'inserimento del lavoro è andato a buon fine!!");
+      } 
+      catch (error) {
         console.error('Errore:', error);
         alert("C'è stato un errore durante l'inserimento del lavoro. Riprova più tardi.");
       }
@@ -183,147 +167,170 @@ const NuovoLavoro = () => {
     setSearchTermProfessionista('');
   };
 
+  const eseguiSalvataggio = (e) => {
+    e.preventDefault();
+
+    // alert(
+    //   "lavoro_cliente_selezionato: " + nuovoLavoro.lavoro_cliente_selezionato + "\n" + 
+    //   "lavoro_professionista_selezionato: " + nuovoLavoro.lavoro_professionista_selezionato + "\n" + 
+    //   "id_cliente: " + nuovoLavoro.id_cliente + "\n" + 
+    //   "id_professionista: " + nuovoLavoro.id_professionista + "\n" + 
+    //   "descrizione: " + nuovoLavoro.descrizione + "\n" + 
+    //   "giorno: " + nuovoLavoro.giorno + "\n" + 
+    //   "orario_inizio: " + nuovoLavoro.orario_inizio + "\n" + 
+    //   "orario_fine: " + nuovoLavoro.orario_fine + "\n" + 
+    //   "note: " + nuovoLavoro.note
+    // )
+    handleInsert(nuovoLavoro, setNuovoLavoro, setLavori);
+  }
+
   return (
     <>
       <Header />
       <div className="main-content"></div>
-      <div>
-        <form 
-          onSubmit={(e) => {
-            e.preventDefault();
-            const formData = new FormData(e.target);
-            const data = {
-              id_cliente: formData.get('id_cliente'),
-              id_professionista: formData.get('id_professionista'),
-              descrizione: formData.get('descrizione'),
-              giorno: formData.get('giorno'),
-              orario_inizio: formData.get('orario_inizio'),
-              orario_fine: formData.get('orario_fine'),
-              note: formData.get('note'),
-            };
-            handleInsert(data, e.target);
-          }}
-        >
+      
+      <form 
+        // onSubmit={(e) => {
+        //   e.preventDefault();
+        //   const formData = new FormData(e.target);
+        //   const data = {
+        //     id_cliente: formData.get('id_cliente'),
+        //     id_professionista: formData.get('id_professionista'),
+        //     descrizione: formData.get('descrizione'),
+        //     giorno: formData.get('giorno'),
+        //     orario_inizio: formData.get('orario_inizio'),
+        //     orario_fine: formData.get('orario_fine'),
+        //     note: formData.get('note'),
+        //   };
+        //   handleInsert(data, e.target);
+        // }}
+      >
 
-          {(formSession.view === "tmp") && (
-            <>
-              <label className='titoloForm'>Nuovo lavoro</label>
+        {(formSession.view === "tmp") && (
+          <>
+            <label className='titoloForm'>Nuovo lavoro</label>
 
-              <label className='labelForm'>Cliente</label>
-              <input 
-                className='inputFormModifica' 
-                type='text' 
-                placeholder='Cerca cliente'
-                value={searchTermCliente}
-                onChange={onChangeCliente} 
-              />
-              {filteredClienti.length > 0 && (
-                <ul>
-                  {filteredClienti.map(cliente => (
-                    <button className='buttonForm'  key={cliente.id} onClick={(e) => handleClienteClick(e, cliente)}>
-                      {cliente.cognome} {cliente.nome} - {cliente.contatto}
-                    </button>
-                  ))}
-                </ul>
-              )}
-              <select
-                className='inputFormModifica' // Aggiungi la classe qui
-                name='cliente'
-                value={selectedClienteId}
-                onChange={(e) => setSelectedClienteId(e.target.value)}
-              >
-                <option value=''>Seleziona un cliente</option>
+            <label className='labelForm'>Cliente</label>
+            <input 
+              className='inputFormModifica' 
+              type='text' 
+              placeholder='Cerca cliente'
+              value={searchTermCliente}
+              onChange={onChangeCliente} 
+            />
+            {filteredClienti.length > 0 && (
+              <ul>
                 {filteredClienti.map(cliente => (
-                  <option key={cliente.id} value={cliente.id}>
+                  <button className='buttonForm'  key={cliente.id} onClick={(e) => handleClienteClick(e, cliente)}>
                     {cliente.cognome} {cliente.nome} - {cliente.contatto}
-                  </option>
+                  </button>
                 ))}
-              </select>
+              </ul>
+            )}
+            <select
+              className='inputFormModifica' // Aggiungi la classe qui
+              name='cliente'
+              value={selectedClienteId}
+              onChange={(e) => setSelectedClienteId(e.target.value)}
+            >
+              <option value=''>Seleziona un cliente</option>
+              {filteredClienti.map(cliente => (
+                <option key={cliente.id} value={cliente.id}>
+                  {cliente.cognome} {cliente.nome} - {cliente.contatto}
+                </option>
+              ))}
+            </select>
 
-              <span className='spanErrore'>{errori.erroreCliente}</span>
+            <span className='spanErrore'>{errori.erroreCliente}</span>
 
-              <label className='labelForm'>Professionista</label>
-              <input 
-                className='inputFormModifica' 
-                type='text' 
-                placeholder='Cerca professionista'
-                value={searchTermProfessionista}
-                onChange={onChangeProfessionista} 
-              />
-              {filteredProfessionisti.length > 0 && (
-                <ul>
-                  {filteredProfessionisti.map(professionista => (
-                    <button className='buttonForm'  key={professionista.id} onClick={(e) => handleProfessionistaClick(e, professionista)}>
-                      {professionista.nome} - {professionista.professione} - {professionista.contatto} - {professionista.email}
-                    </button>
-                  ))}
-                </ul>
-              )}
-              <select
-                className='inputFormModifica' // Aggiungi la classe qui
-                name='professionista'
-                value={selectedProfessionistaId}
-                onChange={(e) => setSelectedProfessionistaId(e.target.value)}
-              >
-                <option value=''>Seleziona un professionista</option>
+            <label className='labelForm'>Professionista</label>
+            <input 
+              className='inputFormModifica' 
+              type='text' 
+              placeholder='Cerca professionista'
+              value={searchTermProfessionista}
+              onChange={onChangeProfessionista} 
+            />
+            {filteredProfessionisti.length > 0 && (
+              <ul>
                 {filteredProfessionisti.map(professionista => (
-                  <option key={professionista.id} value={professionista.id}>
+                  <button className='buttonForm'  key={professionista.id} onClick={(e) => handleProfessionistaClick(e, professionista)}>
                     {professionista.nome} - {professionista.professione} - {professionista.contatto} - {professionista.email}
-                  </option>
+                  </button>
                 ))}
-              </select>
-              <input type='hidden' name='id_cliente' value={selectedClienteId} />
-              <input type='hidden' name='id_professionista' value={selectedProfessionistaId} />
-              <span className='spanErrore'>{errori.erroreProfessionista}</span>
-              <span className='spanErrore'>{errori.erroreClienteEProfessionista}</span>
-              
-              <label className='labelForm'>Descrizione*</label>
-              <textarea className='textAreaFormModifica' type='text' name='descrizione' />
-              <span className='spanErrore'>{errori.erroreDescrizione}</span>
+              </ul>
+            )}
+            <select
+              className='inputFormModifica' // Aggiungi la classe qui
+              name='professionista'
+              value={selectedProfessionistaId}
+              onChange={(e) => setSelectedProfessionistaId(e.target.value)}
+            >
+              <option value=''>Seleziona un professionista</option>
+              {filteredProfessionisti.map(professionista => (
+                <option key={professionista.id} value={professionista.id}>
+                  {professionista.nome} - {professionista.professione} - {professionista.contatto} - {professionista.email}
+                </option>
+              ))}
+            </select>
+            <input type='hidden' name='id_cliente' value={selectedClienteId} />
+            <input type='hidden' name='id_professionista' value={selectedProfessionistaId} />
+            <span className='spanErrore'>{errori.erroreProfessionista}</span>
+            <span className='spanErrore'>{errori.erroreClienteEProfessionista}</span>
+            
+            <label className='labelForm'>Descrizione*</label>
+            <textarea className='textAreaFormModifica' type='text' name='descrizione' />
+            <span className='spanErrore'>{errori.erroreDescrizione}</span>
 
-              <label className='labelForm'>Giorno*</label>
-              <input className='inputFormModifica' type='date' name='giorno' />
-              <span className='spanErrore'>{errori.erroreGiorno}</span>
+            <label className='labelForm'>Giorno*</label>
+            <input className='inputFormModifica' type='date' name='giorno' />
+            <span className='spanErrore'>{errori.erroreGiorno}</span>
 
-              <label className='labelForm'>Orario inizio*</label>
-              <input className='inputFormModifica' type='time' name='orario_inizio' />
-              <span className='spanErrore'>{errori.erroreOrarioInizio}</span>
+            <label className='labelForm'>Orario inizio*</label>
+            <input className='inputFormModifica' type='time' name='orario_inizio' />
+            <span className='spanErrore'>{errori.erroreOrarioInizio}</span>
 
-              <label className='labelForm'>Orario fine*</label>
-              <input className='inputFormModifica' type='time' name='orario_fine' />
-              <span className='spanErrore'>{errori.erroreOrarioFine}</span>
-              <span className='spanErrore'>{errori.erroreOrari}</span>
+            <label className='labelForm'>Orario fine*</label>
+            <input className='inputFormModifica' type='time' name='orario_fine' />
+            <span className='spanErrore'>{errori.erroreOrarioFine}</span>
+            <span className='spanErrore'>{errori.erroreOrari}</span>
 
-              <label className='labelForm'>Note</label>
-              <textarea className='textAreaFormModifica' name='note'></textarea>
-              <span className='spanErrore'>{errori.erroreNote}</span>
-            </>
-          )}
-          {formSession.view === "form" && (
-            <>
-              <FormItem tipoItem={"nuovo lavoro"} item={nuovoLavoro} setItem={setNuovoLavoro} header="Nuovo lavoro" />
-            </>
-          )}
-          {formSession.view === "row" && (
-            <>
-              <RowItem tipoItem={"nuovo lavoro"} item={nuovoLavoroCliente} setItem={setNuovoLavoroCliente} />
-              <RowItem tipoItem={"nuovo lavoro"} item={nuovoLavoroProfessionista} setItem={setNuovoLavoroProfessionista} />
-            </>
-          )}
-          {(formSession.view === "card") && (
-            <>
-              <Row>
-                <Col>
-                  <CardItem tipoItem={"nuovo lavoro"} item={nuovoLavoroCliente} setItem={setNuovoLavoroCliente} header="Nuovo lavoro cliente"/>
-                </Col>
-                <Col>
-                  <CardItem tipoItem={"nuovo lavoro"} item={nuovoLavoroProfessionista} setItem={setNuovoLavoroProfessionista} header="Nuovo lavoro professionista"/>
-                </Col>
-              </Row>
-            </>
-          )}
-        </form>
-      </div>
+            <label className='labelForm'>Note</label>
+            <textarea className='textAreaFormModifica' name='note'></textarea>
+            <span className='spanErrore'>{errori.erroreNote}</span>
+          </>
+        )}
+        {formSession.view === "form" && (
+          <>
+            <FormItem clienti={clienti} professionisti={professionisti} tipoItem={"nuovo lavoro"} item={nuovoLavoro} setItem={setNuovoLavoro} header="Nuovo lavoro" eseguiSalvataggio={(e) => eseguiSalvataggio(e)} />
+          </>
+        )}
+        {formSession.view === "row" && (
+          <>
+            <RowItem tipoItem={"nuovo lavoro"} item={nuovoLavoroCliente} setItem={setNuovoLavoroCliente} />
+            <RowItem tipoItem={"nuovo lavoro"} item={nuovoLavoroProfessionista} setItem={setNuovoLavoroProfessionista} />
+          </>
+        )}
+        {(formSession.view === "card") && (
+          <>
+            <Row>
+              <Col>
+                <CardItem tipoItem={"nuovo lavoro"} item={nuovoLavoroCliente} setItem={setNuovoLavoroCliente} header="Nuovo lavoro cliente"/>
+              </Col>
+              <Col>
+                <CardItem tipoItem={"nuovo lavoro"} item={nuovoLavoroProfessionista} setItem={setNuovoLavoroProfessionista} header="Nuovo lavoro professionista"/>
+              </Col>
+            </Row>
+          </>
+        )}
+      </form>
+
+      {(lavori.length > 0) && (
+        <>
+          <div className="main-content"></div>
+          <Items tipoItem={"lavoro"} items={lavori} setterItems={setLavori} errori={errori} setErrori={setErrori}/>    
+        </>
+      )}
     </>
   );
 };

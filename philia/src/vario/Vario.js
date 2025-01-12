@@ -1,6 +1,6 @@
 export const handleInputChange = (e, setItem) => {
   const nome_campi = [
-    "nome", "cognome", "contatto", "note", "professione", "email", 
+    "nome", "cognome", "contatto", "note", "professione", "email", "id_cliente", "id_professionista", 
     "nome_cliente", "cognome_cliente", "nome_professionista", "descrizione", 
     "giorno", "primo_giorno", "ultimo_giorno", "orario_inizio", "orario_fine"
   ]
@@ -16,11 +16,17 @@ export const handleInputChange = (e, setItem) => {
   }
 };
 
+export const cambiamentoBloccato = (e) => {
+  e.preventDefault();
+}
+
 export const selezionaInserimentoLavoroCliente = (setItem) => {
   setItem(prevState => ({
     ...prevState, 
     "lavoro_cliente_selezionato": !prevState.lavoro_cliente_selezionato,
     "lavoro_professionista_selezionato": false,
+    "id_cliente": null,
+    "id_professionista": null
   }));
 };
 
@@ -30,6 +36,8 @@ export const selezionaInserimentoLavoroProfessionista = (setItem) => {
     ...prevState, 
     "lavoro_cliente_selezionato": false,
     "lavoro_professionista_selezionato": !prevState.lavoro_professionista_selezionato,
+    "id_cliente": null,
+    "id_professionista": null
   }));
 };
 
