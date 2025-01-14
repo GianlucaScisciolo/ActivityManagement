@@ -22,8 +22,28 @@ const NuovoLavoro = () => {
   const [nuovoLavoro, setNuovoLavoro] = useState ({
     lavoro_cliente_selezionato: false, 
     lavoro_professionista_selezionato: false,
-    id_cliente: null,
-    id_professionista: null,
+    id_cliente: 0,
+    id_professionista: 0,
+    descrizione: "",
+    giorno: "",
+    orario_inizio: "",
+    orario_fine: "",
+    note: ""
+  });
+
+  const [nuovoLavoroCliente, setNuovoLavoroCliente] = useState ({
+    tipo_lavoro: "Lavoro cliente",
+    id_cliente: 0,
+    descrizione: "",
+    giorno: "",
+    orario_inizio: "",
+    orario_fine: "",
+    note: ""
+  });
+
+  const [nuovoLavoroProfessionista, setNuovoLavoroProfessionista] = useState ({
+    tipo_lavoro: "Lavoro professionista",
+    id_professionista: 0,
     descrizione: "",
     giorno: "",
     orario_inizio: "",
@@ -57,8 +77,15 @@ const NuovoLavoro = () => {
   
   const handleInsert = async (nuovoLavoro, setNuovoLavoro, setLavori) => {
     if (confirm("Sei sicuro di voler salvare il lavoro?")) {
-      if (controlloNuovoLavoro(nuovoLavoro, setErrori) > 0) 
-        return;
+      nuovoLavoro.id_cliente === (!nuovoLavoro.tipoLavoro === "Lavoro cliente") ? 0 : nuovoLavoro.id_cliente;
+      nuovoLavoro.id_professionista === (!nuovoLavoro.tipoLavoro === "Lavoro profesionista") ? 0 : nuovoLavoro.id_professionista; 
+      if(nuovoLavoro.tipoLavoro === "Lavoro cliente") 
+      alert("Prima dei controlli.");
+      // if (controlloNuovoLavoro(nuovoLavoro, setErrori) > 0) 
+      //   return;
+
+      alert("Controlli passati!!");
+
     
       try {
         const response = await fetch('/INSERISCI_LAVORO', {
@@ -75,12 +102,41 @@ const NuovoLavoro = () => {
 
         const result = await response.json();
 
+        nuovoLavoro.note = (nuovoLavoro.note.split(' ').join('') === "") ? "Nota non inserita." : nuovoLavoro.note;
+        nuovoLavoro["tipo_lavoro"] = (nuovoLavoro.id_cliente > 0) ? "Lavoro cliente" : "Lavoro professionista";
+        if(nuovoLavoro.tipo_lavoro === "Lavoro cliente") {
+          for(let i = 0; i < clienti.length; i++) {
+            // console.log(professionisti[i].id.toString() + " - " + nuovoLavoro.id_professionista.toString());
+            if(clienti[i].id.toString() === nuovoLavoro.id_cliente.toString()) {
+              nuovoLavoro["nome_cliente"] = clienti[i].nome;
+              nuovoLavoro["cognome_cliente"] = clienti[i].cognome;
+              break; 
+            }
+            // console.log("   " + professionisti[i].id + "\n");
+          }
+        }
+        if(nuovoLavoro.tipo_lavoro === "Lavoro professionista") {
+          for(let i = 0; i < professionisti.length; i++) {
+            // console.log(professionisti[i].id.toString() + " - " + nuovoLavoro.id_professionista.toString());
+            if(professionisti[i].id.toString() === nuovoLavoro.id_professionista.toString()) {
+              nuovoLavoro["nome_professionista"] = professionisti[i].nome;
+              nuovoLavoro["professione"] = professionisti[i].professione;
+              break; 
+            }
+            // console.log("   " + professionisti[i].id + "\n");
+          }
+          // console.log(nuovoLavoro.nome_professionista);
+          // console.log(nuovoLavoro.professione);
+          // const professionista = professionisti.filter(p => p.id = p.id_professionista)[0];
+          // nuovoLavoro["nome_professionista"] = professionista.nome;
+          // nuovoLavoro["professione"] = professionista.professione; 
+        }
+
         setLavori(prevLavori => [...prevLavori, nuovoLavoro]);
-        
         setNuovoLavoro(prevState => ({
           ...prevState,
-          id_cliente: null,
-          id_professionista: null,
+          id_cliente: 0,
+          id_professionista: 0,
           descrizione: "",
           giorno: "",
           orario_inizio: "",
@@ -104,18 +160,24 @@ const NuovoLavoro = () => {
     const fetchClienti = async () => {
       await PersonaAction.dispatchAction(null, operazioniPersone.OTTIENI_TUTTI_I_CLIENTI);
       const clientiAggiornati = personaStore.getClienti();
+      console.log(clientiAggiornati); // Aggiungi questo per vedere cosa viene restituito
       setClienti(clientiAggiornati);
     };
-
+  
     fetchClienti();
-
-    const onChange = () => setClienti(personaStore.getClienti());
+  
+    const onChange = () => {
+      const nuoviClienti = personaStore.getClienti();
+      console.log(nuoviClienti); // Aggiungi questo per vedere lo stato aggiornato
+      setClienti(nuoviClienti);
+    };
     personaStore.addChangeListener(operazioniPersone.OTTIENI_TUTTI_I_CLIENTI, onChange);
-
+  
     return () => {
       personaStore.removeChangeListener(operazioniPersone.OTTIENI_TUTTI_I_CLIENTI, onChange);
     };
   }, []);
+  
 
   useEffect(() => {
     const fetchProfessionisti = async () => {
@@ -167,21 +229,18 @@ const NuovoLavoro = () => {
     setSearchTermProfessionista('');
   };
 
-  const eseguiSalvataggio = (e) => {
+  const eseguiSalvataggio = (e, tipoLavoro) => {
     e.preventDefault();
-
-    // alert(
-    //   "lavoro_cliente_selezionato: " + nuovoLavoro.lavoro_cliente_selezionato + "\n" + 
-    //   "lavoro_professionista_selezionato: " + nuovoLavoro.lavoro_professionista_selezionato + "\n" + 
-    //   "id_cliente: " + nuovoLavoro.id_cliente + "\n" + 
-    //   "id_professionista: " + nuovoLavoro.id_professionista + "\n" + 
-    //   "descrizione: " + nuovoLavoro.descrizione + "\n" + 
-    //   "giorno: " + nuovoLavoro.giorno + "\n" + 
-    //   "orario_inizio: " + nuovoLavoro.orario_inizio + "\n" + 
-    //   "orario_fine: " + nuovoLavoro.orario_fine + "\n" + 
-    //   "note: " + nuovoLavoro.note
-    // )
-    handleInsert(nuovoLavoro, setNuovoLavoro, setLavori);
+    // alert(tipoLavoro);
+    if(tipoLavoro === "Lavoro") {
+      handleInsert(nuovoLavoro, setNuovoLavoro, setLavori);
+    }
+    else if(tipoLavoro === "Lavoro cliente") {
+      handleInsert(nuovoLavoroCliente, setNuovoLavoroCliente, setLavori);
+    }
+    else if(tipoLavoro === "Lavoro professionista") {
+      handleInsert(nuovoLavoroProfessionista, setNuovoLavoroProfessionista, setLavori);
+    }
   }
 
   return (
@@ -189,23 +248,7 @@ const NuovoLavoro = () => {
       <Header />
       <div className="main-content"></div>
       
-      <form 
-        // onSubmit={(e) => {
-        //   e.preventDefault();
-        //   const formData = new FormData(e.target);
-        //   const data = {
-        //     id_cliente: formData.get('id_cliente'),
-        //     id_professionista: formData.get('id_professionista'),
-        //     descrizione: formData.get('descrizione'),
-        //     giorno: formData.get('giorno'),
-        //     orario_inizio: formData.get('orario_inizio'),
-        //     orario_fine: formData.get('orario_fine'),
-        //     note: formData.get('note'),
-        //   };
-        //   handleInsert(data, e.target);
-        // }}
-      >
-
+      <form>
         {(formSession.view === "tmp") && (
           <>
             <label className='titoloForm'>Nuovo lavoro</label>
@@ -302,25 +345,22 @@ const NuovoLavoro = () => {
         )}
         {formSession.view === "form" && (
           <>
-            <FormItem clienti={clienti} professionisti={professionisti} tipoItem={"nuovo lavoro"} item={nuovoLavoro} setItem={setNuovoLavoro} header="Nuovo lavoro" eseguiSalvataggio={(e) => eseguiSalvataggio(e)} />
+            <FormItem clienti={clienti} professionisti={professionisti} tipoItem={"nuovo lavoro"} item={nuovoLavoro} setItem={setNuovoLavoro} header="Nuovo lavoro" eseguiSalvataggio={(e) => eseguiSalvataggio(e, "Lavoro")} />
           </>
         )}
         {formSession.view === "row" && (
           <>
-            <RowItem tipoItem={"nuovo lavoro"} item={nuovoLavoroCliente} setItem={setNuovoLavoroCliente} />
-            <RowItem tipoItem={"nuovo lavoro"} item={nuovoLavoroProfessionista} setItem={setNuovoLavoroProfessionista} />
+            <RowItem clienti={clienti} tipoLavoro={"Lavoro cliente"} tipoItem={"nuovo lavoro"} item={nuovoLavoroCliente} setItem={setNuovoLavoroCliente} eseguiSalvataggio={(e) => eseguiSalvataggio(e, nuovoLavoroCliente.tipo_lavoro)} />
+            <RowItem professionisti={professionisti} tipoLavoro={"Lavoro professionista"} tipoItem={"nuovo lavoro"} item={nuovoLavoroProfessionista} setItem={setNuovoLavoroProfessionista} eseguiSalvataggio={(e) => eseguiSalvataggio(e, nuovoLavoroProfessionista.tipo_lavoro)} />
           </>
         )}
         {(formSession.view === "card") && (
           <>
-            <Row>
-              <Col>
-                <CardItem tipoItem={"nuovo lavoro"} item={nuovoLavoroCliente} setItem={setNuovoLavoroCliente} header="Nuovo lavoro cliente"/>
-              </Col>
-              <Col>
-                <CardItem tipoItem={"nuovo lavoro"} item={nuovoLavoroProfessionista} setItem={setNuovoLavoroProfessionista} header="Nuovo lavoro professionista"/>
-              </Col>
-            </Row>
+          <Row style={{ display: 'flex', justifyContent: 'center' }}>
+            <CardItem clienti={clienti} tipoLavoro={"Lavoro cliente"} tipoItem={"nuovo lavoro"} item={nuovoLavoroCliente} setItem={setNuovoLavoroCliente} header="Nuovo lavoro cliente" eseguiSalvataggio={(e) => eseguiSalvataggio(e, nuovoLavoroCliente.tipo_lavoro)} />
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            <CardItem professionisti={professionisti} tipoLavoro={"Lavoro professionista"} tipoItem={"nuovo lavoro"} item={nuovoLavoroProfessionista} setItem={setNuovoLavoroProfessionista} header="Nuovo lavoro professionista" eseguiSalvataggio={(e) => eseguiSalvataggio(e, nuovoLavoroProfessionista.tipo_lavoro)} />
+          </Row>
           </>
         )}
       </form>

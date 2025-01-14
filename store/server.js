@@ -417,7 +417,7 @@ app.post("/VISUALIZZA_LAVORI", async (req, res) => {
     l.giorno AS giorno, 
     l.orario_inizio AS orario_inizio, 
     l.orario_fine AS orario_fine, 
-    l.note AS note, 
+    IFNULL(NULLIF(l.note, ''), 'Nota non inserita.') AS note, 
     l.id_cliente AS id_cliente, 
     c.nome AS nome_cliente, 
     c.cognome AS cognome_cliente, 
@@ -497,8 +497,9 @@ app.post("/MODIFICA_LAVORI", async (req, res) => {
     req.body.id, req.body.descrizione, req.body.giorno, req.body.orario_inizio, req.body.orario_fine, req.body.note
   ];
 
-  // Parsing e formattazione della data
   const giornoFormattato = new Date(giorno).toISOString().slice(0, 10);
+
+  note = (note === "Nota non inserita.") ? null : note;
   
   console.log("Dati ricevuti per la modifica: ", [id, descrizione, giornoFormattato, orario_inizio, orario_fine, note]);
 

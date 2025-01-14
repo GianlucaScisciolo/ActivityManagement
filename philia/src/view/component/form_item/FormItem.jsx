@@ -166,8 +166,15 @@ function getProfessionistiFiltrati(e, professionisti, setProfessionistiFiltrati)
 }
 
 function FormNuovoLavoro({ clienti, professionisti, item, setItem, eseguiSalvataggio }) {
-  const [clientiFiltrati, setClientiFiltrati] = useState(clienti);
-  const [professionistiFiltrati, setProfessionistiFiltrati] = useState(professionisti);
+  const [clientiFiltrati, setClientiFiltrati] = useState([]);
+  const [professionistiFiltrati, setProfessionistiFiltrati] = useState([]);
+  useEffect(() => {
+    setClientiFiltrati(clienti);
+    setProfessionistiFiltrati(professionisti);
+  })
+
+  item.id_cliente = (!item.id_cliente) ? 0 : item.id_cliente;
+  item.id_professionista = (!item.id_professionista) ? 0 : item.id_professionista;
 
   return (
     <>
@@ -192,11 +199,12 @@ function FormNuovoLavoro({ clienti, professionisti, item, setItem, eseguiSalvata
       </Row>
       {(item.lavoro_cliente_selezionato) && (
         <>
+          
           <StyledLabel>Cliente</StyledLabel>
-          <div>{item.id_cliente}</div>
+          {/* <div>|{item.id_cliente}|</div> */}
           <StyledTextAreaModifica rows="1" name="cliente" placeholder='Cliente' onChange={(e) => getClientiFiltrati(e, clienti, setClientiFiltrati)} />
           <StyledSelect value={item.id_cliente} name="id_cliente" onChange={(e) => handleInputChange(e, setItem)}>
-            <StyledOption key={0} value={null}>Seleziona un cliente*</StyledOption>
+            <StyledOption key={0} value="">Seleziona un cliente*</StyledOption>
               {clientiFiltrati.map((clienteFiltrato, index) => (
                 <StyledOption key={index + 1} value={clienteFiltrato.id}>
                   {clienteFiltrato.nome + " " + clienteFiltrato.cognome + " - " + clienteFiltrato.contatto}
@@ -211,7 +219,7 @@ function FormNuovoLavoro({ clienti, professionisti, item, setItem, eseguiSalvata
           <div>{item.id_professionista}</div>
           <StyledTextAreaModifica rows="1" name="professionista" placeholder='Professionista' onChange={(e) => getProfessionistiFiltrati(e, professionisti, setProfessionistiFiltrati)} />
           <StyledSelect value={item.id_professionista} name="id_professionista" onChange={(e) => handleInputChange(e, setItem)}>
-            <StyledOption key={0} value={null}>Seleziona un professionista*</StyledOption>
+            <StyledOption key={0} value="">Seleziona un professionista*</StyledOption>
             {professionistiFiltrati.map((professionistaFiltrato, index) => (
               <StyledOption key={index} value={professionistaFiltrato.id}>{professionistaFiltrato.nome + " - " + professionistaFiltrato.professione + " - " + professionistaFiltrato.contatto + " - " + professionistaFiltrato.email}</StyledOption>  
             ))}
@@ -297,13 +305,13 @@ function FormItem({clienti, professionisti, tipoItem, item, setItem, header, sel
       <StyledHeader style={{backgroundColor: "#000000"}}>{(header !== "") ? header : " "}</StyledHeader>  
       <StyledListGroupItem variant="flush">
         {(tipoItem === "nuovo cliente") && (
-          <FormNuovoCliente item={item} eseguiSalvataggio={eseguiSalvataggio} setItem={setItem} />
+          <FormNuovoCliente item={item} setItem={setItem} eseguiSalvataggio={eseguiSalvataggio} />
         )}
         {(tipoItem === "nuovo professionista") && (
-          <FormNuovoProfessionista item={item} eseguiSalvataggio={eseguiSalvataggio} setItem={setItem} />
+          <FormNuovoProfessionista item={item} setItem={setItem} eseguiSalvataggio={eseguiSalvataggio} />
         )}
         {(tipoItem === "nuovo lavoro") && (
-          <FormNuovoLavoro clienti={clienti} professionisti={professionisti} item={item} eseguiSalvataggio={eseguiSalvataggio} setItem={setItem} />
+          <FormNuovoLavoro clienti={clienti} professionisti={professionisti} item={item} setItem={setItem} eseguiSalvataggio={eseguiSalvataggio} />
         )}
         {(tipoItem.startsWith("cerca")) && (
           <FormRicercaItems tipoItem={tipoItem} item={item} setItem={setItem} eseguiRicerca={eseguiRicerca} 

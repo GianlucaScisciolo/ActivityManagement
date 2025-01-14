@@ -48,7 +48,8 @@ const NuovoCliente = () => {
         }
     
         const result = await response.json();
-    
+
+        nuovoCliente.note = (nuovoCliente.note.split(' ').join('') === "") ? "Nota non inserita." : nuovoCliente.note;
         setClienti(prevClienti => [...prevClienti, nuovoCliente]);
           // Resetta il nuovo cliente dopo l'aggiunta
           setNuovoCliente({
@@ -88,19 +89,15 @@ const NuovoCliente = () => {
 
       <form>
         {formSession.view === "form" && (
-          <>
-            <FormItem tipoItem={"nuovo cliente"} item={nuovoCliente} setItem={setNuovoCliente} header="Nuovo cliente" eseguiSalvataggio={(e) => eseguiSalvataggio(e)} />
-          </>
+          <FormItem   tipoItem={"nuovo cliente"} item={nuovoCliente} setItem={setNuovoCliente} header="Nuovo cliente" eseguiSalvataggio={(e) => eseguiSalvataggio(e)} />
         )}
         {formSession.view === "row" && (
-          <>
-            <RowItem tipoItem={"nuovo cliente"} item={nuovoCliente} setItem={setNuovoCliente} />
-          </>
+          <RowItem    tipoItem={"nuovo cliente"} item={nuovoCliente} setItem={setNuovoCliente} eseguiSalvataggio={(e) => eseguiSalvataggio(e)} />
         )}
         {(formSession.view === "card") && (
-          <>
-            <CardItem tipoItem={"nuovo cliente"} item={nuovoCliente} setItem={setNuovoCliente} header="Nuovo cliente" />
-          </>
+          <center>
+            <CardItem tipoItem={"nuovo cliente"} item={nuovoCliente} setItem={setNuovoCliente} header="Nuovo cliente" eseguiSalvataggio={(e) => eseguiSalvataggio(e)} />
+          </center>
         )}
       </form>
 

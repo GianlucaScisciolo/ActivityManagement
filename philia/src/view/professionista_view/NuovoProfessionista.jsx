@@ -52,6 +52,9 @@ const NuovoProfessionista = () => {
 
         const result = await response.json();
 
+        nuovoProfessionista.contatto = (nuovoProfessionista.contatto.split(' ').join('') === "") ? "Contatto non inserito." : nuovoProfessionista.contatto;
+        nuovoProfessionista.email = (nuovoProfessionista.email.split(' ').join('') === "") ? "Email non inserita." : nuovoProfessionista.email;
+        nuovoProfessionista.note = (nuovoProfessionista.note.split(' ').join('') === "") ? "Nota non inserita." : nuovoProfessionista.note;
         setProfessionisti(prevProfessionisti => [...prevProfessionisti, nuovoProfessionista]);
         setNuovoProfessionista({
           nome: "",
@@ -89,19 +92,15 @@ const NuovoProfessionista = () => {
 
       <form>
         {formSession.view === "form" && (
-          <>
-            <FormItem tipoItem={"nuovo professionista"} item={nuovoProfessionista} setItem={setNuovoProfessionista} header="Nuovo professionista" eseguiSalvataggio={(e) => eseguiSalvataggio(e)} />
-          </>
+          <FormItem tipoItem={"nuovo professionista"} item={nuovoProfessionista} setItem={setNuovoProfessionista} header="Nuovo professionista" eseguiSalvataggio={(e) => eseguiSalvataggio(e)} />
         )}
         {formSession.view === "row" && (
-          <>
-            <RowItem tipoItem={"nuovo professionista"} item={nuovoProfessionista} setItem={setNuovoProfessionista} />
-          </>
+          <RowItem  tipoItem={"nuovo professionista"} item={nuovoProfessionista} setItem={setNuovoProfessionista} eseguiSalvataggio={(e) => eseguiSalvataggio(e)} />
         )}
         {(formSession.view === "card") && (
-          <>
-            <CardItem tipoItem={"nuovo professionista"} item={nuovoProfessionista} setItem={setNuovoProfessionista} header="Nuovo professionista" />
-          </>
+          <center>
+            <CardItem tipoItem={"nuovo professionista"} item={nuovoProfessionista} setItem={setNuovoProfessionista} header="Nuovo professionista" eseguiSalvataggio={(e) => eseguiSalvataggio(e)} />
+          </center>
         )}
       </form>
 

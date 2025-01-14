@@ -24,13 +24,15 @@ export const FormRicerca = ({tipoLista, setLista1, setLista2, datiRicerca, setDa
   return (
     <form>
       {formSession.view === "form" && (
-        <FormItem tipoItem={tipoItem} item={datiRicerca} setItem={setDatiRicerca} header={header} eseguiRicerca={(e) => eseguiRicerca(e, tipoLista, setLista1, setLista2, datiRicerca)} />
+        <FormItem   tipoItem={tipoItem} item={datiRicerca} setItem={setDatiRicerca} header={header} eseguiRicerca={(e) => eseguiRicerca(e, tipoLista, setLista1, setLista2, datiRicerca)} />
       )}
       {(formSession.view === "row") && (
-        <RowItem tipoItem={tipoItem} item={datiRicerca} setItem={setDatiRicerca} setDatiLastSearch={setDatiRicerca} eseguiRicerca={(e) => eseguiRicerca(e, tipoLista, setLista1, setLista2, datiRicerca)} />
+        <RowItem    tipoItem={tipoItem} item={datiRicerca} setItem={setDatiRicerca}                 eseguiRicerca={(e) => eseguiRicerca(e, tipoLista, setLista1, setLista2, datiRicerca)} />
       )}
       {(formSession.view === "card") && (
-        <CardItem tipoItem={tipoItem} item={datiRicerca} setItem={setDatiRicerca} header={header} setDatiLastSearch={setDatiRicerca} eseguiRicerca={(e) => eseguiRicerca(e, tipoLista, setLista1, setLista2, datiRicerca)} />
+        <center>
+          <CardItem tipoItem={tipoItem} item={datiRicerca} setItem={setDatiRicerca} header={header} eseguiRicerca={(e) => eseguiRicerca(e, tipoLista, setLista1, setLista2, datiRicerca)} />
+        </center>
       )}
     </form>
   );

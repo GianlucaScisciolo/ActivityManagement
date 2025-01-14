@@ -218,6 +218,22 @@ export const StyledTrashSelected = styled(Trash2)`
   cursor: pointer;
 `;
 
+export const StyledSelect =  styled.select`
+  width: 100%;
+  border-radius: 40px;
+  background-color: #0050EF;
+  border: 5px solid #000000;
+  color: #FFFFFF;
+  text-align: center;
+`;
+
+export const StyledOption =  styled.option`
+  background-color: #0050EF;
+  &:hover {
+    background-color: #0050EF;
+  }
+`;
+
 
 
 

@@ -7,6 +7,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import CardItem from './card_item/CardItem';
 import RowItem from './row_item/RowItem';
 import { modifica } from '../../vario/OperazioniModifica';
+import { elimina } from '../../vario/OperazioniEliminazione';
 
 export const Items = ({tipoItem, items, setterItems, errori, setErrori}) => {
   const [selectedTrashCount, setSelectedTrashCount] = useState(0);
@@ -73,13 +74,21 @@ export const Items = ({tipoItem, items, setterItems, errori, setErrori}) => {
           {selectedIdsModifica.length > 0 && (
             <Col>
               {/* <button className='bottone-blu-non-selezionato' onClick={() => modifica("tipoItem"ClienteLastSearch, selectedIdsModifica, setSelectedIdsModifica, clienti, setClienti, null, null, setErrori, null)}>Modifica</button> */}
-              <button className="bottone-blu-non-selezionato">Modifica</button>
+              <button className="bottone-blu-non-selezionato"
+                onClick={(e) => modifica(e, tipoItem, selectedIdsModifica, setSelectedIdsModifica, items, setErrori, setterItems)}
+              >
+                Modifica
+              </button>
             </Col>
           )}        
           {selectedIds.length > 0 && (
             <Col>
               {/* <button className='bottone-rosso-non-selezionato' onClick={() => elimina("clienti", datiClienteLastSearch, selectedIds, setSelectedIds, clienti, setClienti, null, null)}>Elimina</button> */}
-              <button className='bottone-rosso-non-selezionato'>Elimina</button>
+              <button className='bottone-rosso-non-selezionato'
+                onClick={(e) => elimina(e, tipoItem, selectedIds, setSelectedIds, items, setterItems)}
+              >
+                Elimina
+              </button>
             </Col>
           )}
         </Row>
