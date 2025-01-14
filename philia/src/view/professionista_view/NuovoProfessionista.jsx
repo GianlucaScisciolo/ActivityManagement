@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Header from '../component/Header';
 import ProfessionistaAction from '../../action/professionista_action/ProfessionistaAction';
-import { controlloNuovoProfessionista } from '../../vario/Controlli';
+import { controlloProfessionista } from '../../vario/Controlli';
 import Row from 'react-bootstrap/esm/Row';
 import Col from 'react-bootstrap/esm/Col';
 import CardItem from '../component/card_item/CardItem';
@@ -24,17 +24,16 @@ const NuovoProfessionista = () => {
   });
 
   const [errori, setErrori] = useState({
-    erroreNome: "",
-    erroreProfessione: "",
-    erroreContatto: "",
-    erroreEmail: "",
-    erroreContattoEEmail: "",
-    erroreNote: ""
+    nome: "",
+    professione: "",
+    contatto: "",
+    email: "",
+    note: ""
   });
 
   const handleInsert = async (nuovoProfessionista, setNuovoProfessionista, setProfessionisti) => {
     if (confirm("Sei sicuro di voler salvare il professionista?")) {
-      if (controlloNuovoProfessionista(nuovoProfessionista, setErrori) > 0) 
+      if (controlloProfessionista(nuovoProfessionista, setErrori) > 0) 
         return;
 
       try {
@@ -92,14 +91,14 @@ const NuovoProfessionista = () => {
 
       <form>
         {formSession.view === "form" && (
-          <FormItem tipoItem={"nuovo professionista"} item={nuovoProfessionista} setItem={setNuovoProfessionista} header="Nuovo professionista" eseguiSalvataggio={(e) => eseguiSalvataggio(e)} />
+          <FormItem errori={errori} setErrori={setErrori} tipoItem={"nuovo professionista"} item={nuovoProfessionista} setItem={setNuovoProfessionista} header="Nuovo professionista" eseguiSalvataggio={(e) => eseguiSalvataggio(e)} />
         )}
         {formSession.view === "row" && (
-          <RowItem  tipoItem={"nuovo professionista"} item={nuovoProfessionista} setItem={setNuovoProfessionista} eseguiSalvataggio={(e) => eseguiSalvataggio(e)} />
+          <RowItem errori={errori} setErrori={setErrori} tipoItem={"nuovo professionista"} item={nuovoProfessionista} setItem={setNuovoProfessionista} eseguiSalvataggio={(e) => eseguiSalvataggio(e)} />
         )}
         {(formSession.view === "card") && (
           <center>
-            <CardItem tipoItem={"nuovo professionista"} item={nuovoProfessionista} setItem={setNuovoProfessionista} header="Nuovo professionista" eseguiSalvataggio={(e) => eseguiSalvataggio(e)} />
+            <CardItem errori={errori} setErrori={setErrori} tipoItem={"nuovo professionista"} item={nuovoProfessionista} setItem={setNuovoProfessionista} header="Nuovo professionista" eseguiSalvataggio={(e) => eseguiSalvataggio(e)} />
           </center>
         )}
       </form>

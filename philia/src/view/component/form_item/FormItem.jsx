@@ -10,7 +10,8 @@ import {
   StyledInputBlock, StyledInputModifica, StyledInputElimina, 
   StyledSaveNotSelected, StyledSearchNotSelected, 
   StyledArrowTopNotSelected, StyledArrowBottomNotSelected, StyledSelect, StyledOption, 
-  BottoneBluNonSelezionato, BottoneBluSelezionato, BottoneRossoNonSelezionato, BottoneRossoSelezionato
+  BottoneBluNonSelezionato, BottoneBluSelezionato, BottoneRossoNonSelezionato, BottoneRossoSelezionato, 
+  StyledSpanErrore
 } from "./StyledFormItem";
 import { 
   handleInputChange, getCampiRicerca, getCampiNuovoItem, selezionaInserimentoLavoroCliente, selezionaInserimentoLavoroProfessionista
@@ -111,36 +112,46 @@ function eseguiFunzione(e, setItem, nomeFunzione) {
   }
 }
 
-function FormNuovoCliente({ item, setItem, eseguiSalvataggio }) {
+function FormNuovoCliente({ item, setItem, eseguiSalvataggio, errori, setErrori }) {
   return (
     <>
+      {/* <div>{errori.nome}</div> */}
       <StyledLabel>Nome</StyledLabel>
       <StyledTextAreaModifica rows="1" name="nome" placeholder='Nome*' value={item.nome} onChange={(e) => handleInputChange(e, setItem)} />
+      <StyledSpanErrore>{errori.nome}</StyledSpanErrore>
       <StyledLabel>Cognome</StyledLabel>
       <StyledTextAreaModifica rows="1" name="cognome" placeholder='Cognome*' value={item.cognome} onChange={(e) => handleInputChange(e, setItem)} />
+      <StyledSpanErrore>{errori.cognome}</StyledSpanErrore>
       <StyledLabel>Contatto</StyledLabel>
       <StyledInputModifica rows="1" type="text" name="contatto" placeholder='Contatto' value={item.contatto} onChange={(e) => handleInputChange(e, setItem)} />
+      <StyledSpanErrore>{errori.contatto}</StyledSpanErrore>
       <StyledLabel>Note</StyledLabel>
       <StyledTextAreaModifica rows="1" name="note" placeholder='Note' value={item.note} onChange={(e) => handleInputChange(e, setItem)} />
+      <StyledSpanErrore>{errori.note}</StyledSpanErrore>
       <br /> <br />
       <OperazioniNuovoItem eseguiSalvataggio={eseguiSalvataggio} />
     </>
   );
 }
 
-function FormNuovoProfessionista({ item, setItem, eseguiSalvataggio }) {
+function FormNuovoProfessionista({ item, setItem, eseguiSalvataggio, errori, setErrori }) {
   return (
     <>
       <StyledLabel>Nome</StyledLabel>
       <StyledTextAreaModifica rows="1" name="nome" placeholder='Nome*' value={item.nome} onChange={(e) => handleInputChange(e, setItem)} />
+      <StyledSpanErrore>{errori.nome}</StyledSpanErrore>
       <StyledLabel>Professione</StyledLabel>
       <StyledTextAreaModifica rows="1" name="professione" placeholder='Professione*' value={item.professione} onChange={(e) => handleInputChange(e, setItem)} />
+      <StyledSpanErrore>{errori.professione}</StyledSpanErrore>
       <StyledLabel>Contatto</StyledLabel>
       <StyledInputModifica rows="1" type="text" name="contatto" placeholder='Contatto' value={item.contatto} onChange={(e) => handleInputChange(e, setItem)} />
+      <StyledSpanErrore>{errori.contatto}</StyledSpanErrore>
       <StyledLabel>Email</StyledLabel>
       <StyledInputModifica rows="1" type="text" name="email" placeholder='Email' value={item.email} onChange={(e) => handleInputChange(e, setItem)} />
+      <StyledSpanErrore>{errori.email}</StyledSpanErrore>
       <StyledLabel>Note</StyledLabel>
       <StyledTextAreaModifica rows="1" name="note" placeholder='Note' value={item.note} onChange={(e) => handleInputChange(e, setItem)} />
+      <StyledSpanErrore>{errori.note}</StyledSpanErrore>
       <br /> <br />
       <OperazioniNuovoItem eseguiSalvataggio={eseguiSalvataggio} />
     </>
@@ -165,7 +176,7 @@ function getProfessionistiFiltrati(e, professionisti, setProfessionistiFiltrati)
   }));
 }
 
-function FormNuovoLavoro({ clienti, professionisti, item, setItem, eseguiSalvataggio }) {
+function FormNuovoLavoro({ clienti, professionisti, item, setItem, eseguiSalvataggio, errori, setErrori }) {
   const [clientiFiltrati, setClientiFiltrati] = useState([]);
   const [professionistiFiltrati, setProfessionistiFiltrati] = useState([]);
   useEffect(() => {
@@ -211,6 +222,8 @@ function FormNuovoLavoro({ clienti, professionisti, item, setItem, eseguiSalvata
                 </StyledOption>
               ))}
           </StyledSelect>
+          <br />
+          <StyledSpanErrore>{errori.cliente_e_professionista}</StyledSpanErrore>
         </>
       )}
       {(item.lavoro_professionista_selezionato) && (
@@ -224,20 +237,27 @@ function FormNuovoLavoro({ clienti, professionisti, item, setItem, eseguiSalvata
               <StyledOption key={index} value={professionistaFiltrato.id}>{professionistaFiltrato.nome + " - " + professionistaFiltrato.professione + " - " + professionistaFiltrato.contatto + " - " + professionistaFiltrato.email}</StyledOption>  
             ))}
           </StyledSelect>
+          <br />
+          <StyledSpanErrore>{errori.cliente_e_professionista}</StyledSpanErrore>
         </>
       )}
       {(item.lavoro_cliente_selezionato || item.lavoro_professionista_selezionato) && (
         <>
           <StyledLabel>Descrizione</StyledLabel>
           <StyledTextAreaModifica rows="1" name="descrizione" placeholder='Descrizione*' value={item.descrizione} onChange={(e) => handleInputChange(e, setItem)} />
+          <StyledSpanErrore>{errori.descrizione}</StyledSpanErrore>
           <StyledLabel>Giorno</StyledLabel>
           <StyledInputModifica rows="1" type="date" name="giorno" placeholder='Giorno*' value={item.giorno} onChange={(e) => handleInputChange(e, setItem)} />
+          <StyledSpanErrore>{errori.giorno}</StyledSpanErrore>
           <StyledLabel>Orario inizio</StyledLabel>
           <StyledInputModifica rows="1" type="time" name="orario_inizio" placeholder='Orario inizio' value={item.orario_inizio} onChange={(e) => handleInputChange(e, setItem)} />
+          <StyledSpanErrore>{errori.orario_inizio}</StyledSpanErrore>
           <StyledLabel>orario fine</StyledLabel>
           <StyledInputModifica rows="1" type="time" name="orario_fine" placeholder='Orario fine' value={item.orario_fine} onChange={(e) => handleInputChange(e, setItem)} />
+          <StyledSpanErrore>{errori.orario_fine}</StyledSpanErrore>
           <StyledLabel>Note</StyledLabel>
           <StyledTextAreaModifica rows="1" name="note" placeholder='Note' value={item.note} onChange={(e) => handleInputChange(e, setItem)} />
+          <StyledSpanErrore>{errori.note}</StyledSpanErrore>
         </>
       )}
       <br /> <br />
@@ -296,7 +316,7 @@ function FormRicercaItems({tipoItem, item, setItem, eseguiRicerca, isVisible, se
   );
 }
 
-function FormItem({clienti, professionisti, tipoItem, item, setItem, header, selectOperation, eseguiRicerca, eseguiSalvataggio}) {
+function FormItem({clienti, professionisti, tipoItem, item, setItem, header, selectOperation, eseguiRicerca, eseguiSalvataggio, errori, setErrori}) {
   const [isVisible, setIsVisible] = useState("true");
   const [arrowUp, setArrowUp] = useState(true);
   
@@ -305,13 +325,13 @@ function FormItem({clienti, professionisti, tipoItem, item, setItem, header, sel
       <StyledHeader style={{backgroundColor: "#000000"}}>{(header !== "") ? header : " "}</StyledHeader>  
       <StyledListGroupItem variant="flush">
         {(tipoItem === "nuovo cliente") && (
-          <FormNuovoCliente item={item} setItem={setItem} eseguiSalvataggio={eseguiSalvataggio} />
+          <FormNuovoCliente item={item} setItem={setItem} eseguiSalvataggio={eseguiSalvataggio} errori={errori} setErrori={setErrori} />
         )}
         {(tipoItem === "nuovo professionista") && (
-          <FormNuovoProfessionista item={item} setItem={setItem} eseguiSalvataggio={eseguiSalvataggio} />
+          <FormNuovoProfessionista item={item} setItem={setItem} eseguiSalvataggio={eseguiSalvataggio} errori={errori} setErrori={setErrori} />
         )}
         {(tipoItem === "nuovo lavoro") && (
-          <FormNuovoLavoro clienti={clienti} professionisti={professionisti} item={item} setItem={setItem} eseguiSalvataggio={eseguiSalvataggio} />
+          <FormNuovoLavoro clienti={clienti} professionisti={professionisti} item={item} setItem={setItem} eseguiSalvataggio={eseguiSalvataggio} errori={errori} setErrori={setErrori} />
         )}
         {(tipoItem.startsWith("cerca")) && (
           <FormRicercaItems tipoItem={tipoItem} item={item} setItem={setItem} eseguiRicerca={eseguiRicerca} 

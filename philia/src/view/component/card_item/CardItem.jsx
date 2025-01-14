@@ -15,7 +15,7 @@ import {
   StyledPencilNotSelected, StyledPencilSelected, 
   StyledTrashNotSelected, StyledTrashSelected, 
   StyledArrowTopNotSelected, StyledArrowBottomNotSelected, 
-  StyledSelect, StyledOption
+  StyledSelect, StyledOption, StyledSpanErrore
 } from './StyledCardItem';
 import { 
   handleInputChange, cambiamentoBloccato, getCampiRicerca, getCampiNuovoItem
@@ -195,7 +195,7 @@ function CardModificaProfilo({ item }) {
 function CampiItem({campiItem, setItem, eseguiSalvataggio}) {
   return (
     <>
-      {campiItem.map(([label, placeholder, name, value, type], index) => (
+      {campiItem.map(([label, placeholder, name, value, type, errore], index) => (
         <React.Fragment key={index}>
           {(type === null) && (
             <StyledTextAreaModifica rows="1" placeholder={placeholder} name={name} value={value} onChange={(e) => handleInputChange(e, setItem)} />
@@ -203,6 +203,7 @@ function CampiItem({campiItem, setItem, eseguiSalvataggio}) {
           {(type !== null) && (
             <StyledInputModifica rows="1" type={type} placeholder={placeholder} name={name} value={value} onChange={(e) => handleInputChange(e, setItem)} />
           )}
+          <StyledSpanErrore>{errore}</StyledSpanErrore>
         </React.Fragment>
       ))}
     </>
@@ -253,8 +254,8 @@ function CardNuovoLavoro({clienti, professionisti, tipoLavoro, tipoItem, item, s
   );
 }
 
-function CardNuovoItem({tipoItem, item, setItem, eseguiSalvataggio}) {
-  const campiNuovoItem = getCampiNuovoItem(tipoItem, item);
+function CardNuovoItem({tipoItem, item, setItem, eseguiSalvataggio, errori}) {
+  const campiNuovoItem = getCampiNuovoItem(tipoItem, item, errori);
   return (
     <>
       <SlideContainer isVisible={true}>
@@ -279,7 +280,7 @@ function CardRicercaItem({tipoItem, item, setItem, eseguiRicerca, isVisible, set
   );
 }
 
-function CardItem({clienti, professionisti, tipoLavoro, tipoItem, item, setItem, header, selectOperation, eseguiRicerca, eseguiSalvataggio}) {
+function CardItem({errori, clienti, professionisti, tipoLavoro, tipoItem, item, setItem, header, selectOperation, eseguiRicerca, eseguiSalvataggio}) {
   const [isVisible, setIsVisible] = useState(true);
   const [arrowUp, setArrowUp] = useState(true);
   item.tipo_selezione = (item.tipo_selezione === undefined) ? 0 : item.tipo_selezione;
@@ -289,7 +290,7 @@ function CardItem({clienti, professionisti, tipoLavoro, tipoItem, item, setItem,
       <StyledCardHeader style={{backgroundColor: "#000000"}}>{(header !== "") ? header : " "}</StyledCardHeader>
       <StyledListGroupItem variant="flush">
         {(tipoItem === "nuovo cliente" || tipoItem === "nuovo professionista") && (
-          <CardNuovoItem tipoItem={tipoItem} item={item} setItem={setItem} eseguiSalvataggio={eseguiSalvataggio} />
+          <CardNuovoItem tipoItem={tipoItem} item={item} setItem={setItem} eseguiSalvataggio={eseguiSalvataggio} errori={errori} />
         )}
         {(tipoItem === "nuovo lavoro") && (
           <CardNuovoLavoro clienti={clienti} professionisti={professionisti} tipoLavoro={tipoLavoro} tipoItem={tipoItem} item={item} setItem={setItem} eseguiSalvataggio={eseguiSalvataggio} />

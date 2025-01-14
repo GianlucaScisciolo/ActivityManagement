@@ -65,13 +65,13 @@ export const StyledColRed = styled(StyledCol)`
   background-color: #500000;
 `;
 
-export const StyledSpanErrore = styled.span`
-  color: #500000;
-  text-align: center;
-  margin-bottom: 5%;
-  background-color: #000000;
-  border-radius: 40px;
-`
+// export const StyledSpanErrore = styled.span`
+//   color: #500000;
+//   text-align: center;
+//   margin-bottom: 5%;
+//   background-color: #000000;
+//   border-radius: 40px;
+// `
 
 export const SlideContainer = styled.div`
   display: flex;
@@ -232,6 +232,12 @@ export const StyledOption =  styled.option`
   &:hover {
     background-color: #0050EF;
   }
+`;
+
+export const StyledSpanErrore =  styled.span`
+  color: #FF0000;
+  /* background-color: #000000; */
+  padding: 10px;
 `;
 
 

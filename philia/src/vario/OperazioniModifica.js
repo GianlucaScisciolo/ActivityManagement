@@ -4,7 +4,7 @@ import ProfessionistaAction from "../action/professionista_action/Professionista
 import AutenticazioneAction from "../action/autenticazione_action/AutenticazioneAction";
 import autenticazioneStore from "../store/autenticazione_store/AutenticazioneStore";
 import { operazioniAutenticazione, operazioniLavori, operazioniPersone, operazioniProfessionisti } from "./Operazioni";
-import { controlloNuovoCliente, controlloNuovoProfessionista, controlloNuovoLavoro } from "./Controlli";
+import { controlloCliente, controlloProfessionista, controlloLavoro } from "./Controlli";
 
 const aggiornaItems = (items, data, setItems) => {
   const updatedItems = items.map(item => {
@@ -39,7 +39,7 @@ export const modifica = async (e, tipoItem, selectedIdsModifica, setSelectedIdsM
           contatto: itemsDaModificare[i].contatto,
           note: itemsDaModificare[i].note
         }
-        if(controlloNuovoCliente(datiModifica, setErrori) > 0) {
+        if(controlloCliente(datiModifica, setErrori) > 0) {
           return;
         }
         await PersonaAction.dispatchAction(datiModifica, operazioniPersone.MODIFICA_CLIENTI);
@@ -55,7 +55,7 @@ export const modifica = async (e, tipoItem, selectedIdsModifica, setSelectedIdsM
           "email": itemsDaModificare[i].email,
           "note": itemsDaModificare[i].note
         }
-        if(controlloNuovoProfessionista(datiModifica, setErrori) > 0) {
+        if(controlloProfessionista(datiModifica, setErrori) > 0) {
           return;
         }
         await ProfessionistaAction.dispatchAction(itemsDaModificare, operazioniProfessionisti.MODIFICA_PROFESSIONISTI);

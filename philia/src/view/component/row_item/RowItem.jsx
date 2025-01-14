@@ -8,7 +8,7 @@ import {
   StyledArrowLeftNotSelected, StyledArrowRightNotSelected,  
   StyledPencilNotSelected, StyledPencilSelected, 
   StyledTrashNotSelected, StyledTrashSelected, 
-  StyledSelect, StyledOption
+  StyledSelect, StyledOption, StyledSpanErrore
 } from "./StyledRowItem";
 import { 
   handleInputChange, cambiamentoBloccato, getCampiRicerca, getCampiNuovoItem
@@ -240,20 +240,25 @@ function RowNuovoLavoro({clienti, professionisti, tipoLavoro, tipoItem, item, se
   );
 }
 
-function RowNuovoItem({tipoItem, item, setItem, eseguiSalvataggio}) {
-  const campiNuovoItem = getCampiNuovoItem(tipoItem, item);
+function RowNuovoItem({tipoItem, item, setItem, eseguiSalvataggio, errori}) {
+  const campiNuovoItem = getCampiNuovoItem(tipoItem, item, errori);
   return (
-    <>
+    <><div style={{width: "auto"}}>
       <OperazioniNuovoItem eseguiSalvataggio={eseguiSalvataggio} />
-      {campiNuovoItem.map(([label, placeholder, name, value, type], index) => (
+      <StyledSpanErrore></StyledSpanErrore>
+      </div>
+      {campiNuovoItem.map(([label, placeholder, name, value, type, errore], index) => (
         <React.Fragment key={index}>
           <StyledCol>
-            {(type === null) && (
-              <StyledTextAreaModifica rows="1" placeholder={placeholder} name={name} value={value} onChange={(e) => handleInputChange(e, setItem)} />
-            )}
-            {(type !== null) && (
-              <StyledInputModifica rows="1" type={type} placeholder={placeholder} name={name} value={value} onChange={(e) => handleInputChange(e, setItem)} />
-            )}
+            <div style={{width: "100%"}}>
+              {(type === null) && (
+                <StyledTextAreaModifica rows="1" placeholder={placeholder} name={name} value={value} onChange={(e) => handleInputChange(e, setItem)} />
+              )}
+              {(type !== null) && (
+                <StyledInputModifica rows="1" type={type} placeholder={placeholder} name={name} value={value} onChange={(e) => handleInputChange(e, setItem)} />
+              )}
+              <StyledSpanErrore>{errore}</StyledSpanErrore>
+            </div>
           </StyledCol>
         </React.Fragment>
       ))}
@@ -291,7 +296,7 @@ function RowRicercaItem({tipoItem, item, setItem, arrowUp, setArrowUp, eseguiRic
   );
 }
 
-function RowItem({clienti, professionisti, tipoLavoro, tipoItem, item, setItem, header, selectOperation, eseguiRicerca, eseguiSalvataggio}) {
+function RowItem({errori, setErrori, clienti, professionisti, tipoLavoro, tipoItem, item, setItem, header, selectOperation, eseguiRicerca, eseguiSalvataggio}) {
   const [isVisible, setIsVisible] = useState(true);
   const [arrowUp, setArrowUp] = useState(true);
 
@@ -299,7 +304,7 @@ function RowItem({clienti, professionisti, tipoLavoro, tipoItem, item, setItem, 
     <>
       {(tipoItem === "nuovo cliente" || tipoItem === "nuovo professionista") && (
         <StyledRow>
-          <RowNuovoItem tipoItem={tipoItem} item={item} setItem={setItem} eseguiSalvataggio={eseguiSalvataggio} />
+          <RowNuovoItem errori={errori} tipoItem={tipoItem} item={item} setItem={setItem} eseguiSalvataggio={eseguiSalvataggio} />
         </StyledRow>
       )}
       {(tipoItem === "nuovo lavoro") && (

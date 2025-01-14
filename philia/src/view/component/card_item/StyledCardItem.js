@@ -188,6 +188,12 @@ export const StyledOption =  styled.option`
   }
 `;
 
+export const StyledSpanErrore =  styled.span`
+  color: #FF0000;
+  /* background-color: #000000; */
+  padding: 10px;
+`;
+
 
 
 

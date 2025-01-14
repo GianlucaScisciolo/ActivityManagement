@@ -89,24 +89,24 @@ export const getCampiRicerca = (tipoItem, item) => {
   }
 };
 
-export const getCampiNuovoCliente = (item) => {
+export const getCampiNuovoCliente = (item, errori) => {
   return [
-    // label, placeholder, name, value, type
-    ["Nome*", "Nome*", "nome", item.nome, ""],
-    ["Cognome*", "Cognome*", "cognome", item.cognome, ""],
-    ["Contatto*", "Contatto*", "contatto", item.contatto, "text"],
-    ["Note", "Note", "note", item.note, ""]
+    // label, placeholder, name, value, type, errore
+    ["Nome*", "Nome*", "nome", item.nome, "", errori.nome],
+    ["Cognome*", "Cognome*", "cognome", item.cognome, "", errori.cognome],
+    ["Contatto*", "Contatto*", "contatto", item.contatto, "text", errori.contatto],
+    ["Note", "Note", "note", item.note, "", errori.note]
   ];
 }
 
-const getCampiNuovoProfessionista = (item) => {
+const getCampiNuovoProfessionista = (item, errori) => {
   return [
-    // label, placeholder, name, value, type
-    ["Nome*", "Nome*", "nome", item.nome, ""],
-    ["Professione*", "Professione*", "professione", item.professione, ""],
-    ["Contatto", "Contatto", "contatto", item.contatto, "text"],
-    ["Email", "Email", "email", item.email, "text"],
-    ["Note", "Note", "note", item.note, ""]
+    // label, placeholder, name, value, type, errori
+    ["Nome*", "Nome*", "nome", item.nome, "", errori.nome],
+    ["Professione*", "Professione*", "professione", item.professione, "", errori.professione],
+    ["Contatto", "Contatto", "contatto", item.contatto, "text", errori.contatto],
+    ["Email", "Email", "email", item.email, "text", errori.email],
+    ["Note", "Note", "note", item.note, "", errori.note]
   ];
 };
 
@@ -150,12 +150,12 @@ const getCampiNuovoLavoro = (item) => {
 };
 
 
-export const getCampiNuovoItem = (tipoItem, item) => {
+export const getCampiNuovoItem = (tipoItem, item, errori) => {
   switch(tipoItem) {
     case "nuovo cliente":
-      return getCampiNuovoCliente(item);
+      return getCampiNuovoCliente(item, errori);
     case "nuovo professionista":
-      return getCampiNuovoProfessionista(item);
+      return getCampiNuovoProfessionista(item, errori);
     case "nuovo lavoro":
       return getCampiNuovoLavoro(item);
     default:

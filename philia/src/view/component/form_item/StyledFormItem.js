@@ -83,6 +83,7 @@ export const StyledTextArea = styled.textarea`
   box-sizing: border-box;
   text-align: center;
   min-height: 70px;
+  margin-bottom: 20px;
 `;
 
 export const StyledTextAreaBlock = styled(StyledTextArea)`
@@ -106,7 +107,7 @@ export const StyledInput = styled.input`
   box-sizing: border-box;
   text-align: center;
   min-height: 70px;
-  margin-bottom: 2%;
+  margin-bottom: 20px;
 `;
 
 export const StyledInputBlock = styled(StyledInput)`
@@ -204,5 +205,11 @@ export const StyledOption =  styled.option`
   &:hover {
     background-color: #0050EF;
   }
+`;
+
+export const StyledSpanErrore =  styled.span`
+  color: #FF0000;
+  /* background-color: #000000; */
+  padding: 10px;
 `;
 

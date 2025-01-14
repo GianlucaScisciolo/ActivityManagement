@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Header from '../component/Header';
 import PersonaAction from '../../action/persona_action/PersonaAction';
-import { controlloNuovoCliente } from '../../vario/Controlli';
+import { controlloCliente } from '../../vario/Controlli';
 import { useSelector, useDispatch } from 'react-redux';
 import CardItem from '../component/card_item/CardItem';
 import Row from 'react-bootstrap/esm/Row';
@@ -23,15 +23,15 @@ const NuovoCliente = () => {
   })
 
   const [errori, setErrori] = useState({
-    erroreNome: "",
-    erroreCognome: "",
-    erroreContatto: "",
-    erroreNote: ""
+    nome: "",
+    cognome: "",
+    contatto: "",
+    note: ""
   })
   
-  const handleInsert = async (nuovoCliente, setNuovoCliente, setClienti) => {
+  const handleInsert = async (nuovoCliente, setNuovoCliente, setClienti, setErrori) => {
     if (confirm("Sei sicuro di voler salvare il cliente?")) {
-      if (controlloNuovoCliente(nuovoCliente, setErrori) > 0) 
+      if (controlloCliente(nuovoCliente, setErrori) > 0) 
         return;
       
       try {
@@ -76,9 +76,9 @@ const NuovoCliente = () => {
     e.target.value = e.target.value.slice(0, 11);
   };
 
-  const eseguiSalvataggio = (e) => {
+  const eseguiSalvataggio = (e, setErrori) => {
     e.preventDefault();
-    handleInsert(nuovoCliente, setNuovoCliente, setClienti);
+    handleInsert(nuovoCliente, setNuovoCliente, setClienti, setErrori);
   }
 
   return (
@@ -89,14 +89,14 @@ const NuovoCliente = () => {
 
       <form>
         {formSession.view === "form" && (
-          <FormItem   tipoItem={"nuovo cliente"} item={nuovoCliente} setItem={setNuovoCliente} header="Nuovo cliente" eseguiSalvataggio={(e) => eseguiSalvataggio(e)} />
+          <FormItem errori={errori} setErrori={setErrori} tipoItem={"nuovo cliente"} item={nuovoCliente} setItem={setNuovoCliente} header="Nuovo cliente" eseguiSalvataggio={(e) => eseguiSalvataggio(e, setErrori)} />
         )}
         {formSession.view === "row" && (
-          <RowItem    tipoItem={"nuovo cliente"} item={nuovoCliente} setItem={setNuovoCliente} eseguiSalvataggio={(e) => eseguiSalvataggio(e)} />
+          <RowItem errori={errori} setErrori={setErrori} tipoItem={"nuovo cliente"} item={nuovoCliente} setItem={setNuovoCliente} eseguiSalvataggio={(e) => eseguiSalvataggio(e, setErrori)} />
         )}
         {(formSession.view === "card") && (
           <center>
-            <CardItem tipoItem={"nuovo cliente"} item={nuovoCliente} setItem={setNuovoCliente} header="Nuovo cliente" eseguiSalvataggio={(e) => eseguiSalvataggio(e)} />
+            <CardItem errori={errori} setErrori={setErrori} tipoItem={"nuovo cliente"} item={nuovoCliente} setItem={setNuovoCliente} header="Nuovo cliente" eseguiSalvataggio={(e) => eseguiSalvataggio(e, setErrori)} />
           </center>
         )}
       </form>
