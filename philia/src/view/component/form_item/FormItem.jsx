@@ -8,10 +8,10 @@ import {
   StyledLabel, StyledHeader, grandezzaIcona, SlideContainer, 
   StyledTextAreaBlock, StyledTextAreaModifica, StyledTextAreaElimina, 
   StyledInputBlock, StyledInputModifica, StyledInputElimina, 
-  StyledSaveNotSelected, StyledSearchNotSelected, 
+  StyledSaveNotSelected, StyledSearchNotSelected, StyledPencilNotSelected,  
   StyledArrowTopNotSelected, StyledArrowBottomNotSelected, StyledSelect, StyledOption, 
   BottoneBluNonSelezionato, BottoneBluSelezionato, BottoneRossoNonSelezionato, BottoneRossoSelezionato, 
-  StyledSpanErrore
+  StyledSpanErrore, StyledLoginNotSelected
 } from "./StyledFormItem";
 import { 
   handleInputChange, getCampiRicerca, getCampiNuovoItem, selezionaInserimentoLavoroCliente, selezionaInserimentoLavoroProfessionista
@@ -80,23 +80,21 @@ const OperazioniCercaItems = ({ setIsVisible, arrowUp, setArrowUp, eseguiRicerca
   );
 };
 
-function FormModificaProfilo({ item }) {
+const OperazioniLogin = ({eseguiLogin}) => {
   return (
-    <>
-      <StyledLabel>Nome</StyledLabel>
-      <StyledTextAreaModifica rows="1" name="nome" placeholder='Nome*' value={item.nome} />
-      <StyledLabel>Cognome</StyledLabel>
-      <StyledTextAreaModifica rows="1" name="cognome" placeholder='Cognome*' value={item.cognome} />
-      <StyledLabel>Contatto</StyledLabel>
-      <StyledInputModifica rows="1" type="text" name="contatto" placeholder='Contatto' value={item.contatto} />
-      <StyledLabel>Email</StyledLabel>
-      <StyledInputModifica rows="1" type="email" name="email" placeholder='Email' value={item.email} />
-      <StyledLabel>Note</StyledLabel>
-      <StyledTextAreaModifica rows="1" name="note" placeholder='Note' value={item.note} />
-      <br /> <br />
-    </>
+    <StyledListGroupItem style={{ border: "5px solid #000000", backgroundColor: "#000000", paddingTop: "3%", paddingBottom: "3%" }}>
+      <StyledLoginNotSelected size={grandezzaIcona} onClick={eseguiLogin} />
+    </StyledListGroupItem>
   );
-}
+};
+
+const OperazioniModificaProfilo = ({eseguiModificaProfilo}) => {
+  return (
+    <StyledListGroupItem style={{ border: "5px solid #000000", backgroundColor: "#000000", paddingTop: "3%", paddingBottom: "3%" }}>
+      <StyledPencilNotSelected size={grandezzaIcona} onClick={eseguiModificaProfilo} />
+    </StyledListGroupItem>
+  );
+};
 
 function addElemento(queue, elemento) {
   queue.push(elemento);
@@ -316,7 +314,62 @@ function FormRicercaItems({tipoItem, item, setItem, eseguiRicerca, isVisible, se
   );
 }
 
-function FormItem({clienti, professionisti, tipoItem, item, setItem, header, selectOperation, eseguiRicerca, eseguiSalvataggio, errori, setErrori}) {
+function FormLogin({item, setItem, errori, setErrori, eseguiLogin}) {
+  return (
+    <>
+      <StyledLabel>Username</StyledLabel>
+      <StyledTextAreaModifica rows="1" name="username" placeholder='Username*' value={item.username} onChange={(e) => handleInputChange(e, setItem)} />
+      <StyledSpanErrore>{errori.username}</StyledSpanErrore>
+      <StyledLabel>Password</StyledLabel>
+      <StyledTextAreaModifica rows="1" name="password" placeholder='Password*' value={item.password} onChange={(e) => handleInputChange(e, setItem)} />
+      <StyledSpanErrore>{errori.password}</StyledSpanErrore>
+      <br /> <br />
+      <OperazioniLogin eseguiLogin={eseguiLogin} />
+    </>
+  );
+}
+
+function FormModificaProfilo({ item, setItem, errori, eseguiModificaProfilo }) {
+  return (
+    <>
+      <StyledLabel>Username*</StyledLabel>
+      <StyledTextAreaModifica rows="1" name="nuovo_username" placeholder='Nuovo username*' value={item.nuovo_username} onChange={(e) => handleInputChange(e, setItem)} />
+      <StyledSpanErrore>{errori.nuovo_username}</StyledSpanErrore>
+
+      <StyledLabel>Note</StyledLabel>
+      <StyledTextAreaModifica rows="1" name="note" placeholder='Note' value={item.note} onChange={(e) => handleInputChange(e, setItem)} />
+      <StyledSpanErrore>{errori.note}</StyledSpanErrore>
+
+      <StyledLabel>Password attuale*</StyledLabel>
+      <StyledTextAreaModifica rows="1" name="password_attuale" placeholder='Password attuale*' value={item.password_attuale} onChange={(e) => handleInputChange(e, setItem)} />
+      <StyledSpanErrore>{errori.password_attuale}</StyledSpanErrore>
+
+      <StyledLabel>Nuova password</StyledLabel>
+      <StyledTextAreaModifica rows="1" name="nuova_password" placeholder='Nuova password' value={item.nuova_password} onChange={(e) => handleInputChange(e, setItem)} />
+      <StyledSpanErrore>{errori.nuova_password}</StyledSpanErrore>
+
+      <StyledLabel>Conferma nuova password</StyledLabel>
+      <StyledTextAreaModifica rows="1" name="conferma_nuova_password" placeholder='Conferma nuova password' value={item.conferma_nuova_password} onChange={(e) => handleInputChange(e, setItem)} />
+      <StyledSpanErrore>{errori.conferma_nuova_password}</StyledSpanErrore>
+
+      {/* 
+      <button>Numero di clienti in una giornata</button><br /> <br />
+      <button>Numero di professionisti in una giornata</button><br /> <br />
+        In una giornata ci sono 3 fasci orari:
+        - mattina    --> 07:00 - 13:00 
+        - pomeriggio --> 13:00 - 19:00
+        - sera       --> 19: 00 - 06:00
+      */} 
+      
+
+      <br /> <br /> 
+
+      <OperazioniModificaProfilo eseguiModificaProfilo={eseguiModificaProfilo} />
+    </>
+  );
+}
+
+function FormItem({clienti, professionisti, tipoItem, item, setItem, header, selectOperation, eseguiRicerca, eseguiSalvataggio, eseguiLogin, errori, setErrori, eseguiModificaProfilo}) {
   const [isVisible, setIsVisible] = useState("true");
   const [arrowUp, setArrowUp] = useState(true);
   
@@ -339,8 +392,11 @@ function FormItem({clienti, professionisti, tipoItem, item, setItem, header, sel
             arrowUp={arrowUp} setArrowUp={setArrowUp} 
           />
         )}
+        {(tipoItem === "login") && (
+          <FormLogin item={item} setItem={setItem} errori={errori} setErrori={setErrori} eseguiLogin={eseguiLogin} />
+        )}
         {(tipoItem.startsWith("modifica profilo")) &&(
-          <FormModificaProfilo item={item} />
+          <FormModificaProfilo item={item} setItem={setItem} errori={errori} eseguiModificaProfilo={eseguiModificaProfilo} />
         )}
       </StyledListGroupItem>
     </StyledForm>

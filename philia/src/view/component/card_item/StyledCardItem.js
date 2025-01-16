@@ -3,7 +3,7 @@ import Row from 'react-bootstrap/esm/Row';
 import Col from 'react-bootstrap/esm/Col';
 import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
-import { Trash2, Pencil, Save, Search, ChevronUp, ChevronDown } from 'lucide-react';
+import { Trash2, Pencil, Save, Search, ChevronUp, ChevronDown, LogIn } from 'lucide-react';
 
 export const grandezzaIcona = 50;
 
@@ -153,8 +153,24 @@ export const StyledArrowBottomNotSelected = styled(ChevronDown)`
   }
 `;
 
+export const StyledLoginNotSelected = styled(LogIn)`
+  ${styledIconNotSelected}
+  transition: 0.5s all ease-out;
+  &:hover {
+    color: #0050EF;
+  }
+`;
+
 export const StyledPencilNotSelected = styled(Pencil)`
   ${styledIconNotSelected}
+`;
+
+export const StyledPencilNotSelectedModificaProfilo = styled(Pencil)`
+  ${styledIconNotSelected}
+  transition: 0.5s all ease-out;
+  &:hover {
+    color: #0050EF;
+  }
 `;
 
 export const StyledPencilSelected = styled(Pencil)`

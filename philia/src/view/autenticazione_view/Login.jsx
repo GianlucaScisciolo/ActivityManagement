@@ -8,13 +8,19 @@ import { operazioniAutenticazione } from '../../vario/Operazioni';
 import { eseguiLogin } from '../../store/redux/AutenticazioneSessionSlice';
 import { generateRandomString, encryptPassword, PEPPER_HEX, passwordIsCorrect } from '../../vario/Sicurezza';
 import { controlloLogin } from '../../vario/Controlli';
+import FormItem from '../component/form_item/FormItem';
+import CardItem from '../component/card_item/CardItem';
+import RowItem from '../component/row_item/RowItem';
 
 const Login = () => {
   const [utenti, setUtenti] = useState(-1);
+  const [datiLogin, setDatiLogin] = useState({
+    username: "", 
+    password: ""
+  });
   const [errori, setErrori] = useState({
-    "erroreUsername": "",
-    "errorePassword": "",
-    "erroreLogin": ""
+    username: "Errore username",
+    password: "Errore password"
   });
   const [, setErroreUsername] = useState("");
   const [, setErrorePassword] = useState("");
@@ -23,8 +29,9 @@ const Login = () => {
   const [passwordInserita, setPasswordInserita] = useState("");
   const navigate = useNavigate();
   const autenticazioneSession = useSelector((state) => state.autenticazioneSession.value);
+  const formSession = useSelector((state) => state.formSession.value);
   const dispatch = useDispatch();
-
+  
   useEffect(() => {
     const handleLoginChange = () => {
       setUtenti(autenticazioneStore.getUtenti());
@@ -35,17 +42,6 @@ const Login = () => {
       autenticazioneStore.removeChangeListener(operazioniAutenticazione.LOGIN, handleLoginChange);
     };
   }, []);
-
-  // useEffect(() => {
-  //   if (utenti.length > 0) {
-  //     dispatch(eseguiLogin({
-  //       username: utenti[0].username,
-  //       ruolo: utenti[0].ruolo,
-  //       note: utenti[0].note,
-  //     }));
-  //     navigate('/');
-  //   }
-  // }, [utenti, navigate, dispatch]);
 
   useEffect(() => {
     if (aggiornamentoCompletato) {
@@ -58,36 +54,15 @@ const Login = () => {
       setAggiornamentoCompletato(false);
       console.log("Aggiornamento effettuato.");
 
-      console.log(utenti.length === 1);
-      
-      // if(controlloProfilo(dati, (utenti.length === 1), setErrori) > 0) {
-      //   return;
-      // }
-      // eseguiModificaProfilo(dati);
-      
-      if (utenti.length === 1) {
-      console.log("username: " + utenti[0].username);
-      console.log("salt_hex DB: " + utenti[0].salt_hex);
-      console.log("password: " + utenti[0].password);
+      // alert(utenti.length === 1);
+      datiLogin["num_utenti"] = utenti.length;
+      if(utenti.length > 0) {
+        datiLogin["password_db"] = utenti[0].password;
+        datiLogin["salt_hex_db"] = utenti[0].salt_hex;
       }
-      else {
-        console.log("Utente non trovato.");
-      }
-      const password_db = (utenti.length === 1) ? utenti[0].password : null;
-      const salt_hex_db = (utenti.length === 1) ? utenti[0].salt_hex : null;
-      const dati = {
-        "username_inserito": usernameInserito,
-        "password_inserita": passwordInserita,
-        "password_db": password_db,
-        "salt_hex_db": salt_hex_db
-      }
-
-      if(controlloLogin(dati, setErrori) > 0) {
+      if(controlloLogin(datiLogin, setErrori) > 0) {
         return;
       }
-
-      setUsernameInserito("");
-      setPasswordInserita("");
       
       dispatch(eseguiLogin({
         username: utenti[0].username,
@@ -102,15 +77,15 @@ const Login = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    // alert("Login");
     autenticazioneStore.setUtenti(-1);
     setUtenti(-1);
 
-    // const username = e.target.username.value;
-    setUsernameInserito(e.target.username.value);
-    // const password = e.target.password.value;
-    setPasswordInserita(e.target.password.value);
-
-    await login(e, setUtenti);
+    // // const username = e.target.username.value;
+    // setUsernameInserito(e.target.username.value);
+    // // const password = e.target.password.value;
+    // setPasswordInserita(e.target.password.value);
+    await login(e, datiLogin, setUtenti);
     setAggiornamentoCompletato(true);
   };
 
@@ -126,24 +101,18 @@ const Login = () => {
   return (
     <>
       <Header />
-      <div>
-        <form className='containerForm' onSubmit={handleLogin}>
-          <label className='titoloForm'>Login</label>
-
-          <label className='labelForm'>Username</label>
-          <input className='inputFormModifica' type='text' name='username' />
-          <span className='spanErrore'>{errori.erroreUsername}</span>
-          
-          <label className='labelForm'>Password</label>
-          <input className='inputFormModifica' type='password' name='password' />
-          <span className='spanErrore'>{errori.errorePassword}</span>
-
-          <span className='spanErrore'>{errori.erroreLogin}</span>
-
-          <button className='buttonForm' type='submit'>Esegui login</button>
-        </form>
-        <button onClick={prova}>Prova</button>
-      </div>
+      <div className="main-content" />
+      {(formSession.view === "form") && (
+        <FormItem errori={errori} setErrori={setErrori} tipoItem={"login"} item={datiLogin} setItem={setDatiLogin} eseguiLogin={(e) => handleLogin(e)} header="Login" />
+      )}
+      {(formSession.view === "row") && (
+        <RowItem errori={errori} setErrori={setErrori} tipoItem={"login"} item={datiLogin} setItem={setDatiLogin} eseguiLogin={(e) => handleLogin(e)} header="Login" />
+      )}
+      {(formSession.view === "card") && (
+        <center>
+          <CardItem errori={errori} setErrori={setErrori} tipoItem={"login"} item={datiLogin} setItem={setDatiLogin} eseguiLogin={(e) => handleLogin(e)} header="Login" />
+        </center>
+      )}
     </>
   );
 };

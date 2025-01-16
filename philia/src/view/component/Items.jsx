@@ -1,30 +1,30 @@
-import React, { useState } from 'react';
-import { List, WalletCards, Trash2, Pencil } from 'lucide-react';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import { HookItems } from '../../vario/HookItems';
-import { useSelector, useDispatch } from 'react-redux';
-import CardItem from './card_item/CardItem';
-import RowItem from './row_item/RowItem';
-import { modifica } from '../../vario/OperazioniModifica';
-import { elimina } from '../../vario/OperazioniEliminazione';
+import { useState } from "react";
+import { useSelector } from "react-redux";
+import Row from "react-bootstrap/esm/Row";
+import Col from "react-bootstrap/esm/Col";
+import CardItem from "./card_item/CardItem";
+import RowItem from "./row_item/RowItem";
+import { elimina } from "../../vario/OperazioniEliminazione";
+import { modifica } from "../../vario/OperazioniModifica";
 
-export const Items = ({tipoItem, items, setterItems, errori, setErrori}) => {
+export const Items = ({tipoItem, items, setterItems}) => {
   const [selectedTrashCount, setSelectedTrashCount] = useState(0);
   const [selectedPencilCount, setSelectedPencilCount] = useState(0);
-  const [selectedIds, setSelectedIds] = useState([]);
+  const [selectedIdsEliminazione, setSelectedIdsEliminazione] = useState([]);
   const [selectedIdsModifica, setSelectedIdsModifica] = useState([]);
+
+  const itemSession = useSelector((state) => state.itemSession.value);
   
   const selectOperation = (icon, item) => {
     if(icon === "trash") {
-      if(selectedIds.includes(item.id)) {
+      if(selectedIdsEliminazione.includes(item.id)) {
         item.tipo_selezione = 0;
-        setSelectedIds(prevIds => prevIds.filter(itemId => itemId !== item.id));
+        setSelectedIdsEliminazione(prevIds => prevIds.filter(itemId => itemId !== item.id));
         setSelectedTrashCount(prevCount => Math.max(prevCount - 1, 0));
       }
       else {
         item.tipo_selezione = 2;
-        setSelectedIds(prevIds => [...prevIds, item.id]);
+        setSelectedIdsEliminazione(prevIds => [...prevIds, item.id]);
         setSelectedTrashCount(prevCount => prevCount + 1);
         setSelectedIdsModifica(prevIdsModifica => prevIdsModifica.filter(itemId => itemId !== item.id));
         setSelectedPencilCount(prevCount => Math.max(prevCount - 1, 0));
@@ -40,35 +40,34 @@ export const Items = ({tipoItem, items, setterItems, errori, setErrori}) => {
         item.tipo_selezione = 1;
         setSelectedIdsModifica(prevIdsModifica => [...prevIdsModifica, item.id]);
         setSelectedPencilCount(prevCount => prevCount + 1);
-        setSelectedIds(prevIds => prevIds.filter(itemId => itemId !== item.id));
+        setSelectedIdsEliminazione(prevIds => prevIds.filter(itemId => itemId !== item.id));
         setSelectedTrashCount(prevCount => Math.max(prevCount - 1, 0));
       }
     }
   }
-  
-  const itemSession = useSelector((state) => state.itemSession.value);
-  
+
   return (
     <>
       {itemSession.view === "list" && (
         <>
-          {items.map((item, index) => (
-            <RowItem key={index} selectOperation={selectOperation} tipoItem={tipoItem} item={item} />
+          {items.map((item, index) => (  
+            <RowItem key={index} selectOperation={selectOperation} tipoItem={tipoItem} item={item} items={items} setItems={setterItems} />
           ))}
         </>
+        // <button>Lista</button>
       )}
       {itemSession.view === "card" && (
-        <>
-          <div className='contenitore-3'>
-            {items.map((item, index) => (
-              <CardItem key={index} selectOperation={selectOperation} tipoItem={tipoItem} item={item} header={tipoItem.charAt(0).toUpperCase() + tipoItem.slice(1)} />
-            ))}
-          </div>
-        </>
+        <div className='contenitore-3'>
+          {items.map((item, index) => (  
+            <CardItem key={index} selectOperation={selectOperation} tipoItem={tipoItem} item={item} 
+              setItems={setterItems} header={tipoItem.charAt(0).toUpperCase() + tipoItem.slice(1)} 
+            />
+          ))}
+        </div>
       )}
 
-      <div className="main-content"></div>
-      
+      <div className="main-content" />
+
       <div className='contenitore-2'>
         <Row>
           {selectedIdsModifica.length > 0 && (
@@ -81,11 +80,10 @@ export const Items = ({tipoItem, items, setterItems, errori, setErrori}) => {
               </button>
             </Col>
           )}        
-          {selectedIds.length > 0 && (
+          {selectedIdsEliminazione.length > 0 && (
             <Col>
-              {/* <button className='bottone-rosso-non-selezionato' onClick={() => elimina("clienti", datiClienteLastSearch, selectedIds, setSelectedIds, clienti, setClienti, null, null)}>Elimina</button> */}
               <button className='bottone-rosso-non-selezionato'
-                onClick={(e) => elimina(e, tipoItem, selectedIds, setSelectedIds, items, setterItems)}
+                onClick={(e) => elimina(e, tipoItem, selectedIdsEliminazione, setSelectedIdsEliminazione, items, setterItems)}
               >
                 Elimina
               </button>
@@ -95,57 +93,10 @@ export const Items = ({tipoItem, items, setterItems, errori, setErrori}) => {
       </div>
 
       <br /> <br />
-
-      {/* <Row className='custom-row'>
-        <Col className='custom-col'><span className='span-errore-col'></span></Col>
-        {(tipoItem === "cliente") && (
-          <>
-            <Col className='custom-col'><span className='span-errore-col'></span></Col>
-            <Col className='custom-col'><span className='span-errore-col'></span></Col>
-            <Col className='custom-col'><span className='span-errore-col'>{errori.erroreContatto}</span></Col>
-            <Col className='custom-col'><span className='span-errore-col'>{errori.erroreNote}</span></Col>
-          </>
-        )}
-        {(tipoItem === "professionista") && (
-          <>
-            <Col className='custom-col'><span className='span-errore-col'></span></Col>
-            <Col className='custom-col'><span className='span-errore-col'></span></Col>
-            {(tipoItem === "lavoro cliente") && (
-              <>
-                <Col className='custom-col'><span className='span-errore-col'>{errori.erroreContatto}</span></Col>
-                <Col className='custom-col'><span className='span-errore-col'>{errori.erroreEmail}</span></Col>
-              </>
-            )}
-            {(tipoItem === "lavoro cliente") && (
-              <Col className='custom-col'><span className='span-errore-col'>{errori.erroreContattoEEmail}</span></Col>
-            )}
-            <Col className='custom-col'><span className='span-errore-col'>{errori.erroreNote}</span></Col>
-          </>
-        )}
-        {(tipoItem === "lavoro cliente" || tipoItem === "lavoro professionista") && (
-          <>
-            <Col className='custom-col'><span className='span-errore-col'></span></Col>
-            <Col className='custom-col'><span className='span-errore-col'></span></Col>
-            <Col className='custom-col'><span className='span-errore-col'>{errori.erroreDescrizione}</span></Col>
-            <Col className='custom-col'><span className='span-errore-col'>{errori.erroreGiorno}</span></Col>
-            {(errori.erroreOrari === "") && (
-              <>
-                <Col className='custom-col'><span className='span-errore-col'>{errori.erroreOrarioInizio}</span></Col>
-                <Col className='custom-col'><span className='span-errore-col'>{errori.erroreOrarioFine}</span></Col>
-              </>
-            )}
-            {(errori.erroreOrari !== "") && (
-              <Col className='custom-col'><span className='span-errore-col'>{errori.erroreOrari}</span></Col>
-            )}
-            <Col className='custom-col'><span className='span-errore-col'>{errori.erroreNote}</span></Col>
-          </>
-        )}
-      </Row> */}
-
-      {/* <div className="main-content" /> */}
     </>
-  )
-};
+  );
+}
+
 
 
 

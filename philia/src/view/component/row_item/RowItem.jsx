@@ -7,8 +7,8 @@ import {
   StyledSaveNotSelected, StyledSearchNotSelected, 
   StyledArrowLeftNotSelected, StyledArrowRightNotSelected,  
   StyledPencilNotSelected, StyledPencilSelected, 
-  StyledTrashNotSelected, StyledTrashSelected, 
-  StyledSelect, StyledOption, StyledSpanErrore
+  StyledTrashNotSelected, StyledTrashSelected, StyledPencilNotSelectedModificaProfilo, 
+  StyledSelect, StyledOption, StyledSpanErrore, StyledLoginNotSelected
 } from "./StyledRowItem";
 import { 
   handleInputChange, cambiamentoBloccato, getCampiRicerca, getCampiNuovoItem
@@ -70,13 +70,13 @@ const TrashTag = ({ tipoSelezione, selectOperation, item }) => {
   }
 }
 
-const TextAreaTag = ({ tipoSelezione, nome, valore, modificabile, setItem, placeholder }) => {
+const TextAreaTag = ({ id, items, tipoSelezione, nome, valore, modificabile, setItem, placeholder, tipoItem, setItems }) => {
   switch(tipoSelezione) {
     case 0:
       return <StyledCol><StyledTextAreaBlock rows="1" name={nome} placeholder={placeholder} value={valore} readOnly /></StyledCol>;
     case 1:
       return <StyledCol>{(modificabile) 
-                            ? <StyledTextAreaModifica rows="1" name={nome} placeholder={placeholder} value={valore} onChange={(e) => handleInputChange(e, setItem)} />
+                            ? <StyledTextAreaModifica rows="1" name={nome} placeholder={placeholder} value={valore} onChange={(e) => handleInputChange(e, setItem, items, setItems, tipoItem, id)} />
                             : <StyledTextAreaBlock rows="1" name={nome} placeholder={placeholder} value={valore} readOnly />}</StyledCol>;
     case 2:
       return <StyledCol><StyledTextAreaElimina rows="1" placeholder={placeholder} name={nome} value={valore} readOnly /></StyledCol>;
@@ -85,13 +85,13 @@ const TextAreaTag = ({ tipoSelezione, nome, valore, modificabile, setItem, place
   }
 }
 
-const InputTag = ({ tipoSelezione, tipo, nome, valore, modificabile, setItem, placeholder }) => {
+const InputTag = ({ id, items, tipoSelezione, tipo, nome, valore, modificabile, setItem, placeholder, tipoItem, setItems }) => {
   switch(tipoSelezione) {
     case 0:
       return <StyledCol><StyledInputBlock rows="1" type={tipo} name={nome} placeholder={placeholder} value={valore} readOnly /></StyledCol>;
     case 1:
       return <StyledCol>{(modificabile) 
-                            ? <StyledInputModifica rows="1" type={tipo} name={nome} placeholder={placeholder} value={valore} onChange={(e) => handleInputChange(e, setItem)} />
+                            ? <StyledInputModifica rows="1" type={tipo} name={nome} placeholder={placeholder} value={valore} onChange={(e) => handleInputChange(e, setItem, items, setItems, tipoItem, id)} />
                             : <StyledInputBlock rows="1" type={tipo} name={nome} placeholder={placeholder} value={valore} readOnly />}</StyledCol>;
     case 2:
       return <StyledCol><StyledInputElimina rows="1" type={tipo} name={nome} placeholder={placeholder} value={valore} readOnly /></StyledCol>;
@@ -131,58 +131,68 @@ const OperazioniCercaItems = ({ visibilita, setVisibilita, arrowUp, setArrowUp, 
   );
 };
 
-function RowCliente({tipoItem, item, selectOperation}) {
-  const [cliente, setCliente] = useState(item);
+const OperazioniLogin = ({eseguiLogin}) => {
+  return (
+    <StyledColOperazioni>
+      <StyledLoginNotSelected size={grandezzaIcona} onClick={eseguiLogin} />
+    </StyledColOperazioni>
+  );
+};
 
+const OperazioniModificaProfilo = ({eseguiModificaProfilo}) => {
+  return (
+    <StyledColOperazioni>
+      <StyledPencilNotSelectedModificaProfilo size={grandezzaIcona} onClick={eseguiModificaProfilo} />
+    </StyledColOperazioni>
+  );
+};
+
+function RowCliente({items, tipoItem, item, selectOperation, setItems}) {
   return (
     <>
-      <OperazioniItemEsistente tipoSelezione={cliente.tipo_selezione} selectOperation={selectOperation} item={cliente} />
-      <StyledCol style={{maxWidth:"1px"}}><InputTag tipoSelezione={cliente.tipo_selezione} tipo="text" nome="contatto"     valore={tipoItem.charAt(0).toUpperCase() + tipoItem.slice(1)} setItem={setCliente} modificabile={false} /></StyledCol>
-      <StyledCol><TextAreaTag                       tipoSelezione={cliente.tipo_selezione}             nome="nome_cognome" valore={cliente.nome + " " + cliente.cognome}                 setItem={setCliente} modificabile={false} /></StyledCol>
-      <StyledCol><InputTag                          tipoSelezione={cliente.tipo_selezione} tipo="text" nome="contatto"     valore={cliente.contatto}                                     setItem={setCliente} modificabile={true}  /></StyledCol>
-      <StyledCol><TextAreaTag                       tipoSelezione={cliente.tipo_selezione}             nome="note"         valore={cliente.note}                                         setItem={setCliente} modificabile={true}  /></StyledCol>
+      <OperazioniItemEsistente tipoSelezione={item.tipo_selezione} selectOperation={selectOperation} item={item} />
+      <StyledCol style={{maxWidth:"1px"}}><InputTag setItems={setItems} id={item.id} items={items} tipoItem={tipoItem} tipoSelezione={item.tipo_selezione} tipo="text" nome="contatto"     valore={tipoItem.charAt(0).toUpperCase() + tipoItem.slice(1)} modificabile={false} /></StyledCol>
+      <StyledCol><TextAreaTag                       setItems={setItems} id={item.id} items={items} tipoItem={tipoItem} tipoSelezione={item.tipo_selezione}             nome="nome_cognome" valore={item.nome + " " + item.cognome}                 modificabile={false} /></StyledCol>
+      <StyledCol><InputTag                          setItems={setItems} id={item.id} items={items} tipoItem={tipoItem} tipoSelezione={item.tipo_selezione} tipo="text" nome="contatto"     valore={item.contatto}                                     modificabile={true} /></StyledCol>
+      <StyledCol><TextAreaTag                       setItems={setItems} id={item.id} items={items} tipoItem={tipoItem} tipoSelezione={item.tipo_selezione}             nome="note"         valore={item.note}                                         modificabile={true} /></StyledCol>
     </>
   );
 }
 
 function RowProfessionista({tipoItem, item, selectOperation}) {
-  const [professionista, setProfessionista] = useState(item);
-
   return (
     <>
-      <OperazioniItemEsistente tipoSelezione={professionista.tipo_selezione} selectOperation={selectOperation} item={professionista} />
-      <StyledCol style={{maxWidth:"1px"}}><InputTag tipoSelezione={professionista.tipo_selezione} tipo="text" nome="contatto"    valore={tipoItem.charAt(0).toUpperCase() + tipoItem.slice(1)} setItem={setProfessionista} modificabile={false} /></StyledCol>
-      <StyledCol><TextAreaTag                       tipoSelezione={professionista.tipo_selezione}             nome="nome"        valore={professionista.nome}                                  setItem={setProfessionista} modificabile={false} /></StyledCol>
-      <StyledCol><TextAreaTag                       tipoSelezione={professionista.tipo_selezione}             nome="professione" valore={professionista.professione}                           setItem={setProfessionista} modificabile={false} /></StyledCol>
-      <StyledCol><InputTag                          tipoSelezione={professionista.tipo_selezione} tipo="text" nome="contatto"    valore={professionista.contatto}                              setItem={setProfessionista} modificabile={true}  /></StyledCol>
-      <StyledCol><InputTag                          tipoSelezione={professionista.tipo_selezione} tipo="text" nome="email"       valore={professionista.email}                                 setItem={setProfessionista} modificabile={true}  /></StyledCol>
-      <StyledCol><TextAreaTag                       tipoSelezione={professionista.tipo_selezione}             nome="note"        valore={professionista.note}                                  setItem={setProfessionista} modificabile={true}  /></StyledCol>
+      <OperazioniItemEsistente tipoSelezione={item.tipo_selezione} selectOperation={selectOperation} item={item} />
+      <StyledCol style={{maxWidth:"1px"}}><InputTag tipoSelezione={item.tipo_selezione} tipo="text" nome="contatto"    valore={tipoItem.charAt(0).toUpperCase() + tipoItem.slice(1)} modificabile={false} /></StyledCol>
+      <StyledCol><TextAreaTag                       tipoSelezione={item.tipo_selezione}             nome="nome"        valore={item.nome}                                  modificabile={false} /></StyledCol>
+      <StyledCol><TextAreaTag                       tipoSelezione={item.tipo_selezione}             nome="professione" valore={item.professione}                           modificabile={false} /></StyledCol>
+      <StyledCol><InputTag                          tipoSelezione={item.tipo_selezione} tipo="text" nome="contatto"    valore={item.contatto}                              modificabile={true}  /></StyledCol>
+      <StyledCol><InputTag                          tipoSelezione={item.tipo_selezione} tipo="text" nome="email"       valore={item.email}                                 modificabile={true}  /></StyledCol>
+      <StyledCol><TextAreaTag                       tipoSelezione={item.tipo_selezione}             nome="note"        valore={item.note}                                  modificabile={true}  /></StyledCol>
     </>
   );
 }
 
 function RowLavoro({tipoItem, item, selectOperation}) {
-  const [lavoro, setLavoro] = useState(item);
-
   return (
     <>
-      <OperazioniItemEsistente tipoSelezione={lavoro.tipo_selezione} selectOperation={selectOperation} item={lavoro} />
-      <StyledCol><InputTag tipoSelezione={lavoro.tipo_selezione} tipo="text" nome="tipo_lavoro" valore={lavoro.tipo_lavoro} setItem={setLavoro} modificabile={false} /></StyledCol>
-      {(lavoro.tipo_lavoro === "Lavoro cliente") && (
-        <StyledCol><TextAreaTag tipoSelezione={lavoro.tipo_selezione} nome="nome_cognome_cliente" valore={lavoro.nome_cliente + " " + lavoro.cognome_cliente} setItem={setLavoro} modificabile={false} /></StyledCol>
+      <OperazioniItemEsistente tipoSelezione={item.tipo_selezione} selectOperation={selectOperation} item={item} />
+      <StyledCol><InputTag tipoSelezione={item.tipo_selezione} tipo="text" nome="tipo_lavoro" valore={item.tipo_lavoro} modificabile={false} /></StyledCol>
+      {(item.tipo_lavoro === "Lavoro cliente") && (
+        <StyledCol><TextAreaTag tipoSelezione={item.tipo_selezione} nome="nome_cognome_cliente" valore={item.nome_cliente + " " + item.cognome_cliente} modificabile={false} /></StyledCol>
       )}
-      {(lavoro.tipo_lavoro === "Lavoro professionista") && (
+      {(item.tipo_lavoro === "Lavoro professionista") && (
         <>
-          <StyledCol><TextAreaTag tipoSelezione={lavoro.tipo_selezione} nome="professionista_e_professione" valore={lavoro.nome_professionista + " - " + lavoro.professione} setItem={setLavoro} modificabile={false} /></StyledCol>
+          <StyledCol><TextAreaTag tipoSelezione={item.tipo_selezione} nome="professionista_e_professione" valore={item.nome_professionista + " - " + item.professione} modificabile={false} /></StyledCol>
         </>
       )}
        {(tipoItem.startsWith("lavoro")) && (
         <>
-          <StyledCol><TextAreaTag     tipoSelezione={lavoro.tipo_selezione}             nome="descrizione"   valore={lavoro.descrizione}                       setItem={setLavoro} modificabile={true} /></StyledCol>
-          <StyledCol><InputTag        tipoSelezione={lavoro.tipo_selezione} tipo="date" nome="giorno"        valore={formatoDate(lavoro.giorno, "AAAA-MM-GG")} setItem={setLavoro} modificabile={true} /></StyledCol>
-          <StyledCol><InputTag        tipoSelezione={lavoro.tipo_selezione} tipo="time" nome="orario_inizio" valore={formatoTime(lavoro.orario_inizio)}        setItem={setLavoro} modificabile={true} /></StyledCol>
-          <StyledCol><InputTag        tipoSelezione={lavoro.tipo_selezione} tipo="time" nome="orario_fine"   valore={formatoTime(lavoro.orario_fine)}        setItem={setLavoro} modificabile={true} /></StyledCol>
-          <StyledCol><TextAreaTag     tipoSelezione={lavoro.tipo_selezione}             nome="note"          valore={lavoro.note}                              setItem={setLavoro} modificabile={true} /></StyledCol>
+          <StyledCol><TextAreaTag     tipoSelezione={item.tipo_selezione}             nome="descrizione"   valore={item.descrizione}                       modificabile={true} /></StyledCol>
+          <StyledCol><InputTag        tipoSelezione={item.tipo_selezione} tipo="date" nome="giorno"        valore={formatoDate(item.giorno, "AAAA-MM-GG")} modificabile={true} /></StyledCol>
+          <StyledCol><InputTag        tipoSelezione={item.tipo_selezione} tipo="time" nome="orario_inizio" valore={formatoTime(item.orario_inizio)}        modificabile={true} /></StyledCol>
+          <StyledCol><InputTag        tipoSelezione={item.tipo_selezione} tipo="time" nome="orario_fine"   valore={formatoTime(item.orario_fine)}          modificabile={true} /></StyledCol>
+          <StyledCol><TextAreaTag     tipoSelezione={item.tipo_selezione}             nome="note"          valore={item.note}                              modificabile={true} /></StyledCol>
         </>
        )}
     </>
@@ -243,9 +253,10 @@ function RowNuovoLavoro({clienti, professionisti, tipoLavoro, tipoItem, item, se
 function RowNuovoItem({tipoItem, item, setItem, eseguiSalvataggio, errori}) {
   const campiNuovoItem = getCampiNuovoItem(tipoItem, item, errori);
   return (
-    <><div style={{width: "auto"}}>
-      <OperazioniNuovoItem eseguiSalvataggio={eseguiSalvataggio} />
-      <StyledSpanErrore></StyledSpanErrore>
+    <>
+      <div style={{width: "auto"}}>
+        <OperazioniNuovoItem eseguiSalvataggio={eseguiSalvataggio} />
+        <StyledSpanErrore></StyledSpanErrore>
       </div>
       {campiNuovoItem.map(([label, placeholder, name, value, type, errore], index) => (
         <React.Fragment key={index}>
@@ -296,7 +307,71 @@ function RowRicercaItem({tipoItem, item, setItem, arrowUp, setArrowUp, eseguiRic
   );
 }
 
-function RowItem({errori, setErrori, clienti, professionisti, tipoLavoro, tipoItem, item, setItem, header, selectOperation, eseguiRicerca, eseguiSalvataggio}) {
+function RowLogin({item, setItem, errori, setErrori, eseguiLogin}) {
+  return (
+    <>
+      <div style={{width: "auto"}}>
+        <OperazioniLogin eseguiLogin={eseguiLogin} />
+        <StyledSpanErrore></StyledSpanErrore>
+      </div>
+      <StyledCol>
+        <div style={{width: "100%"}}>
+          <StyledTextAreaModifica rows="1" name="username" placeholder='Username*' value={item.username} onChange={(e) => handleInputChange(e, setItem)} />
+          <StyledSpanErrore>{errori.username}</StyledSpanErrore>
+        </div>
+      </StyledCol>
+      <StyledCol>
+        <div style={{width: "100%"}}>
+          <StyledTextAreaModifica rows="1" name="password" placeholder='Password*' value={item.password} onChange={(e) => handleInputChange(e, setItem)} />
+          <StyledSpanErrore>{errori.password}</StyledSpanErrore>
+        </div>
+      </StyledCol>
+    </>
+  );
+}
+
+function RowModificaProfilo({ item, setItem, errori, eseguiModificaProfilo }) {
+  return (
+    <>
+      <div style={{width: "auto"}}>
+        <OperazioniModificaProfilo eseguiModificaProfilo={eseguiModificaProfilo} />
+        <StyledSpanErrore></StyledSpanErrore>
+      </div>
+      <StyledCol>
+        <div style={{width: "100%"}}>
+          <StyledTextAreaModifica rows="1" name="nuovo_username" placeholder='Nuovo username*' value={item.nuovo_username} onChange={(e) => handleInputChange(e, setItem)} />
+          {(errori.nuovo_username !== "") && (<StyledSpanErrore>{errori.nuovo_username}</StyledSpanErrore>)}
+        </div>
+      </StyledCol>
+      <StyledCol>
+        <div style={{width: "100%"}}>
+          <StyledTextAreaModifica rows="1" name="note" placeholder='Note' value={item.note} onChange={(e) => handleInputChange(e, setItem)} />
+          {(errori.note !== "") && (<StyledSpanErrore>{errori.note}</StyledSpanErrore>)}
+        </div>
+      </StyledCol>
+      <StyledCol>
+        <div style={{width: "100%"}}>
+          <StyledTextAreaModifica rows="1" name="password_attuale" placeholder='Password attuale*' value={item.password_attuale} onChange={(e) => handleInputChange(e, setItem)} />
+          {(errori.password_attuale !== "") && (<StyledSpanErrore>{errori.password_attuale}</StyledSpanErrore>)}
+        </div>
+      </StyledCol>
+      <StyledCol>
+        <div style={{width: "100%"}}>
+          <StyledTextAreaModifica rows="1" name="nuova_password" placeholder='Nuova password' value={item.nuova_password} onChange={(e) => handleInputChange(e, setItem)} />
+          {(errori.nuova_password !== "") && (<StyledSpanErrore>{errori.nuova_password}</StyledSpanErrore>)}
+        </div>
+      </StyledCol>
+      <StyledCol>
+        <div style={{width: "100%"}}>
+          <StyledTextAreaModifica rows="1" name="conferma_nuova_password" placeholder='Conferma nuova password' value={item.conferma_nuova_password} onChange={(e) => handleInputChange(e, setItem)} />
+          {(errori.conferma_nuova_password !== "") && (<StyledSpanErrore>{errori.conferma_nuova_password}</StyledSpanErrore>)}
+        </div>
+      </StyledCol>  
+    </>
+  );
+}
+
+function RowItem({items, errori, setErrori, clienti, professionisti, tipoLavoro, tipoItem, item, setItem, setItems, header, selectOperation, eseguiRicerca, eseguiSalvataggio, eseguiLogin, eseguiModificaProfilo}) {
   const [isVisible, setIsVisible] = useState(true);
   const [arrowUp, setArrowUp] = useState(true);
 
@@ -319,21 +394,28 @@ function RowItem({errori, setErrori, clienti, professionisti, tipoLavoro, tipoIt
       )}
       {(tipoItem === "cliente") && (
         <StyledRow>
-          <RowCliente tipoItem={tipoItem} item={item} selectOperation={selectOperation} />
+          <RowCliente      items={items} selectOperation={selectOperation} item={item} setItems={setItems} tipoItem={tipoItem} />
         </StyledRow>
       )}
-      {(tipoItem === "professionista") &&(
+      {(tipoItem === "professionista") && (
         <StyledRow>
-          <RowProfessionista tipoItem={tipoItem} item={item} selectOperation={selectOperation} />
+          <RowProfessionista selectOperation={selectOperation} item={item} setItems={setItems} tipoItem={tipoItem} />
         </StyledRow>
       )}
-      {(tipoItem === "lavoro") &&(
+      {(tipoItem === "lavoro") && (
         <StyledRow>
-          <RowLavoro tipoItem={tipoItem} item={item} selectOperation={selectOperation} />
+          <RowLavoro         selectOperation={selectOperation} item={item} setItems={setItems} tipoItem={tipoItem} />
+        </StyledRow>
+      )}
+      {(tipoItem === "login") && (
+        <StyledRow>
+          <RowLogin item={item} setItem={setItem} errori={errori} setErrori={setErrori} eseguiLogin={eseguiLogin} />
         </StyledRow>
       )}
       {(tipoItem.startsWith("modifica profilo")) &&(
-        <RowModificaProfilo key={item.id} item={item} />
+        <StyledRow>
+          <RowModificaProfilo item={item} setItem={setItem} errori={errori} eseguiModificaProfilo={eseguiModificaProfilo} />
+        </StyledRow>
       )}
     </>
   );

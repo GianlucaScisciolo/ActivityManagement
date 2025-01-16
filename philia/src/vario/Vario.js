@@ -1,10 +1,45 @@
-export const handleInputChange = (e, setItem) => {
+// const aggiornaValoreItem = (items, data, setItems) => {
+//   const updatedItems = items.map(item => {
+//     if (data.ids.includes(item.id)) {
+//       return { ...item, tipo_selezione: 0 };
+//     }
+//     return item;
+//   });
+//   setItems(updatedItems);
+// };
+
+export const handleInputChange = (e, setItem, items, setItems, tipoItem, id) => {
   const nome_campi = [
     "nome", "cognome", "contatto", "note", "professione", "email", "id_cliente", "id_professionista", 
     "nome_cliente", "cognome_cliente", "nome_professionista", "descrizione", 
-    "giorno", "primo_giorno", "ultimo_giorno", "orario_inizio", "orario_fine"
+    "giorno", "primo_giorno", "ultimo_giorno", "orario_inizio", "orario_fine", 
+    "username", "password", "nuovo_username", "password_attuale", "nuova_password", "conferma_nuova_password"
   ]
   const { name, value } = e.target;
+  
+  if(tipoItem === "cliente") {
+    // alert(name);
+    // alert(value);
+    if(nome_campi.includes(name)) {
+      // alert("nome valido.");
+      const updatedItems = items.map(item => {
+        if(id === item.id) {
+          return {
+            ...item,
+            [name]: value
+          }
+        }
+        return item;
+      });
+      setItems(updatedItems);
+    }
+    else {
+      alert("Errore, nome campo " + name + " non valido.");
+    }
+    return;
+  }
+  alert("CONTINUA??");
+  
   if(nome_campi.includes(name)) {
     setItem(prevState => ({
       ...prevState, 
@@ -12,7 +47,7 @@ export const handleInputChange = (e, setItem) => {
     }));
   }
   else {
-    alert("Errore, nome campo non valido.");
+    alert("Errore, nome campo " + name + " non valido.");
   }
 };
 

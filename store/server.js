@@ -71,7 +71,7 @@ app.post("/LOGIN", async (req, res) => {
   const { username = '', password = '' } = req.body;
 
   // Aggiungi un log per vedere i dati ricevuti
-  console.log("Dati ricevuti per il login: ", req.body);
+  console.log("Dati ricevuti per il login: ", [username, password]);
 
   const sql = ` 
     SELECT 
@@ -82,7 +82,7 @@ app.post("/LOGIN", async (req, res) => {
       \`username\` = ?; 
   `;
 
-  const params = [`${username}`, `${password}`];
+  const params = [`${username}`];//, `${password}`];
 
   return getResults(sql, params, res);
 });

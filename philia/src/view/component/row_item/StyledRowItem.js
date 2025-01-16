@@ -1,7 +1,7 @@
 import styled, {keyframes} from 'styled-components';
 import Row from 'react-bootstrap/esm/Row';
 import Col from 'react-bootstrap/esm/Col';
-import { Trash2, Pencil, Save, Search, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Trash2, Pencil, Save, Search, ChevronLeft, ChevronRight, LogIn } from 'lucide-react';
 
 export const grandezzaIcona = 50;
 
@@ -200,8 +200,24 @@ export const StyledArrowRightNotSelected = styled(ChevronRight)`
   }
 `;
 
+export const StyledLoginNotSelected = styled(LogIn)`
+  ${styledIconNotSelected}
+  transition: 0.5s all ease-out;
+  &:hover {
+    color: #0050EF;
+  }
+`;
+
 export const StyledPencilNotSelected = styled(Pencil)`
   ${styledIconNotSelected}
+`;
+
+export const StyledPencilNotSelectedModificaProfilo = styled(Pencil)`
+  ${styledIconNotSelected}
+  transition: 0.5s all ease-out;
+  &:hover {
+    color: #0050EF;
+  }
 `;
 
 export const StyledPencilSelected = styled(Pencil)`

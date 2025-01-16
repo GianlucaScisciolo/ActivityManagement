@@ -31,7 +31,7 @@ const Clienti = () => {
     "erroreContatto": "",
     "erroreNote": ""
   })
-
+  
   return (
     <>
       <Header />
@@ -52,26 +52,9 @@ const Clienti = () => {
       {(clienti.length > 0) && (
         <>
           <div className="main-content"></div>
-          <Items tipoItem={"cliente"} items={clienti} setterItems={setClienti} errori={errori} setErrori={setErrori}/>    
+          <Items tipoItem={"cliente"} items={clienti} setterItems={setClienti} />    
         </>
       )}
-
-      {/* <div className="main-content"></div>
-      
-      <div className='contenitore-2'>
-        <Row>
-          {selectedIdsModifica.length > 0 && (
-            <Col>
-              <button className='bottone-blu-non-selezionato' onClick={() => modifica("clienti", datiClienteLastSearch, selectedIdsModifica, setSelectedIdsModifica, clienti, setClienti, null, null, setErrori, null)}>Modifica</button>
-            </Col>
-          )}        
-          {selectedIds.length > 0 && (
-            <Col>
-              <button className='bottone-rosso-non-selezionato' onClick={() => elimina("clienti", datiClienteLastSearch, selectedIds, setSelectedIds, clienti, setClienti, null, null)}>Elimina</button>
-            </Col>
-          )}
-        </Row>
-      </div> */}
     </>
   );
 }
