@@ -54,12 +54,12 @@ const TrashTag = ({ tipoSelezione, selectOperation, item }) => {
   }
 }
 
-const TextAreaTag = ({ tipoSelezione, nome, valore, modificabile, setItem, placeholder }) => {
+const TextAreaTag = ({ tipoSelezione, nome, valore, modificabile, setItem, placeholder, items, setItems, tipoItem, id }) => {
   switch(tipoSelezione) {
     case 0:
       return <StyledTextAreaBlock rows="1" name={nome} placeholder={placeholder} value={valore} readOnly />;
     case 1:
-      return (modificabile) ? <StyledTextAreaModifica rows="1" name={nome} placeholder={placeholder} value={valore} onChange={(e) => handleInputChange(e, setItem)} />
+      return (modificabile) ? <StyledTextAreaModifica rows="1" name={nome} placeholder={placeholder} value={valore} onChange={(e) => handleInputChange(e, setItem, items, setItems, tipoItem, id)} />
                             : <StyledTextAreaBlock rows="1" name={nome} placeholder={placeholder} value={valore} readOnly />;
     case 2:
       return <StyledTextAreaElimina rows="1" name={nome} placeholder={placeholder} value={valore} readOnly />;
@@ -73,12 +73,12 @@ const getTypeIfEmpty = (type, value) => {
   return type;
 }
 
-const InputTag = ({ tipoSelezione, tipo, nome, valore, modificabile, setItem, placeholder }) => {
+const InputTag = ({ tipoSelezione, tipo, nome, valore, modificabile, setItem, placeholder, items, setItems, tipoItem, id }) => {
   switch(tipoSelezione) {
     case 0:
       return <StyledInputBlock rows="1" type={getTypeIfEmpty(tipo, valore)} name={nome} placeholder={placeholder} value={valore}  readOnly />;
     case 1:
-      return (modificabile) ? <StyledInputModifica rows="1" type={getTypeIfEmpty(tipo, valore)} name={nome} placeholder={placeholder} value={valore} onClick={() => cambiaTipo({tipo})} onChange={(e) => handleInputChange(e, setItem)} />
+      return (modificabile) ? <StyledInputModifica rows="1" type={getTypeIfEmpty(tipo, valore)} name={nome} placeholder={placeholder} value={valore} onChange={(e) => handleInputChange(e, setItem, items, setItems, tipoItem, id)} />
                             : <StyledInputBlock rows="1" type={getTypeIfEmpty(tipo, valore)} name={nome} placeholder={placeholder} value={valore} readOnly />;
     case 2:
       return <StyledInputElimina rows="1" type={getTypeIfEmpty(tipo, valore)} name={nome} value={valore} placeholder={placeholder} readOnly />;
@@ -138,51 +138,50 @@ const OperazioniModificaProfilo = ({eseguiModificaProfilo}) => {
   );
 };
 
-
-function CardCliente({ selectOperation, item, setItems }) {
+function CardCliente({ selectOperation, item, setItems, items, tipoItem }) {
   return (
     <>
-      <TextAreaTag             tipoSelezione={item.tipo_selezione}             nome="nome_cognome" valore={item.nome + " " + item.cognome} modificabile={false} />
-      <InputTag                tipoSelezione={item.tipo_selezione} tipo="text" nome="contatto"     valore={item.contatto}                  modificabile={true} />      
-      <TextAreaTag             tipoSelezione={item.tipo_selezione}             nome="note"         valore={item.note}                      modificabile={true} />
-      <OperazioniItemEsistente tipoSelezione={item.tipo_selezione} selectOperation={selectOperation} item={item} />
+      <TextAreaTag             setItems={setItems} id={item.id} items={items} tipoItem={tipoItem} tipoSelezione={item.tipo_selezione}             nome="nome_cognome" valore={item.nome + " " + item.cognome} modificabile={false} />
+      <InputTag                setItems={setItems} id={item.id} items={items} tipoItem={tipoItem} tipoSelezione={item.tipo_selezione} tipo="text" nome="contatto"     valore={item.contatto}                  modificabile={true} />      
+      <TextAreaTag             setItems={setItems} id={item.id} items={items} tipoItem={tipoItem} tipoSelezione={item.tipo_selezione}             nome="note"         valore={item.note}                      modificabile={true} />
+      <OperazioniItemEsistente setItems={setItems} id={item.id} items={items} tipoItem={tipoItem} tipoSelezione={item.tipo_selezione} selectOperation={selectOperation} item={item} />
     </>
   );
 }
 
-function CardProfessionista({ selectOperation, item, setItem }) {  
+function CardProfessionista({ selectOperation, item, setItems, items, tipoItem }) {  
   return (
     <>
       {/* <div>{item.id}</div> */}
       {/* <div>{item.tipo_selezione}</div> */}
-      <TextAreaTag             tipoSelezione={item.tipo_selezione}              nome="nome"        valore={item.nome}        modificabile={false} />
-      <TextAreaTag             tipoSelezione={item.tipo_selezione}              nome="professione" valore={item.professione} modificabile={false} />
-      <InputTag                tipoSelezione={item.tipo_selezione} tipo="text"  nome="contatto"    valore={item.contatto}    modificabile={true} />
-      <InputTag                tipoSelezione={item.tipo_selezione} tipo="email" nome="email"       valore={item.email}       modificabile={true} />
-      <TextAreaTag             tipoSelezione={item.tipo_selezione}              nome="note"        valore={item.note}        modificabile={true} />
+      <TextAreaTag             setItems={setItems} id={item.id} items={items} tipoItem={tipoItem} tipoSelezione={item.tipo_selezione}              nome="nome"        valore={item.nome}        modificabile={false} />
+      <TextAreaTag             setItems={setItems} id={item.id} items={items} tipoItem={tipoItem} tipoSelezione={item.tipo_selezione}              nome="professione" valore={item.professione} modificabile={false} />
+      <InputTag                setItems={setItems} id={item.id} items={items} tipoItem={tipoItem} tipoSelezione={item.tipo_selezione} tipo="text"  nome="contatto"    valore={item.contatto}    modificabile={true} />
+      <InputTag                setItems={setItems} id={item.id} items={items} tipoItem={tipoItem} tipoSelezione={item.tipo_selezione} tipo="email" nome="email"       valore={item.email}       modificabile={true} />
+      <TextAreaTag             setItems={setItems} id={item.id} items={items} tipoItem={tipoItem} tipoSelezione={item.tipo_selezione}              nome="note"        valore={item.note}        modificabile={true} />
       <OperazioniItemEsistente tipoSelezione={item.tipo_selezione} selectOperation={selectOperation} item={item} />
     </>
   );
 }
 
-function CardLavoro({selectOperation, item, setItem, tipoItem}) {
+function CardLavoro({selectOperation, item, items, setItems, setItem, tipoItem}) {
   return (
     <>
       {(item.tipo_lavoro === "Lavoro cliente") && (
-        <TextAreaTag   tipoSelezione={item.tipo_selezione}             nome="nome_cognome_cliente" valore={item.nome_cliente + " " + item.cognome_cliente} modificabile={false}   />
+        <TextAreaTag  setItems={setItems} id={item.id} items={items} tipoItem={tipoItem} tipoSelezione={item.tipo_selezione}             nome="nome_cognome_cliente" valore={item.nome_cliente + " " + item.cognome_cliente} modificabile={false}   />
       )}
       {(item.tipo_lavoro === "Lavoro professionista") && (
         <>
-          <TextAreaTag tipoSelezione={item.tipo_selezione}             nome="nome_professionista_e_professione"  valore={item.nome_professionista + " - " + item.professione}                         modificabile={false} />
+          <TextAreaTag setItems={setItems} id={item.id} items={items} tipoItem={tipoItem} tipoSelezione={item.tipo_selezione}             nome="nome_professionista_e_professione"  valore={item.nome_professionista + " - " + item.professione}                         modificabile={false} />
         </>
       )}
       {(tipoItem.startsWith("lavoro")) && (
         <>
-          <TextAreaTag tipoSelezione={item.tipo_selezione}             nome="descrizione"          valore={item.descrizione}                                 modificabile={true} />
-          <InputTag    tipoSelezione={item.tipo_selezione} tipo="date" nome="giorno"               valore={formatoDate(item.giorno, "AAAA-MM-GG")}           modificabile={true} />
-          <InputTag    tipoSelezione={item.tipo_selezione} tipo="time" nome="orario_inizio"        valore={formatoTime(item.orario_inizio)}                  modificabile={true} />
-          <InputTag    tipoSelezione={item.tipo_selezione} tipo="time" nome="orario_fine"          valore={formatoTime(item.orario_fine)}                    modificabile={true} />
-          <TextAreaTag tipoSelezione={item.tipo_selezione}             nome="note"                 valore={item.note}                                        modificabile={true} />
+          <TextAreaTag setItems={setItems} id={item.id} items={items} tipoItem={tipoItem} tipoSelezione={item.tipo_selezione}             nome="descrizione"          valore={item.descrizione}                                 modificabile={true} />
+          <InputTag    setItems={setItems} id={item.id} items={items} tipoItem={tipoItem} tipoSelezione={item.tipo_selezione} tipo="date" nome="giorno"               valore={formatoDate(item.giorno, "AAAA-MM-GG")}           modificabile={true} />
+          <InputTag    setItems={setItems} id={item.id} items={items} tipoItem={tipoItem} tipoSelezione={item.tipo_selezione} tipo="time" nome="orario_inizio"        valore={formatoTime(item.orario_inizio)}                  modificabile={true} />
+          <InputTag    setItems={setItems} id={item.id} items={items} tipoItem={tipoItem} tipoSelezione={item.tipo_selezione} tipo="time" nome="orario_fine"          valore={formatoTime(item.orario_fine)}                    modificabile={true} />
+          <TextAreaTag setItems={setItems} id={item.id} items={items} tipoItem={tipoItem} tipoSelezione={item.tipo_selezione}             nome="note"                 valore={item.note}                                        modificabile={true} />
         </>
       )}
       <OperazioniItemEsistente tipoSelezione={item.tipo_selezione} selectOperation={selectOperation} item={item} />
@@ -308,7 +307,7 @@ function CardModificaProfilo({ item, setItem, errori, eseguiModificaProfilo }) {
   );
 }
 
-function CardItem({errori, setErrori, clienti, professionisti, tipoLavoro, tipoItem, item, setItem, setItems, header, selectOperation, eseguiRicerca, eseguiSalvataggio, eseguiLogin, eseguiModificaProfilo}) {
+function CardItem({errori, setErrori, clienti, professionisti, tipoLavoro, tipoItem, item, setItem, items, setItems, header, selectOperation, eseguiRicerca, eseguiSalvataggio, eseguiLogin, eseguiModificaProfilo}) {
   const [isVisible, setIsVisible] = useState(true);
   const [arrowUp, setArrowUp] = useState(true);
   const [erroriCliente, setErroriCliente] = useState({
@@ -334,13 +333,13 @@ function CardItem({errori, setErrori, clienti, professionisti, tipoLavoro, tipoI
           />
         )}
         {(tipoItem === "cliente") && (
-          <CardCliente selectOperation={selectOperation} item={item} setItems={setItems} />
+          <CardCliente items={items} tipoItem={tipoItem} selectOperation={selectOperation} item={item} setItems={setItems} />
         )}
         {(tipoItem === "professionista") && (
-          <CardProfessionista item={item} selectOperation={selectOperation} />
+          <CardProfessionista item={item} selectOperation={selectOperation} items={items} tipoItem={tipoItem} setItems={setItems} />
         )}
         {(tipoItem.startsWith("lavoro")) && (
-          <CardLavoro tipoItem={tipoItem} item={item} selectOperation={selectOperation} />
+          <CardLavoro tipoItem={tipoItem} item={item} selectOperation={selectOperation} items={items} setItems={setItems} />
         )}
         {(tipoItem === "login") && (
           <CardLogin item={item} setItem={setItem} errori={errori} setErrori={setErrori} eseguiLogin={eseguiLogin} />

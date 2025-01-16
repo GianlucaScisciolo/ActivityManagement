@@ -159,40 +159,40 @@ function RowCliente({items, tipoItem, item, selectOperation, setItems}) {
   );
 }
 
-function RowProfessionista({tipoItem, item, selectOperation}) {
+function RowProfessionista({items, tipoItem, item, selectOperation, setItems}) {
   return (
     <>
       <OperazioniItemEsistente tipoSelezione={item.tipo_selezione} selectOperation={selectOperation} item={item} />
-      <StyledCol style={{maxWidth:"1px"}}><InputTag tipoSelezione={item.tipo_selezione} tipo="text" nome="contatto"    valore={tipoItem.charAt(0).toUpperCase() + tipoItem.slice(1)} modificabile={false} /></StyledCol>
-      <StyledCol><TextAreaTag                       tipoSelezione={item.tipo_selezione}             nome="nome"        valore={item.nome}                                  modificabile={false} /></StyledCol>
-      <StyledCol><TextAreaTag                       tipoSelezione={item.tipo_selezione}             nome="professione" valore={item.professione}                           modificabile={false} /></StyledCol>
-      <StyledCol><InputTag                          tipoSelezione={item.tipo_selezione} tipo="text" nome="contatto"    valore={item.contatto}                              modificabile={true}  /></StyledCol>
-      <StyledCol><InputTag                          tipoSelezione={item.tipo_selezione} tipo="text" nome="email"       valore={item.email}                                 modificabile={true}  /></StyledCol>
-      <StyledCol><TextAreaTag                       tipoSelezione={item.tipo_selezione}             nome="note"        valore={item.note}                                  modificabile={true}  /></StyledCol>
+      <StyledCol style={{maxWidth:"1px"}}><InputTag setItems={setItems} id={item.id} items={items} tipoItem={tipoItem} tipoSelezione={item.tipo_selezione} tipo="text" nome="contatto"    valore={tipoItem.charAt(0).toUpperCase() + tipoItem.slice(1)} modificabile={false} /></StyledCol>
+      <StyledCol><TextAreaTag                       setItems={setItems} id={item.id} items={items} tipoItem={tipoItem} tipoSelezione={item.tipo_selezione}             nome="nome"        valore={item.nome}                                  modificabile={false} /></StyledCol>
+      <StyledCol><TextAreaTag                       setItems={setItems} id={item.id} items={items} tipoItem={tipoItem} tipoSelezione={item.tipo_selezione}             nome="professione" valore={item.professione}                           modificabile={false} /></StyledCol>
+      <StyledCol><InputTag                          setItems={setItems} id={item.id} items={items} tipoItem={tipoItem} tipoSelezione={item.tipo_selezione} tipo="text" nome="contatto"    valore={item.contatto}                              modificabile={true}  /></StyledCol>
+      <StyledCol><InputTag                          setItems={setItems} id={item.id} items={items} tipoItem={tipoItem} tipoSelezione={item.tipo_selezione} tipo="text" nome="email"       valore={item.email}                                 modificabile={true}  /></StyledCol>
+      <StyledCol><TextAreaTag                       setItems={setItems} id={item.id} items={items} tipoItem={tipoItem} tipoSelezione={item.tipo_selezione}             nome="note"        valore={item.note}                                  modificabile={true}  /></StyledCol>
     </>
   );
 }
 
-function RowLavoro({tipoItem, item, selectOperation}) {
+function RowLavoro({items, tipoItem, item, selectOperation, setItems}) {
   return (
     <>
       <OperazioniItemEsistente tipoSelezione={item.tipo_selezione} selectOperation={selectOperation} item={item} />
       <StyledCol><InputTag tipoSelezione={item.tipo_selezione} tipo="text" nome="tipo_lavoro" valore={item.tipo_lavoro} modificabile={false} /></StyledCol>
       {(item.tipo_lavoro === "Lavoro cliente") && (
-        <StyledCol><TextAreaTag tipoSelezione={item.tipo_selezione} nome="nome_cognome_cliente" valore={item.nome_cliente + " " + item.cognome_cliente} modificabile={false} /></StyledCol>
+        <StyledCol><TextAreaTag setItems={setItems} id={item.id} items={items} tipoItem={tipoItem} tipoSelezione={item.tipo_selezione} nome="nome_cognome_cliente" valore={item.nome_cliente + " " + item.cognome_cliente} modificabile={false} /></StyledCol>
       )}
       {(item.tipo_lavoro === "Lavoro professionista") && (
         <>
-          <StyledCol><TextAreaTag tipoSelezione={item.tipo_selezione} nome="professionista_e_professione" valore={item.nome_professionista + " - " + item.professione} modificabile={false} /></StyledCol>
+          <StyledCol><TextAreaTag setItems={setItems} id={item.id} items={items} tipoItem={tipoItem} tipoSelezione={item.tipo_selezione} nome="professionista_e_professione" valore={item.nome_professionista + " - " + item.professione} modificabile={false} /></StyledCol>
         </>
       )}
        {(tipoItem.startsWith("lavoro")) && (
         <>
-          <StyledCol><TextAreaTag     tipoSelezione={item.tipo_selezione}             nome="descrizione"   valore={item.descrizione}                       modificabile={true} /></StyledCol>
-          <StyledCol><InputTag        tipoSelezione={item.tipo_selezione} tipo="date" nome="giorno"        valore={formatoDate(item.giorno, "AAAA-MM-GG")} modificabile={true} /></StyledCol>
-          <StyledCol><InputTag        tipoSelezione={item.tipo_selezione} tipo="time" nome="orario_inizio" valore={formatoTime(item.orario_inizio)}        modificabile={true} /></StyledCol>
-          <StyledCol><InputTag        tipoSelezione={item.tipo_selezione} tipo="time" nome="orario_fine"   valore={formatoTime(item.orario_fine)}          modificabile={true} /></StyledCol>
-          <StyledCol><TextAreaTag     tipoSelezione={item.tipo_selezione}             nome="note"          valore={item.note}                              modificabile={true} /></StyledCol>
+          <StyledCol><TextAreaTag     setItems={setItems} id={item.id} items={items} tipoItem={tipoItem} tipoSelezione={item.tipo_selezione}             nome="descrizione"   valore={item.descrizione}                       modificabile={true} /></StyledCol>
+          <StyledCol><InputTag        setItems={setItems} id={item.id} items={items} tipoItem={tipoItem} tipoSelezione={item.tipo_selezione} tipo="date" nome="giorno"        valore={formatoDate(item.giorno, "AAAA-MM-GG")} modificabile={true} /></StyledCol>
+          <StyledCol><InputTag        setItems={setItems} id={item.id} items={items} tipoItem={tipoItem} tipoSelezione={item.tipo_selezione} tipo="time" nome="orario_inizio" valore={formatoTime(item.orario_inizio)}        modificabile={true} /></StyledCol>
+          <StyledCol><InputTag        setItems={setItems} id={item.id} items={items} tipoItem={tipoItem} tipoSelezione={item.tipo_selezione} tipo="time" nome="orario_fine"   valore={formatoTime(item.orario_fine)}          modificabile={true} /></StyledCol>
+          <StyledCol><TextAreaTag     setItems={setItems} id={item.id} items={items} tipoItem={tipoItem} tipoSelezione={item.tipo_selezione}             nome="note"          valore={item.note}                              modificabile={true} /></StyledCol>
         </>
        )}
     </>
@@ -399,12 +399,12 @@ function RowItem({items, errori, setErrori, clienti, professionisti, tipoLavoro,
       )}
       {(tipoItem === "professionista") && (
         <StyledRow>
-          <RowProfessionista selectOperation={selectOperation} item={item} setItems={setItems} tipoItem={tipoItem} />
+          <RowProfessionista items={items} selectOperation={selectOperation} item={item} setItems={setItems} tipoItem={tipoItem} />
         </StyledRow>
       )}
       {(tipoItem === "lavoro") && (
         <StyledRow>
-          <RowLavoro         selectOperation={selectOperation} item={item} setItems={setItems} tipoItem={tipoItem} />
+          <RowLavoro         items={items} selectOperation={selectOperation} item={item} setItems={setItems} tipoItem={tipoItem} />
         </StyledRow>
       )}
       {(tipoItem === "login") && (

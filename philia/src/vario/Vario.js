@@ -17,7 +17,7 @@ export const handleInputChange = (e, setItem, items, setItems, tipoItem, id) => 
   ]
   const { name, value } = e.target;
   
-  if(tipoItem === "cliente") {
+  if(tipoItem === "cliente" || tipoItem === "professionista" || tipoItem === "lavoro") {
     // alert(name);
     // alert(value);
     if(nome_campi.includes(name)) {

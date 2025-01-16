@@ -59,7 +59,7 @@ export const Items = ({tipoItem, items, setterItems}) => {
       {itemSession.view === "card" && (
         <div className='contenitore-3'>
           {items.map((item, index) => (  
-            <CardItem key={index} selectOperation={selectOperation} tipoItem={tipoItem} item={item} 
+            <CardItem key={index} selectOperation={selectOperation} tipoItem={tipoItem} item={item} items={items} 
               setItems={setterItems} header={tipoItem.charAt(0).toUpperCase() + tipoItem.slice(1)} 
             />
           ))}
