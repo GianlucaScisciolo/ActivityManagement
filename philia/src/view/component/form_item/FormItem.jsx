@@ -289,17 +289,17 @@ function CampiItem({ campiItem, setItem }) {
   );
 }
 
-function FormNuovoItem({tipoItem, item, setItem, eseguiSalvataggio}) {
-  const campiNuovoItem = getCampiNuovoItem(tipoItem, item);
-  return (
-    <>
-      <SlideContainer isVisible={true}>
-        <CampiItem campiItem={campiNuovoItem} setItem={setItem} />
-      </SlideContainer>
-      <OperazioniNuovoItem eseguiSalvataggio={eseguiSalvataggio} />
-    </>
-  );
-}
+// function FormNuovoItem({tipoItem, item, setItem, eseguiSalvataggio}) {
+//   const campiNuovoItem = getCampiNuovoItem(tipoItem, item);
+//   return (
+//     <>
+//       <SlideContainer isVisible={true}>
+//         <CampiItem campiItem={campiNuovoItem} setItem={setItem} />
+//       </SlideContainer>
+//       <OperazioniNuovoItem eseguiSalvataggio={eseguiSalvataggio} />
+//     </>
+//   );
+// }
 
 function FormRicercaItems({tipoItem, item, setItem, eseguiRicerca, isVisible, setIsVisible, arrowUp, setArrowUp}) {
   const campiRicercaItems = getCampiRicerca(tipoItem, item);

@@ -253,9 +253,11 @@ function CardNuovoLavoro({clienti, professionisti, tipoLavoro, tipoItem, item, s
 
 function CardNuovoItem({tipoItem, item, setItem, eseguiSalvataggio, errori}) {
   const campiNuovoItem = getCampiNuovoItem(tipoItem, item, errori);
+  // let maxHeight = (isVisible) ? "2000px" : "0px";
+  let maxHeight = "2000px";
   return (
     <>
-      <SlideContainer isVisible={true}>
+      <SlideContainer style={{maxHeight: `${maxHeight}`}}>
         <CampiItem campiItem={campiNuovoItem} setItem={setItem} />
       </SlideContainer>
       <OperazioniNuovoItem eseguiSalvataggio={eseguiSalvataggio} />
