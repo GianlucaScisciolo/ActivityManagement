@@ -35,7 +35,7 @@ const NuovoProfessionista = () => {
     if (confirm("Sei sicuro di voler salvare il professionista?")) {
       if (controlloProfessionista(nuovoProfessionista, setErrori) > 0) 
         return;
-
+  
       try {
         const response = await fetch('/INSERISCI_PROFESSIONISTA', {
           method: 'POST',
@@ -44,31 +44,40 @@ const NuovoProfessionista = () => {
           },
           body: JSON.stringify(nuovoProfessionista),
         });
-
+  
         if (!response.ok) {
-          throw new Error('Errore durante l\'inserimento del professionista');
+          const errorData = await response.json();
+          if (response.status === 409) {
+            alert(errorData.message); // Mostra l'alert con il messaggio di errore specifico
+          } 
+          else {
+            throw new Error('Errore durante l\'inserimento del professionista');
+          }
+        } 
+        else {
+          const result = await response.json();
+  
+          nuovoProfessionista.contatto = (nuovoProfessionista.contatto.split(' ').join('') === "") ? "Contatto non inserito." : nuovoProfessionista.contatto;
+          nuovoProfessionista.email = (nuovoProfessionista.email.split(' ').join('') === "") ? "Email non inserita." : nuovoProfessionista.email;
+          nuovoProfessionista.note = (nuovoProfessionista.note.split(' ').join('') === "") ? "Nota non inserita." : nuovoProfessionista.note;
+          setProfessionisti(prevProfessionisti => [...prevProfessionisti, nuovoProfessionista]);
+          setNuovoProfessionista({
+            nome: "",
+            professione: "",
+            contatto: "",
+            email: "",
+            note: ""
+          });
+  
+          alert("L'inserimento del professionista è andato a buon fine!!");
         }
-
-        const result = await response.json();
-
-        nuovoProfessionista.contatto = (nuovoProfessionista.contatto.split(' ').join('') === "") ? "Contatto non inserito." : nuovoProfessionista.contatto;
-        nuovoProfessionista.email = (nuovoProfessionista.email.split(' ').join('') === "") ? "Email non inserita." : nuovoProfessionista.email;
-        nuovoProfessionista.note = (nuovoProfessionista.note.split(' ').join('') === "") ? "Nota non inserita." : nuovoProfessionista.note;
-        setProfessionisti(prevProfessionisti => [...prevProfessionisti, nuovoProfessionista]);
-        setNuovoProfessionista({
-          nome: "",
-          professione: "",
-          contatto: "",
-          email: "",
-          note: ""
-        });
-
-        alert("L'inserimento del professionista è andato a buon fine!!");
-      } catch (error) {
+      } 
+      catch (error) {
         console.error('Errore:', error);
         alert("C'è stato un errore durante l'inserimento del professionista. Riprova più tardi.");
       }
-    } else {
+    } 
+    else {
       alert("Salvataggio annullato.");
     }
   };

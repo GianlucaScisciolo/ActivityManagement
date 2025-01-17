@@ -153,7 +153,17 @@ app.post("/INSERISCI_CLIENTE", async (req, res) => {
 
   const params = [`${nome}`, `${cognome}`, `${contatto}`, `${note}`];
   
-  return getResults(sql, params, res);
+  // return getResults(sql, params, res);
+  try {
+    await executeQuery(sql, params);
+    return res.status(201).json({ message: 'Cliente inserito con successo' });
+  } catch (err) {
+    if (err.code === 'ER_DUP_ENTRY') {
+      return res.status(409).json({ message: 'Errore, cliente gia\' presente' });
+    }
+    console.error('Errore durante l\'inserimento del cliente: ', err);
+    return res.status(500).json({ message: 'Errore del server' });
+  }
 });
 
 /**
@@ -254,6 +264,18 @@ app.post("/MODIFICA_CLIENTI", async (req, res) => {
 /**
  * Inserisci professionista
  */
+// app.post("/INSERISCI_PROFESSIONISTA", async (req, res) => {
+//   const { nome = '', professione = '', contatto = '', email = '', note = '' } = req.body;
+  
+//   const sql = ` 
+//     INSERT INTO professionista (nome, professione, contatto, email, note) 
+//     VALUES (?, ?, ?, ?, ?); 
+//   `;
+
+//   const params = [`${nome}`, `${professione}`, `${contatto}`, `${email}`, `${note}`];
+  
+//   return getResults(sql, params, res);
+// });
 app.post("/INSERISCI_PROFESSIONISTA", async (req, res) => {
   const { nome = '', professione = '', contatto = '', email = '', note = '' } = req.body;
   
@@ -264,7 +286,16 @@ app.post("/INSERISCI_PROFESSIONISTA", async (req, res) => {
 
   const params = [`${nome}`, `${professione}`, `${contatto}`, `${email}`, `${note}`];
   
-  return getResults(sql, params, res);
+  try {
+    await executeQuery(sql, params);
+    return res.status(201).json({ message: 'Professionista inserito con successo' });
+  } catch (err) {
+    if (err.code === 'ER_DUP_ENTRY') {
+      return res.status(409).json({ message: 'Errore, professionista gia\' presente' });
+    }
+    console.error('Errore durante l\'inserimento del professionista: ', err);
+    return res.status(500).json({ message: 'Errore del server' });
+  }
 });
 
 /**
@@ -388,7 +419,18 @@ app.post("/INSERISCI_LAVORO", async (req, res) => {
     id_professionista ? `${id_professionista}` : null
   ];
   
-  return getResults(sql, params, res);
+  // return getResults(sql, params, res);
+  try {
+    await executeQuery(sql, params);
+    return res.status(201).json({ message: 'Lavoro inserito con successo.' });
+  } 
+  catch (err) {
+    if (err.code === 'ER_DUP_ENTRY') {
+      return res.status(409).json({ message: 'Errore, lavoro gia\' presente.' });
+    }
+    console.error('Errore durante l\'inserimento del lavoro: ', err);
+    return res.status(500).json({ message: 'Errore del server.' });
+  }
 });
 
 /**
@@ -499,7 +541,7 @@ app.post("/MODIFICA_LAVORI", async (req, res) => {
 
   const giornoFormattato = new Date(giorno).toISOString().slice(0, 10);
 
-  note = (note === "Nota non inserita.") ? null : note;
+  // note = (note === "Nota non inserita.") ? null : note;
   
   console.log("Dati ricevuti per la modifica: ", [id, descrizione, giornoFormattato, orario_inizio, orario_fine, note]);
 

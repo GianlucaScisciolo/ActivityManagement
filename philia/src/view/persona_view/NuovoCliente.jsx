@@ -29,7 +29,7 @@ const NuovoCliente = () => {
     note: ""
   })
   
-  const handleInsert = async (nuovoCliente, setNuovoCliente, setClienti, setErrori) => {
+  const handleInsert = async (nuovoCliente, setNuovoCliente, setClienti) => {
     if (confirm("Sei sicuro di voler salvare il cliente?")) {
       if (controlloCliente(nuovoCliente, setErrori) > 0) 
         return;
@@ -44,22 +44,28 @@ const NuovoCliente = () => {
         });
     
         if (!response.ok) {
-          throw new Error('Errore durante l\'inserimento del cliente');
-        }
-    
-        const result = await response.json();
-
-        nuovoCliente.note = (nuovoCliente.note.split(' ').join('') === "") ? "Nota non inserita." : nuovoCliente.note;
-        setClienti(prevClienti => [...prevClienti, nuovoCliente]);
-          // Resetta il nuovo cliente dopo l'aggiunta
+          const errorData = await response.json();
+          if (response.status === 409) {
+            alert(errorData.message); // Mostra l'alert con il messaggio di errore specifico
+          } 
+          else {
+            throw new Error('Errore durante l\'inserimento del cliente');
+          }
+        } 
+        else {
+          const result = await response.json();
+  
+          nuovoCliente.note = (nuovoCliente.note.split(' ').join('') === "") ? "Nota non inserita." : nuovoCliente.note;
+          setClienti(prevClienti => [...prevClienti, nuovoCliente]);
           setNuovoCliente({
             nome: "",
             cognome: "",
             contatto: "",
             note: ""
           });
-
-        alert("L'inserimento del cliente è andato a buon fine!!");
+  
+          alert("L'inserimento del cliente e\' andato a buon fine!!");
+        }
       } 
       catch (error) {
         console.error('Errore:', error);

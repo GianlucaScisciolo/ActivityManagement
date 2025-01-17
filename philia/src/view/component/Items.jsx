@@ -72,14 +72,13 @@ export const Items = ({tipoItem, items, setterItems}) => {
         <Row>
           {selectedIdsModifica.length > 0 && (
             <Col>
-              {/* <button className='bottone-blu-non-selezionato' onClick={() => modifica("tipoItem"ClienteLastSearch, selectedIdsModifica, setSelectedIdsModifica, clienti, setClienti, null, null, setErrori, null)}>Modifica</button> */}
               <button className="bottone-blu-non-selezionato"
-                onClick={(e) => modifica(e, tipoItem, selectedIdsModifica, setSelectedIdsModifica, items, setErrori, setterItems)}
+                onClick={(e) => modifica(e, tipoItem, selectedIdsModifica, setSelectedIdsModifica, items, setterItems)}
               >
                 Modifica
               </button>
             </Col>
-          )}        
+          )}
           {selectedIdsEliminazione.length > 0 && (
             <Col>
               <button className='bottone-rosso-non-selezionato'

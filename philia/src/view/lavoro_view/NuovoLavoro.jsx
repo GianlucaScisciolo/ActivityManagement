@@ -72,18 +72,13 @@ const NuovoLavoro = () => {
   const [selectedProfessionista, setSelectedProfessionista] = useState('');
   const [selectedProfessionistaId, setSelectedProfessionistaId] = useState('');
   
-  const handleInsert = async (nuovoLavoro, setNuovoLavoro, setLavori, setErrori) => {
+  const handleInsert = async (nuovoLavoro, setNuovoLavoro, setLavori) => {
     if (confirm("Sei sicuro di voler salvare il lavoro?")) {
       nuovoLavoro.id_cliente === (!nuovoLavoro.tipoLavoro === "Lavoro cliente") ? 0 : nuovoLavoro.id_cliente;
       nuovoLavoro.id_professionista === (!nuovoLavoro.tipoLavoro === "Lavoro profesionista") ? 0 : nuovoLavoro.id_professionista; 
-      // if(nuovoLavoro.tipoLavoro === "Lavoro cliente") 
-      // alert("Prima dei controlli.");
       if (controlloLavoro(nuovoLavoro, setErrori) > 0) 
         return;
 
-      // alert("Controlli passati!!");
-
-    
       try {
         const response = await fetch('/INSERISCI_LAVORO', {
           method: 'POST',
@@ -94,54 +89,54 @@ const NuovoLavoro = () => {
         });
 
         if (!response.ok) {
-          throw new Error('Errore durante l\'inserimento del lavoro');
-        }
-
-        const result = await response.json();
-
-        nuovoLavoro.note = (nuovoLavoro.note.split(' ').join('') === "") ? "Nota non inserita." : nuovoLavoro.note;
-        nuovoLavoro["tipo_lavoro"] = (nuovoLavoro.id_cliente > 0) ? "Lavoro cliente" : "Lavoro professionista";
-        if(nuovoLavoro.tipo_lavoro === "Lavoro cliente") {
-          for(let i = 0; i < clienti.length; i++) {
-            // console.log(professionisti[i].id.toString() + " - " + nuovoLavoro.id_professionista.toString());
-            if(clienti[i].id.toString() === nuovoLavoro.id_cliente.toString()) {
-              nuovoLavoro["nome_cliente"] = clienti[i].nome;
-              nuovoLavoro["cognome_cliente"] = clienti[i].cognome;
-              break; 
-            }
-            // console.log("   " + professionisti[i].id + "\n");
+          const errorData = await response.json();
+          if (response.status === 409) {
+            alert(errorData.message); // Mostra l'alert con il messaggio di errore specifico
+          } 
+          else {
+            throw new Error('Errore durante l\'inserimento del lavoro');
           }
         }
-        if(nuovoLavoro.tipo_lavoro === "Lavoro professionista") {
-          for(let i = 0; i < professionisti.length; i++) {
-            // console.log(professionisti[i].id.toString() + " - " + nuovoLavoro.id_professionista.toString());
-            if(professionisti[i].id.toString() === nuovoLavoro.id_professionista.toString()) {
-              nuovoLavoro["nome_professionista"] = professionisti[i].nome;
-              nuovoLavoro["professione"] = professionisti[i].professione;
-              break; 
+        else {
+          const result = await response.json();
+
+          nuovoLavoro.note = (nuovoLavoro.note.split(' ').join('') === "") ? "Nota non inserita." : nuovoLavoro.note;
+          nuovoLavoro["tipo_lavoro"] = (nuovoLavoro.id_cliente > 0) ? "Lavoro cliente" : "Lavoro professionista";
+          if(nuovoLavoro.tipo_lavoro === "Lavoro cliente") {
+            for(let i = 0; i < clienti.length; i++) {
+              // console.log(professionisti[i].id.toString() + " - " + nuovoLavoro.id_professionista.toString());
+              if(clienti[i].id.toString() === nuovoLavoro.id_cliente.toString()) {
+                nuovoLavoro["nome_cliente"] = clienti[i].nome;
+                nuovoLavoro["cognome_cliente"] = clienti[i].cognome;
+                break; 
+              }
+              // console.log("   " + professionisti[i].id + "\n");
             }
-            // console.log("   " + professionisti[i].id + "\n");
           }
-          // console.log(nuovoLavoro.nome_professionista);
-          // console.log(nuovoLavoro.professione);
-          // const professionista = professionisti.filter(p => p.id = p.id_professionista)[0];
-          // nuovoLavoro["nome_professionista"] = professionista.nome;
-          // nuovoLavoro["professione"] = professionista.professione; 
+          else if(nuovoLavoro.tipo_lavoro === "Lavoro professionista") {
+            for(let i = 0; i < professionisti.length; i++) {
+              // console.log(professionisti[i].id.toString() + " - " + nuovoLavoro.id_professionista.toString());
+              if(professionisti[i].id.toString() === nuovoLavoro.id_professionista.toString()) {
+                nuovoLavoro["nome_professionista"] = professionisti[i].nome;
+                nuovoLavoro["professione"] = professionisti[i].professione;
+                break; 
+              }
+              // console.log("   " + professionisti[i].id + "\n");
+            }
+          }
+          setLavori(prevLavori => [...prevLavori, nuovoLavoro]);
+          setNuovoLavoro(prevState => ({
+            ...prevState,
+            id_cliente: 0,
+            id_professionista: 0,
+            descrizione: "",
+            giorno: "",
+            orario_inizio: "",
+            orario_fine: "",
+            note: ""
+          }));
+          alert("L'inserimento del lavoro è andato a buon fine!!");
         }
-
-        setLavori(prevLavori => [...prevLavori, nuovoLavoro]);
-        setNuovoLavoro(prevState => ({
-          ...prevState,
-          id_cliente: 0,
-          id_professionista: 0,
-          descrizione: "",
-          giorno: "",
-          orario_inizio: "",
-          orario_fine: "",
-          note: ""
-        }));
-
-        alert("L'inserimento del lavoro è andato a buon fine!!");
       } 
       catch (error) {
         console.error('Errore:', error);
@@ -152,7 +147,7 @@ const NuovoLavoro = () => {
       alert("Salvataggio annullato.");
     }
   };
-
+  
   useEffect(() => {
     const fetchClienti = async () => {
       await PersonaAction.dispatchAction(null, operazioniPersone.OTTIENI_TUTTI_I_CLIENTI);

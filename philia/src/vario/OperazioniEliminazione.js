@@ -15,15 +15,15 @@ export const elimina = async (e, tipoItem, selectedIdsEliminazione, setSelectedI
     const itemsRestanti = items.filter(item => !dati.ids.includes(item.id));
     // alert(itemsDaEliminare.length);
     // alert(itemsRestanti.length);
-    console.log("-------------------------------------");
-    for(let item of itemsDaEliminare) {
-      console.log(item.id);
-    }
-    console.log("-------------------------------------");
-    for(let item of itemsRestanti) {
-      console.log(item.id);
-    }
-    console.log("-------------------------------------");
+    // console.log("-------------------------------------");
+    // for(let item of itemsDaEliminare) {
+    //   console.log(item.id);
+    // }
+    // console.log("-------------------------------------");
+    // for(let item of itemsRestanti) {
+    //   console.log(item.id);
+    // }
+    // console.log("-------------------------------------");
     
     if(tipoItem === "cliente") {
       await PersonaAction.dispatchAction(dati, operazioniPersone.ELIMINA_CLIENTI);

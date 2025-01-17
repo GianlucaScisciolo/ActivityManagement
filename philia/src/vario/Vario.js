@@ -1,13 +1,3 @@
-// const aggiornaValoreItem = (items, data, setItems) => {
-//   const updatedItems = items.map(item => {
-//     if (data.ids.includes(item.id)) {
-//       return { ...item, tipo_selezione: 0 };
-//     }
-//     return item;
-//   });
-//   setItems(updatedItems);
-// };
-
 export const handleInputChange = (e, setItem, items, setItems, tipoItem, id) => {
   const nome_campi = [
     "nome", "cognome", "contatto", "note", "professione", "email", "id_cliente", "id_professionista", 
@@ -15,13 +5,11 @@ export const handleInputChange = (e, setItem, items, setItems, tipoItem, id) => 
     "giorno", "primo_giorno", "ultimo_giorno", "orario_inizio", "orario_fine", 
     "username", "password", "nuovo_username", "password_attuale", "nuova_password", "conferma_nuova_password"
   ]
+  
   const { name, value } = e.target;
   
   if(tipoItem === "cliente" || tipoItem === "professionista" || tipoItem === "lavoro") {
-    // alert(name);
-    // alert(value);
     if(nome_campi.includes(name)) {
-      // alert("nome valido.");
       const updatedItems = items.map(item => {
         if(id === item.id) {
           return {
@@ -38,7 +26,6 @@ export const handleInputChange = (e, setItem, items, setItems, tipoItem, id) => 
     }
     return;
   }
-  alert("CONTINUA??");
   
   if(nome_campi.includes(name)) {
     setItem(prevState => ({
