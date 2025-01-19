@@ -6,23 +6,23 @@ import ProfessionistaAction from "../action/professionista_action/Professionista
 import LavoroAction from "../action/lavoro_action/LavoroAction.js";
 import { operazioniPersone, operazioniProfessionisti, operazioniLavori } from "./Operazioni.js";
 
-export const aggiornamentoLista = (tipoLista, setLista1, setLista2) => {
+export const aggiornamentoLista = (tipoLista, setLista) => {
   if(tipoLista === "clienti") {
-    const onChange = () => setLista1(personaStore.getClienti());
+    const onChange = () => setLista(personaStore.getClienti());
     personaStore.addChangeListener(operazioniPersone.VISUALIZZA_CLIENTI, onChange);
     return () => {
       personaStore.removeChangeListener(operazioniPersone.VISUALIZZA_CLIENTI, onChange);
     };
   }
   else if(tipoLista === "professionisti") {
-    const onChange = () => setLista1(professionistaStore.getProfessionisti());
+    const onChange = () => setLista(professionistaStore.getProfessionisti());
     professionistaStore.addChangeListener(operazioniProfessionisti.VISUALIZZA_PROFESSIONISTI, onChange);
     return () => {
       professionistaStore.removeChangeListener(operazioniProfessionisti.VISUALIZZA_PROFESSIONISTI, onChange);
     };
   }
   else if(tipoLista === "lavori") {
-    let onChange = () => setLista1(lavoroStore.getLavori());
+    let onChange = () => setLista(lavoroStore.getLavori());
     lavoroStore.addChangeListener(operazioniLavori.VISUALIZZA_LAVORI, onChange);
     return () => {
       lavoroStore.removeChangeListener(operazioniLavori.VISUALIZZA_LAVORI, onChange);
@@ -33,30 +33,29 @@ export const aggiornamentoLista = (tipoLista, setLista1, setLista2) => {
   } 
 }
 
-const eseguiRicercaClienti = (e, setLista1, datiRicerca) => {
+const eseguiRicercaClienti = (e, setLista, datiRicerca) => {
   PersonaAction.dispatchAction(datiRicerca, operazioniPersone.VISUALIZZA_CLIENTI);//.visualizzaClienti(data);
 };
 
-const eseguiRicercaProfessionisti = (e, setLista1, datiRicerca) => {
+const eseguiRicercaProfessionisti = (e, setLista, datiRicerca) => {
   ProfessionistaAction.dispatchAction(datiRicerca, operazioniProfessionisti.VISUALIZZA_PROFESSIONISTI);
 };
 
-const eseguiRicercaLavori = (e, setLista1, datiRicerca) => {
+const eseguiRicercaLavori = (e, setLista, datiRicerca) => {
   LavoroAction.dispatchAction(datiRicerca, operazioniLavori.VISUALIZZA_LAVORI);
 };
 
-// eseguiRicerca(e, tipoLista, setLista1, setLista2, setDatiRicerca)
-export const eseguiRicerca = (e, tipoLista, setLista1, setLista2, datiRicerca) => {
+export const eseguiRicerca = (e, tipoLista, setLista, datiRicerca) => {
   e.preventDefault();
 
   if(tipoLista === "clienti") {
-    eseguiRicercaClienti(e, setLista1, datiRicerca);
+    eseguiRicercaClienti(e, setLista, datiRicerca);
   }
   else if(tipoLista === "professionisti") {
-    eseguiRicercaProfessionisti(e, setLista1, datiRicerca)
+    eseguiRicercaProfessionisti(e, setLista, datiRicerca)
   }
   else if(tipoLista === "lavori") {
-    eseguiRicercaLavori(e, setLista1, datiRicerca)
+    eseguiRicercaLavori(e, setLista, datiRicerca)
   }
   else {
     alert("Errore, tipo lista non valido.");

@@ -6,8 +6,15 @@ import Row from 'react-bootstrap/esm/Row';
 import Col from 'react-bootstrap/esm/Col';
 import { elimina } from '../../vario/OperazioniEliminazione';
 import { modifica } from '../../vario/OperazioniModifica';
+import { CardCercaDate } from '../component/card_item/CardsLavori';
+import { FormCercaDate } from '../component/form_item/FormsLavori';
+import { RowRicercaDate } from '../component/row_item/RowsLavori';
+import { useSelector } from 'react-redux';
 
 const Lavori = () => {
+  const formSession = useSelector((state) => state.formSession.value);
+  const itemSession = useSelector((state) => state.itemSession.value);
+
   const [lavori, setLavori] = useState(-1);
   const [viewElements, setViewElements] = useState("list");
   const [selectedTrashCount, setSelectedTrashCount] = useState(0);
@@ -43,7 +50,19 @@ const Lavori = () => {
       
       <div className="main-content"></div>
       
-      <FormRicerca tipoLista={'lavori'} setLista1={setLavori} datiRicerca={datiRicerca} setDatiRicerca={setDatiRicerca} />
+      {(formSession.view === "form") && (
+        <center>
+          <FormCercaDate item={datiRicerca} setItem={setDatiRicerca} eseguiRicerca={(e) => eseguiRicerca(e, "professionisti", setProfessionisti, datiRicerca)} />
+        </center>
+      )}
+      {(formSession.view === "row") && (
+        <RowRicercaDate item={datiRicerca} setItem={setDatiRicerca} eseguiRicerca={(e) => eseguiRicerca(e, "professionisti", setProfessionisti, datiRicerca)} />
+      )}
+      {(formSession.view === "card") && (
+        <center>
+          <CardCercaDate item={datiRicerca} setItem={setDatiRicerca} eseguiRicerca={(e) => eseguiRicerca(e, "professionisti", setProfessionisti, datiRicerca)} />
+        </center>
+      )}
       
       {(lavori.length === 0) && (
         <div className='contenitore-1'>Nessun lavoro trovato.</div>

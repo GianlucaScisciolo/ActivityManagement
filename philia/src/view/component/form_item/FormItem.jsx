@@ -116,16 +116,16 @@ function FormNuovoCliente({ item, setItem, eseguiSalvataggio, errori, setErrori 
       {/* <div>{errori.nome}</div> */}
       <StyledLabel>Nome</StyledLabel>
       <StyledTextAreaModifica rows="1" name="nome" placeholder='Nome*' value={item.nome} onChange={(e) => handleInputChange(e, setItem)} />
-      <StyledSpanErrore>{errori.nome}</StyledSpanErrore>
+      {(errori.nome !== "") && (<StyledSpanErrore>{errori.nome}</StyledSpanErrore>)}
       <StyledLabel>Cognome</StyledLabel>
       <StyledTextAreaModifica rows="1" name="cognome" placeholder='Cognome*' value={item.cognome} onChange={(e) => handleInputChange(e, setItem)} />
-      <StyledSpanErrore>{errori.cognome}</StyledSpanErrore>
-      <StyledLabel>Contatto</StyledLabel>
-      <StyledInputModifica rows="1" type="text" name="contatto" placeholder='Contatto' value={item.contatto} onChange={(e) => handleInputChange(e, setItem)} />
-      <StyledSpanErrore>{errori.contatto}</StyledSpanErrore>
-      <StyledLabel>Note</StyledLabel>
-      <StyledTextAreaModifica rows="1" name="note" placeholder='Note' value={item.note} onChange={(e) => handleInputChange(e, setItem)} />
-      <StyledSpanErrore>{errori.note}</StyledSpanErrore>
+      {(errori.cognome !== "") && (<StyledSpanErrore>{errori.cognome}</StyledSpanErrore>)}
+      {/* <StyledLabel>Contatto</StyledLabel> */}
+      {/* <StyledInputModifica rows="1" type="text" name="contatto" placeholder='Contatto' value={item.contatto} onChange={(e) => handleInputChange(e, setItem)} /> */}
+      {/* <StyledSpanErrore>{errori.contatto}</StyledSpanErrore> */}
+      {/* <StyledLabel>Note</StyledLabel> */}
+      {/* <StyledTextAreaModifica rows="1" name="note" placeholder='Note' value={item.note} onChange={(e) => handleInputChange(e, setItem)} /> */}
+      {/* <StyledSpanErrore>{errori.note}</StyledSpanErrore> */}
       <br /> <br />
       <OperazioniNuovoItem eseguiSalvataggio={eseguiSalvataggio} />
     </>
@@ -174,7 +174,7 @@ function getProfessionistiFiltrati(e, professionisti, setProfessionistiFiltrati)
   }));
 }
 
-function FormNuovoLavoro({ clienti, professionisti, item, setItem, eseguiSalvataggio, errori, setErrori }) {
+function FormNuovoLavoroOld({ clienti, professionisti, item, setItem, eseguiSalvataggio, errori, setErrori }) {
   const [clientiFiltrati, setClientiFiltrati] = useState([]);
   const [professionistiFiltrati, setProfessionistiFiltrati] = useState([]);
   useEffect(() => {
@@ -258,6 +258,30 @@ function FormNuovoLavoro({ clienti, professionisti, item, setItem, eseguiSalvata
           <StyledSpanErrore>{errori.note}</StyledSpanErrore>
         </>
       )}
+      <br /> <br />
+      <OperazioniNuovoItem eseguiSalvataggio={eseguiSalvataggio} />
+    </>
+  );
+}
+
+function FormNuovoLavoro({ clienti, professionisti, item, setItem, eseguiSalvataggio, errori, setErrori }) {
+  return (
+    <>
+      <StyledLabel>Descrizione</StyledLabel>
+      <StyledTextAreaModifica rows="1" name="descrizione" placeholder='Descrizione*' value={item.descrizione} onChange={(e) => handleInputChange(e, setItem)} />
+      {(errori.descrizione !== "" && (<StyledSpanErrore>{errori.descrizione}</StyledSpanErrore>))}
+      <StyledLabel>Giorno</StyledLabel>
+      <StyledInputModifica rows="1" type="date" name="giorno" placeholder='Giorno*' value={item.giorno} onChange={(e) => handleInputChange(e, setItem)} />
+      {(errori.giorno !== "" && (<StyledSpanErrore>{errori.giorno}</StyledSpanErrore>))}
+      <StyledLabel>Orario inizio</StyledLabel>
+      <StyledInputModifica rows="1" type="time" name="orario_inizio" placeholder='Orario inizio' value={item.orario_inizio} onChange={(e) => handleInputChange(e, setItem)} />
+      {(errori.orario_inizio !== "" && (<StyledSpanErrore>{errori.orario_inizio}</StyledSpanErrore>))}
+      <StyledLabel>orario fine</StyledLabel>
+      <StyledInputModifica rows="1" type="time" name="orario_fine" placeholder='Orario fine' value={item.orario_fine} onChange={(e) => handleInputChange(e, setItem)} />
+      {(errori.orario_fine !== "" && (<StyledSpanErrore>{errori.orario_fine}</StyledSpanErrore>))}
+      <StyledLabel>Note</StyledLabel>
+      <StyledTextAreaModifica rows="1" name="note" placeholder='Note' value={item.note} onChange={(e) => handleInputChange(e, setItem)} />
+      {(errori.note !== "" && (<StyledSpanErrore>{errori.note}</StyledSpanErrore>))}
       <br /> <br />
       <OperazioniNuovoItem eseguiSalvataggio={eseguiSalvataggio} />
     </>

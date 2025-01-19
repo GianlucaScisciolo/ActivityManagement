@@ -9,6 +9,8 @@ import Col from 'react-bootstrap/esm/Col';
 import RowItem from '../component/row_item/RowItem';
 import FormItem from '../component/form_item/FormItem';
 import { Items } from '../component/Items';
+import { CardNuovoCliente } from '../component/card_item/CardsClienti';
+import { FormNuovoCliente } from '../component/form_item/FormsClienti';
 
 const NuovoCliente = () => {
   const formSession = useSelector((state) => state.formSession.value);
@@ -93,19 +95,17 @@ const NuovoCliente = () => {
       
       <div className="main-content" />
 
-      <form>
-        {formSession.view === "form" && (
-          <FormItem errori={errori} setErrori={setErrori} tipoItem={"nuovo cliente"} item={nuovoCliente} setItem={setNuovoCliente} header="Nuovo cliente" eseguiSalvataggio={(e) => eseguiSalvataggio(e, setErrori)} />
-        )}
-        {formSession.view === "row" && (
-          <RowItem errori={errori} setErrori={setErrori} tipoItem={"nuovo cliente"} item={nuovoCliente} setItem={setNuovoCliente} eseguiSalvataggio={(e) => eseguiSalvataggio(e, setErrori)} />
-        )}
-        {(formSession.view === "card") && (
-          <center>
-            <CardItem errori={errori} setErrori={setErrori} tipoItem={"nuovo cliente"} item={nuovoCliente} setItem={setNuovoCliente} header="Nuovo cliente" eseguiSalvataggio={(e) => eseguiSalvataggio(e, setErrori)} />
-          </center>
-        )}
-      </form>
+      {formSession.view === "form" && (
+        <FormNuovoCliente item={nuovoCliente} setItem={setNuovoCliente} eseguiSalvataggio={(e) => eseguiSalvataggio(e, setErrori)} />
+      )}
+      {formSession.view === "row" && (
+        <RowItem errori={errori} setErrori={setErrori} tipoItem={"nuovo cliente"} item={nuovoCliente} setItem={setNuovoCliente} eseguiSalvataggio={(e) => eseguiSalvataggio(e, setErrori)} />
+      )}
+      {(formSession.view === "card") && (
+        <center>
+          <CardNuovoCliente item={nuovoCliente} setItem={setNuovoCliente} eseguiSalvataggio={(e) => eseguiSalvataggio(e, setErrori)} />
+        </center>
+      )}
 
       <div className="main-content" />
 

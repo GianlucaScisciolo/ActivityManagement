@@ -50,7 +50,7 @@ export const StyledCol = styled(Col)`
 
 export const StyledCardHeader = styled(Card.Header)`
   color: #ffffff;
-  background-color: transparent;
+  background-color: #000000;
   border: 5px solid #000000;
   min-height: 70px;
 `;
@@ -198,6 +198,7 @@ export const StyledSelect =  styled.select`
 `;
 
 export const StyledOption =  styled.option`
+
   background-color: #0050EF;
   &:hover {
     background-color: #0050EF;

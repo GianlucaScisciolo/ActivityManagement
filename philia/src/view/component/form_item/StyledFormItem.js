@@ -21,7 +21,7 @@ export const StyledForm = styled(Card)`
 
 export const StyledHeader = styled(Card.Header)`
   color: #ffffff;
-  background-color: transparent;
+  background-color: #000000;
   border: 5px solid #000000;
   min-height: 70px;
 `;
@@ -202,6 +202,7 @@ export const BottoneRossoSelezionato =  styled(StyledButton)`
 `;
 
 export const StyledSelect =  styled.select`
+  cursor: pointer;
   background-color: #0050EF;
   border: 5px solid #000000;
   color: #FFFFFF;

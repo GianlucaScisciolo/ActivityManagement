@@ -173,7 +173,7 @@ export const controlloProfessionista = (data, settersErrori) => {
   return numErrori;
 }
 
-export const controlloLavoro = (data, settersErrori) => {  
+export const controlloLavoroOld = (data, settersErrori) => {  
   // alert("Prova");
   /*
   lavoro:
@@ -204,6 +204,85 @@ export const controlloLavoro = (data, settersErrori) => {
   setErrore(settersErrori, "cliente_e_professionista", messagioErrore1);
 
 
+  // controllo sulla descrizione
+  messagioErrore1 = "";
+  if (isEmpty(data.descrizione)) {
+    numErrori += 1; 
+    messagioErrore1 = "Inserire la descrizione.";
+  }
+  else if(!isInRange(data.descrizione.length, 1, 100)) {
+    numErrori += 1; 
+    messagioErrore1 = "Lunghezza descrizione non valida, deve avere un numero di caratteri tra 1 e 100 estremi inclusi.";
+  }
+  setErrore(settersErrori, "descrizione", messagioErrore1);
+
+  // controllo sul giorno
+  messagioErrore1 = "";
+  if (isEmpty(data.giorno)) {
+    numErrori += 1; 
+    messagioErrore1 = "Inserire il giorno.";
+  }
+  setErrore(settersErrori, "giorno", messagioErrore1);
+
+  // controllo sull'orario iniziale
+  messagioErrore1 = "";
+  if (isEmpty(data.orario_inizio)) {
+    numErrori += 1; 
+    messagioErrore1 = "Inserire l\'orario iniziale.";
+  }
+  setErrore(settersErrori, "orario_inizio", messagioErrore1);
+
+  // controllo sull'orario finale
+  messagioErrore1 = "";
+  if (isEmpty(data.orario_fine)) {
+    numErrori += 1; 
+    messagioErrore1 = "Inserire l\'orario finale.";
+  }
+  setErrore(settersErrori, "orario_fine", messagioErrore1);
+
+  // controllo sull'orario iniziale e sull'orario finale
+  if(!isEmpty(data.orario_inizio) && !isEmpty(data.orario_fine) && data.orario_inizio >= data.orario_fine) {
+    numErrori += 1; 
+    messagioErrore1 = "L\'orario iniziale deve avvenire prima dell\'orario finale e non possono essere uguali.";
+    messagioErrore2 = "L\'orario finale deve avvenire dopo l\'orario iniziale e non possono essere uguali.";
+    setErrore(settersErrori, "orario_inizio", messagioErrore1);
+    setErrore(settersErrori, "orario_fine", messagioErrore2);
+  }
+  
+  // controllo sulle note
+  messagioErrore1 = "";
+  if(!isInRange(data.note.length, 0, 65535)) {
+    numErrori += 1; 
+    messagioErrore1 = "Lunghezza note non valida, deve avere un numero di caratteri tra 1 e 65.535 estremi inclusi.";
+  }
+  setErrore(settersErrori, "note", messagioErrore1);
+
+  // alert(numErrori);
+  return numErrori;
+}
+
+export const controlloLavoro = (data, settersErrori) => {  
+  // alert("Prova");
+  /*
+  lavoro:
+    empty:
+      solo id_cliente oppure solo id_professionista != empty FATTO
+      descrizione != empty FATTO
+      giorno != empty FATTO
+      orario_inizio != empty FATTO
+      orario_fine != empty FATTO
+    length:
+      1 <= descrizione <= 100 FATTO
+      0 <= note <= 65535 FATTO
+    validità:
+      orario_fine > orario_inizio FATTO
+  */
+
+  let numErrori = 0;
+
+  let messagioErrore1 = "";
+  let messagioErrore2 = "";
+  
   // controllo sulla descrizione
   messagioErrore1 = "";
   if (isEmpty(data.descrizione)) {

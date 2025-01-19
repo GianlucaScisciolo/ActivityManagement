@@ -167,23 +167,23 @@ function CardProfessionista({ selectOperation, item, setItems, items, tipoItem }
 function CardLavoro({selectOperation, item, items, setItems, setItem, tipoItem}) {
   return (
     <>
-      {(item.tipo_lavoro === "Lavoro cliente") && (
+      {/* {(item.tipo_lavoro === "Lavoro cliente") && (
         <TextAreaTag  setItems={setItems} id={item.id} items={items} tipoItem={tipoItem} tipoSelezione={item.tipo_selezione}             nome="nome_cognome_cliente" valore={item.nome_cliente + " " + item.cognome_cliente} modificabile={false}   />
       )}
       {(item.tipo_lavoro === "Lavoro professionista") && (
         <>
           <TextAreaTag setItems={setItems} id={item.id} items={items} tipoItem={tipoItem} tipoSelezione={item.tipo_selezione}             nome="nome_professionista_e_professione"  valore={item.nome_professionista + " - " + item.professione}                         modificabile={false} />
         </>
-      )}
-      {(tipoItem.startsWith("lavoro")) && (
-        <>
+      )} */}
+      {/* {(tipoItem.startsWith("lavoro")) && ( */}
+        {/* <> */}
           <TextAreaTag setItems={setItems} id={item.id} items={items} tipoItem={tipoItem} tipoSelezione={item.tipo_selezione}             nome="descrizione"          valore={item.descrizione}                                 modificabile={true} />
           <InputTag    setItems={setItems} id={item.id} items={items} tipoItem={tipoItem} tipoSelezione={item.tipo_selezione} tipo="date" nome="giorno"               valore={formatoDate(item.giorno, "AAAA-MM-GG")}           modificabile={true} />
           <InputTag    setItems={setItems} id={item.id} items={items} tipoItem={tipoItem} tipoSelezione={item.tipo_selezione} tipo="time" nome="orario_inizio"        valore={formatoTime(item.orario_inizio)}                  modificabile={true} />
           <InputTag    setItems={setItems} id={item.id} items={items} tipoItem={tipoItem} tipoSelezione={item.tipo_selezione} tipo="time" nome="orario_fine"          valore={formatoTime(item.orario_fine)}                    modificabile={true} />
           <TextAreaTag setItems={setItems} id={item.id} items={items} tipoItem={tipoItem} tipoSelezione={item.tipo_selezione}             nome="note"                 valore={item.note}                                        modificabile={true} />
-        </>
-      )}
+        {/* </> */}
+      {/* )} */}
       <OperazioniItemEsistente tipoSelezione={item.tipo_selezione} selectOperation={selectOperation} item={item} />
     </>
   );
@@ -326,7 +326,8 @@ function CardItem({errori, setErrori, clienti, professionisti, tipoLavoro, tipoI
           <CardNuovoItem tipoItem={tipoItem} item={item} setItem={setItem} eseguiSalvataggio={eseguiSalvataggio} errori={errori} />
         )}
         {(tipoItem === "nuovo lavoro") && (
-          <CardNuovoLavoro clienti={clienti} professionisti={professionisti} tipoLavoro={tipoLavoro} tipoItem={tipoItem} item={item} setItem={setItem} eseguiSalvataggio={eseguiSalvataggio} />
+          // <CardNuovoLavoro clienti={clienti} professionisti={professionisti} tipoLavoro={tipoLavoro} tipoItem={tipoItem} item={item} setItem={setItem} eseguiSalvataggio={eseguiSalvataggio} />
+          <button>Nuovo lavoro</button>
         )}
         {(tipoItem.startsWith("cerca")) && (
           <CardRicercaItem tipoItem={tipoItem} item={item} setItem={setItem} eseguiRicerca={eseguiRicerca} 

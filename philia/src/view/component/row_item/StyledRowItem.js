@@ -235,6 +235,7 @@ export const StyledTrashSelected = styled(Trash2)`
 `;
 
 export const StyledSelect =  styled.select`
+  cursor: pointer;
   width: 100%;
   border-radius: 40px;
   background-color: #0050EF;

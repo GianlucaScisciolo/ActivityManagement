@@ -2,7 +2,7 @@ import ProfessionistaDispatcher from "../../dispatcher/professionista_dispatcher
 import { operazioniProfessionisti } from "../../vario/Operazioni";
 
 const ProfessionistaAction = {
-  async dispatchAction(data, operazione) { 
+  async dispatchAction(data, operazione) {
     return new Promise((resolve, reject) => {
       try {
         ProfessionistaDispatcher.dispatch({

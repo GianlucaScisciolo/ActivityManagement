@@ -2,7 +2,7 @@ export const handleInputChange = (e, setItem, items, setItems, tipoItem, id) => 
   const nome_campi = [
     "nome", "cognome", "contatto", "note", "professione", "email", "id_cliente", "id_professionista", 
     "nome_cliente", "cognome_cliente", "nome_professionista", "descrizione", 
-    "giorno", "primo_giorno", "ultimo_giorno", "orario_inizio", "orario_fine", 
+    "giorno", "primo_giorno", "ultimo_giorno", "ora_inizio", "ora_fine", "minuto_inizio", "minuto_fine", 
     "username", "password", "nuovo_username", "password_attuale", "nuova_password", "conferma_nuova_password"
   ]
   
