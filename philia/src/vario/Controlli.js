@@ -61,28 +61,28 @@ export const controlloCliente = (data, settersErrori) => {
   }
   setErrore(settersErrori, "cognome", messagioErrore);
 
-  // controllo sul contatto
-  messagioErrore = "";
-  if (isEmpty(data.contatto)) {
-    numErrori += 1; 
-    messagioErrore = "Inserire il contatto";
-  }
-  else if(!matchRegex(data.contatto, "^3[0-9]{9}$") && !matchRegex(data.contatto, "^0\\d{9,10}$")) {
-    numErrori += 1;
-    messagioErrore = "Contatto non valido. Inserire un numero di cellulare o un numero di telefono valido:\n";
-    messagioErrore += "- numero di cellulare valido: 3XXXXXXXXX\n";
-    messagioErrore += "- numero di telefono valido: 0XXXXXXXXX oppure 0XXXXXXXXXX\n";
-    messagioErrore += "X è un numero tra 0 e 9 estremi inclusi.";
-  }
-  setErrore(settersErrori, "contatto", messagioErrore);
+  // // controllo sul contatto
+  // messagioErrore = "";
+  // if (isEmpty(data.contatto)) {
+  //   numErrori += 1; 
+  //   messagioErrore = "Inserire il contatto";
+  // }
+  // else if(!matchRegex(data.contatto, "^3[0-9]{9}$") && !matchRegex(data.contatto, "^0\\d{9,10}$")) {
+  //   numErrori += 1;
+  //   messagioErrore = "Contatto non valido. Inserire un numero di cellulare o un numero di telefono valido:\n";
+  //   messagioErrore += "- numero di cellulare valido: 3XXXXXXXXX\n";
+  //   messagioErrore += "- numero di telefono valido: 0XXXXXXXXX oppure 0XXXXXXXXXX\n";
+  //   messagioErrore += "X è un numero tra 0 e 9 estremi inclusi.";
+  // }
+  // setErrore(settersErrori, "contatto", messagioErrore);
   
-  // controllo sulle note
-  messagioErrore = "";
-  if(!isInRange(data.note.length, 0, 65535)) {
-    numErrori += 1;
-    messagioErrore = "Lunghezza note non valida, deve avere un numero di caratteri tra 1 e 65.535 estremi inclusi.";
-  }
-  setErrore(settersErrori, "note", messagioErrore);
+  // // controllo sulle note
+  // messagioErrore = "";
+  // if(!isInRange(data.note.length, 0, 65535)) {
+  //   numErrori += 1;
+  //   messagioErrore = "Lunghezza note non valida, deve avere un numero di caratteri tra 1 e 65.535 estremi inclusi.";
+  // }
+  // setErrore(settersErrori, "note", messagioErrore);
   
   return numErrori;
 }  
@@ -128,47 +128,47 @@ export const controlloProfessionista = (data, settersErrori) => {
   }
   setErrore(settersErrori, "professione", messagioErrore);
 
-  // controllo sul contatto e sull'email
-  let erroreContattoEEmail = false;
-  messagioErrore = "";
-  if (isEmpty(data.contatto) && isEmpty(data.email)) {
-    numErrori += 1; 
-    messagioErrore = "Inserire il contatto e/o l\'email.";
-    erroreContattoEEmail = true;
-  }
-  setErrore(settersErrori, "contatto", messagioErrore);
-  setErrore(settersErrori, "email", messagioErrore);
+  // // controllo sul contatto e sull'email
+  // let erroreContattoEEmail = false;
+  // messagioErrore = "";
+  // if (isEmpty(data.contatto) && isEmpty(data.email)) {
+  //   numErrori += 1; 
+  //   messagioErrore = "Inserire il contatto e/o l\'email.";
+  //   erroreContattoEEmail = true;
+  // }
+  // setErrore(settersErrori, "contatto", messagioErrore);
+  // setErrore(settersErrori, "email", messagioErrore);
 
-  // controllo sul contatto
-  messagioErrore = "";
-  if(!erroreContattoEEmail && !isEmpty(data.contatto) && !matchRegex(data.contatto, "^3[0-9]{9}$") && !matchRegex(data.contatto, "^0\\d{9,10}$")) {
-    numErrori += 1;
-    messagioErrore = "Contatto non valido. Inserire un numero di cellulare o un numero di telefono valido:\n";
-    messagioErrore += "- numero di cellulare valido: 3XXXXXXXXX\n";
-    messagioErrore += "- numero di telefono valido: 0XXXXXXXXX oppure 0XXXXXXXXXX\n";
-    messagioErrore += "X è un numero tra 0 e 9 estremi inclusi.";
-  }
-  if(!erroreContattoEEmail) {
-    setErrore(settersErrori, "contatto", messagioErrore);
-  }
+  // // controllo sul contatto
+  // messagioErrore = "";
+  // if(!erroreContattoEEmail && !isEmpty(data.contatto) && !matchRegex(data.contatto, "^3[0-9]{9}$") && !matchRegex(data.contatto, "^0\\d{9,10}$")) {
+  //   numErrori += 1;
+  //   messagioErrore = "Contatto non valido. Inserire un numero di cellulare o un numero di telefono valido:\n";
+  //   messagioErrore += "- numero di cellulare valido: 3XXXXXXXXX\n";
+  //   messagioErrore += "- numero di telefono valido: 0XXXXXXXXX oppure 0XXXXXXXXXX\n";
+  //   messagioErrore += "X è un numero tra 0 e 9 estremi inclusi.";
+  // }
+  // if(!erroreContattoEEmail) {
+  //   setErrore(settersErrori, "contatto", messagioErrore);
+  // }
 
-  // controllo sull'email
-  messagioErrore = "";
-  if(!erroreContattoEEmail && !isEmpty(data.email) && !matchRegex(data.email, "^([a-z\\d\\._-]+)@([a-z\\d-]+)\\.([a-z]{2,8})(\\.[a-z]{2,8})?$")) {
-    numErrori += 1;
-    messagioErrore = "Email non valida.";
-  }
-  if(!erroreContattoEEmail) {
-    setErrore(settersErrori, "email", messagioErrore);
-  }
+  // // controllo sull'email
+  // messagioErrore = "";
+  // if(!erroreContattoEEmail && !isEmpty(data.email) && !matchRegex(data.email, "^([a-z\\d\\._-]+)@([a-z\\d-]+)\\.([a-z]{2,8})(\\.[a-z]{2,8})?$")) {
+  //   numErrori += 1;
+  //   messagioErrore = "Email non valida.";
+  // }
+  // if(!erroreContattoEEmail) {
+  //   setErrore(settersErrori, "email", messagioErrore);
+  // }
 
-  // controllo sulle note
-  messagioErrore = "";
-  if(!isInRange(data.note.length, 0, 65535)) {
-    numErrori += 1;
-    messagioErrore = "Lunghezza note non valida, deve avere un numero di caratteri tra 1 e 65.535 estremi inclusi.";
-  }
-  setErrore(settersErrori, "note", messagioErrore);
+  // // controllo sulle note
+  // messagioErrore = "";
+  // if(!isInRange(data.note.length, 0, 65535)) {
+  //   numErrori += 1;
+  //   messagioErrore = "Lunghezza note non valida, deve avere un numero di caratteri tra 1 e 65.535 estremi inclusi.";
+  // }
+  // setErrore(settersErrori, "note", messagioErrore);
 
   return numErrori;
 }

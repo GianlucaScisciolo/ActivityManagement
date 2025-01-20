@@ -9,6 +9,9 @@ import { operazioniPersone, operazioniProfessionisti } from "../../vario/Operazi
 import FormItem from "../component/form_item/FormItem";
 import { Items } from "../component/Items";
 import { controlloLavoro } from "../../vario/Controlli";
+import { FormNuovaData } from "../component/form_item/FormsLavori";
+import { RowNuovaData } from "../component/row_item/RowsLavori";
+import { CardNuovaData } from "../component/card_item/CardsLavori";
 
 const NuovoLavoro = () => {
   const formSession = useSelector((state) => state.formSession.value);
@@ -17,12 +20,19 @@ const NuovoLavoro = () => {
   const [professionisti, setProfessionisti] = useState([]);
   const [lavori, setLavori] = useState([]);
 
+  // const [nuovoLavoro, setNuovoLavoro] = useState ({
+  //   descrizione: "",
+  //   giorno: "",
+  //   orario_inizio: "",
+  //   orario_fine: "",
+  //   note: ""
+  // });
   const [nuovoLavoro, setNuovoLavoro] = useState ({
-    descrizione: "",
     giorno: "",
-    orario_inizio: "",
-    orario_fine: "",
-    note: ""
+    ora_inizio: "",
+    minuto_inizio: "",
+    ora_fine: "",
+    minuto_fine: ""
   });
 
   const [errori, setErrori] = useState ({
@@ -118,19 +128,15 @@ const NuovoLavoro = () => {
       <div className="main-content" />
       
       {formSession.view === "form" && (
-        <>
-          <FormItem errori={errori} setErrori={setErrori} clienti={clienti} professionisti={professionisti} tipoItem={"nuovo lavoro"} item={nuovoLavoro} setItem={setNuovoLavoro} header="Nuovo lavoro" eseguiSalvataggio={(e) => handleInsertLavoro(e)} />
-        </>
+        <FormNuovaData item={nuovoLavoro} setItem={setNuovoLavoro} eseguiSalvataggio={(e) => eseguiSalvataggio(e, setErrori)} />
       )}
       {formSession.view === "row" && (
-        <>
-          <button>Ciao da Row!!</button>
-        </>
+        <RowNuovaData item={nuovoLavoro} setItem={setNuovoLavoro} eseguiSalvataggio={(e) => eseguiSalvataggio(e, setErrori)} />
       )}
       {(formSession.view === "card") && (
-        <>
-          <button>Ciao da Card!!</button>
-        </>
+        <center>
+          <CardNuovaData item={nuovoLavoro} setItem={setNuovoLavoro} eseguiSalvataggio={(e) => eseguiSalvataggio(e, setErrori)} />
+        </center>
       )}
 
       {(lavori.length > 0) && (

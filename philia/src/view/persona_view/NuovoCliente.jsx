@@ -11,6 +11,7 @@ import FormItem from '../component/form_item/FormItem';
 import { Items } from '../component/Items';
 import { CardNuovoCliente } from '../component/card_item/CardsClienti';
 import { FormNuovoCliente } from '../component/form_item/FormsClienti';
+import { RowNuovoCliente } from '../component/row_item/RowsClienti';
 
 const NuovoCliente = () => {
   const formSession = useSelector((state) => state.formSession.value);
@@ -56,7 +57,8 @@ const NuovoCliente = () => {
         } 
         else {
           const result = await response.json();
-  
+          
+          nuovoCliente.contatto = (nuovoCliente.contatto.split(' ').join('') === "") ? "Contatto non inserito." : nuovoCliente.note;
           nuovoCliente.note = (nuovoCliente.note.split(' ').join('') === "") ? "Nota non inserita." : nuovoCliente.note;
           setClienti(prevClienti => [...prevClienti, nuovoCliente]);
           setNuovoCliente({
@@ -99,7 +101,7 @@ const NuovoCliente = () => {
         <FormNuovoCliente item={nuovoCliente} setItem={setNuovoCliente} eseguiSalvataggio={(e) => eseguiSalvataggio(e, setErrori)} />
       )}
       {formSession.view === "row" && (
-        <RowItem errori={errori} setErrori={setErrori} tipoItem={"nuovo cliente"} item={nuovoCliente} setItem={setNuovoCliente} eseguiSalvataggio={(e) => eseguiSalvataggio(e, setErrori)} />
+        <RowNuovoCliente item={nuovoCliente} setItem={setNuovoCliente} eseguiSalvataggio={(e) => eseguiSalvataggio(e, setErrori)} />
       )}
       {(formSession.view === "card") && (
         <center>

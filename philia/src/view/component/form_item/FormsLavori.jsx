@@ -122,7 +122,7 @@ export function FormNuovaData({item, setItem, eseguiSalvataggio}) {
           <StyledLabel htmlFor="orario_inizio">Orario inizio*</StyledLabel>
           <Row>
             <Col style={{ padding: '0', margin: '0', paddingLeft: '19px' }}>
-              <StyledSelect name="ora_inizio" value={orario.ora_inizio} onChange={(e) => cambioValoriOrari(e, setOrario)}>
+              <StyledSelect style={{width: "100%"}} name="ora_inizio" value={orario.ora_inizio} onChange={(e) => cambioValoriOrari(e, setOrario)}>
                 <StyledOption value="">Ora inizio</StyledOption>
                 {ore.map((ora) => (
                   <StyledOption key={ora} value={ora}>{ora}</StyledOption>  
@@ -130,7 +130,7 @@ export function FormNuovaData({item, setItem, eseguiSalvataggio}) {
               </StyledSelect>
             </Col>
             <Col style={{ padding: '0', margin: '0', paddingRight: '19px' }}>
-              <StyledSelect name="minuto_inizio" value={orario.minuto_inizio} onChange={(e) => cambioValoriOrari(e, setOrario)}>
+              <StyledSelect style={{width: "100%"}} name="minuto_inizio" value={orario.minuto_inizio} onChange={(e) => cambioValoriOrari(e, setOrario)}>
                 <StyledOption value="">Minuto inizio</StyledOption>
                 {minuti.map((minuto) => (
                   <StyledOption key={minuto} value={minuto}>{minuto}</StyledOption>  
@@ -141,7 +141,7 @@ export function FormNuovaData({item, setItem, eseguiSalvataggio}) {
           <StyledLabel htmlFor="orario_fine">Orario fine*</StyledLabel>
           <Row>
             <Col style={{ padding: '0', margin: '0', paddingLeft: '19px' }}>
-              <StyledSelect name="ora_fine" value={orario.ora_fine} onChange={(e) => cambioValoriOrari(e, setOrario)}>
+              <StyledSelect style={{width: "100%"}}name="ora_fine" value={orario.ora_fine} onChange={(e) => cambioValoriOrari(e, setOrario)}>
                 <StyledOption value="">Ora fine</StyledOption>
                 {ore.map((ora) => (
                   <StyledOption key={ora} value={ora}>{ora}</StyledOption>  
@@ -149,7 +149,7 @@ export function FormNuovaData({item, setItem, eseguiSalvataggio}) {
               </StyledSelect>
             </Col>
             <Col style={{ padding: '0', margin: '0', paddingRight: '19px' }}>
-              <StyledSelect name="minuto_fine" value={orario.minuto_fine} onChange={(e) => cambioValoriOrari(e, setOrario)}>
+              <StyledSelect style={{width: "100%"}}name="minuto_fine" value={orario.minuto_fine} onChange={(e) => cambioValoriOrari(e, setOrario)}>
                 <StyledOption value="">Minuto fine</StyledOption>
                 {minuti.map((minuto) => (
                   <StyledOption key={minuto} value={minuto}>{minuto}</StyledOption>  

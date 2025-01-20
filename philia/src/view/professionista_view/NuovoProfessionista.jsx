@@ -9,6 +9,9 @@ import { useSelector } from 'react-redux';
 import RowItem from '../component/row_item/RowItem';
 import FormItem from '../component/form_item/FormItem';
 import { Items } from '../component/Items';
+import { FormNuovoProfessionista } from '../component/form_item/FormsProfessionisti';
+import { RowNuovoProfessionista } from '../component/row_item/RowsProfessionisti';
+import { CardNuovoProfessionista } from '../component/card_item/CardsProfessionisti';
 
 const NuovoProfessionista = () => {
   const formSession = useSelector((state) => state.formSession.value);
@@ -98,19 +101,17 @@ const NuovoProfessionista = () => {
 
       <div className="main-content"></div>
 
-      <form>
-        {formSession.view === "form" && (
-          <FormItem errori={errori} setErrori={setErrori} tipoItem={"nuovo professionista"} item={nuovoProfessionista} setItem={setNuovoProfessionista} header="Nuovo professionista" eseguiSalvataggio={(e) => eseguiSalvataggio(e)} />
-        )}
-        {formSession.view === "row" && (
-          <RowItem errori={errori} setErrori={setErrori} tipoItem={"nuovo professionista"} item={nuovoProfessionista} setItem={setNuovoProfessionista} eseguiSalvataggio={(e) => eseguiSalvataggio(e)} />
-        )}
-        {(formSession.view === "card") && (
-          <center>
-            <CardItem errori={errori} setErrori={setErrori} tipoItem={"nuovo professionista"} item={nuovoProfessionista} setItem={setNuovoProfessionista} header="Nuovo professionista" eseguiSalvataggio={(e) => eseguiSalvataggio(e)} />
-          </center>
-        )}
-      </form>
+      {formSession.view === "form" && (
+        <FormNuovoProfessionista item={nuovoProfessionista} setItem={setNuovoProfessionista} eseguiSalvataggio={(e) => eseguiSalvataggio(e, setErrori)} />
+      )}
+      {formSession.view === "row" && (
+        <RowNuovoProfessionista item={nuovoProfessionista} setItem={setNuovoProfessionista} eseguiSalvataggio={(e) => eseguiSalvataggio(e, setErrori)} />
+      )}
+      {(formSession.view === "card") && (
+        <center>
+          <CardNuovoProfessionista item={nuovoProfessionista} setItem={setNuovoProfessionista} eseguiSalvataggio={(e) => eseguiSalvataggio(e, setErrori)} />
+        </center>
+      )}
 
       <div className="main-content" />
 

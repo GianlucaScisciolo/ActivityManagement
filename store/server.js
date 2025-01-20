@@ -146,12 +146,17 @@ app.post("/INSERISCI_CLIENTE", async (req, res) => {
   // Aggiungi un log per vedere i dati ricevuti
   console.log("Dati ricevuti per l\'inserimento:", req.body);
 
+  // const sql = ` 
+  //   INSERT INTO cliente (nome, cognome, contatto, note) 
+  //   VALUES (?, ?, ?, ?); 
+  // `;
   const sql = ` 
-    INSERT INTO cliente (nome, cognome, contatto, note) 
-    VALUES (?, ?, ?, ?); 
+    INSERT INTO cliente (nome, cognome) 
+    VALUES (?, ?); 
   `;
 
-  const params = [`${nome}`, `${cognome}`, `${contatto}`, `${note}`];
+  // const params = [`${nome}`, `${cognome}`, `${contatto}`, `${note}`];
+  const params = [`${nome}`, `${cognome}`];
   
   // return getResults(sql, params, res);
   try {
@@ -171,28 +176,48 @@ app.post("/INSERISCI_CLIENTE", async (req, res) => {
  */
 app.post("/VISUALIZZA_CLIENTI", async (req, res) => {
   const { nome = '', cognome = '', contatto = '', note = '' } = req.body;
-  
+
   // Aggiungi un log per vedere i dati ricevuti
   console.log("Dati ricevuti per la ricerca:", req.body);
 
-  const sql = `
+  let sql = `
     SELECT 
       id, 
       nome, 
       cognome, 
-      contatto, 
+      IFNULL(NULLIF(contatto, ''), 'Contatto non inserito.') AS contatto, 
       IFNULL(NULLIF(note, ''), 'Nota non inserita.') AS note, 
       0 AS tipo_selezione 
     FROM 
       cliente 
     WHERE 
-      nome LIKE ? AND cognome LIKE ? AND contatto LIKE ? AND note LIKE ?; 
+      nome LIKE ? AND cognome LIKE ?
   `;
-  
-  const params = [`${nome}%`, `${cognome}%`, `${contatto}%`, `${note}%`];
+
+  const params = [`${nome}%`, `${cognome}%`];
+
+  if (contatto === '') {
+    sql += " AND (contatto LIKE ? OR contatto IS NULL)";
+    params.push('%');
+  } 
+  else {
+    sql += " AND contatto LIKE ?";
+    params.push(`${contatto}%`);
+  }
+
+  if (note === '') {
+    sql += " AND (note LIKE ? OR note IS NULL)";
+    params.push('%');
+  } 
+  else {
+    sql += " AND note LIKE ?";
+    params.push(`${note}%`);
+  }
 
   return getResults(sql, params, res);
 });
+
+
 
 
 /**
@@ -286,12 +311,17 @@ app.post("/MODIFICA_CLIENTI", async (req, res) => {
 app.post("/INSERISCI_PROFESSIONISTA", async (req, res) => {
   const { nome = '', professione = '', contatto = '', email = '', note = '' } = req.body;
   
+  // const sql = ` 
+  //   INSERT INTO professionista (nome, professione, contatto, email, note) 
+  //   VALUES (?, ?, ?, ?, ?); 
+  // `;
   const sql = ` 
-    INSERT INTO professionista (nome, professione, contatto, email, note) 
-    VALUES (?, ?, ?, ?, ?); 
+    INSERT INTO professionista (nome, professione) 
+    VALUES (?, ?); 
   `;
 
-  const params = [`${nome}`, `${professione}`, `${contatto}`, `${email}`, `${note}`];
+  // const params = [`${nome}`, `${professione}`, `${contatto}`, `${email}`, `${note}`];
+  const params = [`${nome}`, `${professione}`];
   
   try {
     await executeQuery(sql, params);
@@ -313,7 +343,7 @@ app.post("/VISUALIZZA_PROFESSIONISTI", async (req, res) => {
   const { nome = '', professione = '', contatto = '', email = '', note = '' } = req.body;
   console.log([nome, professione, contatto, email, note]);
   
-  const sql = ` 
+  let sql = `
     SELECT 
       id, 
       nome, 
@@ -325,20 +355,37 @@ app.post("/VISUALIZZA_PROFESSIONISTI", async (req, res) => {
     FROM 
       professionista 
     WHERE 
-      nome LIKE IFNULL(?, '%') AND 
-      professione LIKE IFNULL(?, '%') AND 
-      IFNULL(contatto, '') LIKE IFNULL(?, '%') AND 
-      IFNULL(email, '') LIKE IFNULL(?, '%') AND 
-      IFNULL(note, '') LIKE IFNULL(?, '%');
+      nome LIKE ? AND professione LIKE ? 
   `;
 
-  const params = [
-    `${nome}%`, 
-    `${professione}%`, 
-    contatto === '' ? `%${contatto}%` : `${contatto}%`, 
-    email === '' ? `%${email}%` : `${email}%`, 
-    note === '' ? `%${note}%` : `${note}%`
-  ];
+  const params = [`${nome}%`, `${professione}%`];
+
+  if (contatto === '') {
+    sql += " AND (contatto LIKE ? OR contatto IS NULL)";
+    params.push('%');
+  } 
+  else {
+    sql += " AND contatto LIKE ?";
+    params.push(`${contatto}%`);
+  }
+
+  if (email === '') {
+    sql += " AND (email LIKE ? OR email IS NULL)";
+    params.push('%');
+  } 
+  else {
+    sql += " AND email LIKE ?";
+    params.push(`${email}%`);
+  }
+
+  if (note === '') {
+    sql += " AND (note LIKE ? OR note IS NULL)";
+    params.push('%');
+  } 
+  else {
+    sql += " AND note LIKE ?";
+    params.push(`${note}%`);
+  }
   
   return getResults(sql, params, res);
 });

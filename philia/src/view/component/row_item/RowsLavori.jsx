@@ -70,6 +70,14 @@ const TrashTag = ({ tipoSelezione, selectOperation, item }) => {
   }
 }
 
+function OperazioniNuovoItem({eseguiSalvataggio}) {
+  return (
+    <StyledColOperazioni>
+      <StyledSaveNotSelected size={grandezzaIcona} onClick={eseguiSalvataggio} />
+    </StyledColOperazioni>
+  )
+}
+
 const OperazioniCercaItems = ({ visibilita, setVisibilita, arrowUp, setArrowUp, eseguiRicerca }) => {
   return (
     <StyledColOperazioni>
@@ -126,6 +134,85 @@ function cambioValoriOrari(e, setValue) {
   else {
     alert("Errore, nome campo " + name + " non valido.");
   }
+}
+
+export function RowNuovaData({item, setItem, eseguiSalvataggio}) {
+  const ore = ["07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22"];
+  const minuti = ["00", "30"];
+  let [visibilita, setVisibilita] = useState([true, true, true, true, true]);
+  const [arrowUp, setArrowUp] = useState(true);
+
+  const [giornoType, setGiornoType] = useState('text');
+  const [orario, setOrario] = useState({
+    ora_inizio: "", 
+    ora_fine: "",
+    minuto_inizio: "", 
+    minuto_fine: ""
+  });
+
+  const giornoValue = item.giorno !== undefined ? item.giorno : '';
+
+  return (
+    <>
+      <StyledRow>
+        <OperazioniNuovoItem eseguiSalvataggio={eseguiSalvataggio} />
+        <StyledCol>
+          {(visibilita[0]) && (
+            <StyledInputModifica
+              rows="1"
+              placeholder="Giorno*"
+              type={giornoType}
+              name="giorno"
+              value={giornoValue}
+              onClick={handleGiornoClick(setGiornoType)}
+              onBlur={handleGiornoBlur(setGiornoType, item, setItem)}
+              onChange={(e) => handleInputChange(e, setItem)}
+            />
+          )}
+        </StyledCol>
+        <StyledCol>
+          {(visibilita[1]) && (
+            <StyledSelect name="ora_inizio" value={orario.ora_inizio} onChange={(e) => cambioValoriOrari(e, setOrario)}>
+              <StyledOption value="">Ora inizio</StyledOption>
+              {ore.map((ora) => (
+                <StyledOption key={ora} value={ora}>{ora}</StyledOption>  
+              ))}
+            </StyledSelect>
+          )}
+        </StyledCol>
+        <StyledCol>
+          {(visibilita[2]) && (
+            <StyledSelect name="minuto_inizio" value={orario.minuto_inizio} onChange={(e) => cambioValoriOrari(e, setOrario)}>
+              <StyledOption value="">Minuto inizio</StyledOption>
+              {minuti.map((minuto) => (
+                <StyledOption key={minuto} value={minuto}>{minuto}</StyledOption>  
+              ))}
+            </StyledSelect>
+          )}
+        </StyledCol>
+        <StyledCol>
+          {(visibilita[3]) && (
+            <StyledSelect name="ora_fine" value={orario.ora_fine} onChange={(e) => cambioValoriOrari(e, setOrario)}>
+              <StyledOption value="">Ora fine</StyledOption>
+              {ore.map((ora) => (
+                <StyledOption key={ora} value={ora}>{ora}</StyledOption>  
+              ))}
+            </StyledSelect>
+          )}
+        </StyledCol>
+        <StyledCol>
+          {(visibilita[4]) && (
+            <StyledSelect name="minuto_fine" value={orario.minuto_fine} onChange={(e) => cambioValoriOrari(e, setOrario)}>
+              <StyledOption value="">Minuto fine</StyledOption>
+              {minuti.map((minuto) => (
+                <StyledOption key={minuto} value={minuto}>{minuto}</StyledOption>  
+              ))}
+            </StyledSelect>
+          )}
+        </StyledCol>
+      </StyledRow>
+    </>
+  );
 }
 
 export function RowRicercaDate({item, setItem, eseguiRicerca}) {

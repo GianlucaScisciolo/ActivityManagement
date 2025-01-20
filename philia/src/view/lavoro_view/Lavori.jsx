@@ -22,6 +22,15 @@ const Lavori = () => {
   const [selectedIds, setSelectedIds] = useState([]);
   const [selectedIdsModifica, setSelectedIdsModifica] = useState([]);
 
+  // const [datiRicerca, setDatiRicerca] = useState({
+  //   "nome_cliente": "", 
+  //   "cognome_cliente": "", 
+  //   "nome_professionista": "",
+  //   "descrizione": "", 
+  //   "primo_giorno": "",
+  //   "ultimo_giorno": "",
+  //   "note": ""
+  // });
   const [datiRicerca, setDatiRicerca] = useState({
     "nome_cliente": "", 
     "cognome_cliente": "", 

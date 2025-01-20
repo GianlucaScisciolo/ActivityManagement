@@ -70,6 +70,14 @@ const TrashTag = ({ tipoSelezione, selectOperation, item }) => {
   }
 }
 
+function OperazioniNuovoItem({eseguiSalvataggio}) {
+  return (
+    <StyledColOperazioni>
+      <StyledSaveNotSelected size={grandezzaIcona} onClick={eseguiSalvataggio} />
+    </StyledColOperazioni>
+  )
+}
+
 const OperazioniCercaItems = ({ visibilita, setVisibilita, arrowUp, setArrowUp, eseguiRicerca }) => {
   return (
     <StyledColOperazioni>
@@ -91,6 +99,25 @@ function OperazioniItemEsistente ({ tipoSelezione, selectOperation, item }) {
       <TrashTag tipoSelezione={item.tipo_selezione} selectOperation={selectOperation} item={item} />
     </StyledColOperazioni>
   )
+}
+
+export function RowNuovoProfessionista({item, setItem, eseguiSalvataggio}) {
+  // const [visibilita, setVisibilita] = useState(Array(Object.keys(item).length).fill(true));
+  const [arrowUp, setArrowUp] = useState(true);
+
+  return (
+    <>
+      <StyledRow>
+        <OperazioniNuovoItem eseguiSalvataggio={eseguiSalvataggio} />
+        <StyledCol>
+          <StyledTextAreaModifica rows="1" placeholder="Nome*" name="nome" value={item.nome} onChange={(e) => handleInputChange(e, setItem)} />
+        </StyledCol>
+        <StyledCol>
+          <StyledTextAreaModifica rows="1" placeholder="Professione*" name="professione" value={item.professione} onChange={(e) => handleInputChange(e, setItem)} />
+        </StyledCol>
+      </StyledRow>
+    </>
+  );
 }
 
 export function RowRicercaProfessionisti({item, setItem, eseguiRicerca}) {
