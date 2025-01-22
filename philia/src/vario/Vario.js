@@ -35,6 +35,20 @@ export const handleInputChange = (e, setItem, items, setItems, tipoItem, id) => 
   }
   else {
     alert("Errore, nome campo " + name + " non valido.");
+    return;
+  }
+
+  if(name === "id_cliente") {
+    setItem(prevState => ({
+      ...prevState, 
+      "id_professionista": 0
+    }));
+  }
+  else if(name === "id_professionista") {
+    setItem(prevState => ({
+      ...prevState, 
+      "id_cliente": 0
+    }));
   }
 };
 

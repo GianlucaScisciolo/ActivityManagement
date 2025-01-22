@@ -146,17 +146,12 @@ app.post("/INSERISCI_CLIENTE", async (req, res) => {
   // Aggiungi un log per vedere i dati ricevuti
   console.log("Dati ricevuti per l\'inserimento:", req.body);
 
-  // const sql = ` 
-  //   INSERT INTO cliente (nome, cognome, contatto, note) 
-  //   VALUES (?, ?, ?, ?); 
-  // `;
   const sql = ` 
-    INSERT INTO cliente (nome, cognome) 
-    VALUES (?, ?); 
+    INSERT INTO cliente (nome, cognome, contatto, note) 
+    VALUES (?, ?, ?, ?); 
   `;
 
-  // const params = [`${nome}`, `${cognome}`, `${contatto}`, `${note}`];
-  const params = [`${nome}`, `${cognome}`];
+  const params = [`${nome}`, `${cognome}`, `${contatto}`, `${note}`];
   
   // return getResults(sql, params, res);
   try {
@@ -311,18 +306,13 @@ app.post("/MODIFICA_CLIENTI", async (req, res) => {
 app.post("/INSERISCI_PROFESSIONISTA", async (req, res) => {
   const { nome = '', professione = '', contatto = '', email = '', note = '' } = req.body;
   
-  // const sql = ` 
-  //   INSERT INTO professionista (nome, professione, contatto, email, note) 
-  //   VALUES (?, ?, ?, ?, ?); 
-  // `;
   const sql = ` 
-    INSERT INTO professionista (nome, professione) 
-    VALUES (?, ?); 
+    INSERT INTO professionista (nome, professione, contatto, email, note) 
+    VALUES (?, ?, ?, ?, ?); 
   `;
 
-  // const params = [`${nome}`, `${professione}`, `${contatto}`, `${email}`, `${note}`];
-  const params = [`${nome}`, `${professione}`];
-  
+  const params = [`${nome}`, `${professione}`, `${contatto}`, `${email}`, `${note}`];
+    
   try {
     await executeQuery(sql, params);
     return res.status(201).json({ message: 'Professionista inserito con successo' });
@@ -464,40 +454,45 @@ app.post("/MODIFICA_PROFESSIONISTI", async (req, res) => {
 /**
  * Inserisci lavoro
  */
-app.post("/INSERISCI_LAVORO", async (req, res) => {
-  const {
-    descrizione = '',
-    giorno = '',
-    orario_inizio = '',
-    orario_fine = '',
-    note = ''
-  } = req.body;
+// app.post("/INSERISCI_LAVORO", async (req, res) => {
+//   const {
+//     id_cliente = '',
+//     id_professionista = '',
+//     descrizione = '',
+//     giorno = '',
+//     ora_inizio = '',
+//     minuto_inizio = '',
+//     ora_fine = '',
+//     minuto_fine = '',
+//     note = ''
+//   } = req.body;
   
-  const sql = ` 
-    INSERT INTO lavoro (descrizione, giorno, orario_inizio, orario_fine, note) 
-    VALUES (?, ?, ?, ?, ?); 
-  `;
+//   const sql = ` 
+//     INSERT INTO lavoro (descrizione, giorno, orario_inizio, orario_fine, note) 
+//     VALUES (?, ?, ?, ?, ?); 
+//   `;
   
-  const params = [
-    `${descrizione}`, 
-    `${giorno}`, 
-    `${orario_inizio}`, 
-    `${orario_fine}`, 
-    `${note}`, 
-  ];
+//   const params = [
+//     `${descrizione}`, 
+//     `${giorno}`, 
+//     `${orario_inizio}`, 
+//     `${orario_fine}`, 
+//     `${note}`, 
+//   ];
   
-  try {
-    await executeQuery(sql, params);
-    res.sendStatus(200);
-  } 
-  catch (err) {
-    if (err.code === 'ER_DUP_ENTRY') {
-      res.sendStatus(200);
-    }
-    console.error('Errore durante l\'inserimento del lavoro: ', err);
-    return res.status(500).json({ message: 'Errore del server.' });
-  }
-});
+//   try {
+//     await executeQuery(sql, params);
+//     res.sendStatus(200);
+//   } 
+//   catch (err) {
+//     if (err.code === 'ER_DUP_ENTRY') {
+//       res.sendStatus(200);
+//     }
+//     console.error('Errore durante l\'inserimento del lavoro: ', err);
+//     return res.status(500).json({ message: 'Errore del server.' });
+//   }
+// });
+
 // app.post("/INSERISCI_LAVORO", async (req, res) => {
 //   const {
 //     lavoro_cliente_selezionato = '', 
@@ -558,14 +553,185 @@ app.post("/INSERISCI_LAVORO", async (req, res) => {
 //   }
 // });
 
+app.post("/INSERISCI_LAVORO", async (req, res) => {
+  const {
+    id_cliente = '',
+    id_professionista = '',
+    descrizione = '',
+    giorno = '',
+    ora_inizio = '',
+    minuto_inizio = '',
+    ora_fine = '',
+    minuto_fine = '',
+    note = ''
+  } = req.body;
+  
+  // SQL per inserire un nuovo lavoro
+  const sqlInsertLavoro = `
+    INSERT INTO lavoro (giorno, ora_inizio, minuto_inizio, ora_fine, minuto_fine)
+    VALUES (?, ?, ?, ?, ?);
+  `;
+  
+  // Parametri per la query di inserimento
+  const paramsLavoro = [
+    `${giorno}`, 
+    `${ora_inizio}`, 
+    `${minuto_inizio}`, 
+    `${ora_fine}`, 
+    `${minuto_fine}`
+  ];
+
+  try {
+    const insertResult = await executeQuery(sqlInsertLavoro, paramsLavoro);
+
+    // Ottieni l'ID del nuovo lavoro inserito
+    const id_lavoro = insertResult.insertId;
+
+    // Esegui la query per inserire prenotazione o impegno
+    if (parseInt(id_cliente) !== 0) {
+      const sqlInsertPrenotazione = `
+        INSERT INTO prenotazione (id_cliente, id_lavoro, descrizione, note)
+        VALUES (?, ?, ?, ?);
+      `;
+      const paramsPrenotazione = [
+        `${id_cliente}`, 
+        `${id_lavoro}`, 
+        `${descrizione}`, 
+        `${note}`
+      ];
+      await executeQuery(sqlInsertPrenotazione, paramsPrenotazione);
+    } 
+    else if (parseInt(id_professionista) !== 0) {
+      const sqlInsertImpegno = `
+        INSERT INTO impegno (id_professionista, id_lavoro, descrizione, note)
+        VALUES (?, ?, ?, ?);
+      `;
+      const paramsImpegno = [
+        `${id_professionista}`, 
+        `${id_lavoro}`, 
+        `${descrizione}`, 
+        `${note}`
+      ];
+      await executeQuery(sqlInsertImpegno, paramsImpegno);
+    }
+
+    res.sendStatus(200);
+
+  } 
+  catch (err) {
+    if (err.code === 'ER_DUP_ENTRY') {
+      // Se il lavoro è già presente, ottieni l'ID del lavoro esistente
+      const sqlSelectLavoro = `
+        SELECT id FROM lavoro WHERE giorno = ? AND ora_inizio = ? AND minuto_inizio = ? AND ora_fine = ? AND minuto_fine = ?;
+      `;
+      const paramsSelectLavoro = [
+        `${giorno}`, 
+        `${ora_inizio}`, 
+        `${minuto_inizio}`, 
+        `${ora_fine}`, 
+        `${minuto_fine}`
+      ];
+      const selectResult = await executeQuery(sqlSelectLavoro, paramsSelectLavoro);
+      const id_lavoro = selectResult[0].id;
+
+      // Esegui la query per inserire prenotazione o impegno
+      if (parseInt(id_cliente) !== 0) {
+        const sqlInsertPrenotazione = `
+          INSERT INTO prenotazione (id_cliente, id_lavoro, descrizione, note)
+          VALUES (?, ?, ?, ?);
+        `;
+        const paramsPrenotazione = [
+          `${id_cliente}`, 
+          `${id_lavoro}`, 
+          `${descrizione}`, 
+          `${note}`
+        ];
+        await executeQuery(sqlInsertPrenotazione, paramsPrenotazione);
+      } else if (parseInt(id_professionista) !== 0) {
+        const sqlInsertImpegno = `
+          INSERT INTO impegno (id_professionista, id_lavoro, descrizione, note)
+          VALUES (?, ?, ?, ?);
+        `;
+        const paramsImpegno = [
+          `${id_professionista}`, 
+          `${id_lavoro}`, 
+          `${descrizione}`, 
+          `${note}`
+        ];
+        await executeQuery(sqlInsertImpegno, paramsImpegno);
+      }
+
+      res.sendStatus(200);
+
+    } else {
+      console.error('Errore durante l\'inserimento del lavoro: ', err);
+      return res.status(500).json({ message: 'Errore del server.' });
+    }
+  }
+});
+
+
 
 /**
  * Visualizza lavori 
  */
+// app.post("/VISUALIZZA_LAVORI", async (req, res) => {
+//   let { 
+//     nome_cliente = '', cognome_cliente = '', nome_professionista = '', professione = '',  
+//     primo_giorno = '', ultimo_giorno = '', descrizione = '', note = '',
+//   } = req.body;
+
+//   if(primo_giorno === '')
+//     primo_giorno = '1111-01-01';
+//   if(ultimo_giorno === '')
+//     ultimo_giorno = '9999-01-01';
+
+//   console.log("Dati ricevuti per la ricerca dei lavori: ", { 
+//     nome_cliente, cognome_cliente, nome_professionista, professione, primo_giorno, ultimo_giorno, descrizione, note
+//   });
+
+//   const sql = `
+//   Vorrei ottenere una sql tale che, ottiene una lista formata da impegni e prenotazioni e devo avere, per ogni elemento della lista:
+//   [nome_cliente, cognome_cliente, nome_professionista, professione, giorno, ora_inizio, minuto_inizio, ora_fine, minuto_fine, descrizione, note]
+//   `;
+// //   const sql = `
+// //   SELECT 
+// //     0 AS tipo_selezione, 
+// //     l.id AS id, 
+// //     l.descrizione AS descrizione, 
+// //     l.giorno AS giorno, 
+// //     l.orario_inizio AS orario_inizio, 
+// //     l.orario_fine AS orario_fine, 
+// //     IFNULL(NULLIF(l.note, ''), 'Nota non inserita.') AS note, 
+// //     l.id_cliente AS id_cliente, 
+// //     c.nome AS nome_cliente, 
+// //     c.cognome AS cognome_cliente, 
+// //     l.id_professionista AS id_professionista, 
+// //     p.nome AS nome_professionista, 
+// //     p.professione AS professione,
+// //     CASE 
+// //       WHEN l.id_cliente IS NOT NULL THEN 'Lavoro cliente'
+// //       WHEN l.id_professionista IS NOT NULL THEN 'Lavoro professionista'
+// //       ELSE 'Lavoro'
+// //     END AS tipo_lavoro
+// //   FROM 
+// //     lavoro AS l 
+// //     LEFT JOIN cliente AS c ON c.id = l.id_cliente 
+// //     LEFT JOIN professionista AS p ON p.id = l.id_professionista 
+// //   WHERE 
+// //     (l.descrizione LIKE ?) AND (l.giorno BETWEEN ? AND ?) AND (l.note LIKE ?) 
+// //     AND ((c.nome LIKE ? AND c.cognome LIKE ?) OR (p.nome LIKE ?));
+// // `;
+
+
+// //   const params = [`${descrizione}%`, `${primo_giorno}%`, `${ultimo_giorno}%`, `${note}%`, `${nome_cliente}%`, `${cognome_cliente}%`, `${nome_professionista}%`];
+
+// //   return getResults(sql, params, res);
+// });
 app.post("/VISUALIZZA_LAVORI", async (req, res) => {
   let { 
-    nome_cliente = '', cognome_cliente = '', nome_professionista = '', 
-    descrizione = '', primo_giorno = '', ultimo_giorno = '', note = '',
+    nome_cliente = '', cognome_cliente = '', nome_professionista = '', professione = '',  
+    primo_giorno = '', ultimo_giorno = '', descrizione = '', note = '',
   } = req.body;
 
   if(primo_giorno === '')
@@ -573,44 +739,66 @@ app.post("/VISUALIZZA_LAVORI", async (req, res) => {
   if(ultimo_giorno === '')
     ultimo_giorno = '9999-01-01';
 
-  console.log("Dati ricevuti per la ricerca dei lavori dei clienti: ", { 
-    nome_cliente, cognome_cliente, nome_professionista, descrizione, primo_giorno, ultimo_giorno, note,
+  console.log("Dati ricevuti per la ricerca dei lavori: ", { 
+    nome_cliente, cognome_cliente, nome_professionista, professione, primo_giorno, ultimo_giorno, descrizione, note
   });
-  
+
   const sql = `
-  SELECT 
-    0 AS tipo_selezione, 
-    l.id AS id, 
-    l.descrizione AS descrizione, 
-    l.giorno AS giorno, 
-    l.orario_inizio AS orario_inizio, 
-    l.orario_fine AS orario_fine, 
-    IFNULL(NULLIF(l.note, ''), 'Nota non inserita.') AS note, 
-    l.id_cliente AS id_cliente, 
-    c.nome AS nome_cliente, 
-    c.cognome AS cognome_cliente, 
-    l.id_professionista AS id_professionista, 
-    p.nome AS nome_professionista, 
-    p.professione AS professione,
-    CASE 
-      WHEN l.id_cliente IS NOT NULL THEN 'Lavoro cliente'
-      WHEN l.id_professionista IS NOT NULL THEN 'Lavoro professionista'
-      ELSE 'Lavoro'
-    END AS tipo_lavoro
-  FROM 
-    lavoro AS l 
-    LEFT JOIN cliente AS c ON c.id = l.id_cliente 
-    LEFT JOIN professionista AS p ON p.id = l.id_professionista 
-  WHERE 
-    (l.descrizione LIKE ?) AND (l.giorno BETWEEN ? AND ?) AND (l.note LIKE ?) 
-    AND ((c.nome LIKE ? AND c.cognome LIKE ?) OR (p.nome LIKE ?));
-`;
+    SELECT 
+      0 AS tipo_selezione, 
+      c.nome AS nome_cliente,
+      c.cognome AS cognome_cliente,
+      p.nome AS nome_professionista,
+      p.professione,
+      l.giorno,
+      l.ora_inizio,
+      l.minuto_inizio,
+      l.ora_fine,
+      l.minuto_fine,
+      CASE 
+        WHEN pr.descrizione IS NULL AND im.descrizione IS NULL THEN 'Descrizione non inserita'
+        ELSE COALESCE(pr.descrizione, im.descrizione) 
+      END AS descrizione,
+      CASE 
+        WHEN pr.note IS NULL AND im.note IS NULL THEN 'Note non inserite'
+        ELSE COALESCE(pr.note, im.note)
+      END AS note
+    FROM
+      lavoro l
+    LEFT JOIN prenotazione pr ON l.id = pr.id_lavoro
+    LEFT JOIN cliente c ON pr.id_cliente = c.id
+    LEFT JOIN impegno im ON l.id = im.id_lavoro
+    LEFT JOIN professionista p ON im.id_professionista = p.id
+    WHERE
+      (c.nome LIKE CONCAT('%', ?, '%') OR ? = '')
+      AND (c.cognome LIKE CONCAT('%', ?, '%') OR ? = '')
+      AND (p.nome LIKE CONCAT('%', ?, '%') OR ? = '')
+      AND (p.professione LIKE CONCAT('%', ?, '%') OR ? = '')
+      AND l.giorno BETWEEN ? AND ?
+      AND (COALESCE(pr.descrizione, im.descrizione) LIKE CONCAT('%', ?, '%') OR ? = '')
+      AND (COALESCE(pr.note, im.note) LIKE CONCAT('%', ?, '%') OR ? = '')
+    ORDER BY l.giorno, l.ora_inizio, l.minuto_inizio;
+  `;
 
+  const params = [
+    `${nome_cliente}`, `${nome_cliente}`,
+    `${cognome_cliente}`, `${cognome_cliente}`,
+    `${nome_professionista}`, `${nome_professionista}`,
+    `${professione}`, `${professione}`,
+    `${primo_giorno}`, `${ultimo_giorno}`,
+    `${descrizione}`, `${descrizione}`,
+    `${note}`, `${note}`
+  ];
 
-  const params = [`${descrizione}%`, `${primo_giorno}%`, `${ultimo_giorno}%`, `${note}%`, `${nome_cliente}%`, `${cognome_cliente}%`, `${nome_professionista}%`];
-
-  return getResults(sql, params, res);
+  try {
+    const result = await executeQuery(sql, params);
+    res.json(result);
+  } catch (err) {
+    console.error('Errore durante la visualizzazione dei lavori: ', err);
+    return res.status(500).json({ message: 'Errore del server.' });
+  }
 });
+
 
 /**
  * Elimina lavori

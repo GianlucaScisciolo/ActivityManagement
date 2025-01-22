@@ -9,16 +9,22 @@ import Col from 'react-bootstrap/esm/Col';
 import RowItem from '../component/row_item/RowItem';
 import FormItem from '../component/form_item/FormItem';
 import { Items } from '../component/Items';
-import { CardNuovoCliente } from '../component/card_item/CardsClienti';
+import { CardNuovoCliente, CardClienteEsistente } from '../component/card_item/CardsClienti';
 import { FormNuovoCliente } from '../component/form_item/FormsClienti';
-import { RowNuovoCliente } from '../component/row_item/RowsClienti';
+import { RowNuovoCliente, RowClienteEsistente } from '../component/row_item/RowsClienti';
 
 const NuovoCliente = () => {
   const formSession = useSelector((state) => state.formSession.value);
+  const itemSession = useSelector((state) => state.itemSession.value);
 
   const [clienti, setClienti] = useState([]);
+  const [selectedTrashCount, setSelectedTrashCount] = useState(0);
+  const [selectedPencilCount, setSelectedPencilCount] = useState(0);
+  const [selectedIdsEliminazione, setSelectedIdsEliminazione] = useState([]);
+  const [selectedIdsModifica, setSelectedIdsModifica] = useState([]);
 
   const [nuovoCliente, setNuovoCliente] = useState({
+    tipo_selezione: 0,
     nome: "",
     cognome: "",
     contatto: "",
@@ -31,8 +37,40 @@ const NuovoCliente = () => {
     contatto: "",
     note: ""
   })
+
+  const selectOperation = (icon, item) => {
+    if(icon === "trash") {
+      if(selectedIdsEliminazione.includes(item.id)) {
+        item.tipo_selezione = 0;
+        setSelectedIdsEliminazione(prevIds => prevIds.filter(itemId => itemId !== item.id));
+        setSelectedTrashCount(prevCount => Math.max(prevCount - 1, 0));
+      }
+      else {
+        item.tipo_selezione = 2;
+        setSelectedIdsEliminazione(prevIds => [...prevIds, item.id]);
+        setSelectedTrashCount(prevCount => prevCount + 1);
+        setSelectedIdsModifica(prevIdsModifica => prevIdsModifica.filter(itemId => itemId !== item.id));
+        setSelectedPencilCount(prevCount => Math.max(prevCount - 1, 0));
+      }
+    }
+    else if(icon === "pencil") {
+      if(selectedIdsModifica.includes(item.id)) {
+        item.tipo_selezione = 0;
+        setSelectedIdsModifica(prevIdsModifica => prevIdsModifica.filter(itemId => itemId !== item.id));
+        setSelectedPencilCount(prevCount => Math.max(prevCount - 1, 0));
+      }
+      else {
+        item.tipo_selezione = 1;
+        setSelectedIdsModifica(prevIdsModifica => [...prevIdsModifica, item.id]);
+        setSelectedPencilCount(prevCount => prevCount + 1);
+        setSelectedIdsEliminazione(prevIds => prevIds.filter(itemId => itemId !== item.id));
+        setSelectedTrashCount(prevCount => Math.max(prevCount - 1, 0));
+      }
+    }
+  }
   
-  const handleInsert = async (nuovoCliente, setNuovoCliente, setClienti) => {
+  const handleInsert = async (e) => {
+    e.preventDefault();
     if (confirm("Sei sicuro di voler salvare il cliente?")) {
       if (controlloCliente(nuovoCliente, setErrori) > 0) 
         return;
@@ -58,10 +96,11 @@ const NuovoCliente = () => {
         else {
           const result = await response.json();
           
-          nuovoCliente.contatto = (nuovoCliente.contatto.split(' ').join('') === "") ? "Contatto non inserito." : nuovoCliente.note;
+          nuovoCliente.contatto = (nuovoCliente.contatto.split(' ').join('') === "") ? "Contatto non inserito." : nuovoCliente.contatto;
           nuovoCliente.note = (nuovoCliente.note.split(' ').join('') === "") ? "Nota non inserita." : nuovoCliente.note;
           setClienti(prevClienti => [...prevClienti, nuovoCliente]);
           setNuovoCliente({
+            tipo_selezione: 0,
             nome: "",
             cognome: "",
             contatto: "",
@@ -86,10 +125,10 @@ const NuovoCliente = () => {
     e.target.value = e.target.value.slice(0, 11);
   };
 
-  const eseguiSalvataggio = (e, setErrori) => {
-    e.preventDefault();
-    handleInsert(nuovoCliente, setNuovoCliente, setClienti, setErrori);
-  }
+  // const eseguiSalvataggio = (e, setErrori) => {
+  //   e.preventDefault();
+  //   handleInsert(nuovoCliente, setNuovoCliente, setClienti, setErrori);
+  // }
 
   return (
     <>
@@ -98,25 +137,39 @@ const NuovoCliente = () => {
       <div className="main-content" />
 
       {formSession.view === "form" && (
-        <FormNuovoCliente item={nuovoCliente} setItem={setNuovoCliente} eseguiSalvataggio={(e) => eseguiSalvataggio(e, setErrori)} />
+        <FormNuovoCliente item={nuovoCliente} setItem={setNuovoCliente} eseguiSalvataggio={(e) => handleInsert(e)} />
       )}
       {formSession.view === "row" && (
-        <RowNuovoCliente item={nuovoCliente} setItem={setNuovoCliente} eseguiSalvataggio={(e) => eseguiSalvataggio(e, setErrori)} />
+        <RowNuovoCliente item={nuovoCliente} setItem={setNuovoCliente} eseguiSalvataggio={(e) => handleInsert(e)} />
       )}
       {(formSession.view === "card") && (
         <center>
-          <CardNuovoCliente item={nuovoCliente} setItem={setNuovoCliente} eseguiSalvataggio={(e) => eseguiSalvataggio(e, setErrori)} />
+          <CardNuovoCliente item={nuovoCliente} setItem={setNuovoCliente} eseguiSalvataggio={(e) => handleInsert(e)} />
         </center>
       )}
 
-      <div className="main-content" />
+      <br /> <br /> <br /> <br />
 
       {(clienti.length > 0) && (
         <>
-          <div className="main-content"></div>
-          <Items tipoItem={"cliente"} items={clienti} setterItems={setClienti} errori={errori} setErrori={setErrori}/>    
+          {(itemSession.view === "card") && (
+            <div className="contenitore-3">
+              {clienti.map((cliente, index) => (
+                <CardClienteEsistente key={index} item={cliente} items={clienti} setItems={setClienti} selectOperation={selectOperation} />
+              ))}
+            </div>
+          )}
+          {(itemSession.view === "list") && (
+            <>
+              {clienti.map((cliente, index) => (
+                <RowClienteEsistente key={index} item={cliente} items={clienti} setItems={setClienti} selectOperation={selectOperation} />
+              ))}
+            </>
+          )}
         </>
       )}
+
+      <br /> <br /> <br /> <br />
     </>
   );
 };

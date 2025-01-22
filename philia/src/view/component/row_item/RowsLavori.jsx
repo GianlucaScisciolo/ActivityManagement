@@ -136,10 +136,10 @@ function cambioValoriOrari(e, setValue) {
   }
 }
 
-export function RowNuovaData({item, setItem, eseguiSalvataggio}) {
+export function RowNuovoLavoro({clienti, professionisti, header, item, setItem, eseguiSalvataggio}) {
   const ore = ["07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22"];
   const minuti = ["00", "30"];
-  let [visibilita, setVisibilita] = useState([true, true, true, true, true]);
+  // let [visibilita, setVisibilita] = useState([true, true, true, true, true, true, true]);
   const [arrowUp, setArrowUp] = useState(true);
 
   const [giornoType, setGiornoType] = useState('text');
@@ -157,79 +157,106 @@ export function RowNuovaData({item, setItem, eseguiSalvataggio}) {
       <StyledRow>
         <OperazioniNuovoItem eseguiSalvataggio={eseguiSalvataggio} />
         <StyledCol>
-          {(visibilita[0]) && (
-            <StyledInputModifica
-              rows="1"
-              placeholder="Giorno*"
-              type={giornoType}
-              name="giorno"
-              value={giornoValue}
-              onClick={handleGiornoClick(setGiornoType)}
-              onBlur={handleGiornoBlur(setGiornoType, item, setItem)}
-              onChange={(e) => handleInputChange(e, setItem)}
-            />
+          {(header === "Nuovo lavoro cliente") && (
+            <>
+              <StyledSelect name="id_cliente" value={item.id_cliente} onChange={(e) => handleInputChange(e, setItem)}>
+                <StyledOption value="0">Seleziona il cliente</StyledOption>
+                {clienti.map((cliente) => (
+                  <StyledOption key={cliente.id} value={cliente.id}>{cliente.nome + " " + cliente.cognome}</StyledOption>  
+                ))}
+              </StyledSelect>
+            </>
+          )}
+          {(header === "Nuovo lavoro professionista") && (
+            <>
+              <StyledSelect name="id_professionista" value={item.id_professionista} onChange={(e) => handleInputChange(e, setItem)}>
+                <StyledOption value="0">Seleziona il professionista</StyledOption>
+                {professionisti.map((professionista) => (
+                  <StyledOption key={professionista.id} value={professionista.id}>{professionista.nome + " - " + professionista.professione}</StyledOption>  
+                ))}
+              </StyledSelect>
+            </>
           )}
         </StyledCol>
         <StyledCol>
-          {(visibilita[1]) && (
-            <StyledSelect name="ora_inizio" value={orario.ora_inizio} onChange={(e) => cambioValoriOrari(e, setOrario)}>
-              <StyledOption value="">Ora inizio</StyledOption>
-              {ore.map((ora) => (
-                <StyledOption key={ora} value={ora}>{ora}</StyledOption>  
-              ))}
-            </StyledSelect>
-          )}
+          <StyledInputModifica
+            rows="1"
+            placeholder="Giorno*"
+            type={giornoType}
+            name="giorno"
+            value={giornoValue}
+            onClick={handleGiornoClick(setGiornoType)}
+            onBlur={handleGiornoBlur(setGiornoType, item, setItem)}
+            onChange={(e) => handleInputChange(e, setItem)}
+          />
         </StyledCol>
         <StyledCol>
-          {(visibilita[2]) && (
-            <StyledSelect name="minuto_inizio" value={orario.minuto_inizio} onChange={(e) => cambioValoriOrari(e, setOrario)}>
-              <StyledOption value="">Minuto inizio</StyledOption>
-              {minuti.map((minuto) => (
-                <StyledOption key={minuto} value={minuto}>{minuto}</StyledOption>  
-              ))}
-            </StyledSelect>
-          )}
+          <StyledSelect name="ora_inizio" value={item.ora_inizio} onChange={(e) => cambioValoriOrari(e, setItem)}>
+            <StyledOption value="">Ora inizio</StyledOption>
+            {ore.map((ora) => (
+              <StyledOption key={ora} value={ora}>{ora}</StyledOption>  
+            ))}
+          </StyledSelect>
         </StyledCol>
         <StyledCol>
-          {(visibilita[3]) && (
-            <StyledSelect name="ora_fine" value={orario.ora_fine} onChange={(e) => cambioValoriOrari(e, setOrario)}>
-              <StyledOption value="">Ora fine</StyledOption>
-              {ore.map((ora) => (
-                <StyledOption key={ora} value={ora}>{ora}</StyledOption>  
-              ))}
-            </StyledSelect>
-          )}
+          <StyledSelect name="minuto_inizio" value={item.minuto_inizio} onChange={(e) => cambioValoriOrari(e, setItem)}>
+            <StyledOption value="">Minuto inizio</StyledOption>
+            {minuti.map((minuto) => (
+              <StyledOption key={minuto} value={minuto}>{minuto}</StyledOption>  
+            ))}
+          </StyledSelect>
         </StyledCol>
         <StyledCol>
-          {(visibilita[4]) && (
-            <StyledSelect name="minuto_fine" value={orario.minuto_fine} onChange={(e) => cambioValoriOrari(e, setOrario)}>
-              <StyledOption value="">Minuto fine</StyledOption>
-              {minuti.map((minuto) => (
-                <StyledOption key={minuto} value={minuto}>{minuto}</StyledOption>  
-              ))}
-            </StyledSelect>
-          )}
+          <StyledSelect name="ora_fine" value={item.ora_fine} onChange={(e) => cambioValoriOrari(e, setItem)}>
+            <StyledOption value="">Ora fine</StyledOption>
+            {ore.map((ora) => (
+              <StyledOption key={ora} value={ora}>{ora}</StyledOption>  
+            ))}
+          </StyledSelect>
+        </StyledCol>
+        <StyledCol>
+          <StyledSelect name="minuto_fine" value={item.minuto_fine} onChange={(e) => cambioValoriOrari(e, setItem)}>
+            <StyledOption value="">Minuto fine</StyledOption>
+            {minuti.map((minuto) => (
+              <StyledOption key={minuto} value={minuto}>{minuto}</StyledOption>  
+            ))}
+          </StyledSelect>
+        </StyledCol>
+        <StyledCol>
+          <StyledTextAreaModifica
+            rows="1"
+            placeholder="Descrizione*"
+            name="descrizione"
+            value={item.descrizione}
+            onChange={(e) => handleInputChange(e, setItem)}
+          />
+        </StyledCol>
+        <StyledCol>
+          <StyledTextAreaModifica
+            rows="1"
+            placeholder="Note"
+            name="note"
+            value={item.note}
+            onChange={(e) => handleInputChange(e, setItem)}
+          />
         </StyledCol>
       </StyledRow>
     </>
   );
 }
 
-export function RowRicercaDate({item, setItem, eseguiRicerca}) {
+export function RowRicercaLavori({item, setItem, eseguiRicerca}) {
   const ore = ["07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22"];
   const minuti = ["00", "30"];
-  let [visibilita, setVisibilita] = useState([true, true, true, true, true]);
+  let [visibilita, setVisibilita] = useState([true, true, true, true, true, true, true, true]);
   const [arrowUp, setArrowUp] = useState(true);
+  let maxHeight = "2000px";
 
-  const [giornoType, setGiornoType] = useState('text');
-  const [orario, setOrario] = useState({
-    ora_inizio: "", 
-    ora_fine: "",
-    minuto_inizio: "", 
-    minuto_fine: ""
-  });
+  const [primoGiornoType, setPrimoGiornoType] = useState('text');
+  const [ultimoGiornoType, setUltimoGiornoType] = useState('text');
 
-  const giornoValue = item.giorno !== undefined ? item.giorno : '';
+  item.primo_giorno = (item.primo_giorno !== undefined) ? item.primo_giorno : '';
+  item.ultimo_giorno = (item.ultimo_giorno !== undefined) ? item.ultimo_giorno : ''; 
 
   return (
     <>
@@ -242,54 +269,98 @@ export function RowRicercaDate({item, setItem, eseguiRicerca}) {
           {(visibilita[0]) && (
             <StyledInputModifica
               rows="1"
-              placeholder="Giorno*"
-              type={giornoType}
-              name="giorno"
-              value={giornoValue}
-              onClick={handleGiornoClick(setGiornoType)}
-              onBlur={handleGiornoBlur(setGiornoType, item, setItem)}
+              placeholder="Nome cliente"
+              type="text"
+              name="nome_cliente"
+              value={item.nome_cliente}
               onChange={(e) => handleInputChange(e, setItem)}
             />
           )}
         </StyledCol>
         <StyledCol>
           {(visibilita[1]) && (
-            <StyledSelect name="ora_inizio" value={orario.ora_inizio} onChange={(e) => cambioValoriOrari(e, setOrario)}>
-              <StyledOption value="">Ora inizio</StyledOption>
-              {ore.map((ora) => (
-                <StyledOption key={ora} value={ora}>{ora}</StyledOption>  
-              ))}
-            </StyledSelect>
+            <StyledInputModifica
+              rows="1"
+              placeholder="Cognome cliente"
+              type="text"
+              name="cognome_cliente"
+              value={item.cognome_cliente}
+              onChange={(e) => handleInputChange(e, setItem)}
+            />
           )}
-        </StyledCol>
+        </StyledCol>        
         <StyledCol>
           {(visibilita[2]) && (
-            <StyledSelect name="minuto_inizio" value={orario.minuto_inizio} onChange={(e) => cambioValoriOrari(e, setOrario)}>
-              <StyledOption value="">Minuto inizio</StyledOption>
-              {minuti.map((minuto) => (
-                <StyledOption key={minuto} value={minuto}>{minuto}</StyledOption>  
-              ))}
-            </StyledSelect>
+            <StyledInputModifica
+              rows="1"
+              placeholder="Nome professionista"
+              type="text"
+              name="nome_professionista"
+              value={item.nome_professionista}
+              onChange={(e) => handleInputChange(e, setItem)}
+            />
           )}
-        </StyledCol>
+        </StyledCol>        
         <StyledCol>
           {(visibilita[3]) && (
-            <StyledSelect name="ora_fine" value={orario.ora_fine} onChange={(e) => cambioValoriOrari(e, setOrario)}>
-              <StyledOption value="">Ora fine</StyledOption>
-              {ore.map((ora) => (
-                <StyledOption key={ora} value={ora}>{ora}</StyledOption>  
-              ))}
-            </StyledSelect>
+            <StyledInputModifica
+              rows="1"
+              placeholder="Professione"
+              type="text"
+              name="professione"
+              value={item.professione}
+              onChange={(e) => handleInputChange(e, setItem)}
+            />
           )}
-        </StyledCol>
+        </StyledCol>        
         <StyledCol>
           {(visibilita[4]) && (
-            <StyledSelect name="minuto_fine" value={orario.minuto_fine} onChange={(e) => cambioValoriOrari(e, setOrario)}>
-              <StyledOption value="">Minuto fine</StyledOption>
-              {minuti.map((minuto) => (
-                <StyledOption key={minuto} value={minuto}>{minuto}</StyledOption>  
-              ))}
-            </StyledSelect>
+            <StyledInputModifica
+              rows="1"
+              placeholder="Primo giorno"
+              type={primoGiornoType}
+              name="primo_giorno"
+              value={item.primo_giorno}
+              onClick={handleGiornoClick(setPrimoGiornoType)}
+              onBlur={handleGiornoBlur(setPrimoGiornoType, item, setItem)}
+              onChange={(e) => handleInputChange(e, setItem)}
+            />
+          )}
+        </StyledCol>        
+        <StyledCol>
+          {(visibilita[5]) && (
+            <StyledInputModifica
+              rows="1"
+              placeholder="Ultimo giorno"
+              type={ultimoGiornoType}
+              name="ultimo_giorno"
+              value={item.ultimo_giorno}
+              onClick={handleGiornoClick(setUltimoGiornoType)}
+              onBlur={handleGiornoBlur(setUltimoGiornoType, item, setItem)}
+              onChange={(e) => handleInputChange(e, setItem)}
+            />
+          )}
+        </StyledCol>        
+        <StyledCol>
+          {(visibilita[6]) && (
+            <StyledTextAreaModifica
+              rows="1"
+              placeholder="Descrizione"
+              name="descrizione"
+              value={item.descrizione}
+              onChange={(e) => handleInputChange(e, setItem)}
+            />
+          )}
+        </StyledCol>        
+        <StyledCol>
+          {(visibilita[7]) && (
+            <StyledTextAreaModifica
+              rows="1"
+              placeholder="Note"
+              name="note"
+              value={item.note}
+              onChange={(e) => handleInputChange(e, setItem)}
+            />
           )}
         </StyledCol>
       </StyledRow>

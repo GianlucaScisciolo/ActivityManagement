@@ -9,9 +9,9 @@ import { operazioniPersone, operazioniProfessionisti } from "../../vario/Operazi
 import FormItem from "../component/form_item/FormItem";
 import { Items } from "../component/Items";
 import { controlloLavoro } from "../../vario/Controlli";
-import { FormNuovaData } from "../component/form_item/FormsLavori";
-import { RowNuovaData } from "../component/row_item/RowsLavori";
-import { CardNuovaData } from "../component/card_item/CardsLavori";
+import { FormNuovoLavoro } from "../component/form_item/FormsLavori";
+import { RowNuovoLavoro } from "../component/row_item/RowsLavori";
+import { CardNuovoLavoro } from "../component/card_item/CardsLavori";
 
 const NuovoLavoro = () => {
   const formSession = useSelector((state) => state.formSession.value);
@@ -20,19 +20,16 @@ const NuovoLavoro = () => {
   const [professionisti, setProfessionisti] = useState([]);
   const [lavori, setLavori] = useState([]);
 
-  // const [nuovoLavoro, setNuovoLavoro] = useState ({
-  //   descrizione: "",
-  //   giorno: "",
-  //   orario_inizio: "",
-  //   orario_fine: "",
-  //   note: ""
-  // });
   const [nuovoLavoro, setNuovoLavoro] = useState ({
+    id_cliente: 0,
+    id_professionista: 0,
     giorno: "",
     ora_inizio: "",
     minuto_inizio: "",
     ora_fine: "",
-    minuto_fine: ""
+    minuto_fine: "",
+    descrizione: "",
+    note: "", 
   });
 
   const [errori, setErrori] = useState ({
@@ -45,6 +42,16 @@ const NuovoLavoro = () => {
 
   const handleInsertLavoro = async (e) => {
     e.preventDefault();
+
+    // alert (
+    //   nuovoLavoro.id_cliente + "\n" +
+    //   nuovoLavoro.id_professionista + "\n" +
+    //   nuovoLavoro.giorno + "\n" +
+    //   nuovoLavoro.ora_inizio + ":" + nuovoLavoro.minuto_inizio + "\n" + 
+    //   nuovoLavoro.ora_fine + ":" + nuovoLavoro.minuto_fine + "\n" + 
+    //   nuovoLavoro.descrizione + "\n" +
+    //   nuovoLavoro.note
+    // )
   
     if (controlloLavoro(nuovoLavoro, setErrori) > 0) {
       return;
@@ -67,20 +74,25 @@ const NuovoLavoro = () => {
         else {
           throw new Error('Errore durante l\'inserimento del lavoro');
         }
-      } else {
-        // Non tentare di analizzare la risposta come JSON
+      } 
+      else {
         nuovoLavoro.note = (nuovoLavoro.note.split(' ').join('') === "") ? "Nota non inserita." : nuovoLavoro.note;
         
         setLavori(prevLavori => [...prevLavori, nuovoLavoro]);
         setNuovoLavoro(prevState => ({
           ...prevState,
-          descrizione: "",
+          id_cliente: 0,
+          id_professionista: 0,
           giorno: "",
-          orario_inizio: "",
-          orario_fine: "",
-          note: ""
+          ora_inizio: "",
+          minuto_inizio: "",
+          ora_fine: "",
+          minuto_fine: "",
+          descrizione: "",
+          note: "",
         }));
       }
+      alert("L\'inserimento del nuovo lavoro è andato a buon fine.");
     } 
     catch (error) {
       console.error('Errore:', error);
@@ -128,16 +140,22 @@ const NuovoLavoro = () => {
       <div className="main-content" />
       
       {formSession.view === "form" && (
-        <FormNuovaData item={nuovoLavoro} setItem={setNuovoLavoro} eseguiSalvataggio={(e) => eseguiSalvataggio(e, setErrori)} />
+        <FormNuovoLavoro clienti={clienti} professionisti={professionisti} item={nuovoLavoro} setItem={setNuovoLavoro} eseguiSalvataggio={(e) => handleInsertLavoro(e)} />
       )}
       {formSession.view === "row" && (
-        <RowNuovaData item={nuovoLavoro} setItem={setNuovoLavoro} eseguiSalvataggio={(e) => eseguiSalvataggio(e, setErrori)} />
+        <>
+          <RowNuovoLavoro clienti={clienti} header="Nuovo lavoro cliente" item={nuovoLavoro} setItem={setNuovoLavoro} eseguiSalvataggio={(e) => handleInsertLavoro(e)} />
+          <br />
+          <RowNuovoLavoro professionisti={professionisti} header="Nuovo lavoro professionista" item={nuovoLavoro} setItem={setNuovoLavoro} eseguiSalvataggio={(e) => handleInsertLavoro(e)} />
+        </>
       )}
       {(formSession.view === "card") && (
-        <center>
-          <CardNuovaData item={nuovoLavoro} setItem={setNuovoLavoro} eseguiSalvataggio={(e) => eseguiSalvataggio(e, setErrori)} />
-        </center>
+        <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: '50px' }}>
+          <CardNuovoLavoro clienti={clienti} header="Nuovo lavoro cliente" item={nuovoLavoro} setItem={setNuovoLavoro} eseguiSalvataggio={(e) => handleInsertLavoro(e)} />
+          <CardNuovoLavoro professionisti={professionisti} header="Nuovo lavoro professionista" item={nuovoLavoro} setItem={setNuovoLavoro} eseguiSalvataggio={(e) => handleInsertLavoro(e)} />
+        </div>
       )}
+
 
       {(lavori.length > 0) && (
         <>

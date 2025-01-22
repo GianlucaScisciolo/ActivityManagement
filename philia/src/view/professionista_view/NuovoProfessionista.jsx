@@ -10,15 +10,21 @@ import RowItem from '../component/row_item/RowItem';
 import FormItem from '../component/form_item/FormItem';
 import { Items } from '../component/Items';
 import { FormNuovoProfessionista } from '../component/form_item/FormsProfessionisti';
-import { RowNuovoProfessionista } from '../component/row_item/RowsProfessionisti';
-import { CardNuovoProfessionista } from '../component/card_item/CardsProfessionisti';
+import { RowNuovoProfessionista, RowProfessionistaEsistente } from '../component/row_item/RowsProfessionisti';
+import { CardNuovoProfessionista, CardProfessionistaEsistente } from '../component/card_item/CardsProfessionisti';
 
 const NuovoProfessionista = () => {
   const formSession = useSelector((state) => state.formSession.value);
+  const itemSession = useSelector((state) => state.itemSession.value);
 
   const [professionisti, setProfessionisti] = useState([]);
+  const [selectedTrashCount, setSelectedTrashCount] = useState(0);
+  const [selectedPencilCount, setSelectedPencilCount] = useState(0);
+  const [selectedIdsEliminazione, setSelectedIdsEliminazione] = useState([]);
+  const [selectedIdsModifica, setSelectedIdsModifica] = useState([]);
   
   const [nuovoProfessionista, setNuovoProfessionista] = useState({
+    tipo_selezione: 0,
     nome: "",
     professione: "",
     contatto: "",
@@ -33,6 +39,37 @@ const NuovoProfessionista = () => {
     email: "",
     note: ""
   });
+
+  const selectOperation = (icon, item) => {
+    if(icon === "trash") {
+      if(selectedIdsEliminazione.includes(item.id)) {
+        item.tipo_selezione = 0;
+        setSelectedIdsEliminazione(prevIds => prevIds.filter(itemId => itemId !== item.id));
+        setSelectedTrashCount(prevCount => Math.max(prevCount - 1, 0));
+      }
+      else {
+        item.tipo_selezione = 2;
+        setSelectedIdsEliminazione(prevIds => [...prevIds, item.id]);
+        setSelectedTrashCount(prevCount => prevCount + 1);
+        setSelectedIdsModifica(prevIdsModifica => prevIdsModifica.filter(itemId => itemId !== item.id));
+        setSelectedPencilCount(prevCount => Math.max(prevCount - 1, 0));
+      }
+    }
+    else if(icon === "pencil") {
+      if(selectedIdsModifica.includes(item.id)) {
+        item.tipo_selezione = 0;
+        setSelectedIdsModifica(prevIdsModifica => prevIdsModifica.filter(itemId => itemId !== item.id));
+        setSelectedPencilCount(prevCount => Math.max(prevCount - 1, 0));
+      }
+      else {
+        item.tipo_selezione = 1;
+        setSelectedIdsModifica(prevIdsModifica => [...prevIdsModifica, item.id]);
+        setSelectedPencilCount(prevCount => prevCount + 1);
+        setSelectedIdsEliminazione(prevIds => prevIds.filter(itemId => itemId !== item.id));
+        setSelectedTrashCount(prevCount => Math.max(prevCount - 1, 0));
+      }
+    }
+  }
 
   const handleInsert = async (nuovoProfessionista, setNuovoProfessionista, setProfessionisti) => {
     if (confirm("Sei sicuro di voler salvare il professionista?")) {
@@ -65,6 +102,7 @@ const NuovoProfessionista = () => {
           nuovoProfessionista.note = (nuovoProfessionista.note.split(' ').join('') === "") ? "Nota non inserita." : nuovoProfessionista.note;
           setProfessionisti(prevProfessionisti => [...prevProfessionisti, nuovoProfessionista]);
           setNuovoProfessionista({
+            tipo_selezione: 0,
             nome: "",
             professione: "",
             contatto: "",
@@ -113,14 +151,28 @@ const NuovoProfessionista = () => {
         </center>
       )}
 
-      <div className="main-content" />
+      <br /> <br /> <br /> <br />
 
       {(professionisti.length > 0) && (
         <>
-          <div className="main-content"></div>
-          <Items tipoItem={"professionista"} items={professionisti} setterItems={setProfessionisti} errori={errori} setErrori={setErrori}/>    
+          {(itemSession.view === "card") && (
+            <div className="contenitore-3">
+              {professionisti.map((professionista, index) => (
+                <CardProfessionistaEsistente key={index} item={professionista} items={professionisti} setItems={setProfessionisti} selectOperation={selectOperation} />
+              ))}
+            </div>
+          )}
+          {(itemSession.view === "list") && (
+            <>
+              {professionisti.map((professionista, index) => (
+                <RowProfessionistaEsistente key={index} item={professionista} items={professionisti} setItems={setProfessionisti} selectOperation={selectOperation} />
+              ))}
+            </>
+          )}
         </>
       )}
+
+      <br /> <br /> <br /> <br />
     </>
   );
 };

@@ -64,6 +64,10 @@ export function FormNuovoCliente({item, setItem, eseguiSalvataggio}) {
           <StyledTextAreaModifica rows="1" placeholder="Nome*" name="nome" value={item.nome} onChange={(e) => handleInputChange(e, setItem)} />
           <StyledLabel htmlFor="nome">Cognome*</StyledLabel>
           <StyledTextAreaModifica rows="1" placeholder="Cognome*" name="cognome" value={item.cognome} onChange={(e) => handleInputChange(e, setItem)} />
+          <StyledLabel htmlFor="contatto">Contatto*</StyledLabel>
+          <StyledInputModifica rows="1" placeholder="Contatto*" type="text" name="contatto" value={item.contatto} onChange={(e) => handleInputChange(e, setItem)} />
+          <StyledLabel htmlFor="note">Note</StyledLabel>
+          <StyledTextAreaModifica rows="1" placeholder="Note" name="note" value={item.note} onChange={(e) => handleInputChange(e, setItem)} />
           <br /> <br />
         </SlideContainer>
         <OperazioniNuovoItem eseguiSalvataggio={eseguiSalvataggio} />

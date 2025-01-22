@@ -195,10 +195,18 @@ export const BottoneRossoNonSelezionato =  styled(StyledButton)`
 
 export const BottoneBluSelezionato =  styled(StyledButton)`
   background-color: #0050EF;
+  &:hover {
+    background-color: #000000;
+    color: #FFFFFF;
+  }
 `;
 
 export const BottoneRossoSelezionato =  styled(StyledButton)`
   background-color: #500000;
+  &:hover {
+    background-color: #000000;
+    color: #FFFFFF;
+  }
 `;
 
 export const StyledSelect =  styled.select`
