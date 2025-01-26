@@ -1,6 +1,22 @@
 {
-  "dependencies": {
-    "events": "^3.3.0",
-    "flux": "^4.0.4"
-  }
+  "name": "philia",
+  "version": "1.0.0",
+  "description": "Applicazione web gestione database salone Philia",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GianlucaScisciolo/Philia.git"
+  },
+  "keywords": [
+    "Philia"
+  ],
+  "author": "GianlucaScisciolo",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/GianlucaScisciolo/Philia/issues"
+  },
+  "homepage": "https://github.com/GianlucaScisciolo/Philia#readme"
 }
