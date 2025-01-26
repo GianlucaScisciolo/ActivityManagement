@@ -52,6 +52,60 @@ export const handleInputChange = (e, setItem, items, setItems, tipoItem, id) => 
   }
 };
 
+export const handleInputChangeNuovoLavoro = (e, setItem) => {
+  const nome_campi = [
+    "id_cliente", "id_professionista", "giorno", "ora_inizio", "ora_fine", "minuto_inizio", "minuto_fine", 
+    "descrizione", "note"
+  ]
+  
+  const { name, value } = e.target;
+
+  if (nome_campi.includes(name)) {
+    setItem(prevState => {
+      const newState = {
+        ...prevState,
+        [name]: value
+      };
+  
+      if (name === "id_cliente") {
+        newState.id_professionista = 0;
+      } else if (name === "id_professionista") {
+        newState.id_cliente = 0;
+      }
+  
+      return newState;
+    });
+  }  
+  else {
+    alert("Errore, nome campo " + name + " non valido.");
+    return;
+  }
+}
+
+export const handleInputChangeLavoroEsistente = (e, items, setItems, id_lavoro, id_cliente, id_professionista) => {
+  const nome_campi = ["giorno", "ora_inizio", "minuto_inizio", "ora_fine", "minuto_fine", "descrizione", "note"];
+
+  const { name, value } = e.target;
+
+  if(nome_campi.includes(name)) {
+    // alert("Campo valido!!");
+    const updatedItems = items.map(item => {
+      if(id_lavoro === item.id_lavoro && id_cliente === item.id_cliente && id_professionista === item.id_professionista) {
+        return {
+          ...item,
+          [name]: value
+        }
+      }
+      return item;
+    });
+    setItems(updatedItems);
+  }
+  else {
+    alert("Errore, nome campo " + name + " non valido.");
+    return;
+  }
+}
+
 export const cambiamentoBloccato = (e) => {
   e.preventDefault();
 }
@@ -199,6 +253,31 @@ export const getCampiNuovoItem = (tipoItem, item, errori) => {
       break;
   }
 };
+
+export const attesaLista = (funzione) => {
+  let lista = -1;
+  useEffect(() => {
+    lista = 
+    console.log("<<<<"+lista+">>>>");
+  }, lista === -1);
+  return lista; 
+}
+
+// export async const attesaLista = (funzione) => {
+//   return new Promise(async (resolve, reject) => {
+//     try {
+//       let lista = await funzione();
+//       console.log("<<<<"+lista+">>>>");
+//       resolve(lista);
+//     } 
+//     catch (error) {
+//       console.error("Errore durante l'attesa della lista: " + error);
+//       reject(error);
+//     }
+//   });
+// }
+
+
 
 
 

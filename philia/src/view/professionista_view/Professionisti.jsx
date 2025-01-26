@@ -125,6 +125,31 @@ const Professionisti = () => {
       )}
 
       <br /> <br /> <br /> <br />
+
+      <div className='contenitore-2'>
+        <Row>
+          {selectedIdsModifica.length > 0 && (
+            <Col>
+              <button className="bottone-blu-non-selezionato"
+                onClick={(e) => modifica(e, "professionista", selectedIdsModifica, setSelectedIdsModifica, professionisti, setProfessionisti)}
+              >
+                Modifica
+              </button>
+            </Col>
+          )}
+          {selectedIdsEliminazione.length > 0 && (
+            <Col>
+              <button className='bottone-rosso-non-selezionato'
+                onClick={(e) => elimina(e, "professionista", selectedIdsEliminazione, setSelectedIdsEliminazione, professionisti, setProfessionisti)}
+              >
+                Elimina
+              </button>
+            </Col>
+          )}
+        </Row>
+      </div>
+
+      <br /> <br /> <br /> <br />
     </>
   );
 }

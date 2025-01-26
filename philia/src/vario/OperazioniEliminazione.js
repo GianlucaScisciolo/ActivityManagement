@@ -10,21 +10,30 @@ export const elimina = async (e, tipoItem, selectedIdsEliminazione, setSelectedI
     return;
   }
   try {
-    const dati = { ids: selectedIdsEliminazione };
-    const itemsDaEliminare = items.filter(item => dati.ids.includes(item.id));
-    const itemsRestanti = items.filter(item => !dati.ids.includes(item.id));
-    // alert(itemsDaEliminare.length);
-    // alert(itemsRestanti.length);
-    // console.log("-------------------------------------");
-    // for(let item of itemsDaEliminare) {
-    //   console.log(item.id);
-    // }
-    // console.log("-------------------------------------");
-    // for(let item of itemsRestanti) {
-    //   console.log(item.id);
-    // }
-    // console.log("-------------------------------------");
-    
+    let dati = null, itemsDaEliminare = null, itemsRestanti = null;
+
+    dati = { ids: selectedIdsEliminazione };
+    if(tipoItem === "cliente" || tipoItem === "professionista") {
+      itemsDaEliminare = items.filter(item => dati.ids.includes(item.id));
+      itemsRestanti = items.filter(item => !dati.ids.includes(item.id));
+    }
+    else if(tipoItem === "lavoro") {
+      itemsDaEliminare = items.filter(item =>
+        dati.ids.some(idArray => 
+          idArray[0] === item.id_lavoro && 
+          idArray[1] === item.id_cliente && 
+          idArray[2] === item.id_professionista
+        )
+      );     
+      itemsRestanti = items.filter(item =>
+        !dati.ids.some(idArray => 
+          idArray[0] === item.id_lavoro && 
+          idArray[1] === item.id_cliente && 
+          idArray[2] === item.id_professionista
+        )
+      );
+    }
+
     if(tipoItem === "cliente") {
       await PersonaAction.dispatchAction(dati, operazioniPersone.ELIMINA_CLIENTI);
     }
@@ -35,8 +44,8 @@ export const elimina = async (e, tipoItem, selectedIdsEliminazione, setSelectedI
       await LavoroAction.dispatchAction(dati, operazioniLavori.ELIMINA_LAVORI)
     } 
     setterItems(itemsRestanti);
-    alert("Eliminazione completata con successo.");
     setSelectedIdsEliminazione([]);
+    alert("Eliminazione completata con successo.");
   }
   catch (error) {
     alert("Errore durante l'eliminazione, riprova più tardi.");

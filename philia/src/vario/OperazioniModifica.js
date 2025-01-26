@@ -5,6 +5,9 @@ import AutenticazioneAction from "../action/autenticazione_action/Autenticazione
 import autenticazioneStore from "../store/autenticazione_store/AutenticazioneStore";
 import { operazioniAutenticazione, operazioniLavori, operazioniPersone, operazioniProfessionisti } from "./Operazioni";
 import { controlloCliente, controlloProfessionista, controlloLavoro } from "./Controlli";
+import lavoroStore from "../store/lavoro_store/LavoroStore";
+import { attesaLista } from "./Vario";
+import { useState } from "react";
 
 const aggiornaItems = (items, dati, setItems) => {
   const updatedItems = items.map(item => {
@@ -19,46 +22,39 @@ const aggiornaItems = (items, dati, setItems) => {
   setItems(updatedItems);
 };
 
-const azzeraSelezione = (items, ids, setItems) => {
+export const azzeraSelezione = (items, setItems, tipoItem, idsLavori) => {
   let itemsAggiornati = [];
-  for (let i = 0; i < items.length; i++) {
-    let itemAggiornato = { ...items[i] }; // Clonazione dell'oggetto per evitare mutazioni
-    if (ids.includes(items[i].id)) {
+  for (let i = 0, j = 0; i < items.length; i++) {
+    let itemAggiornato = { ...items[i] };
+    if(itemAggiornato.tipo_selezione === 1) {
       itemAggiornato.tipo_selezione = 0;
+      if(tipoItem === "lavoro") {
+        itemAggiornato.id_lavoro = idsLavori[j];
+        j++;
+      }
     }
     itemsAggiornati.push(itemAggiornato);
   }
   try {
     setItems(itemsAggiornati);
-  } catch (error) {
+  } 
+  catch (error) {
     console.error("Errore durante l'aggiornamento degli items:", error);
   }
 };
 
-function prova(items, ids, setItems) {
-  console("- 1");
-  // let itemsAggiornati = [];
-  // console("- 2");
-  // for (let i = 0; i < items.length; i++) {
-  //   console("- 3 - " + i);
-  //   let itemAggiornato = { ...items[i] }; // Clonare l'oggetto per evitare mutazioni
-  //   console("- 4 - " + i);
-  //   if(ids.includes(items[i].id)) {
-  //     console("- 5 - " + i);
-  //     itemAggiornato.id = 0;
-  //     console("- 6 - " + i);
-  //   }
-  //   console("- 7 - " + i);
-  //   itemsAggiornati.push(itemAggiornato);
-  //   console("- 8 - " + i);
-  // }
-  // console("- 9");
-  // setItems(itemsAggiornati);
-  // console("- 10");
-};
-// (e, tipoItem, selectedIdsModifica, setSelectedIdsModifica, items, setterItems)
 export const modifica = async (e, tipoItem, selectedIdsModifica, setSelectedIdsModifica, items, setItems) => {
   e.preventDefault();
+  
+  // const [idsLavori, setIdsLavori] = useState(-1);
+  // const [completato, setCompletato] = useState(true);
+
+  // useEffect(() => {
+    // setIdsLavori(lavoroStore.getIdsLavori());
+    // if(idsLavori !== -1) {
+      // setCompletato(true);
+    // }
+  // }, !completato);
 
   // alert("Modifica");
   // alert(selectedIdsModifica);
@@ -67,18 +63,42 @@ export const modifica = async (e, tipoItem, selectedIdsModifica, setSelectedIdsM
     return;
   }
   try {
-    const dati = { ids: selectedIdsModifica };
-    const itemsDaModificare = items.filter(item => dati.ids.includes(item.id));
-    const itemsRestanti = items.filter(item => !dati.ids.includes(item.id));
-    console.log("-------------------------------------");
-    for(let item of itemsDaModificare) {
-      console.log(item);
+    let dati = null;
+    let itemsDaModificare = [];
+    let itemsRestanti = [];
+    let ids_lavori = [];
+
+    dati = { ids: selectedIdsModifica };
+    
+    if(tipoItem === "cliente" || tipoItem === "professionista") {
+      itemsDaModificare = items.filter(item => dati.ids.includes(item.id)); 
+      itemsRestanti = items.filter(item => !dati.ids.includes(item.id));
     }
-    console.log("-------------------------------------");
-    for(let item of itemsRestanti) {
-      console.log(item);
+    else if(tipoItem === "lavoro") {
+
+      for (let item of items) {
+        if (dati.ids.some(idArray =>
+          idArray[0] === item.id_lavoro &&
+          idArray[1] === item.id_cliente &&
+          idArray[2] === item.id_professionista
+        )) {
+          itemsDaModificare.push(item);
+        } else {
+          itemsRestanti.push(item);
+        }
+      }
+      // console.log(itemsDaModificare.length);
+      // for(let item of itemsDaModificare) {
+      //   console.log(item.id_lavoro);
+      // }
+      // console.log(itemsRestanti.length);
     }
-    console.log("prima della modifica");
+    // console.log("||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||");
+    // console.log("|"+tipoItem+"|");
+    // for(let i = 0; i < itemsDaModificare.length; i++) {console.log("||"+itemsDaModificare[i].id_lavoro+"||")}
+    // console.log("||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||");
+    console.log("fuori 1");
+    console.log("fuori 2");
     if(tipoItem === "cliente") {
       await PersonaAction.dispatchAction(itemsDaModificare, operazioniPersone.MODIFICA_CLIENTI);
     }
@@ -86,16 +106,30 @@ export const modifica = async (e, tipoItem, selectedIdsModifica, setSelectedIdsM
       await ProfessionistaAction.dispatchAction(itemsDaModificare, operazioniProfessionisti.MODIFICA_PROFESSIONISTI);
     }
     else if(tipoItem === "lavoro") {
+      console.log("fuori 3");
       await LavoroAction.dispatchAction(itemsDaModificare, operazioniLavori.MODIFICA_LAVORI);
+      console.log("fuori 4");
+      // const result = await response.json();
+      // ids_lavori = result.ids_lavori;
+      // setIdsLavori(-1);
+      // setCompletato(false);
+      ids_lavori = -1;
+      do { 
+        console.log("Aggiornamento in corso...");
+        ids_lavori = lavoroStore.getIdsLavori();
+      } while(ids_lavori !== -1);
+      console.log("Aggiornamento completato.");
+
+      console.log("ids lavori ricevuti: " + ids_lavori);
+      console.log("fuori 5");
     }
-    console.log("Dopo la modifica");
-    console.log("Prima del setter");
-    // azzeraSelezione(items, selectedIdsModifica, setItems);
-    azzeraSelezione(items, selectedIdsModifica, setItems);
-    console.log("Dopo il setter");
-    // setSelectedIdsModifica([]);
+    console.log("fuori 6");
+    azzeraSelezione(items, selectedIdsModifica, setItems, tipoItem, ids_lavori);
+    console.log("fuori 7");
     setSelectedIdsModifica([]);
+    console.log("fuori 8");
     alert("Modifica completata con successo.");
+    console.log("fuori 9");
   }
   catch (error) {
     alert("Errore durante la modifica, riprova più tardi.");

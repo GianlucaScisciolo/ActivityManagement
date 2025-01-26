@@ -4,6 +4,7 @@ import axios from "axios";
 import { operazioniLavori } from "../../vario/Operazioni";
 
 let lavori = [];
+let ids_lavori = -1;
 
 class LavoroStore extends EventEmitter {
   constructor() {
@@ -40,20 +41,22 @@ class LavoroStore extends EventEmitter {
       if (operazione === operazioniLavori.VISUALIZZA_LAVORI)
         lavori = response.data;
       this.emitChange(operazione);
-    } catch (error) {
+    } 
+    catch (error) {
       console.error("Errore durante l'operazione " + operazione + ": " + (error.response ? error.response.data : error.message));
     }
   }
 
   async modificaLavori(data) {
-    for (let i = 0; i < data.length; i++) {
-      const lavoro = data[i];
-      try {
-        const response = await axios.post('/MODIFICA_LAVORI', lavoro);
-        this.emitChange(operazioniLavori.MODIFICA_LAVORI);
-      } catch (error) {
-        console.error('Errore durante la modifica dei lavori: ', error);
-      }
+    try {
+      const response = await axios.post("/MODIFICA_LAVORI", data);
+      ids_lavori = response.data.ids_lavori;
+      this.setIdsLavori(ids_lavori);
+      console.log("<" + this.idsLavori + ">")
+      this.emitChange(operazioniLavori.MODIFICA_LAVORI);
+    } 
+    catch (error) {
+      console.error("Errore durante la modifica dei lavori: " + (error.response ? error.response.data : error.message));
     }
   }
 
@@ -67,6 +70,14 @@ class LavoroStore extends EventEmitter {
 
   getLavori() {
     return lavori;
+  }
+
+  getIdsLavori() {
+    return ids_lavori;
+  }
+
+  setIdsLavori(idsLavori) {
+    this.idsLavori = idsLavori;
   }
 
   addChangeListener(event, callback) {

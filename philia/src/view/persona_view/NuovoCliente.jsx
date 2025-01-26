@@ -12,6 +12,8 @@ import { Items } from '../component/Items';
 import { CardNuovoCliente, CardClienteEsistente } from '../component/card_item/CardsClienti';
 import { FormNuovoCliente } from '../component/form_item/FormsClienti';
 import { RowNuovoCliente, RowClienteEsistente } from '../component/row_item/RowsClienti';
+import { modifica } from '../../vario/OperazioniModifica';
+import { elimina } from '../../vario/OperazioniEliminazione';
 
 const NuovoCliente = () => {
   const formSession = useSelector((state) => state.formSession.value);
@@ -87,7 +89,7 @@ const NuovoCliente = () => {
         if (!response.ok) {
           const errorData = await response.json();
           if (response.status === 409) {
-            alert(errorData.message); // Mostra l'alert con il messaggio di errore specifico
+            alert(errorData.message); 
           } 
           else {
             throw new Error('Errore durante l\'inserimento del cliente');
@@ -95,10 +97,13 @@ const NuovoCliente = () => {
         } 
         else {
           const result = await response.json();
+          const nuovoClienteId = result.id; // Ottengo l'id inserito
           
           nuovoCliente.contatto = (nuovoCliente.contatto.split(' ').join('') === "") ? "Contatto non inserito." : nuovoCliente.contatto;
           nuovoCliente.note = (nuovoCliente.note.split(' ').join('') === "") ? "Nota non inserita." : nuovoCliente.note;
-          setClienti(prevClienti => [...prevClienti, nuovoCliente]);
+  
+          // Aggiorna l'oggetto con l'ID ottenuto
+          setClienti(prevClienti => [...prevClienti, { ...nuovoCliente, id: nuovoClienteId }]);
           setNuovoCliente({
             tipo_selezione: 0,
             nome: "",
@@ -107,7 +112,7 @@ const NuovoCliente = () => {
             note: ""
           });
   
-          alert("L'inserimento del cliente e\' andato a buon fine!!");
+          alert("L'inserimento del cliente è andato a buon fine!!");
         }
       } 
       catch (error) {
@@ -119,6 +124,7 @@ const NuovoCliente = () => {
       alert("Salvataggio annullato.");
     }
   };
+  
 
   const handleChangeInsertJustNumber = (e) => {
     e.target.value = e.target.value.replace(/\D/g, '');
@@ -168,6 +174,31 @@ const NuovoCliente = () => {
           )}
         </>
       )}
+
+      <br /> <br /> <br /> <br />
+
+      <div className='contenitore-2'>
+        <Row>
+          {selectedIdsModifica.length > 0 && (
+            <Col>
+              <button className="bottone-blu-non-selezionato"
+                onClick={(e) => modifica(e, "cliente", selectedIdsModifica, setSelectedIdsModifica, clienti, setClienti)}
+              >
+                Modifica
+              </button>
+            </Col>
+          )}
+          {selectedIdsEliminazione.length > 0 && (
+            <Col>
+              <button className='bottone-rosso-non-selezionato'
+                onClick={(e) => elimina(e, "cliente", selectedIdsEliminazione, setSelectedIdsEliminazione, clienti, setClienti)}
+              >
+                Elimina
+              </button>
+            </Col>
+          )}
+        </Row>
+      </div>
 
       <br /> <br /> <br /> <br />
     </>

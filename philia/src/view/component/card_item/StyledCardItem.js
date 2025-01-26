@@ -187,7 +187,7 @@ export const StyledTrashSelected = styled(Trash2)`
   cursor: pointer;
 `;
 
-export const StyledSelect =  styled.select`
+export const StyledSelect = styled.select`
   width: 100%;
   min-height: 70px;
   /* border-radius: 40px; */
@@ -195,6 +195,18 @@ export const StyledSelect =  styled.select`
   border: 5px solid #000000;
   color: #FFFFFF;
   text-align: center;
+`;
+
+export const StyledSelectBlock = styled(StyledSelect)`
+  background-color: #111111;
+`;
+
+export const StyledSelectModifica = styled(StyledSelect)`
+  background-color: #0050EF;
+`;
+
+export const StyledSelectElimina = styled(StyledSelect)`
+  background-color: #500000;
 `;
 
 export const StyledOption =  styled.option`

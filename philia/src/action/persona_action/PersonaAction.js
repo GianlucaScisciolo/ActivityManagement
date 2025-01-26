@@ -24,7 +24,8 @@ const PersonaAction = {
           payload: data,
         });
         resolve(); // Risolve il Promise se tutto va bene
-      } catch(error) {
+      } 
+      catch(error) {
         console.error("Impossibile inviare l'azione " + operazione + ": " + error);
         reject(error); // Rigetta il Promise in caso di errore
       }

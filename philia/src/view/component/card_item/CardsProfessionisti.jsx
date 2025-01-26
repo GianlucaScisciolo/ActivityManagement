@@ -195,7 +195,7 @@ export function CardProfessionistaEsistente({item, items, setItems, selectOperat
             placeholder="Contatto" 
             items={items} 
             setItems={setItems} 
-            tipoItem={"cliente"} 
+            tipoItem={"professionista"} 
             id={item.id} 
           />
           <InputTag 
@@ -207,7 +207,7 @@ export function CardProfessionistaEsistente({item, items, setItems, selectOperat
             placeholder="Email" 
             items={items} 
             setItems={setItems} 
-            tipoItem={"cliente"} 
+            tipoItem={"professionista"} 
             id={item.id} 
           />
           <TextAreaTag 

@@ -12,6 +12,8 @@ import { Items } from '../component/Items';
 import { FormNuovoProfessionista } from '../component/form_item/FormsProfessionisti';
 import { RowNuovoProfessionista, RowProfessionistaEsistente } from '../component/row_item/RowsProfessionisti';
 import { CardNuovoProfessionista, CardProfessionistaEsistente } from '../component/card_item/CardsProfessionisti';
+import { modifica } from '../../vario/OperazioniModifica';
+import { elimina } from '../../vario/OperazioniEliminazione';
 
 const NuovoProfessionista = () => {
   const formSession = useSelector((state) => state.formSession.value);
@@ -71,7 +73,8 @@ const NuovoProfessionista = () => {
     }
   }
 
-  const handleInsert = async (nuovoProfessionista, setNuovoProfessionista, setProfessionisti) => {
+  const handleInsert = async (e) => {
+    e.preventDefault();
     if (confirm("Sei sicuro di voler salvare il professionista?")) {
       if (controlloProfessionista(nuovoProfessionista, setErrori) > 0) 
         return;
@@ -96,11 +99,12 @@ const NuovoProfessionista = () => {
         } 
         else {
           const result = await response.json();
+          const nuovoProfessionistaId = result.id; // Ottengo l'id inserito
   
           nuovoProfessionista.contatto = (nuovoProfessionista.contatto.split(' ').join('') === "") ? "Contatto non inserito." : nuovoProfessionista.contatto;
           nuovoProfessionista.email = (nuovoProfessionista.email.split(' ').join('') === "") ? "Email non inserita." : nuovoProfessionista.email;
           nuovoProfessionista.note = (nuovoProfessionista.note.split(' ').join('') === "") ? "Nota non inserita." : nuovoProfessionista.note;
-          setProfessionisti(prevProfessionisti => [...prevProfessionisti, nuovoProfessionista]);
+          setProfessionisti(prevProfessionisti => [...prevProfessionisti, { ...nuovoProfessionista, id: nuovoProfessionistaId }]);
           setNuovoProfessionista({
             tipo_selezione: 0,
             nome: "",
@@ -128,10 +132,10 @@ const NuovoProfessionista = () => {
     e.target.value = e.target.value.slice(0, 11);
   };
 
-  const eseguiSalvataggio = (e) => {
-    e.preventDefault();
-    handleInsert(nuovoProfessionista, setNuovoProfessionista, setProfessionisti);
-  };
+  // const eseguiSalvataggio = (e) => {
+  //   e.preventDefault();
+  //   handleInsert(nuovoProfessionista, setNuovoProfessionista, setProfessionisti);
+  // };
 
   return (
     <>
@@ -140,14 +144,14 @@ const NuovoProfessionista = () => {
       <div className="main-content"></div>
 
       {formSession.view === "form" && (
-        <FormNuovoProfessionista item={nuovoProfessionista} setItem={setNuovoProfessionista} eseguiSalvataggio={(e) => eseguiSalvataggio(e, setErrori)} />
+        <FormNuovoProfessionista item={nuovoProfessionista} setItem={setNuovoProfessionista} eseguiSalvataggio={(e) => handleInsert(e)} />
       )}
       {formSession.view === "row" && (
-        <RowNuovoProfessionista item={nuovoProfessionista} setItem={setNuovoProfessionista} eseguiSalvataggio={(e) => eseguiSalvataggio(e, setErrori)} />
+        <RowNuovoProfessionista item={nuovoProfessionista} setItem={setNuovoProfessionista} eseguiSalvataggio={(e) => handleInsert(e)} />
       )}
       {(formSession.view === "card") && (
         <center>
-          <CardNuovoProfessionista item={nuovoProfessionista} setItem={setNuovoProfessionista} eseguiSalvataggio={(e) => eseguiSalvataggio(e, setErrori)} />
+          <CardNuovoProfessionista item={nuovoProfessionista} setItem={setNuovoProfessionista} eseguiSalvataggio={(e) => handleInsert(e)} />
         </center>
       )}
 
@@ -171,6 +175,31 @@ const NuovoProfessionista = () => {
           )}
         </>
       )}
+
+      <br /> <br /> <br /> <br />
+
+      <div className='contenitore-2'>
+        <Row>
+          {selectedIdsModifica.length > 0 && (
+            <Col>
+              <button className="bottone-blu-non-selezionato"
+                onClick={(e) => modifica(e, "professionista", selectedIdsModifica, setSelectedIdsModifica, professionisti, setProfessionisti)}
+              >
+                Modifica
+              </button>
+            </Col>
+          )}
+          {selectedIdsEliminazione.length > 0 && (
+            <Col>
+              <button className='bottone-rosso-non-selezionato'
+                onClick={(e) => elimina(e, "professionista", selectedIdsEliminazione, setSelectedIdsEliminazione, professionisti, setProfessionisti)}
+              >
+                Elimina
+              </button>
+            </Col>
+          )}
+        </Row>
+      </div>
 
       <br /> <br /> <br /> <br />
     </>

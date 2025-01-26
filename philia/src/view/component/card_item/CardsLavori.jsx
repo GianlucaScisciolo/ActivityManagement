@@ -15,10 +15,10 @@ import {
   StyledPencilNotSelected, StyledPencilSelected, 
   StyledTrashNotSelected, StyledTrashSelected, 
   StyledArrowTopNotSelected, StyledArrowBottomNotSelected, StyledPencilNotSelectedModificaProfilo, 
-  StyledSelect, StyledOption, StyledSpanErrore, StyledLoginNotSelected
+  StyledSelectBlock, StyledSelectModifica, StyledSelectElimina, StyledOption, StyledSpanErrore, StyledLoginNotSelected
 } from './StyledCardItem';
 import { 
-  handleInputChange, cambiamentoBloccato, getCampiRicerca, getCampiNuovoItem
+  handleInputChange, handleInputChangeLavoroEsistente, handleInputChangeNuovoLavoro, cambiamentoBloccato, getCampiRicerca, getCampiNuovoItem
 } from '../../../vario/Vario';
 
 const nascondiForm = (setIsVisible, setArrowUp) => {
@@ -51,6 +51,49 @@ const TrashTag = ({ tipoSelezione, selectOperation, item }) => {
     default:
       return <></>;
   }
+}
+
+const TextAreaTag = ({ tipoSelezione, nome, valore, modificabile, setItem, placeholder, items, setItems, tipoItem, id }) => {
+  switch(tipoSelezione) {
+    case 0:
+      return <StyledTextAreaBlock rows="1" name={nome} placeholder={placeholder} value={valore} readOnly />;
+    case 1:
+      return (modificabile) ? <StyledTextAreaModifica rows="1" name={nome} placeholder={placeholder} value={valore} onChange={(e) => handleInputChange(e, setItem, items, setItems, tipoItem, id)} />
+                            : <StyledTextAreaBlock rows="1" name={nome} placeholder={placeholder} value={valore} readOnly />;
+    case 2:
+      return <StyledTextAreaElimina rows="1" name={nome} placeholder={placeholder} value={valore} readOnly />;
+    default:
+      return <></>;
+  }
+}
+
+const InputTag = ({ tipoSelezione, nome, tipo, valore, modificabile, setItem, placeholder, items, setItems, tipoItem, id }) => { 
+  switch(tipoSelezione) {
+    case 0:
+      return <StyledInputBlock rows="1" type={tipo} name={nome} placeholder={placeholder} value={valore}  readOnly />;
+    case 1:
+      return (modificabile) ? <StyledInputModifica rows="1" type={tipo} name={nome} placeholder={placeholder} value={valore} onChange={(e) => handleInputChange(e, setItem, items, setItems, tipoItem, id)} />
+                            : <StyledInputBlock rows="1" type={tipo} name={nome} placeholder={placeholder} value={valore} readOnly />;
+    case 2:
+      return <StyledInputElimina rows="1" type={tipo} name={nome} value={valore} placeholder={placeholder} readOnly />;
+    default:
+      return <></>;
+  }
+}
+
+const SelectTag = ({ tipoSelezione, nome, valore, modificabile, setItem, items, setItems, tipoItem, id }) => {
+  switch(tipoSelezione) {
+    case 0:
+      return <StyledSelectBlock name={nome} value={valore} onChange={onChangeFunction}></StyledSelectBlock>;
+    case 1:
+      return (modificabile) ? <StyledSelectModifica name={nome} value={valore} onChange={onChangeFunction}></StyledSelectModifica>
+                            : <StyledSelectBlock name={nome} value={valore} onChange={onChangeFunction}></StyledSelectBlock>;
+    case 2:
+      return <StyledSelectElimina name={nome} value={valore} onChange={onChangeFunction}></StyledSelectElimina>;
+    default:
+      return <></>;
+  }
+  
 }
 
 function OperazioniNuovoItem({eseguiSalvataggio}) {
@@ -139,22 +182,22 @@ export function CardNuovoLavoro({clienti, professionisti, header, item, setItem,
         <StyledCardHeader>{header}</StyledCardHeader>
         {(header === "Nuovo lavoro cliente") && (
           <>
-            <StyledSelect style={{width: "100%"}} name="id_cliente" value={item.id_cliente} onChange={(e) => handleInputChange(e, setItem)}>
+            <StyledSelectModifica style={{width: "100%"}} name="id_cliente" value={item.id_cliente} onChange={(e) => handleInputChangeNuovoLavoro(e, setItem)}>
               <StyledOption value="0">Seleziona il cliente</StyledOption>
               {clienti.map((cliente) => (
                 <StyledOption key={cliente.id} value={cliente.id}>{cliente.nome + " " + cliente.cognome}</StyledOption>  
               ))}
-            </StyledSelect>
+            </StyledSelectModifica>
           </>
         )}
         {(header === "Nuovo lavoro professionista") && (
           <>
-            <StyledSelect style={{width: "100%"}} name="id_professionista" value={item.id_professionista} onChange={(e) => handleInputChange(e, setItem)}>
+            <StyledSelectModifica style={{width: "100%"}} name="id_professionista" value={item.id_professionista} onChange={(e) => handleInputChangeNuovoLavoro(e, setItem)}>
               <StyledOption value="0">Seleziona il professionista</StyledOption>
               {professionisti.map((professionista) => (
                 <StyledOption key={professionista.id} value={professionista.id}>{professionista.nome + " - " + professionista.professione}</StyledOption>  
               ))}
-            </StyledSelect>
+            </StyledSelectModifica>
           </>
         )}
         <StyledInputModifica
@@ -169,38 +212,38 @@ export function CardNuovoLavoro({clienti, professionisti, header, item, setItem,
         />
         <Row>
           <Col style={{ padding: '0', margin: '0', paddingLeft: '19px' }}>
-            <StyledSelect name="ora_inizio" value={item.ora_inizio} onChange={(e) => cambioValoriOrari(e, setItem)}>
+            <StyledSelectModifica name="ora_inizio" value={item.ora_inizio} onChange={(e) => handleInputChangeNuovoLavoro(e, setItem)}>
               <StyledOption value="">Ora inizio</StyledOption>
               {ore.map((ora) => (
                 <StyledOption key={ora} value={ora}>{ora}</StyledOption>  
               ))}
-            </StyledSelect>
+            </StyledSelectModifica>
           </Col>
           <Col style={{ padding: '0', margin: '0', paddingRight: '19px' }}>
-            <StyledSelect name="minuto_inizio" value={item.minuto_inizio} onChange={(e) => cambioValoriOrari(e, setItem)}>
+            <StyledSelectModifica name="minuto_inizio" value={item.minuto_inizio} onChange={(e) => handleInputChangeNuovoLavoro(e, setItem)}>
               <StyledOption value="">Minuto inizio</StyledOption>
               {minuti.map((minuto) => (
                 <StyledOption key={minuto} value={minuto}>{minuto}</StyledOption>  
               ))}
-            </StyledSelect>
+            </StyledSelectModifica>
           </Col>
         </Row>
         <Row>
           <Col style={{ padding: '0', margin: '0', paddingLeft: '19px' }}>
-            <StyledSelect name="ora_fine" value={item.ora_fine} onChange={(e) => cambioValoriOrari(e, setItem)}>
+            <StyledSelectModifica name="ora_fine" value={item.ora_fine} onChange={(e) => handleInputChangeNuovoLavoro(e, setItem)}>
               <StyledOption value="">Ora fine</StyledOption>
               {ore.map((ora) => (
                 <StyledOption key={ora} value={ora}>{ora}</StyledOption>  
               ))}
-            </StyledSelect>
+            </StyledSelectModifica>
           </Col>
           <Col style={{ padding: '0', margin: '0', paddingRight: '19px' }}>
-            <StyledSelect name="minuto_fine" value={item.minuto_fine} onChange={(e) => cambioValoriOrari(e, setItem)}>
+            <StyledSelectModifica name="minuto_fine" value={item.minuto_fine} onChange={(e) => handleInputChangeNuovoLavoro(e, setItem)}>
               <StyledOption value="">Minuto fine</StyledOption>
               {minuti.map((minuto) => (
                 <StyledOption key={minuto} value={minuto}>{minuto}</StyledOption>  
               ))}
-            </StyledSelect>
+            </StyledSelectModifica>
           </Col>
         </Row>
         <StyledTextAreaModifica
@@ -208,14 +251,14 @@ export function CardNuovoLavoro({clienti, professionisti, header, item, setItem,
           placeholder="Descrizione*"
           name="descrizione"
           value={item.descrizione}
-          onChange={(e) => handleInputChange(e, setItem)}
+          onChange={(e) => handleInputChangeNuovoLavoro(e, setItem)}
         />
         <StyledTextAreaModifica
           rows="1"
           placeholder="Note*"
           name="note"
           value={item.note}
-          onChange={(e) => handleInputChange(e, setItem)}
+          onChange={(e) => handleInputChangeNuovoLavoro(e, setItem)}
         />
         <OperazioniNuovoItem eseguiSalvataggio={eseguiSalvataggio} />
       </StyledCard>
@@ -323,71 +366,135 @@ export function CardLavoroEsistente({item, items, setItems, selectOperation}) {
   let maxHeight = "2000px";
   const [giornoType, setGiornoType] = useState('text');
   item.giorno = item.giorno !== undefined ? item.giorno : '';
+  const header = (item.nome_cliente) ? "Lavoro cliente" : "Lavoro professionista";
+  if(item.ora_inizio.toString().length === 1) item.ora_inizio = "0" + item.ora_inizio.toString();
+  if(item.ora_fine.toString().length === 1) item.ora_fine = "0" + item.ora_fine.toString();
+  if(item.minuto_inizio.toString().length === 1) item.minuto_inizio = "0" + item.minuto_inizio.toString();
+  if(item.minuto_fine.toString().length === 1) item.minuto_fine = "0" + item.minuto_fine.toString();
+  
+  const ClasseSelect = (item.tipo_selezione !== 1 && item.tipo_selezione !== 2) ? StyledSelectBlock : (
+    item.tipo_selezione === 1) ? StyledSelectModifica : StyledSelectElimina;
+
+  const ClasseInputModificabile = (item.tipo_selezione !== 1 && item.tipo_selezione !== 2) ? StyledInputBlock : (
+    item.tipo_selezione === 1) ? StyledInputModifica : StyledInputElimina;
+
+  const ClasseInputNonModificabile = (item.tipo_selezione !== 2) ? StyledInputBlock : StyledInputElimina;
+    
+  const ClasseTextAreaModificabile = (item.tipo_selezione !== 1 && item.tipo_selezione !== 2) ? StyledTextAreaBlock : (
+    item.tipo_selezione === 1) ? StyledTextAreaModifica : StyledTextAreaElimina;
+  
+  const ClasseTextAreaNonModificabile = (item.tipo_selezione !== 2) ? StyledTextAreaBlock : StyledTextAreaElimina;
 
   return (
     <>
       <StyledCard>
-        <StyledCardHeader>Lavoro</StyledCardHeader>
+        <StyledCardHeader>{header}</StyledCardHeader>
         <SlideContainer style={{maxHeight: `${maxHeight}`}}>
-          <StyledInputModifica
-            rows="1"
-            placeholder="Giorno*"
-            type={giornoType}
-            name="giorno"
-            value={formatoDate(item.giorno, "AAAA-MM-GG")}
+          {/* <div>|{item.id_cliente}|</div> */}
+          {/* <div>|{item.id_professionista}|</div> */}
+          <div>|{item.id_lavoro}|</div>
+          {(item.nome_cliente) && (
+            <ClasseTextAreaNonModificabile 
+              rows="1" 
+              name="nome_cognome_cliente" 
+              value={item.nome_cliente + " " + item.cognome_cliente} 
+              placeholder="Nome e cognome cliente*"
+              readOnly 
+            />
+          )}
+          {(item.nome_professionista) && (
+            <ClasseTextAreaNonModificabile 
+              rows="1" 
+              name="nome_professione_professionista" 
+              value={item.nome_professionista + " - " + item.professione} 
+              placeholder="Nome e professione professionista*"
+              readOnly 
+            />
+          )}
+
+          <ClasseInputModificabile 
+            rows="1" 
+            name="giorno" 
+            type={giornoType} 
+            value={formatoDate(item.giorno, "AAAA-MM-GG")} 
+            placeholder="Giorno*" 
             onClick={handleGiornoClick(setGiornoType)}
             onBlur={handleGiornoBlur(setGiornoType, item, setItems)}
-            onChange={(e) => handleInputChange(e, setItems)}
+            readOnly={item.tipo_selezione !== 1}
+            onChange={item.tipo_selezione === 1 ? (e) => handleInputChangeLavoroEsistente(e, items, setItems, item.id_lavoro, item.id_cliente, item.id_professionista) : undefined}
           />
+
           <Row>
             <Col style={{ padding: '0', margin: '0', paddingLeft: '19px' }}>
-              <StyledSelect name="ora_inizio" value={item.ora_inizio} onChange={(e) => cambioValoriOrari(e, setItem)}>
+              <ClasseSelect
+                name="ora_inizio" 
+                value={item.ora_inizio.toString()} 
+                readOnly={item.tipo_selezione !== 1}
+                onChange={item.tipo_selezione === 1 ? (e) => handleInputChangeLavoroEsistente(e, items, setItems, item.id_lavoro, item.id_cliente, item.id_professionista) : undefined}
+              >
                 <StyledOption value="">Ora inizio</StyledOption>
                 {ore.map((ora) => (
                   <StyledOption key={ora} value={ora}>{ora}</StyledOption>  
                 ))}
-              </StyledSelect>
+              </ClasseSelect>
             </Col>
             <Col style={{ padding: '0', margin: '0', paddingRight: '19px' }}>
-              <StyledSelect name="minuto_inizio" value={item.minuto_inizio} onChange={(e) => cambioValoriOrari(e, setItem)}>
+              <ClasseSelect 
+                name="minuto_inizio" 
+                value={item.minuto_inizio} 
+                readOnly={item.tipo_selezione !== 1}
+                onChange={item.tipo_selezione === 1 ? (e) => handleInputChangeLavoroEsistente(e, items, setItems, item.id_lavoro, item.id_cliente, item.id_professionista) : undefined}
+              >
                 <StyledOption value="">Minuto inizio</StyledOption>
                 {minuti.map((minuto) => (
                   <StyledOption key={minuto} value={minuto}>{minuto}</StyledOption>  
                 ))}
-              </StyledSelect>
+              </ClasseSelect>
             </Col>
           </Row>
           <Row>
             <Col style={{ padding: '0', margin: '0', paddingLeft: '19px' }}>
-              <StyledSelect name="ora_fine" value={item.ora_fine} onChange={(e) => cambioValoriOrari(e, setItem)}>
+              <ClasseSelect 
+                name="ora_fine" 
+                value={item.ora_fine} 
+                readOnly={item.tipo_selezione !== 1}
+                onChange={item.tipo_selezione === 1 ? (e) => handleInputChangeLavoroEsistente(e, items, setItems, item.id_lavoro, item.id_cliente, item.id_professionista) : undefined}
+              >
                 <StyledOption value="">Ora fine</StyledOption>
                 {ore.map((ora) => (
                   <StyledOption key={ora} value={ora}>{ora}</StyledOption>  
                 ))}
-              </StyledSelect>
-            </Col>
+              </ClasseSelect>
+            </Col>    
             <Col style={{ padding: '0', margin: '0', paddingRight: '19px' }}>
-              <StyledSelect name="minuto_fine" value={item.minuto_fine} onChange={(e) => cambioValoriOrari(e, setItem)}>
+              <ClasseSelect 
+                name="minuto_fine" 
+                value={item.minuto_fine} 
+                readOnly={item.tipo_selezione !== 1}
+                onChange={item.tipo_selezione === 1 ? (e) => handleInputChangeLavoroEsistente(e, items, setItems, item.id_lavoro, item.id_cliente, item.id_professionista) : undefined}
+              >
                 <StyledOption value="">Minuto fine</StyledOption>
                 {minuti.map((minuto) => (
                   <StyledOption key={minuto} value={minuto}>{minuto}</StyledOption>  
                 ))}
-              </StyledSelect>
+              </ClasseSelect>
             </Col>
           </Row>
-          <StyledTextAreaModifica
-            rows="1"
-            placeholder="Descrizione*"
-            name="descrizione"
+          <ClasseTextAreaModificabile 
+            rows="1" 
+            name="descrizione" 
             value={item.descrizione}
-            onChange={(e) => handleInputChange(e, setItem)}
+            placeholder="Descrizione*"
+            readOnly={item.tipo_selezione !== 1}
+            onChange={item.tipo_selezione === 1 ? (e) => handleInputChangeLavoroEsistente(e, items, setItems, item.id_lavoro, item.id_cliente, item.id_professionista) : undefined}
           />
-          <StyledTextAreaModifica
-            rows="1"
-            placeholder="Note*"
-            name="note"
-            value={item.note}
-            onChange={(e) => handleInputChange(e, setItem)}
+          <ClasseTextAreaModificabile 
+            rows="1" 
+            name="note" 
+            value={item.note} 
+            placeholder="Note" 
+            readOnly={item.tipo_selezione !== 1}
+            onChange={item.tipo_selezione === 1 ? (e) => handleInputChangeLavoroEsistente(e, items, setItems, item.id_lavoro, item.id_cliente, item.id_professionista) : undefined}
           />
         </SlideContainer>
         <OperazioniItemEsistente selectOperation={selectOperation} item={item} />

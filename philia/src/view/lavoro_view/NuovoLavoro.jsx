@@ -11,17 +11,32 @@ import { Items } from "../component/Items";
 import { controlloLavoro } from "../../vario/Controlli";
 import { FormNuovoLavoro } from "../component/form_item/FormsLavori";
 import { RowNuovoLavoro } from "../component/row_item/RowsLavori";
-import { CardNuovoLavoro } from "../component/card_item/CardsLavori";
+import { CardNuovoLavoro, CardLavoroEsistente } from "../component/card_item/CardsLavori";
+import Row from "react-bootstrap/esm/Row";
+import Col from "react-bootstrap/esm/Col";
+import { modifica } from "../../vario/OperazioniModifica";
+import { elimina } from "../../vario/OperazioniEliminazione";
 
 const NuovoLavoro = () => {
   const formSession = useSelector((state) => state.formSession.value);
+  const itemSession = useSelector((state) => state.itemSession.value);
 
   const [clienti, setClienti] = useState([]);
   const [professionisti, setProfessionisti] = useState([]);
   const [lavori, setLavori] = useState([]);
+  const [selectedTrashCount, setSelectedTrashCount] = useState(0);
+  const [selectedPencilCount, setSelectedPencilCount] = useState(0);
+  const [selectedIdsEliminazione, setSelectedIdsEliminazione] = useState([]);
+  const [selectedIdsModifica, setSelectedIdsModifica] = useState([]);
 
   const [nuovoLavoro, setNuovoLavoro] = useState ({
-    id_cliente: 0,
+    nome_cliente: "", 
+    cognome_cliente: "", 
+    nome_professionista: "", 
+    professione: "", 
+    tipo_selezione: 0, 
+    id_lavoro: 0, 
+    id_cliente: 0, 
     id_professionista: 0,
     giorno: "",
     ora_inizio: "",
@@ -29,7 +44,7 @@ const NuovoLavoro = () => {
     ora_fine: "",
     minuto_fine: "",
     descrizione: "",
-    note: "", 
+    note: ""
   });
 
   const [errori, setErrori] = useState ({
@@ -40,63 +55,99 @@ const NuovoLavoro = () => {
     note: ""
   });
 
+  const selectOperation = (icon, item) => {
+    if (icon === "trash") {
+      if (selectedIdsEliminazione.some(el => el[0] === item.id_lavoro && el[1] === item.id_cliente && el[2] === item.id_professionista)) {
+        item.tipo_selezione = 0;
+        setSelectedIdsEliminazione(prevIds => prevIds.filter(el => el[0] !== item.id_lavoro || el[1] !== item.id_cliente || el[2] !== item.id_professionista));
+        setSelectedTrashCount(prevCount => Math.max(prevCount - 1, 0));
+      } else {
+        item.tipo_selezione = 2;
+        setSelectedIdsEliminazione(prevIds => [...prevIds, [item.id_lavoro, item.id_cliente, item.id_professionista]]);
+        setSelectedTrashCount(prevCount => prevCount + 1);
+        setSelectedIdsModifica(prevIdsModifica => prevIdsModifica.filter(el => el[0] !== item.id_lavoro || el[1] !== item.id_cliente || el[2] !== item.id_professionista));
+        setSelectedPencilCount(prevCount => Math.max(prevCount - 1, 0));
+      }
+    } else if (icon === "pencil") {
+      if (selectedIdsModifica.some(el => el[0] === item.id_lavoro && el[1] === item.id_cliente && el[2] === item.id_professionista)) {
+        item.tipo_selezione = 0;
+        setSelectedIdsModifica(prevIdsModifica => prevIdsModifica.filter(el => el[0] !== item.id_lavoro || el[1] !== item.id_cliente || el[2] !== item.id_professionista));
+        setSelectedPencilCount(prevCount => Math.max(prevCount - 1, 0));
+      } else {
+        item.tipo_selezione = 1;
+        setSelectedIdsModifica(prevIdsModifica => [...prevIdsModifica, [item.id_lavoro, item.id_cliente, item.id_professionista]]);
+        setSelectedPencilCount(prevCount => prevCount + 1);
+        setSelectedIdsEliminazione(prevIds => prevIds.filter(el => el[0] !== item.id_lavoro || el[1] !== item.id_cliente || el[2] !== item.id_professionista));
+        setSelectedTrashCount(prevCount => Math.max(prevCount - 1, 0));
+      }
+    }
+  }
+
   const handleInsertLavoro = async (e) => {
     e.preventDefault();
 
-    // alert (
-    //   nuovoLavoro.id_cliente + "\n" +
-    //   nuovoLavoro.id_professionista + "\n" +
-    //   nuovoLavoro.giorno + "\n" +
-    //   nuovoLavoro.ora_inizio + ":" + nuovoLavoro.minuto_inizio + "\n" + 
-    //   nuovoLavoro.ora_fine + ":" + nuovoLavoro.minuto_fine + "\n" + 
-    //   nuovoLavoro.descrizione + "\n" +
-    //   nuovoLavoro.note
-    // )
-  
     if (controlloLavoro(nuovoLavoro, setErrori) > 0) {
       return;
     }
-  
-    try {
-      const response = await fetch('/INSERISCI_LAVORO', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(nuovoLavoro),
-      });
-  
-      if (!response.ok) {
-        const errorData = await response.json();
-        if (response.status === 409) {
-          alert(errorData.message); // Mostra l'alert con il messaggio di errore specifico
-        }
-        else {
-          throw new Error('Errore durante l\'inserimento del lavoro');
-        }
-      } 
-      else {
-        nuovoLavoro.note = (nuovoLavoro.note.split(' ').join('') === "") ? "Nota non inserita." : nuovoLavoro.note;
-        
-        setLavori(prevLavori => [...prevLavori, nuovoLavoro]);
-        setNuovoLavoro(prevState => ({
-          ...prevState,
-          id_cliente: 0,
-          id_professionista: 0,
-          giorno: "",
-          ora_inizio: "",
-          minuto_inizio: "",
-          ora_fine: "",
-          minuto_fine: "",
-          descrizione: "",
-          note: "",
-        }));
+    
+    const response = await fetch('/INSERISCI_LAVORO', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(nuovoLavoro),
+    });
+
+    if(response.ok) {
+      // alert("OK");
+      // alert(response.status);
+      const result = await response.json();
+      nuovoLavoro.id_lavoro = result.id_lavoro;
+      if(parseInt(nuovoLavoro.id_cliente) !== 0) {
+        const cliente = clienti.filter(c => c.id === parseInt(nuovoLavoro.id_cliente))[0];
+        nuovoLavoro.nome_cliente = cliente.nome;
+        nuovoLavoro.cognome_cliente = cliente.cognome;
+        alert(nuovoLavoro.nome_cliente);
+        alert(nuovoLavoro.cognome_cliente);
+        alert(nuovoLavoro.id_cliente);
       }
+      else if(parseInt(nuovoLavoro.id_professionista) !== 0) {
+        const professionista = professionisti.filter(p => p.id === parseInt(nuovoLavoro.id_professionista))[0];
+        nuovoLavoro.nome_professionista = professionista.nome;
+        nuovoLavoro.professione = professionista.professione;
+      }
+      nuovoLavoro.note = (nuovoLavoro.note.split(' ').join('') === "") ? "Nota non inserita." : nuovoLavoro.note;
+      setLavori(prevLavori => [...prevLavori, nuovoLavoro]);
+      setNuovoLavoro(prevState => ({
+        ...prevState,
+        nome_cliente: "", 
+        cognome_cliente: "", 
+        nome_professionista: "", 
+        professione: "", 
+        tipo_selezione: 0, 
+        id_lavoro: 0, 
+        id_cliente: 0, 
+        id_professionista: 0,
+        giorno: "",
+        ora_inizio: "",
+        minuto_inizio: "",
+        ora_fine: "",
+        minuto_fine: "",
+        descrizione: "",
+        note: ""
+      }));
+
       alert("L\'inserimento del nuovo lavoro è andato a buon fine.");
-    } 
-    catch (error) {
-      console.error('Errore:', error);
-      alert("C'è stato un errore durante l'inserimento del lavoro. Riprova più tardi.");
+    }
+    else {
+      const errorData = await response.json();
+      if (response.status === 409 || response.status === 500) {
+        alert(errorData.message);
+      }
+      else {
+        response.status = 500;
+        alert('Errore durante l\'inserimento del lavoro');
+      }
     }
   };
   
@@ -156,13 +207,51 @@ const NuovoLavoro = () => {
         </div>
       )}
 
-
+      <br /> <br /> <br /> <br />
+      
       {(lavori.length > 0) && (
         <>
-          <div className="main-content" />
-          <Items tipoItem={"lavoro"} items={lavori} setterItems={setLavori} errori={errori} setErrori={setErrori}/>    
+          {(itemSession.view === "card") && (
+            <div className="contenitore-3">
+              {lavori.map((lavoro, index) => (
+                <CardLavoroEsistente key={index} item={lavoro} items={lavori} setItems={setLavori} selectOperation={selectOperation} />
+              ))}
+            </div>
+          )}
+          {/* {(itemSession.view === "list") && (
+            <>
+              {lavori.map((lavoro, index) => (
+                <RowLavoroEsistente key={index} item={lavoro} items={lavori} setItems={setLavori} selectOperation={selectOperation} />
+              ))}
+            </>
+          )} */}
         </>
       )}
+      
+      <div className='contenitore-2'>
+        <Row>
+          {selectedIdsModifica.length > 0 && (
+            <Col>
+              <button className="bottone-blu-non-selezionato"
+                onClick={(e) => modifica(e, "lavoro", selectedIdsModifica, setSelectedIdsModifica, lavori, setLavori)}
+              >
+                Modifica
+              </button>
+            </Col>
+          )}
+          {selectedIdsEliminazione.length > 0 && (
+            <Col>
+              <button className='bottone-rosso-non-selezionato'
+                onClick={(e) => elimina(e, "lavoro", selectedIdsEliminazione, setSelectedIdsEliminazione, lavori, setLavori)}
+              >
+                Elimina
+              </button>
+            </Col>
+          )}
+        </Row>
+      </div>
+            
+      <br /> <br /> <br /> <br />
     </>
   );
 }

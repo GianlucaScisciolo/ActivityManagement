@@ -124,6 +124,31 @@ const Clienti = () => {
       )}
 
       <br /> <br /> <br /> <br />
+
+      <div className='contenitore-2'>
+        <Row>
+          {selectedIdsModifica.length > 0 && (
+            <Col>
+              <button className="bottone-blu-non-selezionato"
+                onClick={(e) => modifica(e, "cliente", selectedIdsModifica, setSelectedIdsModifica, clienti, setClienti)}
+              >
+                Modifica
+              </button>
+            </Col>
+          )}
+          {selectedIdsEliminazione.length > 0 && (
+            <Col>
+              <button className='bottone-rosso-non-selezionato'
+                onClick={(e) => elimina(e, "cliente", selectedIdsEliminazione, setSelectedIdsEliminazione, clienti, setClienti)}
+              >
+                Elimina
+              </button>
+            </Col>
+          )}
+        </Row>
+      </div>
+
+      <br /> <br /> <br /> <br />
     </>
   );
 }
