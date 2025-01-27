@@ -244,6 +244,18 @@ export const StyledSelect =  styled.select`
   text-align: center;
 `;
 
+export const StyledSelectBlock = styled(StyledSelect)`
+  background-color: #111111;
+`;
+
+export const StyledSelectModifica = styled(StyledSelect)`
+  background-color: #0050EF;
+`;
+
+export const StyledSelectElimina = styled(StyledSelect)`
+  background-color: #500000;
+`;
+
 export const StyledOption =  styled.option`
   background-color: #0050EF;
   &:hover {
@@ -254,6 +266,7 @@ export const StyledOption =  styled.option`
 export const StyledSpanErrore =  styled.span`
   color: #FF0000;
   /* background-color: #000000; */
+  border-radius: 40px;
   padding: 10px;
 `;
 

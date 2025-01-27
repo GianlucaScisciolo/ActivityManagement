@@ -31,15 +31,12 @@ const NuovoProfessionista = () => {
     professione: "",
     contatto: "",
     email: "",
-    note: ""
-  });
-
-  const [errori, setErrori] = useState({
-    nome: "",
-    professione: "",
-    contatto: "",
-    email: "",
-    note: ""
+    note: "", 
+    errore_nome: "", 
+    errore_professione: "", 
+    errore_contatto: "", 
+    errore_email: "", 
+    errore_note: ""
   });
 
   const selectOperation = (icon, item) => {
@@ -76,7 +73,7 @@ const NuovoProfessionista = () => {
   const handleInsert = async (e) => {
     e.preventDefault();
     if (confirm("Sei sicuro di voler salvare il professionista?")) {
-      if (controlloProfessionista(nuovoProfessionista, setErrori) > 0) 
+      if (controlloProfessionista(nuovoProfessionista, setNuovoProfessionista) > 0) 
         return;
   
       try {
@@ -111,7 +108,12 @@ const NuovoProfessionista = () => {
             professione: "",
             contatto: "",
             email: "",
-            note: ""
+            note: "", 
+            errore_nome: "", 
+            errore_professione: "", 
+            errore_contatto: "", 
+            errore_email: "", 
+            errore_note: ""
           });
   
           alert("L'inserimento del professionista è andato a buon fine!!");

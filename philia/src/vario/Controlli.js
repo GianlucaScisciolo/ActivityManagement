@@ -54,7 +54,7 @@ export const controlloCliente = (data, settersErrori) => {
     numErrori += 1; 
     messagioErrore = "Lunghezza nome non valido, deve avere un numero di caratteri tra 1 e 30 estremi inclusi.";
   }
-  setErrore(settersErrori, "nome", messagioErrore);
+  setErrore(settersErrori, "errore_nome", messagioErrore);
 
   // controllo sul cognome
   messagioErrore = "";
@@ -66,7 +66,7 @@ export const controlloCliente = (data, settersErrori) => {
     numErrori += 1; 
     messagioErrore = "Lunghezza cognome non valido, deve avere un numero di caratteri tra 1 e 30 estremi inclusi.";
   }
-  setErrore(settersErrori, "cognome", messagioErrore);
+  setErrore(settersErrori, "errore_cognome", messagioErrore);
 
   // controllo sul contatto
   messagioErrore = "";
@@ -81,7 +81,7 @@ export const controlloCliente = (data, settersErrori) => {
     messagioErrore += "- numero di telefono valido: 0XXXXXXXXX oppure 0XXXXXXXXXX\n";
     messagioErrore += "X è un numero tra 0 e 9 estremi inclusi.";
   }
-  setErrore(settersErrori, "contatto", messagioErrore);
+  setErrore(settersErrori, "errore_contatto", messagioErrore);
   
   // controllo sulle note
   messagioErrore = "";
@@ -89,8 +89,8 @@ export const controlloCliente = (data, settersErrori) => {
     numErrori += 1;
     messagioErrore = "Lunghezza note non valida, deve avere un numero di caratteri tra 1 e 65.535 estremi inclusi.";
   }
-  setErrore(settersErrori, "note", messagioErrore);
-  
+  setErrore(settersErrori, "errore_note", messagioErrore);
+  // alert(numErrori);
   return numErrori;
 }  
 
@@ -121,7 +121,7 @@ export const controlloProfessionista = (data, settersErrori) => {
     numErrori += 1; 
     messagioErrore = "Lunghezza nome non valido, deve avere un numero di caratteri tra 1 e 60 estremi inclusi.";
   }
-  setErrore(settersErrori, "nome", messagioErrore);
+  setErrore(settersErrori, "errore_nome", messagioErrore);
 
   // controllo sulla professione
   messagioErrore = "";
@@ -133,7 +133,7 @@ export const controlloProfessionista = (data, settersErrori) => {
     numErrori += 1; 
     messagioErrore = "Lunghezza professione non valida, deve avere un numero di caratteri tra 1 e 30 estremi inclusi.";
   }
-  setErrore(settersErrori, "professione", messagioErrore);
+  setErrore(settersErrori, "errore_professione", messagioErrore);
 
   // controllo sul contatto e sull'email
   let erroreContattoEEmail = false;
@@ -143,8 +143,8 @@ export const controlloProfessionista = (data, settersErrori) => {
     messagioErrore = "Inserire il contatto e/o l\'email.";
     erroreContattoEEmail = true;
   }
-  setErrore(settersErrori, "contatto", messagioErrore);
-  setErrore(settersErrori, "email", messagioErrore);
+  setErrore(settersErrori, "errore_contatto", messagioErrore);
+  setErrore(settersErrori, "errore_email", messagioErrore);
 
   // controllo sul contatto
   messagioErrore = "";
@@ -156,7 +156,7 @@ export const controlloProfessionista = (data, settersErrori) => {
     messagioErrore += "X è un numero tra 0 e 9 estremi inclusi.";
   }
   if(!erroreContattoEEmail) {
-    setErrore(settersErrori, "contatto", messagioErrore);
+    setErrore(settersErrori, "errore_contatto", messagioErrore);
   }
 
   // controllo sull'email
@@ -166,7 +166,7 @@ export const controlloProfessionista = (data, settersErrori) => {
     messagioErrore = "Email non valida.";
   }
   if(!erroreContattoEEmail) {
-    setErrore(settersErrori, "email", messagioErrore);
+    setErrore(settersErrori, "errore_email", messagioErrore);
   }
 
   // controllo sulle note
@@ -175,7 +175,7 @@ export const controlloProfessionista = (data, settersErrori) => {
     numErrori += 1;
     messagioErrore = "Lunghezza note non valida, deve avere un numero di caratteri tra 1 e 65.535 estremi inclusi.";
   }
-  setErrore(settersErrori, "note", messagioErrore);
+  setErrore(settersErrori, "errore_note", messagioErrore);
 
   return numErrori;
 }
@@ -294,11 +294,10 @@ export const controlloLavoro = (data, settersErrori) => {
   messagioErrore1 = "";
   // alert(getInt(data.id_cliente) + " - " + getInt(data.id_professionista));
   if(getInt(data.id_cliente) === 0 && getInt(data.id_professionista) === 0) {
-    alert("Errore!!");
     numErrori += 1; 
     messagioErrore1 = "Selezionare il cliente oppure il professionista (non entrambi).";
   }
-  setErrore(settersErrori, "cliente_e_professionista", messagioErrore1);
+  setErrore(settersErrori, "errore_cliente_e_professionista", messagioErrore1);
 
   // controllo sul giorno
   messagioErrore1 = "";
@@ -306,7 +305,7 @@ export const controlloLavoro = (data, settersErrori) => {
     numErrori += 1; 
     messagioErrore1 = "Inserire il giorno.";
   }
-  setErrore(settersErrori, "giorno", messagioErrore1);
+  setErrore(settersErrori, "errore_giorno", messagioErrore1);
 
   // controllo sull'orario iniziale
   messagioErrore1 = "";
@@ -314,15 +313,15 @@ export const controlloLavoro = (data, settersErrori) => {
     numErrori += 1; 
     messagioErrore1 = "Inserire l\'orario iniziale.";
   }
-  setErrore(settersErrori, "orario_inizio", messagioErrore1);
-  
+  setErrore(settersErrori, "errore_orario_inizio", messagioErrore1);
+
   // controllo sull'orario finale
   messagioErrore1 = "";
   if (isEmpty(data.ora_fine) || isEmpty(data.minuto_fine)) {
     numErrori += 1; 
     messagioErrore1 = "Inserire l\'orario finale.";
   }
-  setErrore(settersErrori, "orario_fine", messagioErrore1);
+  setErrore(settersErrori, "errore_orario_fine", messagioErrore1);
 
   // controllo sull'orario iniziale e sull'orario finale
   messagioErrore1 = "";
@@ -337,8 +336,8 @@ export const controlloLavoro = (data, settersErrori) => {
       messagioErrore1 = "L\'orario iniziale deve avvenire prima dell\'orario finale e non possono essere uguali.";
       messagioErrore2 = "L\'orario finale deve avvenire dopo l\'orario iniziale e non possono essere uguali.";
     }    
-    setErrore(settersErrori, "orario_inizio", messagioErrore1);
-    setErrore(settersErrori, "orario_fine", messagioErrore2);
+    setErrore(settersErrori, "errore_orario_inizio", messagioErrore1);
+    setErrore(settersErrori, "errore_orario_fine", messagioErrore2);
   }
 
   // controllo sulla descrizione
@@ -351,7 +350,7 @@ export const controlloLavoro = (data, settersErrori) => {
     numErrori += 1; 
     messagioErrore1 = "Lunghezza descrizione non valida, deve avere un numero di caratteri tra 1 e 100 estremi inclusi.";
   }
-  setErrore(settersErrori, "descrizione", messagioErrore1);
+  setErrore(settersErrori, "errore_descrizione", messagioErrore1);
   
   // controllo sulle note
   messagioErrore1 = "";
@@ -359,7 +358,7 @@ export const controlloLavoro = (data, settersErrori) => {
     numErrori += 1; 
     messagioErrore1 = "Lunghezza note non valida, deve avere un numero di caratteri tra 1 e 65.535 estremi inclusi.";
   }
-  setErrore(settersErrori, "note", messagioErrore1);
+  setErrore(settersErrori, "errore_note", messagioErrore1);
 
   // alert(numErrori);
   return numErrori;

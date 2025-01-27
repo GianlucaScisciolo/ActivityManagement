@@ -10,7 +10,7 @@ import FormItem from "../component/form_item/FormItem";
 import { Items } from "../component/Items";
 import { controlloLavoro } from "../../vario/Controlli";
 import { FormNuovoLavoro } from "../component/form_item/FormsLavori";
-import { RowNuovoLavoro } from "../component/row_item/RowsLavori";
+import { RowNuovoLavoro, RowLavoroEsistente } from "../component/row_item/RowsLavori";
 import { CardNuovoLavoro, CardLavoroEsistente } from "../component/card_item/CardsLavori";
 import Row from "react-bootstrap/esm/Row";
 import Col from "react-bootstrap/esm/Col";
@@ -44,15 +44,13 @@ const NuovoLavoro = () => {
     ora_fine: "",
     minuto_fine: "",
     descrizione: "",
-    note: ""
-  });
-
-  const [errori, setErrori] = useState ({
-    descrizione: "",
-    giorno: "",
-    orario_inizio: "",
-    orario_fine: "",
-    note: ""
+    note: "", 
+    errore_cliente_e_professionista: "", 
+    errore_descrizione: "", 
+    errore_giorno: "", 
+    errore_orario_inizio: "", 
+    errore_orario_fine: "", 
+    errore_note: ""
   });
 
   const selectOperation = (icon, item) => {
@@ -86,7 +84,7 @@ const NuovoLavoro = () => {
   const handleInsertLavoro = async (e) => {
     e.preventDefault();
 
-    if (controlloLavoro(nuovoLavoro, setErrori) > 0) {
+    if (controlloLavoro(nuovoLavoro, setNuovoLavoro) > 0) {
       return;
     }
     
@@ -99,17 +97,12 @@ const NuovoLavoro = () => {
     });
 
     if(response.ok) {
-      // alert("OK");
-      // alert(response.status);
       const result = await response.json();
       nuovoLavoro.id_lavoro = result.id_lavoro;
       if(parseInt(nuovoLavoro.id_cliente) !== 0) {
         const cliente = clienti.filter(c => c.id === parseInt(nuovoLavoro.id_cliente))[0];
         nuovoLavoro.nome_cliente = cliente.nome;
         nuovoLavoro.cognome_cliente = cliente.cognome;
-        alert(nuovoLavoro.nome_cliente);
-        alert(nuovoLavoro.cognome_cliente);
-        alert(nuovoLavoro.id_cliente);
       }
       else if(parseInt(nuovoLavoro.id_professionista) !== 0) {
         const professionista = professionisti.filter(p => p.id === parseInt(nuovoLavoro.id_professionista))[0];
@@ -134,7 +127,12 @@ const NuovoLavoro = () => {
         ora_fine: "",
         minuto_fine: "",
         descrizione: "",
-        note: ""
+        note: "", 
+        errore_descrizione, 
+        errore_giorno: "", 
+        errore_orario_inizio: "", 
+        errore_orario_fine: "", 
+        errore_note: ""
       }));
 
       alert("L\'inserimento del nuovo lavoro è andato a buon fine.");
@@ -194,17 +192,12 @@ const NuovoLavoro = () => {
         <FormNuovoLavoro clienti={clienti} professionisti={professionisti} item={nuovoLavoro} setItem={setNuovoLavoro} eseguiSalvataggio={(e) => handleInsertLavoro(e)} />
       )}
       {formSession.view === "row" && (
-        <>
-          <RowNuovoLavoro clienti={clienti} header="Nuovo lavoro cliente" item={nuovoLavoro} setItem={setNuovoLavoro} eseguiSalvataggio={(e) => handleInsertLavoro(e)} />
-          <br />
-          <RowNuovoLavoro professionisti={professionisti} header="Nuovo lavoro professionista" item={nuovoLavoro} setItem={setNuovoLavoro} eseguiSalvataggio={(e) => handleInsertLavoro(e)} />
-        </>
+        <RowNuovoLavoro clienti={clienti} professionisti={professionisti} item={nuovoLavoro} setItem={setNuovoLavoro} eseguiSalvataggio={(e) => handleInsertLavoro(e)} />
       )}
       {(formSession.view === "card") && (
-        <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: '50px' }}>
-          <CardNuovoLavoro clienti={clienti} header="Nuovo lavoro cliente" item={nuovoLavoro} setItem={setNuovoLavoro} eseguiSalvataggio={(e) => handleInsertLavoro(e)} />
-          <CardNuovoLavoro professionisti={professionisti} header="Nuovo lavoro professionista" item={nuovoLavoro} setItem={setNuovoLavoro} eseguiSalvataggio={(e) => handleInsertLavoro(e)} />
-        </div>
+        <center>
+          <CardNuovoLavoro clienti={clienti} professionisti={professionisti} item={nuovoLavoro} setItem={setNuovoLavoro} eseguiSalvataggio={(e) => handleInsertLavoro(e)} />
+        </center>
       )}
 
       <br /> <br /> <br /> <br />
@@ -218,13 +211,13 @@ const NuovoLavoro = () => {
               ))}
             </div>
           )}
-          {/* {(itemSession.view === "list") && (
+          {(itemSession.view === "list") && (
             <>
               {lavori.map((lavoro, index) => (
                 <RowLavoroEsistente key={index} item={lavoro} items={lavori} setItems={setLavori} selectOperation={selectOperation} />
               ))}
             </>
-          )} */}
+          )} 
         </>
       )}
       

@@ -62,14 +62,19 @@ export function FormNuovoProfessionista({item, setItem, eseguiSalvataggio}) {
         <SlideContainer style={{maxHeight: `${maxHeight}`}}>
           <StyledLabel htmlFor="nome">Nome*</StyledLabel>
           <StyledTextAreaModifica rows="1" placeholder="Nome*" name="nome" value={item.nome} onChange={(e) => handleInputChange(e, setItem)} />
-          <StyledLabel htmlFor="nome">Professione*</StyledLabel>
+          {(item.errore_nome !== "") && (<StyledSpanErrore>{item.errore_nome}</StyledSpanErrore>)}
+          <StyledLabel htmlFor="professione">Professione*</StyledLabel>
           <StyledTextAreaModifica rows="1" placeholder="Professione*" name="professione" value={item.professione} onChange={(e) => handleInputChange(e, setItem)} />
+          {(item.errore_professione !== "") && (<StyledSpanErrore>{item.errore_professione}</StyledSpanErrore>)}
           <StyledLabel htmlFor="contatto">Contatto</StyledLabel>
           <StyledInputModifica rows="1" placeholder="Contatto" type="text" name="contatto" value={item.contatto} onChange={(e) => handleInputChange(e, setItem)} />
+          {(item.errore_contatto !== "") && (<StyledSpanErrore>{item.errore_contatto}</StyledSpanErrore>)}
           <StyledLabel htmlFor="email">Email</StyledLabel>
           <StyledInputModifica rows="1" placeholder="Email" type="text" name="email" value={item.email} onChange={(e) => handleInputChange(e, setItem)} />
+          {(item.errore_email !== "") && (<StyledSpanErrore>{item.errore_email}</StyledSpanErrore>)}
           <StyledLabel htmlFor="note">Note</StyledLabel>
           <StyledTextAreaModifica rows="1" placeholder="Note" name="note" value={item.note} onChange={(e) => handleInputChange(e, setItem)} />
+          {(item.errore_note !== "") && (<StyledSpanErrore>{item.errore_note}</StyledSpanErrore>)}
           <br /> <br />
         </SlideContainer>
         <OperazioniNuovoItem eseguiSalvataggio={eseguiSalvataggio} />

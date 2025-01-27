@@ -167,39 +167,31 @@ function cambioValoriOrari(e, setValue) {
 }
 
 
-export function CardNuovoLavoro({clienti, professionisti, header, item, setItem, eseguiSalvataggio}) {
+export function CardNuovoLavoro({clienti, professionisti, item, setItem, eseguiSalvataggio}) {
   const ore = ["07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22"];
   const minuti = ["00", "30"];
   let maxHeight = "2000px";
 
   const [giornoType, setGiornoType] = useState('text');
-
   item.giorno = item.giorno !== undefined ? item.giorno : '';
 
   return (
     <>
       <StyledCard>
-        <StyledCardHeader>{header}</StyledCardHeader>
-        {(header === "Nuovo lavoro cliente") && (
-          <>
-            <StyledSelectModifica style={{width: "100%"}} name="id_cliente" value={item.id_cliente} onChange={(e) => handleInputChangeNuovoLavoro(e, setItem)}>
-              <StyledOption value="0">Seleziona il cliente</StyledOption>
-              {clienti.map((cliente) => (
-                <StyledOption key={cliente.id} value={cliente.id}>{cliente.nome + " " + cliente.cognome}</StyledOption>  
-              ))}
-            </StyledSelectModifica>
-          </>
-        )}
-        {(header === "Nuovo lavoro professionista") && (
-          <>
-            <StyledSelectModifica style={{width: "100%"}} name="id_professionista" value={item.id_professionista} onChange={(e) => handleInputChangeNuovoLavoro(e, setItem)}>
-              <StyledOption value="0">Seleziona il professionista</StyledOption>
-              {professionisti.map((professionista) => (
-                <StyledOption key={professionista.id} value={professionista.id}>{professionista.nome + " - " + professionista.professione}</StyledOption>  
-              ))}
-            </StyledSelectModifica>
-          </>
-        )}
+        <StyledCardHeader>Nuovo lavoro</StyledCardHeader>
+        <StyledSelectModifica style={{width: "100%"}} name="id_cliente" value={item.id_cliente} onChange={(e) => handleInputChangeNuovoLavoro(e, setItem)}>
+          <StyledOption value="0">Seleziona il cliente</StyledOption>
+          {clienti.map((cliente) => (
+            <StyledOption key={cliente.id} value={cliente.id}>{cliente.nome + " " + cliente.cognome}</StyledOption>  
+          ))}
+        </StyledSelectModifica>
+        <StyledSelectModifica style={{width: "100%"}} name="id_professionista" value={item.id_professionista} onChange={(e) => handleInputChangeNuovoLavoro(e, setItem)}>
+          <StyledOption value="0">Seleziona il professionista</StyledOption>
+          {professionisti.map((professionista) => (
+            <StyledOption key={professionista.id} value={professionista.id}>{professionista.nome + " - " + professionista.professione}</StyledOption>  
+          ))}
+        </StyledSelectModifica>
+        {(item.errore_cliente_e_professionista !== "") && (<StyledSpanErrore>{item.errore_cliente_e_professionista}</StyledSpanErrore>)}
         <StyledInputModifica
           rows="1"
           placeholder="Giorno*"
@@ -210,6 +202,7 @@ export function CardNuovoLavoro({clienti, professionisti, header, item, setItem,
           onBlur={handleGiornoBlur(setGiornoType, item, setItem)}
           onChange={(e) => handleInputChange(e, setItem)}
         />
+        {(item.errore_giorno !== "") && (<StyledSpanErrore>{item.errore_giorno}</StyledSpanErrore>)}
         <Row>
           <Col style={{ padding: '0', margin: '0', paddingLeft: '19px' }}>
             <StyledSelectModifica name="ora_inizio" value={item.ora_inizio} onChange={(e) => handleInputChangeNuovoLavoro(e, setItem)}>
@@ -228,6 +221,7 @@ export function CardNuovoLavoro({clienti, professionisti, header, item, setItem,
             </StyledSelectModifica>
           </Col>
         </Row>
+        {(item.errore_orario_inizio !== "") && (<StyledSpanErrore>{item.errore_orario_inizio}</StyledSpanErrore>)}
         <Row>
           <Col style={{ padding: '0', margin: '0', paddingLeft: '19px' }}>
             <StyledSelectModifica name="ora_fine" value={item.ora_fine} onChange={(e) => handleInputChangeNuovoLavoro(e, setItem)}>
@@ -246,6 +240,7 @@ export function CardNuovoLavoro({clienti, professionisti, header, item, setItem,
             </StyledSelectModifica>
           </Col>
         </Row>
+        {(item.errore_orario_fine !== "") && (<StyledSpanErrore>{item.errore_orario_fine}</StyledSpanErrore>)}
         <StyledTextAreaModifica
           rows="1"
           placeholder="Descrizione*"
@@ -253,6 +248,7 @@ export function CardNuovoLavoro({clienti, professionisti, header, item, setItem,
           value={item.descrizione}
           onChange={(e) => handleInputChangeNuovoLavoro(e, setItem)}
         />
+        {(item.errore_descrizione !== "") && (<StyledSpanErrore>{item.errore_descrizione}</StyledSpanErrore>)}
         <StyledTextAreaModifica
           rows="1"
           placeholder="Note*"
@@ -260,6 +256,7 @@ export function CardNuovoLavoro({clienti, professionisti, header, item, setItem,
           value={item.note}
           onChange={(e) => handleInputChangeNuovoLavoro(e, setItem)}
         />
+        {(item.errore_note !== "") && (<StyledSpanErrore>{item.errore_note}</StyledSpanErrore>)}
         <OperazioniNuovoItem eseguiSalvataggio={eseguiSalvataggio} />
       </StyledCard>
     </>

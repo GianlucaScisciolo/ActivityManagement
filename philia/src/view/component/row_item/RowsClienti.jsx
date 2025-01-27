@@ -138,16 +138,28 @@ export function RowNuovoCliente({item, setItem, eseguiSalvataggio}) {
       <StyledRow>
         <OperazioniNuovoItem eseguiSalvataggio={eseguiSalvataggio} />
         <StyledCol>
-          <StyledTextAreaModifica rows="1" placeholder="Nome*" name="nome" value={item.nome} onChange={(e) => handleInputChange(e, setItem)} />
+          <div style={{width: "100%"}}>
+            <StyledTextAreaModifica rows="1" placeholder="Nome*" name="nome" value={item.nome} onChange={(e) => handleInputChange(e, setItem)} />
+            {(item.errore_nome !== "") && (<StyledSpanErrore>{item.errore_nome}</StyledSpanErrore>)}
+          </div>
         </StyledCol>
         <StyledCol>
-          <StyledTextAreaModifica rows="1" placeholder="Cognome*" name="cognome" value={item.cognome} onChange={(e) => handleInputChange(e, setItem)} />
+          <div style={{width: "100%"}}>
+            <StyledTextAreaModifica rows="1" placeholder="Cognome*" name="cognome" value={item.cognome} onChange={(e) => handleInputChange(e, setItem)} />
+            {(item.errore_cognome !== "") && (<StyledSpanErrore>{item.errore_cognome}</StyledSpanErrore>)}
+          </div>
         </StyledCol>
         <StyledCol>
-          <StyledInputModifica rows="1" placeholder="Contatto*" type="text" name="contatto" value={item.contatto} onChange={(e) => handleInputChange(e, setItem)} />
+          <div style={{width: "100%"}}>
+            <StyledInputModifica rows="1" placeholder="Contatto*" type="text" name="contatto" value={item.contatto} onChange={(e) => handleInputChange(e, setItem)} />
+            {(item.errore_contatto !== "") && (<StyledSpanErrore>{item.errore_contatto}</StyledSpanErrore>)}
+          </div>
         </StyledCol>
         <StyledCol>
-          <StyledTextAreaModifica rows="1" placeholder="Note" name="note" value={item.note} onChange={(e) => handleInputChange(e, setItem)} />
+          <div style={{width: "100%"}}>
+            <StyledTextAreaModifica rows="1" placeholder="Note" name="note" value={item.note} onChange={(e) => handleInputChange(e, setItem)} />
+            {(item.errore_note !== "") && (<StyledSpanErrore>{item.errore_note}</StyledSpanErrore>)}
+          </div>
         </StyledCol>
       </StyledRow>
     </>

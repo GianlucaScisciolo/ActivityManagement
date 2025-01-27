@@ -30,14 +30,11 @@ const NuovoCliente = () => {
     nome: "",
     cognome: "",
     contatto: "",
-    note: ""
-  })
-
-  const [errori, setErrori] = useState({
-    nome: "",
-    cognome: "",
-    contatto: "",
-    note: ""
+    note: "", 
+    errore_nome: "", 
+    errore_cognome: "", 
+    errore_contatto: "", 
+    errore_note: ""
   })
 
   const selectOperation = (icon, item) => {
@@ -74,7 +71,7 @@ const NuovoCliente = () => {
   const handleInsert = async (e) => {
     e.preventDefault();
     if (confirm("Sei sicuro di voler salvare il cliente?")) {
-      if (controlloCliente(nuovoCliente, setErrori) > 0) 
+      if (controlloCliente(nuovoCliente, setNuovoCliente) > 0) 
         return;
       
       try {
@@ -109,7 +106,11 @@ const NuovoCliente = () => {
             nome: "",
             cognome: "",
             contatto: "",
-            note: ""
+            note: "", 
+            errore_nome: "", 
+            errore_cognome: "", 
+            errore_contatto: "", 
+            errore_note: ""
           });
   
           alert("L'inserimento del cliente è andato a buon fine!!");

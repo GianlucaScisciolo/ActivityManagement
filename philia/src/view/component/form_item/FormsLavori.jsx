@@ -117,8 +117,6 @@ function selezionaDeselezionaBottone(e, setValue) {
 export function FormNuovoLavoro({clienti, professionisti, item, setItem, eseguiSalvataggio}) {
   const ore = ["07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22"];
   const minuti = ["00", "30"];
-  const [isVisible, setIsVisible] = useState(true);
-  const [arrowUp, setArrowUp] = useState(true);
   let maxHeight = "2000px";
 
   const [giornoType, setGiornoType] = useState('text');
@@ -149,6 +147,8 @@ export function FormNuovoLavoro({clienti, professionisti, item, setItem, eseguiS
               </StyledSelect>
             </Col>
           </Row>
+          {(item.errore_cliente_e_professionista !== "") && (<StyledSpanErrore>{item.errore_cliente_e_professionista}</StyledSpanErrore>)}
+          
           <StyledLabel htmlFor="giorno">Giorno*</StyledLabel>
           <StyledInputModifica
             rows="1"
@@ -160,6 +160,8 @@ export function FormNuovoLavoro({clienti, professionisti, item, setItem, eseguiS
             onBlur={handleGiornoBlur(setGiornoType, item, setItem)}
             onChange={(e) => handleInputChange(e, setItem)}
           />
+          {(item.errore_giorno !== "") && (<StyledSpanErrore>{item.errore_giorno}</StyledSpanErrore>)}
+          
           <StyledLabel htmlFor="orario_inizio">Orario inizio*</StyledLabel>
           <Row>
             <Col style={{ padding: '0', margin: '0', paddingLeft: '19px' }}>
@@ -179,6 +181,8 @@ export function FormNuovoLavoro({clienti, professionisti, item, setItem, eseguiS
               </StyledSelect>
             </Col>
           </Row>
+          {(item.errore_orario_inizio !== "") && (<StyledSpanErrore>{item.errore_orario_inizio}</StyledSpanErrore>)}
+          
           <StyledLabel htmlFor="orario_fine">Orario fine*</StyledLabel>
           <Row>
             <Col style={{ padding: '0', margin: '0', paddingLeft: '19px' }}>
@@ -198,6 +202,8 @@ export function FormNuovoLavoro({clienti, professionisti, item, setItem, eseguiS
               </StyledSelect>
             </Col>
           </Row>
+          {(item.errore_orario_fine !== "") && (<StyledSpanErrore>{item.errore_orario_fine}</StyledSpanErrore>)}
+          
           <StyledLabel htmlFor="descrizione">Descrizione*</StyledLabel>
           <StyledTextAreaModifica
             rows="1"
@@ -206,6 +212,8 @@ export function FormNuovoLavoro({clienti, professionisti, item, setItem, eseguiS
             value={item.descrizione}
             onChange={(e) => handleInputChange(e, setItem)}
           />
+          {(item.errore_descrizione !== "") && (<StyledSpanErrore>{item.errore_descrizione}</StyledSpanErrore>)}
+          
           <StyledLabel htmlFor="note">Note</StyledLabel>
           <StyledTextAreaModifica
             rows="1"
@@ -214,6 +222,7 @@ export function FormNuovoLavoro({clienti, professionisti, item, setItem, eseguiS
             value={item.note}
             onChange={(e) => handleInputChange(e, setItem)}
           />
+          {(item.errore_note !== "") && (<StyledSpanErrore>{item.errore_note}</StyledSpanErrore>)}
           <br /> <br />
         </SlideContainer>
         <OperazioniNuovoItem eseguiSalvataggio={eseguiSalvataggio} />

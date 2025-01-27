@@ -8,7 +8,7 @@ import { elimina } from '../../vario/OperazioniEliminazione';
 // import { modifica } from '../../vario/OperazioniModifica';
 import { useSelector } from 'react-redux';
 import { FormCercaLavori } from '../component/form_item/FormsLavori';
-import { RowRicercaLavori} from '../component/row_item/RowsLavori';
+import { RowRicercaLavori, RowLavoroEsistente} from '../component/row_item/RowsLavori';
 import { CardCercaLavori, CardLavoroEsistente } from '../component/card_item/CardsLavori';
 import { eseguiRicerca } from '../../vario/OperazioniRicerca';
 import lavoroStore from '../../store/lavoro_store/LavoroStore';
@@ -244,13 +244,13 @@ const Lavori = () => {
               ))}
             </div>
           )}
-          {/* {(itemSession.view === "list") && (
+          {(itemSession.view === "list") && (
             <>
               {lavori.map((lavoro, index) => (
                 <RowLavoroEsistente key={index} item={lavoro} items={lavori} setItems={setLavori} selectOperation={selectOperation} />
               ))}
             </>
-          )} */}
+          )} 
         </>
       )}
             
