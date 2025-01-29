@@ -52,8 +52,6 @@ function OperazioniCercaItems({ setIsVisible, arrowUp, setArrowUp, eseguiRicerca
 };
 
 export function FormNuovoCliente({item, setItem, eseguiSalvataggio}) {
-  const [isVisible, setIsVisible] = useState(true);
-  const [arrowUp, setArrowUp] = useState(true);
   let maxHeight = "2000px";
   return (
     <>

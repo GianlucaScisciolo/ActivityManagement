@@ -48,7 +48,6 @@ export const autenticazioneSessionSlice = createSlice({
     },
     eseguiModificaAutenticazioneSession : (state, action) => {
       state.value.username = action.payload.username;
-      state.value.ruolo = action.payload.ruolo;
       state.value.note = action.payload.note;
       state.value.isLogged = true;
       saveToLocalStorage(state);

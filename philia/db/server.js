@@ -132,46 +132,53 @@ app.post("/LOGIN", async (req, res) => {
  * Modifica profilo
  */
 app.post("/MODIFICA_PROFILO", async (req, res) => {
-  const { 
-    username_attuale = '', password_attuale = '', nuovo_username = '', nuova_password = '', 
-    nuovo_ruolo = '', nuove_note = '', nuovo_salt_hex = ''
-  } = req.body;
+  // const { 
+  //   username_attuale = '', password_attuale = '', nuovo_username = '', nuova_password = '', 
+  //   nuovo_ruolo = '', nuove_note = '', nuovo_salt_hex = ''
+  // } = req.body;
 
-  console.log("Dati ricevuti per la modifica: ", [
-    username_attuale, password_attuale, nuovo_username, nuova_password, nuovo_ruolo, nuove_note, nuovo_salt_hex
-  ]);
+  console.log("Dati ricevuti per la modifica:");
+  console.log(`
+    username_attuale: ${req.body.username_attuale}
+    password_attuale: ${req.body.password_attuale}
+    nuove_note: ${req.body.nuove_note}
+    nuova_password: ${req.body.nuova_password}
+    nuovo_salt_hex: ${req.body.nuovo_salt_hex}
+  `);
   
   const sql = `
     UPDATE 
       \`utente\` 
     SET 
       \`username\` = ?, 
-      \`ruolo\` = ?, 
       \`note\` = ? 
-      ${nuova_password !== "" ? ", \`password\` = ?, \`salt_hex\` = ? " : ""} 
+      ${req.body.nuova_password !== "" ? ", \`password\` = ?, \`salt_hex\` = ? " : ""} 
     WHERE 
       \`username\` = ? AND \`password\` = ?; 
   `;
   
   const params = [
-    `${nuovo_username}`, 
-    `${nuovo_ruolo}`, 
-    `${nuove_note}`
+    `${req.body.nuovo_username}`, 
+    `${req.body.nuove_note}` 
   ];
 
-  if (nuova_password !== "") {
-    params.push(`${nuova_password}`);
-    params.push(`${nuovo_salt_hex}`);
+  if (req.body.nuova_password !== "") {
+    params.push(`${req.body.nuova_password}`); 
+    params.push(`${req.body.nuovo_salt_hex}`); 
   }
 
-  params.push(`${username_attuale}`);
-  params.push(`${password_attuale}`);
-
-
-  return getResults(sql, params, res);
+  params.push(`${req.body.username_attuale}`); 
+  params.push(`${req.body.password_attuale}`); 
+  
+  try {
+    await executeQuery(sql, params);
+    return res.status(201).json({ message: 'Modifica profilo eseguita con successo'});
+  } 
+  catch(err) {
+    console.error('Errore durante la modifica del profilo: ', err);
+    return res.status(500).json({ message: 'Errore del server' });
+  }
 });
-
-
 
 /*************************************************************************************************************/
 

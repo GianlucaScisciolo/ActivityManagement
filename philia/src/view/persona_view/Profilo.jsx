@@ -8,9 +8,9 @@ import { controlloProfilo } from "../../vario/Controlli";
 import { eseguiModificaAutenticazioneSession } from "../../store/redux/AutenticazioneSessionSlice";
 import Row from 'react-bootstrap/esm/Row';
 import Col from 'react-bootstrap/esm/Col';
-import FormItem from "../component/form_item/FormItem";
-import RowItem from "../component/row_item/RowItem";
-import CardItem from "../component/card_item/CardItem";
+import { FormModificaProfilo } from "../component/form_item/FormsProfilo";
+import { CardModificaProfilo } from "../component/card_item/CardsProfilo";
+import { RowModificaProfilo } from "../component/row_item/RowsProfilo";
 
 const Profilo = () => {
   const formSession = useSelector((state) => state.formSession.value);
@@ -30,35 +30,32 @@ const Profilo = () => {
     note: autenticazioneSession.note, 
     password_attuale: "",
     nuova_password: "", 
-    conferma_nuova_password: ""
+    conferma_nuova_password: "", 
+    errore_nuovo_username: "", 
+    errore_note: "", 
+    errore_password_attuale: "", 
+    errore_nuova_password: "", 
+    errore_conferma_nuova_password: ""
   })
-  const [errori, setErrori] = useState({
-    nuovo_username: "", 
-    note: "", 
-    password_attuale: "", 
-    nuova_password: "", 
-    conferma_nuova_password: ""
-  });
+  
   const [aggiornamentoCompletato, setAggiornamentoCompletato] = useState(true);
   
   const eseguiModificaProfilo = async (e) => {
     e.preventDefault();
-    autenticazioneStore.setUtenti(-1);
-    setUtenti(-1);
-    const datiLogin = {
-      username: autenticazioneSession.username,
-      password: ""
+    if (confirm("Sei sicuro di voler modificare il profilo?")) {
+      autenticazioneStore.setUtenti(-1);
+      setUtenti(-1);
+      const datiLogin = {
+        username: autenticazioneSession.username,
+        password: ""
+      }
+      await login(e, datiLogin, setUtenti);
+      setAggiornamentoCompletato(false);
     }
-    await login(e, datiLogin, setUtenti);
-    setAggiornamentoCompletato(false);
-
-    // if(nuovoUsername === undefined) {
-    //   setNuovoUsername(usernameAttuale);
-    // }
-    // autenticazioneStore.setUtenti(-1);
-    // setUtenti(-1);
-    // await login(e, setUtenti);
-    // setAggiornamentoCompletato(true);
+    else {
+      alert("Modifica profilo annullata.");
+      return;
+    }
   };
 
   useEffect(() => {
@@ -82,56 +79,25 @@ const Profilo = () => {
     if (!aggiornamentoCompletato && utenti !== -1) {
       setAggiornamentoCompletato(true);
       console.log("Aggiornamento effettuato.");
-      // console.log(utenti.length === 1);
       datiProfilo["num_utenti"] = utenti.length;
+
       if(utenti.length > 0) {
         datiProfilo["password_db"] = utenti[0].password;
         datiProfilo["salt_hex_db"] = utenti[0].salt_hex;
       }
-      // alert(datiProfilo.nuovo_username);
-      // alert(datiProfilo.note);
-      // alert(datiProfilo.password_attuale);
-      // alert(datiProfilo.nuova_password);
-      // alert(datiProfilo.conferma_nuova_password);
-      if(controlloProfilo(datiProfilo, setErrori) > 0) {
+      if(controlloProfilo(datiProfilo, setDatiProfilo) > 0) {
         return;
       }
+      datiProfilo["username"] = autenticazioneSession.username;
       
-      
-      
-      
-      // const password_db = (utenti.length === 1) ? utenti[0].password : null;
-      // const salt_hex_db = (utenti.length === 1) ? utenti[0].salt_hex : null;
-      // const dati = {
-      //   "username": usernameAttuale,
-      //   "nuovo_username": nuovoUsername,
-      //   "nuovo_ruolo": ruolo,
-      //   "nuove_note": note,
-      //   "password_attuale": password,
-      //   "nuova_password": nuovaPassword,
-      //   "conferma_nuova_password": confermaNuovaPassword,
-      //   "password_db": password_db,
-      //   "salt_hex_db": salt_hex_db
-      // }
-      // console.log(
-      //   `${dati.username}\n${dati.nuovo_username}\n${dati.nuovo_ruolo}\n${dati.nuove_note}\n${dati.password_attuale}\n${dati.nuova_password}\n${dati.conferma_nuova_password}\n${dati.password_db}\n${dati.salt_hex_db}`
-      // );
-      // if (confirm("Sei sicuro di voler modificare il profilo?")) {
-      //   if(controlloProfilo(dati, setErrori) > 0) {
-      //     return;
-      //   }
-        
-      //   eseguiModificaProfilo(dati);
+      modificaProfilo(datiProfilo);
 
-      //   dispatch(eseguiModificaAutenticazioneSession({
-      //     username: dati.nuovo_username,
-      //     ruolo: dati.nuovo_ruolo,
-      //     note: dati.nuove_note
-      //   }));
-      // } 
-      // else {
-      //   alert("Modifica annullata.");
-      // }
+      dispatch(eseguiModificaAutenticazioneSession({
+        username: datiProfilo.nuovo_username,
+        note: datiProfilo.note
+      }));
+
+      alert("Modifica profilo eseguita con successo.");
     }
   }, [utenti]);
   
@@ -151,14 +117,14 @@ const Profilo = () => {
       <div className="main-content"></div>
 
       {(formSession.view === "form") && (
-        <FormItem errori={errori} setErrori={setErrori} tipoItem={"modifica profilo"} item={datiProfilo} setItem={setDatiProfilo} header="Profilo" eseguiModificaProfilo={(e) => eseguiModificaProfilo(e)} />
+        <FormModificaProfilo  item={datiProfilo} setItem={setDatiProfilo} eseguiModificaProfilo={(e) => eseguiModificaProfilo(e)} />
       )}
       {(formSession.view === "row") && (
-        <RowItem errori={errori} setErrori={setErrori} tipoItem={"modifica profilo"} item={datiProfilo} setItem={setDatiProfilo} eseguiModificaProfilo={(e) => eseguiModificaProfilo(e)} />
+        <RowModificaProfilo  item={datiProfilo} setItem={setDatiProfilo} eseguiModificaProfilo={(e) => eseguiModificaProfilo(e)} />
       )}
       {(formSession.view === "card") && (
         <center>
-          <CardItem errori={errori} setErrori={setErrori} tipoItem={"modifica profilo"} item={datiProfilo} setItem={setDatiProfilo} header="Profilo" eseguiModificaProfilo={(e) => eseguiModificaProfilo(e)} />
+          <CardModificaProfilo  item={datiProfilo} setItem={setDatiProfilo} eseguiModificaProfilo={(e) => eseguiModificaProfilo(e)} />
         </center>
       )}
 
@@ -166,56 +132,6 @@ const Profilo = () => {
       <br /> <br /> <br /> <br />
       <br /> <br /> <br /> <br />
       <br /> <br /> <br /> <br />
-
-      {/* <div className='visible'>
-        <form 
-          className={formSession.view === "form" ? 'containerForm' : ''} 
-          onSubmit={(e) => modificaProfilo(e)}
-        >
-          {(formSession.view === "form") && (
-            <>
-              <label className='titoloForm'>Profilo</label>
-            
-              <label className='labelForm'>Username</label>
-              <input className='inputFormModifica' type='text' name='nuovoUsername' value={nuovoUsername} onChange={handleInputChange} />
-              <span className='spanErrore'>{errori.erroreNuovoUsername}</span>
-
-              <label className='labelForm'>Note</label>
-              <textarea className='textAreaFormModifica' name='note' value={note} onChange={handleInputChange} />
-              <span className='spanErrore'>{errori.erroreNuoveNote}</span>
-
-              <label className='labelForm'>Password attuale</label>
-              <input className='inputFormModifica' type='password' name='password' value={password} onChange={handleInputChange} />
-              <span className='spanErrore'>{errori.errorePasswordAttuale}</span>
-
-              <label className='labelForm'>Nuova password</label>
-              <input className='inputFormModifica' type='password' name='nuovaPassword' value={nuovaPassword} onChange={handleInputChange} />
-              <span className='spanErrore'>{errori.erroreNuovaPassword}</span>
-              
-              <label className='labelForm'>Conferma nuova password</label>
-              <input className='inputFormModifica' type='password' name='confermaNuovaPassword' value={confermaNuovaPassword} onChange={handleInputChange} />
-              <span className='spanErrore'>{errori.erroreConfermaNuovaPassword}</span>
-
-              <span className='spanErrore'>{errori.errore2Password}</span>
-
-              <input type="hidden" name="username" value={usernameAttuale} />
-
-              <span className='spanErrore'>{errori.erroreLogin}</span>
-            </>
-          )}
-
-          {(formSession.view === "card") && (
-            <>
-              <Row className='custom-row'>
-                <Col className='custom-col'>
-                  <CardItem tipoItem={"modifica profilo"} item={null} header="Profilo" />
-                </Col>
-              </Row>
-            </>
-          )}
-          <button className='buttonForm' type='submit'>Esegui modifica</button>
-        </form>
-      </div> */}
     </>
   );
 }

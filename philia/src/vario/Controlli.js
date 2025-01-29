@@ -422,7 +422,7 @@ export const controlloProfilo = (dati, settersErrori) => {
   
   let numErrori = 0;
   let messaggioErrore = "";
-
+  
   // controllo sul nuovo username
   messaggioErrore = "";
   if (isEmpty(dati.nuovo_username)) {
@@ -433,7 +433,7 @@ export const controlloProfilo = (dati, settersErrori) => {
     numErrori += 1; 
     messaggioErrore = "Lunghezza username non valida, deve avere un numero di caratteri tra 1 e 10 estremi inclusi.";
   }
-  setErrore(settersErrori, "nuovo_username", messaggioErrore);
+  setErrore(settersErrori, "errore_nuovo_username", messaggioErrore);
 
   // controllo sulle nuove note
   messaggioErrore = "";
@@ -441,7 +441,7 @@ export const controlloProfilo = (dati, settersErrori) => {
     numErrori += 1; 
     messaggioErrore = "Lunghezza note non valida, deve avere un numero di caratteri alfanumerici tra 1 e 65.535 estremi inclusi.";
   }
-  setErrore(settersErrori, "note", messaggioErrore);
+  setErrore(settersErrori, "errore_note", messaggioErrore);
   
   // controllo sulla password attuale
   messaggioErrore = "";
@@ -453,7 +453,7 @@ export const controlloProfilo = (dati, settersErrori) => {
     numErrori += 1;
     messaggioErrore = "La password attuale risulta errata.";
   }
-  setErrore(settersErrori, "password_attuale", messaggioErrore);
+  setErrore(settersErrori, "errore_password_attuale", messaggioErrore);
 
   // controllo le 2 nuove password:
   messaggioErrore = "";
@@ -474,8 +474,8 @@ export const controlloProfilo = (dati, settersErrori) => {
       }
     }
   }
-  setErrore(settersErrori, "nuova_password", messaggioErrore);
-  setErrore(settersErrori, "conferma_nuova_password", messaggioErrore);
+  setErrore(settersErrori, "errore_nuova_password", messaggioErrore);
+  setErrore(settersErrori, "errore_conferma_nuova_password", messaggioErrore);
   
   return numErrori;
 }
