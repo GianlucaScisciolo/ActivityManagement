@@ -5,6 +5,7 @@ import Col from 'react-bootstrap/esm/Col';
 import { Trash2, Pencil, Plus, Search } from 'lucide-react';
 import { HookItems } from '../../../vario/HookItems';
 import { useSelector, useDispatch } from 'react-redux';
+import { faFilePdf, faFileExcel } from '@fortawesome/free-solid-svg-icons';
 import { formatoDate, formatoTime } from '../../../vario/Tempo';
 import { 
   StyledCard, StyledRow, StyledCol, StyledCardHeader, grandezzaIcona,
@@ -15,7 +16,8 @@ import {
   StyledPencilNotSelected, StyledPencilSelected, 
   StyledTrashNotSelected, StyledTrashSelected, 
   StyledArrowTopNotSelected, StyledArrowBottomNotSelected, StyledPencilNotSelectedModificaProfilo, 
-  StyledSelectBlock, StyledSelectModifica, StyledSelectElimina, StyledOption, StyledSpanErrore, StyledLoginNotSelected
+  StyledSelectBlock, StyledSelectModifica, StyledSelectElimina, StyledOption, StyledSpanErrore, StyledLoginNotSelected, 
+  StyledFileIconNotSelected, StyledDownloadNotSelected, StyledDeleteNotSelected, StyledTrashNotSelected2
 } from './StyledCardItem';
 import { 
   handleInputChange, handleInputChangeLavoroEsistente, handleInputChangeNuovoLavoro, cambiamentoBloccato, getCampiRicerca, getCampiNuovoItem
@@ -130,6 +132,27 @@ function OperazioniItemEsistente ({ tipoSelezione, selectOperation, item }) {
     </StyledListGroupItem>
   )
 }
+
+function OperazioniFileItems({ottieniLavoriRangePDF, ottieniLavoriRangeExcel, eliminaLavoriRange}) {
+  return (
+    <StyledListGroupItem style={{ border: "5px solid #000000", backgroundColor: "#000000", paddingTop: "3%" }}>
+      <div>
+        <StyledFileIconNotSelected icon={faFilePdf} size="2xl" style={{ marginRight: "50%" }} />
+        <StyledFileIconNotSelected icon={faFileExcel} size="2xl" />
+      </div>
+      <br />
+      <div>
+        <StyledDownloadNotSelected size={grandezzaIcona} style={{ marginRight: "50%" }} onClick={ottieniLavoriRangePDF} />
+        <StyledDownloadNotSelected size={grandezzaIcona} onClick={ottieniLavoriRangeExcel} />
+      </div>
+      <br />
+      <div>
+        <StyledTrashNotSelected2 size={grandezzaIcona} onClick={eliminaLavoriRange} />
+      </div>
+      <br />
+    </StyledListGroupItem>
+  );
+};
 
 const handleGiornoClick = (setGiornoType) => {
   return () => {
@@ -495,6 +518,50 @@ export function CardLavoroEsistente({item, items, setItems, selectOperation}) {
           />
         </SlideContainer>
         <OperazioniItemEsistente selectOperation={selectOperation} item={item} />
+      </StyledCard>
+    </>
+  );
+}
+
+export function CardFileLavori({item, setItem, ottieniLavoriRangePDF, ottieniLavoriRangeExcel, eliminaLavoriRange}) {
+  const [primoGiornoType, setPrimoGiornoType] = useState('text');
+  const [ultimoGiornoType, setUltimoGiornoType] = useState('text');
+  let maxHeight = "2000px";
+
+  item.primo_giorno = (item.primo_giorno !== undefined) ? item.primo_giorno : '';
+  item.ultimo_giorno = (item.ultimo_giorno !== undefined) ? item.ultimo_giorno : '';
+
+  return (
+    <>
+      <StyledCard>
+        <StyledCardHeader>File lavori</StyledCardHeader>
+        <SlideContainer style={{maxHeight: `${maxHeight}`}}>
+          <StyledInputModifica
+            rows="1"
+            placeholder="Primo giorno"
+            type={primoGiornoType}
+            name="primo_giorno"
+            value={item.primo_giorno}
+            onClick={handleGiornoClick(setPrimoGiornoType)}
+            onBlur={handleGiornoBlur(setPrimoGiornoType, item, setItem)}
+            onChange={(e) => handleInputChange(e, setItem)}
+          />
+          <StyledInputModifica
+            rows="1"
+            placeholder="Ultimo giorno"
+            type={ultimoGiornoType}
+            name="ultimo_giorno"
+            value={item.ultimo_giorno}
+            onClick={handleGiornoClick(setUltimoGiornoType)}
+            onBlur={handleGiornoBlur(setUltimoGiornoType, item, setItem)}
+            onChange={(e) => handleInputChange(e, setItem)}
+          />
+        </SlideContainer>
+        <OperazioniFileItems 
+          ottieniLavoriRangePDF={ottieniLavoriRangePDF} 
+          ottieniLavoriRangeExcel={ottieniLavoriRangeExcel} 
+          eliminaLavoriRange={eliminaLavoriRange} 
+        />
       </StyledCard>
     </>
   );

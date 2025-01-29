@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { faFilePdf, faFileExcel } from '@fortawesome/free-solid-svg-icons';
 import Row from 'react-bootstrap/esm/Row';
 import Col from 'react-bootstrap/esm/Col';
 import ListGroup from 'react-bootstrap/ListGroup';
@@ -11,7 +12,8 @@ import {
   StyledSaveNotSelected, StyledSearchNotSelected, StyledPencilNotSelected,  
   StyledArrowTopNotSelected, StyledArrowBottomNotSelected, StyledSelect, StyledOption, 
   BottoneBluNonSelezionato, BottoneBluSelezionato, BottoneRossoNonSelezionato, BottoneRossoSelezionato, 
-  StyledSpanErrore, StyledLoginNotSelected
+  StyledSpanErrore, StyledLoginNotSelected, StyledFileIconNotSelected, 
+  StyledDownloadNotSelected, StyledDeleteNotSelected, StyledTrashNotSelected
 } from "./StyledFormItem";
 import { 
   handleInputChange, getCampiRicerca, getCampiNuovoItem, selezionaInserimentoLavoroCliente, selezionaInserimentoLavoroProfessionista
@@ -47,6 +49,27 @@ function OperazioniCercaItems({ setIsVisible, arrowUp, setArrowUp, eseguiRicerca
       {!arrowUp && (
         <StyledArrowBottomNotSelected size={grandezzaIcona} onClick={() => nascondiForm(setIsVisible, setArrowUp)} />
       )}
+    </StyledListGroupItem>
+  );
+};
+
+function OperazioniFileItems({ottieniLavoriRangePDF, ottieniLavoriRangeExcel, eliminaLavoriRange}) {
+  return (
+    <StyledListGroupItem style={{ border: "5px solid #000000", backgroundColor: "#000000", paddingTop: "3%" }}>
+      <div>
+        <StyledFileIconNotSelected icon={faFilePdf} size="2xl" style={{ marginRight: "50%" }} />
+        <StyledFileIconNotSelected icon={faFileExcel} size="2xl" />
+      </div>
+      <br />
+      <div>
+        <StyledDownloadNotSelected size={grandezzaIcona} style={{ marginRight: "50%" }} onClick={ottieniLavoriRangePDF} />
+        <StyledDownloadNotSelected size={grandezzaIcona} onClick={ottieniLavoriRangeExcel} />
+      </div>
+      <br />
+      <div>
+        <StyledTrashNotSelected size={grandezzaIcona} onClick={eliminaLavoriRange} />
+      </div>
+      <br />
     </StyledListGroupItem>
   );
 };
@@ -331,7 +354,54 @@ export function FormCercaLavori({item, setItem, eseguiRicerca}) {
   );
 }
 
+export function FormFileLavori({item, setItem, ottieniLavoriRangePDF, ottieniLavoriRangeExcel, eliminaLavoriRange}) {
+  const [primoGiornoType, setPrimoGiornoType] = useState('text');
+  const [ultimoGiornoType, setUltimoGiornoType] = useState('text');
+  let maxHeight = "2000px";
 
+  item.primo_giorno = (item.primo_giorno !== undefined) ? item.primo_giorno : '';
+  item.ultimo_giorno = (item.ultimo_giorno !== undefined) ? item.ultimo_giorno : '';
+
+  return (
+    <>
+      <StyledForm>
+        <StyledHeader>File lavori</StyledHeader>
+        <SlideContainer style={{maxHeight: `${maxHeight}`}}>
+          <StyledLabel htmlFor="primo_giorno">Primo giorno</StyledLabel>
+          <StyledInputModifica
+            rows="1"
+            placeholder="Primo giorno"
+            type={primoGiornoType}
+            name="primo_giorno"
+            value={item.primo_giorno}
+            onClick={handleGiornoClick(setPrimoGiornoType)}
+            onBlur={handleGiornoBlur(setPrimoGiornoType, item, setItem)}
+            onChange={(e) => handleInputChange(e, setItem)}
+          />
+          
+          <StyledLabel htmlFor="ultimo_giorno">ultimo giorno</StyledLabel>
+          <StyledInputModifica
+            rows="1"
+            placeholder="Ultimo giorno"
+            type={ultimoGiornoType}
+            name="ultimo_giorno"
+            value={item.ultimo_giorno}
+            onClick={handleGiornoClick(setUltimoGiornoType)}
+            onBlur={handleGiornoBlur(setUltimoGiornoType, item, setItem)}
+            onChange={(e) => handleInputChange(e, setItem)}
+          />
+
+          <br /> <br />
+        </SlideContainer>
+        <OperazioniFileItems 
+          ottieniLavoriRangePDF={ottieniLavoriRangePDF} 
+          ottieniLavoriRangeExcel={ottieniLavoriRangeExcel} 
+          eliminaLavoriRange={eliminaLavoriRange} 
+        />
+      </StyledForm>
+    </>
+  );
+}
 
 
 

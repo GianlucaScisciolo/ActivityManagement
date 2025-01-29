@@ -211,10 +211,6 @@ export function CardClienteEsistente({item, items, setItems, selectOperation}) {
             tipoItem={"cliente"} 
             id={item.id}
           />
-          {/* <StyledTextAreaModifica rows="1" placeholder="Nome" name="nome" value={item.nome} onChange={(e) => handleInputChange(e, null, items, setItems, "cliente", item.id)} /> */}
-          {/* <StyledTextAreaModifica rows="1" placeholder="Cognome" name="cognome" value={item.cognome} onChange={(e) => handleInputChange(e, null, items, setItems, "cliente", item.id)} /> */}
-          {/* <StyledInputModifica rows="1" placeholder="Contatto" type="text" name="contatto" value={item.contatto} onChange={(e) => handleInputChange(e, null, items, setItems, "cliente", item.id)} /> */}
-          {/* <StyledTextAreaModifica rows="1" placeholder="Note" name="note" value={item.note} onChange={(e) => handleInputChange(e, null, items, setItems, "cliente", item.id)} /> */}
         </SlideContainer>
         <OperazioniItemEsistente selectOperation={selectOperation} item={item} />
       </StyledCard>

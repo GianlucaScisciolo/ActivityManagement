@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { formatoDate, formatoTime } from "../../../vario/Tempo";
+import { faFilePdf, faFileExcel } from '@fortawesome/free-solid-svg-icons';
 import { 
   StyledRow, StyledCol, StyledColBlack, StyledColOperazioni, StyledColAnimato, SlideContainer, grandezzaIcona, 
   StyledTextAreaBlock, StyledTextAreaModifica, StyledTextAreaElimina, 
@@ -9,7 +10,8 @@ import {
   StyledPencilNotSelected, StyledPencilSelected, 
   StyledTrashNotSelected, StyledTrashSelected, StyledPencilNotSelectedModificaProfilo, 
   StyledSelect, StyledSelectBlock, StyledSelectModifica, StyledSelectElimina, 
-  StyledOption, StyledSpanErrore, StyledLoginNotSelected
+  StyledOption, StyledSpanErrore, StyledLoginNotSelected, 
+  StyledFileIconNotSelected, StyledDownloadNotSelected, StyledDeleteNotSelected, StyledTrashNotSelected2
 } from "./StyledRowItem";
 import { 
   handleInputChange, handleInputChangeLavoroEsistente, cambiamentoBloccato, getCampiRicerca, getCampiNuovoItem
@@ -101,6 +103,24 @@ function OperazioniItemEsistente ({ tipoSelezione, selectOperation, item }) {
     </StyledColOperazioni>
   )
 }
+
+function OperazioniFileItems({ottieniLavoriRangePDF, ottieniLavoriRangeExcel, eliminaLavoriRange}) {
+  return (
+    <>
+      <StyledColOperazioni>
+        <StyledFileIconNotSelected icon={faFilePdf} style={{ marginRight: "50%" }} size="2xl" />
+        <StyledDownloadNotSelected size={grandezzaIcona} onClick={ottieniLavoriRangePDF} />
+      </StyledColOperazioni>
+      <StyledColOperazioni>
+        <StyledFileIconNotSelected icon={faFileExcel} style={{ marginRight: "50%" }} size="2xl" />
+        <StyledDownloadNotSelected size={grandezzaIcona} onClick={ottieniLavoriRangeExcel} />
+      </StyledColOperazioni>
+      <StyledColOperazioni>
+        <StyledTrashNotSelected2 size={grandezzaIcona} onClick={eliminaLavoriRange} />
+      </StyledColOperazioni>
+    </>
+  );
+};
 
 const handleGiornoClick = (setGiornoType) => {
   return () => {
@@ -534,6 +554,51 @@ export function RowLavoroEsistente({item, items, setItems, selectOperation}) {
             readOnly={item.tipo_selezione !== 1}
             onChange={item.tipo_selezione === 1 ? (e) => handleInputChangeLavoroEsistente(e, items, setItems, item.id_lavoro, item.id_cliente, item.id_professionista) : undefined}
           />
+        </StyledCol>
+      </StyledRow>
+    </>
+  );
+}
+
+export function RowFileLavori({item, setItem, ottieniLavoriRangePDF, ottieniLavoriRangeExcel, eliminaLavoriRange}) {
+  const [primoGiornoType, setPrimoGiornoType] = useState('text');
+  const [ultimoGiornoType, setUltimoGiornoType] = useState('text');
+  let maxHeight = "2000px";
+
+  item.primo_giorno = (item.primo_giorno !== undefined) ? item.primo_giorno : '';
+  item.ultimo_giorno = (item.ultimo_giorno !== undefined) ? item.ultimo_giorno : '';
+
+  return (
+    <>
+      <StyledRow>
+        <OperazioniFileItems 
+          ottieniLavoriRangePDF={ottieniLavoriRangePDF} 
+          ottieniLavoriRangeExcel={ottieniLavoriRangeExcel} 
+          eliminaLavoriRange={eliminaLavoriRange} 
+        />
+        <StyledCol>
+          <StyledInputModifica
+            rows="1"
+            placeholder="Primo giorno"
+            type={primoGiornoType}
+            name="primo_giorno"
+            value={item.primo_giorno}
+            onClick={handleGiornoClick(setPrimoGiornoType)}
+            onBlur={handleGiornoBlur(setPrimoGiornoType, item, setItem)}
+            onChange={(e) => handleInputChange(e, setItem)}
+          />
+        </StyledCol>
+        <StyledCol>
+          <StyledInputModifica
+            rows="1"
+            placeholder="Ultimo giorno"
+            type={ultimoGiornoType}
+            name="ultimo_giorno"
+            value={item.ultimo_giorno}
+            onClick={handleGiornoClick(setUltimoGiornoType)}
+            onBlur={handleGiornoBlur(setUltimoGiornoType, item, setItem)}
+            onChange={(e) => handleInputChange(e, setItem)}
+          />          
         </StyledCol>
       </StyledRow>
     </>

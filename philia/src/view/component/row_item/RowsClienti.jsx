@@ -131,7 +131,7 @@ function OperazioniItemEsistente ({ tipoSelezione, selectOperation, item }) {
 
 export function RowNuovoCliente({item, setItem, eseguiSalvataggio}) {
   // const [visibilita, setVisibilita] = useState(Array(Object.keys(item).length).fill(true));
-  const [arrowUp, setArrowUp] = useState(true);
+  // const [arrowUp, setArrowUp] = useState(true);
 
   return (
     <>

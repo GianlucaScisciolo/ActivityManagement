@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import Header from "../component/Header";
 import LavoroAction from "../../action/lavoro_action/LavoroAction";
 import { operazioniLavori } from "../../vario/Operazioni";
@@ -8,79 +9,95 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { formatoDate, formatoTime } from "../../vario/Tempo";
 import { generaFileLavoriPDF, generaFileLavoriExcel } from "../../vario/File";
+import { FormFileLavori } from "../component/form_item/FormsLavori";
+import { CardFileLavori } from "../component/card_item/CardsLavori";
+import { RowFileLavori } from "../component/row_item/RowsLavori";
 
 const FileLavori = () => {
-  const [lavoriClienti, setLavoriClienti] = useState(-1);
-  const [lavoriProfessionisti, setLavoriProfessionisti] = useState(-1);
+  const formSession = useSelector((state) => state.formSession.value);
+  const itemSession = useSelector((state) => state.itemSession.value);
+  
+  const [datiRicerca, setDatiRicerca] = useState({
+    nome_cliente: "",
+    cognome_cliente: "",
+    nome_professionista: "",
+    professione: "",
+    primo_giorno: "",
+    ultimo_giorno: "",
+    descrizione: "",
+    note: "",
+  });
+  const [lavori, setLavori] = useState(-1);
   const [aggiornamentoCompletato, setAggiornamentoCompletato] = useState("");
   const [tipoFile, setTipoFile] = useState('');
   const [eliminaLavori, setEliminaLavori] = useState(false);
-  const [primoGiorno, setPrimoGiorno] = useState("");
-  const [ultimoGiorno, setUltimoGiorno] = useState("");
   
   const updateDatiLastSearch = () => {
     console.log("Dati aggiornati.");
   };
 
   const ottieniLavori = async () => {
-    lavoroStore.azzeraLavori(); // rende lavoriClienti e lavoriProfessionisti === -1
-    const datiRicerca = {
-      nome_cliente: "",
-      cognome_cliente: "",
-      nome_professionista: "",
-      professione: "",
-      descrizione: "",
-      primo_giorno: primoGiorno,
-      ultimo_giorno: ultimoGiorno,
-      note: "",
-    };
-
-    await LavoroAction.dispatchAction(datiRicerca, operazioniLavori.VISUALIZZA_LAVORI_CLIENTI);
-    await LavoroAction.dispatchAction(datiRicerca, operazioniLavori.VISUALIZZA_LAVORI_PROFESSIONISTI);
-
+    lavoroStore.azzeraLavori(); // rende lavori === -1
+    await LavoroAction.dispatchAction(datiRicerca, operazioniLavori.VISUALIZZA_LAVORI);
     setAggiornamentoCompletato(false);
   };
 
   useEffect(() => {
     if (!aggiornamentoCompletato) {
-      aggiornamentoLista("lavori", setLavoriClienti, setLavoriProfessionisti, updateDatiLastSearch);
+      aggiornamentoLista("lavori", setLavori);
       console.log("Aggiornamento in corso ...");
     }
   }, [!aggiornamentoCompletato]);
 
   useEffect(() => {
-    if (!aggiornamentoCompletato && (lavoriClienti !== -1 && lavoriProfessionisti !== -1)) {
+    if (!aggiornamentoCompletato && lavori !== -1) {
       setAggiornamentoCompletato(true);
       console.log("Aggiornamento completato.")
-      if(tipoFile === "pdf")
-        generaFileLavoriPDF(lavoriClienti, lavoriProfessionisti);
-      else if(tipoFile === "excel")
-        generaFileLavoriExcel(lavoriClienti, lavoriProfessionisti);
-      if(eliminaLavori === true) {
-        const dati = {
-          "primo_giorno": primoGiorno,
-          "ultimo_giorno": ultimoGiorno
-        }
-        LavoroAction.dispatchAction(dati, operazioniLavori.ELIMINA_LAVORI_RANGE_GIORNI);
+      if(tipoFile === "pdf") {
+        generaFileLavoriPDF(lavori);
       }
+      else if(tipoFile === "excel") {
+        generaFileLavoriExcel(lavori);
+      }
+      setDatiRicerca(prevState => ({
+        ...prevState,
+        primo_giorno: "", 
+        ultimo_giorno: ""
+      }));
     }
-  }, [lavoriClienti, lavoriProfessionisti]);
+  }, [lavori]);
 
-  const ottieniLavoriRange = async (e, tipoFile, eliminaLavori) => {
+  const ottieniLavoriRange = async (e, tipoFile) => {
     e.preventDefault();
-    setEliminaLavori(false);
     if (confirm("Sei sicuro di voler ottenere il file?")) {
-      const form = e.currentTarget.closest('form'); // Trova il form più vicino
-      setPrimoGiorno(formatoDate(form.querySelector('input[name="primoGiorno"]').value, "AAAA-MM-GG"));
-      setUltimoGiorno(formatoDate(form.querySelector('input[name="ultimoGiorno"]').value, "AAAA-MM-GG"));
       setTipoFile(tipoFile);
-      setEliminaLavori(eliminaLavori);
       await ottieniLavori();
     }
     else {
       alert("Operazione annullata.");
     }
   };
+
+  const eliminaLavoriRange = async (e) => {
+    e.preventDefault();
+    if (confirm("Sei sicuro di voler eliminare i lavori?")) {
+      const dati = {
+        "primo_giorno": datiRicerca.primo_giorno,
+        "ultimo_giorno": datiRicerca.ultimo_giorno
+      }
+      LavoroAction.dispatchAction(dati, operazioniLavori.ELIMINA_LAVORI_RANGE_GIORNI);
+      alert("Eliminazione effettuata.");
+
+      setDatiRicerca(prevState => ({
+        ...prevState,
+        primo_giorno: "", 
+        ultimo_giorno: ""
+      }));
+    }
+    else {
+      alert("Eliminazione annullata.");
+    }
+  }
 
   const controllo = () => {
     alert("Numero lavori clienti = " + lavoriClienti.length + "\nNumero lavori professionisti = " + lavoriProfessionisti.length);
@@ -89,37 +106,38 @@ const FileLavori = () => {
   return (
     <>
       <Header />
-      <div className="main-content">
-        <form className='containerForm'>
-          <label className='titoloForm'>Creazione file lavori</label>
 
-          <label className='labelForm'>Primo giorno</label>
-          <input className='inputFormModifica' type='date' name='primoGiorno' />
-          <span className='spanErrore'></span>
-
-          <label className='labelForm'>Ultimo giorno</label>
-          <input className='inputFormModifica' type='date' name='ultimoGiorno' />
-          <span className='spanErrore'></span>
-          {/* bottoni */}
-          <Row className='custom-row'>
-            <Col>
-              <button className='buttonForm' onClick={(e) => ottieniLavoriRange(e, "pdf", false)}>Ottieni file PDF</button>
-            </Col>
-            <Col>
-              <button className='buttonForm' onClick={(e) => ottieniLavoriRange(e, "excel", false)}>Ottieni file Excel</button>
-            </Col>
-          </Row>
-          <Row className='custom-row'>
-            <Col>
-              <button className='buttonForm' onClick={(e) => ottieniLavoriRange(e, "pdf", true)}>Ottieni file PDF ed elimina i lavori</button>
-            </Col>
-            <Col>
-              <button className='buttonForm' onClick={(e) => ottieniLavoriRange(e, "excel", true)}>Ottieni file Excel ed elimina i lavori</button>
-            </Col>
-          </Row>
-        </form>
-        {/* <button onClick={controllo}>Controllo</button> */}
-      </div>
+      <div className="main-content" />
+      
+      {(formSession.view === "form") && (
+        <FormFileLavori 
+          item={datiRicerca} 
+          setItem={setDatiRicerca} 
+          ottieniLavoriRangePDF={(e) => ottieniLavoriRange(e, "pdf")}
+          ottieniLavoriRangeExcel={(e) => ottieniLavoriRange(e, "excel")} 
+          eliminaLavoriRange={(e) => eliminaLavoriRange(e)}
+        />
+      )}
+      {(formSession.view === "row") && (
+        <RowFileLavori 
+          item={datiRicerca} 
+          setItem={setDatiRicerca}
+          ottieniLavoriRangePDF={(e) => ottieniLavoriRange(e, "pdf")}
+          ottieniLavoriRangeExcel={(e) => ottieniLavoriRange(e, "excel")} 
+          eliminaLavoriRange={(e) => eliminaLavoriRange(e)} 
+        />
+      )}
+      {(formSession.view === "card") && (
+        <center>
+          <CardFileLavori 
+            item={datiRicerca} 
+            setItem={setDatiRicerca} 
+            ottieniLavoriRangePDF={(e) => ottieniLavoriRange(e, "pdf")}
+            ottieniLavoriRangeExcel={(e) => ottieniLavoriRange(e, "excel")} 
+            eliminaLavoriRange={(e) => eliminaLavoriRange(e)} 
+          />
+        </center>
+      )}
     </>
   );
 };
@@ -134,14 +152,3 @@ export default FileLavori;
 
 
 
-{/* <Row className='custom-row'>
-      <Col style={{marginLeft:'45%', marginRight:'45%'}} className='custom-col-black'>
-        <div className='icon-container' onClick={() => handleClickChangeViewElements({viewElements, setViewElements})}>
-          {
-            viewElements === "list" 
-              ? <WalletCards className='icon-view-style' id='walletCards' size={40} />
-              : <List className='icon-view-style' id='walletCards' size={40} />
-          }
-        </div>
-      </Col>
-    </Row> */}

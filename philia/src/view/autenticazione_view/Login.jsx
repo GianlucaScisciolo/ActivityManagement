@@ -8,19 +8,17 @@ import { operazioniAutenticazione } from '../../vario/Operazioni';
 import { eseguiLogin } from '../../store/redux/AutenticazioneSessionSlice';
 import { generateRandomString, encryptPassword, PEPPER_HEX, passwordIsCorrect } from '../../vario/Sicurezza';
 import { controlloLogin } from '../../vario/Controlli';
-import FormItem from '../component/form_item/FormItem';
-import CardItem from '../component/card_item/CardItem';
-import RowItem from '../component/row_item/RowItem';
+import { FormLogin } from '../component/form_item/FormsLogin';
+import { CardLogin } from '../component/card_item/CardsLogin';
+import { RowLogin } from '../component/row_item/RowsLogin';
 
 const Login = () => {
   const [utenti, setUtenti] = useState(-1);
   const [datiLogin, setDatiLogin] = useState({
     username: "", 
-    password: ""
-  });
-  const [errori, setErrori] = useState({
-    username: "Errore username",
-    password: "Errore password"
+    password: "", 
+    errore_username: "", 
+    errore_password: ""
   });
   const [, setErroreUsername] = useState("");
   const [, setErrorePassword] = useState("");
@@ -60,7 +58,7 @@ const Login = () => {
         datiLogin["password_db"] = utenti[0].password;
         datiLogin["salt_hex_db"] = utenti[0].salt_hex;
       }
-      if(controlloLogin(datiLogin, setErrori) > 0) {
+      if(controlloLogin(datiLogin, setDatiLogin) > 0) {
         return;
       }
       
@@ -103,16 +101,18 @@ const Login = () => {
       <Header />
       <div className="main-content" />
       {(formSession.view === "form") && (
-        <FormItem errori={errori} setErrori={setErrori} tipoItem={"login"} item={datiLogin} setItem={setDatiLogin} eseguiLogin={(e) => handleLogin(e)} header="Login" />
+        <FormLogin item={datiLogin} setItem={setDatiLogin} eseguiLogin={(e) => handleLogin(e)} />
       )}
       {(formSession.view === "row") && (
-        <RowItem errori={errori} setErrori={setErrori} tipoItem={"login"} item={datiLogin} setItem={setDatiLogin} eseguiLogin={(e) => handleLogin(e)} header="Login" />
+        <RowLogin item={datiLogin} setItem={setDatiLogin} eseguiLogin={(e) => handleLogin(e)} />
       )}
       {(formSession.view === "card") && (
         <center>
-          <CardItem errori={errori} setErrori={setErrori} tipoItem={"login"} item={datiLogin} setItem={setDatiLogin} eseguiLogin={(e) => handleLogin(e)} header="Login" />
+          <CardLogin item={datiLogin} setItem={setDatiLogin} eseguiLogin={(e) => handleLogin(e)} />
         </center>
       )}
+
+      {/* <button onClick={prova}>Genera!!</button> */}
     </>
   );
 };

@@ -3,7 +3,8 @@ import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Row from 'react-bootstrap/esm/Row';
 import Col from 'react-bootstrap/esm/Col';
-import { Trash2, Pencil, Save, Search, ChevronUp, ChevronDown, LogIn } from 'lucide-react';
+import { Trash2, Pencil, Save, Search, ChevronUp, ChevronDown, LogIn, Download, X } from 'lucide-react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export const grandezzaIcona = 50;
 
@@ -125,46 +126,57 @@ export const StyledInputElimina = styled(StyledInput)`
 const styledIconNotSelected = `
   color: #FFFFFF;
   cursor: pointer;
+  transition: 0.5s all ease-out;
+`;
+
+const styledIconNotSelectedBlue = `
+  ${styledIconNotSelected}
+  &:hover {
+    color: #0050EF;
+  }
+`;
+
+const styledIconNotSelectedRed = `
+  ${styledIconNotSelected}
+  &:hover {
+    color: #500000;
+  }
 `;
 
 export const StyledSaveNotSelected = styled(Save)`
-  ${styledIconNotSelected}
-  transition: 0.5s all ease-out;
-  &:hover {
-    color: #0050EF;
-  }
+  ${styledIconNotSelectedBlue}
 `;
 
 export const StyledSearchNotSelected = styled(Search)`
-  ${styledIconNotSelected}
-  transition: 0.5s all ease-out;
-  &:hover {
-    color: #0050EF;
-  }
+  ${styledIconNotSelectedBlue}
 `;
 
 export const StyledArrowTopNotSelected = styled(ChevronUp)`
-  ${styledIconNotSelected}
-  transition: 0.5s all ease-out;
-  &:hover {
-    color: #0050EF;
-  }
+  ${styledIconNotSelectedBlue}
 `;
 
 export const StyledArrowBottomNotSelected = styled(ChevronDown)`
-  ${styledIconNotSelected}
-  transition: 0.5s all ease-out;
-  &:hover {
-    color: #0050EF;
-  }
+  ${styledIconNotSelectedBlue}
 `;
 
 export const StyledLoginNotSelected = styled(LogIn)`
-  ${styledIconNotSelected}
-  transition: 0.5s all ease-out;
-  &:hover {
-    color: #0050EF;
-  }
+  ${styledIconNotSelectedBlue}
+`;
+
+export const StyledFileIconNotSelected = styled(FontAwesomeIcon)`
+  color: #FFFFFF;
+`;
+
+export const StyledDownloadNotSelected = styled(Download)`
+  ${styledIconNotSelectedBlue}
+`;
+
+export const StyledDeleteNotSelected = styled(X)`
+  ${styledIconNotSelectedRed}
+`;
+
+export const StyledTrashNotSelected = styled(Trash2)`
+  ${styledIconNotSelectedRed}
 `;
 
 export const StyledButton =  styled.button`

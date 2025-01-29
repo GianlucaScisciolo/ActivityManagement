@@ -3,7 +3,8 @@ import Row from 'react-bootstrap/esm/Row';
 import Col from 'react-bootstrap/esm/Col';
 import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
-import { Trash2, Pencil, Save, Search, ChevronUp, ChevronDown, LogIn } from 'lucide-react';
+import { Trash2, Pencil, Save, Search, ChevronUp, ChevronDown, LogIn, Download, X } from 'lucide-react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export const grandezzaIcona = 50;
 
@@ -186,6 +187,35 @@ export const StyledTrashSelected = styled(Trash2)`
   color: #500000;
   cursor: pointer;
 `;
+
+export const StyledFileIconNotSelected = styled(FontAwesomeIcon)`
+  color: #FFFFFF;
+`;
+
+export const StyledDownloadNotSelected = styled(Download)`
+  ${styledIconNotSelected}
+  transition: 0.5s all ease-out;
+  &:hover {
+    color: #0050EF;
+  }
+`;
+
+export const StyledDeleteNotSelected = styled(X)`
+  ${styledIconNotSelected}
+  transition: 0.5s all ease-out;
+  &:hover {
+    color: #500000;
+  }
+`;
+
+export const StyledTrashNotSelected2 = styled(Trash2)`
+  ${styledIconNotSelected}
+  transition: 0.5s all ease-out;
+  &:hover {
+    color: #500000;
+  }
+`;
+
 
 export const StyledSelect = styled.select`
   width: 100%;

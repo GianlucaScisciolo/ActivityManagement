@@ -380,7 +380,7 @@ export const controlloLogin = (dati, settersErrori) => {
     numErrori += 1; 
     messaggioErrore = "Lunghezza username non valida, deve avere un numero di caratteri alfanumerici tra 1 e 10 estremi inclusi.";
   }
-  setErrore(settersErrori, "username", messaggioErrore);
+  setErrore(settersErrori, "errore_username", messaggioErrore);
   
   // constrollo sulla password inserita
   messaggioErrore = "";
@@ -397,7 +397,7 @@ export const controlloLogin = (dati, settersErrori) => {
     messaggioErrore += "- almeno 1 lettera minuscola.<br>";
     messaggioErrore += "- almeno 1 dei seguenti caratteri speciali: !@#$%^&*<br>";
   }
-  setErrore(settersErrori, "password", messaggioErrore);
+  setErrore(settersErrori, "errore_password", messaggioErrore);
 
   if(numErrori === 0) {
     // controllo sullo username e sulla password inserita
@@ -410,8 +410,8 @@ export const controlloLogin = (dati, settersErrori) => {
       numErrori += 1;
       messaggioErrore = "Username e/o password errati.";
     }
-    setErrore(settersErrori, "username", messaggioErrore);
-    setErrore(settersErrori, "password", messaggioErrore);
+    setErrore(settersErrori, "errore_username", messaggioErrore);
+    setErrore(settersErrori, "errore_password", messaggioErrore);
   }
 
   return numErrori;
