@@ -15,8 +15,10 @@ import { RowModificaProfilo } from "../component/row_item/RowsProfilo";
 const Profilo = () => {
   const formSession = useSelector((state) => state.formSession.value);
   const autenticazioneSession = useSelector((state) => state.autenticazioneSession.value);
-  const [utenti, setUtenti] = useState(-1);
-  const [salone, setSalone] = useState(-1);
+  const [utente, setUtente] = useState(0);
+  const [salone, setSalone] = useState(0);
+  const [aggiornamento1, setAggiornamento1] = useState(false);
+  const [aggiornamento2, setAggiornamento2] = useState(false);
   const [usernameAttuale, setUsernameAttuale] = useState(autenticazioneSession.username);
   const [nuovoUsername, setNuovoUsername] = useState(autenticazioneSession.username);
   const [ruolo, setRuolo] = useState(autenticazioneSession.ruolo);
@@ -50,14 +52,16 @@ const Profilo = () => {
   const eseguiModificaProfilo = async (e) => {
     e.preventDefault();
     if (confirm("Sei sicuro di voler modificare il profilo?")) {
-      autenticazioneStore.setUtenti(-1);
-      setUtenti(-1);
       const datiLogin = {
         username: autenticazioneSession.username,
         password: ""
       }
-      await login(e, datiLogin, setUtenti);
-      setAggiornamentoCompletato(false);
+      await login(e, datiLogin, setUtente, setSalone);
+      autenticazioneStore.setUtente(-1);
+      autenticazioneStore.setSalone(-1);
+      setUtente(-1);
+      setSalone(-1)
+      setAggiornamento1(!aggiornamento1);
     }
     else {
       alert("Modifica profilo annullata.");
@@ -67,7 +71,7 @@ const Profilo = () => {
 
   useEffect(() => {
     const handleLoginChange = () => {
-      setUtenti(autenticazioneStore.getUtenti());
+      setUtente(autenticazioneStore.getUtente());
       setSalone(autenticazioneStore.getSalone());
     };
 
@@ -76,7 +80,66 @@ const Profilo = () => {
       autenticazioneStore.removeChangeListener(operazioniAutenticazione.LOGIN, handleLoginChange);
     };
   }, []);
+  
+  useEffect(() => {
+    if(utente === -1 || salone === -1) {
+      console.log("Aggiornamento in corso...");
+      setAggiornamento2(!aggiornamento2);
+    }
+    else if(utente !== 0 && salone !== 0) {
+      console.log("Aggiornamento effettuato.");
+      // console.log(utente);
+      // console.log(salone);
+      datiProfilo["num_utenti"] = utente.length;
 
+      if(utente) {
+        datiProfilo["password_db"] = utente.password;
+        datiProfilo["salt_hex_db"] = utente.salt_hex;
+      }
+      if(controlloProfilo(datiProfilo, setDatiProfilo) > 0) {
+        return;
+      }
+      
+      datiProfilo["username"] = autenticazioneSession.username;
+
+      modificaProfilo(datiProfilo);
+
+      dispatch(eseguiModificaAutenticazioneSession({
+        username: datiProfilo.nuovo_username,
+        note: datiProfilo.note, 
+        num_lavori_clienti: datiProfilo.num_lavori_clienti, 
+        num_lavori_professionisti: datiProfilo.num_lavori_professionisti, 
+        num_lavori_giorno: datiProfilo.num_lavori_giorno
+      }));
+
+      alert("Modifica profilo eseguita con successo.");
+      /*
+        
+        if(controlloLogin(datiLogin, setDatiLogin) > 0) {
+          return;
+        }
+        dispatch(eseguiLogin({
+          username: utente.username,
+          ruolo: utente.ruolo,
+          note: utente.note, 
+          num_lavori_clienti: salone.num_lavori_clienti, 
+          num_lavori_professionisti: salone.num_lavori_professionisti, 
+          num_lavori_giorno: salone.num_lavori_giorno
+        }));
+        navigate("/");
+      */
+    }
+  }, [aggiornamento1]);
+
+  useEffect(() => {
+    if(utente !== 0 && salone !== 0) {
+      setUtente(autenticazioneStore.getUtente());
+      setSalone(autenticazioneStore.getSalone());
+      setAggiornamento1(!aggiornamento1);
+    }
+  }, [aggiornamento2]);
+
+  /*
   useEffect(() => {
     if (!aggiornamentoCompletato) {
       console.log("Aggiornamento in corso...");
@@ -84,14 +147,14 @@ const Profilo = () => {
   }, [!aggiornamentoCompletato]);
 
   useEffect(() => {
-    if (!aggiornamentoCompletato && utenti !== -1) {
+    if (!aggiornamentoCompletato && utente !== -1) {
       setAggiornamentoCompletato(true);
       console.log("Aggiornamento effettuato.");
-      datiProfilo["num_utenti"] = utenti.length;
+      datiProfilo["num_utenti"] = utente.length;
 
-      if(utenti.length > 0) {
-        datiProfilo["password_db"] = utenti[0].password;
-        datiProfilo["salt_hex_db"] = utenti[0].salt_hex;
+      if(utente.length > 0) {
+        datiProfilo["password_db"] = utente[0].password;
+        datiProfilo["salt_hex_db"] = utente[0].salt_hex;
       }
       if(controlloProfilo(datiProfilo, setDatiProfilo) > 0) {
         return;
@@ -107,8 +170,8 @@ const Profilo = () => {
 
       alert("Modifica profilo eseguita con successo.");
     }
-  }, [utenti]);
-  
+  }, [utente]);
+  */
   
   useEffect(() => {
     setNuovoUsername(autenticazioneSession.nuovoUsername);

@@ -40,7 +40,10 @@ export const modificaProfilo = async (datiProfilo) => {
       nuovo_username: datiProfilo["nuovo_username"],
       nuove_note: datiProfilo["note"], 
       nuova_password: nuova_password, 
-      nuovo_salt_hex: nuovo_salt_hex 
+      nuovo_salt_hex: nuovo_salt_hex, 
+      num_lavori_clienti: datiProfilo["num_lavori_clienti"], 
+      num_lavori_professionisti: datiProfilo["num_lavori_professionisti"], 
+      num_lavori_giorno: datiProfilo["num_lavori_giorno"]
     }
     
     // console.log(`

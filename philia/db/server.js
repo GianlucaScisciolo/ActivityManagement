@@ -155,9 +155,6 @@ app.post("/LOGIN", async (req, res) => {
   }
 });
 
-
-
-
 /**
  * Modifica profilo
  */
@@ -176,7 +173,7 @@ app.post("/MODIFICA_PROFILO", async (req, res) => {
     nuovo_salt_hex: ${req.body.nuovo_salt_hex}
   `);
   
-  const sql = `
+  const sql_modifica_utente = `
     UPDATE 
       \`utente\` 
     SET 
@@ -186,20 +183,37 @@ app.post("/MODIFICA_PROFILO", async (req, res) => {
     WHERE 
       \`username\` = ? AND \`password\` = ?; 
   `;
+
+  const sql_modifica_salone = `
+    UPDATE 
+      \`salone\` 
+    SET 
+      \`num_lavori_clienti\` = ?, 
+      \`num_lavori_professionisti\` = ?, 
+      \`num_lavori_giorno\` = ? 
+    WHERE 
+      \`username_utente\` = ?; 
+  `;
   
-  const params = [
+  const params_sql_modifica_utente = [
     `${req.body.nuovo_username}`, 
     `${req.body.nuove_note}` 
   ];
-
   if (req.body.nuova_password !== "") {
-    params.push(`${req.body.nuova_password}`); 
-    params.push(`${req.body.nuovo_salt_hex}`); 
+    params_sql_modifica_utente.push(`${req.body.nuova_password}`); 
+    params_sql_modifica_utente.push(`${req.body.nuovo_salt_hex}`); 
   }
+  params_sql_modifica_utente.push(`${req.body.username_attuale}`); 
+  params_sql_modifica_utente.push(`${req.body.password_attuale}`); 
 
-  params.push(`${req.body.username_attuale}`); 
-  params.push(`${req.body.password_attuale}`); 
-  
+  const params_sql_modifica_salone = [
+    `${req.body.num_lavori_clienti}`, 
+    `${req.body.num_lavori_professionisti}`, 
+    `${req.body.num_lavori_giorno}`, 
+    `${req.body.nuovo_username}` 
+  ]
+
+  /*
   try {
     await executeQuery(sql, params);
     return res.status(201).json({ message: 'Modifica profilo eseguita con successo'});
@@ -207,6 +221,23 @@ app.post("/MODIFICA_PROFILO", async (req, res) => {
   catch(err) {
     console.error('Errore durante la modifica del profilo: ', err);
     return res.status(500).json({ message: 'Errore del server' });
+  }
+  */
+
+  try {
+    await beginTransaction();
+
+    await executeQuery(sql_modifica_utente, params_sql_modifica_utente);
+    await executeQuery(sql_modifica_salone, params_sql_modifica_salone);
+
+    await commitTransaction();
+
+    return res.status(200);
+  } 
+  catch (err) {
+    await rollbackTransaction();
+    console.error('Errore durante il login: ', err);
+    return res.status(500).json({ message: 'Errore del server.' });
   }
 });
 

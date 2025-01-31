@@ -68,6 +68,9 @@ export const autenticazioneSessionSlice = createSlice({
       state.value.username = action.payload.username;
       state.value.note = action.payload.note;
       state.value.isLogged = true;
+      state.value.num_lavori_clienti = action.payload.num_lavori_clienti; 
+      state.value.num_lavori_professionisti = action.payload.num_lavori_professionisti; 
+      state.value.num_lavori_giorno = action.payload.num_lavori_giorno; 
       saveToLocalStorage(state);
     },
   },

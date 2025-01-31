@@ -45,51 +45,51 @@ export const controlloCliente = (data, settersErrori) => {
   let numErrori = 0;
 
   // controllo sul nome
-  let messagioErrore = "";
+  let messaggioErrore = "";
   if (isEmpty(data.nome)) {
     numErrori += 1; 
-    messagioErrore = "Inserire il nome";
+    messaggioErrore = "Inserire il nome";
   }
   else if(!isInRange(data.nome.length, 1, 30)) {
     numErrori += 1; 
-    messagioErrore = "Lunghezza nome non valido, deve avere un numero di caratteri tra 1 e 30 estremi inclusi.";
+    messaggioErrore = "Lunghezza nome non valido, deve avere un numero di caratteri tra 1 e 30 estremi inclusi.";
   }
-  setErrore(settersErrori, "errore_nome", messagioErrore);
+  setErrore(settersErrori, "errore_nome", messaggioErrore);
 
   // controllo sul cognome
-  messagioErrore = "";
+  messaggioErrore = "";
   if (isEmpty(data.cognome)) {
     numErrori += 1; 
-    messagioErrore = "Inserire il cognome";
+    messaggioErrore = "Inserire il cognome";
   }
   else if(!isInRange(data.nome.length, 1, 30)) {
     numErrori += 1; 
-    messagioErrore = "Lunghezza cognome non valido, deve avere un numero di caratteri tra 1 e 30 estremi inclusi.";
+    messaggioErrore = "Lunghezza cognome non valido, deve avere un numero di caratteri tra 1 e 30 estremi inclusi.";
   }
-  setErrore(settersErrori, "errore_cognome", messagioErrore);
+  setErrore(settersErrori, "errore_cognome", messaggioErrore);
 
   // controllo sul contatto
-  messagioErrore = "";
+  messaggioErrore = "";
   if (isEmpty(data.contatto)) {
     numErrori += 1; 
-    messagioErrore = "Inserire il contatto";
+    messaggioErrore = "Inserire il contatto";
   }
   else if(!matchRegex(data.contatto, "^3[0-9]{9}$") && !matchRegex(data.contatto, "^0\\d{9,10}$")) {
     numErrori += 1;
-    messagioErrore = "Contatto non valido. Inserire un numero di cellulare o un numero di telefono valido:\n";
-    messagioErrore += "- numero di cellulare valido: 3XXXXXXXXX\n";
-    messagioErrore += "- numero di telefono valido: 0XXXXXXXXX oppure 0XXXXXXXXXX\n";
-    messagioErrore += "X è un numero tra 0 e 9 estremi inclusi.";
+    messaggioErrore = "Contatto non valido. Inserire un numero di cellulare o un numero di telefono valido:\n";
+    messaggioErrore += "- numero di cellulare valido: 3XXXXXXXXX\n";
+    messaggioErrore += "- numero di telefono valido: 0XXXXXXXXX oppure 0XXXXXXXXXX\n";
+    messaggioErrore += "X è un numero tra 0 e 9 estremi inclusi.";
   }
-  setErrore(settersErrori, "errore_contatto", messagioErrore);
+  setErrore(settersErrori, "errore_contatto", messaggioErrore);
   
   // controllo sulle note
-  messagioErrore = "";
+  messaggioErrore = "";
   if(!isInRange(data.note.length, 0, 65535)) {
     numErrori += 1;
-    messagioErrore = "Lunghezza note non valida, deve avere un numero di caratteri tra 1 e 65.535 estremi inclusi.";
+    messaggioErrore = "Lunghezza note non valida, deve avere un numero di caratteri tra 1 e 65.535 estremi inclusi.";
   }
-  setErrore(settersErrori, "errore_note", messagioErrore);
+  setErrore(settersErrori, "errore_note", messaggioErrore);
   // alert(numErrori);
   return numErrori;
 }  
@@ -112,70 +112,70 @@ export const controlloProfessionista = (data, settersErrori) => {
   let numErrori = 0;
 
   // controllo sul nome
-  let messagioErrore = "";
+  let messaggioErrore = "";
   if (isEmpty(data.nome)) {
     numErrori += 1; 
-    messagioErrore = "Inserire il nome.";
+    messaggioErrore = "Inserire il nome.";
   }
   else if(!isInRange(data.nome.length, 1, 60)) {
     numErrori += 1; 
-    messagioErrore = "Lunghezza nome non valido, deve avere un numero di caratteri tra 1 e 60 estremi inclusi.";
+    messaggioErrore = "Lunghezza nome non valido, deve avere un numero di caratteri tra 1 e 60 estremi inclusi.";
   }
-  setErrore(settersErrori, "errore_nome", messagioErrore);
+  setErrore(settersErrori, "errore_nome", messaggioErrore);
 
   // controllo sulla professione
-  messagioErrore = "";
+  messaggioErrore = "";
   if (isEmpty(data.professione)) {
     numErrori += 1; 
-    messagioErrore = "Inserire la professione.";
+    messaggioErrore = "Inserire la professione.";
   }
   else if(!isInRange(data.professione.length, 1, 30)) {
     numErrori += 1; 
-    messagioErrore = "Lunghezza professione non valida, deve avere un numero di caratteri tra 1 e 30 estremi inclusi.";
+    messaggioErrore = "Lunghezza professione non valida, deve avere un numero di caratteri tra 1 e 30 estremi inclusi.";
   }
-  setErrore(settersErrori, "errore_professione", messagioErrore);
+  setErrore(settersErrori, "errore_professione", messaggioErrore);
 
   // controllo sul contatto e sull'email
   let erroreContattoEEmail = false;
-  messagioErrore = "";
+  messaggioErrore = "";
   if (isEmpty(data.contatto) && isEmpty(data.email)) {
     numErrori += 1; 
-    messagioErrore = "Inserire il contatto e/o l\'email.";
+    messaggioErrore = "Inserire il contatto e/o l\'email.";
     erroreContattoEEmail = true;
   }
-  setErrore(settersErrori, "errore_contatto", messagioErrore);
-  setErrore(settersErrori, "errore_email", messagioErrore);
+  setErrore(settersErrori, "errore_contatto", messaggioErrore);
+  setErrore(settersErrori, "errore_email", messaggioErrore);
 
   // controllo sul contatto
-  messagioErrore = "";
+  messaggioErrore = "";
   if(!erroreContattoEEmail && !isEmpty(data.contatto) && !matchRegex(data.contatto, "^3[0-9]{9}$") && !matchRegex(data.contatto, "^0\\d{9,10}$")) {
     numErrori += 1;
-    messagioErrore = "Contatto non valido. Inserire un numero di cellulare o un numero di telefono valido:\n";
-    messagioErrore += "- numero di cellulare valido: 3XXXXXXXXX\n";
-    messagioErrore += "- numero di telefono valido: 0XXXXXXXXX oppure 0XXXXXXXXXX\n";
-    messagioErrore += "X è un numero tra 0 e 9 estremi inclusi.";
+    messaggioErrore = "Contatto non valido. Inserire un numero di cellulare o un numero di telefono valido:\n";
+    messaggioErrore += "- numero di cellulare valido: 3XXXXXXXXX\n";
+    messaggioErrore += "- numero di telefono valido: 0XXXXXXXXX oppure 0XXXXXXXXXX\n";
+    messaggioErrore += "X è un numero tra 0 e 9 estremi inclusi.";
   }
   if(!erroreContattoEEmail) {
-    setErrore(settersErrori, "errore_contatto", messagioErrore);
+    setErrore(settersErrori, "errore_contatto", messaggioErrore);
   }
 
   // controllo sull'email
-  messagioErrore = "";
+  messaggioErrore = "";
   if(!erroreContattoEEmail && !isEmpty(data.email) && !matchRegex(data.email, "^([a-z\\d\\._-]+)@([a-z\\d-]+)\\.([a-z]{2,8})(\\.[a-z]{2,8})?$")) {
     numErrori += 1;
-    messagioErrore = "Email non valida.";
+    messaggioErrore = "Email non valida.";
   }
   if(!erroreContattoEEmail) {
-    setErrore(settersErrori, "errore_email", messagioErrore);
+    setErrore(settersErrori, "errore_email", messaggioErrore);
   }
 
   // controllo sulle note
-  messagioErrore = "";
+  messaggioErrore = "";
   if(!isInRange(data.note.length, 0, 65535)) {
     numErrori += 1;
-    messagioErrore = "Lunghezza note non valida, deve avere un numero di caratteri tra 1 e 65.535 estremi inclusi.";
+    messaggioErrore = "Lunghezza note non valida, deve avere un numero di caratteri tra 1 e 65.535 estremi inclusi.";
   }
-  setErrore(settersErrori, "errore_note", messagioErrore);
+  setErrore(settersErrori, "errore_note", messaggioErrore);
 
   return numErrori;
 }
@@ -200,69 +200,69 @@ export const controlloLavoroOld = (data, settersErrori) => {
   let numErrori = 0;
 
   // controllo sull'id_cliente e sull'id_professionista
-  let messagioErrore1 = "";
-  let messagioErrore2 = "";
+  let messaggioErrore1 = "";
+  let messaggioErrore2 = "";
   // alert(data.id_cliente.toString());
   // alert(data.id_professionista.toString());
   if(data.id_cliente <= 0 && data.id_professionista <= 0) {
     numErrori += 1; 
-    messagioErrore1 = "Selezionare un cliente oppure un professionista (non entrambi).";
+    messaggioErrore1 = "Selezionare un cliente oppure un professionista (non entrambi).";
   }
-  setErrore(settersErrori, "cliente_e_professionista", messagioErrore1);
+  setErrore(settersErrori, "cliente_e_professionista", messaggioErrore1);
 
 
   // controllo sulla descrizione
-  messagioErrore1 = "";
+  messaggioErrore1 = "";
   if (isEmpty(data.descrizione)) {
     numErrori += 1; 
-    messagioErrore1 = "Inserire la descrizione.";
+    messaggioErrore1 = "Inserire la descrizione.";
   }
   else if(!isInRange(data.descrizione.length, 1, 100)) {
     numErrori += 1; 
-    messagioErrore1 = "Lunghezza descrizione non valida, deve avere un numero di caratteri tra 1 e 100 estremi inclusi.";
+    messaggioErrore1 = "Lunghezza descrizione non valida, deve avere un numero di caratteri tra 1 e 100 estremi inclusi.";
   }
-  setErrore(settersErrori, "descrizione", messagioErrore1);
+  setErrore(settersErrori, "descrizione", messaggioErrore1);
 
   // controllo sul giorno
-  messagioErrore1 = "";
+  messaggioErrore1 = "";
   if (isEmpty(data.giorno)) {
     numErrori += 1; 
-    messagioErrore1 = "Inserire il giorno.";
+    messaggioErrore1 = "Inserire il giorno.";
   }
-  setErrore(settersErrori, "giorno", messagioErrore1);
+  setErrore(settersErrori, "giorno", messaggioErrore1);
 
   // controllo sull'orario iniziale
-  messagioErrore1 = "";
+  messaggioErrore1 = "";
   if (isEmpty(data.orario_inizio)) {
     numErrori += 1; 
-    messagioErrore1 = "Inserire l\'orario iniziale.";
+    messaggioErrore1 = "Inserire l\'orario iniziale.";
   }
-  setErrore(settersErrori, "orario_inizio", messagioErrore1);
+  setErrore(settersErrori, "orario_inizio", messaggioErrore1);
 
   // controllo sull'orario finale
-  messagioErrore1 = "";
+  messaggioErrore1 = "";
   if (isEmpty(data.orario_fine)) {
     numErrori += 1; 
-    messagioErrore1 = "Inserire l\'orario finale.";
+    messaggioErrore1 = "Inserire l\'orario finale.";
   }
-  setErrore(settersErrori, "orario_fine", messagioErrore1);
+  setErrore(settersErrori, "orario_fine", messaggioErrore1);
 
   // controllo sull'orario iniziale e sull'orario finale
   if(!isEmpty(data.orario_inizio) && !isEmpty(data.orario_fine) && data.orario_inizio >= data.orario_fine) {
     numErrori += 1; 
-    messagioErrore1 = "L\'orario iniziale deve avvenire prima dell\'orario finale e non possono essere uguali.";
-    messagioErrore2 = "L\'orario finale deve avvenire dopo l\'orario iniziale e non possono essere uguali.";
-    setErrore(settersErrori, "orario_inizio", messagioErrore1);
-    setErrore(settersErrori, "orario_fine", messagioErrore2);
+    messaggioErrore1 = "L\'orario iniziale deve avvenire prima dell\'orario finale e non possono essere uguali.";
+    messaggioErrore2 = "L\'orario finale deve avvenire dopo l\'orario iniziale e non possono essere uguali.";
+    setErrore(settersErrori, "orario_inizio", messaggioErrore1);
+    setErrore(settersErrori, "orario_fine", messaggioErrore2);
   }
   
   // controllo sulle note
-  messagioErrore1 = "";
+  messaggioErrore1 = "";
   if(!isInRange(data.note.length, 0, 65535)) {
     numErrori += 1; 
-    messagioErrore1 = "Lunghezza note non valida, deve avere un numero di caratteri tra 1 e 65.535 estremi inclusi.";
+    messaggioErrore1 = "Lunghezza note non valida, deve avere un numero di caratteri tra 1 e 65.535 estremi inclusi.";
   }
-  setErrore(settersErrori, "note", messagioErrore1);
+  setErrore(settersErrori, "note", messaggioErrore1);
 
   // alert(numErrori);
   return numErrori;
@@ -287,45 +287,45 @@ export const controlloLavoro = (data, settersErrori) => {
 
   let numErrori = 0;
 
-  let messagioErrore1 = "";
-  let messagioErrore2 = "";
+  let messaggioErrore1 = "";
+  let messaggioErrore2 = "";
   
   // controllo sul cliente e sul professionista
-  messagioErrore1 = "";
+  messaggioErrore1 = "";
   // alert(getInt(data.id_cliente) + " - " + getInt(data.id_professionista));
   if(getInt(data.id_cliente) === 0 && getInt(data.id_professionista) === 0) {
     numErrori += 1; 
-    messagioErrore1 = "Selezionare il cliente oppure il professionista (non entrambi).";
+    messaggioErrore1 = "Selezionare il cliente oppure il professionista (non entrambi).";
   }
-  setErrore(settersErrori, "errore_cliente_e_professionista", messagioErrore1);
+  setErrore(settersErrori, "errore_cliente_e_professionista", messaggioErrore1);
 
   // controllo sul giorno
-  messagioErrore1 = "";
+  messaggioErrore1 = "";
   if (isEmpty(data.giorno)) {
     numErrori += 1; 
-    messagioErrore1 = "Inserire il giorno.";
+    messaggioErrore1 = "Inserire il giorno.";
   }
-  setErrore(settersErrori, "errore_giorno", messagioErrore1);
+  setErrore(settersErrori, "errore_giorno", messaggioErrore1);
 
   // controllo sull'orario iniziale
-  messagioErrore1 = "";
+  messaggioErrore1 = "";
   if (isEmpty(data.ora_inizio) || isEmpty(data.minuto_inizio)) {
     numErrori += 1; 
-    messagioErrore1 = "Inserire l\'orario iniziale.";
+    messaggioErrore1 = "Inserire l\'orario iniziale.";
   }
-  setErrore(settersErrori, "errore_orario_inizio", messagioErrore1);
+  setErrore(settersErrori, "errore_orario_inizio", messaggioErrore1);
 
   // controllo sull'orario finale
-  messagioErrore1 = "";
+  messaggioErrore1 = "";
   if (isEmpty(data.ora_fine) || isEmpty(data.minuto_fine)) {
     numErrori += 1; 
-    messagioErrore1 = "Inserire l\'orario finale.";
+    messaggioErrore1 = "Inserire l\'orario finale.";
   }
-  setErrore(settersErrori, "errore_orario_fine", messagioErrore1);
+  setErrore(settersErrori, "errore_orario_fine", messaggioErrore1);
 
   // controllo sull'orario iniziale e sull'orario finale
-  messagioErrore1 = "";
-  messagioErrore2 = "";
+  messaggioErrore1 = "";
+  messaggioErrore2 = "";
   if( !(isEmpty(data.ora_inizio) || isEmpty(data.minuto_inizio)) && 
       !(isEmpty(data.ora_fine) || isEmpty(data.minuto_fine)) && 
       (getInt(data.ora_fine) <= getInt(data.ora_inizio)) ) {
@@ -333,32 +333,32 @@ export const controlloLavoro = (data, settersErrori) => {
     if((getInt(data.ora_fine) < getInt(data.ora_inizio)) || 
         (getInt(data.ora_fine) === getInt(data.ora_inizio) && getInt(data.minuto_fine) <= getInt(data.minuto_inizio))) {
       numErrori += 1; 
-      messagioErrore1 = "L\'orario iniziale deve avvenire prima dell\'orario finale e non possono essere uguali.";
-      messagioErrore2 = "L\'orario finale deve avvenire dopo l\'orario iniziale e non possono essere uguali.";
+      messaggioErrore1 = "L\'orario iniziale deve avvenire prima dell\'orario finale e non possono essere uguali.";
+      messaggioErrore2 = "L\'orario finale deve avvenire dopo l\'orario iniziale e non possono essere uguali.";
     }    
-    setErrore(settersErrori, "errore_orario_inizio", messagioErrore1);
-    setErrore(settersErrori, "errore_orario_fine", messagioErrore2);
+    setErrore(settersErrori, "errore_orario_inizio", messaggioErrore1);
+    setErrore(settersErrori, "errore_orario_fine", messaggioErrore2);
   }
 
   // controllo sulla descrizione
-  messagioErrore1 = "";
+  messaggioErrore1 = "";
   if (isEmpty(data.descrizione)) {
     numErrori += 1; 
-    messagioErrore1 = "Inserire la descrizione.";
+    messaggioErrore1 = "Inserire la descrizione.";
   }
   else if(!isInRange(data.descrizione.length, 1, 100)) {
     numErrori += 1; 
-    messagioErrore1 = "Lunghezza descrizione non valida, deve avere un numero di caratteri tra 1 e 100 estremi inclusi.";
+    messaggioErrore1 = "Lunghezza descrizione non valida, deve avere un numero di caratteri tra 1 e 100 estremi inclusi.";
   }
-  setErrore(settersErrori, "errore_descrizione", messagioErrore1);
+  setErrore(settersErrori, "errore_descrizione", messaggioErrore1);
   
   // controllo sulle note
-  messagioErrore1 = "";
+  messaggioErrore1 = "";
   if(!isInRange(data.note.length, 0, 65535)) {
     numErrori += 1; 
-    messagioErrore1 = "Lunghezza note non valida, deve avere un numero di caratteri tra 1 e 65.535 estremi inclusi.";
+    messaggioErrore1 = "Lunghezza note non valida, deve avere un numero di caratteri tra 1 e 65.535 estremi inclusi.";
   }
-  setErrore(settersErrori, "errore_note", messagioErrore1);
+  setErrore(settersErrori, "errore_note", messaggioErrore1);
 
   // alert(numErrori);
   return numErrori;
@@ -476,7 +476,53 @@ export const controlloProfilo = (dati, settersErrori) => {
   }
   setErrore(settersErrori, "errore_nuova_password", messaggioErrore);
   setErrore(settersErrori, "errore_conferma_nuova_password", messaggioErrore);
+
+  console.log(dati.num_lavori_clienti);
+  console.log(dati.num_lavori_professionisti);
+  console.log(dati.num_lavori_giorno);
+
+  // controllo il numero lavori dei clienti:
+  messaggioErrore = "";
+  if (isEmpty(dati.num_lavori_clienti.toString())) {
+    numErrori += 1; 
+    messaggioErrore = "Inserire il numero di lavori per i clienti.";
+  }
+  else if(dati.num_lavori_clienti < 0) {
+    numErrori += 1; 
+    messaggioErrore = "Il numero di lavori per i clienti deve essere maggiore o uguale a 0.";
+  }
+  setErrore(settersErrori, "errore_num_lavori_clienti", messaggioErrore);
+
+  // controllo il numero di lavori dei professionisti:
+  messaggioErrore = "";
+  if (isEmpty(dati.num_lavori_professionisti.toString())) {
+    numErrori += 1; 
+    messaggioErrore = "Inserire il numero di lavori per i professionisti.";
+  }
+  else if(dati.num_lavori_professionisti < 0) {
+    numErrori += 1; 
+    messaggioErrore = "Il numero di lavori per i professionisti deve essere maggiore o uguale a 0.";
+  }
+  setErrore(settersErrori, "errore_num_lavori_professionisti", messaggioErrore);
   
+  // controllo il numero massimo di lavori in un giorno:
+  messaggioErrore = "";
+  if(parseInt(dati.num_lavori_clienti) >= 0 && parseInt(dati.num_lavori_professionisti) >= 0) {
+    if (isEmpty(dati.num_lavori_giorno.toString())) {
+      numErrori += 1; 
+      messaggioErrore = "Inserire il numero massimo di lavori in un giorno.";
+    }
+    else if(parseInt(dati.num_lavori_giorno) < 0) {
+      numErrori += 1; 
+      messaggioErrore = "Il numero massimo di lavori in un giorno deve essere maggiore o uguale a 0.";
+    }
+    else if(parseInt(dati.num_lavori_giorno) < (parseInt(dati.num_lavori_clienti) + parseInt(dati.num_lavori_professionisti))) {
+      numErrori += 1;
+      messaggioErrore = "Il numero massimo di loavori in un giorno non puo\' essere minore della somma del numero di lavori per i clienti e del numero di lavori per i professionisti.";
+    }
+  }
+  setErrore(settersErrori, "errore_num_lavori_giorno", messaggioErrore);
+
   return numErrori;
 }
 
