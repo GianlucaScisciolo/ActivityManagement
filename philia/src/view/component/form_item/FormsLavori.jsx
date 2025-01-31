@@ -217,7 +217,7 @@ export function FormNuovoLavoro({clienti, professionisti, item, setItem, eseguiS
               </StyledSelect>
             </Col>
             <Col style={{ padding: '0', margin: '0', paddingRight: '19px' }}>
-              <StyledSelect style={{width: "100%"}}name="minuto_fine" value={item.minuto_fine} onChange={(e) => cambioValoriOrari(e, setItem)}>
+              <StyledSelect style={{width: "100%"}} name="minuto_fine" value={item.minuto_fine} onChange={(e) => cambioValoriOrari(e, setItem)}>
                 <StyledOption value="">Minuto fine</StyledOption>
                 {minuti.map((minuto) => (
                   <StyledOption key={minuto} value={minuto}>{minuto}</StyledOption>  

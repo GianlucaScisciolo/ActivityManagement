@@ -59,6 +59,24 @@ export function RowModificaProfilo({ item, setItem, eseguiModificaProfilo }) {
             {(item.errore_conferma_nuova_password !== "") && (<StyledSpanErrore>{item.errore_conferma_nuova_password}</StyledSpanErrore>)}
           </div>
         </StyledCol>
+        <StyledCol>
+          <div style={{width: "100%"}}>
+            <StyledInputModifica rows="1" value={item.num_lavori_clienti} type="number" name="lavori_cliente" placeholder='Lavori cliente'  onChange={(e) => handleInputChange(e, setItem)} />
+            {(item.errore_num_lavori_clienti !== "") && (<StyledSpanErrore>{item.errore_num_lavori_clienti}</StyledSpanErrore>)}
+          </div>
+        </StyledCol>
+        <StyledCol>
+          <div style={{width: "100%"}}>
+            <StyledInputModifica rows="1" value={item.num_lavori_professionisti} type="number" name="lavori_professionista" placeholder='Lavori professionista' onChange={(e) => handleInputChange(e, setItem)} />
+            {(item.errore_num_lavori_professionisti !== "") && (<StyledSpanErrore>{item.errore_num_lavori_professionisti}</StyledSpanErrore>)}
+          </div>
+        </StyledCol>
+        <StyledCol>
+          <div style={{width: "100%"}}>
+            <StyledInputModifica rows="1" value={item.num_lavori_giorno} type="number" name="lavori_giorno" placeholder='Lavori giorno' onChange={(e) => handleInputChange(e, setItem)} />
+            {(item.errore_num_lavori_giorno !== "") && (<StyledSpanErrore>{item.errore_num_lavori_giorno}</StyledSpanErrore>)}
+          </div>
+        </StyledCol>
       </StyledRow>
       {/* 
       <button>Numero di clienti in una giornata</button><br /> <br />

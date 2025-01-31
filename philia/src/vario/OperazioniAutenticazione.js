@@ -4,20 +4,14 @@ import autenticazioneStore from "../store/autenticazione_store/AutenticazioneSto
 import { operazioniAutenticazione } from "./Operazioni";
 import { generateRandomString, encryptPassword, passwordIsCorrect, PEPPER_HEX } from './Sicurezza';
 
-export const login = async (e, datiLogin, setUtenti) => {
+export const login = async (e, datiLogin, setUtente, setSalone) => {
   e.preventDefault();
-  // autenticazioneStore.setUtenti([]);
-  // const formData = new FormData(e.target);
-  // const data = {
-    // username: formData.get('username'),
-    // password: formData.get('password')
-    // password: encryptPassword(formData.get('password'), 'SALT_HEX', PEPPER_HEX)
-  // };
-  // alert(datiLogin.username);
-  // alert(datiLogin.password);
   try {
     await AutenticazioneAction.dispatchAction(datiLogin, operazioniAutenticazione.LOGIN);
-    setUtenti(autenticazioneStore.getUtenti());
+    setUtente(autenticazioneStore.getUtente());
+    setSalone(autenticazioneStore.getSalone());
+    // console.log("utente: " + autenticazioneStore.getUtente());
+    // console.log("salone: " + autenticazioneStore.getSalone());
   } 
   catch (error) {
     console.error("Errore durante il login: ", error);

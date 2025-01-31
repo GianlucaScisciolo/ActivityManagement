@@ -16,6 +16,7 @@ const Profilo = () => {
   const formSession = useSelector((state) => state.formSession.value);
   const autenticazioneSession = useSelector((state) => state.autenticazioneSession.value);
   const [utenti, setUtenti] = useState(-1);
+  const [salone, setSalone] = useState(-1);
   const [usernameAttuale, setUsernameAttuale] = useState(autenticazioneSession.username);
   const [nuovoUsername, setNuovoUsername] = useState(autenticazioneSession.username);
   const [ruolo, setRuolo] = useState(autenticazioneSession.ruolo);
@@ -31,11 +32,17 @@ const Profilo = () => {
     password_attuale: "",
     nuova_password: "", 
     conferma_nuova_password: "", 
+    num_lavori_clienti: autenticazioneSession.num_lavori_clienti, 
+    num_lavori_professionisti: autenticazioneSession.num_lavori_professionisti, 
+    num_lavori_giorno: autenticazioneSession.num_lavori_giorno,
     errore_nuovo_username: "", 
     errore_note: "", 
     errore_password_attuale: "", 
     errore_nuova_password: "", 
-    errore_conferma_nuova_password: ""
+    errore_conferma_nuova_password: "", 
+    errore_num_lavori_clienti: "", 
+    errore_num_lavori_professionisti: "", 
+    errore_num_lavori_giorno: "", 
   })
   
   const [aggiornamentoCompletato, setAggiornamentoCompletato] = useState(true);
@@ -61,6 +68,7 @@ const Profilo = () => {
   useEffect(() => {
     const handleLoginChange = () => {
       setUtenti(autenticazioneStore.getUtenti());
+      setSalone(autenticazioneStore.getSalone());
     };
 
     autenticazioneStore.addChangeListener(operazioniAutenticazione.LOGIN, handleLoginChange);

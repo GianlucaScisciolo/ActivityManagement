@@ -53,6 +53,22 @@ export function FormModificaProfilo({ item, setItem, eseguiModificaProfilo }) {
           <StyledInputModifica rows="1" type="password" name="conferma_nuova_password" placeholder='Conferma nuova password' value={item.conferma_nuova_password} onChange={(e) => handleInputChange(e, setItem)} />
           {(item.errore_conferma_nuova_password !== "") && (<StyledSpanErrore>{item.errore_conferma_nuova_password}</StyledSpanErrore>)}
           
+          <StyledLabel htmlFor="orario_inizio">Numero di lavori*</StyledLabel>
+          <Row>
+            <Col style={{ padding: '0', margin: '0', paddingLeft: '19px' }}>
+              <StyledInputModifica style={{width: "100%"}} rows="1" value={item.num_lavori_clienti} type="number" name="lavori_cliente" placeholder='Lavori cliente'  onChange={(e) => handleInputChange(e, setItem)} />
+            </Col>
+            <Col style={{ padding: '0', margin: '0'}}>
+              <StyledInputModifica style={{width: "100%"}} rows="1" value={item.num_lavori_professionisti} type="number" name="lavori_professionista" placeholder='Lavori professionista' onChange={(e) => handleInputChange(e, setItem)} />
+            </Col>
+            <Col style={{ padding: '0', margin: '0', paddingRight: '19px' }}>
+              <StyledInputModifica style={{width: "100%"}} rows="1" value={item.num_lavori_giorno} type="number" name="lavori_giorno" placeholder='Lavori giorno' onChange={(e) => handleInputChange(e, setItem)} />
+            </Col>
+          </Row>
+          {(item.errore_num_lavori_clienti !== "") && (<StyledSpanErrore>{item.errore_num_lavori_clienti}</StyledSpanErrore>)}
+          {(item.errore_num_lavori_professionisti !== "") && (<StyledSpanErrore>{item.errore_num_lavori_professionisti}</StyledSpanErrore>)}
+          {(item.errore_num_lavori_giorno !== "") && (<StyledSpanErrore>{item.errore_num_lavori_giorno}</StyledSpanErrore>)}
+
           <br /> <br /> 
         </SlideContainer>
         <OperazioniModificaProfilo eseguiModificaProfilo={eseguiModificaProfilo} />

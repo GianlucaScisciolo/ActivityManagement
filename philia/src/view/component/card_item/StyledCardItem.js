@@ -208,6 +208,14 @@ export const StyledDeleteNotSelected = styled(X)`
   }
 `;
 
+export const StyledPencilNotSelected2 = styled(Pencil)`
+  ${styledIconNotSelected}
+  transition: 0.5s all ease-out;
+  &:hover {
+    color: #0050EF;
+  }
+`;
+
 export const StyledTrashNotSelected2 = styled(Trash2)`
   ${styledIconNotSelected}
   transition: 0.5s all ease-out;

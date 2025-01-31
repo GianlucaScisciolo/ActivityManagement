@@ -26,7 +26,8 @@ const AutenticazioneAction = {
           payload: data,
         });
         resolve();
-      } catch(error) {
+      } 
+      catch(error) {
         console.error("Impossibile inviare l'azione " + operazione + ": " + error);
         // reject(error);
       }

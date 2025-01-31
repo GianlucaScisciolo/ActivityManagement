@@ -26,17 +26,23 @@ const OperazioniLogin = ({eseguiLogin}) => {
 };
 
 export function FormLogin({item, setItem, eseguiLogin}) {
+  let maxHeight = "2000px";
+
   return (
     <>
       <StyledForm>
         <StyledHeader>Login</StyledHeader>
-        <StyledLabel htmlFor="username">Username*</StyledLabel>
-        <StyledTextAreaModifica rows="1" placeholder="Username*" name="username" value={item.username} onChange={(e) => handleInputChange(e, setItem)} /> 
-        {(item.errore_username !== "") && (<StyledSpanErrore>{item.errore_username}</StyledSpanErrore>)}
-        <StyledLabel htmlFor="password">Password*</StyledLabel>
-        <StyledInputModifica rows="1" placeholder="Password*" type="password" name="password" value={item.password} onChange={(e) => handleInputChange(e, setItem)} />
-        {(item.errore_password !== "") && (<StyledSpanErrore>{item.errore_password}</StyledSpanErrore>)}
-        <br /> <br />
+        <SlideContainer style={{maxHeight: `${maxHeight}`}}>
+          <StyledLabel htmlFor="username">Username*</StyledLabel>
+          <StyledTextAreaModifica rows="1" placeholder="Username*" name="username" value={item.username} onChange={(e) => handleInputChange(e, setItem)} /> 
+          {(item.errore_username !== "") && (<StyledSpanErrore>{item.errore_username}</StyledSpanErrore>)}
+          
+          <StyledLabel htmlFor="password">Password*</StyledLabel>
+          <StyledInputModifica rows="1" placeholder="Password*" type="password" name="password" value={item.password} onChange={(e) => handleInputChange(e, setItem)} />
+          {(item.errore_password !== "") && (<StyledSpanErrore>{item.errore_password}</StyledSpanErrore>)}
+          
+          <br /> <br />
+        </SlideContainer>
         <OperazioniLogin eseguiLogin={eseguiLogin} />
       </StyledForm>
     </>

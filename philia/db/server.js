@@ -110,10 +110,9 @@ const getResults = async (sql, params, res) => {
 app.post("/LOGIN", async (req, res) => {
   const { username = '', password = '' } = req.body;
 
-  // Aggiungi un log per vedere i dati ricevuti
   console.log("Dati ricevuti per il login: ", [username, password]);
 
-  const sql = ` 
+  const sql_select_utente = ` 
     SELECT 
       \`username\`, \`ruolo\`, \`note\`, \`password\`, \`salt_hex\` 
     FROM 
@@ -122,10 +121,41 @@ app.post("/LOGIN", async (req, res) => {
       \`username\` = ?; 
   `;
 
-  const params = [`${username}`];//, `${password}`];
+  const sql_select_salone = `
+    SELECT 
+      \`num_lavori_clienti\`, \`num_lavori_professionisti\`, \`num_lavori_giorno\` 
+    FROM 
+      \`salone\` 
+    WHERE 
+      \`username_utente\` = ?; 
+  `;
 
-  return getResults(sql, params, res);
+  const params = [username];
+
+  try {
+    await beginTransaction();
+
+    const [utentiResult] = await executeQuery(sql_select_utente, params);
+    const [saloniResult] = await executeQuery(sql_select_salone, params);
+
+    await commitTransaction();
+
+    const utente = (utentiResult) ? utentiResult : null;
+    const salone = (saloniResult) ? saloniResult : null;
+
+    // console.log("utente server: ", utente);
+    // console.log("salone server: ", salone);
+
+    return res.status(200).json({ utente: utente, salone: salone });
+  } 
+  catch (err) {
+    await rollbackTransaction();
+    console.error('Errore durante il login: ', err);
+    return res.status(500).json({ message: 'Errore del server.' });
+  }
 });
+
+
 
 
 /**
@@ -887,12 +917,12 @@ app.post("/ELIMINA_LAVORI", async (req, res) => {
   try {
     await beginTransaction();
 
-    // Esegui la query per le prenotazioni
+    // Eseguo la query per le prenotazioni
     if (ids_prenotazioni.length > 0) {
       await executeQuery(sqlPrenotazioni, ids_prenotazioni.flat());
     }
 
-    // Esegui la query per gli impegni
+    // Eseguo la query per gli impegni
     if (ids_impegni.length > 0) {
       await executeQuery(sqlImpegni, ids_impegni.flat());
     }
@@ -908,7 +938,7 @@ app.post("/ELIMINA_LAVORI", async (req, res) => {
 });
 
 /**
- * Elimina lavori range giorni
+ * Elimino lavori range giorni
  */
 app.post("/ELIMINA_LAVORI_RANGE_GIORNI", async (req, res) => {
   let { primo_giorno = '', ultimo_giorno = '' } = req.body;
@@ -918,7 +948,7 @@ app.post("/ELIMINA_LAVORI_RANGE_GIORNI", async (req, res) => {
   if (ultimo_giorno === "")
     ultimo_giorno = "9999-01-01";
 
-  // Aggiungi un log per vedere i dati ricevuti
+  // Aggiungo un log per vedere i dati ricevuti
   console.log("Dati ricevuti per l\'eliminazione: ", [primo_giorno, ultimo_giorno]);
 
   const sql = ` 
