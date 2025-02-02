@@ -39,6 +39,7 @@ const Lavori = () => {
     "descrizione": "", 
     "note": ""
   });
+  const [giornoType, setGiornoType] = useState('text');
 
   const [errori, setErrori] = useState ({
     erroreCliente: "",
@@ -209,6 +210,45 @@ const Lavori = () => {
   //   }
   // }, [idsLavori]);
 
+  const ottieniLavoriGiorno = async (setGiornoType, item) => {
+    const response = await fetch('/OTTIENI_LAVORI_GIORNO', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(nuovoLavoro),
+    });
+
+    // console.log((response).status);
+    if(response.status === 200) {
+      const risultato = await response.json();
+      // console.log(risultato.lavoriGiornoSelezionato);
+      setLavoriGiornoSelezionato(risultato.lavoriGiornoSelezionato);
+    }
+    else {
+      const errorData = await response.json();
+      if (response.status === 409 || response.status === 500) {
+        alert(errorData.message);
+      }
+      else {
+        response.status = 500;
+        alert('Errore durante l\'ottenimento dei lavori.');
+      }
+    }
+  }
+
+  const handleGiornoBlur = (setGiornoType, item) => {
+    return () => {
+      if(!item.giorno)
+        setGiornoType('text');
+      else {
+        setGiornoType('date');
+        ottieniLavoriGiorno(setGiornoType, item);
+      }
+    };
+         
+  };
+
   return (
     <>
       <Header />
@@ -225,7 +265,7 @@ const Lavori = () => {
       )}
       {(formSession.view === "card") && (
         <center>
-          <CardCercaLavori item={datiRicerca} setItem={setDatiRicerca} eseguiRicerca={(e) => eseguiRicerca(e, "lavori", setLavori, datiRicerca)} />
+          <CardCercaLavori handleGiornoBlur={handleGiornoBlur} item={datiRicerca} setItem={setDatiRicerca} eseguiRicerca={(e) => eseguiRicerca(e, "lavori", setLavori, datiRicerca)} />
         </center>
       )}
 
@@ -234,13 +274,13 @@ const Lavori = () => {
       {(lavori.length === 0) && (
         <div className='contenitore-1'>Nessun lavoro trovato.</div>
       )}
-
+      
       {(lavori.length > 0) && (
         <>
           {(itemSession.view === "card") && (
             <div className="contenitore-3">
               {lavori.map((lavoro, index) => (
-                <CardLavoroEsistente key={index} item={lavoro} items={lavori} setItems={setLavori} selectOperation={selectOperation} />
+                <CardLavoroEsistente handleGiornoBlur={handleGiornoBlur} key={index} item={lavoro} items={lavori} setItems={setLavori} selectOperation={selectOperation} />
               ))}
             </div>
           )}

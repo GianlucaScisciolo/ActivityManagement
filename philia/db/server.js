@@ -39,16 +39,6 @@ db.connect(err => {
   console.log('Connesso al database.');
 });
 
-// const executeQuery = (sql, params) => {
-//   return new Promise((resolve, reject) => {
-//     db.query(sql, params, (err, data) => {
-//       if (err) {
-//         return reject(err);
-//       }
-//       return resolve(data);
-//     });
-//   });
-// };
 const executeQuery = (sql, params, connection = db) => {
   return new Promise((resolve, reject) => {
     connection.query(sql, params, (err, data) => {
@@ -104,9 +94,6 @@ const getResults = async (sql, params, res) => {
 
 /*************************************************** Autenticazione **************************************************/
 
-/**
- * Login:
- */
 app.post("/LOGIN", async (req, res) => {
   const { username = '', password = '' } = req.body;
 
@@ -143,9 +130,6 @@ app.post("/LOGIN", async (req, res) => {
     const utente = (utentiResult) ? utentiResult : null;
     const salone = (saloniResult) ? saloniResult : null;
 
-    // console.log("utente server: ", utente);
-    // console.log("salone server: ", salone);
-
     return res.status(200).json({ utente: utente, salone: salone });
   } 
   catch (err) {
@@ -155,14 +139,7 @@ app.post("/LOGIN", async (req, res) => {
   }
 });
 
-/**
- * Modifica profilo
- */
 app.post("/MODIFICA_PROFILO", async (req, res) => {
-  // const { 
-  //   username_attuale = '', password_attuale = '', nuovo_username = '', nuova_password = '', 
-  //   nuovo_ruolo = '', nuove_note = '', nuovo_salt_hex = ''
-  // } = req.body;
 
   console.log("Dati ricevuti per la modifica:");
   console.log(`
@@ -213,17 +190,6 @@ app.post("/MODIFICA_PROFILO", async (req, res) => {
     `${req.body.nuovo_username}` 
   ]
 
-  /*
-  try {
-    await executeQuery(sql, params);
-    return res.status(201).json({ message: 'Modifica profilo eseguita con successo'});
-  } 
-  catch(err) {
-    console.error('Errore durante la modifica del profilo: ', err);
-    return res.status(500).json({ message: 'Errore del server' });
-  }
-  */
-
   try {
     await beginTransaction();
 
@@ -245,9 +211,6 @@ app.post("/MODIFICA_PROFILO", async (req, res) => {
 
 /************************************************** Persona **************************************************/
 
-/**
- * Inserisci cliente:
- */
 app.post("/INSERISCI_CLIENTE", async (req, res) => {
   const { nome = '', cognome = '', contatto = '', note = '' } = req.body;
 
@@ -275,13 +238,9 @@ app.post("/INSERISCI_CLIENTE", async (req, res) => {
 });
 
 
-/**
- * Visualizza clienti:
- */
 app.post("/VISUALIZZA_CLIENTI", async (req, res) => {
   const { nome = '', cognome = '', contatto = '', note = '' } = req.body;
 
-  // Aggiungi un log per vedere i dati ricevuti
   console.log("Dati ricevuti per la ricerca:", req.body);
 
   let sql = `
@@ -321,12 +280,6 @@ app.post("/VISUALIZZA_CLIENTI", async (req, res) => {
   return getResults(sql, params, res);
 });
 
-
-
-
-/**
- * Ottieni tutti i clienti:
- */
 app.post("/OTTIENI_TUTTI_I_CLIENTI", async (req, res) => {
   const sql = `
     SELECT 
@@ -347,19 +300,13 @@ app.post("/OTTIENI_TUTTI_I_CLIENTI", async (req, res) => {
   }
 });
 
-/**
- * Elimina clienti
- */
 app.post("/ELIMINA_CLIENTI", async (req, res) => {
   const { ids = [] } = req.body;
 
-  // Aggiungi un log per vedere i dati ricevuti
   console.log("Dati ricevuti per l\'eliminazione:", [ids]);
 
-  // Creare una stringa di parametri di placeholder per la query
   const placeholders = ids.map(() => '?').join(', ');
   
-
   const sql = ` 
     DELETE FROM 
       cliente 
@@ -370,9 +317,6 @@ app.post("/ELIMINA_CLIENTI", async (req, res) => {
   return getResults(sql, ids, res);
 });
 
-/**
- * Modifica clienti
- */
 app.post("/MODIFICA_CLIENTI", async (req, res) => {
   const [id, contatto, note] = [req.body.id, req.body.contatto, req.body.note];
   
@@ -397,21 +341,6 @@ app.post("/MODIFICA_CLIENTI", async (req, res) => {
 
 /*********************************************** Professionista **********************************************/
 
-/**
- * Inserisci professionista
- */
-// app.post("/INSERISCI_PROFESSIONISTA", async (req, res) => {
-//   const { nome = '', professione = '', contatto = '', email = '', note = '' } = req.body;
-  
-//   const sql = ` 
-//     INSERT INTO professionista (nome, professione, contatto, email, note) 
-//     VALUES (?, ?, ?, ?, ?); 
-//   `;
-
-//   const params = [`${nome}`, `${professione}`, `${contatto}`, `${email}`, `${note}`];
-  
-//   return getResults(sql, params, res);
-// });
 app.post("/INSERISCI_PROFESSIONISTA", async (req, res) => {
   const { nome = '', professione = '', contatto = '', email = '', note = '' } = req.body;
   
@@ -436,9 +365,6 @@ app.post("/INSERISCI_PROFESSIONISTA", async (req, res) => {
   }
 });
 
-/**
- * Visualizza professionisti 
- */
 app.post("/VISUALIZZA_PROFESSIONISTI", async (req, res) => {
   const { nome = '', professione = '', contatto = '', email = '', note = '' } = req.body;
   console.log([nome, professione, contatto, email, note]);
@@ -490,10 +416,6 @@ app.post("/VISUALIZZA_PROFESSIONISTI", async (req, res) => {
   return getResults(sql, params, res);
 });
 
-
-/**
- * Ottieni tutti i professionisti:
- */
 app.post("/OTTIENI_TUTTI_I_PROFESSIONISTI", async (req, res) => {
   const sql = `
     SELECT 
@@ -512,17 +434,11 @@ app.post("/OTTIENI_TUTTI_I_PROFESSIONISTI", async (req, res) => {
   }
 });
 
-
-/**
- * Elimina professionisti
- */
 app.post("/ELIMINA_PROFESSIONISTI", async (req, res) => {
   const { ids = [] } = req.body;
 
-  // Aggiungi un log per vedere i dati ricevuti
   console.log("Dati ricevuti per l\'eliminazione: ", ids);
 
-  // Creare una stringa di parametri di placeholder per la query
   const placeholders = ids.map(() => '?').join(', ');
 
   const sql = ` 
@@ -535,9 +451,6 @@ app.post("/ELIMINA_PROFESSIONISTI", async (req, res) => {
   return getResults(sql, ids, res);
 });
 
-/**
- * Modifica professionisti
- */
 app.post("/MODIFICA_PROFESSIONISTI", async (req, res) => {
   const [id, contatto, email, note] = [req.body.id, req.body.contatto, req.body.email, req.body.note];
 
@@ -561,130 +474,26 @@ app.post("/MODIFICA_PROFESSIONISTI", async (req, res) => {
 
 /*************************************************** Lavori **************************************************/
 
-/**
- * Inserisci lavoro
- */
-// app.post("/INSERISCI_LAVORO", async (req, res) => {
-//   const {
-//     id_cliente = '',
-//     id_professionista = '',
-//     descrizione = '',
-//     giorno = '',
-//     ora_inizio = '',
-//     minuto_inizio = '',
-//     ora_fine = '',
-//     minuto_fine = '',
-//     note = ''
-//   } = req.body;
-  
-//   const sql = ` 
-//     INSERT INTO lavoro (descrizione, giorno, orario_inizio, orario_fine, note) 
-//     VALUES (?, ?, ?, ?, ?); 
-//   `;
-  
-//   const params = [
-//     `${descrizione}`, 
-//     `${giorno}`, 
-//     `${orario_inizio}`, 
-//     `${orario_fine}`, 
-//     `${note}`, 
-//   ];
-  
-//   try {
-//     await executeQuery(sql, params);
-//     res.sendStatus(200);
-//   } 
-//   catch (err) {
-//     if (err.code === 'ER_DUP_ENTRY') {
-//       res.sendStatus(200);
-//     }
-//     console.error('Errore durante l\'inserimento del lavoro: ', err);
-//     return res.status(500).json({ message: 'Errore del server.' });
-//   }
-// });
-
-// app.post("/INSERISCI_LAVORO", async (req, res) => {
-//   const {
-//     lavoro_cliente_selezionato = '', 
-//     lavoro_professionista_selezionato = '',
-//     id_cliente = '',
-//     id_professionista = '',
-//     descrizione = '',
-//     giorno = '',
-//     orario_inizio = '',
-//     orario_fine = '',
-//     note = ''
-//   } = req.body;
-  
-//   const sqlLavoro = ` 
-//     INSERT INTO lavoro (descrizione, giorno, orario_inizio, orario_fine, note) 
-//     VALUES (?, ?, ?, ?, ?); 
-//   `;
-  
-//   const paramsLavoro = [
-//     `${descrizione}`, 
-//     `${giorno}`, 
-//     `${orario_inizio}`, 
-//     `${orario_fine}`, 
-//     `${note}`
-//   ];
-
-//   id_cliente = (id_cliente) ? id_cliente : null;
-//   id_professionista = (id_professionista) ? id_professionista : null;
-  
-//   try {
-//     const resultLavoro = await executeQuery(sqlLavoro, paramsLavoro);
-//     const id_lavoro = resultLavoro.insertId;
-
-//     if (id_professionista === null && id_cliente !== null) {
-//       const sqlPrenotazione = `
-//         INSERT INTO prenotazione (id_cliente, id_lavoro)
-//         VALUES (?, ?);
-//       `;
-//       const paramsPrenotazione = [`${id_cliente}`, `${id_lavoro}`];
-//       await executeQuery(sqlPrenotazione, paramsPrenotazione);
-//     } else if (id_cliente === null && id_professionista !== null) {
-//       const sqlImpegno = `
-//         INSERT INTO impegno (id_professionista, id_lavoro)
-//         VALUES (?, ?);
-//       `;
-//       const paramsImpegno = [`${id_professionista}`, `${id_lavoro}`];
-//       await executeQuery(sqlImpegno, paramsImpegno);
-//     }
-
-//     return res.status(201).json({ message: 'Lavoro inserito con successo.' });
-//   } 
-//   catch (err) {
-//     if (err.code === 'ER_DUP_ENTRY') {
-//       return res.status(409).json({ message: 'Errore, lavoro già presente.' });
-//     }
-//     console.error('Errore durante l\'inserimento del lavoro: ', err);
-//     return res.status(500).json({ message: 'Errore del server.' });
-//   }
-// });
-
 app.post("/INSERISCI_LAVORO", async (req, res) => {
-  const {
-    id_cliente = '',
-    id_professionista = '',
-    descrizione = '',
-    giorno = '',
-    ora_inizio = '',
-    minuto_inizio = '',
-    ora_fine = '',
-    minuto_fine = '',
-    note = ''
-  } = req.body;
+  // const {
+  //   id_cliente = '',
+  //   id_professionista = '',
+  //   descrizione = '',
+  //   giorno = '',
+  //   orario_inizio = '',
+  //   orario_fine = '',
+  //   note = ''
+  // } = req.body;
 
-  console.log("id_cliente: " + id_cliente + "\n" + "id_professionista: " + id_professionista + "\n" + 
-              "descrizione: " + descrizione + "\n" + "giorno: " + giorno + "\n" + "ora_inizio: " + ora_inizio + "\n" + 
-              "minuto_inizio: " + minuto_inizio + "\n" + "ora_fine: " + ora_fine + "\n" + 
-              "minuto_fine: " + minuto_fine + "\n" + "note: " + note
-  );
+  // console.log("id_cliente: " + id_cliente + "\n" + "id_professionista: " + id_professionista + "\n" + 
+  //             "descrizione: " + descrizione + "\n" + "giorno: " + giorno + "\n" + "ora_inizio: " + ora_inizio + "\n" + 
+  //             "minuto_inizio: " + minuto_inizio + "\n" + "ora_fine: " + ora_fine + "\n" + 
+  //             "minuto_fine: " + minuto_fine + "\n" + "note: " + note
+  // );
 
   const sql_inserimento_lavoro = `
-    INSERT INTO lavoro (giorno, ora_inizio, minuto_inizio, ora_fine, minuto_fine) 
-    VALUES (?, ?, ?, ?, ?);
+    INSERT INTO lavoro (giorno, orario_inizio, orario_fine) 
+    VALUES (?, ?, ?);
   `
 
   const sql_selezione_lavoro = `
@@ -693,7 +502,7 @@ app.post("/INSERISCI_LAVORO", async (req, res) => {
     FROM 
       lavoro 
     WHERE 
-      giorno = ? AND ora_inizio = ? AND minuto_inizio = ? AND ora_fine = ? AND minuto_fine = ?;
+      giorno = ? AND orario_inizio = ? AND orario_fine = ?;
   `;
 
   const sql_inserimento_prenotazione = `
@@ -706,25 +515,12 @@ app.post("/INSERISCI_LAVORO", async (req, res) => {
     VALUES (?, ?, ?, ?);
   `
 
-  const parametri_inserimento_lavoro = [
-    `${giorno}`, 
-    `${ora_inizio}`, 
-    `${minuto_inizio}`, 
-    `${ora_fine}`, 
-    `${minuto_fine}`
-  ];
+  const parametri_inserimento_lavoro = [`${req.body.giorno}`, `${req.body.orario_inizio}`, `${req.body.orario_fine}`];
 
-  const parametri_selezione_lavoro = [
-    `${giorno}`, 
-    `${ora_inizio}`, 
-    `${minuto_inizio}`, 
-    `${ora_fine}`, 
-    `${minuto_fine}`
-  ];
+  const parametri_selezione_lavoro = [`${req.body.giorno}`, `${req.body.orario_inizio}`, `${req.body.orario_fine}`];
 
   let id_lavoro = 0;
 
-  // Inserimento lavoro ed ottenimento suo id. Se già presente ottengo il suo id con una ricerca.
   try {
     const risultato_inserimento_lavoro = await executeQuery(sql_inserimento_lavoro, parametri_inserimento_lavoro);
     id_lavoro = risultato_inserimento_lavoro.insertId;
@@ -747,29 +543,20 @@ app.post("/INSERISCI_LAVORO", async (req, res) => {
   }
 
   const parametri_inserimento_prenotazione = [
-    `${id_cliente}`, 
-    `${id_lavoro}`, 
-    `${descrizione}`, 
-    `${note}`
+    `${req.body.id_cliente}`, `${req.body.id_lavoro}`, `${req.body.descrizione}`, `${req.body.note}`
   ];
-
   const parametri_inserimento_impegno = [
-    `${id_professionista}`, 
-    `${id_lavoro}`, 
-    `${descrizione}`, 
-    `${note}`
+    `${req.body.id_professionista}`, `${req.body.id_lavoro}`, `${req.body.descrizione}`, `${req.body.note}`
   ];
-  
-  console.log("id_lavoro: " + id_lavoro);
 
   try {
     // Inserimento prenotazione
     if(parseInt(id_cliente) !== 0) {
-      const risultato_inserimento_prenotazione = await executeQuery(sql_inserimento_prenotazione, parametri_inserimento_prenotazione);
+      await executeQuery(sql_inserimento_prenotazione, parametri_inserimento_prenotazione);
     }
     // inserimento impegno
     else if(parseInt(id_professionista) !== 0) {
-      const risultato_inserimento_impegno = await executeQuery(sql_inserimento_impegno, parametri_inserimento_impegno);
+      await executeQuery(sql_inserimento_impegno, parametri_inserimento_impegno);
     }
   }
   catch(err) {
@@ -780,29 +567,24 @@ app.post("/INSERISCI_LAVORO", async (req, res) => {
     return res.status(500).json({ message: 'Errore del server' });
   }
   
-  // Restituisce l'id del lavoro nel response
   return res.status(200).json({ id_lavoro: id_lavoro });
 });
 
-
 app.post("/VISUALIZZA_LAVORI", async (req, res) => {
-  let { 
-    nome_cliente = '', cognome_cliente = '', nome_professionista = '', professione = '',  
-    primo_giorno = '', ultimo_giorno = '', descrizione = '', note = '',
-  } = req.body;
+  // let { 
+  //   nome_cliente = '', cognome_cliente = '', nome_professionista = '', professione = '',  
+  //   primo_giorno = '', ultimo_giorno = '', descrizione = '', note = '',
+  // } = req.body;
+  let primo_giorno = (req.body.primo_giorno) ? req.body.primo_giorno : "1111-01-01";
+  let ultimo_giorno = (req.body.ultimo_giorno) ? req.body.ultimo_giorno : "9999-01-01";
 
-  if(primo_giorno === '')
-    primo_giorno = '1111-01-01';
-  if(ultimo_giorno === '')
-    ultimo_giorno = '9999-01-01';
+  // console.log("Dati ricevuti per la ricerca dei lavori: ", { 
+  //   nome_cliente, cognome_cliente, nome_professionista, professione, primo_giorno, ultimo_giorno, descrizione, note
+  // });
 
-  console.log("Dati ricevuti per la ricerca dei lavori: ", { 
-    nome_cliente, cognome_cliente, nome_professionista, professione, primo_giorno, ultimo_giorno, descrizione, note
-  });
+  let notePrenotazioneSQL = (req.body.note === "") ? ` AND (p.note LIKE ? OR p.note IS NULL) ` : ` AND p.note LIKE ? `;
+  let noteImpegnoSQL = (req.body.note === "") ? ` AND (i.note LIKE ? OR i.note IS NULL) ` : ` AND i.note LIKE ? `;
 
-  let notePrenotazioneSQL = (note === "") ? ` AND (p.note LIKE ? OR p.note IS NULL) ` : ` AND p.note LIKE ? `;
-  let noteImpegnoSQL = (note === "") ? ` AND (i.note LIKE ? OR i.note IS NULL) ` : ` AND i.note LIKE ? `;
-  
   const sql = `
     ( 
       SELECT 
@@ -815,10 +597,8 @@ app.post("/VISUALIZZA_LAVORI", async (req, res) => {
         null AS nome_professionista, 
         null AS professione, 
         l.giorno AS giorno, 
-        l.ora_inizio AS ora_inizio, 
-        l.minuto_inizio AS minuto_inizio, 
-        l.ora_fine AS ora_fine, 
-        l.minuto_fine AS minuto_fine, 
+        l.orario_inizio AS orario_inizio, 
+        l.orario_fine AS orario_fine,  
         p.descrizione AS descrizione, 
         COALESCE(p.note, "Note non inserite") AS note 
       FROM
@@ -843,10 +623,8 @@ app.post("/VISUALIZZA_LAVORI", async (req, res) => {
         p.nome AS nome_professionista, 
         p.professione AS professione, 
         l.giorno AS giorno, 
-        l.ora_inizio AS ora_inizio, 
-        l.minuto_inizio AS minuto_inizio, 
-        l.ora_fine AS ora_fine, 
-        l.minuto_fine AS minuto_fine, 
+        l.orario_inizio AS orario_inizio, 
+        l.orario_fine AS orario_fine, 
         i.descrizione AS descrizione, 
         COALESCE(i.note, "Note non inserite") AS note 
       FROM 
@@ -862,100 +640,117 @@ app.post("/VISUALIZZA_LAVORI", async (req, res) => {
     );
   `;
 
-  /*
-  const sql = `
-    SELECT 
-      0 AS tipo_selezione, 
-      c.nome AS nome_cliente,
-      c.cognome AS cognome_cliente,
-      p.nome AS nome_professionista,
-      p.professione,
-      l.giorno,
-      l.ora_inizio,
-      l.minuto_inizio,
-      l.ora_fine,
-      l.minuto_fine,
-      CASE 
-        WHEN pr.descrizione IS NULL AND im.descrizione IS NULL THEN 'Descrizione non inserita'
-        ELSE COALESCE(pr.descrizione, im.descrizione) 
-      END AS descrizione,
-      CASE 
-        WHEN pr.note IS NULL AND im.note IS NULL THEN 'Note non inserite'
-        ELSE COALESCE(pr.note, im.note)
-      END AS note
-    FROM
-      lavoro l
-    LEFT JOIN prenotazione pr ON l.id = pr.id_lavoro
-    LEFT JOIN cliente c ON pr.id_cliente = c.id
-    LEFT JOIN impegno im ON l.id = im.id_lavoro
-    LEFT JOIN professionista p ON im.id_professionista = p.id
-    WHERE
-      (c.nome LIKE CONCAT('%', ?, '%') OR ? = '')
-      AND (c.cognome LIKE CONCAT('%', ?, '%') OR ? = '')
-      AND (p.nome LIKE CONCAT('%', ?, '%') OR ? = '')
-      AND (p.professione LIKE CONCAT('%', ?, '%') OR ? = '')
-      AND l.giorno BETWEEN ? AND ?
-      AND (COALESCE(pr.descrizione, im.descrizione) LIKE CONCAT('%', ?, '%') OR ? = '')
-      AND (COALESCE(pr.note, im.note) LIKE CONCAT('%', ?, '%') OR ? = '')
-    ORDER BY l.giorno, l.ora_inizio, l.minuto_inizio;
-  `;
-  */
-
-  // c.nome LIKE ? AND c.cognome LIKE ? AND (l.giorno BETWEEN ? AND ?) AND p.descrizione LIKE ? AND p.note LIKE ? 
-  // p.nome LIKE ? AND p.professione LIKE ? AND (l.giorno BETWEEN ? AND ?) AND i.descrizione LIKE ? AND i.note LIKE ? 
   const params = [
-    `${nome_cliente}%`, `${cognome_cliente}%`, `${primo_giorno}%`, `${ultimo_giorno}%`, `${descrizione}%`, `${note}%`, 
-    `${nome_professionista}%`, `${professione}%`, `${primo_giorno}%`, `${ultimo_giorno}%`, `${descrizione}%`, `${note}%`, 
+    `${req.body.nome_cliente}%`, `${req.body.cognome_cliente}%`, `${primo_giorno}%`, 
+    `${ultimo_giorno}%`, `${req.body.descrizione}%`, `${req.body.note}%`, 
+    `${req.body.nome_professionista}%`, `${req.body.professione}%`, `${primo_giorno}%`, 
+    `${ultimo_giorno}%`, `${req.body.descrizione}%`, `${req.body.note}%`, 
   ];
+
+  // console.log(params);
 
   try {
     const result = await executeQuery(sql, params);
+    console.log(result);
     res.json(result);
-  } catch (err) {
+  } 
+  catch (err) {
     console.error('Errore durante la visualizzazione dei lavori: ', err);
     return res.status(500).json({ message: 'Errore del server.' });
   }
 });
 
+app.post("/OTTIENI_LAVORI_GIORNO", async (req, res) => {
+  const sqlSetIds = `
+    SET @ids := (
+      SELECT 
+        GROUP_CONCAT(\`id\`) 
+      FROM 
+        \`lavoro\` 
+      WHERE 
+        \`giorno\` = ?
+    );
+  `;
 
-/**
- * Elimina lavori
- */
+  const sqlSelectLavori = `
+    (
+      SELECT 
+        "lavoro_cliente" AS \`tipo_lavoro\`, 
+        l.\`orario_inizio\` AS \`orario_inizio\`, 
+        l.\`orario_fine\` AS \`orario_fine\` 
+      FROM 
+        \`prenotazione\` AS p 
+        LEFT JOIN \`lavoro\` AS l ON p.\`id_lavoro\` = l.\`id\`
+      WHERE 
+        FIND_IN_SET(p.\`id_lavoro\`, @ids) 
+    ) 
+    UNION 
+    (
+      SELECT 
+        "lavoro_professionista" AS \`tipo_lavoro\`, 
+        l.\`orario_inizio\` AS \`orario_inizio\`, 
+        l.\`orario_fine\` AS \`orario_fine\` 
+      FROM 
+        \`impegno\` AS i 
+        LEFT JOIN \`lavoro\` AS l ON i.\`id_lavoro\` = l.\`id\`
+      WHERE 
+        FIND_IN_SET(i.\`id_lavoro\`, @ids)
+    );
+  `;
+
+  const params = [`${req.body.giorno}`];
+
+  try {
+    await beginTransaction();
+    
+    await executeQuery(sqlSetIds, params);
+    const lavoriGiornoSelezionato = await executeQuery(sqlSelectLavori);
+    await commitTransaction();
+    
+    return res.status(200).json({ lavoriGiornoSelezionato: lavoriGiornoSelezionato });
+  } 
+  catch (err) {
+    await rollbackTransaction();
+    console.error('Errore durante l\'operazione: ', err);
+    return res.status(500).json({ message: 'Errore del server.' });
+  }
+});
+
+
 app.post("/ELIMINA_LAVORI", async (req, res) => {
   const { ids = [] } = req.body;
   let ids_prenotazioni = [], ids_impegni = [];
 
-  console.log("Dati ricevuti per l'eliminazione: ", ids);
+  // console.log("Dati ricevuti per l'eliminazione: ", ids);
 
   for (let i = 0; i < ids.length; i++) {
     if (ids[i][1] !== 0) ids_prenotazioni.push([ids[i][0], ids[i][1]]);
     if (ids[i][2] !== 0) ids_impegni.push([ids[i][0], ids[i][2]]);
   }
 
-  console.log("Ids prenotazioni: ", ids_prenotazioni);
-  console.log("Ids impegni: ", ids_impegni);
+  // console.log("Ids prenotazioni: ", ids_prenotazioni);
+  // console.log("Ids impegni: ", ids_impegni);
 
   const placeholders_prenotazioni = ids_prenotazioni.map(() => `(?, ?)`).join(", ");
   const placeholders_impegni = ids_impegni.map(() => `(?, ?)`).join(", ");
 
-  const sqlPrenotazioni = `
+  const sqlEliminaPrenotazioni = `
     DELETE FROM prenotazione WHERE (id_lavoro, id_cliente) IN (${placeholders_prenotazioni});
   `;
-  const sqlImpegni = `
+  const sqlEliminaImpegni = `
     DELETE FROM impegno WHERE (id_lavoro, id_professionista) IN (${placeholders_impegni});
   `;
 
   try {
     await beginTransaction();
 
-    // Eseguo la query per le prenotazioni
     if (ids_prenotazioni.length > 0) {
-      await executeQuery(sqlPrenotazioni, ids_prenotazioni.flat());
+      await executeQuery(sqlEliminaPrenotazioni, ids_prenotazioni.flat());
     }
 
     // Eseguo la query per gli impegni
     if (ids_impegni.length > 0) {
-      await executeQuery(sqlImpegni, ids_impegni.flat());
+      await executeQuery(sqlEliminaImpegni, ids_impegni.flat());
     }
 
     await commitTransaction();
@@ -968,19 +763,19 @@ app.post("/ELIMINA_LAVORI", async (req, res) => {
   }
 });
 
-/**
- * Elimino lavori range giorni
- */
 app.post("/ELIMINA_LAVORI_RANGE_GIORNI", async (req, res) => {
-  let { primo_giorno = '', ultimo_giorno = '' } = req.body;
+  // let { primo_giorno = '', ultimo_giorno = '' } = req.body;
 
-  if (primo_giorno === "")
-    primo_giorno = "1111-01-01";
-  if (ultimo_giorno === "")
-    ultimo_giorno = "9999-01-01";
+  let primo_giorno = (req.body.primo_giorno) ? req.body.primo_giorno : "1111-01-01";
+  let ultimo_giorno = (req.body.ultimo_giorno) ? req.body.ultimo_giorno : "9999-01-01";
+
+  // if (primo_giorno === "")
+  //   primo_giorno = "1111-01-01";
+  // if (ultimo_giorno === "")
+  //   ultimo_giorno = "9999-01-01";
 
   // Aggiungo un log per vedere i dati ricevuti
-  console.log("Dati ricevuti per l\'eliminazione: ", [primo_giorno, ultimo_giorno]);
+  // console.log("Dati ricevuti per l\'eliminazione: ", [primo_giorno, ultimo_giorno]);
 
   const sql = ` 
     DELETE FROM 
@@ -998,12 +793,12 @@ app.post("/MODIFICA_LAVORI", async (req, res) => {
   const sql_selezione_lavoro = `
     SELECT id AS id_lavoro 
     FROM lavoro 
-    WHERE giorno = ? AND ora_inizio = ? AND minuto_inizio = ? AND ora_fine = ? AND minuto_fine = ?; 
+    WHERE giorno = ? AND orario_inizio = ? AND orario_fine = ?; 
   `;
 
   const sql_inserimento_lavoro = ` 
-    INSERT INTO lavoro (giorno, ora_inizio, minuto_inizio, ora_fine, minuto_fine) 
-    VALUES (?, ?, ?, ?, ?);
+    INSERT INTO lavoro (giorno, orario_inizio, orario_fine) 
+    VALUES (?, ?, ?);
   `;
 
   const sql_modifica_prenotazione = `
@@ -1021,46 +816,40 @@ app.post("/MODIFICA_LAVORI", async (req, res) => {
   let ids_lavori = [];
   try {
     for (let lavoro of req.body) {
-      console.log(lavoro);
+      // console.log(lavoro);
       await beginTransaction();
-      console.log("START");
-      console.log(1);
+      // console.log("START");
+      // console.log(1);
 
       const giorno = new Date(lavoro.giorno).toISOString().split('T')[0];
-      console.log(2);
-      let parametri_selezione_lavoro = [
-        `${giorno}`, `${lavoro.ora_inizio}`, `${lavoro.minuto_inizio}`, 
-        `${lavoro.ora_fine}`, `${lavoro.minuto_fine}`
-      ];
-      console.log(3);
-      let parametri_inserimento_lavoro = [
-        `${giorno}`, `${lavoro.ora_inizio}`, `${lavoro.minuto_inizio}`, 
-        `${lavoro.ora_fine}`, `${lavoro.minuto_fine}`
-      ];
-      console.log(4);
+      // console.log(2);
+      let parametri_selezione_lavoro = [`${giorno}`, `${lavoro.orario_inizio}`, `${lavoro.orario_fine}`];
+      // console.log(3);
+      let parametri_inserimento_lavoro = [`${giorno}`, `${lavoro.orario_inizio}`, `${lavoro.orario_fine}`];
+      // console.log(4);
       let resultSQL = await executeQuery(sql_selezione_lavoro, parametri_selezione_lavoro);
       let id_lavoro;
-      console.log("---------------------" + resultSQL.length);
+      // console.log("---------------------" + resultSQL.length);
       if (resultSQL.length > 0) {
-        console.log("|||||||||||||||||||||||");
+        // console.log("|||||||||||||||||||||||");
         id_lavoro = resultSQL[0].id_lavoro;
-        console.log("|||||||||||||||||||||||" + id_lavoro);
+        // console.log("|||||||||||||||||||||||" + id_lavoro);
       } 
       else {
         await executeQuery(sql_inserimento_lavoro, parametri_inserimento_lavoro);
         resultSQL = await executeQuery(sql_selezione_lavoro, parametri_selezione_lavoro);
         id_lavoro = resultSQL[0].id_lavoro;
       }
-      console.log(5);
+      // console.log(5);
 
       let parametri_modifica_prenotazione = [
         id_lavoro, `${lavoro.descrizione}`, `${lavoro.note}`, `${lavoro.id_cliente}`, `${lavoro.id_lavoro}`
       ];
-      console.log(6);
+      // console.log(6);
       let parametri_modifica_impegno = [
         id_lavoro, `${lavoro.descrizione}`, `${lavoro.note}`, `${lavoro.id_professionista}`, `${lavoro.id_lavoro}`
       ];
-      console.log(7);
+      // console.log(7);
 
       if (lavoro.id_cliente !== 0) {
         await executeQuery(sql_modifica_prenotazione, parametri_modifica_prenotazione);
@@ -1068,21 +857,21 @@ app.post("/MODIFICA_LAVORI", async (req, res) => {
       else if (lavoro.id_professionista !== 0) {
         await executeQuery(sql_modifica_impegno, parametri_modifica_impegno);
       }
-      console.log(8);
+      // console.log(8);
       ids_lavori.push(id_lavoro);
-      console.log(9);
+      // console.log(9);
     }
     await commitTransaction();
-    console.log(10);
-    console.log(ids_lavori);
+    // console.log(10);
+    // console.log(ids_lavori);
     return res.status(200).json({ ids_lavori: ids_lavori });
   } 
   catch (err) {
-    console.log(11)
+    // console.log(11)
     await rollbackTransaction();
-    console.log(12)
+    // console.log(12)
     console.error('Errore durante la modifica dei lavori: ', err);
-    console.log(13)
+    // console.log(13)
     return res.status(500).json({ message: 'Errore del server.' });
   }
 });

@@ -55,9 +55,8 @@ export const handleInputChange = (e, setItem, items, setItems, tipoItem, id) => 
 
 export const handleInputChangeNuovoLavoro = (e, setItem) => {
   const nome_campi = [
-    "id_cliente", "id_professionista", "giorno", "ora_inizio", "ora_fine", "minuto_inizio", "minuto_fine", 
-    "descrizione", "note"
-  ]
+    "id_cliente", "id_professionista", "giorno", "orario_inizio", "orario_fine", "descrizione", "note"
+  ];
   
   const { name, value } = e.target;
 
@@ -70,7 +69,8 @@ export const handleInputChangeNuovoLavoro = (e, setItem) => {
   
       if (name === "id_cliente") {
         newState.id_professionista = 0;
-      } else if (name === "id_professionista") {
+      } 
+      else if (name === "id_professionista") {
         newState.id_cliente = 0;
       }
   
@@ -84,7 +84,7 @@ export const handleInputChangeNuovoLavoro = (e, setItem) => {
 }
 
 export const handleInputChangeLavoroEsistente = (e, items, setItems, id_lavoro, id_cliente, id_professionista) => {
-  const nome_campi = ["giorno", "ora_inizio", "minuto_inizio", "ora_fine", "minuto_fine", "descrizione", "note"];
+  const nome_campi = ["giorno", "orario_inizio", "orario_fine", "descrizione", "note"];
 
   const { name, value } = e.target;
 

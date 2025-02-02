@@ -160,15 +160,6 @@ const handleGiornoClick = (setGiornoType) => {
   };
 };
 
-const handleGiornoBlur = (setGiornoType, item, setItem) => {
-  return () => {
-    if(!item.giorno)
-      setGiornoType('text');
-    else
-      setGiornoType('date');
-  };
-};
-
 function cambioValoriOrari(e, setValue) {
   e.preventDefault();
 
@@ -189,19 +180,42 @@ function cambioValoriOrari(e, setValue) {
   }
 }
 
-
-export function CardNuovoLavoro({clienti, professionisti, item, setItem, eseguiSalvataggio}) {
-  const ore = ["07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22"];
-  const minuti = ["00", "30"];
-  let maxHeight = "2000px";
+export function CardNuovoLavoro({lavoriGiornoSelezionato, setLavoriGiornoSelezionato, handleInputChangeGiorno, handleGiornoBlur, clienti, professionisti, item, setItem, eseguiSalvataggio}) {
+  const orari = {
+    "07:00": [0, 0, 0], "07:30": [1, 0, 0], 
+    "08:00": [2, 0, 0], "08:30": [3, 0, 0], 
+    "09:00": [4, 0, 0], "09:30": [5, 0, 0], 
+    "10:00": [6, 0, 0], "10:30": [7, 0, 0], 
+    "11:00": [8, 0, 0], "11:30": [9, 0, 0], 
+    "12:00": [10, 0, 0], "12:30": [11, 0, 0], 
+    "13:00": [12, 0, 0], "13:30": [13, 0, 0], 
+    "14:00": [14, 0, 0], "14:30": [15, 0, 0], 
+    "15:00": [16, 0, 0], "15:30": [17, 0, 0], 
+    "16:00": [18, 0, 0], "16:30": [19, 0, 0], 
+    "17:00": [20, 0, 0], "17:30": [21, 0, 0], 
+    "18:00": [22, 0, 0], "18:30": [23, 0, 0], 
+    "19:00": [24, 0, 0], "19:30": [25, 0, 0], 
+    "20:00": [26, 0, 0], "20:30": [27, 0, 0], 
+    "21:00": [28, 0, 0], "21:30": [29, 0, 0], 
+    "22:00": [30, 0, 0]
+  };
 
   const [giornoType, setGiornoType] = useState('text');
+
+  let maxHeight = "2000px";
+
   item.giorno = item.giorno !== undefined ? item.giorno : '';
 
   return (
     <>
+
       <StyledCard>
         <StyledCardHeader>Nuovo lavoro</StyledCardHeader>
+        {Object.entries(orari).map(([key, value], index) => (
+          <React.Fragment key={index}>
+            <div>{key} - [{value[0]}, {value[1]}, {value[2]}]</div>
+          </React.Fragment>
+        ))}
         <StyledSelectModifica style={{width: "100%"}} name="id_cliente" value={item.id_cliente} onChange={(e) => handleInputChangeNuovoLavoro(e, setItem)}>
           <StyledOption value="0">Seleziona il cliente</StyledOption>
           {clienti.map((cliente) => (
@@ -222,48 +236,46 @@ export function CardNuovoLavoro({clienti, professionisti, item, setItem, eseguiS
           name="giorno"
           value={item.giorno}
           onClick={handleGiornoClick(setGiornoType)}
-          onBlur={handleGiornoBlur(setGiornoType, item, setItem)}
-          onChange={(e) => handleInputChange(e, setItem)}
+          onBlur={handleGiornoBlur(setGiornoType, item, orari)}
+          onChange={handleInputChangeGiorno}
         />
         {(item.errore_giorno !== "") && (<StyledSpanErrore>{item.errore_giorno}</StyledSpanErrore>)}
-        <Row>
-          <Col style={{ padding: '0', margin: '0', paddingLeft: '19px' }}>
-            <StyledSelectModifica name="ora_inizio" value={item.ora_inizio} onChange={(e) => handleInputChangeNuovoLavoro(e, setItem)}>
-              <StyledOption value="">Ora inizio</StyledOption>
-              {ore.map((ora) => (
-                <StyledOption key={ora} value={ora}>{ora}</StyledOption>  
-              ))}
-            </StyledSelectModifica>
-          </Col>
-          <Col style={{ padding: '0', margin: '0', paddingRight: '19px' }}>
-            <StyledSelectModifica name="minuto_inizio" value={item.minuto_inizio} onChange={(e) => handleInputChangeNuovoLavoro(e, setItem)}>
-              <StyledOption value="">Minuto inizio</StyledOption>
-              {minuti.map((minuto) => (
-                <StyledOption key={minuto} value={minuto}>{minuto}</StyledOption>  
-              ))}
-            </StyledSelectModifica>
-          </Col>
-        </Row>
-        {(item.errore_orario_inizio !== "") && (<StyledSpanErrore>{item.errore_orario_inizio}</StyledSpanErrore>)}
-        <Row>
-          <Col style={{ padding: '0', margin: '0', paddingLeft: '19px' }}>
-            <StyledSelectModifica name="ora_fine" value={item.ora_fine} onChange={(e) => handleInputChangeNuovoLavoro(e, setItem)}>
-              <StyledOption value="">Ora fine</StyledOption>
-              {ore.map((ora) => (
-                <StyledOption key={ora} value={ora}>{ora}</StyledOption>  
-              ))}
-            </StyledSelectModifica>
-          </Col>
-          <Col style={{ padding: '0', margin: '0', paddingRight: '19px' }}>
-            <StyledSelectModifica name="minuto_fine" value={item.minuto_fine} onChange={(e) => handleInputChangeNuovoLavoro(e, setItem)}>
-              <StyledOption value="">Minuto fine</StyledOption>
-              {minuti.map((minuto) => (
-                <StyledOption key={minuto} value={minuto}>{minuto}</StyledOption>  
-              ))}
-            </StyledSelectModifica>
-          </Col>
-        </Row>
-        {(item.errore_orario_fine !== "") && (<StyledSpanErrore>{item.errore_orario_fine}</StyledSpanErrore>)}
+        {(item.giorno) && (
+          <>
+            <Row>
+              <Col style={{ padding: '0', margin: '0', paddingLeft: '19px' }}>
+                <StyledSelectModifica name="orario_inizio" value={item.orario_inizio} onChange={(e) => handleInputChangeNuovoLavoro(e, setItem)}>
+                  <StyledOption value="">Orario inizio</StyledOption>
+                  {Object.entries(orari).map(([key, value], index) => (
+                    <React.Fragment key={index}>
+                      <StyledOption value={value}>{key}</StyledOption>
+                    </React.Fragment>
+                  ))}
+                </StyledSelectModifica>
+              </Col>
+              <Col style={{ padding: '0', margin: '0', paddingRight: '19px' }}>
+                <StyledSelectModifica name="orario_fine" value={item.orario_fine} onChange={(e) => handleInputChangeNuovoLavoro(e, setItem)}>
+                  <StyledOption value="">Orario fine</StyledOption>
+                  {Object.entries(orari).map(([key, value], index) => (
+                    <React.Fragment key={index}>
+                      <StyledOption value={value}>{key}</StyledOption>
+                    </React.Fragment>
+                  ))}
+                </StyledSelectModifica>
+              </Col>
+            </Row>
+            {(item.errore_orario_inizio !== "") && (<StyledSpanErrore>{item.errore_orario_inizio}</StyledSpanErrore>)}
+            {(item.errore_orario_fine !== "") && (<StyledSpanErrore>{item.errore_orario_fine}</StyledSpanErrore>)}
+            {lavoriGiornoSelezionato.length > 0 && (
+              <>
+                {lavoriGiornoSelezionato.map((lgs, index) => (
+                  <div key={index}>
+                    {lgs.tipo_lavoro} -- {lgs.orario_inizio} - {lgs.orario_fine}</div>
+                ))}
+              </>
+            )}
+          </>
+        )}
         <StyledTextAreaModifica
           rows="1"
           placeholder="Descrizione*"
@@ -286,7 +298,7 @@ export function CardNuovoLavoro({clienti, professionisti, item, setItem, eseguiS
   );
 }
 
-export function CardCercaLavori({ item, setItem, eseguiRicerca }) {
+export function CardCercaLavori({ handleGiornoBlur, item, setItem, eseguiRicerca }) {
   const ore = ["07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22"];
   const minuti = ["00", "30"];
   const [isVisible, setIsVisible] = useState(true);
@@ -380,17 +392,34 @@ export function CardCercaLavori({ item, setItem, eseguiRicerca }) {
   );
 }
 
-export function CardLavoroEsistente({item, items, setItems, selectOperation}) {
-  const ore = ["07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22"];
-  const minuti = ["00", "30"];
+export function CardLavoroEsistente({ handleGiornoBlur, item, items, setItems, selectOperation }) {
+  const orari = {
+    "07:00": [0, 0, 0], "07:30": [1, 0, 0], 
+    "08:00": [2, 0, 0], "08:30": [3, 0, 0], 
+    "09:00": [4, 0, 0], "09:30": [5, 0, 0], 
+    "10:00": [6, 0, 0], "10:30": [7, 0, 0], 
+    "11:00": [8, 0, 0], "11:30": [9, 0, 0], 
+    "12:00": [10, 0, 0], "12:30": [11, 0, 0], 
+    "13:00": [12, 0, 0], "13:30": [13, 0, 0], 
+    "14:00": [14, 0, 0], "14:30": [15, 0, 0], 
+    "15:00": [16, 0, 0], "15:30": [17, 0, 0], 
+    "16:00": [18, 0, 0], "16:30": [19, 0, 0], 
+    "17:00": [20, 0, 0], "17:30": [21, 0, 0], 
+    "18:00": [22, 0, 0], "18:30": [23, 0, 0], 
+    "19:00": [24, 0, 0], "19:30": [25, 0, 0], 
+    "20:00": [26, 0, 0], "20:30": [27, 0, 0], 
+    "21:00": [28, 0, 0], "21:30": [29, 0, 0], 
+    "22:00": [30, 0, 0]
+  };
+
   let maxHeight = "2000px";
   const [giornoType, setGiornoType] = useState('text');
   item.giorno = item.giorno !== undefined ? item.giorno : '';
   const header = (item.nome_cliente) ? "Lavoro cliente" : "Lavoro professionista";
-  if(item.ora_inizio.toString().length === 1) item.ora_inizio = "0" + item.ora_inizio.toString();
-  if(item.ora_fine.toString().length === 1) item.ora_fine = "0" + item.ora_fine.toString();
-  if(item.minuto_inizio.toString().length === 1) item.minuto_inizio = "0" + item.minuto_inizio.toString();
-  if(item.minuto_fine.toString().length === 1) item.minuto_fine = "0" + item.minuto_fine.toString();
+  // if(item.ora_inizio.toString().length === 1) item.ora_inizio = "0" + item.ora_inizio.toString();
+  // if(item.ora_fine.toString().length === 1) item.ora_fine = "0" + item.ora_fine.toString();
+  // if(item.minuto_inizio.toString().length === 1) item.minuto_inizio = "0" + item.minuto_inizio.toString();
+  // if(item.minuto_fine.toString().length === 1) item.minuto_fine = "0" + item.minuto_fine.toString();
   
   const ClasseSelect = (item.tipo_selezione !== 1 && item.tipo_selezione !== 2) ? StyledSelectBlock : (
     item.tipo_selezione === 1) ? StyledSelectModifica : StyledSelectElimina;
@@ -412,7 +441,7 @@ export function CardLavoroEsistente({item, items, setItems, selectOperation}) {
         <SlideContainer style={{maxHeight: `${maxHeight}`}}>
           {/* <div>|{item.id_cliente}|</div> */}
           {/* <div>|{item.id_professionista}|</div> */}
-          <div>|{item.id_lavoro}|</div>
+          {/* <div>|{item.id_lavoro}|</div> */}
           {(item.nome_cliente) && (
             <ClasseTextAreaNonModificabile 
               rows="1" 
@@ -446,56 +475,32 @@ export function CardLavoroEsistente({item, items, setItems, selectOperation}) {
 
           <Row>
             <Col style={{ padding: '0', margin: '0', paddingLeft: '19px' }}>
-              <ClasseSelect
-                name="ora_inizio" 
-                value={item.ora_inizio.toString()} 
+              <ClasseSelect 
+                name="orario_inizio" 
+                value={item.orario_inizio} 
                 readOnly={item.tipo_selezione !== 1}
                 onChange={item.tipo_selezione === 1 ? (e) => handleInputChangeLavoroEsistente(e, items, setItems, item.id_lavoro, item.id_cliente, item.id_professionista) : undefined}
               >
-                <StyledOption value="">Ora inizio</StyledOption>
-                {ore.map((ora) => (
-                  <StyledOption key={ora} value={ora}>{ora}</StyledOption>  
+                <StyledOption value="">Orario inizio</StyledOption>
+                {Object.entries(orari).map(([key, value], index) => (
+                  <React.Fragment key={index}>
+                    <StyledOption value={key}>{key}</StyledOption>
+                  </React.Fragment>
                 ))}
               </ClasseSelect>
             </Col>
             <Col style={{ padding: '0', margin: '0', paddingRight: '19px' }}>
               <ClasseSelect 
-                name="minuto_inizio" 
-                value={item.minuto_inizio} 
+                name="orario_fine" 
+                value={item.orario_fine} 
                 readOnly={item.tipo_selezione !== 1}
                 onChange={item.tipo_selezione === 1 ? (e) => handleInputChangeLavoroEsistente(e, items, setItems, item.id_lavoro, item.id_cliente, item.id_professionista) : undefined}
               >
-                <StyledOption value="">Minuto inizio</StyledOption>
-                {minuti.map((minuto) => (
-                  <StyledOption key={minuto} value={minuto}>{minuto}</StyledOption>  
-                ))}
-              </ClasseSelect>
-            </Col>
-          </Row>
-          <Row>
-            <Col style={{ padding: '0', margin: '0', paddingLeft: '19px' }}>
-              <ClasseSelect 
-                name="ora_fine" 
-                value={item.ora_fine} 
-                readOnly={item.tipo_selezione !== 1}
-                onChange={item.tipo_selezione === 1 ? (e) => handleInputChangeLavoroEsistente(e, items, setItems, item.id_lavoro, item.id_cliente, item.id_professionista) : undefined}
-              >
-                <StyledOption value="">Ora fine</StyledOption>
-                {ore.map((ora) => (
-                  <StyledOption key={ora} value={ora}>{ora}</StyledOption>  
-                ))}
-              </ClasseSelect>
-            </Col>    
-            <Col style={{ padding: '0', margin: '0', paddingRight: '19px' }}>
-              <ClasseSelect 
-                name="minuto_fine" 
-                value={item.minuto_fine} 
-                readOnly={item.tipo_selezione !== 1}
-                onChange={item.tipo_selezione === 1 ? (e) => handleInputChangeLavoroEsistente(e, items, setItems, item.id_lavoro, item.id_cliente, item.id_professionista) : undefined}
-              >
-                <StyledOption value="">Minuto fine</StyledOption>
-                {minuti.map((minuto) => (
-                  <StyledOption key={minuto} value={minuto}>{minuto}</StyledOption>  
+                <StyledOption value="">Orario fine</StyledOption>
+                {Object.entries(orari).map(([key, value], index) => (
+                  <React.Fragment key={index}>
+                    <StyledOption value={key}>{key}</StyledOption>
+                  </React.Fragment>
                 ))}
               </ClasseSelect>
             </Col>

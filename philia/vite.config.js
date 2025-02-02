@@ -40,7 +40,8 @@ export default defineConfig({
       '/VISUALIZZA_LAVORI': 'http://localhost:3000',
       '/ELIMINA_LAVORI': 'http://localhost:3000',
       '/ELIMINA_LAVORI_RANGE_GIORNI': 'http://localhost:3000',
-      '/MODIFICA_LAVORI': 'http://localhost:3000',
+      '/MODIFICA_LAVORI': 'http://localhost:3000', 
+      '/OTTIENI_LAVORI_GIORNO': 'http://localhost:3000', 
     }
   }
 });
