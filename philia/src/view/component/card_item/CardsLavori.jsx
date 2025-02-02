@@ -23,37 +23,7 @@ import {
   handleInputChange, handleInputChangeLavoroEsistente, handleInputChangeNuovoLavoro, cambiamentoBloccato, getCampiRicerca, getCampiNuovoItem
 } from '../../../vario/Vario';
 
-const nascondiForm = (setIsVisible, setArrowUp) => {
-  setIsVisible(prev => !prev);
-  
-  setTimeout(() => {
-    setArrowUp(prev => !prev);
-  }, 450); 
-};
-
-const PencilTag = ({ tipoSelezione, selectOperation, item }) => {
-  switch(tipoSelezione) {
-    case 0:
-    case 2:
-      return <StyledPencilNotSelected size={grandezzaIcona} style={{ marginRight: "50%" }}  onClick={() => selectOperation("pencil", item)} />;
-    case 1:
-      return <StyledPencilSelected size={grandezzaIcona} style={{ marginRight: "50%" }}  onClick={() => selectOperation("pencil", item)} />;
-    default:
-      return <></>;
-  }
-}
-
-const TrashTag = ({ tipoSelezione, selectOperation, item }) => {
-  switch(tipoSelezione) {
-    case 0:
-    case 1:
-      return <StyledTrashNotSelected size={grandezzaIcona} onClick={() => selectOperation("trash", item)} />;
-    case 2:
-      return <StyledTrashSelected size={grandezzaIcona} onClick={() => selectOperation("trash", item)} />;
-    default:
-      return <></>;
-  }
-}
+import { OperazioniNuovoItem, OperazioniCercaItems, OperazioniItemEsistente, OperazioniFileItems } from './CardItem';
 
 const TextAreaTag = ({ tipoSelezione, nome, valore, modificabile, setItem, placeholder, items, setItems, tipoItem, id }) => {
   switch(tipoSelezione) {
@@ -95,64 +65,7 @@ const SelectTag = ({ tipoSelezione, nome, valore, modificabile, setItem, items, 
     default:
       return <></>;
   }
-  
 }
-
-function OperazioniNuovoItem({eseguiSalvataggio}) {
-  return (
-    <StyledListGroupItem style={{border: "5px solid #000000", backgroundColor:"#000000", paddingTop: "3%"}}>
-      <StyledRow>
-        <StyledCol>
-          <StyledSaveNotSelected size={grandezzaIcona} onClick={eseguiSalvataggio} />
-        </StyledCol>
-      </StyledRow>
-    </StyledListGroupItem>
-  )
-}
-
-function OperazioniCercaItems({ setIsVisible, arrowUp, setArrowUp, eseguiRicerca }) {
-  return (
-    <StyledListGroupItem style={{ border: "5px solid #000000", backgroundColor: "#000000", paddingTop: "3%" }}>
-      <StyledSearchNotSelected size={grandezzaIcona} style={{ marginRight: "50%" }} onClick={eseguiRicerca} />
-      {arrowUp && (
-        <StyledArrowTopNotSelected size={grandezzaIcona} onClick={() => nascondiForm(setIsVisible, setArrowUp)} />
-      )}
-      {!arrowUp && (
-        <StyledArrowBottomNotSelected size={grandezzaIcona} onClick={() => nascondiForm(setIsVisible, setArrowUp)} />
-      )}
-    </StyledListGroupItem>
-  );
-};
-
-function OperazioniItemEsistente ({ tipoSelezione, selectOperation, item }) {
-  return (
-    <StyledListGroupItem style={{ border: "5px solid #000000", backgroundColor: "#000000", paddingTop: "3%" }}>
-      <PencilTag tipoSelezione={item.tipo_selezione} selectOperation={selectOperation} item={item} />
-      <TrashTag tipoSelezione={item.tipo_selezione} selectOperation={selectOperation} item={item} />
-    </StyledListGroupItem>
-  )
-}
-
-function OperazioniFileItems({ottieniLavoriRangePDF, ottieniLavoriRangeExcel, eliminaLavoriRange}) {
-  return (
-    <StyledListGroupItem style={{ border: "5px solid #000000", backgroundColor: "#000000", paddingTop: "3%" }}>
-      <div>
-        <StyledFileIconNotSelected icon={faFilePdf} size="2xl" style={{ marginRight: "50%" }} />
-        <StyledFileIconNotSelected icon={faFileExcel} size="2xl" />
-      </div>
-      <br />
-      <div>
-        <StyledDownloadNotSelected size={grandezzaIcona} style={{ marginRight: "50%" }} onClick={ottieniLavoriRangePDF} />
-        <StyledDownloadNotSelected size={grandezzaIcona} onClick={ottieniLavoriRangeExcel} />
-      </div>
-      <br />
-      <div>
-        <StyledTrashNotSelected2 size={grandezzaIcona} onClick={eliminaLavoriRange} />
-      </div>
-      <br />
-    </StyledListGroupItem>
-  );
-};
 
 const handleGiornoClick = (setGiornoType) => {
   return () => {
@@ -416,23 +329,9 @@ export function CardLavoroEsistente({ handleGiornoBlur, item, items, setItems, s
   const [giornoType, setGiornoType] = useState('text');
   item.giorno = item.giorno !== undefined ? item.giorno : '';
   const header = (item.nome_cliente) ? "Lavoro cliente" : "Lavoro professionista";
-  // if(item.ora_inizio.toString().length === 1) item.ora_inizio = "0" + item.ora_inizio.toString();
-  // if(item.ora_fine.toString().length === 1) item.ora_fine = "0" + item.ora_fine.toString();
-  // if(item.minuto_inizio.toString().length === 1) item.minuto_inizio = "0" + item.minuto_inizio.toString();
-  // if(item.minuto_fine.toString().length === 1) item.minuto_fine = "0" + item.minuto_fine.toString();
   
-  const ClasseSelect = (item.tipo_selezione !== 1 && item.tipo_selezione !== 2) ? StyledSelectBlock : (
-    item.tipo_selezione === 1) ? StyledSelectModifica : StyledSelectElimina;
-
-  const ClasseInputModificabile = (item.tipo_selezione !== 1 && item.tipo_selezione !== 2) ? StyledInputBlock : (
-    item.tipo_selezione === 1) ? StyledInputModifica : StyledInputElimina;
-
-  const ClasseInputNonModificabile = (item.tipo_selezione !== 2) ? StyledInputBlock : StyledInputElimina;
-    
-  const ClasseTextAreaModificabile = (item.tipo_selezione !== 1 && item.tipo_selezione !== 2) ? StyledTextAreaBlock : (
-    item.tipo_selezione === 1) ? StyledTextAreaModifica : StyledTextAreaElimina;
   
-  const ClasseTextAreaNonModificabile = (item.tipo_selezione !== 2) ? StyledTextAreaBlock : StyledTextAreaElimina;
+
 
   return (
     <>

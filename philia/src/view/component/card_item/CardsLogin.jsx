@@ -21,13 +21,7 @@ import {
   handleInputChange, cambiamentoBloccato, getCampiRicerca, getCampiNuovoItem
 } from '../../../vario/Vario';
 
-const OperazioniLogin = ({eseguiLogin}) => {
-  return (
-    <StyledListGroupItem style={{ border: "5px solid #000000", backgroundColor: "#000000", paddingTop: "3%", paddingBottom: "3%" }}>
-      <StyledLoginNotSelected size={grandezzaIcona} onClick={eseguiLogin} />
-    </StyledListGroupItem>
-  );
-};
+import { OperazioniLogin } from './CardItem';
 
 export function CardLogin({item, setItem, eseguiLogin}) {
   return (

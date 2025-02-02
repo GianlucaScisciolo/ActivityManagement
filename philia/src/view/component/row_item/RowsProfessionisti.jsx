@@ -13,62 +13,7 @@ import {
 import { 
   handleInputChange, cambiamentoBloccato, getCampiRicerca, getCampiNuovoItem
 } from '../../../vario/Vario';
-
-const nascondiForm = (visibilita, setVisibilita, setArrowUp) => {
-  const steps = visibilita.length;
-  for (let i = 1; i <= steps; i++) {
-    setTimeout(() => {
-      setVisibilita(prevState => {
-        const newState = [...prevState];
-        newState[steps - i] = false;
-        return newState;
-      });
-    }, i * 250);
-  }
-  setTimeout(() => {
-    setArrowUp(prev => !prev);
-  }, steps * 250);
-};
-
-const mostraForm = (visibilita, setVisibilita, setArrowUp) => {
-  const steps = visibilita.length;
-  for (let i = 1; i <= steps; i++) {
-    setTimeout(() => {
-      setVisibilita(prevState => {
-        const newState = [...prevState];
-        newState[i - 1] = true;
-        return newState;
-      });
-    }, i * 250);
-  }
-  setTimeout(() => {
-    setArrowUp(prev => !prev);
-  }, steps * 250);
-};
-
-const PencilTag = ({ tipoSelezione, selectOperation, item }) => {
-  switch(tipoSelezione) {
-    case 0:
-    case 2:
-      return <StyledPencilNotSelected size={grandezzaIcona} style={{ marginRight: "50%" }}  onClick={() => selectOperation("pencil", item)} />;
-    case 1:
-      return <StyledPencilSelected size={grandezzaIcona} style={{ marginRight: "50%" }}  onClick={() => selectOperation("pencil", item)} />;
-    default:
-      return <></>;
-  }
-}
-
-const TrashTag = ({ tipoSelezione, selectOperation, item }) => {
-  switch(tipoSelezione) {
-    case 0:
-    case 1:
-      return <StyledTrashNotSelected size={grandezzaIcona} onClick={() => selectOperation("trash", item)} />;
-    case 2:
-      return <StyledTrashSelected size={grandezzaIcona} onClick={() => selectOperation("trash", item)} />;
-    default:
-      return <></>;
-  }
-}
+import { OperazioniNuovoItem, OperazioniCercaItems, OperazioniItemEsistente } from './RowItem';
 
 const TextAreaTag = ({ tipoSelezione, nome, valore, modificabile, setItem, placeholder, items, setItems, tipoItem, id }) => {
   switch(tipoSelezione) {
@@ -96,37 +41,6 @@ const InputTag = ({ tipoSelezione, nome, tipo, valore, modificabile, setItem, pl
     default:
       return <></>;
   }
-}
-
-function OperazioniNuovoItem({eseguiSalvataggio}) {
-  return (
-    <StyledColOperazioni>
-      <StyledSaveNotSelected size={grandezzaIcona} onClick={eseguiSalvataggio} />
-    </StyledColOperazioni>
-  )
-}
-
-const OperazioniCercaItems = ({ visibilita, setVisibilita, arrowUp, setArrowUp, eseguiRicerca }) => {
-  return (
-    <StyledColOperazioni>
-      <StyledSearchNotSelected size={grandezzaIcona} style={{ marginRight: "50%" }} onClick={eseguiRicerca} />
-      {arrowUp && (
-        <StyledArrowLeftNotSelected size={grandezzaIcona} onClick={() => nascondiForm(visibilita, setVisibilita, setArrowUp)} />
-      )}
-      {!arrowUp && (
-        <StyledArrowRightNotSelected size={grandezzaIcona} onClick={() => mostraForm(visibilita, setVisibilita, setArrowUp)} />
-      )}
-    </StyledColOperazioni>
-  );
-};
-
-function OperazioniItemEsistente ({ tipoSelezione, selectOperation, item }) {
-  return (
-    <StyledColOperazioni>
-      <PencilTag tipoSelezione={item.tipo_selezione} selectOperation={selectOperation} item={item} />
-      <TrashTag tipoSelezione={item.tipo_selezione} selectOperation={selectOperation} item={item} />
-    </StyledColOperazioni>
-  )
 }
 
 export function RowNuovoProfessionista({item, setItem, eseguiSalvataggio}) {

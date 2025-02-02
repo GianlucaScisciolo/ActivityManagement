@@ -6,8 +6,6 @@ import personaStore from "../../store/persona_store/PersonaStore";
 import ProfessionistaAction from "../../action/professionista_action/ProfessionistaAction";
 import professionistaStore from "../../store/professionista_store/ProfessionistaStore";
 import { operazioniPersone, operazioniProfessionisti } from "../../vario/Operazioni";
-import FormItem from "../component/form_item/FormItem";
-import { Items } from "../component/Items";
 import { controlloLavoro } from "../../vario/Controlli";
 import { FormNuovoLavoro } from "../component/form_item/FormsLavori";
 import { RowNuovoLavoro, RowLavoroEsistente } from "../component/row_item/RowsLavori";

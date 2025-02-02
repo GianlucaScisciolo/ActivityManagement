@@ -17,13 +17,7 @@ import {
   handleInputChange, getCampiRicerca, getCampiNuovoItem, selezionaInserimentoLavoroCliente, selezionaInserimentoLavoroProfessionista
 } from '../../../vario/Vario';
 
-const OperazioniModificaProfilo = ({eseguiModificaProfilo}) => {
-  return (
-    <StyledListGroupItem style={{ border: "5px solid #000000", backgroundColor: "#000000", paddingTop: "3%", paddingBottom: "3%" }}>
-      <StyledPencilNotSelected size={grandezzaIcona} onClick={eseguiModificaProfilo} />
-    </StyledListGroupItem>
-  );
-};
+import { OperazioniModificaProfilo } from './FormItem';
 
 export function FormModificaProfilo({ item, setItem, eseguiModificaProfilo }) {
   let maxHeight = "2000px";

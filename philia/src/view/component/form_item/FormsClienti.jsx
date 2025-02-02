@@ -17,39 +17,7 @@ import {
   handleInputChange, getCampiRicerca, getCampiNuovoItem, selezionaInserimentoLavoroCliente, selezionaInserimentoLavoroProfessionista
 } from '../../../vario/Vario';
 
-const nascondiForm = (setIsVisible, setArrowUp) => {
-  setIsVisible(prev => !prev);
-  
-  setTimeout(() => {
-    setArrowUp(prev => !prev);
-  }, 1000); 
-};
-
-function OperazioniNuovoItem({eseguiSalvataggio}) {
-  return (
-    <StyledListGroupItem style={{border: "5px solid #000000", backgroundColor:"#000000", paddingTop: "3%"}}>
-      <StyledRow>
-        <StyledCol>
-          <StyledSaveNotSelected size={grandezzaIcona} onClick={eseguiSalvataggio} />
-        </StyledCol>
-      </StyledRow>
-    </StyledListGroupItem>
-  )
-}
-
-function OperazioniCercaItems({ setIsVisible, arrowUp, setArrowUp, eseguiRicerca }) {
-  return (
-    <StyledListGroupItem style={{ border: "5px solid #000000", backgroundColor: "#000000", paddingTop: "3%" }}>
-      <StyledSearchNotSelected size={grandezzaIcona} style={{ marginRight: "50%" }} onClick={eseguiRicerca} />
-      {arrowUp && (
-        <StyledArrowTopNotSelected size={grandezzaIcona} onClick={() => nascondiForm(setIsVisible, setArrowUp)} />
-      )}
-      {!arrowUp && (
-        <StyledArrowBottomNotSelected size={grandezzaIcona} onClick={() => nascondiForm(setIsVisible, setArrowUp)} />
-      )}
-    </StyledListGroupItem>
-  );
-};
+import { OperazioniNuovoItem, OperazioniCercaItems } from './FormItem';
 
 export function FormNuovoCliente({item, setItem, eseguiSalvataggio}) {
   let maxHeight = "2000px";

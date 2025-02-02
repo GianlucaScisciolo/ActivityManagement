@@ -21,37 +21,7 @@ import {
   handleInputChange, cambiamentoBloccato, getCampiRicerca, getCampiNuovoItem
 } from '../../../vario/Vario';
 
-const nascondiForm = (setIsVisible, setArrowUp) => {
-  setIsVisible(prev => !prev);
-  
-  setTimeout(() => {
-    setArrowUp(prev => !prev);
-  }, 450); 
-};
-
-const PencilTag = ({ tipoSelezione, selectOperation, item }) => {
-  switch(tipoSelezione) {
-    case 0:
-    case 2:
-      return <StyledPencilNotSelected size={grandezzaIcona} style={{ marginRight: "50%" }}  onClick={() => selectOperation("pencil", item)} />;
-    case 1:
-      return <StyledPencilSelected size={grandezzaIcona} style={{ marginRight: "50%" }}  onClick={() => selectOperation("pencil", item)} />;
-    default:
-      return <></>;
-  }
-}
-
-const TrashTag = ({ tipoSelezione, selectOperation, item }) => {
-  switch(tipoSelezione) {
-    case 0:
-    case 1:
-      return <StyledTrashNotSelected size={grandezzaIcona} onClick={() => selectOperation("trash", item)} />;
-    case 2:
-      return <StyledTrashSelected size={grandezzaIcona} onClick={() => selectOperation("trash", item)} />;
-    default:
-      return <></>;
-  }
-}
+import { OperazioniNuovoItem, OperazioniCercaItems, OperazioniItemEsistente } from './CardItem';
 
 const TextAreaTag = ({ tipoSelezione, nome, valore, modificabile, setItem, placeholder, items, setItems, tipoItem, id }) => {
   switch(tipoSelezione) {
@@ -79,41 +49,6 @@ const InputTag = ({ tipoSelezione, nome, tipo, valore, modificabile, setItem, pl
     default:
       return <></>;
   }
-}
-
-function OperazioniNuovoItem({eseguiSalvataggio}) {
-  return (
-    <StyledListGroupItem style={{border: "5px solid #000000", backgroundColor:"#000000", paddingTop: "3%"}}>
-      <StyledRow>
-        <StyledCol>
-          <StyledSaveNotSelected size={grandezzaIcona} onClick={eseguiSalvataggio} />
-        </StyledCol>
-      </StyledRow>
-    </StyledListGroupItem>
-  )
-}
-
-function OperazioniCercaItems({ setIsVisible, arrowUp, setArrowUp, eseguiRicerca }) {
-  return (
-    <StyledListGroupItem style={{ border: "5px solid #000000", backgroundColor: "#000000", paddingTop: "3%" }}>
-      <StyledSearchNotSelected size={grandezzaIcona} style={{ marginRight: "50%" }} onClick={eseguiRicerca} />
-      {arrowUp && (
-        <StyledArrowTopNotSelected size={grandezzaIcona} onClick={() => nascondiForm(setIsVisible, setArrowUp)} />
-      )}
-      {!arrowUp && (
-        <StyledArrowBottomNotSelected size={grandezzaIcona} onClick={() => nascondiForm(setIsVisible, setArrowUp)} />
-      )}
-    </StyledListGroupItem>
-  );
-};
-
-function OperazioniItemEsistente ({ tipoSelezione, selectOperation, item }) {
-  return (
-    <StyledListGroupItem style={{ border: "5px solid #000000", backgroundColor: "#000000", paddingTop: "3%" }}>
-      <PencilTag tipoSelezione={item.tipo_selezione} selectOperation={selectOperation} item={item} />
-      <TrashTag tipoSelezione={item.tipo_selezione} selectOperation={selectOperation} item={item} />
-    </StyledListGroupItem>
-  )
 }
 
 export function CardNuovoProfessionista({item, setItem, eseguiSalvataggio}) {

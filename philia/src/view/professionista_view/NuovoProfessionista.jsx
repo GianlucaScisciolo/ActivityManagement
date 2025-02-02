@@ -1,14 +1,9 @@
 import React, { useState } from 'react';
 import Header from '../component/Header';
-import ProfessionistaAction from '../../action/professionista_action/ProfessionistaAction';
 import { controlloProfessionista } from '../../vario/Controlli';
 import Row from 'react-bootstrap/esm/Row';
 import Col from 'react-bootstrap/esm/Col';
-import CardItem from '../component/card_item/CardItem';
 import { useSelector } from 'react-redux';
-import RowItem from '../component/row_item/RowItem';
-import FormItem from '../component/form_item/FormItem';
-import { Items } from '../component/Items';
 import { FormNuovoProfessionista } from '../component/form_item/FormsProfessionisti';
 import { RowNuovoProfessionista, RowProfessionistaEsistente } from '../component/row_item/RowsProfessionisti';
 import { CardNuovoProfessionista, CardProfessionistaEsistente } from '../component/card_item/CardsProfessionisti';

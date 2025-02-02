@@ -14,13 +14,7 @@ import {
   handleInputChange, cambiamentoBloccato, getCampiRicerca, getCampiNuovoItem
 } from '../../../vario/Vario';
 
-const OperazioniLogin = ({eseguiLogin}) => {
-  return (
-    <StyledColOperazioni>
-      <StyledLoginNotSelected size={grandezzaIcona} onClick={eseguiLogin} />
-    </StyledColOperazioni>
-  );
-};
+import { OperazioniLogin } from './RowItem';
 
 export function RowLogin({item, setItem, eseguiLogin}) {
   return (

@@ -1,14 +1,9 @@
 import React, { useState } from 'react';
 import Header from '../component/Header';
-import PersonaAction from '../../action/persona_action/PersonaAction';
 import { controlloCliente } from '../../vario/Controlli';
 import { useSelector, useDispatch } from 'react-redux';
-import CardItem from '../component/card_item/CardItem';
 import Row from 'react-bootstrap/esm/Row';
 import Col from 'react-bootstrap/esm/Col';
-import RowItem from '../component/row_item/RowItem';
-import FormItem from '../component/form_item/FormItem';
-import { Items } from '../component/Items';
 import { CardNuovoCliente, CardClienteEsistente } from '../component/card_item/CardsClienti';
 import { FormNuovoCliente } from '../component/form_item/FormsClienti';
 import { RowNuovoCliente, RowClienteEsistente } from '../component/row_item/RowsClienti';

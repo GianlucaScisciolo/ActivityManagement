@@ -14,13 +14,7 @@ import {
   handleInputChange, cambiamentoBloccato, getCampiRicerca, getCampiNuovoItem
 } from '../../../vario/Vario';
 
-const OperazioniModificaProfilo = ({eseguiModificaProfilo}) => {
-  return (
-    <StyledColOperazioni>
-      <StyledPencilNotSelectedModificaProfilo size={grandezzaIcona} onClick={eseguiModificaProfilo} />
-    </StyledColOperazioni>
-  );
-};
+import { OperazioniModificaProfilo } from './RowItem';
 
 export function RowModificaProfilo({ item, setItem, eseguiModificaProfilo }) {
   let maxHeight = "2000px";

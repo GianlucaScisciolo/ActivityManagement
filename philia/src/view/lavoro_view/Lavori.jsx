@@ -1,11 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Header from '../component/Header';
-import { FormRicerca } from '../component/FormRicerca';
-import { Items } from '../component/Items';
 import Row from 'react-bootstrap/esm/Row';
 import Col from 'react-bootstrap/esm/Col';
 import { elimina } from '../../vario/OperazioniEliminazione';
-// import { modifica } from '../../vario/OperazioniModifica';
 import { useSelector } from 'react-redux';
 import { FormCercaLavori } from '../component/form_item/FormsLavori';
 import { RowRicercaLavori, RowLavoroEsistente} from '../component/row_item/RowsLavori';
