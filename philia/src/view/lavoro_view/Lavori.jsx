@@ -6,7 +6,7 @@ import { elimina } from '../../vario/OperazioniEliminazione';
 import { useSelector } from 'react-redux';
 import { FormCercaLavori } from '../component/form_item/FormsLavori';
 import { RowRicercaLavori, RowLavoroEsistente} from '../component/row_item/RowsLavori';
-import { CardCercaLavori, CardLavoroEsistente } from '../component/card_item/CardsLavori';
+import { CardRicercaLavori, CardLavoroEsistente } from '../component/card_item/CardsLavori';
 import { eseguiRicerca } from '../../vario/OperazioniRicerca';
 import lavoroStore from '../../store/lavoro_store/LavoroStore';
 import LavoroAction from '../../action/lavoro_action/LavoroAction';
@@ -262,7 +262,7 @@ const Lavori = () => {
       )}
       {(formSession.view === "card") && (
         <center>
-          <CardCercaLavori handleGiornoBlur={handleGiornoBlur} item={datiRicerca} setItem={setDatiRicerca} eseguiRicerca={(e) => eseguiRicerca(e, "lavori", setLavori, datiRicerca)} />
+          <CardRicercaLavori handleGiornoBlur={handleGiornoBlur} item={datiRicerca} setItem={setDatiRicerca} eseguiRicerca={(e) => eseguiRicerca(e, "lavori", setLavori, datiRicerca)} />
         </center>
       )}
 

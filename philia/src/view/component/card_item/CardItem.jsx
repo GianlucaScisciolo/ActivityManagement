@@ -9,7 +9,9 @@ import {
   StyledPencilNotSelected2, 
   StyledSelectBlock, StyledSelectModifica, StyledSelectElimina, 
   StyledInputBlock, StyledInputModifica, StyledInputElimina, 
-  StyledTextAreaBlock, StyledTextAreaModifica, StyledTextAreaElimina
+  StyledTextAreaBlock, StyledTextAreaModifica, StyledTextAreaElimina, 
+  StyledCard, StyledCardHeader, SlideContainer, 
+  StyledSpanErrore
 } from './StyledCardItem';
 import { faFilePdf, faFileExcel } from '@fortawesome/free-solid-svg-icons';
 import { Trash2, Pencil } from 'lucide-react';
@@ -18,9 +20,11 @@ function getPencilTag(tipoSelezione) {
   return (tipoSelezione === 0 || tipoSelezione === 2) ? StyledPencilNotSelected : (
     (tipoSelezione === 1) ? StyledPencilSelected : Pencil
   );
+  // console.log(tipoSelezione);
 };
 
 function getTrashTag(tipoSelezione) {
+  // console.log(tipoSelezione);
   return (tipoSelezione === 0 || tipoSelezione === 1) ? StyledTrashNotSelected : (
     (tipoSelezione === 2) ? StyledTrashSelected : Trash2
   );
@@ -88,6 +92,9 @@ export function OperazioniCercaItems({ setIsVisible, arrowUp, setArrowUp, esegui
 export function OperazioniItemEsistente ({ selectOperation, item }) {
   let TrashTag = getTrashTag(item.tipo_selezione);
   let PencilTag = getPencilTag(item.tipo_selezione);
+
+  // let TrashTag = Trash2;
+  // let PencilTag = Pencil;
   return (
     <StyledListGroupItem style={{ border: "5px solid #000000", backgroundColor: "#000000", paddingTop: "3%" }}>
       <PencilTag size={grandezzaIcona} onClick={() => selectOperation("pencil", item)} style={{ marginRight: "50%" }} />
@@ -132,6 +139,139 @@ export function OperazioniModificaProfilo({eseguiModificaProfilo}) {
     </StyledListGroupItem>
   );
 };
+
+export function CardNuovoItem({campi, indici, eseguiSalvataggio}) {
+  let maxHeight = "2000px";
+  let InputTag = getInputTag(1, true);
+  let TextAreaTag = getTextAreaTag(1, true);
+
+  return (
+    <StyledCard>
+      <StyledCardHeader>{campi["header"]}</StyledCardHeader>
+      <SlideContainer style={{maxHeight: `${maxHeight}`}}>
+        {indici.map((i) => {
+          // onClick={handleGiornoClick(setUltimoGiornoType)}
+          // onBlur={handleGiornoBlur(setUltimoGiornoType, item, setItem)}
+          // onChange={(e) => handleInputChange(e, setItem)}
+          const NomeTag = (campi.type[i]) ? getInputTag(1, true) : (
+            getTextAreaTag(1, true)
+          );
+          return ( 
+            <React.Fragment key={i}>
+              <NomeTag 
+                key={i}
+                rows={1}
+                name={campi.name[i]}
+                type={campi.type[i]}
+                value={campi.value[i]}
+                placeholder={campi.placeholder[i]}
+                onChange={campi.onChange}
+                onClick={campi.onClick}
+                onBlur={campi.onBlur}
+              />
+              {(campi.errore[i] !== "") && (<StyledSpanErrore>{campi.errore[i]}</StyledSpanErrore>)}
+            </React.Fragment>
+          );
+        })}
+      </SlideContainer>
+      <OperazioniNuovoItem 
+        eseguiSalvataggio={eseguiSalvataggio} 
+      />
+    </StyledCard>
+  );
+}
+
+export function CardRicercaItems({campi, indici, eseguiRicerca}) {
+  const [isVisible, setIsVisible] = useState(true);
+  const [arrowUp, setArrowUp] = useState(true);
+  let maxHeight = (isVisible) ? "2000px" : "0px";
+  let InputTag = getInputTag(1, true);
+  let TextAreaTag = getTextAreaTag(1, true);
+
+  return (
+    <StyledCard>
+      <StyledCardHeader>{campi["header"]}</StyledCardHeader>
+      <SlideContainer style={{maxHeight: `${maxHeight}`}}>
+        {indici.map((i) => {
+          // onClick={handleGiornoClick(setUltimoGiornoType)}
+          // onBlur={handleGiornoBlur(setUltimoGiornoType, item, setItem)}
+          // onChange={(e) => handleInputChange(e, setItem)}
+          const NomeTag = (campi.type[i]) ? getInputTag(1, true) : (
+            getTextAreaTag(1, true)
+          );
+          return ( 
+            <NomeTag 
+              key={i}
+              rows={1}
+              name={campi.name[i]}
+              type={campi.type[i]}
+              value={campi.value[i]}
+              placeholder={campi.placeholder[i]}
+              onChange={campi.onChange}
+              onClick={campi.onClick}
+              onBlur={campi.onBlur}
+            />
+          );
+        })}
+      </SlideContainer>
+      <OperazioniCercaItems
+        setIsVisible={setIsVisible}
+        arrowUp={arrowUp}
+        setArrowUp={setArrowUp}
+        eseguiRicerca={eseguiRicerca}
+      />
+    </StyledCard>
+  );
+}
+
+export function CardItemEsistente({item, campi, indici, selectOperation}) {
+  let maxHeight = "2000px";
+  // let InputModificabileTag = getInputTag(campi.tipoSelezione, true);
+  // let TextAreaModificabileTag = getTextAreaTag(campi.tipoSelezione, true);
+  // let InputNonModificabileTag = getInputTag(campi.tipoSelezione, false);
+  // let TextAreaNonModificabileTag = getTextAreaTag(campi.tipoSelezione, false);
+  return (
+    <>
+      <StyledCard>
+        <StyledCardHeader>{campi["header"]}</StyledCardHeader>
+        <SlideContainer style={{maxHeight: `${maxHeight}`}}>
+          {indici.map((i) => {
+            // onClick={handleGiornoClick(setUltimoGiornoType)}
+            // onBlur={handleGiornoBlur(setUltimoGiornoType, item, setItem)}
+            // onChange={(e) => handleInputChange(e, setItem)}
+            // const NomeTag = (campi.type[i]) ? InputTag : TextAreaTag;
+            const NomeTag = (campi.type[i]) ? getInputTag(campi.tipoSelezione, campi.valoreModificabile[i]) : (
+              getTextAreaTag(campi.tipoSelezione, campi.valoreModificabile[i])
+            );
+            return ( 
+              <NomeTag 
+                key={i}
+                rows={1}
+                name={campi.name[i]}
+                type={campi.type[i]}
+                value={campi.value[i]}
+                placeholder={campi.placeholder[i]}
+                onChange={campi.onChange}
+                onClick={campi.onClick}
+                onBlur={campi.onBlur}
+              />
+            );
+          })}
+        </SlideContainer>
+        <OperazioniItemEsistente 
+          selectOperation={selectOperation} 
+          item={item} 
+        />
+        {/* <OperazioniItemEsistente selectOperation={selectOperation} item={item} /> */}
+      </StyledCard>
+    </>
+  )
+}
+
+
+
+
+
 
 
 

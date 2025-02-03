@@ -14,22 +14,28 @@ import {
   handleInputChange, cambiamentoBloccato, getCampiRicerca, getCampiNuovoItem
 } from '../../../vario/Vario';
 
-import { OperazioniLogin } from './RowItem';
+import { 
+  OperazioniLogin, 
+  getTextAreaTag, getInputTag, getSelectTag
+} from './RowItem';
 
 export function RowLogin({item, setItem, eseguiLogin}) {
+  let InputTag = getInputTag(1, true);
+  let TextAreaTag = getTextAreaTag(1, true);
+
   return (
     <>
       <StyledRow>
         <OperazioniLogin eseguiLogin={eseguiLogin} />
         <StyledCol>
           <div style={{width: "100%"}}>
-            <StyledTextAreaModifica rows="1" placeholder="Username*" name="username" value={item.username} onChange={(e) => handleInputChange(e, setItem)} /> 
+            <TextAreaTag rows="1" placeholder="Username*" name="username" value={item.username} onChange={(e) => handleInputChange(e, setItem)} /> 
             {(item.errore_username !== "") && (<StyledSpanErrore>{item.errore_username}</StyledSpanErrore>)}
           </div>
         </StyledCol>
         <StyledCol>
           <div style={{width: "100%"}}>
-            <StyledInputModifica rows="1" placeholder="Password*" type="password" name="password" value={item.password} onChange={(e) => handleInputChange(e, setItem)} />
+            <InputTag rows="1" placeholder="Password*" type="password" name="password" value={item.password} onChange={(e) => handleInputChange(e, setItem)} />
             {(item.errore_password !== "") && (<StyledSpanErrore>{item.errore_password}</StyledSpanErrore>)}
           </div>
         </StyledCol>

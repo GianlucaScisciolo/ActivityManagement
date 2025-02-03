@@ -10,6 +10,32 @@ import {
 } from "./StyledRowItem";
 import { Trash2, Pencil } from 'lucide-react';
 
+export function getSelectTag(tipoSelezione) {
+  return (item.tipo_selezione !== 1 && item.tipo_selezione !== 2) ? StyledSelectBlock : (
+    (item.tipo_selezione === 1) ? StyledSelectModifica : StyledSelectElimina
+  );
+}; 
+
+export function getInputTag(tipoSelezione, isModificabile) {
+  return (isModificabile) ? (
+    (tipoSelezione !== 1 && tipoSelezione !== 2) ? StyledInputBlock : (
+      (tipoSelezione === 1) ? StyledInputModifica : StyledInputElimina
+    )
+  ) : (
+    (tipoSelezione !== 2) ? StyledInputBlock : StyledInputElimina
+  );
+};
+
+export function getTextAreaTag(tipoSelezione, isModificabile) {
+  return (isModificabile) ? (
+    (tipoSelezione !== 1 && tipoSelezione !== 2) ? StyledTextAreaBlock : (
+      (tipoSelezione === 1) ? StyledTextAreaModifica : StyledTextAreaElimina
+    )
+  ) : (
+    (tipoSelezione !== 2) ? StyledTextAreaBlock : StyledTextAreaElimina
+  );
+};
+
 const nascondiForm = (visibilita, setVisibilita, setArrowUp) => {
   const steps = visibilita.length;
   for (let i = 1; i <= steps; i++) {

@@ -20,155 +20,84 @@ import {
 import { 
   handleInputChange, cambiamentoBloccato, getCampiRicerca, getCampiNuovoItem
 } from '../../../vario/Vario';
-
-import { OperazioniNuovoItem, OperazioniCercaItems, OperazioniItemEsistente } from './CardItem';
-
-const TextAreaTag = ({ tipoSelezione, nome, valore, modificabile, setItem, placeholder, items, setItems, tipoItem, id }) => {
-  switch(tipoSelezione) {
-    case 0:
-      return <StyledTextAreaBlock rows="1" name={nome} placeholder={placeholder} value={valore} readOnly />;
-    case 1:
-      return (modificabile) ? <StyledTextAreaModifica rows="1" name={nome} placeholder={placeholder} value={valore} onChange={(e) => handleInputChange(e, setItem, items, setItems, tipoItem, id)} />
-                            : <StyledTextAreaBlock rows="1" name={nome} placeholder={placeholder} value={valore} readOnly />;
-    case 2:
-      return <StyledTextAreaElimina rows="1" name={nome} placeholder={placeholder} value={valore} readOnly />;
-    default:
-      return <></>;
-  }
-}
-
-const InputTag = ({ tipoSelezione, nome, tipo, valore, modificabile, setItem, placeholder, items, setItems, tipoItem, id }) => { 
-  switch(tipoSelezione) {
-    case 0:
-      return <StyledInputBlock rows="1" type={tipo} name={nome} placeholder={placeholder} value={valore}  readOnly />;
-    case 1:
-      return (modificabile) ? <StyledInputModifica rows="1" type={tipo} name={nome} placeholder={placeholder} value={valore} onChange={(e) => handleInputChange(e, setItem, items, setItems, tipoItem, id)} />
-                            : <StyledInputBlock rows="1" type={tipo} name={nome} placeholder={placeholder} value={valore} readOnly />;
-    case 2:
-      return <StyledInputElimina rows="1" type={tipo} name={nome} value={valore} placeholder={placeholder} readOnly />;
-    default:
-      return <></>;
-  }
-}
+import { 
+  OperazioniNuovoItem, OperazioniCercaItems, OperazioniItemEsistente, 
+  getTextAreaTag, getInputTag, 
+  CardRicercaItems, CardNuovoItem, CardItemEsistente
+} from './CardItem';
 
 export function CardNuovoProfessionista({item, setItem, eseguiSalvataggio}) {
-  let maxHeight = "2000px";
+  let campi = {
+    header: "Ricerca professionisti", 
+    type: [null, null, "text", "text", null], 
+    name: ["nome", "professione", "contatto", "email", "note"], 
+    value: [item.nome, item.professione, item.contatto, item.email, item.note], 
+    placeholder: ["Nome", "Professione", "Contatto", "Email", "Note"], 
+    errore: [item.errore_nome, item.errore_professione, item.errore_contatto, item.errore_email, item.errore_note], 
+    onChange: (e) => handleInputChange(e, setItem), 
+    onClick: null, 
+    onBlur: null
+  }
+  const indici = [0, 1, 2, 3, 4];
 
   return (
     <>
-      <StyledCard>
-        <StyledCardHeader>Nuovo professionista</StyledCardHeader>
-        <StyledTextAreaModifica rows="1" placeholder="Nome*" name="nome" value={item.nome} onChange={(e) => handleInputChange(e, setItem)} />
-        {(item.errore_nome !== "") && (<StyledSpanErrore>{item.errore_nome}</StyledSpanErrore>)}
-        <StyledTextAreaModifica rows="1" placeholder="Professione*" name="professione" value={item.professione} onChange={(e) => handleInputChange(e, setItem)} />
-        {(item.errore_professione !== "") && (<StyledSpanErrore>{item.errore_professione}</StyledSpanErrore>)}
-        <StyledInputModifica rows="1" placeholder="Contatto" type="text" name="contatto" value={item.contatto} onChange={(e) => handleInputChange(e, setItem)} />
-        {(item.errore_contatto !== "") && (<StyledSpanErrore>{item.errore_contatto}</StyledSpanErrore>)}
-        <StyledInputModifica rows="1" placeholder="Email" type="text" name="email" value={item.email} onChange={(e) => handleInputChange(e, setItem)} />
-        {(item.errore_email !== "") && (<StyledSpanErrore>{item.errore_email}</StyledSpanErrore>)}
-        <StyledTextAreaModifica rows="1" placeholder="Note" name="note" value={item.note} onChange={(e) => handleInputChange(e, setItem)} />
-        {(item.errore_note !== "") && (<StyledSpanErrore>{item.errore_note}</StyledSpanErrore>)}
-        <OperazioniNuovoItem eseguiSalvataggio={eseguiSalvataggio} />
-      </StyledCard>
+      <CardNuovoItem 
+        campi={campi}
+        indici={indici}
+        eseguiSalvataggio={eseguiSalvataggio}
+      />
     </>
   );
 }
 
-export function CardCercaProfessionisti({item, setItem, eseguiRicerca}) {
-  const [isVisible, setIsVisible] = useState(true);
-  const [arrowUp, setArrowUp] = useState(true);
-  let maxHeight = (isVisible) ? "2000px" : "0px";
+export function CardRicercaProfessionisti({item, setItem, eseguiRicerca}) {
+  let campi = {
+    header: "Ricerca professionisti", 
+    type: [null, null, "text", "text", null], 
+    name: ["nome", "professione", "contatto", "email", "note"], 
+    value: [item.nome, item.professione, item.contatto, item.email, item.note], 
+    placeholder: ["Nome", "Professione", "Contatto", "Email", "Note"], 
+    onChange: (e) => handleInputChange(e, setItem), 
+    onClick: null, 
+    onBlur: null
+  }
+  const indici = [0, 1, 2, 3, 4];
 
   return (
     <>
-      <StyledCard>
-        <StyledCardHeader>Ricerca professionisti</StyledCardHeader>
-        <SlideContainer style={{maxHeight: `${maxHeight}`}}>
-          <StyledTextAreaModifica rows="1" placeholder="Nome" name="nome" value={item.nome} onChange={(e) => handleInputChange(e, setItem)} />
-          <StyledTextAreaModifica rows="1" placeholder="Professione" name="professione" value={item.professione} onChange={(e) => handleInputChange(e, setItem)} />
-          <StyledInputModifica rows="1" placeholder="Contatto" type="text" name="contatto" value={item.contatto} onChange={(e) => handleInputChange(e, setItem)} />
-          <StyledInputModifica rows="1" placeholder="Email" type="text" name="email" value={item.email} onChange={(e) => handleInputChange(e, setItem)} />
-          <StyledTextAreaModifica rows="1" placeholder="Note" name="note" value={item.note} onChange={(e) => handleInputChange(e, setItem)} />
-        </SlideContainer>
-        <OperazioniCercaItems setIsVisible={setIsVisible} arrowUp={arrowUp} setArrowUp={setArrowUp} eseguiRicerca={eseguiRicerca} />
-      </StyledCard>
+      <CardRicercaItems 
+        campi={campi}
+        indici={indici}
+        eseguiRicerca={eseguiRicerca}
+      />
     </>
   );
 }
 
 export function CardProfessionistaEsistente({item, items, setItems, selectOperation}) {
-  let maxHeight = "2000px";
-
+  let campi = {
+    header: "Professionista", 
+    tipoSelezione: item.tipo_selezione,
+    type: [null, null, "text", "text", null], 
+    name: ["nome", "professione", "contatto", "email", "note"], 
+    value: [item.nome, item.professione, item.contatto, item.email, item.note], 
+    placeholder: ["Nome", "Professione", "Contatto", "Email", "Note"], 
+    valoreModificabile: [false, false, true, true, true], 
+    onChange: (e) => handleInputChange(e, setItems), 
+    onClick: null, 
+    onBlur: null
+  }
+  const indici = [0, 1, 2, 3, 4];
+  
   return (
     <>
-      <StyledCard>
-        <StyledCardHeader>Professionista</StyledCardHeader>
-        <SlideContainer style={{maxHeight: `${maxHeight}`}}>
-          <TextAreaTag 
-            tipoSelezione={item.tipo_selezione} 
-            nome="nome" 
-            valore={item.nome} 
-            modificabile={false} 
-            placeholder="Nome*" 
-            items={items} 
-            setItems={setItems} 
-            tipoItem={"professionista"} 
-            id={item.id}
-          />
-          <TextAreaTag 
-            tipoSelezione={item.tipo_selezione} 
-            nome="professione" 
-            valore={item.professione} 
-            modificabile={false} 
-            placeholder="Professione*" 
-            items={items} 
-            setItems={setItems} 
-            tipoItem={"professionista"} 
-            id={item.id}
-          />
-          <InputTag 
-            tipoSelezione={item.tipo_selezione} 
-            nome="contatto" 
-            tipo="text" 
-            valore={item.contatto} 
-            modificabile={true} 
-            placeholder="Contatto" 
-            items={items} 
-            setItems={setItems} 
-            tipoItem={"professionista"} 
-            id={item.id} 
-          />
-          <InputTag 
-            tipoSelezione={item.tipo_selezione} 
-            nome="email" 
-            tipo="text" 
-            valore={item.email} 
-            modificabile={true} 
-            placeholder="Email" 
-            items={items} 
-            setItems={setItems} 
-            tipoItem={"professionista"} 
-            id={item.id} 
-          />
-          <TextAreaTag 
-            tipoSelezione={item.tipo_selezione} 
-            nome="note" 
-            valore={item.note} 
-            modificabile={true} 
-            placeholder="Note" 
-            items={items} 
-            setItems={setItems} 
-            tipoItem={"professionista"} 
-            id={item.id}
-          />
-          {/* <StyledTextAreaModifica rows="1" placeholder="Nome" name="nome" value={item.nome} onChange={(e) => handleInputChange(e, setItem)} /> */}
-          {/* <StyledTextAreaModifica rows="1" placeholder="Professione" name="professione" value={item.professione} onChange={(e) => handleInputChange(e, setItem)} /> */}
-          {/* <StyledInputModifica rows="1" placeholder="Contatto" type="text" name="contatto" value={item.contatto} onChange={(e) => handleInputChange(e, setItem)} /> */}
-          {/* <StyledInputModifica rows="1" placeholder="Email" type="text" name="email" value={item.email} onChange={(e) => handleInputChange(e, setItem)} /> */}
-          {/* <StyledTextAreaModifica rows="1" placeholder="Note" name="note" value={item.note} onChange={(e) => handleInputChange(e, setItem)} /> */}
-        </SlideContainer>
-        <OperazioniItemEsistente selectOperation={selectOperation} item={item} />
-      </StyledCard>
+      <CardItemEsistente 
+        item={item}
+        campi={campi}
+        indici={indici}
+        selectOperation={selectOperation}
+      />
     </>
   );
 }

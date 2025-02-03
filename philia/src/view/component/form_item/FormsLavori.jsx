@@ -19,7 +19,9 @@ import {
   handleInputChange, getCampiRicerca, getCampiNuovoItem, selezionaInserimentoLavoroCliente, selezionaInserimentoLavoroProfessionista
 } from '../../../vario/Vario';
 
-import { OperazioniNuovoItem, OperazioniCercaItems } from './FormItem';
+import { 
+  OperazioniNuovoItem, OperazioniCercaItems 
+} from './FormItem';
 
 function OperazioniFileItems({ottieniLavoriRangePDF, ottieniLavoriRangeExcel, eliminaLavoriRange}) {
   return (

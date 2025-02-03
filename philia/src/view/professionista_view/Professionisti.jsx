@@ -7,7 +7,7 @@ import { modifica } from '../../vario/OperazioniModifica';
 import { useSelector, useDispatch } from 'react-redux';
 import professionistaStore from '../../store/professionista_store/ProfessionistaStore';
 import { operazioniProfessionisti } from '../../vario/Operazioni';
-import { CardCercaProfessionisti, CardProfessionistaEsistente } from '../component/card_item/CardsProfessionisti';
+import { CardRicercaProfessionisti, CardProfessionistaEsistente } from '../component/card_item/CardsProfessionisti';
 import { FormCercaProfessionisti } from '../component/form_item/FormsProfessionisti';
 import { RowRicercaProfessionisti, RowProfessionistaEsistente } from '../component/row_item/RowsProfessionisti';
 import { eseguiRicerca } from '../../vario/OperazioniRicerca';
@@ -93,7 +93,7 @@ const Professionisti = () => {
       )}
       {(formSession.view === "card") && (
         <center>
-          <CardCercaProfessionisti item={datiRicerca} setItem={setDatiRicerca} eseguiRicerca={(e) => eseguiRicerca(e, "professionisti", setProfessionisti, datiRicerca)} />
+          <CardRicercaProfessionisti item={datiRicerca} setItem={setDatiRicerca} eseguiRicerca={(e) => eseguiRicerca(e, "professionisti", setProfessionisti, datiRicerca)} />
         </center>
       )}
 

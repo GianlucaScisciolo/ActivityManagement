@@ -21,16 +21,22 @@ import {
   handleInputChange, cambiamentoBloccato, getCampiRicerca, getCampiNuovoItem
 } from '../../../vario/Vario';
 
-import { OperazioniLogin } from './CardItem';
+import { 
+  OperazioniLogin, 
+  getTextAreaTag, getInputTag
+} from './CardItem';
 
 export function CardLogin({item, setItem, eseguiLogin}) {
+  let InputTag = getInputTag(1, true);
+  let TextAreaTag = getTextAreaTag(1, true);
+  
   return (
     <>
       <StyledCard>
         <StyledCardHeader>Login</StyledCardHeader>
-        <StyledTextAreaModifica rows="1" placeholder="Username*" name="username" value={item.username} onChange={(e) => handleInputChange(e, setItem)} /> 
+        <TextAreaTag rows="1" placeholder="Username*" name="username" value={item.username} onChange={(e) => handleInputChange(e, setItem)} /> 
         {(item.errore_username !== "") && (<StyledSpanErrore>{item.errore_username}</StyledSpanErrore>)}
-        <StyledInputModifica rows="1" placeholder="Password*" type="password" name="password" value={item.password} onChange={(e) => handleInputChange(e, setItem)} />
+        <InputTag rows="1" placeholder="Password*" type="password" name="password" value={item.password} onChange={(e) => handleInputChange(e, setItem)} />
         {(item.errore_password !== "") && (<StyledSpanErrore>{item.errore_password}</StyledSpanErrore>)}
         <br /> <br />
         <OperazioniLogin eseguiLogin={eseguiLogin} />

@@ -14,39 +14,14 @@ import {
   handleInputChange, cambiamentoBloccato, getCampiRicerca, getCampiNuovoItem
 } from '../../../vario/Vario';
 
-import { OperazioniNuovoItem, OperazioniCercaItems, OperazioniItemEsistente } from './RowItem';
-
-const TextAreaTag = ({ tipoSelezione, nome, valore, modificabile, setItem, placeholder, items, setItems, tipoItem, id }) => {
-  switch(tipoSelezione) {
-    case 0:
-      return <StyledTextAreaBlock rows="1" name={nome} placeholder={placeholder} value={valore} readOnly />;
-    case 1:
-      return (modificabile) ? <StyledTextAreaModifica rows="1" name={nome} placeholder={placeholder} value={valore} onChange={(e) => handleInputChange(e, setItem, items, setItems, tipoItem, id)} />
-                            : <StyledTextAreaBlock rows="1" name={nome} placeholder={placeholder} value={valore} readOnly />;
-    case 2:
-      return <StyledTextAreaElimina rows="1" name={nome} placeholder={placeholder} value={valore} readOnly />;
-    default:
-      return <></>;
-  }
-}
-
-const InputTag = ({ tipoSelezione, nome, tipo, valore, modificabile, setItem, placeholder, items, setItems, tipoItem, id }) => {
-  switch(tipoSelezione) {
-    case 0:
-      return <StyledInputBlock rows="1" type={tipo} name={nome} placeholder={placeholder} value={valore}  readOnly />;
-    case 1:
-      return (modificabile) ? <StyledInputModifica rows="1" type={tipo} name={nome} placeholder={placeholder} value={valore} onChange={(e) => handleInputChange(e, setItem, items, setItems, tipoItem, id)} />
-                            : <StyledInputBlock rows="1" type={tipo} name={nome} placeholder={placeholder} value={valore} readOnly />;
-    case 2:
-      return <StyledInputElimina rows="1" type={tipo} name={nome} value={valore} placeholder={placeholder} readOnly />;
-    default:
-      return <></>;
-  }
-}
+import { 
+  OperazioniNuovoItem, OperazioniCercaItems, OperazioniItemEsistente, 
+  getTextAreaTag, getInputTag, getSelectTag
+} from './RowItem';
 
 export function RowNuovoCliente({item, setItem, eseguiSalvataggio}) {
-  // const [visibilita, setVisibilita] = useState(Array(Object.keys(item).length).fill(true));
-  // const [arrowUp, setArrowUp] = useState(true);
+  let InputTag = getInputTag(1, true);
+  let TextAreaTag = getTextAreaTag(1, true);
 
   return (
     <>
@@ -54,25 +29,25 @@ export function RowNuovoCliente({item, setItem, eseguiSalvataggio}) {
         <OperazioniNuovoItem eseguiSalvataggio={eseguiSalvataggio} />
         <StyledCol>
           <div style={{width: "100%"}}>
-            <StyledTextAreaModifica rows="1" placeholder="Nome*" name="nome" value={item.nome} onChange={(e) => handleInputChange(e, setItem)} />
+            <TextAreaTag rows="1" placeholder="Nome*" name="nome" value={item.nome} onChange={(e) => handleInputChange(e, setItem)} />
             {(item.errore_nome !== "") && (<StyledSpanErrore>{item.errore_nome}</StyledSpanErrore>)}
           </div>
         </StyledCol>
         <StyledCol>
           <div style={{width: "100%"}}>
-            <StyledTextAreaModifica rows="1" placeholder="Cognome*" name="cognome" value={item.cognome} onChange={(e) => handleInputChange(e, setItem)} />
+            <TextAreaTag rows="1" placeholder="Cognome*" name="cognome" value={item.cognome} onChange={(e) => handleInputChange(e, setItem)} />
             {(item.errore_cognome !== "") && (<StyledSpanErrore>{item.errore_cognome}</StyledSpanErrore>)}
           </div>
         </StyledCol>
         <StyledCol>
           <div style={{width: "100%"}}>
-            <StyledInputModifica rows="1" placeholder="Contatto*" type="text" name="contatto" value={item.contatto} onChange={(e) => handleInputChange(e, setItem)} />
+            <InputTag rows="1" placeholder="Contatto*" type="text" name="contatto" value={item.contatto} onChange={(e) => handleInputChange(e, setItem)} />
             {(item.errore_contatto !== "") && (<StyledSpanErrore>{item.errore_contatto}</StyledSpanErrore>)}
           </div>
         </StyledCol>
         <StyledCol>
           <div style={{width: "100%"}}>
-            <StyledTextAreaModifica rows="1" placeholder="Note" name="note" value={item.note} onChange={(e) => handleInputChange(e, setItem)} />
+            <TextAreaTag rows="1" placeholder="Note" name="note" value={item.note} onChange={(e) => handleInputChange(e, setItem)} />
             {(item.errore_note !== "") && (<StyledSpanErrore>{item.errore_note}</StyledSpanErrore>)}
           </div>
         </StyledCol>
@@ -82,9 +57,10 @@ export function RowNuovoCliente({item, setItem, eseguiSalvataggio}) {
 }
 
 export function RowRicercaClienti({item, setItem, eseguiRicerca}) {
-  // const [visibilita, setVisibilita] = useState(Array(Object.keys(item).length).fill(true));
   let [visibilita, setVisibilita] = useState([true, true, true, true]);
   const [arrowUp, setArrowUp] = useState(true);
+  let InputTag = getInputTag(1, true);
+  let TextAreaTag = getTextAreaTag(1, true);
 
   return (
     <>
@@ -95,22 +71,22 @@ export function RowRicercaClienti({item, setItem, eseguiRicerca}) {
         />
         <StyledCol>
           {(visibilita[0]) && (
-            <StyledTextAreaModifica rows="1" placeholder="Nome" name="nome" value={item.nome} onChange={(e) => handleInputChange(e, setItem)} />
+            <TextAreaTag rows="1" placeholder="Nome" name="nome" value={item.nome} onChange={(e) => handleInputChange(e, setItem)} />
           )}
         </StyledCol>
         <StyledCol>
           {(visibilita[1]) && (
-            <StyledTextAreaModifica rows="1" placeholder="Cognome" name="cognome" value={item.cognome} onChange={(e) => handleInputChange(e, setItem)} />
+            <TextAreaTag rows="1" placeholder="Cognome" name="cognome" value={item.cognome} onChange={(e) => handleInputChange(e, setItem)} />
           )}
         </StyledCol>
         <StyledCol>
           {(visibilita[2]) && (
-            <StyledInputModifica rows="1" placeholder="Contatto" type="text" name="contatto" value={item.contatto} onChange={(e) => handleInputChange(e, setItem)} />
+            <InputTag rows="1" placeholder="Contatto" type="text" name="contatto" value={item.contatto} onChange={(e) => handleInputChange(e, setItem)} />
           )}
         </StyledCol>
         <StyledCol>
           {(visibilita[3]) && (
-            <StyledTextAreaModifica rows="1" placeholder="Note" name="note" value={item.note} onChange={(e) => handleInputChange(e, setItem)} />
+            <TextAreaTag rows="1" placeholder="Note" name="note" value={item.note} onChange={(e) => handleInputChange(e, setItem)} />
           )}
         </StyledCol>
       </StyledRow>
@@ -118,13 +94,18 @@ export function RowRicercaClienti({item, setItem, eseguiRicerca}) {
   );
 }
 
-export function RowClienteEsistente({item, items, setItems, selectOperation}) { 
+export function RowClienteEsistente({item, items, setItems, selectOperation}) {
+  let InputModificabileTag = getInputTag(item.tipo_selezione, true);
+  let TextAreaModificabileTag = getTextAreaTag(item.tipo_selezione, true);
+  let InputNonModificabileTag = getInputTag(item.tipo_selezione, false);
+  let TextAreaNonModificabileTag = getTextAreaTag(item.tipo_selezione, false);
+  
   return (
     <>
       <StyledRow>
         <OperazioniItemEsistente selectOperation={selectOperation} item={item} />
         <StyledCol>
-          <TextAreaTag 
+          <TextAreaNonModificabileTag 
             tipoSelezione={item.tipo_selezione} 
             nome="nome" 
             valore={item.nome} 
@@ -137,7 +118,7 @@ export function RowClienteEsistente({item, items, setItems, selectOperation}) {
           />
         </StyledCol>
         <StyledCol>
-          <TextAreaTag 
+          <TextAreaNonModificabileTag 
             tipoSelezione={item.tipo_selezione} 
             nome="cognome" 
             valore={item.cognome} 
@@ -150,7 +131,7 @@ export function RowClienteEsistente({item, items, setItems, selectOperation}) {
           />
         </StyledCol>
         <StyledCol>
-        <InputTag 
+        <InputModificabileTag 
             tipoSelezione={item.tipo_selezione} 
             nome="contatto" 
             tipo="text" 
@@ -164,7 +145,7 @@ export function RowClienteEsistente({item, items, setItems, selectOperation}) {
           />
         </StyledCol>
         <StyledCol>
-          <TextAreaTag 
+          <TextAreaModificabileTag 
             tipoSelezione={item.tipo_selezione} 
             nome="note" 
             valore={item.note} 

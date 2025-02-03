@@ -17,10 +17,15 @@ import {
   handleInputChange, getCampiRicerca, getCampiNuovoItem, selezionaInserimentoLavoroCliente, selezionaInserimentoLavoroProfessionista
 } from '../../../vario/Vario';
 
-import { OperazioniLogin } from './FormItem';
+import { 
+  OperazioniLogin, 
+  getTextAreaTag, getInputTag
+} from './FormItem';
 
 export function FormLogin({item, setItem, eseguiLogin}) {
   let maxHeight = "2000px";
+  let InputTag = getInputTag(1, true);
+  let TextAreaTag = getTextAreaTag(1, true);
 
   return (
     <>
@@ -28,11 +33,11 @@ export function FormLogin({item, setItem, eseguiLogin}) {
         <StyledHeader>Login</StyledHeader>
         <SlideContainer style={{maxHeight: `${maxHeight}`}}>
           <StyledLabel htmlFor="username">Username*</StyledLabel>
-          <StyledTextAreaModifica rows="1" placeholder="Username*" name="username" value={item.username} onChange={(e) => handleInputChange(e, setItem)} /> 
+          <TextAreaTag rows="1" placeholder="Username*" name="username" value={item.username} onChange={(e) => handleInputChange(e, setItem)} /> 
           {(item.errore_username !== "") && (<StyledSpanErrore>{item.errore_username}</StyledSpanErrore>)}
           
           <StyledLabel htmlFor="password">Password*</StyledLabel>
-          <StyledInputModifica rows="1" placeholder="Password*" type="password" name="password" value={item.password} onChange={(e) => handleInputChange(e, setItem)} />
+          <InputTag rows="1" placeholder="Password*" type="password" name="password" value={item.password} onChange={(e) => handleInputChange(e, setItem)} />
           {(item.errore_password !== "") && (<StyledSpanErrore>{item.errore_password}</StyledSpanErrore>)}
           
           <br /> <br />
