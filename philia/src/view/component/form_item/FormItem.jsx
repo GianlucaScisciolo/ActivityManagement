@@ -2,7 +2,12 @@ import React, { useState, useEffect, useRef } from 'react';
 import { 
   StyledListGroupItem, StyledRow, StyledCol, StyledSaveNotSelected, grandezzaIcona, 
   StyledSearchNotSelected, StyledArrowTopNotSelected, StyledArrowBottomNotSelected, 
-  StyledLoginNotSelected, StyledPencilNotSelected
+  StyledLoginNotSelected, StyledPencilNotSelected, StyledLabel, 
+  /*StyledSelectBlock, StyledSelectModifica, StyledSelectElimina,*/
+  StyledInputBlock, StyledInputModifica, StyledInputElimina, 
+  StyledTextAreaBlock, StyledTextAreaModifica, StyledTextAreaElimina, 
+  StyledForm, StyledHeader, SlideContainer, 
+  StyledSpanErrore
 } from "./StyledFormItem";
 
 export function getSelectTag(tipoSelezione) {
@@ -80,6 +85,97 @@ export function OperazioniModificaProfilo({eseguiModificaProfilo}) {
     </StyledListGroupItem>
   );
 };
+
+export function FormNuovoItem({campi, indici, eseguiSalvataggio}) {
+  let maxHeight = "2000px";
+  let InputTag = getInputTag(1, true);
+  let TextAreaTag = getTextAreaTag(1, true);
+
+  return (
+    <StyledForm>
+      <StyledHeader>Ricerca clienti</StyledHeader>  
+      <SlideContainer style={{maxHeight: `${maxHeight}`}}>
+        {indici.map((i) => {
+          // onClick={handleGiornoClick(setUltimoGiornoType)}
+          // onBlur={handleGiornoBlur(setUltimoGiornoType, item, setItem)}
+          // onChange={(e) => handleInputChange(e, setItem)}
+          const NomeTag = (campi.type[i]) ? getInputTag(1, true) : (
+            getTextAreaTag(1, true)
+          );
+          return ( 
+            <React.Fragment key={i}>
+              <StyledLabel htmlFor={campi.name[i]}>{campi.label[i]}</StyledLabel>
+              <NomeTag 
+                key={i}
+                rows={1}
+                name={campi.name[i]}
+                type={campi.type[i]}
+                value={campi.value[i]}
+                placeholder={campi.placeholder[i]}
+                onChange={campi.onChange}
+                onClick={campi.onClick}
+                onBlur={campi.onBlur}
+              />
+              {(campi.errore[i] !== "") && (<StyledSpanErrore>{campi.errore[i]}</StyledSpanErrore>)}
+            </React.Fragment>
+          );
+        })}
+        <br /> <br />
+      </SlideContainer>
+      <OperazioniNuovoItem 
+        eseguiSalvataggio={eseguiSalvataggio} 
+      />
+    </StyledForm>
+  );
+}
+
+export function FormRicercaItems({campi, indici, eseguiRicerca}) {
+  const [isVisible, setIsVisible] = useState(true);
+  const [arrowUp, setArrowUp] = useState(true);
+  let maxHeight = (isVisible) ? "2000px" : "0px";
+  let InputTag = getInputTag(1, true);
+  let TextAreaTag = getTextAreaTag(1, true);
+
+  return (
+    <StyledForm>
+      <StyledHeader>{campi["header"]}</StyledHeader>
+      <SlideContainer style={{maxHeight: `${maxHeight}`}}>
+        {indici.map((i) => {
+          // onClick={handleGiornoClick(setUltimoGiornoType)}
+          // onBlur={handleGiornoBlur(setUltimoGiornoType, item, setItem)}
+          // onChange={(e) => handleInputChange(e, setItem)}
+          const NomeTag = (campi.type[i]) ? getInputTag(1, true) : (
+            getTextAreaTag(1, true)
+          );
+          return ( 
+            <React.Fragment key={i}>
+              <StyledLabel htmlFor={campi.name[i]}>{campi.label[i]}</StyledLabel>
+              <NomeTag 
+                key={i}
+                rows={1}
+                name={campi.name[i]}
+                type={campi.type[i]}
+                value={campi.value[i]}
+                placeholder={campi.placeholder[i]}
+                onChange={campi.onChange}
+                onClick={campi.onClick}
+                onBlur={campi.onBlur}
+              />
+            </React.Fragment>
+          );
+        })}
+        <br /> <br />
+      </SlideContainer>
+      <OperazioniCercaItems
+        setIsVisible={setIsVisible}
+        arrowUp={arrowUp}
+        setArrowUp={setArrowUp}
+        eseguiRicerca={eseguiRicerca}
+      />
+    </StyledForm>
+  );
+}
+
 
 
 

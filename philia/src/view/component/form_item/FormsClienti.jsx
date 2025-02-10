@@ -19,35 +19,58 @@ import {
 
 import { 
   OperazioniNuovoItem, OperazioniCercaItems, 
-  getInputTag, getTextAreaTag
+  getInputTag, getTextAreaTag, 
+  FormNuovoItem, FormRicercaItems
 } from './FormItem';
 
 export function FormNuovoCliente({item, setItem, eseguiSalvataggio}) {
-  let maxHeight = "2000px";
-  let InputTag = getInputTag(1, true);
-  let TextAreaTag = getTextAreaTag(1, true);
+  let campi = {
+    header: "Nuovo cliente", 
+    type: [null, null, "text", null], 
+    label: ["Nome*", "Cognome*", "Contatto*", "Note"],  
+    name: ["nome", "cognome", "contatto", "note"], 
+    value: [item.nome, item.cognome, item.contatto, item.note], 
+    placeholder: ["Nome", "Cognome", "Contatto", "Note"],
+    errore: [item.errore_nome, item.errore_cognome, item.errore_contatto, item.errore_note], 
+    onChange: (e) => handleInputChange(e, setItem), 
+    onClick: null, 
+    onBlur: null
+  }
+  const indici = [0, 1, 2, 3];
+
+    return (
+      <>
+        <FormNuovoItem 
+          campi={campi}
+          indici={indici}
+          eseguiSalvataggio={eseguiSalvataggio}
+        />
+      </>
+    );
+}
+
+export function FormRicercaClienti({item, setItem, eseguiRicerca}) {
+  let campi = {
+    header: "Ricerca clienti", 
+    label: ["Nome", "Cognome", "Contatto", "Note"], 
+    type: [null, null, "text", null],  
+    name: ["nome", "cognome", "contatto", "note"], 
+    value: [item.nome, item.cognome, item.contatto, item.note], 
+    placeholder: ["Nome", "Cognome", "Contatto", "Note"], 
+    onChange: (e) => handleInputChange(e, setItem), 
+    onClick: null, 
+    onBlur: null
+  }
+  const indici = [0, 1, 2, 3];
 
   return (
     <>
-      <StyledForm>
-        <StyledHeader>Nuovo cliente</StyledHeader>  
-        <SlideContainer style={{maxHeight: `${maxHeight}`}}>
-          <StyledLabel htmlFor="nome">Nome*</StyledLabel>
-          <TextAreaTag rows="1" placeholder="Nome*" name="nome" value={item.nome} onChange={(e) => handleInputChange(e, setItem)} />
-          {(item.errore_nome !== "") && (<StyledSpanErrore>{item.errore_nome}</StyledSpanErrore>)}
-          <StyledLabel htmlFor="cognome">Cognome*</StyledLabel>
-          <TextAreaTag rows="1" placeholder="Cognome*" name="cognome" value={item.cognome} onChange={(e) => handleInputChange(e, setItem)} />
-          {(item.errore_cognome !== "") && (<StyledSpanErrore>{item.errore_cognome}</StyledSpanErrore>)}
-          <StyledLabel htmlFor="contatto">Contatto*</StyledLabel>
-          <TextAreaTag rows="1" placeholder="Contatto*" type="text" name="contatto" value={item.contatto} onChange={(e) => handleInputChange(e, setItem)} />
-          {(item.errore_contatto !== "") && (<StyledSpanErrore>{item.errore_contatto}</StyledSpanErrore>)}
-          <StyledLabel htmlFor="note">Note</StyledLabel>
-          <TextAreaTag rows="1" placeholder="Note" name="note" value={item.note} onChange={(e) => handleInputChange(e, setItem)} />
-          {(item.errore_note !== "") && (<StyledSpanErrore>{item.errore_note}</StyledSpanErrore>)}
-          <br /> <br />
-        </SlideContainer>
-        <OperazioniNuovoItem eseguiSalvataggio={eseguiSalvataggio} />
-      </StyledForm>
+      <FormRicercaItems 
+        item={item}
+        campi={campi}
+        indici={indici}
+        eseguiRicerca={eseguiRicerca}
+      />
     </>
   );
 }

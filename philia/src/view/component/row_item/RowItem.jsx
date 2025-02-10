@@ -6,7 +6,10 @@ import {
   StyledSearchNotSelected, StyledArrowLeftNotSelected, StyledArrowRightNotSelected, 
   StyledFileIconNotSelected, StyledDownloadNotSelected, StyledTrashNotSelected2, 
   StyledLoginNotSelected, 
-  StyledPencilNotSelectedModificaProfilo
+  StyledPencilNotSelectedModificaProfilo, 
+  StyledInputBlock, StyledInputModifica, StyledInputElimina, 
+  StyledTextAreaBlock, StyledTextAreaModifica, StyledTextAreaElimina, 
+  StyledRow, StyledCol, StyledSpanErrore
 } from "./StyledRowItem";
 import { Trash2, Pencil } from 'lucide-react';
 
@@ -146,6 +149,122 @@ export function OperazioniModificaProfilo({eseguiModificaProfilo}) {
     </StyledColOperazioni>
   );
 };
+
+export function RowNuovoItem({campi, indici, eseguiSalvataggio}) {
+  let InputTag = getInputTag(1, true);
+  let TextAreaTag = getTextAreaTag(1, true);
+
+  return (
+    <StyledRow>
+      <OperazioniNuovoItem eseguiSalvataggio={eseguiSalvataggio} />
+      {indici.map((i) => {
+        // onClick={handleGiornoClick(setUltimoGiornoType)}
+        // onBlur={handleGiornoBlur(setUltimoGiornoType, item, setItem)}
+        // onChange={(e) => handleInputChange(e, setItem)}
+        const NomeTag = (campi.type[i]) ? getInputTag(1, true) : (
+          getTextAreaTag(1, true)
+        );
+        return ( 
+          <React.Fragment key={i}>
+            <StyledCol>
+              <div style={{width: "100%"}}>
+                <NomeTag 
+                  key={i}
+                  rows={1}
+                  name={campi.name[i]}
+                  type={campi.type[i]}
+                  value={campi.value[i]}
+                  placeholder={campi.placeholder[i]}
+                  onChange={campi.onChange}
+                  onClick={campi.onClick}
+                  onBlur={campi.onBlur}
+                />
+                {(campi.errore[i] !== "") && (<StyledSpanErrore>{campi.errore[i]}</StyledSpanErrore>)}
+              </div>
+            </StyledCol>
+          </React.Fragment>
+        );
+      })}
+    </StyledRow>
+  );
+}
+
+export function RowRicercaItems({campi, indici, eseguiRicerca}) {
+  let [visibilita, setVisibilita] = useState([true, true, true, true, true]);
+  const [arrowUp, setArrowUp] = useState(true);
+  let InputTag = getInputTag(1, true);
+  let TextAreaTag = getTextAreaTag(1, true);
+
+  return (
+    <StyledRow>
+      <OperazioniCercaItems 
+        visibilita={visibilita} 
+        setVisibilita={setVisibilita} 
+        arrowUp={arrowUp} 
+        setArrowUp={setArrowUp} 
+        eseguiRicerca={eseguiRicerca}
+      />
+      {indici.map((i) => {
+        const NomeTag = (campi.type[i]) ? getInputTag(1, true) : (
+          getTextAreaTag(1, true)
+        );
+        return ( 
+          <React.Fragment key={i}>
+            <StyledCol>
+              {(visibilita[i]) && (
+                <NomeTag 
+                  rows={1}
+                  name={campi.name[i]}
+                  type={campi.type[i]}
+                  value={campi.value[i]}
+                  placeholder={campi.placeholder[i]}
+                  onChange={campi.onChange}
+                  onClick={campi.onClick}
+                  onBlur={campi.onBlur}
+                />
+              )}
+            </StyledCol>
+          </React.Fragment>
+        );
+      })} 
+    </StyledRow>
+  );
+}
+
+export function RowItemEsistente({item, campi, indici, selectOperation}) {
+  return (
+    <StyledRow>
+      <OperazioniItemEsistente 
+        selectOperation={selectOperation} 
+        item={item} 
+      />
+      {indici.map((i) => {
+        // onClick={handleGiornoClick(setUltimoGiornoType)}
+        // onBlur={handleGiornoBlur(setUltimoGiornoType, item, setItem)}
+        // onChange={(e) => handleInputChange(e, setItem)}
+        const NomeTag = (campi.type[i]) ? getInputTag(campi.tipoSelezione, campi.valoreModificabile[i]) : (
+          getTextAreaTag(campi.tipoSelezione, campi.valoreModificabile[i])
+        );
+        return ( 
+          <React.Fragment key={i}>
+            <StyledCol>
+              <NomeTag 
+                rows={1}
+                name={campi.name[i]}
+                type={campi.type[i]}
+                value={campi.value[i]}
+                placeholder={campi.placeholder[i]}
+                onChange={campi.onChange}
+                onClick={campi.onClick}
+                onBlur={campi.onBlur}
+              />
+            </StyledCol>
+          </React.Fragment>
+        );
+      })}
+    </StyledRow>
+  )
+}
 
 
 

@@ -8,7 +8,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import personaStore from '../../store/persona_store/PersonaStore';
 import { operazioniPersone } from '../../vario/Operazioni';
 import { CardRicercaClienti, CardClienteEsistente } from '../component/card_item/CardsClienti';
-import { FormCercaClienti } from '../component/form_item/FormsClienti';
+import { FormRicercaClienti } from '../component/form_item/FormsClienti';
 import { RowRicercaClienti } from '../component/row_item/RowsClienti';
 import { RowClienteEsistente } from '../component/row_item/RowsClienti';
 import { eseguiRicerca } from '../../vario/OperazioniRicerca';
@@ -84,7 +84,7 @@ const Clienti = () => {
 
       {(formSession.view === "form") && (
         <center>
-          <FormCercaClienti item={datiRicerca} setItem={setDatiRicerca} eseguiRicerca={(e) => eseguiRicerca(e, "clienti", setClienti, datiRicerca)} />
+          <FormRicercaClienti item={datiRicerca} setItem={setDatiRicerca} eseguiRicerca={(e) => eseguiRicerca(e, "clienti", setClienti, datiRicerca)} />
         </center>
       )}
       {(formSession.view === "row") && (

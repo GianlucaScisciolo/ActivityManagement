@@ -15,173 +15,83 @@ import {
 } from '../../../vario/Vario';
 import { 
   OperazioniNuovoItem, OperazioniCercaItems, OperazioniItemEsistente, 
-  getTextAreaTag, getInputTag, getSelectTag
+  getTextAreaTag, getInputTag, getSelectTag, 
+  RowNuovoItem, RowRicercaItems, RowItemEsistente
 } from './RowItem';
 
 export function RowNuovoProfessionista({item, setItem, eseguiSalvataggio}) {
-  // const [visibilita, setVisibilita] = useState(Array(Object.keys(item).length).fill(true));
-  const [arrowUp, setArrowUp] = useState(true);
+  let campi = {
+    header: "Nuovo professionista", 
+    type: [null, null, "text", "text", null], 
+    name: ["nome", "professione", "contatto", "email", "note"], 
+    value: [item.nome, item.professione, item.contatto, item.email, item.note], 
+    placeholder: ["Nome", "Professione", "Contatto", "Email", "Note"], 
+    errore: [item.errore_nome, item.errore_professione, item.errore_contatto, item.errore_email, item.errore_note], 
+    onChange: (e) => handleInputChange(e, setItem), 
+    onClick: null, 
+    onBlur: null
+  }
+  const indici = [0, 1, 2, 3, 4];
 
   return (
     <>
-      <StyledRow>
-        <OperazioniNuovoItem eseguiSalvataggio={eseguiSalvataggio} />
-        <StyledCol>
-          <div style={{width: "100%"}}>
-            <TextAreaTag rows="1" placeholder="Nome*" name="nome" value={item.nome} onChange={(e) => handleInputChange(e, setItem)} />
-            {(item.errore_nome !== "") && (<StyledSpanErrore>{item.errore_nome}</StyledSpanErrore>)}
-          </div>
-        </StyledCol>
-        <StyledCol>
-          <div style={{width: "100%"}}>
-            <TextAreaTag rows="1" placeholder="Professione*" name="professione" value={item.professione} onChange={(e) => handleInputChange(e, setItem)} />
-            {(item.errore_professione !== "") && (<StyledSpanErrore>{item.errore_professione}</StyledSpanErrore>)}
-          </div>
-        </StyledCol>
-        <StyledCol>
-          <div style={{width: "100%"}}>
-            <InputTag rows="1" placeholder="Contatto" type="text" name="contatto" value={item.contatto} onChange={(e) => handleInputChange(e, setItem)} />
-            {(item.errore_contatto !== "") && (<StyledSpanErrore>{item.errore_contatto}</StyledSpanErrore>)}
-          </div>
-        </StyledCol>
-        <StyledCol>
-          <div style={{width: "100%"}}>
-            <InputTag rows="1" placeholder="Email" type="text" name="email" value={item.email} onChange={(e) => handleInputChange(e, setItem)} />
-            {(item.errore_email !== "") && (<StyledSpanErrore>{item.errore_email}</StyledSpanErrore>)}
-          </div>
-        </StyledCol>
-        <StyledCol>
-          <div style={{width: "100%"}}>
-            <TextAreaTag rows="1" placeholder="Note" name="note" value={item.note} onChange={(e) => handleInputChange(e, setItem)} />
-            {(item.errore_note !== "") && (<StyledSpanErrore>{item.errore_note}</StyledSpanErrore>)}
-          </div>
-        </StyledCol>
-      </StyledRow>
+      <RowNuovoItem 
+        campi={campi}
+        indici={indici}
+        eseguiSalvataggio={eseguiSalvataggio}
+      />
     </>
   );
 }
 
 export function RowRicercaProfessionisti({item, setItem, eseguiRicerca}) {
-  let [visibilita, setVisibilita] = useState([true, true, true, true, true]);
-  const [arrowUp, setArrowUp] = useState(true);
-  let InputTag = getInputTag(1, true);
-  let TextAreaTag = getTextAreaTag(1, true);
+  let campi = {
+    header: "Ricerca professionisti", 
+    type: [null, null, "text", "text", null], 
+    name: ["nome", "professione", "contatto", "email", "note"], 
+    value: [item.nome, item.professione, item.contatto, item.email, item.note], 
+    placeholder: ["Nome", "Professione", "Contatto", "Email", "Note"], 
+    onChange: (e) => handleInputChange(e, setItem), 
+    onClick: null, 
+    onBlur: null
+  }
+  const indici = [0, 1, 2, 3, 4];
 
   return (
     <>
-      <StyledRow>
-        <OperazioniCercaItems 
-          visibilita={visibilita} setVisibilita={setVisibilita} 
-          arrowUp={arrowUp} setArrowUp={setArrowUp} eseguiRicerca={eseguiRicerca}
-        />
-        <StyledCol>
-          {(visibilita[0]) && (
-            <TextAreaTag rows="1" placeholder="Nome" name="nome" value={item.nome} onChange={(e) => handleInputChange(e, setItem)} />
-          )}
-        </StyledCol>
-        <StyledCol>
-          {(visibilita[1]) && (
-            <TextAreaTag rows="1" placeholder="Professione" name="professione" value={item.professione} onChange={(e) => handleInputChange(e, setItem)} />
-          )}
-        </StyledCol>
-        <StyledCol>
-          {(visibilita[2]) && (
-            <InputTag rows="1" placeholder="Contatto" type="text" name="contatto" value={item.contatto} onChange={(e) => handleInputChange(e, setItem)} />
-          )}
-        </StyledCol>
-        <StyledCol>
-          {(visibilita[3]) && (
-            <InputTag rows="1" placeholder="Email" type="text" name="email" value={item.email} onChange={(e) => handleInputChange(e, setItem)} />
-          )}
-        </StyledCol>
-        <StyledCol>
-          {(visibilita[4]) && (
-            <TextAreaTag rows="1" placeholder="Note" name="note" value={item.note} onChange={(e) => handleInputChange(e, setItem)} />
-          )}
-        </StyledCol>
-      </StyledRow>
+      <RowRicercaItems 
+        item={item}
+        campi={campi}
+        indici={indici}
+        eseguiRicerca={eseguiRicerca}
+      />
     </>
   );
 }
 
-export function RowProfessionistaEsistente({item, items, setItems, selectOperation}) { 
-  let InputModificabileTag = getInputTag(item.tipo_selezione, true);
-  let TextAreaModificabileTag = getTextAreaTag(item.tipo_selezione, true);
-  let InputNonModificabileTag = getInputTag(item.tipo_selezione, false);
-  let TextAreaNonModificabileTag = getTextAreaTag(item.tipo_selezione, false);
-
+export function RowProfessionistaEsistente({item, items, setItems, selectOperation}) {
+  let campi = {
+    header: "Professionista", 
+    tipoSelezione: item.tipo_selezione,
+    type: [null, null, "text", "text", null], 
+    name: ["nome", "professione", "contatto", "email", "note"], 
+    value: [item.nome, item.professione, item.contatto, item.email, item.note], 
+    placeholder: ["Nome", "Professione", "Contatto", "Email", "Note"], 
+    valoreModificabile: [false, false, true, true, true], 
+    onChange: (e) => handleInputChange(e, setItems), 
+    onClick: null, 
+    onBlur: null
+  }
+  const indici = [0, 1, 2, 3, 4];
+  
   return (
     <>
-      <StyledRow>
-        <OperazioniItemEsistente selectOperation={selectOperation} item={item} />
-        <StyledCol>
-          <TextAreaNonModificabileTag 
-            tipoSelezione={item.tipo_selezione} 
-            nome="nome" 
-            valore={item.nome} 
-            modificabile={false} 
-            placeholder="Nome*" 
-            items={items} 
-            setItems={setItems} 
-            tipoItem={"professionista"} 
-            id={item.id}
-          />
-        </StyledCol>
-        <StyledCol>
-          <TextAreaNonModificabileTag 
-            tipoSelezione={item.tipo_selezione} 
-            nome="professione" 
-            valore={item.professione} 
-            modificabile={false} 
-            placeholder="Professione*" 
-            items={items} 
-            setItems={setItems} 
-            tipoItem={"professionista"} 
-            id={item.id}
-          />
-        </StyledCol>
-        <StyledCol>
-          <InputModificabileTag 
-            tipoSelezione={item.tipo_selezione} 
-            nome="contatto" 
-            tipo="text" 
-            valore={item.contatto} 
-            modificabile={true} 
-            placeholder="Contatto" 
-            items={items} 
-            setItems={setItems} 
-            tipoItem={"cliente"} 
-            id={item.id} 
-          />
-        </StyledCol>
-        <StyledCol>
-          <InputModificabileTag 
-            tipoSelezione={item.tipo_selezione} 
-            nome="email" 
-            tipo="text" 
-            valore={item.email} 
-            modificabile={true} 
-            placeholder="Email" 
-            items={items} 
-            setItems={setItems} 
-            tipoItem={"cliente"} 
-            id={item.id} 
-          />
-        </StyledCol>
-        <StyledCol>
-          <TextAreaModificabileTag 
-            tipoSelezione={item.tipo_selezione} 
-            nome="note" 
-            valore={item.note} 
-            modificabile={true} 
-            placeholder="Note" 
-            items={items} 
-            setItems={setItems} 
-            tipoItem={"professionista"} 
-            id={item.id}
-          />
-        </StyledCol>
-      </StyledRow>
+      <RowItemEsistente 
+        item={item}
+        campi={campi}
+        indici={indici}
+        selectOperation={selectOperation}
+      />
     </>
   );
 }

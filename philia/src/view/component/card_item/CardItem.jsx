@@ -226,10 +226,6 @@ export function CardRicercaItems({campi, indici, eseguiRicerca}) {
 
 export function CardItemEsistente({item, campi, indici, selectOperation}) {
   let maxHeight = "2000px";
-  // let InputModificabileTag = getInputTag(campi.tipoSelezione, true);
-  // let TextAreaModificabileTag = getTextAreaTag(campi.tipoSelezione, true);
-  // let InputNonModificabileTag = getInputTag(campi.tipoSelezione, false);
-  // let TextAreaNonModificabileTag = getTextAreaTag(campi.tipoSelezione, false);
   return (
     <>
       <StyledCard>
@@ -239,7 +235,6 @@ export function CardItemEsistente({item, campi, indici, selectOperation}) {
             // onClick={handleGiornoClick(setUltimoGiornoType)}
             // onBlur={handleGiornoBlur(setUltimoGiornoType, item, setItem)}
             // onChange={(e) => handleInputChange(e, setItem)}
-            // const NomeTag = (campi.type[i]) ? InputTag : TextAreaTag;
             const NomeTag = (campi.type[i]) ? getInputTag(campi.tipoSelezione, campi.valoreModificabile[i]) : (
               getTextAreaTag(campi.tipoSelezione, campi.valoreModificabile[i])
             );
@@ -262,7 +257,6 @@ export function CardItemEsistente({item, campi, indici, selectOperation}) {
           selectOperation={selectOperation} 
           item={item} 
         />
-        {/* <OperazioniItemEsistente selectOperation={selectOperation} item={item} /> */}
       </StyledCard>
     </>
   )

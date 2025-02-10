@@ -28,7 +28,7 @@ import {
 
 export function CardNuovoProfessionista({item, setItem, eseguiSalvataggio}) {
   let campi = {
-    header: "Ricerca professionisti", 
+    header: "Nuovo professionista", 
     type: [null, null, "text", "text", null], 
     name: ["nome", "professione", "contatto", "email", "note"], 
     value: [item.nome, item.professione, item.contatto, item.email, item.note], 

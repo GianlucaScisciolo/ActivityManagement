@@ -18,7 +18,8 @@ import {
 } from '../../../vario/Vario';
 import { 
   OperazioniNuovoItem, OperazioniCercaItems, 
-  getTextAreaTag, getInputTag
+  getTextAreaTag, getInputTag, 
+  FormNuovoItem, FormRicercaItems 
 } from './FormItem';
 
 const nascondiForm = (setIsVisible, setArrowUp) => {
@@ -30,66 +31,53 @@ const nascondiForm = (setIsVisible, setArrowUp) => {
 };
 
 export function FormNuovoProfessionista({item, setItem, eseguiSalvataggio}) {
-  const [isVisible, setIsVisible] = useState(true);
-  const [arrowUp, setArrowUp] = useState(true);
-  let maxHeight = "2000px";
-  let InputTag = getInputTag(1, true);
-  let TextAreaTag = getTextAreaTag(1, true);
-
+  let campi = {
+    header: "Nuovo professionista", 
+    type: [null, null, "text", "text", null], 
+    label: ["Nome*", "Professione*", "Contatto", "Email*", "Note"], 
+    name: ["nome", "professione", "contatto", "email", "note"], 
+    value: [item.nome, item.professione, item.contatto, item.email, item.note], 
+    placeholder: ["Nome*", "Professione*", "Contatto", "Email", "Note"], 
+    errore: [item.errore_nome, item.errore_professione, item.errore_contatto, item.errore_email, item.errore_note], 
+    onChange: (e) => handleInputChange(e, setItem), 
+    onClick: null, 
+    onBlur: null
+  }
+  const indici = [0, 1, 2, 3, 4];
+  
   return (
     <>
-      <StyledForm>
-        <StyledHeader>Nuovo professionista</StyledHeader>  
-        <SlideContainer style={{maxHeight: `${maxHeight}`}}>
-          <StyledLabel htmlFor="nome">Nome*</StyledLabel>
-          <TextAreaTag rows="1" placeholder="Nome*" name="nome" value={item.nome} onChange={(e) => handleInputChange(e, setItem)} />
-          {(item.errore_nome !== "") && (<StyledSpanErrore>{item.errore_nome}</StyledSpanErrore>)}
-          <StyledLabel htmlFor="professione">Professione*</StyledLabel>
-          <TextAreaTag rows="1" placeholder="Professione*" name="professione" value={item.professione} onChange={(e) => handleInputChange(e, setItem)} />
-          {(item.errore_professione !== "") && (<StyledSpanErrore>{item.errore_professione}</StyledSpanErrore>)}
-          <StyledLabel htmlFor="contatto">Contatto</StyledLabel>
-          <InputTag rows="1" placeholder="Contatto" type="text" name="contatto" value={item.contatto} onChange={(e) => handleInputChange(e, setItem)} />
-          {(item.errore_contatto !== "") && (<StyledSpanErrore>{item.errore_contatto}</StyledSpanErrore>)}
-          <StyledLabel htmlFor="email">Email</StyledLabel>
-          <InputTag rows="1" placeholder="Email" type="text" name="email" value={item.email} onChange={(e) => handleInputChange(e, setItem)} />
-          {(item.errore_email !== "") && (<StyledSpanErrore>{item.errore_email}</StyledSpanErrore>)}
-          <StyledLabel htmlFor="note">Note</StyledLabel>
-          <TextAreaTag rows="1" placeholder="Note" name="note" value={item.note} onChange={(e) => handleInputChange(e, setItem)} />
-          {(item.errore_note !== "") && (<StyledSpanErrore>{item.errore_note}</StyledSpanErrore>)}
-          <br /> <br />
-        </SlideContainer>
-        <OperazioniNuovoItem eseguiSalvataggio={eseguiSalvataggio} />
-      </StyledForm>
+      <FormNuovoItem 
+        campi={campi}
+        indici={indici}
+        eseguiSalvataggio={eseguiSalvataggio}
+      />
     </>
   );
 }
 
-export function FormCercaProfessionisti({item, setItem, eseguiRicerca}) {
-  const [isVisible, setIsVisible] = useState(true);
-  const [arrowUp, setArrowUp] = useState(true);
-  let maxHeight = (isVisible) ? "2000px" : "0px";
-  let InputTag = getInputTag(1, true);
-  let TextAreaTag = getTextAreaTag(1, true);
+export function FormRicercaProfessionisti({item, setItem, eseguiRicerca}) {
+  let campi = {
+    header: "Ricerca professionisti", 
+    label: ["Nome", "Professione", "Contatto", "Email", "Note"], 
+    type: [null, null, "text", "text", null], 
+    name: ["nome", "professione", "contatto", "email", "note"], 
+    value: [item.nome, item.professione, item.contatto, item.email, item.note], 
+    placeholder: ["Nome", "Professione", "Contatto", "Email", "Note"], 
+    onChange: (e) => handleInputChange(e, setItem), 
+    onClick: null, 
+    onBlur: null
+  }
+  const indici = [0, 1, 2, 3, 4];
 
   return (
     <>
-      <StyledForm>
-        <StyledHeader>Ricerca professionisti</StyledHeader>  
-        <SlideContainer style={{maxHeight: `${maxHeight}`}}>
-          <StyledLabel htmlFor="nome">Nome</StyledLabel>
-          <TextAreaTag rows="1" placeholder="Nome" name="nome" value={item.nome} onChange={(e) => handleInputChange(e, setItem)} />
-          <StyledLabel htmlFor="nome">Professione</StyledLabel>
-          <TextAreaTag rows="1" placeholder="Professione" name="professione" value={item.professione} onChange={(e) => handleInputChange(e, setItem)} />
-          <StyledLabel htmlFor="contatto">Contatto</StyledLabel>
-          <InputTag rows="1" placeholder="Contatto" type="text" name="contatto" value={item.contatto} onChange={(e) => handleInputChange(e, setItem)} />
-          <StyledLabel htmlFor="email">Email</StyledLabel>
-          <InputTag rows="1" placeholder="Email" type="text" name="email" value={item.email} onChange={(e) => handleInputChange(e, setItem)} />
-          <StyledLabel htmlFor="note">Note</StyledLabel>
-          <TextAreaTag rows="1" placeholder="Note" name="note" value={item.note} onChange={(e) => handleInputChange(e, setItem)} />
-          <br /> <br />
-        </SlideContainer>
-      <OperazioniCercaItems setIsVisible={setIsVisible} arrowUp={arrowUp} setArrowUp={setArrowUp} eseguiRicerca={eseguiRicerca} />
-      </StyledForm>
+      <FormRicercaItems 
+        item={item}
+        campi={campi}
+        indici={indici}
+        eseguiRicerca={eseguiRicerca}
+      />
     </>
   );
 }
