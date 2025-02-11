@@ -11,6 +11,8 @@ import { CardRicercaProfessionisti, CardProfessionistaEsistente } from '../compo
 import { FormRicercaProfessionisti } from '../component/form_item/FormsProfessionisti';
 import { RowRicercaProfessionisti, RowProfessionistaEsistente } from '../component/row_item/RowsProfessionisti';
 import { eseguiRicerca } from '../../vario/OperazioniRicerca';
+import Items from '../component/Items';
+import { OperazioniItems } from '../component/Operazioni';
 
 const Professionisti = () => {
   const [professionisti, setProfessionisti] = useState(-1);
@@ -77,75 +79,47 @@ const Professionisti = () => {
     };
   }, []);
   
+  let RicercaProfessionistiTag = (formSession.view === "form") ? FormRicercaProfessionisti : (
+    (formSession.view === "card") ? CardRicercaProfessionisti : RowRicercaProfessionisti
+  )
+
+  const itemsComponent = (
+    <Items 
+      tipoItem={"professionista"} 
+      items={professionisti} 
+      selectOperation={selectOperation}
+      emptyIsConsidered={true}
+    />
+  );
+
   return (
     <>
       <Header />
 
       <div className="main-content" />
+      
+      <RicercaProfessionistiTag 
+        item={datiRicerca} 
+        setItem={setDatiRicerca} 
+        eseguiRicerca={(e) => eseguiRicerca(e, "professionisti", setProfessionisti, datiRicerca)}
+      />
 
-      {(formSession.view === "form") && (
-        <center>
-          <FormRicercaProfessionisti item={datiRicerca} setItem={setDatiRicerca} eseguiRicerca={(e) => eseguiRicerca(e, "professionisti", setProfessionisti, datiRicerca)} />
-        </center>
-      )}
-      {(formSession.view === "row") && (
-        <RowRicercaProfessionisti item={datiRicerca} setItem={setDatiRicerca} eseguiRicerca={(e) => eseguiRicerca(e, "professionisti", setProfessionisti, datiRicerca)} />
-      )}
-      {(formSession.view === "card") && (
-        <center>
-          <CardRicercaProfessionisti item={datiRicerca} setItem={setDatiRicerca} eseguiRicerca={(e) => eseguiRicerca(e, "professionisti", setProfessionisti, datiRicerca)} />
-        </center>
-      )}
-
-      {(professionisti.length === 0) && (
-        <div className='contenitore-1'>Nessun professionista trovato!!</div>
+      <br /> <br /> <br /> <br />
+      
+      {itemSession.view === "card" ? (
+        <div className="contenitore-3">{itemsComponent}</div>
+      ) : (
+        itemsComponent
       )}
 
       <br /> <br /> <br /> <br />
 
-      {(professionisti.length > 0) && (
-        <>
-          {(itemSession.view === "card") && (
-            <div className="contenitore-3">
-              {professionisti.map((professionista, index) => (
-                <CardProfessionistaEsistente key={index} item={professionista} items={professionisti} setItems={setProfessionisti} selectOperation={selectOperation} />
-              ))}
-            </div>
-          )}
-          {(itemSession.view === "list") && (
-            <>
-              {professionisti.map((professionista, index) => (
-                <RowProfessionistaEsistente key={index} item={professionista} items={professionisti} setItems={setProfessionisti} selectOperation={selectOperation} />
-              ))}
-            </>
-          )}
-        </>
-      )}
-
-      <br /> <br /> <br /> <br />
-
-      <div className='contenitore-2'>
-        <Row>
-          {selectedIdsModifica.length > 0 && (
-            <Col>
-              <button className="bottone-blu-non-selezionato"
-                onClick={(e) => modifica(e, "professionista", selectedIdsModifica, setSelectedIdsModifica, professionisti, setProfessionisti)}
-              >
-                Modifica
-              </button>
-            </Col>
-          )}
-          {selectedIdsEliminazione.length > 0 && (
-            <Col>
-              <button className='bottone-rosso-non-selezionato'
-                onClick={(e) => elimina(e, "professionista", selectedIdsEliminazione, setSelectedIdsEliminazione, professionisti, setProfessionisti)}
-              >
-                Elimina
-              </button>
-            </Col>
-          )}
-        </Row>
-      </div>
+      <OperazioniItems 
+        selectedIdsModifica={selectedIdsModifica} 
+        selectedIdsEliminazione={selectedIdsEliminazione}
+        modifica={(e) => modifica(e, "professionista", selectedIdsModifica, setSelectedIdsModifica, professionisti, setProfessionisti)} 
+        elimina={(e) => elimina(e, "professionista", selectedIdsEliminazione, setSelectedIdsEliminazione, professionisti, setProfessionisti)}
+      />
 
       <br /> <br /> <br /> <br />
     </>

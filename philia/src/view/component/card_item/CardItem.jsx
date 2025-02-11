@@ -146,38 +146,40 @@ export function CardNuovoItem({campi, indici, eseguiSalvataggio}) {
   let TextAreaTag = getTextAreaTag(1, true);
 
   return (
-    <StyledCard>
-      <StyledCardHeader>{campi["header"]}</StyledCardHeader>
-      <SlideContainer style={{maxHeight: `${maxHeight}`}}>
-        {indici.map((i) => {
-          // onClick={handleGiornoClick(setUltimoGiornoType)}
-          // onBlur={handleGiornoBlur(setUltimoGiornoType, item, setItem)}
-          // onChange={(e) => handleInputChange(e, setItem)}
-          const NomeTag = (campi.type[i]) ? getInputTag(1, true) : (
-            getTextAreaTag(1, true)
-          );
-          return ( 
-            <React.Fragment key={i}>
-              <NomeTag 
-                key={i}
-                rows={1}
-                name={campi.name[i]}
-                type={campi.type[i]}
-                value={campi.value[i]}
-                placeholder={campi.placeholder[i]}
-                onChange={campi.onChange}
-                onClick={campi.onClick}
-                onBlur={campi.onBlur}
-              />
-              {(campi.errore[i] !== "") && (<StyledSpanErrore>{campi.errore[i]}</StyledSpanErrore>)}
-            </React.Fragment>
-          );
-        })}
-      </SlideContainer>
-      <OperazioniNuovoItem 
-        eseguiSalvataggio={eseguiSalvataggio} 
-      />
-    </StyledCard>
+    <center>
+      <StyledCard>
+        <StyledCardHeader>{campi["header"]}</StyledCardHeader>
+        <SlideContainer style={{maxHeight: `${maxHeight}`}}>
+          {indici.map((i) => {
+            // onClick={handleGiornoClick(setUltimoGiornoType)}
+            // onBlur={handleGiornoBlur(setUltimoGiornoType, item, setItem)}
+            // onChange={(e) => handleInputChange(e, setItem)}
+            const NomeTag = (campi.type[i]) ? getInputTag(1, true) : (
+              getTextAreaTag(1, true)
+            );
+            return ( 
+              <React.Fragment key={i}>
+                <NomeTag 
+                  key={i}
+                  rows={1}
+                  name={campi.name[i]}
+                  type={campi.type[i]}
+                  value={campi.value[i]}
+                  placeholder={campi.placeholder[i]}
+                  onChange={campi.onChange}
+                  onClick={campi.onClick}
+                  onBlur={campi.onBlur}
+                />
+                {(campi.errore[i] !== "") && (<StyledSpanErrore>{campi.errore[i]}</StyledSpanErrore>)}
+              </React.Fragment>
+            );
+          })}
+        </SlideContainer>
+        <OperazioniNuovoItem 
+          eseguiSalvataggio={eseguiSalvataggio} 
+        />
+      </StyledCard>
+    </center>
   );
 }
 
@@ -189,38 +191,40 @@ export function CardRicercaItems({campi, indici, eseguiRicerca}) {
   let TextAreaTag = getTextAreaTag(1, true);
 
   return (
-    <StyledCard>
-      <StyledCardHeader>{campi["header"]}</StyledCardHeader>
-      <SlideContainer style={{maxHeight: `${maxHeight}`}}>
-        {indici.map((i) => {
-          // onClick={handleGiornoClick(setUltimoGiornoType)}
-          // onBlur={handleGiornoBlur(setUltimoGiornoType, item, setItem)}
-          // onChange={(e) => handleInputChange(e, setItem)}
-          const NomeTag = (campi.type[i]) ? getInputTag(1, true) : (
-            getTextAreaTag(1, true)
-          );
-          return ( 
-            <NomeTag 
-              key={i}
-              rows={1}
-              name={campi.name[i]}
-              type={campi.type[i]}
-              value={campi.value[i]}
-              placeholder={campi.placeholder[i]}
-              onChange={campi.onChange}
-              onClick={campi.onClick}
-              onBlur={campi.onBlur}
-            />
-          );
-        })}
-      </SlideContainer>
-      <OperazioniCercaItems
-        setIsVisible={setIsVisible}
-        arrowUp={arrowUp}
-        setArrowUp={setArrowUp}
-        eseguiRicerca={eseguiRicerca}
-      />
-    </StyledCard>
+    <center>
+      <StyledCard>
+        <StyledCardHeader>{campi["header"]}</StyledCardHeader>
+        <SlideContainer style={{maxHeight: `${maxHeight}`}}>
+          {indici.map((i) => {
+            // onClick={handleGiornoClick(setUltimoGiornoType)}
+            // onBlur={handleGiornoBlur(setUltimoGiornoType, item, setItem)}
+            // onChange={(e) => handleInputChange(e, setItem)}
+            const NomeTag = (campi.type[i]) ? getInputTag(1, true) : (
+              getTextAreaTag(1, true)
+            );
+            return ( 
+              <NomeTag 
+                key={i}
+                rows={1}
+                name={campi.name[i]}
+                type={campi.type[i]}
+                value={campi.value[i]}
+                placeholder={campi.placeholder[i]}
+                onChange={campi.onChange}
+                onClick={campi.onClick}
+                onBlur={campi.onBlur}
+              />
+            );
+          })}
+        </SlideContainer>
+        <OperazioniCercaItems
+          setIsVisible={setIsVisible}
+          arrowUp={arrowUp}
+          setArrowUp={setArrowUp}
+          eseguiRicerca={eseguiRicerca}
+        />
+      </StyledCard>
+    </center>
   );
 }
 

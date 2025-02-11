@@ -11,7 +11,7 @@ import {
   StyledSelect, StyledOption, StyledSpanErrore, StyledLoginNotSelected
 } from "./StyledRowItem";
 import { 
-  handleInputChange, cambiamentoBloccato, getCampiRicerca, getCampiNuovoItem
+  handleInputChange, cambiamentoBloccato
 } from '../../../vario/Vario';
 import { 
   OperazioniNuovoItem, OperazioniCercaItems, OperazioniItemEsistente, 

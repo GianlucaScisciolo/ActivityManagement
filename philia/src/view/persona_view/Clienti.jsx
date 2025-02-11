@@ -12,6 +12,8 @@ import { FormRicercaClienti } from '../component/form_item/FormsClienti';
 import { RowRicercaClienti } from '../component/row_item/RowsClienti';
 import { RowClienteEsistente } from '../component/row_item/RowsClienti';
 import { eseguiRicerca } from '../../vario/OperazioniRicerca';
+import Items from '../component/Items';
+import { OperazioniItems } from '../component/Operazioni';
 
 const Clienti = () => {
   const [clienti, setClienti] = useState(-1);
@@ -75,77 +77,49 @@ const Clienti = () => {
       personaStore.removeChangeListener(operazioniPersone.VISUALIZZA_CLIENTI, onChange);
     };
   }, []);
+
+  let RicercaClientiTag = (formSession.view === "form") ? FormRicercaClienti : (
+    (formSession.view === "card") ? CardRicercaClienti : RowRicercaClienti
+  )
   
+  const itemsComponent = (
+    <Items 
+      tipoItem={"cliente"} 
+      items={clienti} 
+      selectOperation={selectOperation}
+      emptyIsConsidered={true}
+    />
+  );
+
   return (
     <>
       <Header />
 
       <div className="main-content" />
 
-      {(formSession.view === "form") && (
-        <center>
-          <FormRicercaClienti item={datiRicerca} setItem={setDatiRicerca} eseguiRicerca={(e) => eseguiRicerca(e, "clienti", setClienti, datiRicerca)} />
-        </center>
-      )}
-      {(formSession.view === "row") && (
-        <RowRicercaClienti item={datiRicerca} setItem={setDatiRicerca} eseguiRicerca={(e) => eseguiRicerca(e, "clienti", setClienti, datiRicerca)} />
-      )}
-      {(formSession.view === "card") && (
-        <center>
-          <CardRicercaClienti item={datiRicerca} setItem={setDatiRicerca} eseguiRicerca={(e) => eseguiRicerca(e, "clienti", setClienti, datiRicerca)} />
-        </center>
-      )}
-
-      {(clienti.length === 0) && (
-        <div className='contenitore-1'>Nessun cliente trovato!!</div>
-      )}
+      <RicercaClientiTag 
+        item={datiRicerca} 
+        setItem={setDatiRicerca} 
+        eseguiRicerca={(e) => eseguiRicerca(e, "clienti", setClienti, datiRicerca)}
+      />
 
       <br /> <br /> <br /> <br />
-
-      {(clienti.length > 0) && (
-        <>
-          {(itemSession.view === "card") && (
-            <div className="contenitore-3">
-              {clienti.map((cliente, index) => (
-                <CardClienteEsistente key={index} item={cliente} items={clienti} setItems={setClienti} selectOperation={selectOperation} />
-              ))}
-            </div>
-          )}
-          {(itemSession.view === "list") && (
-            <>
-              {clienti.map((cliente, index) => (
-                <RowClienteEsistente key={index} item={cliente} items={clienti} setItems={setClienti} selectOperation={selectOperation} />
-              ))}
-            </>
-          )}
-        </>
+      
+      {itemSession.view === "card" ? (
+        <div className="contenitore-3">{itemsComponent}</div>
+      ) : (
+        itemsComponent
       )}
-
+      
       <br /> <br /> <br /> <br />
 
-      <div className='contenitore-2'>
-        <Row>
-          {selectedIdsModifica.length > 0 && (
-            <Col>
-              <button className="bottone-blu-non-selezionato"
-                onClick={(e) => modifica(e, "cliente", selectedIdsModifica, setSelectedIdsModifica, clienti, setClienti)}
-              >
-                Modifica
-              </button>
-            </Col>
-          )}
-          {selectedIdsEliminazione.length > 0 && (
-            <Col>
-              <button className='bottone-rosso-non-selezionato'
-                onClick={(e) => elimina(e, "cliente", selectedIdsEliminazione, setSelectedIdsEliminazione, clienti, setClienti)}
-              >
-                Elimina
-              </button>
-            </Col>
-          )}
-        </Row>
-      </div>
-
+      <OperazioniItems 
+        selectedIdsModifica={selectedIdsModifica} 
+        selectedIdsEliminazione={selectedIdsEliminazione}
+        modifica={(e) => modifica(e, "cliente", selectedIdsModifica, setSelectedIdsModifica, clienti, setClienti)} 
+        elimina={(e) => elimina(e, "cliente", selectedIdsEliminazione, setSelectedIdsEliminazione, clienti, setClienti)}
+      />
+      
       <br /> <br /> <br /> <br />
     </>
   );

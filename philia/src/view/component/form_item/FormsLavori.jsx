@@ -16,7 +16,7 @@ import {
   StyledDownloadNotSelected, StyledDeleteNotSelected, StyledTrashNotSelected
 } from "./StyledFormItem";
 import { 
-  handleInputChange, getCampiRicerca, getCampiNuovoItem, selezionaInserimentoLavoroCliente, selezionaInserimentoLavoroProfessionista
+  handleInputChange, selezionaInserimentoLavoroCliente, selezionaInserimentoLavoroProfessionista
 } from '../../../vario/Vario';
 
 import { 

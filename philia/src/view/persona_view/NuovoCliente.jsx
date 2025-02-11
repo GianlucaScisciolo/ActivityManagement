@@ -9,6 +9,8 @@ import { FormNuovoCliente } from '../component/form_item/FormsClienti';
 import { RowNuovoCliente, RowClienteEsistente } from '../component/row_item/RowsClienti';
 import { modifica } from '../../vario/OperazioniModifica';
 import { elimina } from '../../vario/OperazioniEliminazione';
+import Items from '../component/Items';
+import { OperazioniItems } from '../component/Operazioni';
 
 const NuovoCliente = () => {
   const formSession = useSelector((state) => state.formSession.value);
@@ -132,70 +134,48 @@ const NuovoCliente = () => {
   //   handleInsert(nuovoCliente, setNuovoCliente, setClienti, setErrori);
   // }
 
+  let NuovoClienteTag = (formSession.view === "form") ? FormNuovoCliente : (
+    (formSession.view === "card") ? CardNuovoCliente : RowNuovoCliente
+  )
+
+  const itemsComponent = (
+    <Items 
+      tipoItem={"cliente"} 
+      items={clienti} 
+      selectOperation={selectOperation}
+      emptyIsConsidered={false}
+    />
+  );
+
   return (
     <>
       <Header />
       
       <div className="main-content" />
 
-      {formSession.view === "form" && (
-        <FormNuovoCliente item={nuovoCliente} setItem={setNuovoCliente} eseguiSalvataggio={(e) => handleInsert(e)} />
-      )}
-      {formSession.view === "row" && (
-        <RowNuovoCliente item={nuovoCliente} setItem={setNuovoCliente} eseguiSalvataggio={(e) => handleInsert(e)} />
-      )}
-      {(formSession.view === "card") && (
-        <center>
-          <CardNuovoCliente item={nuovoCliente} setItem={setNuovoCliente} eseguiSalvataggio={(e) => handleInsert(e)} />
-        </center>
-      )}
+      <NuovoClienteTag 
+        item={nuovoCliente} 
+        setItem={setNuovoCliente} 
+        eseguiSalvataggio={(e) => handleInsert(e)} 
+      />
 
       <br /> <br /> <br /> <br />
 
-      {(clienti.length > 0) && (
-        <>
-          {(itemSession.view === "card") && (
-            <div className="contenitore-3">
-              {clienti.map((cliente, index) => (
-                <CardClienteEsistente key={index} item={cliente} items={clienti} setItems={setClienti} selectOperation={selectOperation} />
-              ))}
-            </div>
-          )}
-          {(itemSession.view === "list") && (
-            <>
-              {clienti.map((cliente, index) => (
-                <RowClienteEsistente key={index} item={cliente} items={clienti} setItems={setClienti} selectOperation={selectOperation} />
-              ))}
-            </>
-          )}
-        </>
+      {itemSession.view === "card" ? (
+        <div className="contenitore-3">{itemsComponent}</div>
+      ) : (
+        itemsComponent
       )}
-
+      
       <br /> <br /> <br /> <br />
 
-      <div className='contenitore-2'>
-        <Row>
-          {selectedIdsModifica.length > 0 && (
-            <Col>
-              <button className="bottone-blu-non-selezionato"
-                onClick={(e) => modifica(e, "cliente", selectedIdsModifica, setSelectedIdsModifica, clienti, setClienti)}
-              >
-                Modifica
-              </button>
-            </Col>
-          )}
-          {selectedIdsEliminazione.length > 0 && (
-            <Col>
-              <button className='bottone-rosso-non-selezionato'
-                onClick={(e) => elimina(e, "cliente", selectedIdsEliminazione, setSelectedIdsEliminazione, clienti, setClienti)}
-              >
-                Elimina
-              </button>
-            </Col>
-          )}
-        </Row>
-      </div>
-
+      <OperazioniItems 
+        selectedIdsModifica={selectedIdsModifica} 
+        selectedIdsEliminazione={selectedIdsEliminazione}
+        modifica={(e) => modifica(e, "cliente", selectedIdsModifica, setSelectedIdsModifica, clienti, setClienti)} 
+        elimina={(e) => elimina(e, "cliente", selectedIdsEliminazione, setSelectedIdsEliminazione, clienti, setClienti)}
+      />
+      
       <br /> <br /> <br /> <br />
     </>
   );

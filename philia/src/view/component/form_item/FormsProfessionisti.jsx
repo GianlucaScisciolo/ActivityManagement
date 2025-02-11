@@ -14,7 +14,7 @@ import {
   StyledSpanErrore, StyledLoginNotSelected
 } from "./StyledFormItem";
 import { 
-  handleInputChange, getCampiRicerca, getCampiNuovoItem, selezionaInserimentoLavoroCliente, selezionaInserimentoLavoroProfessionista
+  handleInputChange, selezionaInserimentoLavoroCliente, selezionaInserimentoLavoroProfessionista
 } from '../../../vario/Vario';
 import { 
   OperazioniNuovoItem, OperazioniCercaItems, 

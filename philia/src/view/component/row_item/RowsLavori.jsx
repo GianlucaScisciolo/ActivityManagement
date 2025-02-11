@@ -14,7 +14,7 @@ import {
   StyledFileIconNotSelected, StyledDownloadNotSelected, StyledDeleteNotSelected, StyledTrashNotSelected2
 } from "./StyledRowItem";
 import { 
-  handleInputChange, handleInputChangeLavoroEsistente, cambiamentoBloccato, getCampiRicerca, getCampiNuovoItem
+  handleInputChange, handleInputChangeLavoroEsistente, cambiamentoBloccato
 } from '../../../vario/Vario';
 
 import { OperazioniNuovoItem, OperazioniCercaItems, OperazioniItemEsistente, OperazioniFileItems } from './RowItem';
