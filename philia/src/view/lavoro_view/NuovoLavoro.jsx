@@ -14,6 +14,7 @@ import Row from "react-bootstrap/esm/Row";
 import Col from "react-bootstrap/esm/Col";
 import { modifica } from "../../vario/OperazioniModifica";
 import { elimina } from "../../vario/OperazioniEliminazione";
+import { dizionarioOrari } from "../../vario/Tempo";
 
 const NuovoLavoro = () => {
   const formSession = useSelector((state) => state.formSession.value);
@@ -22,7 +23,7 @@ const NuovoLavoro = () => {
   const [clienti, setClienti] = useState([]);
   const [professionisti, setProfessionisti] = useState([]);
   const [lavori, setLavori] = useState([]);
-  const [lavoriGiornoSelezionato, setLavoriGiornoSelezionato] = useState([]);
+  const [lavoriGiornoSelezionato, setLavoriGiornoSelezionato] = useState(0);
   const [selectedTrashCount, setSelectedTrashCount] = useState(0);
   const [selectedPencilCount, setSelectedPencilCount] = useState(0);
   const [selectedIdsEliminazione, setSelectedIdsEliminazione] = useState([]);
@@ -50,7 +51,8 @@ const NuovoLavoro = () => {
     errore_orario_fine: "", 
     errore_note: ""
   });
-  
+  const [aggiornato, setAggiornato] = useState(false);
+  const [orari, setOrari] = useState(dizionarioOrari);
   
   const selectOperation = (icon, item) => {
     if (icon === "trash") {
@@ -189,35 +191,6 @@ const NuovoLavoro = () => {
       ...prevState, 
       [name]: value
     }));
-
-
-
-    // ---------------------------------------- //
-
-    // if(response.ok) {
-    //   const result = await response.json();
-    //   nuovoLavoro.id_lavoro = result.id_lavoro;
-    //   if(parseInt(nuovoLavoro.id_cliente) !== 0) {
-    //     const cliente = clienti.filter(c => c.id === parseInt(nuovoLavoro.id_cliente))[0];
-    //     nuovoLavoro.nome_cliente = cliente.nome;
-    //     nuovoLavoro.cognome_cliente = cliente.cognome;
-    //   }
-    //   else if(parseInt(nuovoLavoro.id_professionista) !== 0) {
-    //     const professionista = professionisti.filter(p => p.id === parseInt(nuovoLavoro.id_professionista))[0];
-    //     nuovoLavoro.nome_professionista = professionista.nome;
-    //     nuovoLavoro.professione = professionista.professione;
-    //   }
-    // }
-    // else {
-    //   const errorData = await response.json();
-    //   if (response.status === 409 || response.status === 500) {
-    //     alert(errorData.message);
-    //   }
-    //   else {
-    //     response.status = 500;
-    //     alert('Errore durante l\'inserimento del lavoro');
-    //   }
-    // }
   }
 
   const ottieniLavoriGiorno = async (setGiornoType, item) => {
@@ -247,71 +220,90 @@ const NuovoLavoro = () => {
     }
   }
 
-  const aggiornaOrari = (lavoriGiornoSelezionato, orari) => {
-    let listaOrari = Object.entries(orari);
-    
-    for (let lavoroGiorno of lavoriGiornoSelezionato) {
-      console.log(lavoroGiorno.tipo_lavoro + ": " + lavoroGiorno.orario_inizio + " - " + lavoroGiorno.orario_fine);
-      
-      let indice_primo_considerato = orari[lavoroGiorno.orario_inizio][0];
-      let indice_ultimo_considerato = orari[lavoroGiorno.orario_fine][0] - 1;
-      
-      for (let i = indice_primo_considerato; i <= indice_ultimo_considerato; i++) {
-        if (lavoroGiorno.tipo_lavoro === "lavoro_cliente") {
-          listaOrari[i][1] += 1;
-        } else if (lavoroGiorno.tipo_lavoro === "lavoro_professionista") {
-          listaOrari[i][2] += 1;
+  const aggiornaOrari = (lavoriGiornoSelezionato, orari, setOrari) => {
+    // console.log("Funzione aggiornaOrari!!");
+    if(lavoriGiornoSelezionato !== -1 && lavoriGiornoSelezionato !== 0) {
+      let listaOrari = Object.entries(orari);
+      for(let lavoroGiorno of lavoriGiornoSelezionato) {
+        console.log(lavoroGiorno.tipo_lavoro + ": " + lavoroGiorno.orario_inizio + " - " + lavoroGiorno.orario_fine);
+        let indicePrimoGiornoConsiderato = orari[lavoroGiorno.orario_inizio][0];
+        let indiceUltimoGiornoConsiderato = orari[lavoroGiorno.orario_fine][0] - 1;
+        for (let i = indicePrimoGiornoConsiderato; i <= indiceUltimoGiornoConsiderato; i++) {
+          // console.log(`| ${listaOrari[i]} | : | ${listaOrari[i][0]} - ( ${listaOrari[i][1][0]} - ${listaOrari[i][1][1]} - ${listaOrari[i][1][2]} ) |`);
+          if (lavoroGiorno.tipo_lavoro === "lavoro_cliente") {
+            listaOrari[i][1][1] += 1;
+          } else if (lavoroGiorno.tipo_lavoro === "lavoro_professionista") {
+            listaOrari[i][1][2] += 1;
+          }
         }
+        setOrari(Object.fromEntries(listaOrari));
+      }
+      if(lavoriGiornoSelezionato.length === 0) {
+        console.log("Nessun lavoro trovato per il giorno selezionato!!");
       }
     }
-    
-    // Converti listaOrari di nuovo in un oggetto
-    let nuovoOrari = Object.fromEntries(listaOrari);
-    
-    // Sostituisci l'oggetto orari vecchio con il nuovo
-    Object.assign(orari, nuovoOrari);
   };
 
-  const handleGiornoBlur = (setGiornoType, item, orari) => {
+  const handleGiornoBlur = (setGiornoType, item, orari, setOrari) => {
     return () => {
       if(!item.giorno)
         setGiornoType('text');
       else {
         setGiornoType('date');
+        setLavoriGiornoSelezionato(-1);
         ottieniLavoriGiorno(setGiornoType, item);
-        aggiornaOrari(lavoriGiornoSelezionato, orari);
+        setAggiornato(!aggiornato);
       }
     };
-         
   };
+
+  useEffect(() => {
+    if (lavoriGiornoSelezionato === 0) {
+      return;
+    }
+    if(lavoriGiornoSelezionato === -1) {
+      console.log("Aggiornamento in corso...")
+      setAggiornato(!aggiornato);
+    }
+  }, [aggiornato]);
+
+  useEffect(() => {
+    if (lavoriGiornoSelezionato === 0) {
+      return;
+    }
+    if(lavoriGiornoSelezionato !== -1) {
+      console.log("Agggiornamento effettuato.");
+      setOrari(dizionarioOrari);
+      console.log(orari);
+      aggiornaOrari(lavoriGiornoSelezionato, orari, setOrari);
+    }
+  }, [aggiornato]);
+
+  const NuovoLavoroTag = (formSession.view === "form") ? FormNuovoLavoro : (
+    (formSession.view === "card") ? CardNuovoLavoro : RowNuovoLavoro
+  )
 
   return (
     <>
       <Header />
 
       <div className="main-content" />
-      
-      {formSession.view === "form" && (
-        <FormNuovoLavoro clienti={clienti} professionisti={professionisti} item={nuovoLavoro} setItem={setNuovoLavoro} eseguiSalvataggio={(e) => handleInsertLavoro(e)} />
-      )}
-      {formSession.view === "row" && (
-        <RowNuovoLavoro clienti={clienti} professionisti={professionisti} item={nuovoLavoro} setItem={setNuovoLavoro} eseguiSalvataggio={(e) => handleInsertLavoro(e)} />
-      )}
-      {(formSession.view === "card") && (
-        <center>
-          <CardNuovoLavoro 
-            lavoriGiornoSelezionato={lavoriGiornoSelezionato} 
-            setLavoriGiornoSelezionato={setLavoriGiornoSelezionato}
-            handleInputChangeGiorno={(e) => handleInputChangeGiorno(e, setNuovoLavoro)} 
-            handleGiornoBlur={handleGiornoBlur}
-            clienti={clienti} 
-            professionisti={professionisti} 
-            item={nuovoLavoro} 
-            setItem={setNuovoLavoro} 
-            eseguiSalvataggio={(e) => handleInsertLavoro(e)} 
-          />
-        </center>
-      )}
+
+      <NuovoLavoroTag 
+        lavoriGiornoSelezionato={lavoriGiornoSelezionato} 
+        setLavoriGiornoSelezionato={setLavoriGiornoSelezionato}
+        handleInputChangeGiorno={(e) => handleInputChangeGiorno(e, setNuovoLavoro)} 
+        handleGiornoBlur={handleGiornoBlur}
+        clienti={clienti} 
+        professionisti={professionisti} 
+        item={nuovoLavoro} 
+        setItem={setNuovoLavoro} 
+        eseguiSalvataggio={(e) => handleInsertLavoro(e)} 
+        orari={orari} 
+        setOrari={setOrari} 
+        aggiornato={aggiornato} 
+        setAggiornato={setAggiornato}
+      />      
 
       <br /> <br /> <br /> <br />
       

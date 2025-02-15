@@ -107,7 +107,10 @@ function selezionaDeselezionaBottone(e, setValue) {
   }
 }
 
-export function FormNuovoLavoro({clienti, professionisti, item, setItem, eseguiSalvataggio}) {
+export function FormNuovoLavoro({
+  lavoriGiornoSelezionato, setLavoriGiornoSelezionato, handleInputChangeGiorno, handleGiornoBlur, 
+  clienti, professionisti, item, setItem, eseguiSalvataggio
+}) {
   const ore = ["07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22"];
   const minuti = ["00", "30"];
   let maxHeight = "2000px";
@@ -224,7 +227,7 @@ export function FormNuovoLavoro({clienti, professionisti, item, setItem, eseguiS
   );
 }
 
-export function FormCercaLavori({item, setItem, eseguiRicerca}) {
+export function FormRicercaLavori({item, setItem, eseguiRicerca}) {
   const ore = ["07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22"];
   const minuti = ["00", "30"];
   const [isVisible, setIsVisible] = useState(true);

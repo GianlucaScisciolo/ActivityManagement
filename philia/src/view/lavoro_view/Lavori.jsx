@@ -4,7 +4,7 @@ import Row from 'react-bootstrap/esm/Row';
 import Col from 'react-bootstrap/esm/Col';
 import { elimina } from '../../vario/OperazioniEliminazione';
 import { useSelector } from 'react-redux';
-import { FormCercaLavori } from '../component/form_item/FormsLavori';
+import { FormRicercaLavori } from '../component/form_item/FormsLavori';
 import { RowRicercaLavori, RowLavoroEsistente} from '../component/row_item/RowsLavori';
 import { CardRicercaLavori, CardLavoroEsistente } from '../component/card_item/CardsLavori';
 import { eseguiRicerca } from '../../vario/OperazioniRicerca';
@@ -12,16 +12,27 @@ import lavoroStore from '../../store/lavoro_store/LavoroStore';
 import LavoroAction from '../../action/lavoro_action/LavoroAction';
 import { operazioniLavori } from '../../vario/Operazioni';
 import { azzeraSelezione } from '../../vario/OperazioniModifica';
+import PersonaAction from '../../action/persona_action/PersonaAction';
+import ProfessionistaAction from '../../action/professionista_action/ProfessionistaAction';
+import personaStore from '../../store/persona_store/PersonaStore';
+import professionistaStore from '../../store/professionista_store/ProfessionistaStore';
+import { operazioniPersone, operazioniProfessionisti } from '../../vario/Operazioni';
+import { handleInputChangeLavoroEsistente } from '../../vario/Vario';
+import { formatoDate } from '../../vario/Tempo';
+import { dizionarioOrari } from '../../vario/Tempo';
 
 const Lavori = () => {
   const formSession = useSelector((state) => state.formSession.value);
   const itemSession = useSelector((state) => state.itemSession.value);
 
   const [lavori, setLavori] = useState(-1);
+  const [clienti, setClienti] = useState([]);
+  const [professionisti, setProfessionisti] = useState([]);
   const [selectedTrashCount, setSelectedTrashCount] = useState(0);
   const [selectedPencilCount, setSelectedPencilCount] = useState(0);
   const [selectedIdsEliminazione, setSelectedIdsEliminazione] = useState([]);
   const [selectedIdsModifica, setSelectedIdsModifica] = useState([]);
+  // const [aggiornato, setAggiornato] = useState(false);
 
   const [idsLavori, setIdsLavori] = useState(-1);
   const [aggiornamentoCompletato, setAggiornamentoCompletato] = useState("");
@@ -77,6 +88,10 @@ const Lavori = () => {
       }
     }
   }
+
+  const RicercaLavoriTag = (formSession.view === "form") ? FormRicercaLavori : (
+    (formSession.view === "card") ? CardRicercaLavori : RowRicercaLavori
+  )
 
   const modificaLavori = async(itemsDaModificare) => {
     await LavoroAction.dispatchAction(itemsDaModificare, operazioniLavori.MODIFICA_LAVORI);
@@ -169,6 +184,39 @@ const Lavori = () => {
   }
 
   useEffect(() => {
+    const getClientiFiltrati = async () => {
+      await PersonaAction.dispatchAction(null, operazioniPersone.OTTIENI_TUTTI_I_CLIENTI);
+      const clientiFiltrati = personaStore.getClienti();
+      // console.log(clientiFiltrati); // Visualizza i dati ottenuti
+      setClienti(clientiFiltrati);
+    };
+  
+    getClientiFiltrati();
+    
+    const onChange = () => setClienti(personaStore.getClienti());
+
+    personaStore.addChangeListener(operazioniPersone.OTTIENI_TUTTI_I_CLIENTI, onChange);
+      
+    return () => personaStore.removeChangeListener(operazioniPersone.OTTIENI_TUTTI_I_CLIENTI, onChange);
+  }, []);
+
+  useEffect(() => {
+    const getProfessionistiFiltrati = async () => {
+      await ProfessionistaAction.dispatchAction(null, operazioniProfessionisti.OTTIENI_TUTTI_I_PROFESSIONISTI);
+      const professionistiFiltrati = professionistaStore.getProfessionisti();
+      setProfessionisti(professionistiFiltrati);
+    };
+  
+    getProfessionistiFiltrati();
+  
+    const onChange = () => setProfessionisti(professionistaStore.getProfessionisti());
+    
+    professionistaStore.addChangeListener(operazioniProfessionisti.OTTIENI_TUTTI_I_PROFESSIONISTI, onChange);
+  
+    return () => professionistaStore.removeChangeListener(operazioniProfessionisti.OTTIENI_TUTTI_I_PROFESSIONISTI, onChange);
+  }, []);
+
+  useEffect(() => {
     if (idsLavori !== -1) {
       console.log("IdsLavori aggiornato: ", idsLavori);
       // modificaLavori(itemsDaModificare);
@@ -189,38 +237,134 @@ const Lavori = () => {
     };
   }, []);
   
-  // useEffect(() => {
-  //   if(!aggiornamentoCompletato) {
-  //     setIdsLavori(lavoroStore.getIdsLavori());
-  //     console.log("Aggiornamento in corso...");
+  // const ottieniLavoriGiorno = async (setGiornoType, item, setLavoriGiornoSelezionato) => {
+  //   let nuovoLavoro = [];
+  //   const response = await fetch('/OTTIENI_LAVORI_GIORNO', {
+  //     method: 'POST',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     },
+  //     body: JSON.stringify(item),
+  //   });
+
+  //   // console.log((response).status);
+  //   if(response.status === 200) {
+  //     const risultato = await response.json();
+  //     // console.log(risultato.lavoriGiornoSelezionato);
+  //     setLavoriGiornoSelezionato(risultato.lavoriGiornoSelezionato);
   //   }
-  // }, [!aggiornamentoCompletato]);
+  //   else {
+  //     const errorData = await response.json();
+  //     if (response.status === 409 || response.status === 500) {
+  //       alert(errorData.message);
+  //     }
+  //     else {
+  //       response.status = 500;
+  //       alert('Errore durante l\'ottenimento dei lavori.');
+  //     }
+  //   }
+  // }
+
+  // const handleGiornoBlur = (setGiornoType, item, setLavoriGiornoSelezionato) => {
+  //   return () => {
+  //     if(!item.giorno)
+  //       setGiornoType('text');
+  //     else {
+  //       setGiornoType('date');
+  //       ottieniLavoriGiorno(setGiornoType, item, setLavoriGiornoSelezionato);
+  //     }
+  //   };
+  // };
+
+  // const handleGiornoBlur = (setGiornoType, item, orari, setOrari, setLavoriGiornoSelezionato) => {
+  //   return () => {
+  //     if(!item.giorno)
+  //       setGiornoType('text');
+  //     else {
+  //       setGiornoType('date');
+  //       setLavoriGiornoSelezionato(-1);
+  //       ottieniLavoriGiorno(setGiornoType, item, setLavoriGiornoSelezionato);
+  //       setAggiornato(!aggiornato);
+  //     }
+  //   };
+  // };
 
   // useEffect(() => {
-  //   if(!aggiornamentoCompletato && idsLavori !== -1) {
-  //     setAggiornamentoCompletato(true);
-  //     console.log("Aggiornamento completato.");
-  //     console.log(idsLavori);
+  //   if (lavoriGiornoSelezionato === 0) {
+  //     return;
   //   }
-  //   else{
-  //     console.log("Problema!!");
+  //   if(lavoriGiornoSelezionato === -1) {
+  //     console.log("Aggiornamento in corso...")
+  //     setAggiornato(!aggiornato);
   //   }
-  // }, [idsLavori]);
+  // }, [aggiornato]);
 
-  const ottieniLavoriGiorno = async (setGiornoType, item) => {
+  // useEffect(() => {
+  //   if (lavoriGiornoSelezionato === 0) {
+  //     return;
+  //   }
+  //   if(lavoriGiornoSelezionato !== -1) {
+  //     console.log("Agggiornamento effettuato.");
+  //     setOrari(dizionarioOrari);
+  //     console.log(orari);
+  //     aggiornaOrari(lavoriGiornoSelezionato, orari, setOrari);
+  //   }
+  // }, [aggiornato]);
+
+  const [lavoriGiorniPresenti, setLavoriGiorniPresenti] = useState ({});
+
+  const aggiornaOrari = (lavoriGiorniPresenti, setLavoriGiorniPresenti) => {
+    // const [orari, setOrari] = useState(dizionarioOrari);
+    let orari = useState(dizionarioOrari);
+    console.log("------------------------------------------");
+    console.log(orari);
+    console.log("------------------------------------------");
+
+    // // console.log("Funzione aggiornaOrari!!");
+    // if(lavoriGiornoSelezionato !== -1 && lavoriGiornoSelezionato !== 0) {
+    //   let listaOrari = Object.entries(orari);
+    //   for(let lavoroGiorno of lavoriGiornoSelezionato) {
+    //     console.log(lavoroGiorno.tipo_lavoro + ": " + lavoroGiorno.orario_inizio + " - " + lavoroGiorno.orario_fine);
+    //     let indicePrimoGiornoConsiderato = orari[lavoroGiorno.orario_inizio][0];
+    //     let indiceUltimoGiornoConsiderato = orari[lavoroGiorno.orario_fine][0] - 1;
+    //     for (let i = indicePrimoGiornoConsiderato; i <= indiceUltimoGiornoConsiderato; i++) {
+    //       // console.log(`| ${listaOrari[i]} | : | ${listaOrari[i][0]} - ( ${listaOrari[i][1][0]} - ${listaOrari[i][1][1]} - ${listaOrari[i][1][2]} ) |`);
+    //       if (lavoroGiorno.tipo_lavoro === "lavoro_cliente") {
+    //         listaOrari[i][1][1] += 1;
+    //       } else if (lavoroGiorno.tipo_lavoro === "lavoro_professionista") {
+    //         listaOrari[i][1][2] += 1;
+    //       }
+    //     }
+    //     setOrari(Object.fromEntries(listaOrari));
+    //   }
+    //   if(lavoriGiornoSelezionato.length === 0) {
+    //     console.log("Nessun lavoro trovato per il giorno selezionato!!");
+    //   }
+    // }
+  };
+
+  const ottieniLavoriGiorno = async (item, lavoriGiorniPresenti, setLavoriGiorniPresenti) => {
     const response = await fetch('/OTTIENI_LAVORI_GIORNO', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(nuovoLavoro),
+      body: JSON.stringify(item),
     });
 
-    // console.log((response).status);
     if(response.status === 200) {
       const risultato = await response.json();
       // console.log(risultato.lavoriGiornoSelezionato);
-      setLavoriGiornoSelezionato(risultato.lavoriGiornoSelezionato);
+      setLavoriGiorniPresenti(prevState => ({
+        ...prevState,
+        [formatoDate(item["giorno"].toString(), "AAAA-MM-GG")]: risultato.lavoriGiornoSelezionato
+      }));
+      // aggiornaOrari(lavoriGiorniPresenti, setLavoriGiorniPresenti);
+      // setLavoriGiorniPresenti(prevState => ({
+      //   ...prevState,
+      //   [formatoDate(item["giorno"].toString(), "GG-MM-AAAA")]: [
+      //     setLavoriGiorniPresenti[formatoDate(item["giorno"].toString(), "GG-MM-AAAA")], dizionarioOrari]
+      // }));
     }
     else {
       const errorData = await response.json();
@@ -234,17 +378,23 @@ const Lavori = () => {
     }
   }
 
-  const handleGiornoBlur = (setGiornoType, item) => {
-    return () => {
-      if(!item.giorno)
-        setGiornoType('text');
-      else {
-        setGiornoType('date');
-        ottieniLavoriGiorno(setGiornoType, item);
+  useEffect(() => {
+    const updateLavoriGiorniPresenti = () => {
+      const newLavoriGiorniPresenti = {};
+      for (let i = 0; i < lavori.length; i++) {
+        const lavoro = lavori[i];
+        console.log(lavoro.id_lavoro + " - " + lavoro.id_cliente + " - " + lavoro.id_professionista);
+        ottieniLavoriGiorno(lavoro, lavoriGiorniPresenti, setLavoriGiorniPresenti);
+        // newLavoriGiorniPresenti[lavoro.giorno] = [
+          
+        // ]
+        // ;//"Qualcosa ma non so ancora cosa numero " + i;
       }
+      setLavoriGiorniPresenti(newLavoriGiorniPresenti);
+      console.log(lavoriGiorniPresenti);
     };
-         
-  };
+    updateLavoriGiorniPresenti();
+  }, [lavori]);
 
   return (
     <>
@@ -252,19 +402,11 @@ const Lavori = () => {
       
       <div className="main-content"></div>
       
-      {(formSession.view === "form") && (
-        <center>
-          <FormCercaLavori item={datiRicerca} setItem={setDatiRicerca} eseguiRicerca={(e) => eseguiRicerca(e, "lavori", setLavori, datiRicerca)} />
-        </center>
-      )}
-      {(formSession.view === "row") && (
-        <RowRicercaLavori item={datiRicerca} setItem={setDatiRicerca} eseguiRicerca={(e) => eseguiRicerca(e, "lavori", setLavori, datiRicerca)} />
-      )}
-      {(formSession.view === "card") && (
-        <center>
-          <CardRicercaLavori handleGiornoBlur={handleGiornoBlur} item={datiRicerca} setItem={setDatiRicerca} eseguiRicerca={(e) => eseguiRicerca(e, "lavori", setLavori, datiRicerca)} />
-        </center>
-      )}
+      <RicercaLavoriTag 
+        item={datiRicerca} 
+        setItem={setDatiRicerca} 
+        eseguiRicerca={(e) => eseguiRicerca(e, "lavori", setLavori, datiRicerca)} 
+      />
 
       <br /> <br /> <br /> <br />
       
@@ -277,7 +419,22 @@ const Lavori = () => {
           {(itemSession.view === "card") && (
             <div className="contenitore-3">
               {lavori.map((lavoro, index) => (
-                <CardLavoroEsistente handleGiornoBlur={handleGiornoBlur} key={index} item={lavoro} items={lavori} setItems={setLavori} selectOperation={selectOperation} />
+                <CardLavoroEsistente 
+                  key={index}
+                  // lavoriGiornoSelezionato={lavoriGiornoSelezionato}
+                  // setLavoriGiornoSelezionato={setLavoriGiornoSelezionato}
+                  handleInputChangeLavoroEsistente={handleInputChangeLavoroEsistente}
+                  // handleGiornoBlur={handleGiornoBlur}
+                  clienti={clienti}
+                  professionisti={professionisti}
+                  item={lavoro} 
+                  items={lavori} 
+                  setItems={setLavori} 
+                  selectOperation={selectOperation}
+                  // orari={orari}
+                  // setOrari={setOrari} 
+                  lavoriGiorniPresenti={lavoriGiorniPresenti}
+                />
               ))}
             </div>
           )}

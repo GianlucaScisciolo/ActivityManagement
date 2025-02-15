@@ -84,6 +84,7 @@ export const handleInputChangeNuovoLavoro = (e, setItem) => {
 }
 
 export const handleInputChangeLavoroEsistente = (e, items, setItems, id_lavoro, id_cliente, id_professionista) => {
+  e.preventDefault();
   const nome_campi = ["giorno", "orario_inizio", "orario_fine", "descrizione", "note"];
 
   const { name, value } = e.target;
