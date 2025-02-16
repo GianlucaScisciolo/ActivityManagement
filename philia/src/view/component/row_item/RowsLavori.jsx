@@ -16,8 +16,10 @@ import {
 import { 
   handleInputChange, handleInputChangeLavoroEsistente, cambiamentoBloccato
 } from '../../../vario/Vario';
-
-import { OperazioniNuovoItem, OperazioniCercaItems, OperazioniItemEsistente, OperazioniFileItems } from './RowItem';
+import { 
+  OperazioniNuovoItem, OperazioniCercaItems, OperazioniItemEsistente, OperazioniFileItems, 
+  RowRicercaItems
+} from './RowItem';
 
 const handleGiornoClick = (setGiornoType) => {
   return () => {
@@ -196,125 +198,164 @@ export function RowNuovoLavoro({
   );
 }
 
-export function RowRicercaLavori({item, setItem, eseguiRicerca}) {
-  const ore = ["07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22"];
-  const minuti = ["00", "30"];
-  let [visibilita, setVisibilita] = useState([true, true, true, true, true, true, true, true]);
-  const [arrowUp, setArrowUp] = useState(true);
-  let maxHeight = "2000px";
+// export function RowRicercaLavori({item, setItem, eseguiRicerca}) {
+//   const ore = ["07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22"];
+//   const minuti = ["00", "30"];
+//   let [visibilita, setVisibilita] = useState([true, true, true, true, true, true, true, true]);
+//   const [arrowUp, setArrowUp] = useState(true);
+//   let maxHeight = "2000px";
 
+//   const [primoGiornoType, setPrimoGiornoType] = useState('text');
+//   const [ultimoGiornoType, setUltimoGiornoType] = useState('text');
+
+//   item.primo_giorno = (item.primo_giorno !== undefined) ? item.primo_giorno : '';
+//   item.ultimo_giorno = (item.ultimo_giorno !== undefined) ? item.ultimo_giorno : ''; 
+
+//   return (
+//     <>
+//       <StyledRow>
+//         <OperazioniCercaItems 
+//           visibilita={visibilita} setVisibilita={setVisibilita} 
+//           arrowUp={arrowUp} setArrowUp={setArrowUp} eseguiRicerca={eseguiRicerca}
+//         />
+//         <StyledCol>
+//           {(visibilita[0]) && (
+//             <StyledInputModifica
+//               rows="1"
+//               placeholder="Nome cliente"
+//               type="text"
+//               name="nome_cliente"
+//               value={item.nome_cliente}
+//               onChange={(e) => handleInputChange(e, setItem)}
+//             />
+//           )}
+//         </StyledCol>
+//         <StyledCol>
+//           {(visibilita[1]) && (
+//             <StyledInputModifica
+//               rows="1"
+//               placeholder="Cognome cliente"
+//               type="text"
+//               name="cognome_cliente"
+//               value={item.cognome_cliente}
+//               onChange={(e) => handleInputChange(e, setItem)}
+//             />
+//           )}
+//         </StyledCol>        
+//         <StyledCol>
+//           {(visibilita[2]) && (
+//             <StyledInputModifica
+//               rows="1"
+//               placeholder="Nome professionista"
+//               type="text"
+//               name="nome_professionista"
+//               value={item.nome_professionista}
+//               onChange={(e) => handleInputChange(e, setItem)}
+//             />
+//           )}
+//         </StyledCol>        
+//         <StyledCol>
+//           {(visibilita[3]) && (
+//             <StyledInputModifica
+//               rows="1"
+//               placeholder="Professione"
+//               type="text"
+//               name="professione"
+//               value={item.professione}
+//               onChange={(e) => handleInputChange(e, setItem)}
+//             />
+//           )}
+//         </StyledCol>        
+//         <StyledCol>
+//           {(visibilita[4]) && (
+//             <StyledInputModifica
+//               rows="1"
+//               placeholder="Primo giorno"
+//               type={primoGiornoType}
+//               name="primo_giorno"
+//               value={item.primo_giorno}
+//               onClick={handleGiornoClick(setPrimoGiornoType)}
+//               onBlur={handleGiornoBlur(setPrimoGiornoType, item, setItem)}
+//               onChange={(e) => handleInputChange(e, setItem)}
+//             />
+//           )}
+//         </StyledCol>        
+//         <StyledCol>
+//           {(visibilita[5]) && (
+//             <StyledInputModifica
+//               rows="1"
+//               placeholder="Ultimo giorno"
+//               type={ultimoGiornoType}
+//               name="ultimo_giorno"
+//               value={item.ultimo_giorno}
+//               onClick={handleGiornoClick(setUltimoGiornoType)}
+//               onBlur={handleGiornoBlur(setUltimoGiornoType, item, setItem)}
+//               onChange={(e) => handleInputChange(e, setItem)}
+//             />
+//           )}
+//         </StyledCol>        
+//         <StyledCol>
+//           {(visibilita[6]) && (
+//             <StyledTextAreaModifica
+//               rows="1"
+//               placeholder="Descrizione"
+//               name="descrizione"
+//               value={item.descrizione}
+//               onChange={(e) => handleInputChange(e, setItem)}
+//             />
+//           )}
+//         </StyledCol>        
+//         <StyledCol>
+//           {(visibilita[7]) && (
+//             <StyledTextAreaModifica
+//               rows="1"
+//               placeholder="Note"
+//               name="note"
+//               value={item.note}
+//               onChange={(e) => handleInputChange(e, setItem)}
+//             />
+//           )}
+//         </StyledCol>
+//       </StyledRow>
+//     </>
+//   );
+// }
+
+export function RowRicercaLavori({ item, setItem, eseguiRicerca }) {
   const [primoGiornoType, setPrimoGiornoType] = useState('text');
   const [ultimoGiornoType, setUltimoGiornoType] = useState('text');
 
   item.primo_giorno = (item.primo_giorno !== undefined) ? item.primo_giorno : '';
-  item.ultimo_giorno = (item.ultimo_giorno !== undefined) ? item.ultimo_giorno : ''; 
+  item.ultimo_giorno = (item.ultimo_giorno !== undefined) ? item.ultimo_giorno : '';  
 
+  let campi = {
+    header: "Ricerca lavori", 
+    type: [null, null, null, null, primoGiornoType, ultimoGiornoType, null, null], 
+    name: [
+      "nome_cliente", "cognome_cliente", "nome_professionista", "professione", 
+      "primo_giorno", "ultimo_giorno", "descrizione", "note"
+    ], 
+    value: [
+      item.nome_cliente, item.cognome_cliente, item.nome_professionista, item.professione, 
+      item.primo_giorno, item.ultimo_giorno, item.descrizione, item.note
+    ], 
+    placeholder: [
+      "Nome cliente", "Cognome cliente", "nome professionista", "Professione", 
+      "Primo giorno", "Ultimo giorno", "Descrizione", "Note"
+    ], 
+    onChange: (e) => handleInputChange(e, setItem), 
+    onClick: null, 
+    onBlur: null
+  }
+  const indici = [0, 1, 2, 3, 4, 5, 6, 7];
+  
   return (
     <>
-      <StyledRow>
-        <OperazioniCercaItems 
-          visibilita={visibilita} setVisibilita={setVisibilita} 
-          arrowUp={arrowUp} setArrowUp={setArrowUp} eseguiRicerca={eseguiRicerca}
-        />
-        <StyledCol>
-          {(visibilita[0]) && (
-            <StyledInputModifica
-              rows="1"
-              placeholder="Nome cliente"
-              type="text"
-              name="nome_cliente"
-              value={item.nome_cliente}
-              onChange={(e) => handleInputChange(e, setItem)}
-            />
-          )}
-        </StyledCol>
-        <StyledCol>
-          {(visibilita[1]) && (
-            <StyledInputModifica
-              rows="1"
-              placeholder="Cognome cliente"
-              type="text"
-              name="cognome_cliente"
-              value={item.cognome_cliente}
-              onChange={(e) => handleInputChange(e, setItem)}
-            />
-          )}
-        </StyledCol>        
-        <StyledCol>
-          {(visibilita[2]) && (
-            <StyledInputModifica
-              rows="1"
-              placeholder="Nome professionista"
-              type="text"
-              name="nome_professionista"
-              value={item.nome_professionista}
-              onChange={(e) => handleInputChange(e, setItem)}
-            />
-          )}
-        </StyledCol>        
-        <StyledCol>
-          {(visibilita[3]) && (
-            <StyledInputModifica
-              rows="1"
-              placeholder="Professione"
-              type="text"
-              name="professione"
-              value={item.professione}
-              onChange={(e) => handleInputChange(e, setItem)}
-            />
-          )}
-        </StyledCol>        
-        <StyledCol>
-          {(visibilita[4]) && (
-            <StyledInputModifica
-              rows="1"
-              placeholder="Primo giorno"
-              type={primoGiornoType}
-              name="primo_giorno"
-              value={item.primo_giorno}
-              onClick={handleGiornoClick(setPrimoGiornoType)}
-              onBlur={handleGiornoBlur(setPrimoGiornoType, item, setItem)}
-              onChange={(e) => handleInputChange(e, setItem)}
-            />
-          )}
-        </StyledCol>        
-        <StyledCol>
-          {(visibilita[5]) && (
-            <StyledInputModifica
-              rows="1"
-              placeholder="Ultimo giorno"
-              type={ultimoGiornoType}
-              name="ultimo_giorno"
-              value={item.ultimo_giorno}
-              onClick={handleGiornoClick(setUltimoGiornoType)}
-              onBlur={handleGiornoBlur(setUltimoGiornoType, item, setItem)}
-              onChange={(e) => handleInputChange(e, setItem)}
-            />
-          )}
-        </StyledCol>        
-        <StyledCol>
-          {(visibilita[6]) && (
-            <StyledTextAreaModifica
-              rows="1"
-              placeholder="Descrizione"
-              name="descrizione"
-              value={item.descrizione}
-              onChange={(e) => handleInputChange(e, setItem)}
-            />
-          )}
-        </StyledCol>        
-        <StyledCol>
-          {(visibilita[7]) && (
-            <StyledTextAreaModifica
-              rows="1"
-              placeholder="Note"
-              name="note"
-              value={item.note}
-              onChange={(e) => handleInputChange(e, setItem)}
-            />
-          )}
-        </StyledCol>
-      </StyledRow>
+      <RowRicercaItems 
+        campi={campi}
+        indici={indici}
+        eseguiRicerca={eseguiRicerca}
+      />
     </>
   );
 }

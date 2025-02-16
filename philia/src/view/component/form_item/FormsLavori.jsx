@@ -18,9 +18,9 @@ import {
 import { 
   handleInputChange, selezionaInserimentoLavoroCliente, selezionaInserimentoLavoroProfessionista
 } from '../../../vario/Vario';
-
 import { 
-  OperazioniNuovoItem, OperazioniCercaItems 
+  OperazioniNuovoItem, OperazioniCercaItems, 
+  FormRicercaItems 
 } from './FormItem';
 
 function OperazioniFileItems({ottieniLavoriRangePDF, ottieniLavoriRangeExcel, eliminaLavoriRange}) {
@@ -227,102 +227,45 @@ export function FormNuovoLavoro({
   );
 }
 
-export function FormRicercaLavori({item, setItem, eseguiRicerca}) {
-  const ore = ["07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22"];
-  const minuti = ["00", "30"];
-  const [isVisible, setIsVisible] = useState(true);
-  const [arrowUp, setArrowUp] = useState(true);
-  let maxHeight = (isVisible) ? "2000px" : "0px";
-
+export function FormRicercaLavori({ item, setItem, eseguiRicerca }) {
   const [primoGiornoType, setPrimoGiornoType] = useState('text');
   const [ultimoGiornoType, setUltimoGiornoType] = useState('text');
 
   item.primo_giorno = (item.primo_giorno !== undefined) ? item.primo_giorno : '';
-  item.ultimo_giorno = (item.ultimo_giorno !== undefined) ? item.ultimo_giorno : '';
+  item.ultimo_giorno = (item.ultimo_giorno !== undefined) ? item.ultimo_giorno : '';  
 
+  let campi = {
+    header: "Ricerca lavori", 
+    label: [
+      "Nome cliente", "Cognome cliente", "nome professionista", "Professione", 
+      "Primo giorno", "Ultimo giorno", "Descrizione", "Note"
+    ],
+    type: [null, null, null, null, primoGiornoType, ultimoGiornoType, null, null], 
+    name: [
+      "nome_cliente", "cognome_cliente", "nome_professionista", "professione", 
+      "primo_giorno", "ultimo_giorno", "descrizione", "note"
+    ], 
+    value: [
+      item.nome_cliente, item.cognome_cliente, item.nome_professionista, item.professione, 
+      item.primo_giorno, item.ultimo_giorno, item.descrizione, item.note
+    ], 
+    placeholder: [
+      "Nome cliente", "Cognome cliente", "nome professionista", "Professione", 
+      "Primo giorno", "Ultimo giorno", "Descrizione", "Note"
+    ], 
+    onChange: (e) => handleInputChange(e, setItem), 
+    onClick: null, 
+    onBlur: null
+  }
+  const indici = [0, 1, 2, 3, 4, 5, 6, 7];
+  
   return (
     <>
-      <StyledForm>
-        <StyledHeader>Ricerca lavori</StyledHeader>  
-        <SlideContainer style={{maxHeight: `${maxHeight}`}}>
-          <StyledLabel htmlFor="nome_cliente">Nome cliente</StyledLabel>
-          <StyledInputModifica
-            rows="1"
-            placeholder="Nome cliente"
-            type="text"
-            name="nome_cliente"
-            value={item.nome_cliente}
-            onChange={(e) => handleInputChange(e, setItem)}
-          />
-          <StyledLabel htmlFor="cognome_cliente">Cognome cliente</StyledLabel>
-          <StyledInputModifica
-            rows="1"
-            placeholder="Cognome cliente"
-            type="text"
-            name="cognome_cliente"
-            value={item.cognome_cliente}
-            onChange={(e) => handleInputChange(e, setItem)}
-          />
-          <StyledLabel htmlFor="nome_professionista">Nome professionista</StyledLabel>
-          <StyledInputModifica
-            rows="1"
-            placeholder="Nome professionista"
-            type="text"
-            name="nome_professionista"
-            value={item.nome_professionista}
-            onChange={(e) => handleInputChange(e, setItem)}
-          />
-          <StyledLabel htmlFor="professione">Professione</StyledLabel>
-          <StyledInputModifica
-            rows="1"
-            placeholder="Professione"
-            type="text"
-            name="professione"
-            value={item.professione}
-            onChange={(e) => handleInputChange(e, setItem)}
-          />
-          <StyledLabel htmlFor="primo_giorno">Primo giorno</StyledLabel>
-          <StyledInputModifica
-            rows="1"
-            placeholder="Primo giorno"
-            type={primoGiornoType}
-            name="primo_giorno"
-            value={item.primo_giorno}
-            onClick={handleGiornoClick(setPrimoGiornoType)}
-            onBlur={handleGiornoBlur(setPrimoGiornoType, item, setItem)}
-            onChange={(e) => handleInputChange(e, setItem)}
-          />
-          <StyledLabel htmlFor="ultimo_giorno">ultimo giorno</StyledLabel>
-          <StyledInputModifica
-            rows="1"
-            placeholder="Ultimo giorno"
-            type={ultimoGiornoType}
-            name="ultimo_giorno"
-            value={item.ultimo_giorno}
-            onClick={handleGiornoClick(setUltimoGiornoType)}
-            onBlur={handleGiornoBlur(setUltimoGiornoType, item, setItem)}
-            onChange={(e) => handleInputChange(e, setItem)}
-          />
-          <StyledLabel htmlFor="descrizione">Descrizione</StyledLabel>
-          <StyledTextAreaModifica
-            rows="1"
-            placeholder="Descrizione"
-            name="descrizione"
-            value={item.descrizione}
-            onChange={(e) => handleInputChange(e, setItem)}
-          />
-          <StyledLabel htmlFor="note">Note</StyledLabel>
-          <StyledTextAreaModifica
-            rows="1"
-            placeholder="Note"
-            name="note"
-            value={item.note}
-            onChange={(e) => handleInputChange(e, setItem)}
-          />
-          <br /> <br />
-        </SlideContainer>
-      <OperazioniCercaItems setIsVisible={setIsVisible} arrowUp={arrowUp} setArrowUp={setArrowUp} eseguiRicerca={eseguiRicerca} />
-      </StyledForm>
+      <FormRicercaItems 
+        campi={campi}
+        indici={indici}
+        eseguiRicerca={eseguiRicerca}
+      />
     </>
   );
 }

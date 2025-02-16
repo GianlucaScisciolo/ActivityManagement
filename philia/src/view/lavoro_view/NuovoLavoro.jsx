@@ -301,8 +301,6 @@ const NuovoLavoro = () => {
         eseguiSalvataggio={(e) => handleInsertLavoro(e)} 
         orari={orari} 
         setOrari={setOrari} 
-        aggiornato={aggiornato} 
-        setAggiornato={setAggiornato}
       />      
 
       <br /> <br /> <br /> <br />

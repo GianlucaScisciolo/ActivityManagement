@@ -190,7 +190,7 @@ export function RowNuovoItem({campi, indici, eseguiSalvataggio}) {
 }
 
 export function RowRicercaItems({campi, indici, eseguiRicerca}) {
-  let [visibilita, setVisibilita] = useState([true, true, true, true, true]);
+  let [visibilita, setVisibilita] = useState([true, true, true, true, true, true, true, true]);
   const [arrowUp, setArrowUp] = useState(true);
   let InputTag = getInputTag(1, true);
   let TextAreaTag = getTextAreaTag(1, true);

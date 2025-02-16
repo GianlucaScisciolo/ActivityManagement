@@ -90,15 +90,8 @@ export function CardNuovoLavoro({
 
   return (
     <center>
-      {/* <button>{item.id_cliente}</button>
-      <button>{item.id_professionista}</button> */}
       <StyledCard>
         <StyledCardHeader>Nuovo lavoro</StyledCardHeader>
-        {/* {Object.entries(orari).map(([key, value], index) => (
-          <React.Fragment key={index}>
-            <div>{key} - [{value[0]}, {value[1]}, {value[2]}]</div>
-          </React.Fragment>
-        ))} */}
         <StyledSelectModifica style={{width: "100%"}} name="id_cliente" value={item.id_cliente} onChange={(e) => handleInputChangeNuovoLavoro(e, setItem)}>
           <StyledOption value="0">Seleziona il cliente</StyledOption>
           {clienti.map((cliente) => (
@@ -113,58 +106,50 @@ export function CardNuovoLavoro({
           ))}
         </StyledSelectModifica>
         {(item.errore_cliente_e_professionista !== "") && (<StyledSpanErrore>{item.errore_cliente_e_professionista}</StyledSpanErrore>)}
-<StyledInputModifica
-  rows="1"
-  placeholder="Giorno*"
-  type={giornoType}
-  name="giorno"
-  value={item.giorno}
-  onClick={handleGiornoClick(setGiornoType)}
-  onBlur={handleGiornoBlur(setGiornoType, item, orari, setOrari)}
-  onChange={handleInputChangeGiorno}
-/>
-{(item.errore_giorno !== "") && (<StyledSpanErrore>{item.errore_giorno}</StyledSpanErrore>)}
-{(item.giorno) && (
-  <>
-    <Row>
-      <Col style={{ padding: '0', margin: '0', paddingLeft: '19px' }}>
-        <StyledSelectModifica name="orario_inizio" value={item.orario_inizio} onChange={(e) => handleInputChangeNuovoLavoro(e, setItem)}>
-          <StyledOption value="">Orario inizio</StyledOption>
-          {(autenticazioneSession.num_lavori_giorno > lavoriGiornoSelezionato.length) && (
-            <>
-              {Object.entries(orari).map(([key, value], index) => (
-                <React.Fragment key={index}>
-                  {((item.id_cliente !== 0 && autenticazioneSession.num_lavori_clienti > value[1]) || 
-                    (item.id_professionista !== 0 && autenticazioneSession.num_lavori_professionisti > value[2])) && (
-                    <StyledOption value={key}>{key}</StyledOption>
+        <StyledInputModifica
+          rows="1"
+          placeholder="Giorno*"
+          type={giornoType}
+          name="giorno"
+          value={item.giorno}
+          onClick={handleGiornoClick(setGiornoType)}
+          onBlur={handleGiornoBlur(setGiornoType, item, orari, setOrari)}
+          onChange={handleInputChangeGiorno}
+        />
+        {(item.errore_giorno !== "") && (<StyledSpanErrore>{item.errore_giorno}</StyledSpanErrore>)}
+        {(item.giorno) && (
+          <>
+            <Row>
+              <Col style={{ padding: '0', margin: '0', paddingLeft: '19px' }}>
+                <StyledSelectModifica name="orario_inizio" value={item.orario_inizio} onChange={(e) => handleInputChangeNuovoLavoro(e, setItem)}>
+                  <StyledOption value="">Orario inizio</StyledOption>
+                  {(autenticazioneSession.num_lavori_giorno > lavoriGiornoSelezionato.length) && (
+                    <>
+                      {Object.entries(orari).map(([key, value], index) => (
+                        <React.Fragment key={index}>
+                          {((item.id_cliente !== 0 && autenticazioneSession.num_lavori_clienti > value[1]) || 
+                            (item.id_professionista !== 0 && autenticazioneSession.num_lavori_professionisti > value[2])) && (
+                            <StyledOption value={key}>{key}</StyledOption>
+                          )}
+                        </React.Fragment>
+                      ))}
+                    </>
                   )}
-                </React.Fragment>
-              ))}
-            </>
-          )}
-        </StyledSelectModifica>
-      </Col>
-      {(item.orario_inizio) && (
-        <Col style={{ padding: '0', margin: '0', paddingRight: '19px' }}>
-          <StyledSelectModifica name="orario_fine" value={item.orario_fine} onChange={(e) => handleInputChangeNuovoLavoro(e, setItem)}>
-            <StyledOption value="">Orario fine</StyledOption>
-            <OrariOptions orari={orari} item={item} autenticazioneSession={autenticazioneSession} />
-          </StyledSelectModifica>
-        </Col>
-      )}
-    </Row>
-    {(item.errore_orario_inizio !== "") && (<StyledSpanErrore>{item.errore_orario_inizio}</StyledSpanErrore>)}
-    {(item.errore_orario_fine !== "") && (<StyledSpanErrore>{item.errore_orario_fine}</StyledSpanErrore>)}
-    {lavoriGiornoSelezionato.length > 0 && (
-      <>
-        {lavoriGiornoSelezionato.map((lgs, index) => (
-          <div key={index}>
-            {lgs.tipo_lavoro} -- {lgs.orario_inizio} - {lgs.orario_fine}</div>
-        ))}
-      </>
-    )}
-  </>
-)}
+                </StyledSelectModifica>
+              </Col>
+              {(item.orario_inizio) && (
+                <Col style={{ padding: '0', margin: '0', paddingRight: '19px' }}>
+                  <StyledSelectModifica name="orario_fine" value={item.orario_fine} onChange={(e) => handleInputChangeNuovoLavoro(e, setItem)}>
+                    <StyledOption value="">Orario fine</StyledOption>
+                    <OrariOptions orari={orari} item={item} autenticazioneSession={autenticazioneSession} />
+                  </StyledSelectModifica>
+                </Col>
+              )}
+            </Row>
+            {(item.errore_orario_inizio !== "") && (<StyledSpanErrore>{item.errore_orario_inizio}</StyledSpanErrore>)}
+            {(item.errore_orario_fine !== "") && (<StyledSpanErrore>{item.errore_orario_fine}</StyledSpanErrore>)}
+          </>
+        )}
         <StyledTextAreaModifica
           rows="1"
           placeholder="Descrizione*"
@@ -187,7 +172,7 @@ export function CardNuovoLavoro({
   );
 }
 
-export function CardRicercaLavori({ handleGiornoBlur, item, setItem, eseguiRicerca }) {
+export function CardRicercaLavori({ item, setItem, eseguiRicerca }) {
   const [primoGiornoType, setPrimoGiornoType] = useState('text');
   const [ultimoGiornoType, setUltimoGiornoType] = useState('text');
 
@@ -234,57 +219,7 @@ function CardLavoro({
   const [lavoriGiornoSelezionato, setLavoriGiornoSelezionato] = useState(0);
   const [aggiornato, setAggiornato] = useState(false);
 
-  const aggiornaOrari = (lavoriGiornoSelezionato, orari, setOrari) => {
-    // console.log("Funzione aggiornaOrari!!");
-    if(lavoriGiornoSelezionato !== -1 && lavoriGiornoSelezionato !== 0) {
-      let listaOrari = Object.entries(orari);
-      for(let lavoroGiorno of lavoriGiornoSelezionato) {
-        console.log(lavoroGiorno.tipo_lavoro + ": " + lavoroGiorno.orario_inizio + " - " + lavoroGiorno.orario_fine);
-        let indicePrimoGiornoConsiderato = orari[lavoroGiorno.orario_inizio][0];
-        let indiceUltimoGiornoConsiderato = orari[lavoroGiorno.orario_fine][0] - 1;
-        for (let i = indicePrimoGiornoConsiderato; i <= indiceUltimoGiornoConsiderato; i++) {
-          // console.log(`| ${listaOrari[i]} | : | ${listaOrari[i][0]} - ( ${listaOrari[i][1][0]} - ${listaOrari[i][1][1]} - ${listaOrari[i][1][2]} ) |`);
-          if (lavoroGiorno.tipo_lavoro === "lavoro_cliente") {
-            listaOrari[i][1][1] += 1;
-          } else if (lavoroGiorno.tipo_lavoro === "lavoro_professionista") {
-            listaOrari[i][1][2] += 1;
-          }
-        }
-        setOrari(Object.fromEntries(listaOrari));
-      }
-      if(lavoriGiornoSelezionato.length === 0) {
-        console.log("Nessun lavoro trovato per il giorno selezionato!!");
-      }
-    }
-  };
-
-  const ottieniLavoriGiorno = async (setGiornoType, item, setLavoriGiornoSelezionato) => {
-    let nuovoLavoro = [];
-    const response = await fetch('/OTTIENI_LAVORI_GIORNO', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(item),
-    });
-
-    // console.log((response).status);
-    if(response.status === 200) {
-      const risultato = await response.json();
-      // console.log(risultato.lavoriGiornoSelezionato);
-      setLavoriGiornoSelezionato(risultato.lavoriGiornoSelezionato);
-    }
-    else {
-      const errorData = await response.json();
-      if (response.status === 409 || response.status === 500) {
-        alert(errorData.message);
-      }
-      else {
-        response.status = 500;
-        alert('Errore durante l\'ottenimento dei lavori.');
-      }
-    }
-  }
+  /****************************************************************************************************/
 
   const handleGiornoBlur = (setGiornoType, item, orari, setOrari, setLavoriGiornoSelezionato) => {
     return () => {
@@ -311,11 +246,10 @@ function CardLavoro({
         }
       }
     }
-
     return numLavori;
   }
 
-  const orarioVisbile = (orario) => {
+  const orarioVisibile = (orario) => {
     const numLavoriOrario = getNumLavoriOrario(orario);
     if(item.id_cliente && autenticazioneSession.num_lavori_clienti > numLavoriOrario) {
       return true;
@@ -332,7 +266,7 @@ function CardLavoro({
     return (
       <>
         {Object.entries(orari).map(([key, value], index) => (
-          (orarioVisbile(key) || key === item.orario_inizio) && (
+          (orarioVisibile(key) || key === item.orario_inizio) && (
             <StyledOption key={index} value={key}>{key}</StyledOption>  
           )
         ))}
@@ -344,9 +278,8 @@ function CardLavoro({
     let listaOrari = Object.entries(orari);
     let orariDaVisualizzare = [];
     for (let orario of listaOrari) {
-      // console.log(orari[item.orario_inizio][0]);
       if (orario[1][0] > orari[item.orario_inizio][0]) {
-        if(orarioVisbile(orario[0]) || orario[0] === item.orario_fine) {
+        if(orarioVisibile(orario[0]) || orario[0] === item.orario_fine) {
           orariDaVisualizzare.push(orario[0]);
         }
         else {
@@ -363,6 +296,11 @@ function CardLavoro({
     );
   };
   
+  /****************************************************************************************************/
+
+  // const NomeTag = (campi.type[i]) ? getInputTag(campi.tipoSelezione, campi.valoreModificabile[i]) : (
+  //   getTextAreaTag(campi.tipoSelezione, campi.valoreModificabile[i])
+  // );
 
   return (
     <StyledCard> 
