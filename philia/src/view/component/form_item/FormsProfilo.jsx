@@ -53,21 +53,8 @@ export function FormModificaProfilo({ item, setItem, eseguiModificaProfilo }) {
           {(item.errore_conferma_nuova_password !== "") && (<StyledSpanErrore>{item.errore_conferma_nuova_password}</StyledSpanErrore>)}
           
           <StyledLabel htmlFor="orario_inizio">Numero di lavori*</StyledLabel>
-          <Row>
-            <Col style={{ padding: '0', margin: '0', paddingLeft: '19px' }}>
-              <InputTag style={{width: "100%"}} rows="1" value={item.num_lavori_clienti} type="number" name="num_lavori_clienti" placeholder='Lavori cliente'  onChange={(e) => handleInputChange(e, setItem)} />
-            </Col>
-            <Col style={{ padding: '0', margin: '0'}}>
-              <InputTag style={{width: "100%"}} rows="1" value={item.num_lavori_professionisti} type="number" name="num_lavori_professionisti" placeholder='Lavori professionista' onChange={(e) => handleInputChange(e, setItem)} />
-            </Col>
-            <Col style={{ padding: '0', margin: '0', paddingRight: '19px' }}>
-              <InputTag style={{width: "100%"}} rows="1" value={item.num_lavori_giorno} type="number" name="num_lavori_giorno" placeholder='Lavori giorno' onChange={(e) => handleInputChange(e, setItem)} />
-            </Col>
-          </Row>
+          <InputTag style={{width: "100%"}} rows="1" value={item.num_lavori_clienti} type="number" name="num_lavori_clienti" placeholder='Lavori cliente'  onChange={(e) => handleInputChange(e, setItem)} />          
           {(item.errore_num_lavori_clienti !== "") && (<StyledSpanErrore>{item.errore_num_lavori_clienti}</StyledSpanErrore>)}
-          {(item.errore_num_lavori_professionisti !== "") && (<StyledSpanErrore>{item.errore_num_lavori_professionisti}</StyledSpanErrore>)}
-          {(item.errore_num_lavori_giorno !== "") && (<StyledSpanErrore>{item.errore_num_lavori_giorno}</StyledSpanErrore>)}
-
           <br /> <br /> 
         </SlideContainer>
         <OperazioniModificaProfilo eseguiModificaProfilo={eseguiModificaProfilo} />

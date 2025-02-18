@@ -9,7 +9,7 @@ import { FormNuovoCliente } from '../component/form_item/FormsClienti';
 import { RowNuovoCliente, RowClienteEsistente } from '../component/row_item/RowsClienti';
 import { modifica } from '../../vario/OperazioniModifica';
 import { elimina } from '../../vario/OperazioniEliminazione';
-import Items from '../component/Items';
+import { Items } from '../component/Items';
 import { OperazioniItems, selectOperationBody } from '../component/Operazioni';
 
 const NuovoCliente = () => {

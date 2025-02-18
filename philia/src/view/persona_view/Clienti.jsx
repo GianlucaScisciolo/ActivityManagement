@@ -12,7 +12,7 @@ import { FormRicercaClienti } from '../component/form_item/FormsClienti';
 import { RowRicercaClienti } from '../component/row_item/RowsClienti';
 import { RowClienteEsistente } from '../component/row_item/RowsClienti';
 import { eseguiRicerca } from '../../vario/OperazioniRicerca';
-import Items from '../component/Items';
+import { Items } from '../component/Items';
 import { OperazioniItems, selectOperationBody } from '../component/Operazioni';
 
 const Clienti = () => {

@@ -11,7 +11,7 @@ import { CardRicercaProfessionisti, CardProfessionistaEsistente } from '../compo
 import { FormRicercaProfessionisti } from '../component/form_item/FormsProfessionisti';
 import { RowRicercaProfessionisti, RowProfessionistaEsistente } from '../component/row_item/RowsProfessionisti';
 import { eseguiRicerca } from '../../vario/OperazioniRicerca';
-import Items from '../component/Items';
+import { Items } from '../component/Items';
 import { OperazioniItems, selectOperationBody } from '../component/Operazioni';
 
 const Professionisti = () => {

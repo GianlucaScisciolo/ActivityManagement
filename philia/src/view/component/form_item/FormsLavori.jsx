@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useSelector } from 'react-redux';
 import { faFilePdf, faFileExcel } from '@fortawesome/free-solid-svg-icons';
 import Row from 'react-bootstrap/esm/Row';
 import Col from 'react-bootstrap/esm/Col';
@@ -13,10 +14,12 @@ import {
   StyledArrowTopNotSelected, StyledArrowBottomNotSelected, StyledSelect, StyledOption, 
   BottoneBluNonSelezionato, BottoneBluSelezionato, BottoneRossoNonSelezionato, BottoneRossoSelezionato, 
   StyledSpanErrore, StyledLoginNotSelected, StyledFileIconNotSelected, 
-  StyledDownloadNotSelected, StyledDeleteNotSelected, StyledTrashNotSelected
+  StyledDownloadNotSelected, StyledDeleteNotSelected, StyledTrashNotSelected, 
+  StyledSelectBlock, StyledSelectModifica, StyledSelectElimina
 } from "./StyledFormItem";
 import { 
-  handleInputChange, selezionaInserimentoLavoroCliente, selezionaInserimentoLavoroProfessionista
+  handleInputChange, handleInputChangeNuovoLavoro, 
+  selezionaInserimentoLavoroCliente, selezionaInserimentoLavoroProfessionista
 } from '../../../vario/Vario';
 import { 
   OperazioniNuovoItem, OperazioniCercaItems, 
@@ -107,166 +110,108 @@ function selezionaDeselezionaBottone(e, setValue) {
   }
 }
 
+function OrariOptions({orari, item, autenticazioneSession}) {
+  if(orari) {
+  let listaOrari = Object.entries(orari);
+  let orariPossibili = [];
+  for (let i = 0; i < listaOrari.length; i++) {
+    // console.log("| " + listaOrari[i][0] + " | " + listaOrari[i][1][0] + " | " + listaOrari[i][1][1] + " | " + listaOrari[i][1][2] + " | ");
+    if(parseInt(listaOrari[i][1][0], 10) > parseInt(orari[item.orario_inizio][0])) {
+      if(item.id_cliente !== 0 && autenticazioneSession.num_lavori_clienti > listaOrari[i][1][1]) {
+        orariPossibili.push(<StyledOption key={listaOrari[i][0]} value={listaOrari[i][0]}>{listaOrari[i][0]}</StyledOption>);
+      }
+      else if(item.id_professionista !== 0 && autenticazioneSession.num_lavori_professionisti > listaOrari[i][1][2]) {
+        orariPossibili.push(<StyledOption key={listaOrari[i][0]} value={listaOrari[i][0]}>{listaOrari[i][0]}</StyledOption>);
+      }
+      else {
+        break;
+      }
+    }
+  }
+  return orariPossibili;
+  }
+  return orari;
+}
+
 export function FormNuovoLavoro({
   lavoriGiornoSelezionato, setLavoriGiornoSelezionato, handleInputChangeGiorno, handleGiornoBlur, 
-  clienti, professionisti, item, setItem, eseguiSalvataggio
+  clienti, item, setItem, eseguiSalvataggio, orari, setOrari
 }) {
-  const ore = ["07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22"];
-  const minuti = ["00", "30"];
+  const autenticazioneSession = useSelector((state) => state.autenticazioneSession.value);
+  const [giornoType, setGiornoType] = useState('text');
   let maxHeight = "2000px";
 
-  const [giornoType, setGiornoType] = useState('text');
-  const giornoValue = item.giorno !== undefined ? item.giorno : '';
+  item.giorno = item.giorno !== undefined ? item.giorno : '';
 
   return (
-    <>
+    <center>
       <StyledForm>
-        <StyledHeader>Nuovo lavoro</StyledHeader>  
+        <StyledHeader>Nuovo lavoro</StyledHeader>
         <SlideContainer style={{maxHeight: `${maxHeight}`}}>
-          <Row>
-            <Col style={{ padding: '0', margin: '0', paddingLeft: '19px' }}>
-              <StyledLabel htmlFor="id_cliente">Cliente</StyledLabel>
-              <StyledSelect style={{width: "100%"}} name="id_cliente" value={item.id_cliente} onChange={(e) => handleInputChange(e, setItem)}>
-                <StyledOption value="0">Seleziona il cliente</StyledOption>
-                {clienti.map((cliente) => (
-                  <StyledOption key={cliente.id} value={cliente.id}>{cliente.nome + " " + cliente.cognome}</StyledOption>  
-                ))}
-              </StyledSelect>
-            </Col>
-            <Col style={{ padding: '0', margin: '0', paddingRight: '19px' }}>
-              <StyledLabel htmlFor="id_professionista">Professionista</StyledLabel>
-              <StyledSelect style={{width: "100%"}} name="id_professionista" value={item.id_professionista} onChange={(e) => handleInputChange(e, setItem)}>
-                <StyledOption value="0">Seleziona il professionista</StyledOption>
-                {professionisti.map((professionista) => (
-                  <StyledOption key={professionista.id} value={professionista.id}>{professionista.nome + " - " + professionista.professione}</StyledOption>  
-                ))}
-              </StyledSelect>
-            </Col>
-          </Row>
-          {(item.errore_cliente_e_professionista !== "") && (<StyledSpanErrore>{item.errore_cliente_e_professionista}</StyledSpanErrore>)}
-          
-          <StyledLabel htmlFor="giorno">Giorno*</StyledLabel>
+          <StyledLabel htmlFor="id_cliente">Cliente</StyledLabel>
+          <StyledSelectModifica style={{width: "100%"}} name="id_cliente" value={item.id_cliente} onChange={(e) => handleInputChangeNuovoLavoro(e, setItem)}>
+            <StyledOption value="0">Seleziona il cliente</StyledOption>
+            {clienti.map((cliente) => (
+              <StyledOption key={cliente.id} value={cliente.id}>{cliente.nome + " " + cliente.cognome}</StyledOption>  
+            ))}
+          </StyledSelectModifica>
+          {(item.errore_cliente) && (<StyledSpanErrore>{item.errore_cliente}</StyledSpanErrore>)}
+          <StyledLabel htmlFor="giorno">Giorno</StyledLabel>
           <StyledInputModifica
             rows="1"
             placeholder="Giorno*"
             type={giornoType}
             name="giorno"
-            value={giornoValue}
+            value={item.giorno}
             onClick={handleGiornoClick(setGiornoType)}
-            onBlur={handleGiornoBlur(setGiornoType, item, setItem)}
-            onChange={(e) => handleInputChange(e, setItem)}
-          />
-          {(item.errore_giorno !== "") && (<StyledSpanErrore>{item.errore_giorno}</StyledSpanErrore>)}
-          
-          <StyledLabel htmlFor="orario_inizio">Orario inizio*</StyledLabel>
-          <Row>
-            <Col style={{ padding: '0', margin: '0', paddingLeft: '19px' }}>
-              <StyledSelect style={{width: "100%"}} name="ora_inizio" value={item.ora_inizio} onChange={(e) => cambioValoriOrari(e, setItem)}>
-                <StyledOption value="">Ora inizio</StyledOption>
-                {ore.map((ora) => (
-                  <StyledOption key={ora} value={ora}>{ora}</StyledOption>  
-                ))}
-              </StyledSelect>
-            </Col>
-            <Col style={{ padding: '0', margin: '0', paddingRight: '19px' }}>
-              <StyledSelect style={{width: "100%"}} name="minuto_inizio" value={item.minuto_inizio} onChange={(e) => cambioValoriOrari(e, setItem)}>
-                <StyledOption value="">Minuto inizio</StyledOption>
-                {minuti.map((minuto) => (
-                  <StyledOption key={minuto} value={minuto}>{minuto}</StyledOption>  
-                ))}
-              </StyledSelect>
-            </Col>
-          </Row>
-          {(item.errore_orario_inizio !== "") && (<StyledSpanErrore>{item.errore_orario_inizio}</StyledSpanErrore>)}
-          
-          <StyledLabel htmlFor="orario_fine">Orario fine*</StyledLabel>
-          <Row>
-            <Col style={{ padding: '0', margin: '0', paddingLeft: '19px' }}>
-              <StyledSelect style={{width: "100%"}}name="ora_fine" value={item.ora_fine} onChange={(e) => cambioValoriOrari(e, setItem)}>
-                <StyledOption value="">Ora fine</StyledOption>
-                {ore.map((ora) => (
-                  <StyledOption key={ora} value={ora}>{ora}</StyledOption>  
-                ))}
-              </StyledSelect>
-            </Col>
-            <Col style={{ padding: '0', margin: '0', paddingRight: '19px' }}>
-              <StyledSelect style={{width: "100%"}} name="minuto_fine" value={item.minuto_fine} onChange={(e) => cambioValoriOrari(e, setItem)}>
-                <StyledOption value="">Minuto fine</StyledOption>
-                {minuti.map((minuto) => (
-                  <StyledOption key={minuto} value={minuto}>{minuto}</StyledOption>  
-                ))}
-              </StyledSelect>
-            </Col>
-          </Row>
-          {(item.errore_orario_fine !== "") && (<StyledSpanErrore>{item.errore_orario_fine}</StyledSpanErrore>)}
-          
-          <StyledLabel htmlFor="descrizione">Descrizione*</StyledLabel>
+            onBlur={handleGiornoBlur(setGiornoType, item, orari, setOrari)}
+            onChange={handleInputChangeGiorno}
+            />
+          {(item.errore_giorno) && (<StyledSpanErrore>{item.errore_giorno}</StyledSpanErrore>)}
+          {(item.giorno) && (
+            <>
+              <StyledLabel htmlFor="orario_inizio">Orario</StyledLabel>
+              <StyledSelectModifica name="orario_inizio" value={item.orario_inizio} onChange={(e) => handleInputChangeNuovoLavoro(e, setItem)}>
+                <StyledOption value="">Orario</StyledOption>
+                {(autenticazioneSession.num_lavori_giorno > lavoriGiornoSelezionato.length) && (
+                  <>
+                    {Object.entries(orari).map(([key, value], index) => (
+                      <React.Fragment key={index}>
+                        {((item.id_cliente !== 0 && autenticazioneSession.num_lavori_clienti > value[1]) || 
+                          (item.id_professionista !== 0 && autenticazioneSession.num_lavori_professionisti > value[2])) && (
+                            <StyledOption value={key}>{key}</StyledOption>
+                        )}
+                      </React.Fragment>
+                    ))}
+                  </>
+                )}
+              </StyledSelectModifica>
+              {(item.errore_orario_inizio) && (<StyledSpanErrore>{item.errore_orario_inizio}</StyledSpanErrore>)}
+            </>
+          )}
+          <StyledLabel htmlFor="descrizione">Descrizione</StyledLabel>
           <StyledTextAreaModifica
             rows="1"
             placeholder="Descrizione*"
             name="descrizione"
             value={item.descrizione}
-            onChange={(e) => handleInputChange(e, setItem)}
-          />
-          {(item.errore_descrizione !== "") && (<StyledSpanErrore>{item.errore_descrizione}</StyledSpanErrore>)}
-          
+            onChange={(e) => handleInputChangeNuovoLavoro(e, setItem)}
+            />
+          {(item.errore_descrizione) && (<StyledSpanErrore>{item.errore_descrizione}</StyledSpanErrore>)}
           <StyledLabel htmlFor="note">Note</StyledLabel>
           <StyledTextAreaModifica
             rows="1"
-            placeholder="Note"
+            placeholder="Note*"
             name="note"
             value={item.note}
-            onChange={(e) => handleInputChange(e, setItem)}
-          />
-          {(item.errore_note !== "") && (<StyledSpanErrore>{item.errore_note}</StyledSpanErrore>)}
+            onChange={(e) => handleInputChangeNuovoLavoro(e, setItem)}
+            />
+          {(item.errore_note) && (<StyledSpanErrore>{item.errore_note}</StyledSpanErrore>)}
           <br /> <br />
         </SlideContainer>
-        <OperazioniNuovoItem eseguiSalvataggio={eseguiSalvataggio} />
+        <OperazioniNuovoItem eseguiSalvataggio={eseguiSalvataggio} /> 
       </StyledForm>
-    </>
-  );
-}
-
-export function FormRicercaLavori({ item, setItem, eseguiRicerca }) {
-  const [primoGiornoType, setPrimoGiornoType] = useState('text');
-  const [ultimoGiornoType, setUltimoGiornoType] = useState('text');
-
-  item.primo_giorno = (item.primo_giorno !== undefined) ? item.primo_giorno : '';
-  item.ultimo_giorno = (item.ultimo_giorno !== undefined) ? item.ultimo_giorno : '';  
-
-  let campi = {
-    header: "Ricerca lavori", 
-    label: [
-      "Nome cliente", "Cognome cliente", "nome professionista", "Professione", 
-      "Primo giorno", "Ultimo giorno", "Descrizione", "Note"
-    ],
-    type: [null, null, null, null, primoGiornoType, ultimoGiornoType, null, null], 
-    name: [
-      "nome_cliente", "cognome_cliente", "nome_professionista", "professione", 
-      "primo_giorno", "ultimo_giorno", "descrizione", "note"
-    ], 
-    value: [
-      item.nome_cliente, item.cognome_cliente, item.nome_professionista, item.professione, 
-      item.primo_giorno, item.ultimo_giorno, item.descrizione, item.note
-    ], 
-    placeholder: [
-      "Nome cliente", "Cognome cliente", "nome professionista", "Professione", 
-      "Primo giorno", "Ultimo giorno", "Descrizione", "Note"
-    ], 
-    onChange: (e) => handleInputChange(e, setItem), 
-    onClick: null, 
-    onBlur: null
-  }
-  const indici = [0, 1, 2, 3, 4, 5, 6, 7];
-  
-  return (
-    <>
-      <FormRicercaItems 
-        campi={campi}
-        indici={indici}
-        eseguiRicerca={eseguiRicerca}
-      />
-    </>
+    </center>
   );
 }
 

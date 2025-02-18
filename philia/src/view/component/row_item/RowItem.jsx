@@ -9,13 +9,14 @@ import {
   StyledPencilNotSelectedModificaProfilo, 
   StyledInputBlock, StyledInputModifica, StyledInputElimina, 
   StyledTextAreaBlock, StyledTextAreaModifica, StyledTextAreaElimina, 
-  StyledRow, StyledCol, StyledSpanErrore
+  StyledRow, StyledCol, StyledSpanErrore, 
+  StyledSelectBlock, StyledSelectModifica, StyledSelectElimina
 } from "./StyledRowItem";
 import { Trash2, Pencil } from 'lucide-react';
 
 export function getSelectTag(tipoSelezione) {
-  return (item.tipo_selezione !== 1 && item.tipo_selezione !== 2) ? StyledSelectBlock : (
-    (item.tipo_selezione === 1) ? StyledSelectModifica : StyledSelectElimina
+  return (tipoSelezione !== 1 && tipoSelezione !== 2) ? StyledSelectBlock : (
+    (tipoSelezione === 1) ? StyledSelectModifica : StyledSelectElimina
   );
 }; 
 
@@ -232,12 +233,23 @@ export function RowRicercaItems({campi, indici, eseguiRicerca}) {
 }
 
 export function RowItemEsistente({item, campi, indici, selectOperation}) {
+  const NomeTagHeader = getTextAreaTag(campi.tipoSelezione, false);
+
   return (
     <StyledRow>
       <OperazioniItemEsistente 
         selectOperation={selectOperation} 
         item={item} 
       />
+      <StyledCol>
+        <NomeTagHeader
+          rows={1}
+          name="header"
+          value={campi.header}
+          placeholder={campi.header}
+          readOnly
+        />
+      </StyledCol>
       {indici.map((i) => {
         // onClick={handleGiornoClick(setUltimoGiornoType)}
         // onBlur={handleGiornoBlur(setUltimoGiornoType, item, setItem)}

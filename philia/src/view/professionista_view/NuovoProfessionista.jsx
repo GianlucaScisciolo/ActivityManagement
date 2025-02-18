@@ -9,7 +9,7 @@ import { RowNuovoProfessionista, RowProfessionistaEsistente } from '../component
 import { CardNuovoProfessionista, CardProfessionistaEsistente } from '../component/card_item/CardsProfessionisti';
 import { modifica } from '../../vario/OperazioniModifica';
 import { elimina } from '../../vario/OperazioniEliminazione';
-import Items from '../component/Items';
+import { Items } from '../component/Items';
 import { OperazioniItems, selectOperationBody } from '../component/Operazioni';
 
 const NuovoProfessionista = () => {

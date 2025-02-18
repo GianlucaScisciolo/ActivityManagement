@@ -31,8 +31,8 @@ function getTrashTag(tipoSelezione) {
 };
 
 export function getSelectTag(tipoSelezione) {
-  return (item.tipo_selezione !== 1 && item.tipo_selezione !== 2) ? StyledSelectBlock : (
-    (item.tipo_selezione === 1) ? StyledSelectModifica : StyledSelectElimina
+  return (tipoSelezione !== 1 && tipoSelezione !== 2) ? StyledSelectBlock : (
+    (tipoSelezione === 1) ? StyledSelectModifica : StyledSelectElimina
   );
 }; 
 

@@ -35,16 +35,12 @@ const Profilo = () => {
     nuova_password: "", 
     conferma_nuova_password: "", 
     num_lavori_clienti: autenticazioneSession.num_lavori_clienti, 
-    num_lavori_professionisti: autenticazioneSession.num_lavori_professionisti, 
-    num_lavori_giorno: autenticazioneSession.num_lavori_giorno,
     errore_nuovo_username: "", 
     errore_note: "", 
     errore_password_attuale: "", 
     errore_nuova_password: "", 
     errore_conferma_nuova_password: "", 
-    errore_num_lavori_clienti: "", 
-    errore_num_lavori_professionisti: "", 
-    errore_num_lavori_giorno: "", 
+    errore_num_lavori_clienti: "",  
   })
   
   const [aggiornamentoCompletato, setAggiornamentoCompletato] = useState(true);
@@ -108,8 +104,6 @@ const Profilo = () => {
         username: datiProfilo.nuovo_username,
         note: datiProfilo.note, 
         num_lavori_clienti: datiProfilo.num_lavori_clienti, 
-        num_lavori_professionisti: datiProfilo.num_lavori_professionisti, 
-        num_lavori_giorno: datiProfilo.num_lavori_giorno
       }));
 
       alert("Modifica profilo eseguita con successo.");
@@ -139,40 +133,6 @@ const Profilo = () => {
     }
   }, [aggiornamento2]);
 
-  /*
-  useEffect(() => {
-    if (!aggiornamentoCompletato) {
-      console.log("Aggiornamento in corso...");
-    }
-  }, [!aggiornamentoCompletato]);
-
-  useEffect(() => {
-    if (!aggiornamentoCompletato && utente !== -1) {
-      setAggiornamentoCompletato(true);
-      console.log("Aggiornamento effettuato.");
-      datiProfilo["num_utenti"] = utente.length;
-
-      if(utente.length > 0) {
-        datiProfilo["password_db"] = utente[0].password;
-        datiProfilo["salt_hex_db"] = utente[0].salt_hex;
-      }
-      if(controlloProfilo(datiProfilo, setDatiProfilo) > 0) {
-        return;
-      }
-      datiProfilo["username"] = autenticazioneSession.username;
-      
-      modificaProfilo(datiProfilo);
-
-      dispatch(eseguiModificaAutenticazioneSession({
-        username: datiProfilo.nuovo_username,
-        note: datiProfilo.note
-      }));
-
-      alert("Modifica profilo eseguita con successo.");
-    }
-  }, [utente]);
-  */
-  
   useEffect(() => {
     setNuovoUsername(autenticazioneSession.nuovoUsername);
     setRuolo(autenticazioneSession.ruolo);

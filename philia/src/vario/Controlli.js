@@ -180,111 +180,7 @@ export const controlloProfessionista = (data, settersErrori) => {
   return numErrori;
 }
 
-export const controlloLavoroOld = (data, settersErrori) => {  
-  // alert("Prova");
-  /*
-  lavoro:
-    empty:
-      solo id_cliente oppure solo id_professionista != empty FATTO
-      descrizione != empty FATTO
-      giorno != empty FATTO
-      orario_inizio != empty FATTO
-      orario_fine != empty FATTO
-    length:
-      1 <= descrizione <= 100 FATTO
-      0 <= note <= 65535 FATTO
-    validità:
-      orario_fine > orario_inizio FATTO
-  */
-
-  let numErrori = 0;
-
-  // controllo sull'id_cliente e sull'id_professionista
-  let messaggioErrore1 = "";
-  let messaggioErrore2 = "";
-  // alert(data.id_cliente.toString());
-  // alert(data.id_professionista.toString());
-  if(data.id_cliente <= 0 && data.id_professionista <= 0) {
-    numErrori += 1; 
-    messaggioErrore1 = "Selezionare un cliente oppure un professionista (non entrambi).";
-  }
-  setErrore(settersErrori, "cliente_e_professionista", messaggioErrore1);
-
-
-  // controllo sulla descrizione
-  messaggioErrore1 = "";
-  if (isEmpty(data.descrizione)) {
-    numErrori += 1; 
-    messaggioErrore1 = "Inserire la descrizione.";
-  }
-  else if(!isInRange(data.descrizione.length, 1, 100)) {
-    numErrori += 1; 
-    messaggioErrore1 = "Lunghezza descrizione non valida, deve avere un numero di caratteri tra 1 e 100 estremi inclusi.";
-  }
-  setErrore(settersErrori, "descrizione", messaggioErrore1);
-
-  // controllo sul giorno
-  messaggioErrore1 = "";
-  if (isEmpty(data.giorno)) {
-    numErrori += 1; 
-    messaggioErrore1 = "Inserire il giorno.";
-  }
-  setErrore(settersErrori, "giorno", messaggioErrore1);
-
-  // controllo sull'orario iniziale
-  messaggioErrore1 = "";
-  if (isEmpty(data.orario_inizio)) {
-    numErrori += 1; 
-    messaggioErrore1 = "Inserire l\'orario iniziale.";
-  }
-  setErrore(settersErrori, "orario_inizio", messaggioErrore1);
-
-  // controllo sull'orario finale
-  messaggioErrore1 = "";
-  if (isEmpty(data.orario_fine)) {
-    numErrori += 1; 
-    messaggioErrore1 = "Inserire l\'orario finale.";
-  }
-  setErrore(settersErrori, "orario_fine", messaggioErrore1);
-
-  // controllo sull'orario iniziale e sull'orario finale
-  if(!isEmpty(data.orario_inizio) && !isEmpty(data.orario_fine) && data.orario_inizio >= data.orario_fine) {
-    numErrori += 1; 
-    messaggioErrore1 = "L\'orario iniziale deve avvenire prima dell\'orario finale e non possono essere uguali.";
-    messaggioErrore2 = "L\'orario finale deve avvenire dopo l\'orario iniziale e non possono essere uguali.";
-    setErrore(settersErrori, "orario_inizio", messaggioErrore1);
-    setErrore(settersErrori, "orario_fine", messaggioErrore2);
-  }
-  
-  // controllo sulle note
-  messaggioErrore1 = "";
-  if(!isInRange(data.note.length, 0, 65535)) {
-    numErrori += 1; 
-    messaggioErrore1 = "Lunghezza note non valida, deve avere un numero di caratteri tra 1 e 65.535 estremi inclusi.";
-  }
-  setErrore(settersErrori, "note", messaggioErrore1);
-
-  // alert(numErrori);
-  return numErrori;
-}
-
 export const controlloLavoro = (data, settersErrori) => {  
-  // alert("Prova");
-  /*
-  lavoro:
-    empty:
-      solo id_cliente oppure solo id_professionista != empty FATTO
-      descrizione != empty FATTO
-      giorno != empty FATTO
-      orario_inizio != empty FATTO
-      orario_fine != empty FATTO
-    length:
-      1 <= descrizione <= 100 FATTO
-      0 <= note <= 65535 FATTO
-    validità:
-      orario_fine > orario_inizio FATTO
-  */
-
   let numErrori = 0;
 
   let messaggioErrore1 = "";
@@ -309,36 +205,19 @@ export const controlloLavoro = (data, settersErrori) => {
 
   // controllo sull'orario iniziale
   messaggioErrore1 = "";
-  if (isEmpty(data.ora_inizio) || isEmpty(data.minuto_inizio)) {
+  if (isEmpty(data.orario_inizio)) {
     numErrori += 1; 
     messaggioErrore1 = "Inserire l\'orario iniziale.";
   }
   setErrore(settersErrori, "errore_orario_inizio", messaggioErrore1);
 
   // controllo sull'orario finale
-  messaggioErrore1 = "";
-  if (isEmpty(data.ora_fine) || isEmpty(data.minuto_fine)) {
-    numErrori += 1; 
-    messaggioErrore1 = "Inserire l\'orario finale.";
-  }
-  setErrore(settersErrori, "errore_orario_fine", messaggioErrore1);
-
-  // controllo sull'orario iniziale e sull'orario finale
-  messaggioErrore1 = "";
-  messaggioErrore2 = "";
-  if( !(isEmpty(data.ora_inizio) || isEmpty(data.minuto_inizio)) && 
-      !(isEmpty(data.ora_fine) || isEmpty(data.minuto_fine)) && 
-      (getInt(data.ora_fine) <= getInt(data.ora_inizio)) ) {
-    
-    if((getInt(data.ora_fine) < getInt(data.ora_inizio)) || 
-        (getInt(data.ora_fine) === getInt(data.ora_inizio) && getInt(data.minuto_fine) <= getInt(data.minuto_inizio))) {
-      numErrori += 1; 
-      messaggioErrore1 = "L\'orario iniziale deve avvenire prima dell\'orario finale e non possono essere uguali.";
-      messaggioErrore2 = "L\'orario finale deve avvenire dopo l\'orario iniziale e non possono essere uguali.";
-    }    
-    setErrore(settersErrori, "errore_orario_inizio", messaggioErrore1);
-    setErrore(settersErrori, "errore_orario_fine", messaggioErrore2);
-  }
+  // messaggioErrore1 = "";
+  // if (isEmpty(data.orario_fine)) {
+  //   numErrori += 1; 
+  //   messaggioErrore1 = "Inserire l\'orario finale.";
+  // }
+  // setErrore(settersErrori, "errore_orario_fine", messaggioErrore1);
 
   // controllo sulla descrizione
   messaggioErrore1 = "";
@@ -492,36 +371,6 @@ export const controlloProfilo = (dati, settersErrori) => {
     messaggioErrore = "Il numero di lavori per i clienti deve essere maggiore o uguale a 0.";
   }
   setErrore(settersErrori, "errore_num_lavori_clienti", messaggioErrore);
-
-  // controllo il numero di lavori dei professionisti:
-  messaggioErrore = "";
-  if (isEmpty(dati.num_lavori_professionisti.toString())) {
-    numErrori += 1; 
-    messaggioErrore = "Inserire il numero di lavori per i professionisti.";
-  }
-  else if(dati.num_lavori_professionisti < 0) {
-    numErrori += 1; 
-    messaggioErrore = "Il numero di lavori per i professionisti deve essere maggiore o uguale a 0.";
-  }
-  setErrore(settersErrori, "errore_num_lavori_professionisti", messaggioErrore);
-  
-  // controllo il numero massimo di lavori in un giorno:
-  messaggioErrore = "";
-  if(parseInt(dati.num_lavori_clienti) >= 0 && parseInt(dati.num_lavori_professionisti) >= 0) {
-    if (isEmpty(dati.num_lavori_giorno.toString())) {
-      numErrori += 1; 
-      messaggioErrore = "Inserire il numero massimo di lavori in un giorno.";
-    }
-    else if(parseInt(dati.num_lavori_giorno) < 0) {
-      numErrori += 1; 
-      messaggioErrore = "Il numero massimo di lavori in un giorno deve essere maggiore o uguale a 0.";
-    }
-    else if(parseInt(dati.num_lavori_giorno) < (parseInt(dati.num_lavori_clienti) + parseInt(dati.num_lavori_professionisti))) {
-      numErrori += 1;
-      messaggioErrore = "Il numero massimo di loavori in un giorno non puo\' essere minore della somma del numero di lavori per i clienti e del numero di lavori per i professionisti.";
-    }
-  }
-  setErrore(settersErrori, "errore_num_lavori_giorno", messaggioErrore);
 
   return numErrori;
 }

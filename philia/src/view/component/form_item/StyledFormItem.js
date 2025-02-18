@@ -221,12 +221,33 @@ export const BottoneRossoSelezionato =  styled(StyledButton)`
   }
 `;
 
-export const StyledSelect =  styled.select`
-  cursor: pointer;
+// export const StyledSelect =  styled.select`
+//   cursor: pointer;
+//   border: 5px solid #000000;
+//   color: #FFFFFF;
+//   text-align: center;
+// `;
+
+export const StyledSelect = styled.select`
+  width: 100%;
+  min-height: 70px;
+  /* border-radius: 40px; */
   background-color: #0050EF;
   border: 5px solid #000000;
   color: #FFFFFF;
   text-align: center;
+`;
+
+export const StyledSelectBlock = styled(StyledSelect)`
+  background-color: #111111;
+`;
+
+export const StyledSelectModifica = styled(StyledSelect)`
+  background-color: #0050EF;
+`;
+
+export const StyledSelectElimina = styled(StyledSelect)`
+  background-color: #500000;
 `;
 
 export const StyledOption =  styled.option`

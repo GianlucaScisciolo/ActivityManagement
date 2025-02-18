@@ -110,7 +110,7 @@ app.post("/LOGIN", async (req, res) => {
 
   const sql_select_salone = `
     SELECT 
-      \`num_lavori_clienti\`, \`num_lavori_professionisti\`, \`num_lavori_giorno\` 
+      \`num_lavori_clienti\` 
     FROM 
       \`salone\` 
     WHERE 
@@ -148,6 +148,7 @@ app.post("/MODIFICA_PROFILO", async (req, res) => {
     nuove_note: ${req.body.nuove_note}
     nuova_password: ${req.body.nuova_password}
     nuovo_salt_hex: ${req.body.nuovo_salt_hex}
+    num_lavori_clienti: ${req.body.num_lavori_clienti}
   `);
   
   const sql_modifica_utente = `
@@ -165,9 +166,7 @@ app.post("/MODIFICA_PROFILO", async (req, res) => {
     UPDATE 
       \`salone\` 
     SET 
-      \`num_lavori_clienti\` = ?, 
-      \`num_lavori_professionisti\` = ?, 
-      \`num_lavori_giorno\` = ? 
+      \`num_lavori_clienti\` = ?  
     WHERE 
       \`username_utente\` = ?; 
   `;
@@ -185,8 +184,6 @@ app.post("/MODIFICA_PROFILO", async (req, res) => {
 
   const params_sql_modifica_salone = [
     `${req.body.num_lavori_clienti}`, 
-    `${req.body.num_lavori_professionisti}`, 
-    `${req.body.num_lavori_giorno}`, 
     `${req.body.nuovo_username}` 
   ]
 
@@ -475,25 +472,9 @@ app.post("/MODIFICA_PROFESSIONISTI", async (req, res) => {
 /*************************************************** Lavori **************************************************/
 
 app.post("/INSERISCI_LAVORO", async (req, res) => {
-  // const {
-  //   id_cliente = '',
-  //   id_professionista = '',
-  //   descrizione = '',
-  //   giorno = '',
-  //   orario_inizio = '',
-  //   orario_fine = '',
-  //   note = ''
-  // } = req.body;
-
-  // console.log("id_cliente: " + id_cliente + "\n" + "id_professionista: " + id_professionista + "\n" + 
-  //             "descrizione: " + descrizione + "\n" + "giorno: " + giorno + "\n" + "ora_inizio: " + ora_inizio + "\n" + 
-  //             "minuto_inizio: " + minuto_inizio + "\n" + "ora_fine: " + ora_fine + "\n" + 
-  //             "minuto_fine: " + minuto_fine + "\n" + "note: " + note
-  // );
-
   const sql_inserimento_lavoro = `
-    INSERT INTO lavoro (giorno, orario_inizio, orario_fine) 
-    VALUES (?, ?, ?);
+    INSERT INTO lavoro (giorno, orario_inizio) 
+    VALUES (?, ?);
   `
 
   const sql_selezione_lavoro = `
@@ -502,7 +483,7 @@ app.post("/INSERISCI_LAVORO", async (req, res) => {
     FROM 
       lavoro 
     WHERE 
-      giorno = ? AND orario_inizio = ? AND orario_fine = ?;
+      giorno = ? AND orario_inizio = ?;
   `;
 
   const sql_inserimento_prenotazione = `
@@ -515,15 +496,16 @@ app.post("/INSERISCI_LAVORO", async (req, res) => {
     VALUES (?, ?, ?, ?);
   `
 
-  const parametri_inserimento_lavoro = [`${req.body.giorno}`, `${req.body.orario_inizio}`, `${req.body.orario_fine}`];
+  const parametri_inserimento_lavoro = [`${req.body.giorno}`, `${req.body.orario_inizio}`];
 
-  const parametri_selezione_lavoro = [`${req.body.giorno}`, `${req.body.orario_inizio}`, `${req.body.orario_fine}`];
+  const parametri_selezione_lavoro = [`${req.body.giorno}`, `${req.body.orario_inizio}`];
 
   let id_lavoro = 0;
 
   try {
     const risultato_inserimento_lavoro = await executeQuery(sql_inserimento_lavoro, parametri_inserimento_lavoro);
     id_lavoro = risultato_inserimento_lavoro.insertId;
+    console.log("------------------------- " + id_lavoro + " -----------------------------------")
   }
   catch (err) {
     if (err.code === 'ER_DUP_ENTRY') {
@@ -543,19 +525,19 @@ app.post("/INSERISCI_LAVORO", async (req, res) => {
   }
 
   const parametri_inserimento_prenotazione = [
-    `${req.body.id_cliente}`, `${req.body.id_lavoro}`, `${req.body.descrizione}`, `${req.body.note}`
+    `${req.body.id_cliente}`, `${id_lavoro}`, `${req.body.descrizione}`, `${req.body.note}`
   ];
   const parametri_inserimento_impegno = [
-    `${req.body.id_professionista}`, `${req.body.id_lavoro}`, `${req.body.descrizione}`, `${req.body.note}`
+    `${req.body.id_professionista}`, `${id_lavoro}`, `${req.body.descrizione}`, `${req.body.note}`
   ];
 
   try {
     // Inserimento prenotazione
-    if(parseInt(id_cliente) !== 0) {
+    if(parseInt(req.body.id_cliente) !== 0) {
       await executeQuery(sql_inserimento_prenotazione, parametri_inserimento_prenotazione);
     }
     // inserimento impegno
-    else if(parseInt(id_professionista) !== 0) {
+    else if(parseInt(req.body.id_professionista) !== 0) {
       await executeQuery(sql_inserimento_impegno, parametri_inserimento_impegno);
     }
   }
@@ -571,16 +553,8 @@ app.post("/INSERISCI_LAVORO", async (req, res) => {
 });
 
 app.post("/VISUALIZZA_LAVORI", async (req, res) => {
-  // let { 
-  //   nome_cliente = '', cognome_cliente = '', nome_professionista = '', professione = '',  
-  //   primo_giorno = '', ultimo_giorno = '', descrizione = '', note = '',
-  // } = req.body;
   let primo_giorno = (req.body.primo_giorno) ? req.body.primo_giorno : "1111-01-01";
   let ultimo_giorno = (req.body.ultimo_giorno) ? req.body.ultimo_giorno : "9999-01-01";
-
-  // console.log("Dati ricevuti per la ricerca dei lavori: ", { 
-  //   nome_cliente, cognome_cliente, nome_professionista, professione, primo_giorno, ultimo_giorno, descrizione, note
-  // });
 
   let notePrenotazioneSQL = (req.body.note === "") ? ` AND (p.note LIKE ? OR p.note IS NULL) ` : ` AND p.note LIKE ? `;
   let noteImpegnoSQL = (req.body.note === "") ? ` AND (i.note LIKE ? OR i.note IS NULL) ` : ` AND i.note LIKE ? `;
@@ -598,7 +572,6 @@ app.post("/VISUALIZZA_LAVORI", async (req, res) => {
         null AS professione, 
         l.giorno AS giorno, 
         l.orario_inizio AS orario_inizio, 
-        l.orario_fine AS orario_fine,  
         p.descrizione AS descrizione, 
         COALESCE(p.note, "Note non inserite") AS note 
       FROM
@@ -624,7 +597,6 @@ app.post("/VISUALIZZA_LAVORI", async (req, res) => {
         p.professione AS professione, 
         l.giorno AS giorno, 
         l.orario_inizio AS orario_inizio, 
-        l.orario_fine AS orario_fine, 
         i.descrizione AS descrizione, 
         COALESCE(i.note, "Note non inserite") AS note 
       FROM 
@@ -646,8 +618,6 @@ app.post("/VISUALIZZA_LAVORI", async (req, res) => {
     `${req.body.nome_professionista}%`, `${req.body.professione}%`, `${primo_giorno}%`, 
     `${ultimo_giorno}%`, `${req.body.descrizione}%`, `${req.body.note}%`, 
   ];
-
-  // console.log(params);
 
   try {
     const result = await executeQuery(sql, params);
@@ -673,29 +643,14 @@ app.post("/OTTIENI_LAVORI_GIORNO", async (req, res) => {
   `;
 
   const sqlSelectLavori = `
-    (
-      SELECT 
-        "lavoro_cliente" AS \`tipo_lavoro\`, 
-        l.\`orario_inizio\` AS \`orario_inizio\`, 
-        l.\`orario_fine\` AS \`orario_fine\` 
-      FROM 
-        \`prenotazione\` AS p 
-        LEFT JOIN \`lavoro\` AS l ON p.\`id_lavoro\` = l.\`id\`
-      WHERE 
-        FIND_IN_SET(p.\`id_lavoro\`, @ids) 
-    ) 
-    UNION 
-    (
-      SELECT 
-        "lavoro_professionista" AS \`tipo_lavoro\`, 
-        l.\`orario_inizio\` AS \`orario_inizio\`, 
-        l.\`orario_fine\` AS \`orario_fine\` 
-      FROM 
-        \`impegno\` AS i 
-        LEFT JOIN \`lavoro\` AS l ON i.\`id_lavoro\` = l.\`id\`
-      WHERE 
-        FIND_IN_SET(i.\`id_lavoro\`, @ids)
-    );
+    SELECT 
+      "lavoro_cliente" AS \`tipo_lavoro\`, 
+      l.\`orario_inizio\` AS \`orario_inizio\` 
+    FROM 
+      \`prenotazione\` AS p 
+      LEFT JOIN \`lavoro\` AS l ON p.\`id_lavoro\` = l.\`id\` 
+    WHERE 
+      FIND_IN_SET(p.\`id_lavoro\`, @ids); 
   `;
 
   const params = [`${req.body.giorno}`];
@@ -708,6 +663,7 @@ app.post("/OTTIENI_LAVORI_GIORNO", async (req, res) => {
     await commitTransaction();
     
     return res.status(200).json({ lavoriGiornoSelezionato: lavoriGiornoSelezionato });
+    console.log(lavoriGiornoSelezionato);
   } 
   catch (err) {
     await rollbackTransaction();
@@ -764,18 +720,8 @@ app.post("/ELIMINA_LAVORI", async (req, res) => {
 });
 
 app.post("/ELIMINA_LAVORI_RANGE_GIORNI", async (req, res) => {
-  // let { primo_giorno = '', ultimo_giorno = '' } = req.body;
-
   let primo_giorno = (req.body.primo_giorno) ? req.body.primo_giorno : "1111-01-01";
   let ultimo_giorno = (req.body.ultimo_giorno) ? req.body.ultimo_giorno : "9999-01-01";
-
-  // if (primo_giorno === "")
-  //   primo_giorno = "1111-01-01";
-  // if (ultimo_giorno === "")
-  //   ultimo_giorno = "9999-01-01";
-
-  // Aggiungo un log per vedere i dati ricevuti
-  // console.log("Dati ricevuti per l\'eliminazione: ", [primo_giorno, ultimo_giorno]);
 
   const sql = ` 
     DELETE FROM 
@@ -793,12 +739,12 @@ app.post("/MODIFICA_LAVORI", async (req, res) => {
   const sql_selezione_lavoro = `
     SELECT id AS id_lavoro 
     FROM lavoro 
-    WHERE giorno = ? AND orario_inizio = ? AND orario_fine = ?; 
+    WHERE giorno = ? AND orario_inizio = ?; 
   `;
 
   const sql_inserimento_lavoro = ` 
-    INSERT INTO lavoro (giorno, orario_inizio, orario_fine) 
-    VALUES (?, ?, ?);
+    INSERT INTO lavoro (giorno, orario_inizio) 
+    VALUES (?, ?);
   `;
 
   const sql_modifica_prenotazione = `
@@ -816,16 +762,15 @@ app.post("/MODIFICA_LAVORI", async (req, res) => {
   let ids_lavori = [];
   try {
     for (let lavoro of req.body) {
-      // console.log(lavoro);
       await beginTransaction();
       // console.log("START");
       // console.log(1);
 
       const giorno = new Date(lavoro.giorno).toISOString().split('T')[0];
       // console.log(2);
-      let parametri_selezione_lavoro = [`${giorno}`, `${lavoro.orario_inizio}`, `${lavoro.orario_fine}`];
+      let parametri_selezione_lavoro = [`${giorno}`, `${lavoro.orario_inizio}`];
       // console.log(3);
-      let parametri_inserimento_lavoro = [`${giorno}`, `${lavoro.orario_inizio}`, `${lavoro.orario_fine}`];
+      let parametri_inserimento_lavoro = [`${giorno}`, `${lavoro.orario_inizio}`];
       // console.log(4);
       let resultSQL = await executeQuery(sql_selezione_lavoro, parametri_selezione_lavoro);
       let id_lavoro;

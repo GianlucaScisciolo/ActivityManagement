@@ -20,10 +20,8 @@ export const generaFileLavoriPDF = (lavori) => {
       (lavoro.nome_cliente) ? lavoro.nome_cliente : lavoro.nome_professionista, 
       (lavoro.cognome_cliente) ? lavoro.cognome_cliente : lavoro.professione, 
       formatoDate(lavoro.giorno, "GG-MM-AAAA"),
-      ((lavoro.ora_inizio.toString().length === 1) ? "0" + lavoro.ora_inizio.toString() : lavoro.ora_inizio.toString()) + ":" 
-          + ((lavoro.minuto_inizio.toString().length === 1) ? "0" + lavoro.minuto_inizio.toString() : lavoro.minuto_inizio.toString()), 
-      ((lavoro.ora_fine.toString().length === 1) ? "0" + lavoro.ora_fine.toString() : lavoro.ora_fine.toString()) + ":" 
-          + ((lavoro.minuto_fine.toString().length === 1) ? "0" + lavoro.minuto_fine.toString() : lavoro.minuto_fine.toString()),
+      lavoro.orario_inizio.toString(), 
+      lavoro.orario_fine.toString(),
       lavoro.descrizione,
       lavoro.note
     ]);
@@ -61,10 +59,8 @@ export const generaFileLavoriExcel = async (lavori) => {
         nome: (lavoro.nome_cliente) ? lavoro.nome_cliente : lavoro.nome_professionista,
         cognome_o_professione: (lavoro.cognome_cliente) ? lavoro.cognome_cliente : lavoro.professione,
         giorno: formatoDate(lavoro.giorno, "GG-MM-AAAA"),
-        orario_inizio: ((lavoro.ora_inizio.toString().length === 1) ? "0" + lavoro.ora_inizio.toString() : lavoro.ora_inizio.toString()) + ":" 
-            + ((lavoro.minuto_inizio.toString().length === 1) ? "0" + lavoro.minuto_inizio.toString() : lavoro.minuto_inizio.toString()),
-        orario_fine: ((lavoro.ora_fine.toString().length === 1) ? "0" + lavoro.ora_fine.toString() : lavoro.ora_fine.toString()) + ":" 
-            + ((lavoro.minuto_fine.toString().length === 1) ? "0" + lavoro.minuto_fine.toString() : lavoro.minuto_fine.toString()),
+        orario_inizio: lavoro.orario_inizio.toString(),
+        orario_fine: lavoro.orario_fine.toString(),
         descrizione: lavoro.descrizione,
         note: lavoro.note
       });
