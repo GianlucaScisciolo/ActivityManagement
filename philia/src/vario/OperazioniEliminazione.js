@@ -1,11 +1,10 @@
 import PersonaAction from "../action/persona_action/PersonaAction";
-import ProfessionistaAction from "../action/professionista_action/ProfessionistaAction";
 import LavoroAction from "../action/lavoro_action/LavoroAction";
-import { operazioniPersone, operazioniProfessionisti, operazioniLavori } from "./Operazioni";
+import { operazioniPersone, operazioniLavori } from "./Operazioni";
 
 export const elimina = async (e, tipoItem, selectedIdsEliminazione, setSelectedIdsEliminazione, items, setterItems) => {
   e.preventDefault();
-  if(tipoItem !== "cliente" && tipoItem !== "professionista" && tipoItem !== "lavoro") {
+  if(tipoItem !== "cliente" && tipoItem !== "lavoro") {
     alert("Errore, tipo non valido.");
     return;
   }
@@ -13,7 +12,7 @@ export const elimina = async (e, tipoItem, selectedIdsEliminazione, setSelectedI
     let dati = null, itemsDaEliminare = null, itemsRestanti = null;
 
     dati = { ids: selectedIdsEliminazione };
-    if(tipoItem === "cliente" || tipoItem === "professionista") {
+    if(tipoItem === "cliente") {
       itemsDaEliminare = items.filter(item => dati.ids.includes(item.id));
       itemsRestanti = items.filter(item => !dati.ids.includes(item.id));
     }
@@ -21,24 +20,19 @@ export const elimina = async (e, tipoItem, selectedIdsEliminazione, setSelectedI
       itemsDaEliminare = items.filter(item =>
         dati.ids.some(idArray => 
           idArray[0] === item.id_lavoro && 
-          idArray[1] === item.id_cliente && 
-          idArray[2] === item.id_professionista
+          idArray[1] === item.id_cliente 
         )
       );     
       itemsRestanti = items.filter(item =>
         !dati.ids.some(idArray => 
           idArray[0] === item.id_lavoro && 
-          idArray[1] === item.id_cliente && 
-          idArray[2] === item.id_professionista
+          idArray[1] === item.id_cliente 
         )
       );
     }
 
     if(tipoItem === "cliente") {
       await PersonaAction.dispatchAction(dati, operazioniPersone.ELIMINA_CLIENTI);
-    }
-    else if(tipoItem === "professionista") {
-      await ProfessionistaAction.dispatchAction(dati, operazioniProfessionisti.ELIMINA_PROFESSIONISTI);
     }
     else if(tipoItem === "lavoro") {
       await LavoroAction.dispatchAction(dati, operazioniLavori.ELIMINA_LAVORI)

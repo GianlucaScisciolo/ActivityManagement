@@ -28,6 +28,15 @@ const setErrore = (settersErrori, nomeErrore, messaggioErrore) => {
   }));
 }
 
+const isNumber = (numStr) => {
+  const num = parseFloat(numStr);
+  return !isNaN(num) && isFinite(num);  
+}
+
+export const controlloProfessionista = (data, settersErrori) => {
+  return 0;
+}
+
 export const controlloCliente = (data, settersErrori) => {
   /*
   Controlli clienti:
@@ -43,6 +52,11 @@ export const controlloCliente = (data, settersErrori) => {
   */
   
   let numErrori = 0;
+  setErrore(settersErrori, "errore_nome", "");
+  setErrore(settersErrori, "errore_cognome", "");
+  setErrore(settersErrori, "errore_email", "");
+  setErrore(settersErrori, "errore_contatto", "");
+  setErrore(settersErrori, "errore_note", "");
 
   // controllo sul nome
   let messaggioErrore = "";
@@ -68,20 +82,29 @@ export const controlloCliente = (data, settersErrori) => {
   }
   setErrore(settersErrori, "errore_cognome", messaggioErrore);
 
-  // controllo sul contatto
-  messaggioErrore = "";
-  if (isEmpty(data.contatto)) {
-    numErrori += 1; 
-    messaggioErrore = "Inserire il contatto";
-  }
-  else if(!matchRegex(data.contatto, "^3[0-9]{9}$") && !matchRegex(data.contatto, "^0\\d{9,10}$")) {
+  // controllo sul contatto e sull'email
+  if(isEmpty(data.contatto) && isEmpty(data.email)) {
     numErrori += 1;
-    messaggioErrore = "Contatto non valido. Inserire un numero di cellulare o un numero di telefono valido:\n";
-    messaggioErrore += "- numero di cellulare valido: 3XXXXXXXXX\n";
-    messaggioErrore += "- numero di telefono valido: 0XXXXXXXXX oppure 0XXXXXXXXXX\n";
-    messaggioErrore += "X è un numero tra 0 e 9 estremi inclusi.";
+    messaggioErrore = "Inserire il contatto e/o l\'email";
+    setErrore(settersErrori, "errore_contatto", messaggioErrore);
+    setErrore(settersErrori, "errore_email", messaggioErrore);
   }
-  setErrore(settersErrori, "errore_contatto", messaggioErrore);
+  else {
+    if(!isEmpty(data.contatto) && !matchRegex(data.contatto, "^3[0-9]{9}$") && !matchRegex(data.contatto, "^0\\d{9,10}$")) {
+      numErrori += 1;
+      messaggioErrore = "Contatto non valido. Inserire un numero di cellulare o un numero di telefono valido:\n";
+      messaggioErrore += "- numero di cellulare valido: 3XXXXXXXXX\n";
+      messaggioErrore += "- numero di telefono valido: 0XXXXXXXXX oppure 0XXXXXXXXXX\n";
+      messaggioErrore += "X è un numero tra 0 e 9 estremi inclusi.";
+      setErrore(settersErrori, "errore_contatto", messaggioErrore);
+    }
+    messaggioErrore = "";
+    if(!isEmpty(data.email) && !matchRegex(data.email, "^([a-z\\d\\._-]+)@([a-z\\d-]+)\\.([a-z]{2,8})(\\.[a-z]{2,8})?$")) {
+      numErrori += 1;
+      messaggioErrore = "Email non valida.";
+      setErrore(settersErrori, "errore_email", messaggioErrore);
+    }
+  }
   
   // controllo sulle note
   messaggioErrore = "";
@@ -94,90 +117,44 @@ export const controlloCliente = (data, settersErrori) => {
   return numErrori;
 }  
 
-export const controlloProfessionista = (data, settersErrori) => {
-  /*
-  controllo professionisti:
-  empty:
-    nome != empty FATTO
-    professione != empty FATTO
-    contatto != empty or email != empty FATTO
-  length:
-    1 <= nome.length <= 60 FATTO
-    1 <= professione.length <= 30 FATTO
-    0 <= contatto.length <= 11 FATTO
-    0 <= email <= 254 FATTO
-    0 <= note <= 65535 FATTO
-  */
-
+export const controlloServizio = (data, settersErrori) => {
   let numErrori = 0;
-
+  setErrore(settersErrori, "errore_nome", "");
+  setErrore(settersErrori, "errore_prezzo", "");
+  setErrore(settersErrori, "errore_note", "");
+  
   // controllo sul nome
   let messaggioErrore = "";
   if (isEmpty(data.nome)) {
     numErrori += 1; 
-    messaggioErrore = "Inserire il nome.";
+    messaggioErrore = "Inserire il nome";
   }
-  else if(!isInRange(data.nome.length, 1, 60)) {
+  else if(!isInRange(data.nome.length, 1, 100)) {
     numErrori += 1; 
-    messaggioErrore = "Lunghezza nome non valido, deve avere un numero di caratteri tra 1 e 60 estremi inclusi.";
+    messaggioErrore = "Lunghezza nome non valido, deve avere un numero di caratteri tra 1 e 100 estremi inclusi.";
   }
   setErrore(settersErrori, "errore_nome", messaggioErrore);
 
-  // controllo sulla professione
+  // controllo sul prezzo
   messaggioErrore = "";
-  if (isEmpty(data.professione)) {
-    numErrori += 1; 
-    messaggioErrore = "Inserire la professione.";
-  }
-  else if(!isInRange(data.professione.length, 1, 30)) {
-    numErrori += 1; 
-    messaggioErrore = "Lunghezza professione non valida, deve avere un numero di caratteri tra 1 e 30 estremi inclusi.";
-  }
-  setErrore(settersErrori, "errore_professione", messaggioErrore);
-
-  // controllo sul contatto e sull'email
-  let erroreContattoEEmail = false;
-  messaggioErrore = "";
-  if (isEmpty(data.contatto) && isEmpty(data.email)) {
-    numErrori += 1; 
-    messaggioErrore = "Inserire il contatto e/o l\'email.";
-    erroreContattoEEmail = true;
-  }
-  setErrore(settersErrori, "errore_contatto", messaggioErrore);
-  setErrore(settersErrori, "errore_email", messaggioErrore);
-
-  // controllo sul contatto
-  messaggioErrore = "";
-  if(!erroreContattoEEmail && !isEmpty(data.contatto) && !matchRegex(data.contatto, "^3[0-9]{9}$") && !matchRegex(data.contatto, "^0\\d{9,10}$")) {
+  if(!isNumber(data.prezzo.toString())) {
     numErrori += 1;
-    messaggioErrore = "Contatto non valido. Inserire un numero di cellulare o un numero di telefono valido:\n";
-    messaggioErrore += "- numero di cellulare valido: 3XXXXXXXXX\n";
-    messaggioErrore += "- numero di telefono valido: 0XXXXXXXXX oppure 0XXXXXXXXXX\n";
-    messaggioErrore += "X è un numero tra 0 e 9 estremi inclusi.";
+    messaggioErrore = (isEmpty(data.prezzo.toString())) ? "Inserire il prezzo." : (
+      "Il prezzo inserito non è un numero.");
   }
-  if(!erroreContattoEEmail) {
-    setErrore(settersErrori, "errore_contatto", messaggioErrore);
-  }
-
-  // controllo sull'email
-  messaggioErrore = "";
-  if(!erroreContattoEEmail && !isEmpty(data.email) && !matchRegex(data.email, "^([a-z\\d\\._-]+)@([a-z\\d-]+)\\.([a-z]{2,8})(\\.[a-z]{2,8})?$")) {
+  else if(!isInRange(parseFloat(data.prezzo.toString()), 0.50, Number.MAX_VALUE)) {
     numErrori += 1;
-    messaggioErrore = "Email non valida.";
+    messaggioErrore = "Inserire un presso di almeno 0.50 €."
   }
-  if(!erroreContattoEEmail) {
-    setErrore(settersErrori, "errore_email", messaggioErrore);
-  }
-
+  setErrore(settersErrori, "errore_prezzo", messaggioErrore);
+  
   // controllo sulle note
   messaggioErrore = "";
-  if(!isInRange(data.note.length, 0, 65535)) {
+  if(!isInRange(data.note.length, 0, 200)) {
     numErrori += 1;
-    messaggioErrore = "Lunghezza note non valida, deve avere un numero di caratteri tra 1 e 65.535 estremi inclusi.";
+    messaggioErrore = "Lunghezza note non valida, deve avere un numero di caratteri tra 0 e 200 estremi inclusi.";
   }
   setErrore(settersErrori, "errore_note", messaggioErrore);
-
-  return numErrori;
 }
 
 export const controlloLavoro = (data, settersErrori) => {  

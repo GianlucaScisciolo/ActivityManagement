@@ -4,13 +4,20 @@ import { controlloCliente } from '../../vario/Controlli';
 import { useSelector, useDispatch } from 'react-redux';
 import Row from 'react-bootstrap/esm/Row';
 import Col from 'react-bootstrap/esm/Col';
-import { CardNuovoCliente, CardClienteEsistente } from '../component/card_item/CardsClienti';
-import { FormNuovoCliente } from '../component/form_item/FormsClienti';
-import { RowNuovoCliente, RowClienteEsistente } from '../component/row_item/RowsClienti';
+import { FormNuovoItem } from '../../trasportabile/form_item/FormItem';
+import { CardNuovoItem } from '../../trasportabile/card_item/CardItem';
+import { RowNuovoItem } from '../../trasportabile/row_item/RowItem';
+import { CardClienteEsistente } from '../component/card_item/CardsClienti';
+import { RowClienteEsistente } from '../component/row_item/RowsClienti';
 import { modifica } from '../../vario/OperazioniModifica';
 import { elimina } from '../../vario/OperazioniEliminazione';
 import { Items } from '../component/Items';
 import { OperazioniItems, selectOperationBody } from '../component/Operazioni';
+import { 
+  getCampiNuovoCliente, getCampiClienteEsistente, 
+  indiciNuovoCliente, indiciClienteEsistente 
+} from './ClientiVario';
+import { handleInputChange } from '../../vario/Vario';
 
 const NuovoCliente = () => {
   const formSession = useSelector((state) => state.formSession.value);
@@ -26,11 +33,13 @@ const NuovoCliente = () => {
     tipo_selezione: 0,
     nome: "",
     cognome: "",
-    contatto: "",
+    contatto: "", 
+    email: "", 
     note: "", 
     errore_nome: "", 
     errore_cognome: "", 
-    errore_contatto: "", 
+    errore_contatto: "",
+    errore_email: "", 
     errore_note: ""
   })
 
@@ -79,10 +88,12 @@ const NuovoCliente = () => {
             nome: "",
             cognome: "",
             contatto: "",
+            email: "",
             note: "", 
             errore_nome: "", 
             errore_cognome: "", 
             errore_contatto: "", 
+            errore_email: "",
             errore_note: ""
           });
   
@@ -99,7 +110,6 @@ const NuovoCliente = () => {
     }
   };
   
-
   const handleChangeInsertJustNumber = (e) => {
     e.target.value = e.target.value.replace(/\D/g, '');
     e.target.value = e.target.value.slice(0, 11);
@@ -110,18 +120,9 @@ const NuovoCliente = () => {
   //   handleInsert(nuovoCliente, setNuovoCliente, setClienti, setErrori);
   // }
 
-  let NuovoClienteTag = (formSession.view === "form") ? FormNuovoCliente : (
-    (formSession.view === "card") ? CardNuovoCliente : RowNuovoCliente
+  const NuovoClienteTag = (formSession.view === "form") ? FormNuovoItem : (
+    (formSession.view === "card") ? CardNuovoItem : RowNuovoItem
   )
-
-  const itemsComponent = (
-    <Items 
-      tipoItem={"cliente"} 
-      items={clienti} 
-      selectOperation={selectOperation}
-      emptyIsConsidered={false}
-    />
-  );
 
   return (
     <>
@@ -130,20 +131,26 @@ const NuovoCliente = () => {
       <div className="main-content" />
 
       <NuovoClienteTag 
-        item={nuovoCliente} 
-        setItem={setNuovoCliente} 
+        campi={getCampiNuovoCliente(nuovoCliente, (e) => handleInputChange(e, setNuovoCliente), null, null)}  
+        indici={indiciNuovoCliente} 
         eseguiSalvataggio={(e) => handleInsert(e)} 
       />
 
       <br /> <br /> <br /> <br />
 
-      {itemSession.view === "card" ? (
-        <div className="contenitore-3">{itemsComponent}</div>
-      ) : (
-        itemsComponent
-      )}
+      <Items 
+        tipoItem={"cliente"} 
+        items={clienti} 
+        setItems={setClienti}
+        selectOperation={selectOperation}
+        emptyIsConsidered={true} 
+        campi={getCampiClienteEsistente}
+        indici={indiciClienteEsistente}
+      />
       
       <br /> <br /> <br /> <br />
+
+{/* 
 
       <OperazioniItems 
         selectedIdsModifica={selectedIdsModifica} 
@@ -152,7 +159,9 @@ const NuovoCliente = () => {
         elimina={(e) => elimina(e, "cliente", selectedIdsEliminazione, setSelectedIdsEliminazione, clienti, setClienti)}
       />
       
-      <br /> <br /> <br /> <br />
+      <br /> <br /> <br /> <br /> 
+      
+*/}
     </>
   );
 };

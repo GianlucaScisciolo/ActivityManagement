@@ -20,7 +20,6 @@ function getPencilTag(tipoSelezione) {
   return (tipoSelezione === 0 || tipoSelezione === 2) ? StyledPencilNotSelected : (
     (tipoSelezione === 1) ? StyledPencilSelected : Pencil
   );
-  // console.log(tipoSelezione);
 };
 
 function getTrashTag(tipoSelezione) {
@@ -93,8 +92,6 @@ export function OperazioniItemEsistente ({ selectOperation, item }) {
   let TrashTag = getTrashTag(item.tipo_selezione);
   let PencilTag = getPencilTag(item.tipo_selezione);
 
-  // let TrashTag = Trash2;
-  // let PencilTag = Pencil;
   return (
     <StyledListGroupItem style={{ border: "5px solid #000000", backgroundColor: "#000000", paddingTop: "3%" }}>
       <PencilTag size={grandezzaIcona} onClick={() => selectOperation("pencil", item)} style={{ marginRight: "50%" }} />
@@ -142,9 +139,7 @@ export function OperazioniModificaProfilo({eseguiModificaProfilo}) {
 
 export function CardNuovoItem({campi, indici, eseguiSalvataggio}) {
   let maxHeight = "2000px";
-  let InputTag = getInputTag(1, true);
-  let TextAreaTag = getTextAreaTag(1, true);
-
+  
   return (
     <center>
       <StyledCard>
@@ -164,6 +159,7 @@ export function CardNuovoItem({campi, indici, eseguiSalvataggio}) {
                   rows={1}
                   name={campi.name[i]}
                   type={campi.type[i]}
+                  step={campi.step[i]}
                   value={campi.value[i]}
                   placeholder={campi.placeholder[i]}
                   onChange={campi.onChange}
@@ -236,6 +232,9 @@ export function CardItemEsistente({item, campi, indici, selectOperation}) {
         <StyledCardHeader>{campi["header"]}</StyledCardHeader>
         <SlideContainer style={{maxHeight: `${maxHeight}`}}>
           {indici.map((i) => {
+            // onClick={handleGiornoClick(setUltimoGiornoType)}
+            // onBlur={handleGiornoBlur(setUltimoGiornoType, item, setItem)}
+            // onChange={(e) => handleInputChange(e, setItem)}
             const NomeTag = (campi.type[i]) ? getInputTag(campi.tipoSelezione, campi.valoreModificabile[i]) : (
               getTextAreaTag(campi.tipoSelezione, campi.valoreModificabile[i])
             );

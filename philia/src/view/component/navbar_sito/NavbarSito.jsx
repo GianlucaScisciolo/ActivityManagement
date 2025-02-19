@@ -140,12 +140,12 @@ const NavbarSito = () => {
                 <StyledNavDropdownItem as={NavLink} to="/nuovo-cliente">Nuovo cliente</StyledNavDropdownItem>
                 <StyledNavDropdownItem as={NavLink} to="/clienti">Clienti</StyledNavDropdownItem>
               </StyledNavDropdown>
-              <StyledNavDropdown title="Professionisti" show={dropdownProfessionisti}
+              <StyledNavDropdown title="Servizi" show={dropdownProfessionisti}
                 onMouseEnter={() => handleMouseEnter(setDropdownProfessionisti)}
                 onMouseLeave={() => handleMouseLeave(setDropdownProfessionisti)}
               >
-                <StyledNavDropdownItem as={NavLink} to="/nuovo-professionista">Nuovo professionista</StyledNavDropdownItem>
-                <StyledNavDropdownItem as={NavLink} to="/professionisti">Professionisti</StyledNavDropdownItem>
+                <StyledNavDropdownItem as={NavLink} to="/nuovo-servizio">Nuovo servizio</StyledNavDropdownItem>
+                <StyledNavDropdownItem as={NavLink} to="/servizi">Servizi</StyledNavDropdownItem>
               </StyledNavDropdown>
               <StyledNavDropdown title="Lavori" show={dropdownLavori}
                 onMouseEnter={() => handleMouseEnter(setDropdownLavori)}

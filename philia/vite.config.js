@@ -35,6 +35,10 @@ export default defineConfig({
       '/ELIMINA_PROFESSIONISTI': 'http://localhost:3000',
       '/MODIFICA_PROFESSIONISTI': 'http://localhost:3000',
       
+      // Servizi
+      '/INSERISCI_SERVIZIO': 'http://localhost:3000', 
+      '/VISUALIZZA_SERVIZI': 'http://localhost:3000',
+
       // Lavori
       '/INSERISCI_LAVORO': 'http://localhost:3000',
       '/VISUALIZZA_LAVORI': 'http://localhost:3000',

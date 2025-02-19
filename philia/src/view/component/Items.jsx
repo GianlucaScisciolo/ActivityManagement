@@ -3,22 +3,9 @@ import { CardItemEsistente } from "./card_item/CardItem";
 import { RowItemEsistente } from "./row_item/RowItem";
 import { CardLavoroEsistente } from "./card_item/CardsLavori";
 import { RowLavoroEsistente } from "./row_item/RowsLavori";
-import { handleInputChangeLavoroEsistente } from "../../vario/Vario";
+import { handleInputChangeLavoroEsistente, handleInputChange } from "../../vario/Vario";
 
-const getCampiCliente = (item) => {
-  return {
-    header: "Cliente", 
-    tipoSelezione: item.tipo_selezione,  
-    type: [null, "text", null],  
-    name: ["nome_e_cognome", "contatto", "note"], 
-    value: [item.nome + " " + item.cognome, item.contatto, item.note], 
-    placeholder: ["Nome e cognome", "Contatto", "Note"], 
-    valoreModificabile: [false, true, true], 
-    onChange: (e) => handleInputChange(e, setItems), 
-    onClick: null, 
-    onBlur: null
-  };
-};
+
 
 const getCampiProfessionista = (item) => {
   return {
@@ -39,14 +26,32 @@ const getCampiLavoro = (item) => {
   return "Da definire!!";
 }
 
-const indiciCliente = [0, 1, 2];
 const indiciProfessionista = [0, 1, 2, 3];
 const indiciLavoro = "Da definire";
 
-export const Items = ({tipoItem, items, selectOperation, emptyIsConsidered}) => {
+export const Items = ({tipoItem, items, setItems, selectOperation, emptyIsConsidered, campi, indici}) => {
   const formSession = useSelector((state) => state.formSession.value);
   const itemSession = useSelector((state) => state.itemSession.value);
   const ItemEsistenteTag = (itemSession.view === "card") ? CardItemEsistente : RowItemEsistente;
+  
+  const ItemElements = ({items}) => {
+    return (
+      <>
+        {items.map((item, index) => {
+          return (
+            <ItemEsistenteTag 
+              key={index} 
+              item={item} 
+              campi={campi(item, (e) => handleInputChange(e, setItems), null, null)} 
+              indici={indici} 
+              selectOperation={selectOperation} 
+            />
+          )
+        })}
+      </>
+    );
+  }
+
   return (
     <>
       {(items.length <= 0 && emptyIsConsidered) && (
@@ -54,19 +59,15 @@ export const Items = ({tipoItem, items, selectOperation, emptyIsConsidered}) => 
       )}
       {(items.length > 0) && (
         <>
-          {items.map((item, index) => {
-            return (
-              <ItemEsistenteTag 
-                key={index} 
-                item={item} 
-                campi={(tipoItem === "cliente") ? getCampiCliente(item) : getCampiProfessionista(item)} 
-                indici={(tipoItem === "cliente") ? indiciCliente : indiciProfessionista} 
-                selectOperation={selectOperation} 
-              />
-            )
-          })}
+          {itemSession.view === "card" ? (
+            <div className="contenitore-3">
+              <ItemElements items={items} />
+            </div>
+          ) : (
+            <ItemElements items={items} />
+          )}
         </>
-      )}
+      )} 
     </>
   )
 }

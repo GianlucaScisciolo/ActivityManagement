@@ -1,20 +1,6 @@
 import PersonaDispatcher from "../../dispatcher/persona_dispatcher/PersonaDispatcher.js"
 import { operazioniPersone } from "../../vario/Operazioni.js";
 
-// const PersonaAction = {
-//   dispatchAction(data, operazione) { 
-//     try {
-//       PersonaDispatcher.dispatch({
-//         type: operazioniPersone[operazione] || null,
-//         payload: data,
-//       })
-//     }
-//     catch(error) {
-//       console.error("Impossibile inviare l\'azione " + operazione + ": " + error);
-//     }
-//   },
-// };
-
 const PersonaAction = {
   async dispatchAction(data, operazione) { // Aggiungi async
     return new Promise((resolve, reject) => { // Aggiungi Promise

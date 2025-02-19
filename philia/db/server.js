@@ -2,6 +2,9 @@ import express from 'express';
 import mysql from 'mysql2';
 import cors from 'cors';
 import bodyParser from 'body-parser';
+import { SQL_SELECT_UTENTE } from './AutenticazioneSQL.js';
+import { SQL_INSERIMENTO_CLIENTE, SQL_SELEZIONE_CLIENTI } from './PersonaSQL.js';
+import { SQL_INSERIMENTO_SERVIZIO, SQL_SELEZIONE_SERVIZI } from './ServizioSQL.js';
 const app = express();
 
 app.use(cors());
@@ -28,8 +31,6 @@ const db = mysql.createConnection({
   password: "utente",
   database: "philia_test"
 })
-
-// const setLangSQL = `SET lc_time_names = 'it_IT';`;
 
 db.connect(err => {
   if (err) {
@@ -91,51 +92,27 @@ const getResults = async (sql, params, res) => {
   }
 }
 
-
 /*************************************************** Autenticazione **************************************************/
 
 app.post("/LOGIN", async (req, res) => {
-  const { username = '', password = '' } = req.body;
-
-  console.log("Dati ricevuti per il login: ", [username, password]);
-
-  const sql_select_utente = ` 
-    SELECT 
-      \`username\`, \`ruolo\`, \`note\`, \`password\`, \`salt_hex\` 
-    FROM 
-      \`utente\` 
-    WHERE 
-      \`username\` = ?; 
-  `;
-
-  const sql_select_salone = `
-    SELECT 
-      \`num_lavori_clienti\` 
-    FROM 
-      \`salone\` 
-    WHERE 
-      \`username_utente\` = ?; 
-  `;
-
-  const params = [username];
+  const params = [req.body.username];
 
   try {
     await beginTransaction();
 
-    const [utentiResult] = await executeQuery(sql_select_utente, params);
-    const [saloniResult] = await executeQuery(sql_select_salone, params);
+    const [utentiResult] = await executeQuery(SQL_SELECT_UTENTE, params);
 
     await commitTransaction();
 
-    const utente = (utentiResult) ? utentiResult : null;
-    const salone = (saloniResult) ? saloniResult : null;
-
-    return res.status(200).json({ utente: utente, salone: salone });
+    const utente = utentiResult;
+    console.log(utente);
+    
+    return res.status(200).json({ utente: utente });
   } 
   catch (err) {
     await rollbackTransaction();
     console.error('Errore durante il login: ', err);
-    return res.status(500).json({ message: 'Errore del server.' });
+    return res.status(500).json({ message: 'Errore del server.', error: err.message });
   }
 });
 
@@ -209,19 +186,16 @@ app.post("/MODIFICA_PROFILO", async (req, res) => {
 /************************************************** Persona **************************************************/
 
 app.post("/INSERISCI_CLIENTE", async (req, res) => {
-  const { nome = '', cognome = '', contatto = '', note = '' } = req.body;
-
-  console.log("Dati ricevuti per l'inserimento:", req.body);
-
-  const sql = ` 
-    INSERT INTO cliente (nome, cognome, contatto, note) 
-    VALUES (?, ?, ?, ?); 
-  `;
-
-  const params = [`${nome}`, `${cognome}`, `${contatto}`, `${note}`];
-  
+  const params = [
+    `${req.body.nome}`, 
+    `${req.body.cognome}`, 
+    `${(req.body.contatto) ? req.body.contatto : "Contatto non inserito."}`, 
+    `${(req.body.email) ? req.body.email : "Email non inserita."}`, 
+    `${req.body.note}`
+  ];
+    
   try {
-    const result = await executeQuery(sql, params);
+    const result = await executeQuery(SQL_INSERIMENTO_CLIENTE, params);
     const insertedId = result.insertId; // ottengo l'id inserito
     return res.status(201).json({ message: 'Cliente inserito con successo', id: insertedId });
   } 
@@ -234,47 +208,12 @@ app.post("/INSERISCI_CLIENTE", async (req, res) => {
   }
 });
 
-
 app.post("/VISUALIZZA_CLIENTI", async (req, res) => {
-  const { nome = '', cognome = '', contatto = '', note = '' } = req.body;
+  console.log(req.body.email);
+  const params = [`%${req.body.nome}%`, `%${req.body.cognome}%`, `%${req.body.contatto}%`, `%${req.body.email}%`];
+  params.push((!req.body.note) ? '%' : `%${req.body.note}%`);
 
-  console.log("Dati ricevuti per la ricerca:", req.body);
-
-  let sql = `
-    SELECT 
-      id, 
-      nome, 
-      cognome, 
-      IFNULL(NULLIF(contatto, ''), 'Contatto non inserito.') AS contatto, 
-      IFNULL(NULLIF(note, ''), 'Nota non inserita.') AS note, 
-      0 AS tipo_selezione 
-    FROM 
-      cliente 
-    WHERE 
-      nome LIKE ? AND cognome LIKE ?
-  `;
-
-  const params = [`${nome}%`, `${cognome}%`];
-
-  if (contatto === '') {
-    sql += " AND (contatto LIKE ? OR contatto IS NULL)";
-    params.push('%');
-  } 
-  else {
-    sql += " AND contatto LIKE ?";
-    params.push(`${contatto}%`);
-  }
-
-  if (note === '') {
-    sql += " AND (note LIKE ? OR note IS NULL)";
-    params.push('%');
-  } 
-  else {
-    sql += " AND note LIKE ?";
-    params.push(`${note}%`);
-  }
-
-  return getResults(sql, params, res);
+  return getResults(SQL_SELEZIONE_CLIENTI(req.body.note), params, res);
 });
 
 app.post("/OTTIENI_TUTTI_I_CLIENTI", async (req, res) => {
@@ -336,135 +275,39 @@ app.post("/MODIFICA_CLIENTI", async (req, res) => {
 
 /*************************************************************************************************************/
 
-/*********************************************** Professionista **********************************************/
+/*********************************************** Servizi **********************************************/
 
-app.post("/INSERISCI_PROFESSIONISTA", async (req, res) => {
-  const { nome = '', professione = '', contatto = '', email = '', note = '' } = req.body;
-  
-  const sql = ` 
-    INSERT INTO professionista (nome, professione, contatto, email, note) 
-    VALUES (?, ?, ?, ?, ?); 
-  `;
-
-  const params = [`${nome}`, `${professione}`, `${contatto}`, `${email}`, `${note}`];
+app.post("/INSERISCI_SERVIZIO", async (req, res) => {
+  const params = [
+    `${req.body.nome}`, 
+    `${req.body.prezzo}`, 
+    `${req.body.note}`, 
+  ];
     
   try {
-    const result = await executeQuery(sql, params);
-    const insertedId = result.insertId; // ottengo l'id inserito
-    return res.status(201).json({ message: 'Professionista inserito con successo', id: insertedId });
+    const result = await executeQuery(SQL_INSERIMENTO_SERVIZIO, params);
+    return res.status(201).json({ message: 'Cliente inserito con successo', id: result.insertId });
   } 
   catch (err) {
     if (err.code === 'ER_DUP_ENTRY') {
-      return res.status(409).json({ message: 'Errore, professionista gia\' presente' });
+      return res.status(409).json({ message: 'Errore, servizio gia\' presente.' });
     }
-    console.error('Errore durante l\'inserimento del professionista: ', err);
+    console.error('Errore durante l\'inserimento del servizio: ', err);
     return res.status(500).json({ message: 'Errore del server' });
   }
 });
 
-app.post("/VISUALIZZA_PROFESSIONISTI", async (req, res) => {
-  const { nome = '', professione = '', contatto = '', email = '', note = '' } = req.body;
-  console.log([nome, professione, contatto, email, note]);
-  
-  let sql = `
-    SELECT 
-      id, 
-      nome, 
-      professione, 
-      IFNULL(NULLIF(contatto, ''), 'Contatto non inserito.') AS contatto, 
-      IFNULL(NULLIF(email, ''), 'Email non inserita.') AS email, 
-      IFNULL(NULLIF(note, ''), 'Nota non inserita.') AS note, 
-      0 AS tipo_selezione 
-    FROM 
-      professionista 
-    WHERE 
-      nome LIKE ? AND professione LIKE ? 
-  `;
+app.post("/VISUALIZZA_SERVIZI", async (req, res) => {
+  const prezzo_min = (req.body.prezzo_min) ? req.body.prezzo_min : Number.MIN_VALUE;
+  const prezzo_max = (req.body.prezzo_max) ? req.body.prezzo_max : Number.MAX_VALUE;
+  console.log("|"+req.body.nome+"|");
+  console.log(prezzo_min);
+  console.log(prezzo_max);
+  console.log("|"+req.body.note+"|");
+  const params = [`%${req.body.nome}%`, `${prezzo_min}`, `${prezzo_max}`];
+  params.push((!req.body.note) ? '%' : `%${req.body.note}%`);
 
-  const params = [`${nome}%`, `${professione}%`];
-
-  if (contatto === '') {
-    sql += " AND (contatto LIKE ? OR contatto IS NULL)";
-    params.push('%');
-  } 
-  else {
-    sql += " AND contatto LIKE ?";
-    params.push(`${contatto}%`);
-  }
-
-  if (email === '') {
-    sql += " AND (email LIKE ? OR email IS NULL)";
-    params.push('%');
-  } 
-  else {
-    sql += " AND email LIKE ?";
-    params.push(`${email}%`);
-  }
-
-  if (note === '') {
-    sql += " AND (note LIKE ? OR note IS NULL)";
-    params.push('%');
-  } 
-  else {
-    sql += " AND note LIKE ?";
-    params.push(`${note}%`);
-  }
-  
-  return getResults(sql, params, res);
-});
-
-app.post("/OTTIENI_TUTTI_I_PROFESSIONISTI", async (req, res) => {
-  const sql = `
-    SELECT 
-      id, nome, professione, contatto, email 
-    FROM 
-      professionista; 
-  `;
-
-  try {
-    const data = await executeQuery(sql, []);
-    res.status(200).json(data);
-  } 
-  catch (err) {
-    console.error('Errore durante l\'esecuzione della query: ', err);
-    res.status(500).json({ message: 'Errore durante l\'esecuzione della query' });
-  }
-});
-
-app.post("/ELIMINA_PROFESSIONISTI", async (req, res) => {
-  const { ids = [] } = req.body;
-
-  console.log("Dati ricevuti per l\'eliminazione: ", ids);
-
-  const placeholders = ids.map(() => '?').join(', ');
-
-  const sql = ` 
-    DELETE FROM 
-      professionista 
-    WHERE 
-      id IN (${placeholders}); 
-  `;
-
-  return getResults(sql, ids, res);
-});
-
-app.post("/MODIFICA_PROFESSIONISTI", async (req, res) => {
-  const [id, contatto, email, note] = [req.body.id, req.body.contatto, req.body.email, req.body.note];
-
-  console.log("Dati ricevuti per la modifica: ", [id, contatto, email, note]);
-  
-  const sql = ` 
-    UPDATE 
-      professionista 
-    SET 
-      contatto = ?, email = ?, note = ? 
-    WHERE 
-      id = ?; 
-  `;
-
-  const params = [`${contatto}`, `${email}`, `${note}`, `${id}`];
-
-  return getResults(sql, params, res);
+  return getResults(SQL_SELEZIONE_SERVIZI(req.body.note), params, res);
 });
 
 /*************************************************************************************************************/

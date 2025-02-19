@@ -12,14 +12,6 @@ class PersonaStore extends EventEmitter {
   }
 
   handleActions(action) {
-    // alert(action.type)
-  //   alert(
-  //     action.payload.nomeLastSearch + "\n" 
-  //   + action.payload.cognomeLastSearch + "\n"
-  //   + action.payload.contattoLastSearch + "\n"
-  //   + action.payload.noteLastSearch + "\n"
-  //   + action.type
-  //    );
     switch (action.type) {
       case operazioniPersone.INSERISCI_CLIENTE:
         this.runOperation(action.payload, operazioniPersone.INSERISCI_CLIENTE);

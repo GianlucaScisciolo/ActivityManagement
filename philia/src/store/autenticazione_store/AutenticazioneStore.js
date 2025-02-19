@@ -2,10 +2,8 @@ import { EventEmitter } from "events";
 import AutenticazioneDispatcher from "../../dispatcher/autenticazione_dispatcher/AutenticazioneDispatcher";
 import axios from "axios";
 import { operazioniAutenticazione } from "../../vario/Operazioni";
-// import { elseguiLogin, eseguiLogout } from "../redux/AutenticazioneSessionSlice";
 
 let utente = null;
-let salone = null;
 
 class AutenticazioneStore extends EventEmitter {
   constructor() {
@@ -29,21 +27,12 @@ class AutenticazioneStore extends EventEmitter {
         break;
     }
   }
-
-  // login() {
-  //   login();
-  // }
+  
   login(data) {
     axios.post("/LOGIN", data).then(response => {
       const utente = (response.data.utente);
-      const salone = (response.data.salone);
-      // console.log("UTENTE: ", utente);
-      // console.log("SALONE: ", salone);
-      // console.log("utente store: " + utente);
-      // console.log("salone store: " + salone);
       this.emitChange(operazioniAutenticazione.LOGIN);
       this.setUtente(utente);
-      this.setSalone(salone);
     }).catch(error => {
       console.error("Errore durante l'operazione " + operazioniAutenticazione.LOGIN + ": " + 
                     (error.response ? error.response.data : error.message));
@@ -63,15 +52,10 @@ class AutenticazioneStore extends EventEmitter {
       });
   }
   
-  
-
   logout() {
-    // logout();
     console.log("Logout");
   }
 
-
-  
   emitChange(eventType) {
     this.emit(eventType);
   }
@@ -79,19 +63,11 @@ class AutenticazioneStore extends EventEmitter {
   getUtente() {
     return utente;
   }
-
-  getSalone() {
-    return salone;
-  }
-
+  
   setUtente(newUtente) {
     utente = newUtente;
   }
-
-  setSalone(newSalone) {
-    salone = newSalone;
-  }
-
+  
   addChangeListener(event, callback) {
     this.on(event, callback);
   }

@@ -1,44 +1,33 @@
 export const handleInputChange = (e, setItem, items, setItems, tipoItem, id) => {
-  const nome_campi = [
-    "nome", "cognome", "contatto", "note", "professione", "email", "id_cliente", "id_professionista", 
-    "nome_cliente", "cognome_cliente", "nome_professionista", "descrizione", 
-    "giorno", "primo_giorno", "ultimo_giorno", "ora_inizio", "ora_fine", "minuto_inizio", "minuto_fine", 
-    "username", "password", "nuovo_username", "password_attuale", "nuova_password", "conferma_nuova_password", 
-    "num_lavori_clienti", "num_lavori_professionisti", "num_lavori_giorno"
-  ]
+  // const nome_campi = [
+  //   "nome", "cognome", "contatto", "note", "professione", "email", "id_cliente", "id_professionista", 
+  //   "nome_cliente", "cognome_cliente", "nome_professionista", "descrizione", 
+  //   "giorno", "primo_giorno", "ultimo_giorno", "ora_inizio", "ora_fine", "minuto_inizio", "minuto_fine", 
+  //   "username", "password", "nuovo_username", "password_attuale", "nuova_password", "conferma_nuova_password", 
+  //   "num_lavori_clienti", "num_lavori_professionisti", "num_lavori_giorno"
+  // ]
   
   const { name, value } = e.target;
   
-  if(tipoItem === "cliente" || tipoItem === "professionista" || tipoItem === "lavoro") {
-    if(nome_campi.includes(name)) {
-      const updatedItems = items.map(item => {
-        if(id === item.id) {
-          return {
-            ...item,
-            [name]: value
-          }
+  if(tipoItem === "cliente" || tipoItem === "servizio" || tipoItem === "lavoro") {
+    const updatedItems = items.map(item => {
+      if(id === item.id) {
+        return {
+          ...item,
+          [name]: value
         }
-        return item;
-      });
-      setItems(updatedItems);
-    }
-    else {
-      alert("Errore, nome campo " + name + " non valido.");
-    }
+      }
+      return item;
+    });
+    setItems(updatedItems);
     return;
   }
   
-  if(nome_campi.includes(name)) {
-    setItem(prevState => ({
-      ...prevState, 
-      [name]: value
-    }));
-  }
-  else {
-    alert("Errore, nome campo " + name + " non valido.");
-    return;
-  }
-
+  setItem(prevState => ({
+    ...prevState, 
+    [name]: value
+  }));
+  
   if(name === "id_cliente") {
     setItem(prevState => ({
       ...prevState, 

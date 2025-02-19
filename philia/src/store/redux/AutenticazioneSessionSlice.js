@@ -26,8 +26,7 @@ const initialState = loadFromLocalStorage() || {
     username: null,
     ruolo: "guest",
     note: null,
-    isLogged: false,
-    num_lavori_clienti: null, 
+    isLogged: false, 
   },
 };
 
@@ -39,8 +38,7 @@ export const autenticazioneSessionSlice = createSlice({
       state.value.username = action.payload.username;
       state.value.ruolo = action.payload.ruolo;
       state.value.note = action.payload.note;
-      state.value.isLogged = true; 
-      state.value.num_lavori_clienti = action.payload.num_lavori_clienti; 
+      state.value.isLogged = true;  
       saveToLocalStorage(state);
     },
     eseguiLogout: (state) => {
@@ -48,14 +46,12 @@ export const autenticazioneSessionSlice = createSlice({
       state.value.ruolo = "guest";
       state.value.note = null;
       state.value.isLogged = false;
-      state.value.num_lavori_clienti = null; 
       saveToLocalStorage(state);
     },
     eseguiModificaAutenticazioneSession : (state, action) => {
       state.value.username = action.payload.username;
       state.value.note = action.payload.note;
       state.value.isLogged = true;
-      state.value.num_lavori_clienti = action.payload.num_lavori_clienti; 
       saveToLocalStorage(state);
     },
   },

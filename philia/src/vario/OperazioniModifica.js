@@ -1,10 +1,9 @@
 import LavoroAction from "../action/lavoro_action/LavoroAction";
 import PersonaAction from "../action/persona_action/PersonaAction";
-import ProfessionistaAction from "../action/professionista_action/ProfessionistaAction";
 import AutenticazioneAction from "../action/autenticazione_action/AutenticazioneAction";
 import autenticazioneStore from "../store/autenticazione_store/AutenticazioneStore";
-import { operazioniAutenticazione, operazioniLavori, operazioniPersone, operazioniProfessionisti } from "./Operazioni";
-import { controlloCliente, controlloProfessionista, controlloLavoro } from "./Controlli";
+import { operazioniAutenticazione, operazioniLavori, operazioniPersone } from "./Operazioni";
+import { controlloCliente, controlloLavoro } from "./Controlli";
 import lavoroStore from "../store/lavoro_store/LavoroStore";
 import { attesaLista } from "./Vario";
 import { useState } from "react";
@@ -58,7 +57,7 @@ export const modifica = async (e, tipoItem, selectedIdsModifica, setSelectedIdsM
 
   // alert("Modifica");
   // alert(selectedIdsModifica);
-  if(tipoItem !== "cliente" && tipoItem !== "professionista" && tipoItem !== "lavoro") {
+  if(tipoItem !== "cliente" && tipoItem !== "lavoro") {
     alert("Errore: tipo non valido, Riprova più tardi.");
     return;
   }
@@ -70,7 +69,7 @@ export const modifica = async (e, tipoItem, selectedIdsModifica, setSelectedIdsM
 
     dati = { ids: selectedIdsModifica };
     
-    if(tipoItem === "cliente" || tipoItem === "professionista") {
+    if(tipoItem === "cliente") {
       itemsDaModificare = items.filter(item => dati.ids.includes(item.id)); 
       itemsRestanti = items.filter(item => !dati.ids.includes(item.id));
     }
@@ -79,8 +78,7 @@ export const modifica = async (e, tipoItem, selectedIdsModifica, setSelectedIdsM
       for (let item of items) {
         if (dati.ids.some(idArray =>
           idArray[0] === item.id_lavoro &&
-          idArray[1] === item.id_cliente &&
-          idArray[2] === item.id_professionista
+          idArray[1] === item.id_cliente 
         )) {
           itemsDaModificare.push(item);
         } else {
@@ -101,9 +99,6 @@ export const modifica = async (e, tipoItem, selectedIdsModifica, setSelectedIdsM
     console.log("fuori 2");
     if(tipoItem === "cliente") {
       await PersonaAction.dispatchAction(itemsDaModificare, operazioniPersone.MODIFICA_CLIENTI);
-    }
-    else if(tipoItem === "professionista") {
-      await ProfessionistaAction.dispatchAction(itemsDaModificare, operazioniProfessionisti.MODIFICA_PROFESSIONISTI);
     }
     else if(tipoItem === "lavoro") {
       console.log("fuori 3");

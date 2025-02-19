@@ -10,8 +10,6 @@ export const login = async (e, datiLogin, setUtente, setSalone) => {
     await AutenticazioneAction.dispatchAction(datiLogin, operazioniAutenticazione.LOGIN);
     setUtente(autenticazioneStore.getUtente());
     setSalone(autenticazioneStore.getSalone());
-    // console.log("utente: " + autenticazioneStore.getUtente());
-    // console.log("salone: " + autenticazioneStore.getSalone());
   } 
   catch (error) {
     console.error("Errore durante il login: ", error);

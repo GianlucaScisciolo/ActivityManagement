@@ -1,19 +1,23 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Header from '../component/Header';
-import Row from 'react-bootstrap/esm/Row';
-import Col from 'react-bootstrap/esm/Col';
 import { elimina } from '../../vario/OperazioniEliminazione';
 import { modifica } from '../../vario/OperazioniModifica';
 import { useSelector, useDispatch } from 'react-redux';
 import personaStore from '../../store/persona_store/PersonaStore';
 import { operazioniPersone } from '../../vario/Operazioni';
-import { CardRicercaClienti, CardClienteEsistente } from '../component/card_item/CardsClienti';
-import { FormRicercaClienti } from '../component/form_item/FormsClienti';
-import { RowRicercaClienti } from '../component/row_item/RowsClienti';
+import { FormRicercaItems } from '../../trasportabile/form_item/FormItem';
+import { CardRicercaItems } from '../../trasportabile/card_item/CardItem';
+import { RowRicercaItems } from '../../trasportabile/row_item/RowItem';
+import { CardClienteEsistente } from '../component/card_item/CardsClienti';
 import { RowClienteEsistente } from '../component/row_item/RowsClienti';
 import { eseguiRicerca } from '../../vario/OperazioniRicerca';
 import { Items } from '../component/Items';
 import { OperazioniItems, selectOperationBody } from '../component/Operazioni';
+import { 
+  getCampiRicercaClienti, getCampiClienteEsistente, 
+  indiciRicercaClienti, indiciClienteEsistente
+} from './ClientiVario';
+import { handleInputChange } from '../../vario/Vario';
 
 const Clienti = () => {
   const [clienti, setClienti] = useState(-1);
@@ -26,18 +30,12 @@ const Clienti = () => {
   const itemSession = useSelector((state) => state.itemSession.value);
   
   const [datiRicerca, setDatiRicerca] = useState({
-    "nome": "", 
-    "cognome": "", 
-    "contatto": "", 
-    "note": ""
+    nome: "", 
+    cognome: "", 
+    contatto: "", 
+    email: "", 
+    note: ""
   });
-
-  const [errori, setErrori] = useState({
-    "erroreNome": "",
-    "erroreCognome": "",
-    "erroreContatto": "",
-    "erroreNote": ""
-  })
 
   const selectOperation = (icon, item) => {
     selectOperationBody(
@@ -54,38 +52,46 @@ const Clienti = () => {
     };
   }, []);
 
-  let RicercaClientiTag = (formSession.view === "form") ? FormRicercaClienti : (
-    (formSession.view === "card") ? CardRicercaClienti : RowRicercaClienti
+  const RicercaClientiTag = (formSession.view === "form") ? FormRicercaItems : (
+    (formSession.view === "card") ? CardRicercaItems : RowRicercaItems
   )
   
-  const itemsComponent = (
-    <Items 
-      tipoItem={"cliente"} 
-      items={clienti} 
-      selectOperation={selectOperation}
-      emptyIsConsidered={true}
-    />
-  );
-
   return (
     <>
       <Header />
 
       <div className="main-content" />
-
+      
       <RicercaClientiTag 
-        item={datiRicerca} 
-        setItem={setDatiRicerca} 
+        campi={getCampiRicercaClienti(datiRicerca, (e) => handleInputChange(e, setDatiRicerca), null, null)} 
+        indici={indiciRicercaClienti}
         eseguiRicerca={(e) => eseguiRicerca(e, "clienti", setClienti, datiRicerca)}
       />
 
       <br /> <br /> <br /> <br />
       
-      {itemSession.view === "card" ? (
+      <Items 
+        tipoItem={"cliente"} 
+        items={clienti} 
+        setItems={setClienti}
+        selectOperation={selectOperation}
+        emptyIsConsidered={true} 
+        campi={getCampiClienteEsistente}
+        indici={indiciClienteEsistente}
+      />
+
+      <br /> <br /> <br /> <br />
+      {/* {itemSession.view === "card" ? (
         <div className="contenitore-3">{itemsComponent}</div>
       ) : (
         itemsComponent
       )}
+      <Items 
+        tipoItem={"cliente"} 
+        items={clienti} 
+        selectOperation={selectOperation}
+        emptyIsConsidered={true}
+      />
       
       <br /> <br /> <br /> <br />
 
@@ -96,7 +102,7 @@ const Clienti = () => {
         elimina={(e) => elimina(e, "cliente", selectedIdsEliminazione, setSelectedIdsEliminazione, clienti, setClienti)}
       />
       
-      <br /> <br /> <br /> <br />
+      <br /> <br /> <br /> <br /> */}
     </>
   );
 }

@@ -1,10 +1,10 @@
 import personaStore from "../store/persona_store/PersonaStore.js";
-import professionistaStore from "../store/professionista_store/ProfessionistaStore.js";
+import servizioStore from "../store/servizio_store/ServizioStore.js"
 import lavoroStore from "../store/lavoro_store/LavoroStore.js";
 import PersonaAction from "../action/persona_action/PersonaAction.js"
-import ProfessionistaAction from "../action/professionista_action/ProfessionistaAction.js";
+import ServizioAction from "../action/servizio_action/ServizioAction.js"
 import LavoroAction from "../action/lavoro_action/LavoroAction.js";
-import { operazioniPersone, operazioniProfessionisti, operazioniLavori } from "./Operazioni.js";
+import { operazioniPersone, operazioniServizi, operazioniLavori } from "./Operazioni.js";
 
 export const aggiornamentoLista = (tipoLista, setLista) => {
   if(tipoLista === "clienti") {
@@ -14,11 +14,11 @@ export const aggiornamentoLista = (tipoLista, setLista) => {
       personaStore.removeChangeListener(operazioniPersone.VISUALIZZA_CLIENTI, onChange);
     };
   }
-  else if(tipoLista === "professionisti") {
-    const onChange = () => setLista(professionistaStore.getProfessionisti());
-    professionistaStore.addChangeListener(operazioniProfessionisti.VISUALIZZA_PROFESSIONISTI, onChange);
+  else if(tipoLista === "servizi") {
+    const onChange = () => setLista(servizioStore.getServizi());
+    servizioStore.addChangeListener(operazioniServizi.VISUALIZZA_SERVIZI, onChange);
     return () => {
-      professionistaStore.removeChangeListener(operazioniProfessionisti.VISUALIZZA_PROFESSIONISTI, onChange);
+      servizioStore.removeChangeListener(operazioniServizi.VISUALIZZA_SERVIZI, onChange);
     };
   }
   else if(tipoLista === "lavori") {
@@ -34,11 +34,11 @@ export const aggiornamentoLista = (tipoLista, setLista) => {
 }
 
 const eseguiRicercaClienti = (e, setLista, datiRicerca) => {
-  PersonaAction.dispatchAction(datiRicerca, operazioniPersone.VISUALIZZA_CLIENTI);//.visualizzaClienti(data);
+  PersonaAction.dispatchAction(datiRicerca, operazioniPersone.VISUALIZZA_CLIENTI);
 };
 
-const eseguiRicercaProfessionisti = (e, setLista, datiRicerca) => {
-  ProfessionistaAction.dispatchAction(datiRicerca, operazioniProfessionisti.VISUALIZZA_PROFESSIONISTI);
+const eseguiRicercaServizi = (e, setLista, datiRicerca) => {
+  ServizioAction.dispatchAction(datiRicerca, operazioniServizi.VISUALIZZA_SERVIZI);
 };
 
 const eseguiRicercaLavori = (e, setLista, datiRicerca) => {
@@ -51,8 +51,8 @@ export const eseguiRicerca = (e, tipoLista, setLista, datiRicerca) => {
   if(tipoLista === "clienti") {
     eseguiRicercaClienti(e, setLista, datiRicerca);
   }
-  else if(tipoLista === "professionisti") {
-    eseguiRicercaProfessionisti(e, setLista, datiRicerca)
+  else if(tipoLista === "servizi") {
+    eseguiRicercaServizi(e, setLista, datiRicerca)
   }
   else if(tipoLista === "lavori") {
     eseguiRicercaLavori(e, setLista, datiRicerca)

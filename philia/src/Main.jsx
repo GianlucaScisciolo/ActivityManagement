@@ -8,10 +8,10 @@ import App from "./App.jsx";
 import Home from "./view/Home.jsx";
 import Login from "./view/autenticazione_view/Login.jsx";
 import NuovoCliente from "./view/persona_view/NuovoCliente.jsx";
-import NuovoProfessionista from "./view/professionista_view/NuovoProfessionista.jsx";
+import NuovoServizio from "./view/servizio_view/NuovoServizio.jsx";
 import NuovoLavoro from "./view/lavoro_view/NuovoLavoro.jsx";
 import Clienti from "./view/persona_view/Clienti.jsx";
-import Professionisti from "./view/professionista_view/Professionisti.jsx";
+import Servizi from "./view/servizio_view/Servizi.jsx";
 import Lavori from "./view/lavoro_view/Lavori.jsx";
 import Profilo from "./view/persona_view/Profilo.jsx";
 import FileLavori from "./view/lavoro_view/FileLavori.jsx";
@@ -33,8 +33,8 @@ const Root = () => {
             <Route path="/profilo" element={<Profilo />} />
             <Route path="/clienti" element={<Clienti />} />
             <Route path="/nuovo-cliente" element={<NuovoCliente />} />
-            <Route path="/professionisti" element={<Professionisti />} />
-            <Route path="/nuovo-professionista" element={<NuovoProfessionista />} />
+            <Route path="/servizi" element={<Servizi />} />
+            <Route path="/nuovo-servizio" element={<NuovoServizio />} />
             <Route path="/lavori" element={<Lavori />} />
             <Route path="/nuovo-lavoro" element={<NuovoLavoro />} />
             <Route path="/file-lavori" element={<FileLavori />} />
