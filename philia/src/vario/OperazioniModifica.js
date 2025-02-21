@@ -1,12 +1,14 @@
-import LavoroAction from "../action/lavoro_action/LavoroAction";
 import PersonaAction from "../action/persona_action/PersonaAction";
+import ServizioAction from "../action/servizio_action/ServizioAction";
+import LavoroAction from "../action/lavoro_action/LavoroAction";
 import AutenticazioneAction from "../action/autenticazione_action/AutenticazioneAction";
-import autenticazioneStore from "../store/autenticazione_store/AutenticazioneStore";
-import { operazioniAutenticazione, operazioniLavori, operazioniPersone } from "./Operazioni";
-import { controlloCliente, controlloLavoro } from "./Controlli";
+
+import personaStore from "../store/persona_store/PersonaStore";
+import servizioStore from "../store/servizio_store/ServizioStore";
 import lavoroStore from "../store/lavoro_store/LavoroStore";
-import { attesaLista } from "./Vario";
-import { useState } from "react";
+import autenticazioneStore from "../store/autenticazione_store/AutenticazioneStore";
+
+import { operazioniPersone, operazioniServizi, operazioniLavori, operazioniAutenticazione } from "./Operazioni";
 
 const aggiornaItems = (items, dati, setItems) => {
   const updatedItems = items.map(item => {
@@ -45,19 +47,7 @@ export const azzeraSelezione = (items, setItems, tipoItem, idsLavori) => {
 export const modifica = async (e, tipoItem, selectedIdsModifica, setSelectedIdsModifica, items, setItems) => {
   e.preventDefault();
   
-  // const [idsLavori, setIdsLavori] = useState(-1);
-  // const [completato, setCompletato] = useState(true);
-
-  // useEffect(() => {
-    // setIdsLavori(lavoroStore.getIdsLavori());
-    // if(idsLavori !== -1) {
-      // setCompletato(true);
-    // }
-  // }, !completato);
-
-  // alert("Modifica");
-  // alert(selectedIdsModifica);
-  if(tipoItem !== "cliente" && tipoItem !== "lavoro") {
+  if(tipoItem !== "cliente" && tipoItem !== "servizio" && tipoItem !== "lavoro") {
     alert("Errore: tipo non valido, Riprova più tardi.");
     return;
   }
@@ -73,8 +63,11 @@ export const modifica = async (e, tipoItem, selectedIdsModifica, setSelectedIdsM
       itemsDaModificare = items.filter(item => dati.ids.includes(item.id)); 
       itemsRestanti = items.filter(item => !dati.ids.includes(item.id));
     }
+    else if(tipoItem === "servizio") {
+      itemsDaModificare = items.filter(item => dati.ids.includes(item.id)); 
+      itemsRestanti = items.filter(item => !dati.ids.includes(item.id));
+    }
     else if(tipoItem === "lavoro") {
-
       for (let item of items) {
         if (dati.ids.some(idArray =>
           idArray[0] === item.id_lavoro &&
@@ -85,29 +78,15 @@ export const modifica = async (e, tipoItem, selectedIdsModifica, setSelectedIdsM
           itemsRestanti.push(item);
         }
       }
-      // console.log(itemsDaModificare.length);
-      // for(let item of itemsDaModificare) {
-      //   console.log(item.id_lavoro);
-      // }
-      // console.log(itemsRestanti.length);
     }
-    // console.log("||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||");
-    // console.log("|"+tipoItem+"|");
-    // for(let i = 0; i < itemsDaModificare.length; i++) {console.log("||"+itemsDaModificare[i].id_lavoro+"||")}
-    // console.log("||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||");
-    console.log("fuori 1");
-    console.log("fuori 2");
     if(tipoItem === "cliente") {
       await PersonaAction.dispatchAction(itemsDaModificare, operazioniPersone.MODIFICA_CLIENTI);
     }
+    else if(tipoItem === "servizio") {
+      await ServizioAction.dispatchAction(itemsDaModificare, operazioniServizi.MODIFICA_SERVIZI);
+    }
     else if(tipoItem === "lavoro") {
-      console.log("fuori 3");
       await LavoroAction.dispatchAction(itemsDaModificare, operazioniLavori.MODIFICA_LAVORI);
-      console.log("fuori 4");
-      // const result = await response.json();
-      // ids_lavori = result.ids_lavori;
-      // setIdsLavori(-1);
-      // setCompletato(false);
       ids_lavori = -1;
       do { 
         console.log("Aggiornamento in corso...");
@@ -118,13 +97,10 @@ export const modifica = async (e, tipoItem, selectedIdsModifica, setSelectedIdsM
       console.log("ids lavori ricevuti: " + ids_lavori);
       console.log("fuori 5");
     }
-    console.log("fuori 6");
     azzeraSelezione(items, selectedIdsModifica, setItems, tipoItem, ids_lavori);
-    console.log("fuori 7");
+    
     setSelectedIdsModifica([]);
-    console.log("fuori 8");
     alert("Modifica completata con successo.");
-    console.log("fuori 9");
   }
   catch (error) {
     alert("Errore durante la modifica, riprova più tardi.");

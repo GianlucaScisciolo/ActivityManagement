@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import Header from "../component/Header";
-import { selectOperationBody } from "../component/Operazioni";
+import { OperazioniItems, selectOperationBody } from "../component/Operazioni";
+import { elimina } from "../../vario/OperazioniEliminazione";
+import { modifica } from "../../vario/OperazioniModifica";
 import { handleInputChange } from "../../vario/Vario";
 import { eseguiRicerca } from "../../vario/OperazioniRicerca";
 import { FormRicercaItems } from "../../trasportabile/form_item/FormItem";
@@ -72,6 +74,15 @@ const Servizi = () => {
         emptyIsConsidered={true} 
         campi={getCampiServizioEsistente}
         indici={indiciServizioEsistente}
+      />
+
+      <br /> <br /> <br /> <br />
+
+      <OperazioniItems 
+        selectedIdsModifica={selectedIdsModifica} 
+        selectedIdsEliminazione={selectedIdsEliminazione}
+        modifica={(e) => modifica(e, "servizio", selectedIdsModifica, setSelectedIdsModifica, servizi, setServizi)} 
+        elimina={(e) => elimina(e, "servizio", selectedIdsEliminazione, setSelectedIdsEliminazione, servizi, setServizi)}
       />
 
       <br /> <br /> <br /> <br />

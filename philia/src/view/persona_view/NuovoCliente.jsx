@@ -150,18 +150,14 @@ const NuovoCliente = () => {
       
       <br /> <br /> <br /> <br />
 
-{/* 
-
       <OperazioniItems 
         selectedIdsModifica={selectedIdsModifica} 
         selectedIdsEliminazione={selectedIdsEliminazione}
         modifica={(e) => modifica(e, "cliente", selectedIdsModifica, setSelectedIdsModifica, clienti, setClienti)} 
         elimina={(e) => elimina(e, "cliente", selectedIdsEliminazione, setSelectedIdsEliminazione, clienti, setClienti)}
       />
-      
-      <br /> <br /> <br /> <br /> 
-      
-*/}
+
+      <br /> <br /> <br /> <br />
     </>
   );
 };

@@ -4,10 +4,10 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import { SQL_SELECT_UTENTE } from './AutenticazioneSQL.js';
 import { 
-  SQL_INSERIMENTO_CLIENTE, SQL_SELEZIONE_CLIENTI, SQL_SELEZIONE_TUTTI_I_CLIENTI 
+  SQL_INSERIMENTO_CLIENTE, SQL_SELEZIONE_CLIENTI, SQL_SELEZIONE_TUTTI_I_CLIENTI, SQL_ELIMINA_CLIENTI, SQL_MODIFICA_CLIENTE
 } from './PersonaSQL.js';
 import { 
-  SQL_INSERIMENTO_SERVIZIO, SQL_SELEZIONE_SERVIZI, SQL_SELEZIONE_TUTTI_I_SERVIZI  
+  SQL_INSERIMENTO_SERVIZIO, SQL_SELEZIONE_SERVIZI, SQL_SELEZIONE_TUTTI_I_SERVIZI, SQL_ELIMINA_SERVIZI, SQL_MODIFICA_SERVIZIO 
 } from './ServizioSQL.js'; 
 import {
   SQL_INSERIMENTO_LAVORO, SQL_SELEZIONE_LAVORI
@@ -239,37 +239,15 @@ app.post("/OTTIENI_TUTTI_I_CLIENTI", async (req, res) => {
 app.post("/ELIMINA_CLIENTI", async (req, res) => {
   const { ids = [] } = req.body;
 
-  console.log("Dati ricevuti per l\'eliminazione:", [ids]);
-
   const placeholders = ids.map(() => '?').join(', ');
-  
-  const sql = ` 
-    DELETE FROM 
-      cliente 
-    WHERE 
-      id IN (${placeholders}); 
-  `;
 
-  return getResults(sql, ids, res);
+  return getResults(SQL_ELIMINA_CLIENTI(placeholders), ids, res);
 });
 
 app.post("/MODIFICA_CLIENTI", async (req, res) => {
-  const [id, contatto, note] = [req.body.id, req.body.contatto, req.body.note];
+  const params = [`${req.body.contatto}`, `${req.body.email}`, `${req.body.note}`, `${req.body.id}`];
   
-  console.log("Dati ricevuti per la modifica: ", [id, contatto, note]);
-  
-  const sql = ` 
-    UPDATE 
-      cliente 
-      SET 
-        contatto = ?, note = ? 
-      WHERE 
-        id = ?; 
-  `;
-  
-  const params = [`${contatto}`, `${note}`, `${id}`];
-  
-  return getResults(sql, params, res);
+  return getResults(SQL_MODIFICA_CLIENTE, params, res);
 });
 
 
@@ -324,6 +302,20 @@ app.post("/OTTIENI_TUTTI_I_SERVIZI", async (req, res) => {
   }
 });
 
+app.post("/ELIMINA_SERVIZI", async (req, res) => {
+  const { ids = [] } = req.body;
+
+  const placeholders = ids.map(() => '?').join(', ');
+
+  return getResults(SQL_ELIMINA_SERVIZI(placeholders), ids, res);
+});
+
+app.post("/MODIFICA_SERVIZI", async (req, res) => {
+  const params = [`${req.body.nome}`, `${req.body.prezzo}`, `${req.body.note}`, `${req.body.id}`];
+  
+  return getResults(SQL_MODIFICA_SERVIZIO, params, res);
+});
+
 /*************************************************************************************************************/
 
 /*************************************************** Lavori **************************************************/
@@ -344,19 +336,6 @@ app.post("/INSERISCI_LAVORO", async (req, res) => {
     console.error('Errore durante l\'inserimento del lavoro: ', err);
     return res.status(500).json({ message: 'Errore del server' });
   }
-});
-
-app.post("/VISUALIZZA_SERVIZI", async (req, res) => {
-  const prezzo_min = (req.body.prezzo_min) ? req.body.prezzo_min : Number.MIN_VALUE;
-  const prezzo_max = (req.body.prezzo_max) ? req.body.prezzo_max : Number.MAX_VALUE;
-  console.log("|"+req.body.nome+"|");
-  console.log(prezzo_min);
-  console.log(prezzo_max);
-  console.log("|"+req.body.note+"|");
-  const params = [`%${req.body.nome}%`, `${prezzo_min}`, `${prezzo_max}`];
-  params.push((!req.body.note) ? '%' : `%${req.body.note}%`);
-
-  return getResults(SQL_SELEZIONE_SERVIZI(req.body.note), params, res);
 });
 
 app.post("/VISUALIZZA_LAVORI", async (req, res) => {
@@ -417,13 +396,18 @@ app.post("/OTTIENI_LAVORI_GIORNO", async (req, res) => {
   }
 });
 
+app.post("/ELIMINA_SERVIZI", async (req, res) => {
+  const { ids = [] } = req.body;
+  
+  const placeholders = ids.map(() => '?').join(', ');
+
+  return getResults(SQL_ELIMINA_SERVIZI(placeholders), ids, res);
+});
 
 app.post("/ELIMINA_LAVORI", async (req, res) => {
   const { ids = [] } = req.body;
-  let ids_prenotazioni = [], ids_impegni = [];
-
-  // console.log("Dati ricevuti per l'eliminazione: ", ids);
-
+  console.log(ids);
+  /*
   for (let i = 0; i < ids.length; i++) {
     if (ids[i][1] !== 0) ids_prenotazioni.push([ids[i][0], ids[i][1]]);
     if (ids[i][2] !== 0) ids_impegni.push([ids[i][0], ids[i][2]]);
@@ -462,6 +446,7 @@ app.post("/ELIMINA_LAVORI", async (req, res) => {
     console.error('Errore durante l\'eliminazione dei lavori: ', err);
     res.status(500).json({ message: 'Errore del server.' });
   }
+  */
 });
 
 app.post("/ELIMINA_LAVORI_RANGE_GIORNI", async (req, res) => {

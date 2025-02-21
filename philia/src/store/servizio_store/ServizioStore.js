@@ -22,6 +22,12 @@ class ServizioStore extends EventEmitter {
       case operazioniServizi.OTTIENI_TUTTI_I_SERVIZI:
         this.runOperation(action.payload, operazioniServizi.OTTIENI_TUTTI_I_SERVIZI);
         break;
+      case operazioniServizi.ELIMINA_SERVIZI:
+        this.runOperation(action.payload, operazioniServizi.ELIMINA_SERVIZI);
+        break;
+      case operazioniServizi.MODIFICA_SERVIZI:
+        this.modificaServizi(action.payload);
+        break;
       default:
         console.warn("Operazione " + action.type + " non trovata.");
         break;
@@ -37,6 +43,18 @@ class ServizioStore extends EventEmitter {
                     + error.response ? error.response.data : error.message);
       alert("Operazione fallita, riprova più tardi.");
     });
+  }
+
+  modificaServizi(data) {
+    for (let i = 0; i < data.length; i++) {
+      const servizio = data[i];
+      axios.post('/MODIFICA_SERVIZI', servizio).then(response => {
+        this.emitChange(operazioniServizi.MODIFICA_SERVIZI);
+      }).catch(error => {
+        console.error('Errore durante la modifica dei servizi:', error);
+      });
+    }
+    servizi = [];
   }
 
   emitChange(eventType) {

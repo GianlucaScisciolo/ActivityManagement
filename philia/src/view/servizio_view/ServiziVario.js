@@ -9,6 +9,7 @@ export function getCampiNuovoServizio(item, handleOnChange, handleOnClick, handl
     value: [item.nome, item.prezzo, item.note], 
     placeholder: ["Nome*", "Prezzo*", "Note"],
     errore: [item.errore_nome, item.errore_prezzo, item.errore_note], 
+    options: [null, null, null],
     onChange: handleOnChange, 
     onClick: handleOnClick, 
     onBlur: handleOnBlur
@@ -20,7 +21,7 @@ export function getCampiRicercaServizi(item, handleOnChange, handleOnClick, hand
     header: "Ricerca servizi", 
     label: ["Nome", "Prezzo minimo", "Prezzo massimo", "Note"], 
     type: [null, "number", "number", null], 
-    step: [null, "0.50", null], 
+    step: [null, "0.50", "0.50", null], 
     min: [null, null, null, null], 
     name: ["nome", "prezzo_min", "prezzo_max", "note"], 
     value: [item.nome, item.prezzo_min, item.prezzo_max, item.note], 

@@ -31,6 +31,24 @@ export const SQL_SELEZIONE_TUTTI_I_CLIENTI = `
     cliente; 
 `;
 
+export function SQL_ELIMINA_CLIENTI(ids) {
+  return (` 
+    DELETE FROM 
+      cliente 
+    WHERE 
+      id IN (${ids}); 
+  `);
+}
+
+export const SQL_MODIFICA_CLIENTE = `
+  UPDATE 
+    cliente 
+  SET 
+    contatto = ?, email = ?, note = ? 
+  WHERE 
+    id = ?; 
+`;
+
 
 
 

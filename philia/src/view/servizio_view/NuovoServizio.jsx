@@ -1,13 +1,15 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import Header from "../component/Header";
-import { selectOperationBody } from "../component/Operazioni";
+import { OperazioniItems, selectOperationBody } from "../component/Operazioni";
 import { handleInputChange } from "../../vario/Vario";
 import { FormNuovoItem } from "../../trasportabile/form_item/FormItem";
 import { CardNuovoItem } from "../../trasportabile/card_item/CardItem";
 import { RowNuovoItem } from "../../trasportabile/row_item/RowItem";
 import { controlloServizio } from "../../vario/Controlli";
 import { Items } from "../component/Items";
+import { modifica } from "../../vario/OperazioniModifica";
+import { elimina } from "../../vario/OperazioniEliminazione";
 import { 
   getCampiNuovoServizio, getCampiServizioEsistente, 
   indiciNuovoServizio, indiciServizioEsistente 
@@ -117,6 +119,17 @@ const NuovoServizio = () => {
         campi={getCampiServizioEsistente}
         indici={indiciServizioEsistente}
       />
+
+      <br /> <br /> <br /> <br />
+
+      <OperazioniItems 
+        selectedIdsModifica={selectedIdsModifica} 
+        selectedIdsEliminazione={selectedIdsEliminazione}
+        modifica={(e) => modifica(e, "servizio", selectedIdsModifica, setSelectedIdsModifica, servizi, setServizi)} 
+        elimina={(e) => elimina(e, "servizio", selectedIdsEliminazione, setSelectedIdsEliminazione, servizi, setServizi)}
+      />
+
+      <br /> <br /> <br /> <br />
     </>
   )
 }

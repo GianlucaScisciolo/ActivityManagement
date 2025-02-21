@@ -374,7 +374,7 @@ import { useState, useEffect } from "react";
 import Header from "../component/Header";
 import { useSelector } from "react-redux";
 import { handleInputChange } from "../../vario/Vario";
-import { selectOperationBody } from "../component/Operazioni";
+import { OperazioniItems, selectOperationBody } from "../component/Operazioni";
 import { FormRicercaItems } from "../../trasportabile/form_item/FormItem";
 import { CardRicercaItems } from "../../trasportabile/card_item/CardItem";
 import { RowRicercaItems } from "../../trasportabile/row_item/RowItem";
@@ -383,6 +383,8 @@ import lavoroStore from "../../store/lavoro_store/LavoroStore";
 import { operazioniLavori } from "../../vario/Operazioni";
 import { eseguiRicerca } from "../../vario/OperazioniRicerca";
 import { Items } from "../component/Items";
+import { modifica } from "../../vario/OperazioniModifica";
+import { elimina } from "../../vario/OperazioniEliminazione";
 import { 
   getCampiRicercaLavori, getCampiLavoroEsistente, 
   indiciRicercaLavori, indiciLavoroEsistente 
@@ -449,6 +451,15 @@ const Lavori = () => {
         />
       )}
       
+      <br /> <br /> <br /> <br />
+
+      <OperazioniItems 
+        selectedIdsModifica={selectedIdsModifica} 
+        selectedIdsEliminazione={selectedIdsEliminazione}
+        modifica={(e) => modifica(e, "lavoro", selectedIdsModifica, setSelectedIdsModifica, lavori, setLavori)} 
+        elimina={(e) => elimina(e, "lavoro", selectedIdsEliminazione, setSelectedIdsEliminazione, lavori, setLavori)}
+      />
+
       <br /> <br /> <br /> <br />
     </>
   );

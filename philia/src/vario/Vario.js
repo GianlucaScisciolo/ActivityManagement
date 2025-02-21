@@ -1,12 +1,42 @@
-export const handleInputChange = (e, setItem, items, setItems, tipoItem, id) => {
-  // const nome_campi = [
-  //   "nome", "cognome", "contatto", "note", "professione", "email", "id_cliente", "id_professionista", 
-  //   "nome_cliente", "cognome_cliente", "nome_professionista", "descrizione", 
-  //   "giorno", "primo_giorno", "ultimo_giorno", "ora_inizio", "ora_fine", "minuto_inizio", "minuto_fine", 
-  //   "username", "password", "nuovo_username", "password_attuale", "nuova_password", "conferma_nuova_password", 
-  //   "num_lavori_clienti", "num_lavori_professionisti", "num_lavori_giorno"
-  // ]
+// export const handleInputChange = (e, setItem, items, setItems, tipoItem, id) => {
+//   e.preventDefault();
+
+//   const { name, value } = e.target;
   
+//   if(tipoItem === "cliente" || tipoItem === "servizio" || tipoItem === "lavoro") {
+//     const updatedItems = items.map(item => {
+//       if(id === item.id) {
+//         return {
+//           ...item,
+//           [name]: value
+//         }
+//       }
+//       return item;
+//     });
+//     setItems(updatedItems);
+//   }
+//   else {  
+//     setItem(prevState => ({
+//       ...prevState, 
+//       [name]: value
+//     }));
+    
+//     if(name === "id_cliente") {
+//       setItem(prevState => ({
+//         ...prevState, 
+//         "id_professionista": 0
+//       }));
+//     }
+//     else if(name === "id_professionista") {
+//       setItem(prevState => ({
+//         ...prevState, 
+//         "id_cliente": 0
+//       }));
+//     }
+//   }
+// };
+
+export const handleInputChange = (e, setItem, items, setItems, tipoItem, id) => {
   const { name, value } = e.target;
   
   if(tipoItem === "cliente" || tipoItem === "servizio" || tipoItem === "lavoro") {
@@ -15,30 +45,30 @@ export const handleInputChange = (e, setItem, items, setItems, tipoItem, id) => 
         return {
           ...item,
           [name]: value
-        }
+        };
       }
       return item;
     });
     setItems(updatedItems);
-    return;
   }
-  
-  setItem(prevState => ({
-    ...prevState, 
-    [name]: value
-  }));
-  
-  if(name === "id_cliente") {
+  else {  
     setItem(prevState => ({
       ...prevState, 
-      "id_professionista": 0
+      [name]: value
     }));
-  }
-  else if(name === "id_professionista") {
-    setItem(prevState => ({
-      ...prevState, 
-      "id_cliente": 0
-    }));
+    
+    if(name === "id_cliente") {
+      setItem(prevState => ({
+        ...prevState, 
+        "id_professionista": 0
+      }));
+    }
+    else if(name === "id_professionista") {
+      setItem(prevState => ({
+        ...prevState, 
+        "id_cliente": 0
+      }));
+    }
   }
 };
 

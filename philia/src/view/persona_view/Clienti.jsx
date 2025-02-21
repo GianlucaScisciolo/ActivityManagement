@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from '../component/Header';
 import { elimina } from '../../vario/OperazioniEliminazione';
 import { modifica } from '../../vario/OperazioniModifica';
@@ -81,20 +81,7 @@ const Clienti = () => {
       />
 
       <br /> <br /> <br /> <br />
-      {/* {itemSession.view === "card" ? (
-        <div className="contenitore-3">{itemsComponent}</div>
-      ) : (
-        itemsComponent
-      )}
-      <Items 
-        tipoItem={"cliente"} 
-        items={clienti} 
-        selectOperation={selectOperation}
-        emptyIsConsidered={true}
-      />
       
-      <br /> <br /> <br /> <br />
-
       <OperazioniItems 
         selectedIdsModifica={selectedIdsModifica} 
         selectedIdsEliminazione={selectedIdsEliminazione}
@@ -102,7 +89,7 @@ const Clienti = () => {
         elimina={(e) => elimina(e, "cliente", selectedIdsEliminazione, setSelectedIdsEliminazione, clienti, setClienti)}
       />
       
-      <br /> <br /> <br /> <br /> */}
+      <br /> <br /> <br /> <br />
     </>
   );
 }

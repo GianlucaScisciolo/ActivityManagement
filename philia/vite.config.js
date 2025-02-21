@@ -38,7 +38,9 @@ export default defineConfig({
       // Servizi
       '/INSERISCI_SERVIZIO': 'http://localhost:3000', 
       '/VISUALIZZA_SERVIZI': 'http://localhost:3000',
-      '/OTTIENI_TUTTI_I_SERVIZI': 'http://localhost:3000',
+      '/OTTIENI_TUTTI_I_SERVIZI': 'http://localhost:3000', 
+      '/ELIMINA_SERVIZI': 'http://localhost:3000', 
+      '/MODIFICA_SERVIZI': 'http://localhost:3000', 
 
       // Lavori
       '/INSERISCI_LAVORO': 'http://localhost:3000',

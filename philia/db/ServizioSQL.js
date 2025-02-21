@@ -29,6 +29,24 @@ export const SQL_SELEZIONE_TUTTI_I_SERVIZI = `
     servizio; 
 `;
 
+export function SQL_ELIMINA_SERVIZI(ids) {
+  return (` 
+    DELETE FROM 
+      servizio 
+    WHERE 
+      id IN (${ids}); 
+  `);
+}
+
+export const SQL_MODIFICA_SERVIZIO = `
+  UPDATE 
+    servizio 
+  SET 
+    nome = ?, prezzo = ?, note = ? 
+  WHERE 
+    id = ?; 
+`;
+
 
 
 

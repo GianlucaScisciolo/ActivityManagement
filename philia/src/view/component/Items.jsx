@@ -42,7 +42,7 @@ export const Items = ({tipoItem, items, setItems, selectOperation, emptyIsConsid
             <ItemEsistenteTag 
               key={index} 
               item={item} 
-              campi={campi(item, (e) => handleInputChange(e, setItems), null, null)} 
+              campi={campi(item, (e) => handleInputChange(e, null, items, setItems, tipoItem, item.id), null, null)} 
               indici={indici} 
               selectOperation={selectOperation} 
             />
@@ -71,61 +71,6 @@ export const Items = ({tipoItem, items, setItems, selectOperation, emptyIsConsid
     </>
   )
 }
-
-export const ItemsLavori = ({tipoItem, items, setItems, selectOperation, emptyIsConsidered, lavoriGiorniPresenti}) => {
-  const formSession = useSelector((state) => state.formSession.value);
-  const itemSession = useSelector((state) => state.itemSession.value);
-  const LavoroEsistenteTag = (itemSession.view === "card") ? CardLavoroEsistente : RowLavoroEsistente;
-
-  const ItemElement = ({key, lavoro, lavoriGiorniPresenti}) => {
-    let lavoriGiorno = lavoriGiorniPresenti[lavoro.giorno];
-    return (
-      <LavoroEsistenteTag 
-        key={key}
-        handleInputChangeLavoroEsistente={handleInputChangeLavoroEsistente}
-        item={lavoro} 
-        items={items} 
-        setItems={setItems} 
-        selectOperation={selectOperation} 
-        lavoriGiorno={lavoriGiorno}
-      />
-    )
-  }
-
-  return (
-    <>
-      {(items.length <= 0 && emptyIsConsidered) && (
-        <div className='contenitore-1'>Nessun {tipoItem} trovato!!</div>
-      )}
-      {(items.length > 0) && (
-        <>
-          {(itemSession.view === "card") ? (
-            <div className="contenitore-3">
-              {items.map((item, index) => (
-                <ItemElement
-                  key={index} 
-                  lavoro={item} 
-                  lavoriGiorniPresenti={lavoriGiorniPresenti} 
-                />
-              ))}
-            </div>
-          ) : (     
-            items.map((item, index) => (
-              <ItemElement
-                key={index} 
-                lavoro={item} 
-                lavoriGiorniPresenti={lavoriGiorniPresenti} 
-              />
-            ))
-          )} 
-        </>
-      )}
-    </>
-  )
-}
-
-
-
 
 
 
