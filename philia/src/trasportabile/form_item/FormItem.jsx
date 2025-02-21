@@ -5,13 +5,13 @@ import {
   StyledLoginNotSelected, StyledPencilNotSelected, StyledLabel, 
   StyledInputBlock, StyledInputModifica, StyledInputElimina, 
   StyledTextAreaBlock, StyledTextAreaModifica, StyledTextAreaElimina, 
-  StyledForm, StyledHeader, SlideContainer, 
-  StyledSpanErrore
+  StyledForm, StyledHeader, SlideContainer, StyledSpanErrore, 
+  StyledSelectBlock, StyledSelectModifica, StyledSelectElimina
 } from "./StyledFormItem";
 
 export function getSelectTag(tipoSelezione) {
-  return (item.tipo_selezione !== 1 && item.tipo_selezione !== 2) ? StyledSelectBlock : (
-    (item.tipo_selezione === 1) ? StyledSelectModifica : StyledSelectElimina
+  return (tipoSelezione !== 1 && tipoSelezione !== 2) ? StyledSelectBlock : (
+    (tipoSelezione === 1) ? StyledSelectModifica : StyledSelectElimina
   );
 }; 
 
@@ -114,6 +114,8 @@ export function FormNuovoItem({campi, indici, eseguiSalvataggio}) {
                 onClick={campi.onClick}
                 onBlur={campi.onBlur}
               />
+              {campi.options[i]}
+
               {(campi.errore[i] !== "") && (<StyledSpanErrore>{campi.errore[i]}</StyledSpanErrore>)}
             </React.Fragment>
           );

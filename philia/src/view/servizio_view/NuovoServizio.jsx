@@ -22,7 +22,7 @@ const NuovoServizio = () => {
   const [selectedIdsEliminazione, setSelectedIdsEliminazione] = useState([]);
   const [selectedIdsModifica, setSelectedIdsModifica] = useState([]);
   const [nuovoServizio, setNuovoServizio] = useState({
-    tipo_selezione: 0,
+    tipo_selezione: 1,
     nome: "",
     prezzo: "0.50",
     note: "", 

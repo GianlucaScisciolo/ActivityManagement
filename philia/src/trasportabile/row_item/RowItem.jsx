@@ -181,6 +181,7 @@ export function RowNuovoItem({campi, indici, eseguiSalvataggio}) {
                   onClick={campi.onClick}
                   onBlur={campi.onBlur}
                 />
+                {campi.options[i]}
                 {(campi.errore[i] !== "") && (<StyledSpanErrore>{campi.errore[i]}</StyledSpanErrore>)}
               </div>
             </StyledCol>

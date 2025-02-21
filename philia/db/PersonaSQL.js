@@ -24,6 +24,13 @@ export function SQL_SELEZIONE_CLIENTI(note) {
   return sql;
 };
 
+export const SQL_SELEZIONE_TUTTI_I_CLIENTI = `
+  SELECT 
+    id, nome, cognome, contatto, email 
+  FROM 
+    cliente; 
+`;
+
 
 
 

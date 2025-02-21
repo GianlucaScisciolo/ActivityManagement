@@ -370,163 +370,52 @@
 
 // export default Lavori;
 
-
-
-
-
-
-
-import { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import Header from '../component/Header';
-import { RowLavoroEsistente} from '../component/row_item/RowsLavori';
-import { CardLavoroEsistente } from '../component/card_item/CardsLavori';
-import { FormRicercaItems } from '../component/form_item/FormItem';
-import { CardRicercaItems } from '../component/card_item/CardItem';
-import { RowRicercaItems } from '../component/row_item/RowItem';
-import PersonaAction from '../../action/persona_action/PersonaAction';
-import personaStore from '../../store/persona_store/PersonaStore';
-import lavoroStore from '../../store/lavoro_store/LavoroStore';
-import { operazioniPersone, operazioniLavori } from '../../vario/Operazioni';
-import { eseguiRicerca } from '../../vario/OperazioniRicerca';
-import { formatoDate } from '../../vario/Tempo';
-import { ItemsLavori } from '../component/Items';
+import { useState, useEffect } from "react";
+import Header from "../component/Header";
+import { useSelector } from "react-redux";
+import { handleInputChange } from "../../vario/Vario";
+import { selectOperationBody } from "../component/Operazioni";
+import { FormRicercaItems } from "../../trasportabile/form_item/FormItem";
+import { CardRicercaItems } from "../../trasportabile/card_item/CardItem";
+import { RowRicercaItems } from "../../trasportabile/row_item/RowItem";
+import LavoroDispatcher from "../../dispatcher/lavoro_dispatcher/LavoroDispatcher";
+import lavoroStore from "../../store/lavoro_store/LavoroStore";
+import { operazioniLavori } from "../../vario/Operazioni";
+import { eseguiRicerca } from "../../vario/OperazioniRicerca";
+import { Items } from "../component/Items";
+import { 
+  getCampiRicercaLavori, getCampiLavoroEsistente, 
+  indiciRicercaLavori, indiciLavoroEsistente 
+} from "./LavoriVario";
 
 const Lavori = () => {
   const formSession = useSelector((state) => state.formSession.value);
   const itemSession = useSelector((state) => state.itemSession.value);
-
-  const [clienti, setClienti] = useState([]);
   const [lavori, setLavori] = useState(-1);
-
+  const [selectedTrashCount, setSelectedTrashCount] = useState(0);
+  const [selectedPencilCount, setSelectedPencilCount] = useState(0);
+  const [selectedIdsEliminazione, setSelectedIdsEliminazione] = useState([]);
+  const [selectedIdsModifica, setSelectedIdsModifica] = useState([]);
   const [datiRicerca, setDatiRicerca] = useState({
-    "nome_cliente": "", 
-    "cognome_cliente": "", 
-    "primo_giorno": "",
-    "ultimo_giorno": "",
-    "descrizione": "", 
-    "note": ""
+    nome_cliente: "", 
+    cognome_cliente: "", 
+    primo_giorno: "",
+    ultimo_giorno: "",
+    descrizione: "",   
+    note: ""
   });
-
-  const [primoGiornoType, setPrimoGiornoType] = useState('text');
-  const [ultimoGiornoType, setUltimoGiornoType] = useState('text');
-  const [lavoriGiorniPresenti, setLavoriGiorniPresenti] = useState ({});
-
-  datiRicerca.primo_giorno = (datiRicerca.primo_giorno !== undefined) ? datiRicerca.primo_giorno : '';
-  datiRicerca.ultimo_giorno = (datiRicerca.ultimo_giorno !== undefined) ? datiRicerca.ultimo_giorno : '';  
-
-  const campiRicerca = {
-    header: "Ricerca lavori", 
-    label: [
-      "Nome cliente", "Cognome cliente", "Primo giorno", "Ultimo giorno", "Descrizione", "Note"
-    ],
-    type: [null, null, primoGiornoType, ultimoGiornoType, null, null], 
-    name: [
-      "nome_cliente", "cognome_cliente", "primo_giorno", "ultimo_giorno", "descrizione", "note"
-    ], 
-    value: [
-      datiRicerca.nome_cliente, datiRicerca.cognome_cliente, datiRicerca.primo_giorno, 
-      datiRicerca.ultimo_giorno, datiRicerca.descrizione, datiRicerca.note
-    ], 
-    placeholder: [
-      "Nome cliente", "Cognome cliente", "Primo giorno", "Ultimo giorno", "Descrizione", "Note"
-    ], 
-    onChange: (e) => handleInputChange(e, setItem), 
-    onClick: null, 
-    onBlur: null
+  const selectOperation = (icon, item) => {
+    selectOperationBody(
+      icon, item, selectedIdsModifica, setSelectedIdsModifica, selectedIdsEliminazione, setSelectedIdsEliminazione, 
+      setSelectedPencilCount, setSelectedTrashCount
+    )
   }
-  const indiciCampiRicerca = [0, 1, 2, 3, 4, 5];
 
   const RicercaLavoriTag = (formSession.view === "form") ? FormRicercaItems : (
     (formSession.view === "card") ? CardRicercaItems : RowRicercaItems
   )
 
-  const getClientiFiltrati = async () => {
-    await PersonaAction.dispatchAction(null, operazioniPersone.OTTIENI_TUTTI_I_CLIENTI);
-    const clientiFiltrati = personaStore.getClienti();
-    setClienti(clientiFiltrati);
-  };
-  
-  const ottieniLavoriGiorno = async (item) => {
-    const response = await fetch('/OTTIENI_LAVORI_GIORNO', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(item),
-    });
-
-    if(response.status === 200) {
-      const risultato = await response.json();
-      setLavoriGiorniPresenti(prevState => ({
-        ...prevState,
-        [formatoDate(item["giorno"].toString(), "AAAA-MM-GG")]: risultato.lavoriGiornoSelezionato
-      }));
-
-      console.log(lavoriGiorniPresenti);
-    }
-    else {
-      const errorData = await response.json();
-      if (response.status === 409 || response.status === 500) {
-        alert(errorData.message);
-      }
-      else {
-        response.status = 500;
-        alert('Errore durante l\'ottenimento dei lavori.');
-      }
-    }
-  }
-
-  const updateLavoriGiorniPresenti = () => {
-    const newLavoriGiorniPresenti = {};
-    for (let i = 0; i < lavori.length; i++) {
-      const lavoro = lavori[i];
-      console.log(lavoro.id_lavoro + " - " + lavoro.id_cliente);
-      ottieniLavoriGiorno(lavoro, lavoriGiorniPresenti, setLavoriGiorniPresenti);
-    }
-    setLavoriGiorniPresenti(newLavoriGiorniPresenti);
-    console.log(lavoriGiorniPresenti);
-  };
-
-  const selectOperation = (icon, item) => {
-    if (icon === "trash") {
-      if (selectedIdsEliminazione.some(el => el[0] === item.id_lavoro && el[1] === item.id_cliente && el[2] === item.id_professionista)) {
-        item.tipo_selezione = 0;
-        setSelectedIdsEliminazione(prevIds => prevIds.filter(el => el[0] !== item.id_lavoro || el[1] !== item.id_cliente || el[2] !== item.id_professionista));
-        setSelectedTrashCount(prevCount => Math.max(prevCount - 1, 0));
-      } else {
-        item.tipo_selezione = 2;
-        setSelectedIdsEliminazione(prevIds => [...prevIds, [item.id_lavoro, item.id_cliente, item.id_professionista]]);
-        setSelectedTrashCount(prevCount => prevCount + 1);
-        setSelectedIdsModifica(prevIdsModifica => prevIdsModifica.filter(el => el[0] !== item.id_lavoro || el[1] !== item.id_cliente || el[2] !== item.id_professionista));
-        setSelectedPencilCount(prevCount => Math.max(prevCount - 1, 0));
-      }
-    } 
-    else if (icon === "pencil") {
-      if (selectedIdsModifica.some(el => el[0] === item.id_lavoro && el[1] === item.id_cliente && el[2] === item.id_professionista)) {
-        item.tipo_selezione = 0;
-        setSelectedIdsModifica(prevIdsModifica => prevIdsModifica.filter(el => el[0] !== item.id_lavoro || el[1] !== item.id_cliente || el[2] !== item.id_professionista));
-        setSelectedPencilCount(prevCount => Math.max(prevCount - 1, 0));
-      } else {
-        item.tipo_selezione = 1;
-        setSelectedIdsModifica(prevIdsModifica => [...prevIdsModifica, [item.id_lavoro, item.id_cliente, item.id_professionista]]);
-        setSelectedPencilCount(prevCount => prevCount + 1);
-        setSelectedIdsEliminazione(prevIds => prevIds.filter(el => el[0] !== item.id_lavoro || el[1] !== item.id_cliente || el[2] !== item.id_professionista));
-        setSelectedTrashCount(prevCount => Math.max(prevCount - 1, 0));
-      }
-    }
-  }
-
   useEffect(() => {
-    getClientiFiltrati();
-    const onChange = () => setClienti(personaStore.getClienti());
-    personaStore.addChangeListener(operazioniPersone.OTTIENI_TUTTI_I_CLIENTI, onChange);
-    
-    return () => personaStore.removeChangeListener(operazioniPersone.OTTIENI_TUTTI_I_CLIENTI, onChange);
-  }, []);
-
-  useEffect(() => {
-    setLavori(lavoroStore.getLavori()); // Aggiungi questa riga
     const onChange = () => setLavori(lavoroStore.getLavori());
     lavoroStore.addChangeListener(operazioniLavori.VISUALIZZA_LAVORI, onChange);
     return () => {
@@ -534,40 +423,39 @@ const Lavori = () => {
     };
   }, []);
 
-  useEffect(() => {
-    updateLavoriGiorniPresenti();
-  }, [lavori]);
-  console.log("----------------------------------------------------------------------------------------------------");
-  console.log(lavoriGiorniPresenti);
-  console.log("----------------------------------------------------------------------------------------------------");
-
   return (
     <>
       <Header />
-
-      <div className="main-content"></div>
       
+      <div className="main-content" />
+
       <RicercaLavoriTag 
-        campi={campiRicerca}
-        indici={indiciCampiRicerca}
+        campi={getCampiRicercaLavori(datiRicerca, (e) => handleInputChange(e, setDatiRicerca), null, null)} 
+        indici={indiciRicercaLavori}
         eseguiRicerca={(e) => eseguiRicerca(e, "lavori", setLavori, datiRicerca)}
       />
 
       <br /> <br /> <br /> <br />
-
-      <ItemsLavori 
-        tipoItem="lavoro" 
-        items={lavori} 
-        setItems={setLavori} 
-        selectOperation={selectOperation} 
-        emptyIsConsidered={true}
-        lavoriGiorniPresenti={lavoriGiorniPresenti} 
-      />
+      
+      {(lavori && lavori !== -1) && (
+        <Items 
+          tipoItem={"lavoro"} 
+          items={lavori} 
+          setItems={setLavori}
+          selectOperation={selectOperation}
+          emptyIsConsidered={true} 
+          campi={getCampiLavoroEsistente}
+          indici={indiciLavoroEsistente}
+        />
+      )}
+      
+      <br /> <br /> <br /> <br />
     </>
-  )
+  );
 }
 
 export default Lavori;
+
 
 
 

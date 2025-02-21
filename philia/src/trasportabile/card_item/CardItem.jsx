@@ -166,6 +166,7 @@ export function CardNuovoItem({campi, indici, eseguiSalvataggio}) {
                   onClick={campi.onClick}
                   onBlur={campi.onBlur}
                 />
+                {campi.options[i]}
                 {(campi.errore[i] !== "") && (<StyledSpanErrore>{campi.errore[i]}</StyledSpanErrore>)}
               </React.Fragment>
             );

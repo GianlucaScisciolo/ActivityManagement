@@ -101,6 +101,20 @@
   background-color: #500000;
 }
 
+.checkbox-wrapper {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px; /* Spaziatura tra i checkbox */
+  margin-left:20%;
+}
+
+.custom-checkbox {
+  width: 20px;  /* Larghezza della casella di selezione */
+  height: 20px; /* Altezza della casella di selezione */
+  margin-right: 10px; /* Spaziatura tra la casella di selezione e il label */
+}
+
+
 
 
 

@@ -38,6 +38,10 @@ const Servizi = () => {
     )
   }
 
+  const RicercaServiziTag = (formSession.view === "form") ? FormRicercaItems : (
+    (formSession.view === "card") ? CardRicercaItems : RowRicercaItems
+  )
+
   useEffect(() => {
     const onChange = () => setServizi(servizioStore.getServizi());
     servizioStore.addChangeListener(operazioniServizi.VISUALIZZA_SERVIZI, onChange);
@@ -45,10 +49,6 @@ const Servizi = () => {
       servizioStore.removeChangeListener(operazioniServizi.VISUALIZZA_SERVIZI, onChange);
     };
   }, []);
-
-  const RicercaServiziTag = (formSession.view === "form") ? FormRicercaItems : (
-    (formSession.view === "card") ? CardRicercaItems : RowRicercaItems
-  )
 
   return (
     <>

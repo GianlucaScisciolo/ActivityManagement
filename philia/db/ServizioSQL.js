@@ -22,6 +22,13 @@ export function SQL_SELEZIONE_SERVIZI(note) {
   return sql;
 };
 
+export const SQL_SELEZIONE_TUTTI_I_SERVIZI = `
+  SELECT 
+    id, nome, prezzo 
+  FROM 
+    servizio; 
+`;
+
 
 
 

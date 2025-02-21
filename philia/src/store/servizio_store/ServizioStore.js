@@ -19,6 +19,9 @@ class ServizioStore extends EventEmitter {
       case operazioniServizi.VISUALIZZA_SERVIZI:
         this.runOperation(action.payload, operazioniServizi.VISUALIZZA_SERVIZI);
         break;
+      case operazioniServizi.OTTIENI_TUTTI_I_SERVIZI:
+        this.runOperation(action.payload, operazioniServizi.OTTIENI_TUTTI_I_SERVIZI);
+        break;
       default:
         console.warn("Operazione " + action.type + " non trovata.");
         break;
