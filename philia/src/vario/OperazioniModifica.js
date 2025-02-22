@@ -59,26 +59,11 @@ export const modifica = async (e, tipoItem, selectedIdsModifica, setSelectedIdsM
 
     dati = { ids: selectedIdsModifica };
     
-    if(tipoItem === "cliente") {
+    if(tipoItem === "cliente" || tipoItem === "servizio" || tipoItem === "lavoro") {
       itemsDaModificare = items.filter(item => dati.ids.includes(item.id)); 
       itemsRestanti = items.filter(item => !dati.ids.includes(item.id));
     }
-    else if(tipoItem === "servizio") {
-      itemsDaModificare = items.filter(item => dati.ids.includes(item.id)); 
-      itemsRestanti = items.filter(item => !dati.ids.includes(item.id));
-    }
-    else if(tipoItem === "lavoro") {
-      for (let item of items) {
-        if (dati.ids.some(idArray =>
-          idArray[0] === item.id_lavoro &&
-          idArray[1] === item.id_cliente 
-        )) {
-          itemsDaModificare.push(item);
-        } else {
-          itemsRestanti.push(item);
-        }
-      }
-    }
+
     if(tipoItem === "cliente") {
       await PersonaAction.dispatchAction(itemsDaModificare, operazioniPersone.MODIFICA_CLIENTI);
     }
@@ -86,16 +71,13 @@ export const modifica = async (e, tipoItem, selectedIdsModifica, setSelectedIdsM
       await ServizioAction.dispatchAction(itemsDaModificare, operazioniServizi.MODIFICA_SERVIZI);
     }
     else if(tipoItem === "lavoro") {
-      await LavoroAction.dispatchAction(itemsDaModificare, operazioniLavori.MODIFICA_LAVORI);
-      ids_lavori = -1;
-      do { 
-        console.log("Aggiornamento in corso...");
-        ids_lavori = lavoroStore.getIdsLavori();
-      } while(ids_lavori !== -1);
-      console.log("Aggiornamento completato.");
-
-      console.log("ids lavori ricevuti: " + ids_lavori);
-      console.log("fuori 5");
+      // console.log("||||||||||||||||||||||||||||||||||||||||||||||||||");
+      // for(let s of servizioStore.getServizi()) {
+      //   console.log(s);
+      // }
+      // console.log("||||||||||||||||||||||||||||||||||||||||||||||||||");
+      // return;
+      await LavoroAction.dispatchAction([itemsDaModificare, servizioStore.getServizi()], operazioniLavori.MODIFICA_LAVORI);
     }
     azzeraSelezione(items, selectedIdsModifica, setItems, tipoItem, ids_lavori);
     

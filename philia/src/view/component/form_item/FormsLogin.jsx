@@ -12,7 +12,7 @@ import {
   StyledArrowTopNotSelected, StyledArrowBottomNotSelected, StyledSelect, StyledOption, 
   BottoneBluNonSelezionato, BottoneBluSelezionato, BottoneRossoNonSelezionato, BottoneRossoSelezionato, 
   StyledSpanErrore, StyledLoginNotSelected
-} from "./StyledFormItem";
+} from "../../../trasportabile/form_item/StyledFormItem";
 import { 
   handleInputChange, selezionaInserimentoLavoroCliente, selezionaInserimentoLavoroProfessionista
 } from '../../../vario/Vario';
@@ -20,7 +20,7 @@ import {
 import { 
   OperazioniLogin, 
   getTextAreaTag, getInputTag
-} from './FormItem';
+} from "../../../trasportabile/form_item/FormItem"
 
 export function FormLogin({item, setItem, eseguiLogin}) {
   let maxHeight = "2000px";

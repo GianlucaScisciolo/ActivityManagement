@@ -18,7 +18,7 @@ import {
   StyledArrowTopNotSelected, StyledArrowBottomNotSelected, StyledPencilNotSelectedModificaProfilo, 
   StyledSelectBlock, StyledSelectModifica, StyledSelectElimina, StyledOption, StyledSpanErrore, StyledLoginNotSelected, 
   StyledFileIconNotSelected, StyledDownloadNotSelected, StyledDeleteNotSelected, StyledTrashNotSelected2
-} from './StyledCardItem';
+} from "../../../trasportabile/card_item/StyledCardItem";
 import { 
   handleInputChange, handleInputChangeLavoroEsistente, handleInputChangeNuovoLavoro, cambiamentoBloccato
 } from '../../../vario/Vario';
@@ -26,7 +26,7 @@ import {
   OperazioniNuovoItem, OperazioniCercaItems, OperazioniItemEsistente, OperazioniFileItems, 
   getTextAreaTag, getInputTag, getSelectTag, 
   CardRicercaItems
-} from './CardItem';
+} from "../../../trasportabile/card_item/CardItem"
 
 const handleGiornoClick = (setGiornoType) => {
   return () => {

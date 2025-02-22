@@ -118,6 +118,7 @@ const NuovoServizio = () => {
         emptyIsConsidered={true} 
         campi={getCampiServizioEsistente}
         indici={indiciServizioEsistente}
+        servizi={null}
       />
 
       <br /> <br /> <br /> <br />

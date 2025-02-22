@@ -16,14 +16,14 @@ import {
   StyledTrashNotSelected, StyledTrashSelected, 
   StyledArrowTopNotSelected, StyledArrowBottomNotSelected, StyledPencilNotSelectedModificaProfilo, 
   StyledSelect, StyledOption, StyledSpanErrore, StyledLoginNotSelected, StyledPencilNotSelected2
-} from './StyledCardItem';
+} from "../../../trasportabile/card_item/StyledCardItem";
 import { 
   handleInputChange, cambiamentoBloccato
 } from '../../../vario/Vario';
 
 import { 
   OperazioniModificaProfilo 
-} from './CardItem';
+} from "../../../trasportabile/card_item/CardItem"
 
 export function CardModificaProfilo({ item, setItem, eseguiModificaProfilo }) {
   let maxHeight = "2000px";

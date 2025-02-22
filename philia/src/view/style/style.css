@@ -109,8 +109,8 @@
 }
 
 .custom-checkbox {
-  width: 20px;  /* Larghezza della casella di selezione */
-  height: 20px; /* Altezza della casella di selezione */
+  width: 30px;  /* Larghezza della casella di selezione */
+  height: 30px; /* Altezza della casella di selezione */
   margin-right: 10px; /* Spaziatura tra la casella di selezione e il label */
 }
 

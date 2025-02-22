@@ -32,17 +32,18 @@ export function getCampiRicercaLavori(item, handleOnChange, handleOnClick, handl
   };
 };
 
-export function getCampiLavoroEsistente(item, handleOnChange, handleOnClick, handleOnBlur) {
+export function getCampiLavoroEsistente(servizi, item, handleOnChange, handleOnClick, handleOnBlur) {
   return {
     header: "Lavoro", 
     tipoSelezione: item.tipo_selezione,  
-    type: [null, "date", null, null], 
-    step: [null, null, null, null], 
-    min: [null, null, null, null], 
-    name: ["cliente", "giorno", "descrizione", "note"], 
-    value: [item.cliente, item.giorno, item.descrizione, item.note], 
-    placeholder: ["Nome", "Giorno", "Descrizione", "Note"], 
-    valoreModificabile: [false, false, false, false], 
+    type: [null, null, null, "date", null],
+    step: [null, null, null, null, null], 
+    min: [null, null, null, null, null],
+    name: ["cliente", "servizio", "descrizione", "giorno", "note"], 
+    value: [item.cliente, item.servizio, item.descrizione, item.giorno, item.note], 
+    placeholder: ["Cliente", "Servizio", "Descrizione", "Giorno", "Note"], 
+    valoreModificabile: [false, true, true, true, true], 
+    options: [null, servizi, null, null, null],
     onChange: handleOnChange, 
     onClick: handleOnClick, 
     onBlur: handleOnBlur
@@ -51,7 +52,7 @@ export function getCampiLavoroEsistente(item, handleOnChange, handleOnClick, han
 
 export const indiciNuovoLavoro = [0, 1, 2, 3];
 export const indiciRicercaLavori = [0, 1, 2, 3, 4, 5];
-export const indiciLavoroEsistente = [0, 1, 2, 3];
+export const indiciLavoroEsistente = [0, 1, 2, 3, 4];
 
 
 

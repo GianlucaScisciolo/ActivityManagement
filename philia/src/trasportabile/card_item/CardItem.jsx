@@ -225,6 +225,11 @@ export function CardRicercaItems({campi, indici, eseguiRicerca}) {
   );
 }
 
+/*
+<ItemEsistenteTag 
+  campi={campi(servizi, item, (e) => handleInputChange(e, null, items, setItems, tipoItem, item.id), null, null)}  
+/>
+*/
 export function CardItemEsistente({item, campi, indici, selectOperation}) {
   let maxHeight = "2000px";
   return (
@@ -240,17 +245,19 @@ export function CardItemEsistente({item, campi, indici, selectOperation}) {
               getTextAreaTag(campi.tipoSelezione, campi.valoreModificabile[i])
             );
             return ( 
-              <NomeTag 
-                key={i}
-                rows={1}
-                name={campi.name[i]}
-                type={campi.type[i]}
-                value={campi.value[i]}
-                placeholder={campi.placeholder[i]}
-                onChange={campi.onChange}
-                onClick={campi.onClick}
-                onBlur={campi.onBlur}
-              />
+              <React.Fragment key={i}>
+                <NomeTag 
+                  rows={1}
+                  name={campi.name[i]}
+                  type={campi.type[i]}
+                  value={campi.value[i]}
+                  placeholder={campi.placeholder[i]}
+                  onChange={campi.onChange}
+                  onClick={campi.onClick}
+                  onBlur={campi.onBlur}
+                />
+                {campi.options[i]}
+              </React.Fragment>
             );
           })}
         </SlideContainer>

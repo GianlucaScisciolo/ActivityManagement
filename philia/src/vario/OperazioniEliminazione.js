@@ -22,18 +22,8 @@ export const elimina = async (e, tipoItem, selectedIdsEliminazione, setSelectedI
       itemsRestanti = items.filter(item => !dati.ids.includes(item.id));
     }
     else if(tipoItem === "lavoro") {
-      itemsDaEliminare = items.filter(item =>
-        dati.ids.some(idArray => 
-          idArray[0] === item.id_lavoro && 
-          idArray[1] === item.id_cliente 
-        )
-      );     
-      itemsRestanti = items.filter(item =>
-        !dati.ids.some(idArray => 
-          idArray[0] === item.id_lavoro && 
-          idArray[1] === item.id_cliente 
-        )
-      );
+      itemsDaEliminare = items.filter(item => dati.ids.includes(item.id));
+      itemsRestanti = items.filter(item => !dati.ids.includes(item.id));
     }
 
     if(tipoItem === "cliente") {

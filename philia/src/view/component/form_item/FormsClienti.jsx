@@ -12,7 +12,7 @@ import {
   StyledArrowTopNotSelected, StyledArrowBottomNotSelected, StyledSelect, StyledOption, 
   BottoneBluNonSelezionato, BottoneBluSelezionato, BottoneRossoNonSelezionato, BottoneRossoSelezionato, 
   StyledSpanErrore, StyledLoginNotSelected
-} from "./StyledFormItem";
+} from "../../../trasportabile/form_item/StyledFormItem";
 import { 
   handleInputChange, selezionaInserimentoLavoroCliente, selezionaInserimentoLavoroProfessionista
 } from '../../../vario/Vario';
@@ -21,7 +21,7 @@ import {
   OperazioniNuovoItem, OperazioniCercaItems, 
   getInputTag, getTextAreaTag, 
   FormNuovoItem, FormRicercaItems
-} from './FormItem';
+} from "../../../trasportabile/form_item"
 
 export function FormNuovoCliente({item, setItem, eseguiSalvataggio}) {
   let campi = {

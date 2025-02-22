@@ -9,7 +9,7 @@ import {
   StyledPencilNotSelected, StyledPencilSelected, 
   StyledTrashNotSelected, StyledTrashSelected, StyledPencilNotSelectedModificaProfilo, 
   StyledSelect, StyledOption, StyledSpanErrore, StyledLoginNotSelected
-} from "./StyledRowItem";
+} from "../../../trasportabile/row_item/StyledRowItem";
 import { 
   handleInputChange, cambiamentoBloccato
 } from '../../../vario/Vario';
@@ -17,7 +17,7 @@ import {
 import { 
   OperazioniLogin, 
   getTextAreaTag, getInputTag, getSelectTag
-} from './RowItem';
+} from "../../../trasportabile/row_item/RowItem"
 
 export function RowLogin({item, setItem, eseguiLogin}) {
   let InputTag = getInputTag(1, true);

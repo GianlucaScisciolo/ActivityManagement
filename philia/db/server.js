@@ -10,7 +10,7 @@ import {
   SQL_INSERIMENTO_SERVIZIO, SQL_SELEZIONE_SERVIZI, SQL_SELEZIONE_TUTTI_I_SERVIZI, SQL_ELIMINA_SERVIZI, SQL_MODIFICA_SERVIZIO 
 } from './ServizioSQL.js'; 
 import {
-  SQL_INSERIMENTO_LAVORO, SQL_SELEZIONE_LAVORI
+  SQL_INSERIMENTO_LAVORO, SQL_SELEZIONE_LAVORI, SQL_ELIMINA_LAVORI, SQL_MODIFICA_LAVORO
 } from './LavoroSQL.js'
 const app = express();
 
@@ -354,99 +354,12 @@ app.post("/VISUALIZZA_LAVORI", async (req, res) => {
   return getResults(SQL_SELEZIONE_LAVORI(req.body.note), params, res);
 });
 
-app.post("/OTTIENI_LAVORI_GIORNO", async (req, res) => {
-  const sqlSetIds = `
-    SET @ids := (
-      SELECT 
-        GROUP_CONCAT(\`id\`) 
-      FROM 
-        \`lavoro\` 
-      WHERE 
-        \`giorno\` = ?
-    );
-  `;
-
-  const sqlSelectLavori = `
-    SELECT 
-      "lavoro_cliente" AS \`tipo_lavoro\`, 
-      l.\`orario_inizio\` AS \`orario_inizio\` 
-    FROM 
-      \`prenotazione\` AS p 
-      LEFT JOIN \`lavoro\` AS l ON p.\`id_lavoro\` = l.\`id\` 
-    WHERE 
-      FIND_IN_SET(p.\`id_lavoro\`, @ids); 
-  `;
-
-  const params = [`${req.body.giorno}`];
-
-  try {
-    await beginTransaction();
-    
-    await executeQuery(sqlSetIds, params);
-    const lavoriGiornoSelezionato = await executeQuery(sqlSelectLavori);
-    await commitTransaction();
-    
-    return res.status(200).json({ lavoriGiornoSelezionato: lavoriGiornoSelezionato });
-    console.log(lavoriGiornoSelezionato);
-  } 
-  catch (err) {
-    await rollbackTransaction();
-    console.error('Errore durante l\'operazione: ', err);
-    return res.status(500).json({ message: 'Errore del server.' });
-  }
-});
-
-app.post("/ELIMINA_SERVIZI", async (req, res) => {
-  const { ids = [] } = req.body;
-  
-  const placeholders = ids.map(() => '?').join(', ');
-
-  return getResults(SQL_ELIMINA_SERVIZI(placeholders), ids, res);
-});
-
 app.post("/ELIMINA_LAVORI", async (req, res) => {
   const { ids = [] } = req.body;
-  console.log(ids);
-  /*
-  for (let i = 0; i < ids.length; i++) {
-    if (ids[i][1] !== 0) ids_prenotazioni.push([ids[i][0], ids[i][1]]);
-    if (ids[i][2] !== 0) ids_impegni.push([ids[i][0], ids[i][2]]);
-  }
 
-  // console.log("Ids prenotazioni: ", ids_prenotazioni);
-  // console.log("Ids impegni: ", ids_impegni);
+  const placeholders = ids.map(() => '?').join(', ');
 
-  const placeholders_prenotazioni = ids_prenotazioni.map(() => `(?, ?)`).join(", ");
-  const placeholders_impegni = ids_impegni.map(() => `(?, ?)`).join(", ");
-
-  const sqlEliminaPrenotazioni = `
-    DELETE FROM prenotazione WHERE (id_lavoro, id_cliente) IN (${placeholders_prenotazioni});
-  `;
-  const sqlEliminaImpegni = `
-    DELETE FROM impegno WHERE (id_lavoro, id_professionista) IN (${placeholders_impegni});
-  `;
-
-  try {
-    await beginTransaction();
-
-    if (ids_prenotazioni.length > 0) {
-      await executeQuery(sqlEliminaPrenotazioni, ids_prenotazioni.flat());
-    }
-
-    // Eseguo la query per gli impegni
-    if (ids_impegni.length > 0) {
-      await executeQuery(sqlEliminaImpegni, ids_impegni.flat());
-    }
-
-    await commitTransaction();
-    res.sendStatus(200);
-  } 
-  catch (err) {
-    await rollbackTransaction();
-    console.error('Errore durante l\'eliminazione dei lavori: ', err);
-    res.status(500).json({ message: 'Errore del server.' });
-  }
-  */
+  return getResults(SQL_ELIMINA_LAVORI(placeholders), ids, res);
 });
 
 app.post("/ELIMINA_LAVORI_RANGE_GIORNI", async (req, res) => {
@@ -466,87 +379,34 @@ app.post("/ELIMINA_LAVORI_RANGE_GIORNI", async (req, res) => {
 });
 
 app.post("/MODIFICA_LAVORI", async (req, res) => {
-  const sql_selezione_lavoro = `
-    SELECT id AS id_lavoro 
-    FROM lavoro 
-    WHERE giorno = ? AND orario_inizio = ?; 
-  `;
-
-  const sql_inserimento_lavoro = ` 
-    INSERT INTO lavoro (giorno, orario_inizio) 
-    VALUES (?, ?);
-  `;
-
-  const sql_modifica_prenotazione = `
-    UPDATE prenotazione 
-    SET id_lavoro = ?, descrizione = ?, note = ? 
-    WHERE id_cliente = ? AND id_lavoro = ?; 
-  `;
-
-  const sql_modifica_impegno = `
-    UPDATE impegno 
-    SET id_lavoro = ?, descrizione = ?, note = ? 
-    WHERE id_professionista = ? AND id_lavoro = ?; 
-  `;
-
-  let ids_lavori = [];
+  // console.log(req.body[1]);
+  // console.log(req.body[0].descrizione);
+  // for(let servizio of req.body[1]) {
+  //   if(req.body[0].id_servizi.includes(servizio.id)) {
+  //     req.body[0].descrizione += servizio.nome + " - " + servizio.prezzo + " €, ";
+  //   }
+  // }
+  // console.log(req.body[0].descrizione);
   try {
-    for (let lavoro of req.body) {
-      await beginTransaction();
-      // console.log("START");
-      // console.log(1);
-
-      const giorno = new Date(lavoro.giorno).toISOString().split('T')[0];
-      // console.log(2);
-      let parametri_selezione_lavoro = [`${giorno}`, `${lavoro.orario_inizio}`];
-      // console.log(3);
-      let parametri_inserimento_lavoro = [`${giorno}`, `${lavoro.orario_inizio}`];
-      // console.log(4);
-      let resultSQL = await executeQuery(sql_selezione_lavoro, parametri_selezione_lavoro);
-      let id_lavoro;
-      // console.log("---------------------" + resultSQL.length);
-      if (resultSQL.length > 0) {
-        // console.log("|||||||||||||||||||||||");
-        id_lavoro = resultSQL[0].id_lavoro;
-        // console.log("|||||||||||||||||||||||" + id_lavoro);
-      } 
-      else {
-        await executeQuery(sql_inserimento_lavoro, parametri_inserimento_lavoro);
-        resultSQL = await executeQuery(sql_selezione_lavoro, parametri_selezione_lavoro);
-        id_lavoro = resultSQL[0].id_lavoro;
+    for(let servizio of req.body[1]) {
+      for(let i = 0; i < req.body[0].length; i++) {
+        if(req.body[0][i].id_servizi.includes(servizio.id)) {
+          req.body[0][i].descrizione += servizio.nome + " - " + servizio.prezzo + " €, ";
+        }
       }
-      // console.log(5);
-
-      let parametri_modifica_prenotazione = [
-        id_lavoro, `${lavoro.descrizione}`, `${lavoro.note}`, `${lavoro.id_cliente}`, `${lavoro.id_lavoro}`
-      ];
-      // console.log(6);
-      let parametri_modifica_impegno = [
-        id_lavoro, `${lavoro.descrizione}`, `${lavoro.note}`, `${lavoro.id_professionista}`, `${lavoro.id_lavoro}`
-      ];
-      // console.log(7);
-
-      if (lavoro.id_cliente !== 0) {
-        await executeQuery(sql_modifica_prenotazione, parametri_modifica_prenotazione);
-      } 
-      else if (lavoro.id_professionista !== 0) {
-        await executeQuery(sql_modifica_impegno, parametri_modifica_impegno);
-      }
-      // console.log(8);
-      ids_lavori.push(id_lavoro);
-      // console.log(9);
+    }
+    await beginTransaction();
+    for (let lavoro of req.body[0]) {
+      let parametri = [`${lavoro.giorno}`, `${lavoro.descrizione}`, `${lavoro.note}`, `${lavoro.id}`];
+      await executeQuery(SQL_MODIFICA_LAVORO, parametri);
     }
     await commitTransaction();
-    // console.log(10);
-    // console.log(ids_lavori);
-    return res.status(200).json({ ids_lavori: ids_lavori });
+
+    return res.status(200);
   } 
   catch (err) {
-    // console.log(11)
     await rollbackTransaction();
-    // console.log(12)
     console.error('Errore durante la modifica dei lavori: ', err);
-    // console.log(13)
     return res.status(500).json({ message: 'Errore del server.' });
   }
 });

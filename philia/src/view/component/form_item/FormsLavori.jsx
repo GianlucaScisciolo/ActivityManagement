@@ -16,7 +16,7 @@ import {
   StyledSpanErrore, StyledLoginNotSelected, StyledFileIconNotSelected, 
   StyledDownloadNotSelected, StyledDeleteNotSelected, StyledTrashNotSelected, 
   StyledSelectBlock, StyledSelectModifica, StyledSelectElimina
-} from "./StyledFormItem";
+} from "../../../trasportabile/form_item/StyledFormItem";
 import { 
   handleInputChange, handleInputChangeNuovoLavoro, 
   selezionaInserimentoLavoroCliente, selezionaInserimentoLavoroProfessionista
@@ -24,7 +24,7 @@ import {
 import { 
   OperazioniNuovoItem, OperazioniCercaItems, 
   FormRicercaItems 
-} from './FormItem';
+} from "../../../trasportabile/form_item/FormItem";
 
 function OperazioniFileItems({ottieniLavoriRangePDF, ottieniLavoriRangeExcel, eliminaLavoriRange}) {
   return (

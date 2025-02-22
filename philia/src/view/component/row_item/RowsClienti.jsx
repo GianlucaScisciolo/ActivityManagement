@@ -9,7 +9,7 @@ import {
   StyledPencilNotSelected, StyledPencilSelected, 
   StyledTrashNotSelected, StyledTrashSelected, StyledPencilNotSelectedModificaProfilo, 
   StyledSelect, StyledOption, StyledSpanErrore, StyledLoginNotSelected
-} from "./StyledRowItem";
+} from "../../../trasportabile/row_item/StyledRowItem";
 import { 
   handleInputChange, cambiamentoBloccato
 } from '../../../vario/Vario';
@@ -18,7 +18,7 @@ import {
   OperazioniNuovoItem, OperazioniCercaItems, OperazioniItemEsistente, 
   getTextAreaTag, getInputTag, getSelectTag, 
   RowNuovoItem, RowRicercaItems, RowItemEsistente
-} from './RowItem';
+} from "../../../trasportabile/row_item/RowItem"
 
 export function RowNuovoCliente({item, setItem, eseguiSalvataggio}) {
   let campi = {

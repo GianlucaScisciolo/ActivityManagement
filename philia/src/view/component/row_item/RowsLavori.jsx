@@ -13,7 +13,7 @@ import {
   StyledSelect, StyledSelectBlock, StyledSelectModifica, StyledSelectElimina, 
   StyledOption, StyledSpanErrore, StyledLoginNotSelected, 
   StyledFileIconNotSelected, StyledDownloadNotSelected, StyledDeleteNotSelected, StyledTrashNotSelected2 
-} from "./StyledRowItem";
+} from "../../../trasportabile/row_item/StyledRowItem";
 import { 
   handleInputChange, handleInputChangeLavoroEsistente, handleInputChangeNuovoLavoro, 
   cambiamentoBloccato
@@ -21,9 +21,9 @@ import {
 import { 
   OperazioniNuovoItem, OperazioniCercaItems, OperazioniItemEsistente, OperazioniFileItems, 
   RowRicercaItems
-} from './RowItem';
+} from "../../../trasportabile/row_item/RowItem"
 import { dizionarioOrari } from '../../../vario/Tempo';
-import { getTextAreaTag, getInputTag, getSelectTag } from './RowItem';
+import { getTextAreaTag, getInputTag, getSelectTag } from "../../../trasportabile/row_item/RowItem"
 
 const handleGiornoClick = (setGiornoType) => {
   return () => {

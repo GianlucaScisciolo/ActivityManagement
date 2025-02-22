@@ -9,12 +9,12 @@ import {
   StyledPencilNotSelected, StyledPencilSelected, 
   StyledTrashNotSelected, StyledTrashSelected, StyledPencilNotSelectedModificaProfilo, 
   StyledSelect, StyledOption, StyledSpanErrore, StyledLoginNotSelected
-} from "./StyledRowItem";
+} from "../../../trasportabile/row_item/StyledRowItem";
 import { 
   handleInputChange, cambiamentoBloccato
-} from '../../../vario/Vario';
+} from "../../../vario/Vario";
 
-import { OperazioniModificaProfilo } from './RowItem';
+import { OperazioniModificaProfilo } from "../../../trasportabile/row_item/RowItem"
 
 export function RowModificaProfilo({ item, setItem, eseguiModificaProfilo }) {
   let maxHeight = "2000px";

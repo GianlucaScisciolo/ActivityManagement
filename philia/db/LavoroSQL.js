@@ -7,7 +7,7 @@ export function SQL_SELEZIONE_LAVORI(note) {
   let sql = `
     SELECT 
       0 AS tipo_selezione, 
-      l.id AS id_lavoro, 
+      l.id AS id, 
       l.id_cliente AS id_cliente, 
       CONCAT ( 
         c.nome, ' ', c.cognome, 
@@ -40,3 +40,30 @@ export function SQL_SELEZIONE_LAVORI(note) {
 
   return sql;
 }
+
+export function SQL_ELIMINA_LAVORI(ids) {
+  return (` 
+    DELETE FROM 
+      lavoro 
+    WHERE 
+      id IN (${ids}); 
+  `);
+}
+
+export const SQL_MODIFICA_LAVORO = `
+  UPDATE 
+    lavoro 
+  SET 
+    giorno = ?, descrizione = ?, note = ? 
+  WHERE 
+    id = ?; 
+`;
+
+
+
+
+
+
+
+
+

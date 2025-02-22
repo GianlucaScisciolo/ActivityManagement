@@ -32,7 +32,7 @@ export function getCampiRicercaClienti(item, handleOnChange, handleOnClick, hand
   };
 };
 
-export function getCampiClienteEsistente(item, handleOnChange, handleOnClick, handleOnBlur) {
+export function getCampiClienteEsistente(servizi, item, handleOnChange, handleOnClick, handleOnBlur) {
   return {
     header: "Cliente", 
     tipoSelezione: item.tipo_selezione,  
@@ -43,6 +43,7 @@ export function getCampiClienteEsistente(item, handleOnChange, handleOnClick, ha
     value: [item.nome + " " + item.cognome, item.contatto, item.email, item.note], 
     placeholder: ["Nome e cognome", "Contatto", "Email", "Note"], 
     valoreModificabile: [false, true, true, true], 
+    options: [null, null, null, null], 
     onChange: handleOnChange, 
     onClick: handleOnClick, 
     onBlur: handleOnBlur

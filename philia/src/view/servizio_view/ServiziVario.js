@@ -32,7 +32,7 @@ export function getCampiRicercaServizi(item, handleOnChange, handleOnClick, hand
   };
 };
 
-export function getCampiServizioEsistente(item, handleOnChange, handleOnClick, handleOnBlur) {
+export function getCampiServizioEsistente(servizi, item, handleOnChange, handleOnClick, handleOnBlur) {
   return {
     header: "Servizio", 
     tipoSelezione: item.tipo_selezione,  
@@ -43,6 +43,7 @@ export function getCampiServizioEsistente(item, handleOnChange, handleOnClick, h
     value: [item.nome, item.prezzo, item.note], 
     placeholder: ["Nome", "Prezzo", "Note"], 
     valoreModificabile: [true, true, true], 
+    options: [null, null, null], 
     onChange: handleOnChange, 
     onClick: handleOnClick, 
     onBlur: handleOnBlur

@@ -16,7 +16,7 @@ import {
   StyledTrashNotSelected, StyledTrashSelected, 
   StyledArrowTopNotSelected, StyledArrowBottomNotSelected, StyledPencilNotSelectedModificaProfilo, 
   StyledSelect, StyledOption, StyledSpanErrore, StyledLoginNotSelected
-} from './StyledCardItem';
+} from "../../../trasportabile/card_item/StyledCardItem";
 import { 
   handleInputChange, cambiamentoBloccato
 } from '../../../vario/Vario';
@@ -24,7 +24,7 @@ import {
 import { 
   OperazioniLogin, 
   getTextAreaTag, getInputTag
-} from './CardItem';
+} from "../../../trasportabile/card_item/CardItem"
 
 export function CardLogin({item, setItem, eseguiLogin}) {
   let InputTag = getInputTag(1, true);

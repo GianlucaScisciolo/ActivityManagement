@@ -78,6 +78,7 @@ const Clienti = () => {
         emptyIsConsidered={true} 
         campi={getCampiClienteEsistente}
         indici={indiciClienteEsistente}
+        servizi={null}
       />
 
       <br /> <br /> <br /> <br />
