@@ -407,6 +407,15 @@ export function CardLavoroEsistente({
   );
 }
 
+const handleGiornoBlur = (setGiornoType, item, setItem) => {
+  return () => {
+    if(!item.giorno)
+      setGiornoType('text');
+    else
+      setGiornoType('date');
+  };
+};
+
 export function CardFileLavori({item, setItem, ottieniLavoriRangePDF, ottieniLavoriRangeExcel, eliminaLavoriRange}) {
   const [primoGiornoType, setPrimoGiornoType] = useState('text');
   const [ultimoGiornoType, setUltimoGiornoType] = useState('text');

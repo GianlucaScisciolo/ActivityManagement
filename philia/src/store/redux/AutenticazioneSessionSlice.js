@@ -25,7 +25,7 @@ const initialState = loadFromLocalStorage() || {
   value: {
     username: null,
     ruolo: "guest",
-    note: null,
+    note: "",
     isLogged: false, 
   },
 };

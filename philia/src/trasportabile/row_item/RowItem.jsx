@@ -13,6 +13,7 @@ import {
   StyledSelectBlock, StyledSelectModifica, StyledSelectElimina
 } from "./StyledRowItem";
 import { Trash2, Pencil } from 'lucide-react';
+import { faFilePdf, faFileExcel } from '@fortawesome/free-solid-svg-icons';
 
 export function getSelectTag(tipoSelezione) {
   return (tipoSelezione !== 1 && tipoSelezione !== 2) ? StyledSelectBlock : (

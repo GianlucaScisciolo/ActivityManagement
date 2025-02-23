@@ -1,6 +1,5 @@
 import Header from "./component/Header";
-import Row from 'react-bootstrap/esm/Row';
-import Col from 'react-bootstrap/esm/Col';
+import { SiGooglecalendar } from "react-icons/si";
 
 function Home() {
   return (
@@ -8,11 +7,17 @@ function Home() {
       <Header />
 
       <div className="main-content"></div>
+      {/* <center>
+        <SiGooglecalendar 
+          style={{ width: '200px', height: '200px', color: "green" }}
+        />
+      </center> */}
     </>
   );
 }
 
 export default Home;
+
 
 
 

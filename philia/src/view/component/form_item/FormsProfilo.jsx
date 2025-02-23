@@ -52,21 +52,11 @@ export function FormModificaProfilo({ item, setItem, eseguiModificaProfilo }) {
           <InputTag rows="1" type="password" name="conferma_nuova_password" placeholder='Conferma nuova password' value={item.conferma_nuova_password} onChange={(e) => handleInputChange(e, setItem)} />
           {(item.errore_conferma_nuova_password !== "") && (<StyledSpanErrore>{item.errore_conferma_nuova_password}</StyledSpanErrore>)}
           
-          <StyledLabel htmlFor="orario_inizio">Numero di lavori*</StyledLabel>
-          <InputTag style={{width: "100%"}} rows="1" value={item.num_lavori_clienti} type="number" name="num_lavori_clienti" placeholder='Lavori cliente'  onChange={(e) => handleInputChange(e, setItem)} />          
           {(item.errore_num_lavori_clienti !== "") && (<StyledSpanErrore>{item.errore_num_lavori_clienti}</StyledSpanErrore>)}
           <br /> <br /> 
         </SlideContainer>
         <OperazioniModificaProfilo eseguiModificaProfilo={eseguiModificaProfilo} />
-      </StyledForm>
-      {/* 
-      <button>Numero di clienti in una giornata</button><br /> <br />
-      <button>Numero di professionisti in una giornata</button><br /> <br />
-        In una giornata ci sono 3 fasci orari:
-        - mattina    --> 07:00 - 13:00 
-        - pomeriggio --> 13:00 - 19:00
-        - sera       --> 19: 00 - 06:00
-      */} 
+      </StyledForm> 
     </>
   );
 }

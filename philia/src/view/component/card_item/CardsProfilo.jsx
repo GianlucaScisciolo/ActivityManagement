@@ -22,7 +22,7 @@ import {
 } from '../../../vario/Vario';
 
 import { 
-  OperazioniModificaProfilo 
+  OperazioniModificaProfilo, getInputTag, getTextAreaTag 
 } from "../../../trasportabile/card_item/CardItem"
 
 export function CardModificaProfilo({ item, setItem, eseguiModificaProfilo }) {
@@ -49,32 +49,9 @@ export function CardModificaProfilo({ item, setItem, eseguiModificaProfilo }) {
 
           <InputTag rows="1" type="password" name="conferma_nuova_password" placeholder='Conferma nuova password' value={item.conferma_nuova_password} onChange={(e) => handleInputChange(e, setItem)} />
           {(item.errore_conferma_nuova_password !== "") && (<StyledSpanErrore>{item.errore_conferma_nuova_password}</StyledSpanErrore>)}
-
-          <Row>
-            <Col style={{ padding: '0', margin: '0', paddingLeft: '19px' }}>
-              <InputTag style={{width: "100%"}} rows="1" value={item.num_lavori_clienti} type="number" name="num_lavori_clienti" placeholder='Lavori cliente'  onChange={(e) => handleInputChange(e, setItem)} />
-            </Col>
-            <Col style={{ padding: '0', margin: '0'}}>
-              <InputTag style={{width: "100%"}} rows="1" value={item.num_lavori_professionisti} type="number" name="num_lavori_professionisti" placeholder='Lavori professionista' onChange={(e) => handleInputChange(e, setItem)} />
-            </Col>
-            <Col style={{ padding: '0', margin: '0', paddingRight: '19px' }}>
-              <InputTag style={{width: "100%"}} rows="1" value={item.num_lavori_giorno} type="number" name="num_lavori_giorno" placeholder='Lavori giorno' onChange={(e) => handleInputChange(e, setItem)} />
-            </Col>
-            {(item.errore_num_lavori_clienti !== "") && (<StyledSpanErrore>{item.errore_num_lavori_clienti}</StyledSpanErrore>)}
-            {(item.errore_num_lavori_professionisti !== "") && (<StyledSpanErrore>{item.errore_num_lavori_professionisti}</StyledSpanErrore>)}
-            {(item.errore_num_lavori_giorno !== "") && (<StyledSpanErrore>{item.errore_num_lavori_giorno}</StyledSpanErrore>)}
-          </Row>
         </SlideContainer>
         <OperazioniModificaProfilo eseguiModificaProfilo={eseguiModificaProfilo} />
-      </StyledCard>
-      {/* 
-      <button>Numero di clienti in una giornata</button><br /> <br />
-      <button>Numero di professionisti in una giornata</button><br /> <br />
-        In una giornata ci sono 3 fasci orari:
-        - mattina    --> 07:00 - 13:00 
-        - pomeriggio --> 13:00 - 19:00
-        - sera       --> 19: 00 - 06:00
-      */} 
+      </StyledCard> 
     </>
   );
 }

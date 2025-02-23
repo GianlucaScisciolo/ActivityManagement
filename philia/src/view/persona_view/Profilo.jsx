@@ -30,17 +30,15 @@ const Profilo = () => {
   const dispatch = useDispatch();
   const [datiProfilo, setDatiProfilo] = useState({
     nuovo_username: autenticazioneSession.username, 
-    note: autenticazioneSession.note, 
+    note: (autenticazioneSession.note) ? autenticazioneSession.note : "", 
     password_attuale: "",
     nuova_password: "", 
     conferma_nuova_password: "", 
-    num_lavori_clienti: autenticazioneSession.num_lavori_clienti, 
     errore_nuovo_username: "", 
     errore_note: "", 
     errore_password_attuale: "", 
     errore_nuova_password: "", 
-    errore_conferma_nuova_password: "", 
-    errore_num_lavori_clienti: "",  
+    errore_conferma_nuova_password: "",   
   })
   
   const [aggiornamentoCompletato, setAggiornamentoCompletato] = useState(true);
@@ -54,9 +52,7 @@ const Profilo = () => {
       }
       await login(e, datiLogin, setUtente, setSalone);
       autenticazioneStore.setUtente(-1);
-      autenticazioneStore.setSalone(-1);
       setUtente(-1);
-      setSalone(-1)
       setAggiornamento1(!aggiornamento1);
     }
     else {
@@ -68,9 +64,7 @@ const Profilo = () => {
   useEffect(() => {
     const handleLoginChange = () => {
       setUtente(autenticazioneStore.getUtente());
-      setSalone(autenticazioneStore.getSalone());
     };
-
     autenticazioneStore.addChangeListener(operazioniAutenticazione.LOGIN, handleLoginChange);
     return () => {
       autenticazioneStore.removeChangeListener(operazioniAutenticazione.LOGIN, handleLoginChange);
@@ -78,16 +72,13 @@ const Profilo = () => {
   }, []);
   
   useEffect(() => {
-    if(utente === -1 || salone === -1) {
+    if(utente === -1) {
       console.log("Aggiornamento in corso...");
       setAggiornamento2(!aggiornamento2);
     }
-    else if(utente !== 0 && salone !== 0) {
+    else if(utente.length !== 0) {
       console.log("Aggiornamento effettuato.");
-      // console.log(utente);
-      // console.log(salone);
       datiProfilo["num_utenti"] = utente.length;
-
       if(utente) {
         datiProfilo["password_db"] = utente.password;
         datiProfilo["salt_hex_db"] = utente.salt_hex;
@@ -95,40 +86,20 @@ const Profilo = () => {
       if(controlloProfilo(datiProfilo, setDatiProfilo) > 0) {
         return;
       }
-      
       datiProfilo["username"] = autenticazioneSession.username;
-
       modificaProfilo(datiProfilo);
-
       dispatch(eseguiModificaAutenticazioneSession({
         username: datiProfilo.nuovo_username,
-        note: datiProfilo.note, 
-        num_lavori_clienti: datiProfilo.num_lavori_clienti, 
+        note: datiProfilo.note 
       }));
 
       alert("Modifica profilo eseguita con successo.");
-      /*
-        
-        if(controlloLogin(datiLogin, setDatiLogin) > 0) {
-          return;
-        }
-        dispatch(eseguiLogin({
-          username: utente.username,
-          ruolo: utente.ruolo,
-          note: utente.note, 
-          num_lavori_clienti: salone.num_lavori_clienti, 
-          num_lavori_professionisti: salone.num_lavori_professionisti, 
-          num_lavori_giorno: salone.num_lavori_giorno
-        }));
-        navigate("/");
-      */
     }
   }, [aggiornamento1]);
 
   useEffect(() => {
-    if(utente !== 0 && salone !== 0) {
+    if(utente !== 0) {
       setUtente(autenticazioneStore.getUtente());
-      setSalone(autenticazioneStore.getSalone());
       setAggiornamento1(!aggiornamento1);
     }
   }, [aggiornamento2]);
@@ -139,8 +110,7 @@ const Profilo = () => {
     setRuoloSelezionato(autenticazioneSession.ruolo);
     setNote(autenticazioneSession.note);
   }, [autenticazioneSession]);
-
-
+  
   return (
     <>
       <Header />

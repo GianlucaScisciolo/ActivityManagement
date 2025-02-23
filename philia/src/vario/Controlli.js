@@ -333,22 +333,6 @@ export const controlloProfilo = (dati, settersErrori) => {
   setErrore(settersErrori, "errore_nuova_password", messaggioErrore);
   setErrore(settersErrori, "errore_conferma_nuova_password", messaggioErrore);
 
-  console.log(dati.num_lavori_clienti);
-  console.log(dati.num_lavori_professionisti);
-  console.log(dati.num_lavori_giorno);
-
-  // controllo il numero lavori dei clienti:
-  messaggioErrore = "";
-  if (isEmpty(dati.num_lavori_clienti.toString())) {
-    numErrori += 1; 
-    messaggioErrore = "Inserire il numero di lavori per i clienti.";
-  }
-  else if(dati.num_lavori_clienti < 0) {
-    numErrori += 1; 
-    messaggioErrore = "Il numero di lavori per i clienti deve essere maggiore o uguale a 0.";
-  }
-  setErrore(settersErrori, "errore_num_lavori_clienti", messaggioErrore);
-
   return numErrori;
 }
 

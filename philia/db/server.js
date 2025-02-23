@@ -2,7 +2,9 @@ import express from 'express';
 import mysql from 'mysql2';
 import cors from 'cors';
 import bodyParser from 'body-parser';
-import { SQL_SELECT_UTENTE } from './AutenticazioneSQL.js';
+import { 
+  SQL_SELECT_UTENTE, SQL_MODIFICA_UTENTE 
+} from './AutenticazioneSQL.js';
 import { 
   SQL_INSERIMENTO_CLIENTE, SQL_SELEZIONE_CLIENTI, SQL_SELEZIONE_TUTTI_I_CLIENTI, SQL_ELIMINA_CLIENTI, SQL_MODIFICA_CLIENTE
 } from './PersonaSQL.js';
@@ -102,18 +104,13 @@ const getResults = async (sql, params, res) => {
 /*************************************************** Autenticazione **************************************************/
 
 app.post("/LOGIN", async (req, res) => {
-  const params = [req.body.username];
-
+  const params = [`${req.body.username}`];
   try {
     await beginTransaction();
-
     const [utentiResult] = await executeQuery(SQL_SELECT_UTENTE, params);
-
     await commitTransaction();
-
     const utente = utentiResult;
     console.log(utente);
-    
     return res.status(200).json({ utente: utente });
   } 
   catch (err) {
@@ -124,61 +121,20 @@ app.post("/LOGIN", async (req, res) => {
 });
 
 app.post("/MODIFICA_PROFILO", async (req, res) => {
-
-  console.log("Dati ricevuti per la modifica:");
-  console.log(`
-    username_attuale: ${req.body.username_attuale}
-    password_attuale: ${req.body.password_attuale}
-    nuove_note: ${req.body.nuove_note}
-    nuova_password: ${req.body.nuova_password}
-    nuovo_salt_hex: ${req.body.nuovo_salt_hex}
-    num_lavori_clienti: ${req.body.num_lavori_clienti}
-  `);
-  
-  const sql_modifica_utente = `
-    UPDATE 
-      \`utente\` 
-    SET 
-      \`username\` = ?, 
-      \`note\` = ? 
-      ${req.body.nuova_password !== "" ? ", \`password\` = ?, \`salt_hex\` = ? " : ""} 
-    WHERE 
-      \`username\` = ? AND \`password\` = ?; 
-  `;
-
-  const sql_modifica_salone = `
-    UPDATE 
-      \`salone\` 
-    SET 
-      \`num_lavori_clienti\` = ?  
-    WHERE 
-      \`username_utente\` = ?; 
-  `;
-  
-  const params_sql_modifica_utente = [
+  const params = [
     `${req.body.nuovo_username}`, 
     `${req.body.nuove_note}` 
   ];
   if (req.body.nuova_password !== "") {
-    params_sql_modifica_utente.push(`${req.body.nuova_password}`); 
-    params_sql_modifica_utente.push(`${req.body.nuovo_salt_hex}`); 
+    params.push(`${req.body.nuova_password}`); 
+    params.push(`${req.body.nuovo_salt_hex}`); 
   }
-  params_sql_modifica_utente.push(`${req.body.username_attuale}`); 
-  params_sql_modifica_utente.push(`${req.body.password_attuale}`); 
-
-  const params_sql_modifica_salone = [
-    `${req.body.num_lavori_clienti}`, 
-    `${req.body.nuovo_username}` 
-  ]
-
+  params.push(`${req.body.username_attuale}`); 
+  params.push(`${req.body.password_attuale}`); 
   try {
     await beginTransaction();
-
-    await executeQuery(sql_modifica_utente, params_sql_modifica_utente);
-    await executeQuery(sql_modifica_salone, params_sql_modifica_salone);
-
+    await executeQuery(SQL_MODIFICA_UTENTE(req.body.nuova_password), params);
     await commitTransaction();
-
     return res.status(200);
   } 
   catch (err) {
@@ -199,8 +155,7 @@ app.post("/INSERISCI_CLIENTE", async (req, res) => {
     `${(req.body.contatto) ? req.body.contatto : "Contatto non inserito."}`, 
     `${(req.body.email) ? req.body.email : "Email non inserita."}`, 
     `${req.body.note}`
-  ];
-    
+  ];  
   try {
     const result = await executeQuery(SQL_INSERIMENTO_CLIENTE, params);
     const insertedId = result.insertId; // ottengo l'id inserito
@@ -219,13 +174,11 @@ app.post("/VISUALIZZA_CLIENTI", async (req, res) => {
   console.log(req.body.email);
   const params = [`%${req.body.nome}%`, `%${req.body.cognome}%`, `%${req.body.contatto}%`, `%${req.body.email}%`];
   params.push((!req.body.note) ? '%' : `%${req.body.note}%`);
-
   return getResults(SQL_SELEZIONE_CLIENTI(req.body.note), params, res);
 });
 
 app.post("/OTTIENI_TUTTI_I_CLIENTI", async (req, res) => {
   const params = [];
-
   try {
     const data = await executeQuery(SQL_SELEZIONE_TUTTI_I_CLIENTI, []);
     res.status(200).json(data);
@@ -238,18 +191,14 @@ app.post("/OTTIENI_TUTTI_I_CLIENTI", async (req, res) => {
 
 app.post("/ELIMINA_CLIENTI", async (req, res) => {
   const { ids = [] } = req.body;
-
   const placeholders = ids.map(() => '?').join(', ');
-
   return getResults(SQL_ELIMINA_CLIENTI(placeholders), ids, res);
 });
 
 app.post("/MODIFICA_CLIENTI", async (req, res) => {
   const params = [`${req.body.contatto}`, `${req.body.email}`, `${req.body.note}`, `${req.body.id}`];
-  
   return getResults(SQL_MODIFICA_CLIENTE, params, res);
 });
-
 
 /*************************************************************************************************************/
 
@@ -260,8 +209,7 @@ app.post("/INSERISCI_SERVIZIO", async (req, res) => {
     `${req.body.nome}`, 
     `${req.body.prezzo}`, 
     `${req.body.note}`, 
-  ];
-    
+  ];    
   try {
     const result = await executeQuery(SQL_INSERIMENTO_SERVIZIO, params);
     return res.status(201).json({ message: 'Cliente inserito con successo', id: result.insertId });
@@ -278,23 +226,16 @@ app.post("/INSERISCI_SERVIZIO", async (req, res) => {
 app.post("/VISUALIZZA_SERVIZI", async (req, res) => {
   const prezzo_min = (req.body.prezzo_min) ? req.body.prezzo_min : Number.MIN_VALUE;
   const prezzo_max = (req.body.prezzo_max) ? req.body.prezzo_max : Number.MAX_VALUE;
-  console.log("|"+req.body.nome+"|");
-  console.log(prezzo_min);
-  console.log(prezzo_max);
-  console.log("|"+req.body.note+"|");
   const params = [`%${req.body.nome}%`, `${prezzo_min}`, `${prezzo_max}`];
   params.push((!req.body.note) ? '%' : `%${req.body.note}%`);
-
   return getResults(SQL_SELEZIONE_SERVIZI(req.body.note), params, res);
 });
 
 app.post("/OTTIENI_TUTTI_I_SERVIZI", async (req, res) => {
   const params = [];
-
   try {
     const data = await executeQuery(SQL_SELEZIONE_TUTTI_I_SERVIZI, []);
     res.status(200).json(data);
-    console.log(data);
   } 
   catch (err) {
     console.error('Errore durante l\'esecuzione della query: ', err);
@@ -304,15 +245,12 @@ app.post("/OTTIENI_TUTTI_I_SERVIZI", async (req, res) => {
 
 app.post("/ELIMINA_SERVIZI", async (req, res) => {
   const { ids = [] } = req.body;
-
   const placeholders = ids.map(() => '?').join(', ');
-
   return getResults(SQL_ELIMINA_SERVIZI(placeholders), ids, res);
 });
 
 app.post("/MODIFICA_SERVIZI", async (req, res) => {
   const params = [`${req.body.nome}`, `${req.body.prezzo}`, `${req.body.note}`, `${req.body.id}`];
-  
   return getResults(SQL_MODIFICA_SERVIZIO, params, res);
 });
 
@@ -327,7 +265,6 @@ app.post("/INSERISCI_LAVORO", async (req, res) => {
     `${req.body.descrizione}`, 
     `${req.body.note}`, 
   ];
-
   try {
     const result = await executeQuery(SQL_INSERIMENTO_LAVORO, params);
     return res.status(200).json({ message: 'Lavoro inserito con successo', id: result.insertId });
@@ -341,52 +278,34 @@ app.post("/INSERISCI_LAVORO", async (req, res) => {
 app.post("/VISUALIZZA_LAVORI", async (req, res) => {
   req.body.primo_giorno = (req.body.primo_giorno) ? req.body.primo_giorno : "1111-01-01";
   req.body.ultimo_giorno = (req.body.ultimo_giorno) ? req.body.ultimo_giorno : "9999-01-01";
-
-  console.log(req.body);
-  
   const params = [
     `%${req.body.nome_cliente}%`, `%${req.body.cognome_cliente}%`, 
     `${req.body.primo_giorno}`, `${req.body.ultimo_giorno}`, `%${req.body.descrizione}%` 
   ];
-  
   params.push((!req.body.note) ? '%' : `%${req.body.note}%`);
-
   return getResults(SQL_SELEZIONE_LAVORI(req.body.note), params, res);
 });
 
 app.post("/ELIMINA_LAVORI", async (req, res) => {
   const { ids = [] } = req.body;
-
   const placeholders = ids.map(() => '?').join(', ');
-
   return getResults(SQL_ELIMINA_LAVORI(placeholders), ids, res);
 });
 
 app.post("/ELIMINA_LAVORI_RANGE_GIORNI", async (req, res) => {
   let primo_giorno = (req.body.primo_giorno) ? req.body.primo_giorno : "1111-01-01";
   let ultimo_giorno = (req.body.ultimo_giorno) ? req.body.ultimo_giorno : "9999-01-01";
-
   const sql = ` 
     DELETE FROM 
       lavoro 
     WHERE 
       giorno BETWEEN ? AND ?; 
   `;
-
   const params = [`${primo_giorno}`, `${ultimo_giorno}`];
-
   return getResults(sql, params, res);
 });
 
 app.post("/MODIFICA_LAVORI", async (req, res) => {
-  // console.log(req.body[1]);
-  // console.log(req.body[0].descrizione);
-  // for(let servizio of req.body[1]) {
-  //   if(req.body[0].id_servizi.includes(servizio.id)) {
-  //     req.body[0].descrizione += servizio.nome + " - " + servizio.prezzo + " €, ";
-  //   }
-  // }
-  // console.log(req.body[0].descrizione);
   try {
     for(let servizio of req.body[1]) {
       for(let i = 0; i < req.body[0].length; i++) {
@@ -401,7 +320,6 @@ app.post("/MODIFICA_LAVORI", async (req, res) => {
       await executeQuery(SQL_MODIFICA_LAVORO, parametri);
     }
     await commitTransaction();
-
     return res.status(200);
   } 
   catch (err) {

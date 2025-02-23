@@ -53,8 +53,6 @@ const Login = () => {
       else {
         const result = await response.json();
         datiLogin["num_utenti"] = (result.utente) ? 1 : 0;
-        // console.log("utenteDB: " + result.utente);
-        // console.log("Numero utenti: " + datiLogin["num_utenti"]);
         if(datiLogin["num_utenti"] === 1) {
           datiLogin["password_db"] = result.utente.password;
           datiLogin["salt_hex_db"] = result.utente.salt_hex;

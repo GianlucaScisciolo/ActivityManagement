@@ -7,6 +7,18 @@ export const SQL_SELECT_UTENTE = `
     \`username\` = ?; 
 `;
 
+export function SQL_MODIFICA_UTENTE(nuova_password) {
+  return (`
+    UPDATE 
+      \`utente\` 
+    SET 
+      \`username\` = ?, 
+      \`note\` = ? 
+      ${nuova_password !== "" ? ", \`password\` = ?, \`salt_hex\` = ? " : ""} 
+    WHERE 
+      \`username\` = ? AND \`password\` = ?; 
+  `);
+}
 
 
 

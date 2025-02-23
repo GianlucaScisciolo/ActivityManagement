@@ -154,6 +154,7 @@ const NavbarSito = () => {
                   <StyledNavDropdownItem as={NavLink} to="/nuovo-lavoro">Nuovo lavoro</StyledNavDropdownItem>
                   <StyledNavDropdownItem as={NavLink} to="/lavori">Lavori</StyledNavDropdownItem>
                   <StyledNavDropdownItem as={NavLink} to="/file-lavori">File lavori</StyledNavDropdownItem>
+                  <StyledNavDropdownItem as={NavLink} to="https://calendar.google.com">Google calendar</StyledNavDropdownItem>
               </StyledNavDropdown>
             </>
           )}
