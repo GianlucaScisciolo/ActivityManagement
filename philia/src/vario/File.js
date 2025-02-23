@@ -15,15 +15,12 @@ export const generaFileLavoriPDF = (lavori) => {
 
   // Aggiungo la tabella dei lavori
   if (lavori.length > 0) {
-    const lavoriColumns = ["Nome", "Cognome / Professione", "Giorno", "Orario inizio", "Orario fine", "Descrizione", "Note"];
+    const lavoriColumns = ["Cliente", "Giorno", "Descrizione", "Note"];
     const lavoriRows = lavori.map(lavoro => [
-      (lavoro.nome_cliente) ? lavoro.nome_cliente : lavoro.nome_professionista, 
-      (lavoro.cognome_cliente) ? lavoro.cognome_cliente : lavoro.professione, 
-      formatoDate(lavoro.giorno, "GG-MM-AAAA"),
-      lavoro.orario_inizio.toString(), 
-      lavoro.orario_fine.toString(),
-      lavoro.descrizione,
-      lavoro.note
+      lavoro.cliente, 
+      lavoro.giorno, 
+      lavoro.descrizione, 
+      lavoro.note 
     ]);
     autoTable(doc, {
       head: [lavoriColumns],
@@ -46,21 +43,15 @@ export const generaFileLavoriExcel = async (lavori) => {
   // Aggiungo i dati al foglio lavoriSheet
   if (lavori.length > 0) {
     lavoriSheet.columns = [
-      { header: 'Nome', key: 'nome', width: 20 },
-      { header: 'Cognome / Professione', key: 'cognome_o_professione', width: 20 },
-      { header: 'Giorno', key: 'giorno', width: 15 },
-      { header: 'Orario inizio', key: 'orario_inizio', width: 15 },
-      { header: 'Orario fine', key: 'orario_fine', width: 15 },
-      { header: 'Descrizione', key: 'descrizione', width: 30 },
+      { header: 'Cliente', key: 'cliente', width: 20 },  
+      { header: 'Giorno', key: 'giorno', width: 20 }, 
+      { header: 'Descrizione', key: 'descrizione', width: 30 }, 
       { header: 'Note', key: 'note', width: 30 }
     ];
     lavori.forEach(lavoro => {
       lavoriSheet.addRow({
-        nome: (lavoro.nome_cliente) ? lavoro.nome_cliente : lavoro.nome_professionista,
-        cognome_o_professione: (lavoro.cognome_cliente) ? lavoro.cognome_cliente : lavoro.professione,
-        giorno: formatoDate(lavoro.giorno, "GG-MM-AAAA"),
-        orario_inizio: lavoro.orario_inizio.toString(),
-        orario_fine: lavoro.orario_fine.toString(),
+        cliente: lavoro.cliente, 
+        giorno: lavoro.giorno, 
         descrizione: lavoro.descrizione,
         note: lavoro.note
       });

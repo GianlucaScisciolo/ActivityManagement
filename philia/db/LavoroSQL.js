@@ -50,6 +50,13 @@ export function SQL_ELIMINA_LAVORI(ids) {
   `);
 }
 
+export const SQL_ELIMINA_LAVORI_RANGE_GIORNI = ` 
+  DELETE FROM 
+    lavoro 
+  WHERE 
+    giorno BETWEEN ? AND ?; 
+`;
+
 export const SQL_MODIFICA_LAVORO = `
   UPDATE 
     lavoro 

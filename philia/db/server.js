@@ -12,7 +12,7 @@ import {
   SQL_INSERIMENTO_SERVIZIO, SQL_SELEZIONE_SERVIZI, SQL_SELEZIONE_TUTTI_I_SERVIZI, SQL_ELIMINA_SERVIZI, SQL_MODIFICA_SERVIZIO 
 } from './ServizioSQL.js'; 
 import {
-  SQL_INSERIMENTO_LAVORO, SQL_SELEZIONE_LAVORI, SQL_ELIMINA_LAVORI, SQL_MODIFICA_LAVORO
+  SQL_INSERIMENTO_LAVORO, SQL_SELEZIONE_LAVORI, SQL_ELIMINA_LAVORI, SQL_ELIMINA_LAVORI_RANGE_GIORNI, SQL_MODIFICA_LAVORO
 } from './LavoroSQL.js'
 const app = express();
 
@@ -293,16 +293,10 @@ app.post("/ELIMINA_LAVORI", async (req, res) => {
 });
 
 app.post("/ELIMINA_LAVORI_RANGE_GIORNI", async (req, res) => {
-  let primo_giorno = (req.body.primo_giorno) ? req.body.primo_giorno : "1111-01-01";
-  let ultimo_giorno = (req.body.ultimo_giorno) ? req.body.ultimo_giorno : "9999-01-01";
-  const sql = ` 
-    DELETE FROM 
-      lavoro 
-    WHERE 
-      giorno BETWEEN ? AND ?; 
-  `;
-  const params = [`${primo_giorno}`, `${ultimo_giorno}`];
-  return getResults(sql, params, res);
+  req.body.primo_giorno = (req.body.primo_giorno) ? req.body.primo_giorno : "1111-01-01";
+  req.body.ultimo_giorno = (req.body.ultimo_giorno) ? req.body.ultimo_giorno : "9999-01-01";
+  const params = [`${req.body.primo_giorno}`, `${req.body.ultimo_giorno}`];
+  return getResults(SQL_ELIMINA_LAVORI_RANGE_GIORNI, params, res);
 });
 
 app.post("/MODIFICA_LAVORI", async (req, res) => {
