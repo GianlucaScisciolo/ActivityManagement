@@ -360,63 +360,65 @@ export function CardProfilo({campi, indici, eseguiModificaProfilo}) {
   };
 
   return (
-    <StyledCard>
-      <StyledCardHeader>{campi["header"]}</StyledCardHeader>  
-      <SlideContainer style={{maxHeight: `${maxHeight}`}}>
-        {indici.map((i) => {
-          const NomeTag = (campi.type[i]) ? getInputTag(1, true) : (
-            getTextAreaTag(1, true)
-          );
-          const StyledEyeTag = (
-            (
-              campi.name[i] === "password_attuale" && passwordAttualeType === "password" || 
-              campi.name[i] === "nuova_password" && nuovaPasswordType === "password" || 
-              campi.name[i] === "conferma_nuova_password" && confermaNuovaPasswordType === "password"
-            ) ? StyledEyeClosedNotSelected : StyledEyeOpenNotSelected
-          );
-          return ( 
-            <React.Fragment key={i}>
-              <StyledRow>
-                <NomeTag 
-                  style={(campi.name[i].includes("password")) ? {maxWidth:"80%"} : null}
-                  rows={1}
-                  name={campi.name[i]}
-                  type={(campi.name[i].includes("password")) ? (
-                    (campi.name[i] === "password_attuale") ? passwordAttualeType : (
-                      (campi.name[i] === "nuova_password")) ? nuovaPasswordType : confermaNuovaPasswordType
-                  ) : campi.type[i]}
-                  step={campi.step[i]}
-                  min={campi.min[i]}
-                  value={campi.value[i]}
-                  placeholder={campi.placeholder[i]}
-                  onChange={campi.onChange}
-                  onClick={campi.onClick}
-                  onBlur={campi.onBlur}
-                />
-                {(campi.name[i].includes("password")) && (
-                  <StyledEyeTag
-                    style={{
-                      // border: "5px solid #000000",
-                      maxWidth: "20%",
-                      marginLeft: "-6px", 
-                      marginTop: "13px"
-                    }} 
-                    size={grandezzaIcona} 
-                    onClick={(e) => onChangeVisibilityPassword(e, campi.name[i])} 
+    <center>
+      <StyledCard>
+        <StyledCardHeader>{campi["header"]}</StyledCardHeader>  
+        <SlideContainer style={{maxHeight: `${maxHeight}`}}>
+          {indici.map((i) => {
+            const NomeTag = (campi.type[i]) ? getInputTag(1, true) : (
+              getTextAreaTag(1, true)
+            );
+            const StyledEyeTag = (
+              (
+                campi.name[i] === "password_attuale" && passwordAttualeType === "password" || 
+                campi.name[i] === "nuova_password" && nuovaPasswordType === "password" || 
+                campi.name[i] === "conferma_nuova_password" && confermaNuovaPasswordType === "password"
+              ) ? StyledEyeClosedNotSelected : StyledEyeOpenNotSelected
+            );
+            return ( 
+              <React.Fragment key={i}>
+                <StyledRow>
+                  <NomeTag 
+                    style={(campi.name[i].includes("password")) ? {maxWidth:"80%"} : null}
+                    rows={1}
+                    name={campi.name[i]}
+                    type={(campi.name[i].includes("password")) ? (
+                      (campi.name[i] === "password_attuale") ? passwordAttualeType : (
+                        (campi.name[i] === "nuova_password")) ? nuovaPasswordType : confermaNuovaPasswordType
+                    ) : campi.type[i]}
+                    step={campi.step[i]}
+                    min={campi.min[i]}
+                    value={campi.value[i]}
+                    placeholder={campi.placeholder[i]}
+                    onChange={campi.onChange}
+                    onClick={campi.onClick}
+                    onBlur={campi.onBlur}
                   />
-                )}
-              </StyledRow>
-              {campi.options[i]}
+                  {(campi.name[i].includes("password")) && (
+                    <StyledEyeTag
+                      style={{
+                        // border: "5px solid #000000",
+                        maxWidth: "20%",
+                        marginLeft: "-6px", 
+                        marginTop: "13px"
+                      }} 
+                      size={grandezzaIcona} 
+                      onClick={(e) => onChangeVisibilityPassword(e, campi.name[i])} 
+                    />
+                  )}
+                </StyledRow>
+                {campi.options[i]}
 
-              {(campi.errore[i]) && (<StyledSpanErrore>{campi.errore[i]}</StyledSpanErrore>)}
-            </React.Fragment>
-          );
-        })}
-      </SlideContainer>
-      <OperazioniModificaProfilo 
-        eseguiModificaProfilo={eseguiModificaProfilo}
-      />
-    </StyledCard>
+                {(campi.errore[i]) && (<StyledSpanErrore>{campi.errore[i]}</StyledSpanErrore>)}
+              </React.Fragment>
+            );
+          })}
+        </SlideContainer>
+        <OperazioniModificaProfilo 
+          eseguiModificaProfilo={eseguiModificaProfilo}
+        />
+      </StyledCard>
+    </center>
   );
 }
 

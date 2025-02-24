@@ -63,9 +63,9 @@ const Login = () => {
           return;
         }
         dispatch(eseguiLogin({
-          username: utente.username,
-          ruolo: utente.ruolo,
-          note: utente.note, 
+          username: result.utente.username,
+          ruolo: result.utente.ruolo,
+          note: result.utente.note, 
         }));
         navigate("/");
       }
@@ -98,7 +98,7 @@ const Login = () => {
       <div className="main-content" />
 
       <LoginTag 
-        campi={getCampiLogin(setDatiLogin, (e) => handleInputChange(e, setDatiLogin), null, null)} 
+        campi={getCampiLogin(datiLogin, (e) => handleInputChange(e, setDatiLogin), null, null)} 
         indici={indiciLogin} 
         eseguiLogin={(e) => handleLogin(e)} 
       />

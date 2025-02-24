@@ -4,7 +4,7 @@ import autenticazioneStore from "../store/autenticazione_store/AutenticazioneSto
 import { operazioniAutenticazione } from "./Operazioni";
 import { generateRandomString, encryptPassword, passwordIsCorrect, PEPPER_HEX } from './Sicurezza';
 
-export const login = async (e, datiLogin, setUtente, setSalone) => {
+export const login = async (e, datiLogin, setUtente) => {
   e.preventDefault();
   try {
     await AutenticazioneAction.dispatchAction(datiLogin, operazioniAutenticazione.LOGIN);

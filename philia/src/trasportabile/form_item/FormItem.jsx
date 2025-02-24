@@ -201,7 +201,7 @@ export function FormLogin({campi, indici, eseguiLogin}) {
               <StyledLabel htmlFor={campi.name[i]}>{campi.label[i]}</StyledLabel>
               <StyledRow>
                 <NomeTag 
-                  style={(campi.name[i] === "password") ? {maxWidth:"80%"} : null}
+                  style={(campi.name[i] === "password") ? {maxWidth:"90%"} : null}
                   rows={1}
                   name={campi.name[i]}
                   type={(campi.name[i] === "password") ? inputType : campi.type[i]}
@@ -217,7 +217,7 @@ export function FormLogin({campi, indici, eseguiLogin}) {
                   <StyledEyeTag
                     style={{
                       // border: "5px solid #000000",
-                      maxWidth: "20%",
+                      maxWidth: "10%",
                       marginLeft: "-6px", 
                       marginTop: "13px"
                     }} 
@@ -281,7 +281,7 @@ export function FormProfilo({campi, indici, eseguiModificaProfilo}) {
               <StyledLabel htmlFor={campi.name[i]}>{campi.label[i]}</StyledLabel>
               <StyledRow>
                 <NomeTag 
-                  style={(campi.name[i].includes("password")) ? {maxWidth:"80%"} : null}
+                  style={(campi.name[i].includes("password")) ? {maxWidth:"90%"} : null}
                   rows={1}
                   name={campi.name[i]}
                   type={(campi.name[i].includes("password")) ? (
@@ -300,7 +300,7 @@ export function FormProfilo({campi, indici, eseguiModificaProfilo}) {
                   <StyledEyeTag
                     style={{
                       // border: "5px solid #000000",
-                      maxWidth: "20%",
+                      maxWidth: "10%",
                       marginLeft: "-6px", 
                       marginTop: "13px"
                     }} 

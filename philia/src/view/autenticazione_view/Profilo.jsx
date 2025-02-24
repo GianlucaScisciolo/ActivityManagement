@@ -19,20 +19,12 @@ import {
 const Profilo = () => {
   const formSession = useSelector((state) => state.formSession.value);
   const autenticazioneSession = useSelector((state) => state.autenticazioneSession.value);
+  const dispatch = useDispatch();
   const [utente, setUtente] = useState(0);
-  const [salone, setSalone] = useState(0);
   const [aggiornamento1, setAggiornamento1] = useState(false);
   const [aggiornamento2, setAggiornamento2] = useState(false);
-  const [usernameAttuale, setUsernameAttuale] = useState(autenticazioneSession.username);
-  const [nuovoUsername, setNuovoUsername] = useState(autenticazioneSession.username);
-  const [ruolo, setRuolo] = useState(autenticazioneSession.ruolo);
-  const [ruoloSelezionato, setRuoloSelezionato] = useState(autenticazioneSession.ruolo);
-  const [note, setNote] = useState(autenticazioneSession.note);
-  const [password, setPassword] = useState('');
-  const [nuovaPassword, setNuovaPassword] = useState('');
-  const [confermaNuovaPassword, setConfermaNuovaPassword] = useState('');
-  const dispatch = useDispatch();
   const [datiProfilo, setDatiProfilo] = useState({
+    username_attuale: useState(autenticazioneSession.username), 
     nuovo_username: autenticazioneSession.username, 
     note: (autenticazioneSession.note) ? autenticazioneSession.note : "", 
     password_attuale: "",
@@ -44,9 +36,6 @@ const Profilo = () => {
     errore_nuova_password: "", 
     errore_conferma_nuova_password: "",   
   })
-  
-  const [aggiornamentoCompletato, setAggiornamentoCompletato] = useState(true);
-  
   const eseguiModificaProfilo = async (e) => {
     e.preventDefault();
     if (confirm("Sei sicuro di voler modificare il profilo?")) {
@@ -54,7 +43,7 @@ const Profilo = () => {
         username: autenticazioneSession.username,
         password: ""
       }
-      await login(e, datiLogin, setUtente, setSalone);
+      await login(e, datiLogin, setUtente);
       autenticazioneStore.setUtente(-1);
       setUtente(-1);
       setAggiornamento1(!aggiornamento1);
@@ -64,7 +53,10 @@ const Profilo = () => {
       return;
     }
   };
-
+  const ProfiloTag = (formSession.view === "form") ? FormProfilo : (
+    (formSession.view === "card") ? CardProfilo : RowProfilo
+  );
+  
   useEffect(() => {
     const handleLoginChange = () => {
       setUtente(autenticazioneStore.getUtente());
@@ -74,14 +66,19 @@ const Profilo = () => {
       autenticazioneStore.removeChangeListener(operazioniAutenticazione.LOGIN, handleLoginChange);
     };
   }, []);
+  /**/
   
   useEffect(() => {
-    if(utente === -1) {
+    if(utente !== 0 && utente === -1) {
       console.log("Aggiornamento in corso...");
       setAggiornamento2(!aggiornamento2);
     }
-    else if(utente.length !== 0) {
+    else if(utente !== 0 && utente.length !== 0) {
       console.log("Aggiornamento effettuato.");
+      // console.log("Utente trovato: |||| " + 
+      //   utente.username + " | " + utente.ruolo + " | " + utente.note + " | " + 
+      //   utente.password + " | " + utente.salt_hex +
+      // " ||||");
       datiProfilo["num_utenti"] = utente.length;
       if(utente) {
         datiProfilo["password_db"] = utente.password;
@@ -97,54 +94,38 @@ const Profilo = () => {
         note: datiProfilo.note 
       }));
 
-      alert("Modifica profilo eseguita con successo.");
+     alert("Modifica profilo eseguita con successo.");
     }
   }, [aggiornamento1]);
-
+  
   useEffect(() => {
     if(utente !== 0) {
       setUtente(autenticazioneStore.getUtente());
       setAggiornamento1(!aggiornamento1);
     }
   }, [aggiornamento2]);
-
+  
+/*
   useEffect(() => {
     setNuovoUsername(autenticazioneSession.nuovoUsername);
     setRuolo(autenticazioneSession.ruolo);
     setRuoloSelezionato(autenticazioneSession.ruolo);
     setNote(autenticazioneSession.note);
   }, [autenticazioneSession]);
-  
+*/
+
   return (
     <>
       <Header />
 
       <div className="main-content"></div>
 
-      {(formSession.view === "form") && (
-        <FormProfilo  
-          campi={getCampiProfilo(setDatiProfilo, (e) => handleInputChange(e, setDatiProfilo), null, null)} 
-          indici={indiciProfilo} 
-          eseguiModificaProfilo={(e) => eseguiModificaProfilo(e)} 
-        />
-      )}
-      {(formSession.view === "row") && (
-        <RowProfilo  
-          campi={getCampiProfilo(setDatiProfilo, (e) => handleInputChange(e, setDatiProfilo), null, null)} 
-          indici={indiciProfilo} 
-          eseguiModificaProfilo={(e) => eseguiModificaProfilo(e)} 
-        />
-      )}
-      {(formSession.view === "card") && (
-        <center>
-          <CardProfilo  
-            campi={getCampiProfilo(setDatiProfilo, (e) => handleInputChange(e, setDatiProfilo), null, null)} 
-            indici={indiciProfilo} 
-            eseguiModificaProfilo={(e) => eseguiModificaProfilo(e)} 
-          />
-        </center>
-      )}
-
+      <ProfiloTag  
+        campi={getCampiProfilo(datiProfilo, (e) => handleInputChange(e, setDatiProfilo), null, null)} 
+        indici={indiciProfilo} 
+        eseguiModificaProfilo={(e) => eseguiModificaProfilo(e)} 
+      />
+      
       <br /> <br /> <br /> <br />
       <br /> <br /> <br /> <br />
       <br /> <br /> <br /> <br />
@@ -154,3 +135,12 @@ const Profilo = () => {
 }
 
 export default Profilo;
+
+
+
+
+
+
+
+
+
