@@ -10,7 +10,8 @@ import {
   StyledInputBlock, StyledInputModifica, StyledInputElimina, 
   StyledTextAreaBlock, StyledTextAreaModifica, StyledTextAreaElimina, 
   StyledRow, StyledCol, StyledSpanErrore, 
-  StyledSelectBlock, StyledSelectModifica, StyledSelectElimina
+  StyledSelectBlock, StyledSelectModifica, StyledSelectElimina, 
+  StyledEyeClosedNotSelected, StyledEyeOpenNotSelected
 } from "./StyledRowItem";
 import { Trash2, Pencil } from 'lucide-react';
 import { faFilePdf, faFileExcel } from '@fortawesome/free-solid-svg-icons';
@@ -281,6 +282,64 @@ export function RowItemEsistente({item, campi, indici, selectOperation}) {
       })}
     </StyledRow>
   )
+}
+
+export function RowLogin({campi, indici, eseguiLogin}) {
+  const [inputType, setInputType] = useState('password');
+
+  const onChangeVisibilityPassword = (e) => {
+    e.preventDefault();
+    setInputType(inputType === 'text' ? 'password' : 'text');
+  };
+
+  return (
+    <StyledRow>
+      <OperazioniLogin eseguiLogin={eseguiLogin} />
+      {indici.map((i) => {
+        const NomeTag = (campi.type[i]) ? getInputTag(1, true) : (
+          getTextAreaTag(1, true)
+        );
+        const StyledEyeTag = (inputType === "password") ? StyledEyeClosedNotSelected : StyledEyeOpenNotSelected;
+        return ( 
+          <React.Fragment key={i}>
+            <StyledCol>
+              <div style={{width: "100%"}}>
+                <StyledRow>
+                  <NomeTag 
+                    style={(campi.name[i] === "password") ? {maxWidth:"80%"} : null}
+                    rows={1}
+                    name={campi.name[i]}
+                    type={(campi.name[i] === "password") ? inputType : campi.type[i]}
+                    step={campi.step[i]}
+                    min={campi.min[i]}
+                    value={campi.value[i]}
+                    placeholder={campi.placeholder[i]}
+                    onChange={campi.onChange}
+                    onClick={campi.onClick}
+                    onBlur={campi.onBlur}
+                  />
+                  {(campi.name[i] === "password") && (
+                    <StyledEyeTag
+                      style={{
+                        // border: "5px solid #000000",
+                        maxWidth: "20%",
+                        marginLeft: "-6px", 
+                        marginTop: "13px"
+                      }} 
+                      size={grandezzaIcona} 
+                      onClick={onChangeVisibilityPassword} 
+                    />
+                  )}
+                </StyledRow>
+                {campi.options[i]}
+                {(campi.errore[i]) && (<StyledSpanErrore>{campi.errore[i]}</StyledSpanErrore>)}
+              </div>
+            </StyledCol>
+          </React.Fragment>
+        );
+      })}
+    </StyledRow>
+  );
 }
 
 

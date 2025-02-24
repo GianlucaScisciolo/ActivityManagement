@@ -3,7 +3,10 @@ import Row from 'react-bootstrap/esm/Row';
 import Col from 'react-bootstrap/esm/Col';
 import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
-import { Trash2, Pencil, Save, Search, ChevronUp, ChevronDown, LogIn, Download, X } from 'lucide-react';
+import { 
+  Trash2, Pencil, Save, Search, ChevronUp, ChevronDown, LogIn, Download, X, 
+  EyeClosed, Eye
+} from 'lucide-react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export const grandezzaIcona = 50;
@@ -122,12 +125,36 @@ const styledIconNotSelected = `
   cursor: pointer;
 `;
 
+export const Container = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%; // oppure specifica l'altezza desiderata
+  padding-top:10px;
+`;
+
 export const StyledSaveNotSelected = styled(Save)`
   ${styledIconNotSelected}
   transition: 0.5s all ease-out;
   &:hover {
     color: #0050EF;
   }
+`;
+
+export const StyledEyeClosedNotSelected = styled(EyeClosed)`
+  ${styledIconNotSelected}
+  transition: 0.5s all ease-out;
+  /* &:hover {
+    color: #0050EF;
+  } */
+`;
+
+export const StyledEyeOpenNotSelected = styled(Eye)`
+  ${styledIconNotSelected}
+  transition: 0.5s all ease-out;
+  /* &:hover {
+    color: #0050EF;
+  } */
 `;
 
 export const StyledSearchNotSelected = styled(Search)`

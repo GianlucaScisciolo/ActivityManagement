@@ -1,7 +1,10 @@
 import styled, {keyframes} from 'styled-components';
 import Row from 'react-bootstrap/esm/Row';
 import Col from 'react-bootstrap/esm/Col';
-import { Trash2, Pencil, Save, Search, ChevronLeft, ChevronRight, LogIn, Download, X } from 'lucide-react';
+import { 
+  Trash2, Pencil, Save, Search, ChevronLeft, ChevronRight, LogIn, Download, X, 
+  Eye, EyeClosed
+} from 'lucide-react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export const grandezzaIcona = 50;
@@ -14,7 +17,6 @@ export const StyledRow = styled(Row)`
   padding-left: 3%;
   padding-right: 3%;
 `;
-
 
 export const StyledCol = styled(Col)`
   position: relative; 
@@ -175,6 +177,22 @@ export const StyledSaveNotSelected = styled(Save)`
   &:hover {
     color: #0050EF;
   }
+`;
+
+export const StyledEyeClosedNotSelected = styled(EyeClosed)`
+  ${styledIconNotSelected}
+  transition: 0.5s all ease-out;
+  /* &:hover {
+    color: #0050EF;
+  } */
+`;
+
+export const StyledEyeOpenNotSelected = styled(Eye)`
+  ${styledIconNotSelected}
+  transition: 0.5s all ease-out;
+  /* &:hover {
+    color: #0050EF;
+  } */
 `;
 
 export const StyledSearchNotSelected = styled(Search)`

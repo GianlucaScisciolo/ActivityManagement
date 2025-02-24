@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../component/Header';
+import { handleInputChange } from '../../vario/Vario';
 import AutenticazioneAction from '../../action/autenticazione_action/AutenticazioneAction';
 import autenticazioneStore from '../../store/autenticazione_store/AutenticazioneStore';
 import { useSelector, useDispatch } from 'react-redux';
@@ -8,9 +9,10 @@ import { operazioniAutenticazione } from '../../vario/Operazioni';
 import { eseguiLogin } from '../../store/redux/AutenticazioneSessionSlice';
 import { generateRandomString, encryptPassword, PEPPER_HEX, passwordIsCorrect } from '../../vario/Sicurezza';
 import { controlloLogin } from '../../vario/Controlli';
-import { FormLogin } from '../component/form_item/FormsLogin';
-import { CardLogin } from '../component/card_item/CardsLogin';
-import { RowLogin } from '../component/row_item/RowsLogin';
+import { getCampiLogin, indiciLogin } from './AutenticazioneVario';
+import { FormLogin } from '../../trasportabile/form_item/FormItem';
+import { CardLogin } from '../../trasportabile/card_item/CardItem';
+import { RowLogin } from '../../trasportabile/row_item/RowItem';
 
 const Login = () => {
   const [utente, setUtente] = useState(0);
@@ -94,10 +96,10 @@ const Login = () => {
       <Header />
 
       <div className="main-content" />
-      
+
       <LoginTag 
-        item={datiLogin} 
-        setItem={setDatiLogin} 
+        campi={getCampiLogin(setDatiLogin, (e) => handleInputChange(e, setDatiLogin), null, null)} 
+        indici={indiciLogin} 
         eseguiLogin={(e) => handleLogin(e)} 
       />
       

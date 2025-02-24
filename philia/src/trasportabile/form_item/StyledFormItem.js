@@ -3,7 +3,10 @@ import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Row from 'react-bootstrap/esm/Row';
 import Col from 'react-bootstrap/esm/Col';
-import { Trash2, Pencil, Save, Search, ChevronUp, ChevronDown, LogIn, Download, X } from 'lucide-react';
+import { 
+  Trash2, Pencil, Save, Search, ChevronUp, ChevronDown, LogIn, Download, X, 
+  Eye, EyeClosed
+} from 'lucide-react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export const grandezzaIcona = 50;
@@ -145,6 +148,22 @@ const styledIconNotSelectedRed = `
 
 export const StyledSaveNotSelected = styled(Save)`
   ${styledIconNotSelectedBlue}
+`;
+
+export const StyledEyeClosedNotSelected = styled(EyeClosed)`
+  ${styledIconNotSelected}
+  transition: 0.5s all ease-out;
+  /* &:hover {
+    color: #0050EF;
+  } */
+`;
+
+export const StyledEyeOpenNotSelected = styled(Eye)`
+  ${styledIconNotSelected}
+  transition: 0.5s all ease-out;
+  /* &:hover {
+    color: #0050EF;
+  } */
 `;
 
 export const StyledSearchNotSelected = styled(Search)`

@@ -10,19 +10,8 @@ import autenticazioneStore from "../store/autenticazione_store/AutenticazioneSto
 
 import { operazioniPersone, operazioniServizi, operazioniLavori, operazioniAutenticazione } from "./Operazioni";
 
-const aggiornaItems = (items, dati, setItems) => {
-  const updatedItems = items.map(item => {
-    if (dati.ids.includes(item.id)) {
-      return { 
-        ...item, 
-        tipo_selezione: 0 
-      };
-    }
-    return item;
-  });
-  setItems(updatedItems);
-};
 
+// azzeraSelezione(items, selectedIdsModifica, setItems, tipoItem, ids_lavori);
 export const azzeraSelezione = (items, setItems, tipoItem, idsLavori) => {
   let itemsAggiornati = [];
   for (let i = 0, j = 0; i < items.length; i++) {
@@ -71,15 +60,9 @@ export const modifica = async (e, tipoItem, selectedIdsModifica, setSelectedIdsM
       await ServizioAction.dispatchAction(itemsDaModificare, operazioniServizi.MODIFICA_SERVIZI);
     }
     else if(tipoItem === "lavoro") {
-      // console.log("||||||||||||||||||||||||||||||||||||||||||||||||||");
-      // for(let s of servizioStore.getServizi()) {
-      //   console.log(s);
-      // }
-      // console.log("||||||||||||||||||||||||||||||||||||||||||||||||||");
-      // return;
       await LavoroAction.dispatchAction([itemsDaModificare, servizioStore.getServizi()], operazioniLavori.MODIFICA_LAVORI);
     }
-    azzeraSelezione(items, selectedIdsModifica, setItems, tipoItem, ids_lavori);
+    azzeraSelezione(items, setItems, tipoItem, ids_lavori);
     
     setSelectedIdsModifica([]);
     alert("Modifica completata con successo.");
@@ -89,55 +72,6 @@ export const modifica = async (e, tipoItem, selectedIdsModifica, setSelectedIdsM
   }
 }
 
-
-  // try {
-  //   const data = {ids: selectedIdsModifica};
-  //   const itemsDaModificare = items.filter(item => data.ids.includes(item.id));
-  //   const itemsRestanti = items.filter(item => !data.ids.includes(item.id));
-  //   if(tipoItem === "cliente") {
-  //     for(let i = 0; i < itemsDaModificare.length; i++) {
-  //       let datiModifica = {
-  //         id: itemsDaModificare[i].id,
-  //         // nome: itemsDaModificare[i].nome,
-  //         // cognome: itemsDaModificare[i].cognome,
-  //         contatto: itemsDaModificare[i].contatto,
-  //         note: itemsDaModificare[i].note
-  //       }
-  //       if(controlloCliente(datiModifica, setErrori) > 0) {
-  //         return;
-  //       }
-  //       await PersonaAction.dispatchAction(datiModifica, operazioniPersone.MODIFICA_CLIENTI);
-  //       aggiornaItems(items, data, setItems);
-  //     }
-  //   }
-  //   else if(tipoItem === "professionista") {
-  //     for(let i = 0; i < itemsDaModificare.length; i++) {
-  //       let datiModifica = {
-  //         "nome": itemsDaModificare[i].nome,
-  //         "professione": itemsDaModificare[i].professione,
-  //         "contatto": itemsDaModificare[i].contatto,
-  //         "email": itemsDaModificare[i].email,
-  //         "note": itemsDaModificare[i].note
-  //       }
-  //       if(controlloProfessionista(datiModifica, setErrori) > 0) {
-  //         return;
-  //       }
-  //       await ProfessionistaAction.dispatchAction(itemsDaModificare, operazioniProfessionisti.MODIFICA_PROFESSIONISTI);
-  //       aggiornaItems(items, data, setItems);
-  //     }
-  //   }
-  //   else {
-  //     alert(tipoItem);
-  //     alert("Da fare!!");
-  //     return;
-  //   }
-  //   alert("Modifica completata con successo.");
-  // }
-  // catch(error) {
-  //   alert("Errore durante la modifica, riprova più tardi.");
-  // }
-  // setSelectedIdsModifica([]);
-// }
 
 
 

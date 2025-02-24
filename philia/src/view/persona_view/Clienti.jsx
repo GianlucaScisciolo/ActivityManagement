@@ -8,8 +8,6 @@ import { operazioniPersone } from '../../vario/Operazioni';
 import { FormRicercaItems } from '../../trasportabile/form_item/FormItem';
 import { CardRicercaItems } from '../../trasportabile/card_item/CardItem';
 import { RowRicercaItems } from '../../trasportabile/row_item/RowItem';
-import { CardClienteEsistente } from '../component/card_item/CardsClienti';
-import { RowClienteEsistente } from '../component/row_item/RowsClienti';
 import { eseguiRicerca } from '../../vario/OperazioniRicerca';
 import { Items } from '../component/Items';
 import { OperazioniItems, selectOperationBody } from '../component/Operazioni';
