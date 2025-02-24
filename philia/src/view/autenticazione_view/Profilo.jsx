@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Header from "../component/Header";
+import { handleInputChange } from "../../vario/Vario";
 import { login, modificaProfilo } from "../../vario/OperazioniAutenticazione";
 import autenticazioneStore from "../../store/autenticazione_store/AutenticazioneStore";
 import { operazioniAutenticazione } from "../../vario/Operazioni";
@@ -8,9 +9,12 @@ import { controlloProfilo } from "../../vario/Controlli";
 import { eseguiModificaAutenticazioneSession } from "../../store/redux/AutenticazioneSessionSlice";
 import Row from 'react-bootstrap/esm/Row';
 import Col from 'react-bootstrap/esm/Col';
-import { FormModificaProfilo } from "../component/form_item/FormsProfilo";
-import { CardModificaProfilo } from "../component/card_item/CardsProfilo";
-import { RowModificaProfilo } from "../component/row_item/RowsProfilo";
+import { FormProfilo } from "../../trasportabile/form_item/FormItem";
+import { CardProfilo } from "../../trasportabile/card_item/CardItem";
+import { RowProfilo } from "../../trasportabile/row_item/RowItem";
+import { 
+  getCampiProfilo, indiciProfilo 
+} from "./AutenticazioneVario"
 
 const Profilo = () => {
   const formSession = useSelector((state) => state.formSession.value);
@@ -118,14 +122,26 @@ const Profilo = () => {
       <div className="main-content"></div>
 
       {(formSession.view === "form") && (
-        <FormModificaProfilo  item={datiProfilo} setItem={setDatiProfilo} eseguiModificaProfilo={(e) => eseguiModificaProfilo(e)} />
+        <FormProfilo  
+          campi={getCampiProfilo(setDatiProfilo, (e) => handleInputChange(e, setDatiProfilo), null, null)} 
+          indici={indiciProfilo} 
+          eseguiModificaProfilo={(e) => eseguiModificaProfilo(e)} 
+        />
       )}
       {(formSession.view === "row") && (
-        <RowModificaProfilo  item={datiProfilo} setItem={setDatiProfilo} eseguiModificaProfilo={(e) => eseguiModificaProfilo(e)} />
+        <RowProfilo  
+          campi={getCampiProfilo(setDatiProfilo, (e) => handleInputChange(e, setDatiProfilo), null, null)} 
+          indici={indiciProfilo} 
+          eseguiModificaProfilo={(e) => eseguiModificaProfilo(e)} 
+        />
       )}
       {(formSession.view === "card") && (
         <center>
-          <CardModificaProfilo  item={datiProfilo} setItem={setDatiProfilo} eseguiModificaProfilo={(e) => eseguiModificaProfilo(e)} />
+          <CardProfilo  
+            campi={getCampiProfilo(setDatiProfilo, (e) => handleInputChange(e, setDatiProfilo), null, null)} 
+            indici={indiciProfilo} 
+            eseguiModificaProfilo={(e) => eseguiModificaProfilo(e)} 
+          />
         </center>
       )}
 

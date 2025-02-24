@@ -153,17 +153,12 @@ export const StyledSaveNotSelected = styled(Save)`
 export const StyledEyeClosedNotSelected = styled(EyeClosed)`
   ${styledIconNotSelected}
   transition: 0.5s all ease-out;
-  /* &:hover {
-    color: #0050EF;
-  } */
 `;
 
 export const StyledEyeOpenNotSelected = styled(Eye)`
   ${styledIconNotSelected}
   transition: 0.5s all ease-out;
-  /* &:hover {
-    color: #0050EF;
-  } */
+  color: #0050EF;
 `;
 
 export const StyledSearchNotSelected = styled(Search)`

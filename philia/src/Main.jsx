@@ -13,7 +13,7 @@ import NuovoLavoro from "./view/lavoro_view/NuovoLavoro.jsx";
 import Clienti from "./view/persona_view/Clienti.jsx";
 import Servizi from "./view/servizio_view/Servizi.jsx";
 import Lavori from "./view/lavoro_view/Lavori.jsx";
-import Profilo from "./view/persona_view/Profilo.jsx";
+import Profilo from "./view/autenticazione_view/Profilo.jsx";
 import FileLavori from "./view/lavoro_view/FileLavori.jsx";
 
 console.log("Store:", store.getState());

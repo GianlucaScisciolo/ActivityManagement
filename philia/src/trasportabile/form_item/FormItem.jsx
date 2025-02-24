@@ -241,6 +241,88 @@ export function FormLogin({campi, indici, eseguiLogin}) {
   );
 }
 
+export function FormProfilo({campi, indici, eseguiModificaProfilo}) {
+  let maxHeight = "2000px";
+  const [passwordAttualeType, setPasswordAttualeType] = useState('password');
+  const [nuovaPasswordType, setNuovaPasswordType] = useState('password');
+  const [confermaNuovaPasswordType, setConfermaNuovaPasswordType] = useState('password');
+
+  const onChangeVisibilityPassword = (e, nome) => {
+    e.preventDefault();
+    if(nome === "password_attuale") {
+      setPasswordAttualeType(passwordAttualeType === 'text' ? 'password' : 'text');
+    }
+    else if(nome === "nuova_password") {
+      setNuovaPasswordType(nuovaPasswordType === 'text' ? 'password' : 'text');
+    }
+    else if(nome === "conferma_nuova_password") {
+      setConfermaNuovaPasswordType(confermaNuovaPasswordType === 'text' ? 'password' : 'text');
+    } 
+  };
+
+  return (
+    <StyledForm>
+      <StyledHeader>{campi["header"]}</StyledHeader>  
+      <SlideContainer style={{maxHeight: `${maxHeight}`}}>
+        {indici.map((i) => {
+          const NomeTag = (campi.type[i]) ? getInputTag(1, true) : (
+            getTextAreaTag(1, true)
+          );
+          const StyledEyeTag = (
+            (
+              campi.name[i] === "password_attuale" && passwordAttualeType === "password" || 
+              campi.name[i] === "nuova_password" && nuovaPasswordType === "password" || 
+              campi.name[i] === "conferma_nuova_password" && confermaNuovaPasswordType === "password"
+            ) ? StyledEyeClosedNotSelected : StyledEyeOpenNotSelected
+          );
+          //(inputType === "password") ? StyledEyeClosedNotSelected : StyledEyeOpenNotSelected;
+          return ( 
+            <React.Fragment key={i}>
+              <StyledLabel htmlFor={campi.name[i]}>{campi.label[i]}</StyledLabel>
+              <StyledRow>
+                <NomeTag 
+                  style={(campi.name[i].includes("password")) ? {maxWidth:"80%"} : null}
+                  rows={1}
+                  name={campi.name[i]}
+                  type={(campi.name[i].includes("password")) ? (
+                    (campi.name[i] === "password_attuale") ? passwordAttualeType : (
+                      (campi.name[i] === "nuova_password")) ? nuovaPasswordType : confermaNuovaPasswordType
+                  ) : campi.type[i]}
+                  step={campi.step[i]}
+                  min={campi.min[i]}
+                  value={campi.value[i]}
+                  placeholder={campi.placeholder[i]}
+                  onChange={campi.onChange}
+                  onClick={campi.onClick}
+                  onBlur={campi.onBlur}
+                />
+                {(campi.name[i].includes("password")) && (
+                  <StyledEyeTag
+                    style={{
+                      // border: "5px solid #000000",
+                      maxWidth: "20%",
+                      marginLeft: "-6px", 
+                      marginTop: "13px"
+                    }} 
+                    size={grandezzaIcona} 
+                    onClick={(e) => onChangeVisibilityPassword(e, campi.name[i])} 
+                  />
+                )}
+              </StyledRow>
+              {campi.options[i]}
+
+              {(campi.errore[i]) && (<StyledSpanErrore>{campi.errore[i]}</StyledSpanErrore>)}
+            </React.Fragment>
+          );
+        })}
+        <br /> <br />
+      </SlideContainer>
+      <OperazioniModificaProfilo 
+        eseguiModificaProfilo={eseguiModificaProfilo}
+      />
+    </StyledForm>
+  );
+}
 
 
 
