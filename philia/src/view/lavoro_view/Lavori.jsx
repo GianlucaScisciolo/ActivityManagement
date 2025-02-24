@@ -23,6 +23,7 @@ import {
 const Lavori = () => {
   const formSession = useSelector((state) => state.formSession.value);
   const itemSession = useSelector((state) => state.itemSession.value);
+  const [aggiornamento, setAggiornamento] = useState(0);
   const [lavori, setLavori] = useState(-1);
   const [servizi, setServizi] = useState(-1);
   const [selectedTrashCount, setSelectedTrashCount] = useState(0);
@@ -67,8 +68,22 @@ const Lavori = () => {
     const onChange = () => setServizi(servizioStore.getServizi());
     servizioStore.addChangeListener(operazioniServizi.OTTIENI_TUTTI_I_SERVIZI, onChange);
     servizioStore.removeChangeListener(operazioniServizi.OTTIENI_TUTTI_I_SERVIZI, onChange);
-    // setAggiornamento(!aggiornamento);
+    console.log("Aggiornamento in corso...");
+    setAggiornamento(true);
   }, []);
+
+  useEffect(() => {
+    if(aggiornamento !== 0) {
+      if(servizi !== -1) {
+        console.log("Aggiornamento effettuato.");
+      }      
+      else {
+        console.log("Aggiornamento in corso...");
+        setServizi(servizioStore.getServizi());
+        setAggiornamento(!aggiornamento);
+      }
+    }
+  }, [aggiornamento]);
 
   return (
     <>

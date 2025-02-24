@@ -42,6 +42,7 @@ const eseguiRicercaServizi = (e, setLista, datiRicerca) => {
 };
 
 const eseguiRicercaLavori = (e, setLista, datiRicerca) => {
+  servizioStore.setServizi(-1);
   LavoroAction.dispatchAction(datiRicerca, operazioniLavori.VISUALIZZA_LAVORI);
 };
 

@@ -1,6 +1,6 @@
 export const SQL_INSERIMENTO_LAVORO = ` 
-  INSERT INTO lavoro (id_cliente, giorno, descrizione, note) 
-  VALUES (?, ?, ?, ?); 
+  INSERT INTO lavoro (id_cliente, giorno, descrizione, totale, note) 
+  VALUES (?, ?, ?, ?, ?); 
 `;
 
 export function SQL_SELEZIONE_LAVORI(note) {
@@ -28,6 +28,7 @@ export function SQL_SELEZIONE_LAVORI(note) {
       c.email AS email, 
       DATE_FORMAT(l.giorno, "%Y-%m-%d") AS giorno, 
       l.descrizione AS descrizione, 
+      l.totale AS totale, 
       l.note AS note 
     FROM 
       lavoro l 

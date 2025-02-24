@@ -1,13 +1,15 @@
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import Header from "../component/Header";
+import { modifica } from "../../vario/OperazioniModifica";
+import { elimina } from "../../vario/OperazioniEliminazione";
 import PersonaAction from "../../action/persona_action/PersonaAction";
 import ServizioAction from "../../action/servizio_action/ServizioAction";
 import personaStore from "../../store/persona_store/PersonaStore";
 import servizioStore from "../../store/servizio_store/ServizioStore";
 import { operazioniPersone, operazioniServizi } from "../../vario/Operazioni";
 import { handleInputChange } from "../../vario/Vario";
-import { selectOperationBody } from "../component/Operazioni";
+import { OperazioniItems, selectOperationBody } from "../component/Operazioni";
 import { FormNuovoItem } from "../../trasportabile/form_item/FormItem";
 import { CardNuovoItem } from "../../trasportabile/card_item/CardItem";
 import { RowNuovoItem } from "../../trasportabile/row_item/RowItem";
@@ -29,7 +31,7 @@ const NuovoLavoro = () => {
   const [selectedPencilCount, setSelectedPencilCount] = useState(0);
   const [selectedIdsEliminazione, setSelectedIdsEliminazione] = useState([]);
   const [selectedIdsModifica, setSelectedIdsModifica] = useState([]);
-  const [aggiornamento, setAggiornamento] = useState(true);
+  const [aggiornamento, setAggiornamento] = useState(0);
   const NuovoLavoroTag = (formSession.view === "form") ? FormNuovoItem : (
     (formSession.view === "card") ? CardNuovoItem : RowNuovoItem
   )
@@ -40,6 +42,8 @@ const NuovoLavoro = () => {
     id_servizi: [], 
     servizio: "", 
     giorno: "",
+    descrizione: ", ",
+    totale: 0, 
     note: "", 
     errore_cliente: "", 
     errore_servizio: "", 
@@ -63,10 +67,10 @@ const NuovoLavoro = () => {
   const handleInsert = async (e) => {
     e.preventDefault();
     let descrizione = "";
-    if (confirm("Sei sicuro di voler salvare il servizio?")) {
+    if (confirm("Sei sicuro di voler salvare il lavoro?")) {
       for(let servizio of servizi) {
         if(nuovoLavoro.id_servizi.includes(servizio.id)) {
-          // serviziSelezionati.push(servizio.nome + " - " + servizio.prezzo + " €.");
+          nuovoLavoro.totale += servizio.prezzo;
           descrizione += servizio.nome + " - " + servizio.prezzo + " €, "
         }
       }
@@ -112,7 +116,9 @@ const NuovoLavoro = () => {
             cliente: "", 
             id_servizi: [], 
             servizio: "", 
-            giorno: "",
+            giorno: "", 
+            descrizione: ", ",
+            totale: 0,
             note: "", 
             errore_cliente: "", 
             errore_servizio: "", 
@@ -147,6 +153,7 @@ const NuovoLavoro = () => {
       <>
         {/* {(clienti !== -1) && ( */}
           <NomeTagSelect name="id_cliente" value={nuovoLavoro.id_cliente} onChange={(e) => handleInputChange(e, setNuovoLavoro)}>
+            <option key={-1} value="">Seleziona il cliente.</option>
             {Object.values(clienti).filter(cliente => 
               optionStr(cliente).toLowerCase().includes(sottoStringa.toLowerCase())
             ).map((cliente, index) => (
@@ -251,11 +258,13 @@ const NuovoLavoro = () => {
     setClienti(clientiFiltrati);
   };
 
-  const getServiziFiltrati = async () => {
+  const getAllServizi = async () => {
     await ServizioAction.dispatchAction(null, operazioniServizi.OTTIENI_TUTTI_I_SERVIZI);
     const serviziFiltrati = servizioStore.getServizi();
     setServizi(serviziFiltrati);
   };
+
+
 
   useEffect(() => {
     getClientiFiltrati();
@@ -265,12 +274,26 @@ const NuovoLavoro = () => {
   }, []);
 
   useEffect(() => {
-    getServiziFiltrati();
+    getAllServizi();
     const onChange = () => setServizi(servizioStore.getServizi());
     servizioStore.addChangeListener(operazioniServizi.OTTIENI_TUTTI_I_SERVIZI, onChange);
     servizioStore.removeChangeListener(operazioniServizi.OTTIENI_TUTTI_I_SERVIZI, onChange);
-    setAggiornamento(!aggiornamento);
+    console.log("Aggiornamento in corso...");
+    setAggiornamento(true);
   }, []);
+
+  useEffect(() => {
+    if(aggiornamento !== 0) {
+      if(servizi !== -1) {
+        console.log("Aggiornamento effettuato.");
+      }      
+      else {
+        console.log("Aggiornamento in corso...");
+        setServizi(servizioStore.getServizi());
+        setAggiornamento(!aggiornamento);
+      }
+    }
+  }, [aggiornamento]);
 
   useEffect(() => {
     // if(servizi !== 0) {
@@ -309,6 +332,15 @@ const NuovoLavoro = () => {
         campi={getCampiLavoroEsistente}
         indici={indiciLavoroEsistente} 
         servizi={servizi}
+      />
+      
+      <br /> <br /> <br /> <br />
+
+      <OperazioniItems 
+        selectedIdsModifica={selectedIdsModifica} 
+        selectedIdsEliminazione={selectedIdsEliminazione}
+        modifica={(e) => modifica(e, "lavoro", selectedIdsModifica, setSelectedIdsModifica, lavori, setLavori)} 
+        elimina={(e) => elimina(e, "lavoro", selectedIdsEliminazione, setSelectedIdsEliminazione, lavori, setLavori)}
       />
       
       <br /> <br /> <br /> <br />

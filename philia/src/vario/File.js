@@ -15,11 +15,12 @@ export const generaFileLavoriPDF = (lavori) => {
 
   // Aggiungo la tabella dei lavori
   if (lavori.length > 0) {
-    const lavoriColumns = ["Cliente", "Giorno", "Descrizione", "Note"];
+    const lavoriColumns = ["Cliente", "Giorno", "Descrizione", "Totale", "Note"];
     const lavoriRows = lavori.map(lavoro => [
       lavoro.cliente, 
       lavoro.giorno, 
-      lavoro.descrizione, 
+      lavoro.descrizione.substring(0, lavoro.descrizione.length-2),
+      lavoro.totale + " €",
       lavoro.note 
     ]);
     autoTable(doc, {
@@ -46,13 +47,15 @@ export const generaFileLavoriExcel = async (lavori) => {
       { header: 'Cliente', key: 'cliente', width: 20 },  
       { header: 'Giorno', key: 'giorno', width: 20 }, 
       { header: 'Descrizione', key: 'descrizione', width: 30 }, 
+      { header: 'Totale', key: 'totale', width: 10 }, 
       { header: 'Note', key: 'note', width: 30 }
     ];
     lavori.forEach(lavoro => {
       lavoriSheet.addRow({
         cliente: lavoro.cliente, 
         giorno: lavoro.giorno, 
-        descrizione: lavoro.descrizione,
+        descrizione: lavoro.descrizione.substring(0, lavoro.descrizione.length-2),
+        totale: lavoro.totale + " €",
         note: lavoro.note
       });
     });

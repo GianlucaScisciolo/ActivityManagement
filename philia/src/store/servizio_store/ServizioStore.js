@@ -3,7 +3,7 @@ import ServizioDispatcher from "../../dispatcher/servizio_dispatcher/ServizioDis
 import axios from "axios";
 import { operazioniServizi } from "../../vario/Operazioni";
 
-let servizi = [];
+let servizi = -1;
 
 class ServizioStore extends EventEmitter {
   constructor() {
@@ -63,6 +63,10 @@ class ServizioStore extends EventEmitter {
 
   getServizi() {
     return servizi;
+  }
+
+  setServizi(nuovoValore) {
+    servizi = nuovoValore;
   }
 
   addChangeListener(event, callback) {

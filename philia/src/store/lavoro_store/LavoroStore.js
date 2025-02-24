@@ -52,7 +52,7 @@ class LavoroStore extends EventEmitter {
       const response = await axios.post("/MODIFICA_LAVORI", data);
       ids_lavori = response.data.ids_lavori;
       this.setIdsLavori(ids_lavori);
-      console.log("<" + this.idsLavori + ">")
+      // console.log("<" + this.idsLavori + ">")
       this.emitChange(operazioniLavori.MODIFICA_LAVORI);
     } 
     catch (error) {

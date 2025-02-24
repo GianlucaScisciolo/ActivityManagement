@@ -11,12 +11,24 @@ export const Items = ({tipoItem, items, setItems, selectOperation, emptyIsConsid
   const itemSession = useSelector((state) => state.itemSession.value);
   const ItemEsistenteTag = (itemSession.view === "card") ? CardItemEsistente : RowItemEsistente;
 
-  const OptionsServizi = (servizi, sottoStringa, setIdServizi) => {
+  const OptionsServizi = (servizi, descrizione, sottoStringa, setIdServizi) => {
     if (!servizi) {
       return null;
     }
     const [serviziSelezionati, setServiziSelezionati] = useState([]);
     const [serviziNonSelezionati, setServiziNonSelezionati] = useState(Object.values(servizi));
+    
+    useEffect(() => {
+      const serviziSelezionatiAttuali = descrizione.split(',').map(item => item.trim()).filter(item => item !== "");
+      for(let i = 0; i < serviziSelezionatiAttuali.length; i++) {
+        serviziSelezionatiAttuali[i] = serviziSelezionatiAttuali[i].split('-').map(item => item.trim()).filter(item => item !== "");
+        serviziSelezionatiAttuali[i] = {
+          nome: serviziSelezionatiAttuali[i][0], 
+          prezzo: serviziSelezionatiAttuali[i][1].substring(0, serviziSelezionatiAttuali[i][1].length-2)
+        };
+      }
+      setServiziSelezionati(serviziSelezionatiAttuali);
+    }, []);
 
     useEffect(() => {
       setServiziNonSelezionati(Object.values(servizi));
@@ -97,6 +109,7 @@ export const Items = ({tipoItem, items, setItems, selectOperation, emptyIsConsid
       <>
         {items.map((item, index) => {
           item["servizio"] = (item.servizio) ? item.servizio : "";
+          const descrizione = item.descrizione;
           const sottoStringa = item.servizio;
           const [idServizi, setIdServizi] = useState([]);
           item["id_servizi"] = idServizi;
@@ -104,7 +117,7 @@ export const Items = ({tipoItem, items, setItems, selectOperation, emptyIsConsid
             <ItemEsistenteTag 
               key={index} 
               item={item} 
-              campi={campi(OptionsServizi(servizi, sottoStringa, setIdServizi), item, (e) => handleInputChange(e, null, items, setItems, tipoItem, item.id), null, null)} 
+              campi={campi(OptionsServizi(servizi, descrizione, sottoStringa, setIdServizi), item, (e) => handleInputChange(e, null, items, setItems, tipoItem, item.id), null, null)} 
               indici={indici} 
               selectOperation={selectOperation} 
             />

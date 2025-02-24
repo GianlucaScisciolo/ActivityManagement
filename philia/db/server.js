@@ -259,10 +259,12 @@ app.post("/MODIFICA_SERVIZI", async (req, res) => {
 /*************************************************** Lavori **************************************************/
 
 app.post("/INSERISCI_LAVORO", async (req, res) => {
+  // console.log("----------------|||| " + req.body.id_cliente +  "||||------------");
   const params = [
     `${req.body.id_cliente}`, 
     `${req.body.giorno}`, 
-    `${req.body.descrizione}`, 
+    `${req.body.descrizione}`,
+    `${req.body.totale}`, 
     `${req.body.note}`, 
   ];
   try {
