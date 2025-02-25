@@ -7,7 +7,7 @@ import {
   StyledTextAreaBlock, StyledTextAreaModifica, StyledTextAreaElimina, 
   StyledForm, StyledHeader, SlideContainer, StyledSpanErrore, 
   StyledSelectBlock, StyledSelectModifica, StyledSelectElimina, 
-  StyledEyeClosedNotSelected, StyledEyeOpenNotSelected
+  StyledEyeClosedNotSelected, StyledEyeOpenNotSelected, StyledEuroNotSelected 
 } from "./StyledFormItem";
 
 export function getSelectTag(tipoSelezione) {
@@ -103,20 +103,33 @@ export function FormNuovoItem({campi, indici, eseguiSalvataggio}) {
           return ( 
             <React.Fragment key={i}>
               <StyledLabel htmlFor={campi.name[i]}>{campi.label[i]}</StyledLabel>
-              <NomeTag 
-                key={i}
-                rows={1}
-                name={campi.name[i]}
-                type={campi.type[i]}
-                step={campi.step[i]}
-                value={campi.value[i]}
-                placeholder={campi.placeholder[i]}
-                onChange={campi.onChange}
-                onClick={campi.onClick}
-                onBlur={campi.onBlur}
-              />
-              {campi.options[i]}
-
+              <StyledRow>  
+                <NomeTag 
+                  style={(campi.name[i] === "prezzo") ? {maxWidth:"90%"} : null}
+                  rows={1}
+                  name={campi.name[i]}
+                  type={campi.type[i]}
+                  step={campi.step[i]}
+                  value={campi.value[i]}
+                  placeholder={campi.placeholder[i]}
+                  onChange={campi.onChange}
+                  onClick={campi.onClick}
+                  onBlur={campi.onBlur}
+                />
+                {(campi.name[i] === "prezzo") && (
+                  <StyledEuroNotSelected
+                    style={{
+                      // border: "5px solid #000000",
+                      maxWidth: "10%",
+                      marginLeft: "-6px", 
+                      marginTop: "13px"
+                    }} 
+                    size={grandezzaIcona} 
+                    onClick={null} 
+                  />
+                )}
+                {campi.options[i]}
+              </StyledRow>
               {(campi.errore[i] !== "") && (<StyledSpanErrore>{campi.errore[i]}</StyledSpanErrore>)}
             </React.Fragment>
           );

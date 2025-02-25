@@ -256,6 +256,7 @@ const NavbarSito = () => {
             )}
             {(autenticazioneSession.isLogged === true) && (
               <>
+                <StyledNavLink as={NavLink} to="/salone">Salone</StyledNavLink>
                 <StyledNavLink as={NavLink} to="/profilo">Profilo</StyledNavLink>
                 <StyledNavLink as={NavLink} to="/" onClick={logout}>Logout</StyledNavLink>
               </>

@@ -3,7 +3,7 @@ import Row from 'react-bootstrap/esm/Row';
 import Col from 'react-bootstrap/esm/Col';
 import { 
   Trash2, Pencil, Save, Search, ChevronLeft, ChevronRight, LogIn, Download, X, 
-  Eye, EyeClosed
+  Eye, EyeClosed, Euro 
 } from 'lucide-react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -196,6 +196,11 @@ export const StyledSearchNotSelected = styled(Search)`
   &:hover {
     color: #0050EF;
   }
+`;
+
+export const StyledEuroNotSelected = styled(Euro)`
+  color: #FFFFFF;
+  transition: 0.5s all ease-out;
 `;
 
 export const StyledArrowLeftNotSelected = styled(ChevronLeft)`

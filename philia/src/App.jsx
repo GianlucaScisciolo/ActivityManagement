@@ -1,3 +1,4 @@
+import DragAndDrop from "./DragAndDrop";
 import Home from "./view/Home";
 
 function App() {
@@ -5,6 +6,8 @@ function App() {
   return (
     <>
       <Home />
+
+      <DragAndDrop />
     </>
   );
 }

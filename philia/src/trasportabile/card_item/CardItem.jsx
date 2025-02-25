@@ -12,7 +12,7 @@ import {
   StyledInputBlock, StyledInputModifica, StyledInputElimina, 
   StyledTextAreaBlock, StyledTextAreaModifica, StyledTextAreaElimina, 
   StyledCard, StyledCardHeader, SlideContainer, 
-  StyledSpanErrore
+  StyledSpanErrore, StyledEuroNotSelected
 } from './StyledCardItem';
 import { faFilePdf, faFileExcel } from '@fortawesome/free-solid-svg-icons';
 import { Trash2, Pencil } from 'lucide-react';
@@ -162,19 +162,34 @@ export function CardNuovoItem({campi, indici, eseguiSalvataggio}) {
             );
             return ( 
               <React.Fragment key={i}>
-                <NomeTag 
-                  key={i}
-                  rows={1}
-                  name={campi.name[i]}
-                  type={campi.type[i]}
-                  step={campi.step[i]}
-                  value={campi.value[i]}
-                  placeholder={campi.placeholder[i]}
-                  onChange={campi.onChange}
-                  onClick={campi.onClick}
-                  onBlur={campi.onBlur}
-                />
-                {campi.options[i]}
+                <StyledRow>
+                  <NomeTag 
+                    key={i}
+                    style={(campi.name[i] === "prezzo") ? {maxWidth:"80%"} : null}
+                    rows={1}
+                    name={campi.name[i]}
+                    type={campi.type[i]}
+                    step={campi.step[i]}
+                    value={campi.value[i]}
+                    placeholder={campi.placeholder[i]}
+                    onChange={campi.onChange}
+                    onClick={campi.onClick}
+                    onBlur={campi.onBlur}
+                  />
+                  {(campi.name[i] === "prezzo") && (
+                    <StyledEuroNotSelected
+                      style={{
+                        // border: "5px solid #000000",
+                        maxWidth: "20%",
+                        marginLeft: "-6px", 
+                        marginTop: "13px"
+                      }} 
+                      size={grandezzaIcona} 
+                      onClick={null} 
+                    />
+                  )}
+                  {campi.options[i]}
+                </StyledRow>
                 {(campi.errore[i] !== "") && (<StyledSpanErrore>{campi.errore[i]}</StyledSpanErrore>)}
               </React.Fragment>
             );
@@ -233,11 +248,7 @@ export function CardRicercaItems({campi, indici, eseguiRicerca}) {
   );
 }
 
-/*
-<ItemEsistenteTag 
-  campi={campi(servizi, item, (e) => handleInputChange(e, null, items, setItems, tipoItem, item.id), null, null)}  
-/>
-*/
+
 export function CardItemEsistente({item, campi, indici, selectOperation}) {
   let maxHeight = "2000px";
   return (
@@ -254,17 +265,32 @@ export function CardItemEsistente({item, campi, indici, selectOperation}) {
             );
             return ( 
               <React.Fragment key={i}>
-                <NomeTag 
-                  rows={1}
-                  name={campi.name[i]}
-                  type={campi.type[i]}
-                  value={campi.value[i]}
-                  placeholder={campi.placeholder[i]}
-                  onChange={campi.onChange}
-                  onClick={campi.onClick}
-                  onBlur={campi.onBlur}
-                />
-                {campi.options[i]}
+                <StyledRow>
+                  <NomeTag 
+                    rows={1}
+                    style={(campi.name[i] === "totale") ? {maxWidth:"80%"} : null}
+                    name={campi.name[i]}
+                    type={campi.type[i]}
+                    value={campi.value[i]}
+                    placeholder={campi.placeholder[i]}
+                    onChange={campi.onChange}
+                    onClick={campi.onClick}
+                    onBlur={campi.onBlur}
+                  />
+                  {(campi.name[i] === "totale") && (
+                    <StyledEuroNotSelected
+                      style={{
+                        // border: "5px solid #000000",
+                        maxWidth: "20%",
+                        marginLeft: "-6px", 
+                        marginTop: "13px"
+                      }} 
+                      size={grandezzaIcona} 
+                      onClick={null} 
+                    />
+                  )}
+                  {campi.options[i]}
+                </StyledRow>
               </React.Fragment>
             );
           })}

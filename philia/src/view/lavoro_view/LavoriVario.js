@@ -36,7 +36,7 @@ export function getCampiLavoroEsistente(servizi, item, handleOnChange, handleOnC
   return {
     header: "Lavoro", 
     tipoSelezione: item.tipo_selezione,  
-    type: [null, null, null, "date", null],
+    type: [null, null, "text", "date", null],
     step: [null, null, null, null, null], 
     min: [null, null, null, null, null],
     name: ["cliente", "servizio", "totale", "giorno", "note"], 

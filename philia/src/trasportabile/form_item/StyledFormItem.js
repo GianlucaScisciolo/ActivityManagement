@@ -5,7 +5,7 @@ import Row from 'react-bootstrap/esm/Row';
 import Col from 'react-bootstrap/esm/Col';
 import { 
   Trash2, Pencil, Save, Search, ChevronUp, ChevronDown, LogIn, Download, X, 
-  Eye, EyeClosed
+  Eye, EyeClosed, Euro 
 } from 'lucide-react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -163,6 +163,11 @@ export const StyledEyeOpenNotSelected = styled(Eye)`
 
 export const StyledSearchNotSelected = styled(Search)`
   ${styledIconNotSelectedBlue}
+`;
+
+export const StyledEuroNotSelected = styled(Euro)`
+  color: #FFFFFF;
+  transition: 0.5s all ease-out;
 `;
 
 export const StyledArrowTopNotSelected = styled(ChevronUp)`

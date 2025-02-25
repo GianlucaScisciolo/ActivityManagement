@@ -5,7 +5,7 @@ import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
 import { 
   Trash2, Pencil, Save, Search, ChevronUp, ChevronDown, LogIn, Download, X, 
-  EyeClosed, Eye
+  EyeClosed, Eye, Euro
 } from 'lucide-react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -158,6 +158,11 @@ export const StyledSearchNotSelected = styled(Search)`
   &:hover {
     color: #0050EF;
   }
+`;
+
+export const StyledEuroNotSelected = styled(Euro)`
+  color: #FFFFFF;
+  transition: 0.5s all ease-out;
 `;
 
 export const StyledArrowTopNotSelected = styled(ChevronUp)`

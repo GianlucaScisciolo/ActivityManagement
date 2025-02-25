@@ -11,7 +11,8 @@ import {
   StyledTextAreaBlock, StyledTextAreaModifica, StyledTextAreaElimina, 
   StyledRow, StyledCol, StyledSpanErrore, 
   StyledSelectBlock, StyledSelectModifica, StyledSelectElimina, 
-  StyledEyeClosedNotSelected, StyledEyeOpenNotSelected
+  StyledEyeClosedNotSelected, StyledEyeOpenNotSelected, 
+  StyledEuroNotSelected 
 } from "./StyledRowItem";
 import { Trash2, Pencil } from 'lucide-react';
 import { faFilePdf, faFileExcel } from '@fortawesome/free-solid-svg-icons';
@@ -171,19 +172,33 @@ export function RowNuovoItem({campi, indici, eseguiSalvataggio}) {
           <React.Fragment key={i}>
             <StyledCol>
               <div style={{width: "100%"}}>
-                <NomeTag 
-                  key={i}
-                  rows={1}
-                  name={campi.name[i]}
-                  type={campi.type[i]}
-                  step={campi.step[i]}
-                  value={campi.value[i]}
-                  placeholder={campi.placeholder[i]}
-                  onChange={campi.onChange}
-                  onClick={campi.onClick}
-                  onBlur={campi.onBlur}
-                />
-                {campi.options[i]}
+                <StyledRow>
+                  <NomeTag 
+                    rows={1}
+                    style={(campi.name[i] === "prezzo") ? {maxWidth:"90%"} : null}
+                    name={campi.name[i]}
+                    type={campi.type[i]}
+                    step={campi.step[i]}
+                    value={campi.value[i]}
+                    placeholder={campi.placeholder[i]}
+                    onChange={campi.onChange}
+                    onClick={campi.onClick}
+                    onBlur={campi.onBlur}
+                  />
+                  {(campi.name[i] === "prezzo") && (
+                    <StyledEuroNotSelected
+                      style={{
+                        // border: "5px solid #000000",
+                        maxWidth: "10%",
+                        marginLeft: "-6px", 
+                        marginTop: "13px"
+                      }} 
+                      size={grandezzaIcona} 
+                      onClick={null} 
+                    />
+                  )}
+                  {campi.options[i]}
+                </StyledRow>
                 {(campi.errore[i] !== "") && (<StyledSpanErrore>{campi.errore[i]}</StyledSpanErrore>)}
               </div>
             </StyledCol>
@@ -265,17 +280,34 @@ export function RowItemEsistente({item, campi, indici, selectOperation}) {
         return ( 
           <React.Fragment key={i}>
             <StyledCol>
-              <NomeTag 
-                rows={1}
-                name={campi.name[i]}
-                type={campi.type[i]}
-                step={campi.step[i]}
-                value={campi.value[i]}
-                placeholder={campi.placeholder[i]}
-                onChange={campi.onChange}
-                onClick={campi.onClick}
-                onBlur={campi.onBlur}
-              />
+            <div style={{width: "100%"}}>
+              <StyledRow>
+                <NomeTag 
+                  style={(campi.name[i] === "totale") ? {maxWidth:"80%"} : null}
+                  rows={1}
+                  name={campi.name[i]}
+                  type={campi.type[i]}
+                  step={campi.step[i]}
+                  value={campi.value[i]}
+                  placeholder={campi.placeholder[i]}
+                  onChange={campi.onChange}
+                  onClick={campi.onClick}
+                  onBlur={campi.onBlur}
+                />
+                {(campi.name[i] === "totale") && (
+                    <StyledEuroNotSelected
+                      style={{
+                        // border: "5px solid #000000",
+                        maxWidth: "20%",
+                        marginLeft: "-6px", 
+                        marginTop: "13px"
+                      }} 
+                      size={grandezzaIcona} 
+                      onClick={null} 
+                    />
+                  )}
+              </StyledRow>
+            </div>
             </StyledCol>
           </React.Fragment>
         );
