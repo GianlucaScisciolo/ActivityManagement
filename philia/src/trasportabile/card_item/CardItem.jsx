@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Card from 'react-bootstrap/Card';
 import { 
   StyledPencilNotSelected, StyledPencilSelected, grandezzaIcona, 
   StyledTrashNotSelected, StyledTrashSelected, 
@@ -445,6 +446,41 @@ export function CardProfilo({campi, indici, eseguiModificaProfilo}) {
         />
       </StyledCard>
     </center>
+  );
+}
+
+export function CardWidget({nome, img, url}) {
+  return (
+    <Card 
+      style={{ 
+        width: "300px", 
+        height: "400px", 
+        backgroundColor: "rgba(0, 0, 0, 0.5)", 
+        borderRadius: "50px", 
+      }}
+    >
+      <center>
+        <Card.Img 
+          style={{ 
+            width: "220px", 
+            height: "220px", 
+            // border: "5px solid #000000",
+            borderRadius: "20px",
+            marginTop: "50px",
+            marginBottom: "10px", 
+          }} 
+          variant="top" 
+          src={img} 
+        />
+      </center>
+      <Card.Body>
+        <center>
+          <Card.Title
+            style={{color:"#FFFFFF"}}
+          >{nome}</Card.Title>
+        </center>
+      </Card.Body>
+    </Card>
   );
 }
 

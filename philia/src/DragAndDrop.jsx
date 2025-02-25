@@ -1,32 +1,82 @@
 import React, { useState } from 'react';
+import { CardWidget } from './trasportabile/card_item/CardItem'; // Importa il componente CardWidget
 
-const DragAndDrop = () => {
+const DragAndDrop = ({ initialPositions }) => {
     const [dragging, setDragging] = useState(false);
-    const [position, setPosition] = useState({ x: 0, y: 0 });
+    const [positions, setPositions] = useState(initialPositions);
     const [offset, setOffset] = useState({ x: 0, y: 0 });
-    const gridSize = 50; // Definisci la dimensione delle celle della griglia
+    const [draggedElement, setDraggedElement] = useState(null);
+    const gridSize = 310; // Definisci la larghezza delle celle della griglia
+    const gridHeight = 410; // Definisci l'altezza delle celle della griglia
 
-    const handleDragStart = (e) => {
-        setDragging(true);
-        const rect = e.target.getBoundingClientRect();
-        setOffset({
-            x: e.clientX - rect.left,
-            y: e.clientY - rect.top
-        });
-        e.dataTransfer.setData('text/plain', '');
-    };
+    const findNearestFreePosition = (x, y) => {
+        let newX = x;
+        let newY = y;
+        let collision = true;
 
-    const handleDragOver = (e) => {
-        e.preventDefault();
+        while (collision) {
+            collision = false;
+            for (const pos of positions) {
+                if (newX === pos.x && newY === pos.y) {
+                    collision = true;
+                    newX += gridSize;
+                    if (newX >= window.innerWidth) {
+                        newX = 0;
+                        newY += gridHeight;
+                    }
+                    break;
+                }
+            }
+        }
+
+        return { x: newX, y: newY };
     };
 
     const handleDrop = (e) => {
         e.preventDefault();
+        const id = e.dataTransfer.getData('text/plain');
         const containerRect = e.currentTarget.getBoundingClientRect();
         const x = Math.round((e.clientX - offset.x - containerRect.left) / gridSize) * gridSize;
-        const y = Math.round((e.clientY - offset.y - containerRect.top) / gridSize) * gridSize;
-        setPosition({ x, y });
+        const y = Math.round((e.clientY - offset.y - containerRect.top) / gridHeight) * gridHeight;
+        const newPosition = findNearestFreePosition(x, y);
+
+        setPositions((prevPositions) =>
+            prevPositions.map((pos) =>
+                pos.id === id ? { ...pos, ...newPosition } : pos
+            )
+        );
         setDragging(false);
+    };
+
+    const handleDragStart = (e, id) => {
+        setDragging(true);
+        const rect = e.target.getBoundingClientRect();
+        setOffset({
+            x: e.clientX - rect.left,
+            y: e.clientY - rect.top,
+        });
+        e.dataTransfer.setData('text/plain', id);
+
+        // Aggiungi la classe "dragging" all'elemento trascinato
+        e.target.classList.add('dragging');
+        setDraggedElement(e.target);
+    };
+
+    const handleDragEnd = (e) => {
+        setDragging(false);
+        // Rimuovi la classe "dragging" dall'elemento trascinato
+        if (draggedElement) {
+            draggedElement.classList.remove('dragging');
+        }
+    };
+
+    const handleDragOver = (e) => {
+        e.preventDefault();
+        if (dragging && draggedElement) {
+            const containerRect = e.currentTarget.getBoundingClientRect();
+            draggedElement.style.left = `${e.clientX - offset.x - containerRect.left}px`;
+            draggedElement.style.top = `${e.clientY - offset.y - containerRect.top}px`;
+        }
     };
 
     return (
@@ -36,24 +86,27 @@ const DragAndDrop = () => {
             style={{
                 width: '100%',
                 height: '100vh',
-                border: '2px dashed #ccc',
                 position: 'relative'
             }}
         >
-            <div
-                draggable
-                onDragStart={handleDragStart}
-                style={{
-                    width: '100px',
-                    height: '100px',
-                    backgroundColor: 'skyblue',
-                    position: 'absolute',
-                    left: position.x,
-                    top: position.y
-                }}
-            >
-                Trascinami!
-            </div>
+            {positions.map((pos) => (
+                <div
+                    key={pos.id}
+                    draggable
+                    onDragStart={(e) => handleDragStart(e, pos.id)}
+                    onDragEnd={handleDragEnd}
+                    style={{
+                        width: '310px', // Larghezza fissa delle celle
+                        height: '410px', // Altezza fissa delle celle
+                        position: 'absolute',
+                        left: pos.x,
+                        top: pos.y,
+                        cursor: 'pointer'
+                    }}
+                >
+                    <CardWidget nome={pos.nome} img={pos.img} url={pos.url} /> {/* Utilizza il componente CardWidget */}
+                </div>
+            ))}
         </div>
     );
 };

@@ -116,6 +116,20 @@
 
 /**********/
 
+/* styles.css */
+.dragging {
+  opacity: 0.5;
+  border: 2px dashed #000;
+}
+
+.dragging-clone {
+  display: block; /* Rendi il clone visibile */
+  position: absolute;
+  pointer-events: none; /* Impedisce interazioni con il clone */
+  opacity: 0.5;
+}
+
+
 
 
 
