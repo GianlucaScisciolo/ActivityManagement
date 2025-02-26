@@ -49,6 +49,11 @@ export default defineConfig({
       '/ELIMINA_LAVORI_RANGE_GIORNI': 'http://localhost:3000',
       '/MODIFICA_LAVORI': 'http://localhost:3000', 
       '/OTTIENI_LAVORI_GIORNO': 'http://localhost:3000', 
+
+      // Saloni
+      '/INSERISCI_USCITA': 'http://localhost:3000',
+      '/VISUALIZZA_ENTRATE_LAVORI': 'http://localhost:3000',
+      '/VISUALIZZA_USCITE_SPESE': 'http://localhost:3000',
     }
   }
 });

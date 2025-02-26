@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Card from 'react-bootstrap/Card';
+import { Card, Table } from 'react-bootstrap';
 import { 
   StyledPencilNotSelected, StyledPencilSelected, grandezzaIcona, 
   StyledTrashNotSelected, StyledTrashSelected, 
@@ -449,7 +449,7 @@ export function CardProfilo({campi, indici, eseguiModificaProfilo}) {
   );
 }
 
-export function CardWidget({nome, img, url}) {
+export function CardWidget({nome, img}) {
   return (
     <Card 
       style={{ 
@@ -483,6 +483,249 @@ export function CardWidget({nome, img, url}) {
     </Card>
   );
 }
+
+export function CardEntrateLavori({ entrateLavori }) {
+  return (
+    <Card
+      style={{
+        display: 'inline-block',  // Cambiato da 'auto' a 'inline-block'
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        borderRadius: '50px',
+        // padding: '10px',
+        paddingLeft: "50px", 
+        paddingRight: "50px",
+        paddingBottom: "50px",
+        overflowX: 'auto',
+      }}
+    >
+      <Card.Body>
+        <center>
+          <Card.Title style={{ color: '#FFFFFF' }}>Entrate lavori</Card.Title>
+        </center>
+      </Card.Body>
+      <center>
+        <Table
+          striped
+          bordered
+          hover
+          variant='dark'
+          style={{
+            borderRadius: '50px',
+            marginTop: '0',
+            marginBottom: '10px',
+            textAlign: 'center',
+          }}
+        >
+          <thead>
+            <tr>
+              <th>ANNO</th>
+              <th>GEN</th>
+              <th>FEB</th>
+              <th>MAR</th>
+              <th>APR</th>
+              <th>MAG</th>
+              <th>GIU</th>
+              <th>LUG</th>
+              <th>AGO</th>
+              <th>SET</th>
+              <th>OTT</th>
+              <th>NOV</th>
+              <th>DIC</th>
+              <th>TOT ENTRATE</th>
+            </tr>
+          </thead>
+          <tbody>
+            {entrateLavori.map((lavoro, i) => (
+              (i > 0) && (
+                <tr key={i}>
+                  {Object.values(lavoro).map((value, j) => (
+                    <td key={j}>{value}</td>
+                  ))}
+                </tr>
+              )
+            ))}
+          </tbody>
+          <tbody>
+            <tr>
+              {Object.values(entrateLavori[0]).map((value, j) => (
+                <td key={j}>{value}</td>
+              ))}
+            </tr>
+          </tbody>
+        </Table>
+      </center>
+    </Card>
+  );
+}
+
+export function CardUsciteSpese({ usciteSpese }) {
+  return (
+    <Card
+      style={{
+        display: 'inline-block',  // Cambiato da 'auto' a 'inline-block'
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        borderRadius: '50px',
+        // padding: '10px',
+        paddingLeft: "50px", 
+        paddingRight: "50px",
+        paddingBottom: "50px",
+        overflowX: 'auto',
+      }}
+    >
+      <Card.Body>
+        <center>
+          <Card.Title style={{ color: '#FFFFFF' }}>Uscite spese</Card.Title>
+        </center>
+      </Card.Body>
+      <center>
+        <Table
+          striped
+          bordered
+          hover
+          variant='dark'
+          style={{
+            borderRadius: '50px',
+            marginTop: '0',
+            marginBottom: '10px',
+            textAlign: 'center',
+          }}
+        >
+          <thead>
+            <tr>
+              <th>ANNO</th>
+              <th>GEN</th>
+              <th>FEB</th>
+              <th>MAR</th>
+              <th>APR</th>
+              <th>MAG</th>
+              <th>GIU</th>
+              <th>LUG</th>
+              <th>AGO</th>
+              <th>SET</th>
+              <th>OTT</th>
+              <th>NOV</th>
+              <th>DIC</th>
+              <th>TOT USCITE</th>
+            </tr>
+          </thead>
+          <tbody>
+            {usciteSpese.map((spesa, i) => (
+              (i > 0) && (
+                <tr key={i}>
+                  {Object.values(spesa).map((value, j) => (
+                    <td key={j}>{value}</td>
+                  ))}
+                </tr>
+              )
+            ))}
+          </tbody>
+          <tbody>
+            <tr>
+              {Object.values(usciteSpese[0]).map((value, j) => (
+                <td key={j}>{value}</td>
+              ))}
+            </tr>
+          </tbody>
+        </Table>
+      </center>
+    </Card>
+  );
+}
+
+export function CardRicavi({ entrateLavori, usciteSpese }) {
+  return (
+    <Card
+      style={{
+        display: 'inline-block',  // Cambiato da 'auto' a 'inline-block'
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        borderRadius: '50px',
+        // padding: '10px',
+        paddingLeft: "50px", 
+        paddingRight: "50px",
+        paddingBottom: "50px",
+        overflowX: 'auto',
+      }}
+    >
+      <Card.Body>
+        <center>
+          <Card.Title style={{ color: '#FFFFFF' }}>Ricavi</Card.Title>
+        </center>
+      </Card.Body>
+      <center>
+        <Table
+          striped
+          bordered
+          hover
+          variant='dark'
+          style={{
+            borderRadius: '50px',
+            marginTop: '0',
+            marginBottom: '10px',
+            textAlign: 'center',
+          }}
+        >
+          <thead>
+            <tr>
+              <th>ANNO</th>
+              <th>GEN</th>
+              <th>FEB</th>
+              <th>MAR</th>
+              <th>APR</th>
+              <th>MAG</th>
+              <th>GIU</th>
+              <th>LUG</th>
+              <th>AGO</th>
+              <th>SET</th>
+              <th>OTT</th>
+              <th>NOV</th>
+              <th>DIC</th>
+              <th>TOT RICAVI</th>
+            </tr>
+          </thead>
+          <tbody>
+            {entrateLavori.map((entrata, i) => (
+              i > 0 && (
+                <tr key={i}>
+                  <td>{entrata.Anno}</td>
+                  <td>{entrata.gen - usciteSpese[i].gen} €</td>
+                  <td>{entrata.feb - usciteSpese[i].feb} €</td>
+                  <td>{entrata.mar - usciteSpese[i].mar} €</td>
+                  <td>{entrata.apr - usciteSpese[i].apr} €</td>
+                  <td>{entrata.mag - usciteSpese[i].mag} €</td>
+                  <td>{entrata.giu - usciteSpese[i].giu} €</td>
+                  <td>{entrata.lug - usciteSpese[i].lug} €</td>
+                  <td>{entrata.ago - usciteSpese[i].ago} €</td>
+                  <td>{entrata.set - usciteSpese[i].set} €</td>
+                  <td>{entrata.ott - usciteSpese[i].ott} €</td>
+                  <td>{entrata.nov - usciteSpese[i].nov} €</td>
+                  <td>{entrata.dic - usciteSpese[i].dic} €</td>
+                  <td>{entrata.totale_anno - usciteSpese[i].totale_anno} €</td>
+                </tr>
+              )
+            ))}
+            <tr key={0}>
+              <td>{entrateLavori[0].Anno}</td>
+              <td>{entrateLavori[0].gen - usciteSpese[0].gen} €</td>
+              <td>{entrateLavori[0].feb - usciteSpese[0].feb} €</td>
+              <td>{entrateLavori[0].mar - usciteSpese[0].mar} €</td>
+              <td>{entrateLavori[0].apr - usciteSpese[0].apr} €</td>
+              <td>{entrateLavori[0].mag - usciteSpese[0].mag} €</td>
+              <td>{entrateLavori[0].giu - usciteSpese[0].giu} €</td>
+              <td>{entrateLavori[0].lug - usciteSpese[0].lug} €</td>
+              <td>{entrateLavori[0].ago - usciteSpese[0].ago} €</td>
+              <td>{entrateLavori[0].set - usciteSpese[0].set} €</td>
+              <td>{entrateLavori[0].ott - usciteSpese[0].ott} €</td>
+              <td>{entrateLavori[0].nov - usciteSpese[0].nov} €</td>
+              <td>{entrateLavori[0].dic - usciteSpese[0].dic} €</td>
+              <td>{entrateLavori[0].totale_anno - usciteSpese[0].totale_anno} €</td>
+            </tr>
+          </tbody>
+        </Table>
+      </center>
+    </Card>
+  );
+}
+
 
 
 

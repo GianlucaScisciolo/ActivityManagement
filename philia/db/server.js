@@ -13,7 +13,11 @@ import {
 } from './ServizioSQL.js'; 
 import {
   SQL_INSERIMENTO_LAVORO, SQL_SELEZIONE_LAVORI, SQL_ELIMINA_LAVORI, SQL_ELIMINA_LAVORI_RANGE_GIORNI, SQL_MODIFICA_LAVORO
-} from './LavoroSQL.js'
+} from './LavoroSQL.js';
+import {
+  SQL_INSERIMENTO_USCITA, SQL_SELEZIONE_ENTRATE_LAVORI, SQL_SELEZIONE_USCITE_SPESE
+} from './SaloneSQL.js';
+
 const app = express();
 
 app.use(cors());
@@ -327,7 +331,62 @@ app.post("/MODIFICA_LAVORI", async (req, res) => {
 
 /*************************************************************************************************************/
 
+/*************************************************** Saloni **************************************************/
 
+app.post("/INSERISCI_USCITA", async (req, res) => {
+  const params = [
+    `${req.body.nome}`, 
+    `${req.body.giorno}`, 
+    `${req.body.descrizione}`, 
+    `${req.body.totale}`, 
+    `${req.body.note}` 
+  ];    
+  try {
+    const result = await executeQuery(SQL_INSERIMENTO_USCITA, params);
+    return res.status(200).json({ message: 'Uscita inserita con successo', id: result.insertId });
+  } 
+  catch (err) {
+    if (err.code === 'ER_DUP_ENTRY') {
+      return res.status(409).json({ message: 'Errore, uscita gia\' presente.' });
+    }
+    console.error('Errore durante l\'inserimento dell\'uscita: ', err);
+    return res.status(500).json({ message: 'Errore del server' });
+  }
+});
+
+app.post("/VISUALIZZA_ENTRATE_LAVORI", async (req, res) => {
+  const params = [];
+  // return getResults(SQL_SELEZIONE_ENTRATE_LAVORI, params, res);
+  try {
+    const data = await executeQuery(SQL_SELEZIONE_ENTRATE_LAVORI, params);
+    // console.log("--------------------------------------------------");
+    // console.log(data);
+    // console.log("--------------------------------------------------");
+    res.status(200).json({ entrateLavori: data });
+  } 
+  catch (err) {
+    console.error('Errore durante l\'esecuzione della query: ', err);
+    res.status(500).json({ message: 'Errore durante l\'esecuzione della query' });
+  }
+});
+
+app.post("/VISUALIZZA_USCITE_SPESE", async (req, res) => {
+  const params = [];
+  
+  try {
+    const data = await executeQuery(SQL_SELEZIONE_USCITE_SPESE, params);
+    // console.log("--------------------------------------------------");
+    // console.log(data);
+    // console.log("--------------------------------------------------");
+    res.status(200).json({ usciteSpese: data });
+  } 
+  catch (err) {
+    console.error('Errore durante l\'esecuzione della query: ', err);
+    res.status(500).json({ message: 'Errore durante l\'esecuzione della query' });
+  }
+});
+
+/*************************************************************************************************************/
 
 
 

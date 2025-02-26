@@ -336,6 +336,10 @@ export const controlloProfilo = (dati, settersErrori) => {
   return numErrori;
 }
 
+export const controlloUscita = (dati, settersErrori) => {
+  return 0;
+}
+
 
 
 
