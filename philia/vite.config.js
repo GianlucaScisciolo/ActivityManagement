@@ -53,6 +53,8 @@ export default defineConfig({
       // Saloni
       '/INSERISCI_SPESA': 'http://localhost:3000', 
       '/VISUALIZZA_SPESE': 'http://localhost:3000', 
+      '/ELIMINA_SPESE': 'http://localhost:3000', 
+      '/MODIFICA_SPESE': 'http://localhost:3000', 
       '/VISUALIZZA_ENTRATE_LAVORI': 'http://localhost:3000',
       '/VISUALIZZA_USCITE_SPESE': 'http://localhost:3000',
     }

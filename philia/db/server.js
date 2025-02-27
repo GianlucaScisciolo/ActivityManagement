@@ -15,7 +15,7 @@ import {
   SQL_INSERIMENTO_LAVORO, SQL_SELEZIONE_LAVORI, SQL_ELIMINA_LAVORI, SQL_ELIMINA_LAVORI_RANGE_GIORNI, SQL_MODIFICA_LAVORO
 } from './LavoroSQL.js';
 import {
-  SQL_INSERIMENTO_SPESA, SQL_SELEZIONE_SPESE, SQL_SELEZIONE_ENTRATE_LAVORI, SQL_SELEZIONE_USCITE_SPESE 
+  SQL_INSERIMENTO_SPESA, SQL_SELEZIONE_SPESE, SQL_ELIMINA_SPESE, SQL_MODIFICA_SPESA, SQL_SELEZIONE_ENTRATE_LAVORI, SQL_SELEZIONE_USCITE_SPESE 
 } from './SaloneSQL.js';
 
 const app = express();
@@ -373,6 +373,17 @@ app.post("/VISUALIZZA_SPESE", async (req, res) => {
     console.error('Errore durante l\'esecuzione della query: ', err);
     res.status(500).json({ message: 'Errore durante l\'esecuzione della query' });
   }
+});
+
+app.post("/ELIMINA_SPESE", async (req, res) => {
+  const { ids = [] } = req.body;
+  const placeholders = ids.map(() => '?').join(', ');
+  return getResults(SQL_ELIMINA_SPESE(placeholders), ids, res);
+});
+
+app.post("/MODIFICA_SPESE", async (req, res) => {
+  const params = [`${req.body.descrizione}`, `${req.body.totale}`, `${req.body.giorno}`, `${req.body.note}`, `${req.body.id}`];
+  return getResults(SQL_MODIFICA_SPESA, params, res);
 });
 
 app.post("/VISUALIZZA_ENTRATE_LAVORI", async (req, res) => {

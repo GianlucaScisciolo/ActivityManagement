@@ -85,8 +85,8 @@ const Spese = () => {
       <OperazioniItems 
         selectedIdsModifica={selectedIdsModifica} 
         selectedIdsEliminazione={selectedIdsEliminazione}
-        modifica={(e) => modifica(e, "spese", selectedIdsModifica, setSelectedIdsModifica, spese, setSpese)} 
-        elimina={(e) => elimina(e, "spese", selectedIdsEliminazione, setSelectedIdsEliminazione, spese, setSpese)}
+        modifica={(e) => modifica(e, "spesa", selectedIdsModifica, setSelectedIdsModifica, spese, setSpese)} 
+        elimina={(e) => elimina(e, "spesa", selectedIdsEliminazione, setSelectedIdsEliminazione, spese, setSpese)}
       /> 
 
         {/* 

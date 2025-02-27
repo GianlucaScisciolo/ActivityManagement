@@ -21,6 +21,12 @@ class SaloneStore extends EventEmitter {
       case operazioniSaloni.VISUALIZZA_SPESE:
         this.runOperation(action.payload, operazioniSaloni.VISUALIZZA_SPESE);
         break;
+      case operazioniSaloni.ELIMINA_SPESE:
+        this.runOperation(action.payload, operazioniSaloni.ELIMINA_SPESE);
+        break;
+      case operazioniSaloni.MODIFICA_SPESE:
+        this.modificaSpese(action.payload);
+        break;
       case operazioniSaloni.VISUALIZZA_ENTRATE_LAVORI:
         this.runOperation(action.payload, operazioniSaloni.VISUALIZZA_ENTRATE_LAVORI);
         break;
@@ -47,6 +53,18 @@ class SaloneStore extends EventEmitter {
     catch (error) {
       console.error("Errore durante l'operazione " + operazione + ": " + (error.response ? error.response.data : error.message));
     }
+  }
+
+  modificaSpese(data) {
+    for (let i = 0; i < data.length; i++) {
+      const spesa = data[i];
+      axios.post('/MODIFICA_SPESE', spesa).then(response => {
+        this.emitChange(operazioniSaloni.MODIFICA_SPESE);
+      }).catch(error => {
+        console.error('Errore durante la modifica delle spese: ', error);
+      });
+    }
+    spese = [];
   }
   
   emitChange(eventType) {

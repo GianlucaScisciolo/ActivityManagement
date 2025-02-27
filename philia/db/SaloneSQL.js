@@ -24,6 +24,24 @@ export function SQL_SELEZIONE_SPESE(descrizione, note) {
   return sql;
 };
 
+export function SQL_ELIMINA_SPESE(ids) {
+  return (` 
+    DELETE FROM 
+      spesa 
+    WHERE 
+      id IN (${ids}); 
+  `);
+}
+
+export const SQL_MODIFICA_SPESA = `
+  UPDATE 
+    spesa 
+  SET 
+    descrizione = ?, totale = ?, giorno = ?, note = ? 
+  WHERE 
+    id = ?; 
+`;
+
 export const SQL_SELEZIONE_ENTRATE_LAVORI = ` 
   -- Creazione di una tabella temporanea con tutti i mesi degli ultimi 5 anni 
   WITH RECURSIVE DateRange AS ( 

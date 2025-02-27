@@ -39,7 +39,7 @@
 export const handleInputChange = (e, setItem, items, setItems, tipoItem, id) => {
   const { name, value } = e.target;
   
-  if(tipoItem === "cliente" || tipoItem === "servizio" || tipoItem === "lavoro") {
+  if(tipoItem === "cliente" || tipoItem === "servizio" || tipoItem === "lavoro" || tipoItem === "spesa") {
     const updatedItems = items.map(item => {
       if(id === item.id) {
         return {

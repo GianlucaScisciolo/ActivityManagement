@@ -2,16 +2,16 @@ import PersonaAction from "../action/persona_action/PersonaAction";
 import ServizioAction from "../action/servizio_action/ServizioAction";
 import LavoroAction from "../action/lavoro_action/LavoroAction";
 import AutenticazioneAction from "../action/autenticazione_action/AutenticazioneAction";
+import SaloneAction from "../action/salone_action/SaloneAction";
 
 import personaStore from "../store/persona_store/PersonaStore";
 import servizioStore from "../store/servizio_store/ServizioStore";
 import lavoroStore from "../store/lavoro_store/LavoroStore";
 import autenticazioneStore from "../store/autenticazione_store/AutenticazioneStore";
+import saloneStore from "../store/salone_store/SaloneStore";
 
-import { operazioniPersone, operazioniServizi, operazioniLavori, operazioniAutenticazione } from "./Operazioni";
+import { operazioniPersone, operazioniServizi, operazioniLavori, operazioniAutenticazione, operazioniSaloni } from "./Operazioni";
 
-
-// azzeraSelezione(items, selectedIdsModifica, setItems, tipoItem, ids_lavori);
 export const azzeraSelezione = (items, setItems, tipoItem, idsLavori) => {
   let itemsAggiornati = [];
   for (let i = 0, j = 0; i < items.length; i++) {
@@ -36,7 +36,7 @@ export const azzeraSelezione = (items, setItems, tipoItem, idsLavori) => {
 export const modifica = async (e, tipoItem, selectedIdsModifica, setSelectedIdsModifica, items, setItems) => {
   e.preventDefault();
   
-  if(tipoItem !== "cliente" && tipoItem !== "servizio" && tipoItem !== "lavoro") {
+  if(tipoItem !== "cliente" && tipoItem !== "servizio" && tipoItem !== "lavoro" && tipoItem !== "spesa") {
     alert("Errore: tipo non valido, Riprova più tardi.");
     return;
   }
@@ -48,7 +48,7 @@ export const modifica = async (e, tipoItem, selectedIdsModifica, setSelectedIdsM
 
     dati = { ids: selectedIdsModifica };
     
-    if(tipoItem === "cliente" || tipoItem === "servizio" || tipoItem === "lavoro") {
+    if(tipoItem === "cliente" || tipoItem === "servizio" || tipoItem === "lavoro" || tipoItem === "spesa") {
       itemsDaModificare = items.filter(item => dati.ids.includes(item.id)); 
       itemsRestanti = items.filter(item => !dati.ids.includes(item.id));
     }
@@ -61,6 +61,9 @@ export const modifica = async (e, tipoItem, selectedIdsModifica, setSelectedIdsM
     }
     else if(tipoItem === "lavoro") {
       await LavoroAction.dispatchAction([itemsDaModificare, servizioStore.getServizi()], operazioniLavori.MODIFICA_LAVORI);
+    }
+    else if(tipoItem === "spesa") {
+      await SaloneAction.dispatchAction(itemsDaModificare, operazioniSaloni.MODIFICA_SPESE);
     }
     azzeraSelezione(items, setItems, tipoItem, ids_lavori);
     
