@@ -65,6 +65,20 @@
   margin-bottom: 100px;
 }
 
+.contenitore-4 {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 100px; /* regola lo spazio tra gli elementi figli */
+  /* border: 5px solid #000000; */
+  overflow: hidden;
+  margin-left: 3%;
+  margin-right: 3%;
+  color: white;
+  text-align: center;
+  font-size: 40px;
+  margin-bottom: 100px;
+}
+
 .bottone-blu-non-selezionato, .bottone-blu-selezionato, 
 .bottone-rosso-non-selezionato, .bottone-rosso-selezionato {
   border-radius: 40px;
@@ -128,6 +142,25 @@
   pointer-events: none; /* Impedisce interazioni con il clone */
   opacity: 0.5;
 }
+
+/**********/
+
+.right {
+  float: right;
+}
+
+.center {
+  width: 50%; /* Puoi regolare la larghezza in base alle tue esigenze */
+  margin: 0 auto;
+  float: none; /* Annulla eventuali flottanti */
+  text-align: center; /* Centro il testo all'interno del nav */
+}
+
+.left {
+  float: left;
+}
+
+
 
 
 

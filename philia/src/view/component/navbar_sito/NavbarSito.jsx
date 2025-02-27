@@ -155,7 +155,9 @@ const NavbarSito = () => {
                   <StyledNavDropdownItem as={NavLink} to="/nuovo-lavoro">Nuovo lavoro</StyledNavDropdownItem>
                   <StyledNavDropdownItem as={NavLink} to="/lavori">Lavori</StyledNavDropdownItem>
                   <StyledNavDropdownItem as={NavLink} to="/file-lavori">File lavori</StyledNavDropdownItem>
-                  <StyledNavDropdownItem as={NavLink} to="https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ2GRuG5B0k6Qyo2DLBkT1-OOXXC1XO60HQkWAl3Txvc3z-PcBL0EYhfc62sAor46nbg-szeiADZ">Prenotazione</StyledNavDropdownItem>
+                  {/* <StyledNavDropdownItem as={NavLink} to="https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ2GRuG5B0k6Qyo2DLBkT1-OOXXC1XO60HQkWAl3Txvc3z-PcBL0EYhfc62sAor46nbg-szeiADZ">Prenotazione</StyledNavDropdownItem> */}
+                  <StyledNavDropdownItem as="a" href="https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ2GRuG5B0k6Qyo2DLBkT1-OOXXC1XO60HQkWAl3Txvc3z-PcBL0EYhfc62sAor46nbg-szeiADZ" target="_blank" rel="noopener noreferrer">Prenotazione</StyledNavDropdownItem>
+
               </StyledNavDropdown>
               <StyledNavDropdown title="Uscite" show={dropdownUscite}
                 onMouseEnter={() => handleMouseEnter(setDropdownUscite)}

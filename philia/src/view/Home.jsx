@@ -1,36 +1,88 @@
+import React, { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import styled from 'styled-components';
+import { Plus, Save } from 'lucide-react';
 import Header from "./component/Header";
-import { SiGooglecalendar } from "react-icons/si";
-import DragAndDrop from "../DragAndDrop";
+import { DragAndDropWidgetHomePage } from "../DragAndDrop";
+import { widgetSelected, widgetView } from '../store/redux/WidgetsSlice';
 
-import clienti from './img/img_widget/clienti.png';
-import servizi from './img/img_widget/servizi.png';
-import lavori from './img/img_widget/lavori.png';
-import prenotazione from './img/img_widget/prenotazione.png';
-import salone from './img/img_widget/salone.png';
-import profilo from './img/img_widget/profilo.png';
+const styledIconNotSelected = `
+  color: #FFFFFF;
+  cursor: pointer;
+  background-color: #000000;
+  padding: 10px;
+  width: 80px;
+  height: auto;
+  border-radius: 100%;
+  transition: 0.5s all ease-out;
 
-function Home() {
-  const initialPositions = [
-    { id: '1', tipo: "CardWidget", nome: 'Nuovo cliente', img: clienti, x: 100, y: 100 },
-    { id: '2', tipo: "CardWidget", nome: 'Clienti', img: clienti, x: 450, y: 100 },
-    { id: '3', tipo: "CardWidget", nome: 'Nuovo servizio', img: servizi, x: 800, y: 100 },
-    { id: '4', tipo: "CardWidget", nome: 'Servizi', img: servizi, x: 1150, y: 100 },
-    { id: '5', tipo: "CardWidget", nome: 'Nuovo lavoro', img: lavori, x: 1500, y: 100 },
-    { id: '6', tipo: "CardWidget", nome: 'Lavori', img: lavori, x: 1850, y: 100 },
-    { id: '7', tipo: "CardWidget", nome: 'File lavori', img: lavori, x: 2200, y: 100 },
-    { id: '8', tipo: "CardWidget", nome: 'Prenotazione', img: prenotazione, x: 2550, y: 100 },
-    { id: '9', tipo: "CardWidget", nome: 'Salone', img: salone, x: 2900, y: 100 },
-    { id: '10', tipo: "CardWidget", nome: 'Profilo', img: profilo, x: 3250, y: 100 },
-  ];
+  &:hover {
+    color: #0050EF;
+  }
+`;
+
+const StyledPlusNotSelected = styled(Plus)`
+  ${styledIconNotSelected}
+`;
+
+const StyledSaveNotSelected = styled(Save)`
+  ${styledIconNotSelected}
+`;
+
+
+const Home = () => {
+  const formSession = useSelector((state) => state.formSession.value);
+  const itemSession = useSelector((state) => state.itemSession.value);
+  
+  const dispatch = useDispatch();
+  const scegliWidgets = (e) => {
+    e.preventDefault();
+    // console.log(widgetsSession.lavori);
+    setPlusCliccato(!plusCliccato);
+    if(plusCliccato === true) {
+      dispatch(widgetView());
+    }
+    else if(plusCliccato === false) {
+      dispatch(widgetSelected());      
+    }
+  }
+  
+  const [plusCliccato, setPlusCliccato] = useState(false);
+  const AddWidgetsTag = plusCliccato ? StyledSaveNotSelected : StyledPlusNotSelected;
 
   return (
     <>
       <Header />
-      <br /> <br /> <br /> 
 
-      <DragAndDrop initialPositions={initialPositions} />
+      <br /> <br /> <br />
+
+      <div style={{ display: "flex", justifyContent: "flex-end", marginRight: "200px" }}>
+        <button
+          style={{
+            backgroundColor: "transparent",
+            border: "none",
+            cursor: "pointer",
+            outline: "none",
+            padding: "10px",
+            borderRadius: "100%"
+          }}
+        >
+          <AddWidgetsTag className="right" onClick={(e) => scegliWidgets(e)} />
+        </button>
+      </div>
+
+      <DragAndDropWidgetHomePage plusCliccato={plusCliccato} />
     </>
   );
 }
 
 export default Home;
+
+
+
+
+
+
+
+
+

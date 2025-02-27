@@ -5,7 +5,7 @@ import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
 import { 
   Trash2, Pencil, Save, Search, ChevronUp, ChevronDown, LogIn, Download, X, 
-  EyeClosed, Eye, Euro
+  EyeClosed, Eye, Euro, Plus
 } from 'lucide-react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -140,6 +140,19 @@ export const StyledSaveNotSelected = styled(Save)`
     color: #0050EF;
   }
 `;
+
+// const StyledPlus = styled(Plus)`
+//   ${styledIconNotSelected}
+//   background-color: #000000;
+//   padding: 10px;
+//   width: 80px;
+//   height: auto;
+//   border-radius: 100%;
+//   transition: 0.5s all ease-out;
+//   &:hover {
+//     color: #0050EF;
+//   }
+// `;
 
 export const StyledEyeClosedNotSelected = styled(EyeClosed)`
   ${styledIconNotSelected}

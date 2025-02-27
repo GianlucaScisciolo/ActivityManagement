@@ -18,6 +18,14 @@ import {
 import { faFilePdf, faFileExcel } from '@fortawesome/free-solid-svg-icons';
 import { Trash2, Pencil } from 'lucide-react';
 
+function getColor(value, j){
+  // (i > 0) ? (
+  //                       value < 0 ? "#FF0000" : (value > 0 ? "#00FF00" : "#FFFFFF")) : "#0000FF"
+  return (j === 0) ? ("#FFFFFF") : (
+    (value < 0) ? "#FF0000" : (value > 0 ? "#00FF00" : "#FFFFFF")
+  )
+}
+
 function onChangeVisibilityPassword(e, type) {
   e.preventDefault();
   console.log(type);
@@ -449,22 +457,23 @@ export function CardProfilo({campi, indici, eseguiModificaProfilo}) {
   );
 }
 
-export function CardWidget({nome, img}) {
+export function CardWidget({nome, img, id, onClickWidget, backgroundColor}) {  
   return (
     <Card 
       style={{ 
         width: "300px", 
         height: "400px", 
-        backgroundColor: "rgba(0, 0, 0, 0.5)", 
+        // backgroundColor: (isSelected === true) ? "#0050EF" : "rgba(0, 0, 0, 0.5)",
+        backgroundColor: backgroundColor, 
         borderRadius: "50px", 
       }}
+      onClick={(e) => onClickWidget(e, id)}
     >
       <center>
         <Card.Img 
           style={{ 
             width: "220px", 
             height: "220px", 
-            // border: "5px solid #000000",
             borderRadius: "20px",
             marginTop: "50px",
             marginBottom: "10px", 
@@ -518,20 +527,20 @@ export function CardEntrateLavori({ entrateLavori }) {
         >
           <thead>
             <tr>
-              <th>ANNO</th>
-              <th>GEN</th>
-              <th>FEB</th>
-              <th>MAR</th>
-              <th>APR</th>
-              <th>MAG</th>
-              <th>GIU</th>
-              <th>LUG</th>
-              <th>AGO</th>
-              <th>SET</th>
-              <th>OTT</th>
-              <th>NOV</th>
-              <th>DIC</th>
-              <th>TOT ENTRATE</th>
+              <th style={{color: "#FFFFFF"}}>ANNO</th>
+              <th style={{color: "#FFFFFF"}}>GEN</th>
+              <th style={{color: "#FFFFFF"}}>FEB</th>
+              <th style={{color: "#FFFFFF"}}>MAR</th>
+              <th style={{color: "#FFFFFF"}}>APR</th>
+              <th style={{color: "#FFFFFF"}}>MAG</th>
+              <th style={{color: "#FFFFFF"}}>GIU</th>
+              <th style={{color: "#FFFFFF"}}>LUG</th>
+              <th style={{color: "#FFFFFF"}}>AGO</th>
+              <th style={{color: "#FFFFFF"}}>SET</th>
+              <th style={{color: "#FFFFFF"}}>OTT</th>
+              <th style={{color: "#FFFFFF"}}>NOV</th>
+              <th style={{color: "#FFFFFF"}}>DIC</th>
+              <th style={{color: "#FFFFFF"}}>TOT ENTRATE</th>
             </tr>
           </thead>
           <tbody>
@@ -539,7 +548,13 @@ export function CardEntrateLavori({ entrateLavori }) {
               (i > 0) && (
                 <tr key={i}>
                   {Object.values(lavoro).map((value, j) => (
-                    <td key={j}>{value}</td>
+                    <td 
+                      style={{
+                        color: getColor(value, j),
+                        fontWeight: (j === 0) ? "bold" : null,
+                      }} 
+                      key={j}
+                    >{value} {j > 0 ? "€" : ""}</td>
                   ))}
                 </tr>
               )
@@ -548,7 +563,13 @@ export function CardEntrateLavori({ entrateLavori }) {
           <tbody>
             <tr>
               {Object.values(entrateLavori[0]).map((value, j) => (
-                <td key={j}>{value}</td>
+                <td
+                  style={{
+                    color: getColor(value, j),
+                    fontWeight: (j === 0) ? "bold" : null,
+                  }}  
+                  key={j}
+                >{value} {j > 0 ? "€" : ""}</td>
               ))}
             </tr>
           </tbody>
@@ -592,20 +613,20 @@ export function CardUsciteSpese({ usciteSpese }) {
         >
           <thead>
             <tr>
-              <th>ANNO</th>
-              <th>GEN</th>
-              <th>FEB</th>
-              <th>MAR</th>
-              <th>APR</th>
-              <th>MAG</th>
-              <th>GIU</th>
-              <th>LUG</th>
-              <th>AGO</th>
-              <th>SET</th>
-              <th>OTT</th>
-              <th>NOV</th>
-              <th>DIC</th>
-              <th>TOT USCITE</th>
+              <th style={{color: "#FFFFFF"}}>ANNO</th>
+              <th style={{color: "#FFFFFF"}}>GEN</th>
+              <th style={{color: "#FFFFFF"}}>FEB</th>
+              <th style={{color: "#FFFFFF"}}>MAR</th>
+              <th style={{color: "#FFFFFF"}}>APR</th>
+              <th style={{color: "#FFFFFF"}}>MAG</th>
+              <th style={{color: "#FFFFFF"}}>GIU</th>
+              <th style={{color: "#FFFFFF"}}>LUG</th>
+              <th style={{color: "#FFFFFF"}}>AGO</th>
+              <th style={{color: "#FFFFFF"}}>SET</th>
+              <th style={{color: "#FFFFFF"}}>OTT</th>
+              <th style={{color: "#FFFFFF"}}>NOV</th>
+              <th style={{color: "#FFFFFF"}}>DIC</th>
+              <th style={{color: "#FFFFFF"}}>TOT ENTRATE</th>
             </tr>
           </thead>
           <tbody>
@@ -613,7 +634,13 @@ export function CardUsciteSpese({ usciteSpese }) {
               (i > 0) && (
                 <tr key={i}>
                   {Object.values(spesa).map((value, j) => (
-                    <td key={j}>{value}</td>
+                    <td
+                      style={{
+                        color: getColor(value, j),
+                        fontWeight: (j === 0) ? "bold" : null,
+                      }}  
+                      key={j}
+                    >{value} {j > 0 ? "€" : ""}</td>
                   ))}
                 </tr>
               )
@@ -622,7 +649,13 @@ export function CardUsciteSpese({ usciteSpese }) {
           <tbody>
             <tr>
               {Object.values(usciteSpese[0]).map((value, j) => (
-                <td key={j}>{value}</td>
+                <td
+                  style={{
+                    color: getColor(value, j),
+                    fontWeight: (j === 0) ? "bold" : null,
+                  }}  
+                  key={j}
+                >{value} {j > 0 ? "€" : ""}</td>
               ))}
             </tr>
           </tbody>
@@ -666,58 +699,66 @@ export function CardRicavi({ entrateLavori, usciteSpese }) {
         >
           <thead>
             <tr>
-              <th>ANNO</th>
-              <th>GEN</th>
-              <th>FEB</th>
-              <th>MAR</th>
-              <th>APR</th>
-              <th>MAG</th>
-              <th>GIU</th>
-              <th>LUG</th>
-              <th>AGO</th>
-              <th>SET</th>
-              <th>OTT</th>
-              <th>NOV</th>
-              <th>DIC</th>
-              <th>TOT RICAVI</th>
+              <th style={{color: "#FFFFFF"}}>ANNO</th>
+              <th style={{color: "#FFFFFF"}}>GEN</th>
+              <th style={{color: "#FFFFFF"}}>FEB</th>
+              <th style={{color: "#FFFFFF"}}>MAR</th>
+              <th style={{color: "#FFFFFF"}}>APR</th>
+              <th style={{color: "#FFFFFF"}}>MAG</th>
+              <th style={{color: "#FFFFFF"}}>GIU</th>
+              <th style={{color: "#FFFFFF"}}>LUG</th>
+              <th style={{color: "#FFFFFF"}}>AGO</th>
+              <th style={{color: "#FFFFFF"}}>SET</th>
+              <th style={{color: "#FFFFFF"}}>OTT</th>
+              <th style={{color: "#FFFFFF"}}>NOV</th>
+              <th style={{color: "#FFFFFF"}}>DIC</th>
+              <th style={{color: "#FFFFFF"}}>TOT ENTRATE</th>
             </tr>
           </thead>
           <tbody>
             {entrateLavori.map((entrata, i) => (
               i > 0 && (
                 <tr key={i}>
-                  <td>{entrata.Anno}</td>
-                  <td>{entrata.gen - usciteSpese[i].gen} €</td>
-                  <td>{entrata.feb - usciteSpese[i].feb} €</td>
-                  <td>{entrata.mar - usciteSpese[i].mar} €</td>
-                  <td>{entrata.apr - usciteSpese[i].apr} €</td>
-                  <td>{entrata.mag - usciteSpese[i].mag} €</td>
-                  <td>{entrata.giu - usciteSpese[i].giu} €</td>
-                  <td>{entrata.lug - usciteSpese[i].lug} €</td>
-                  <td>{entrata.ago - usciteSpese[i].ago} €</td>
-                  <td>{entrata.set - usciteSpese[i].set} €</td>
-                  <td>{entrata.ott - usciteSpese[i].ott} €</td>
-                  <td>{entrata.nov - usciteSpese[i].nov} €</td>
-                  <td>{entrata.dic - usciteSpese[i].dic} €</td>
-                  <td>{entrata.totale_anno - usciteSpese[i].totale_anno} €</td>
+                  <td                  
+                    style={{
+                      fontWeight: "bold",
+                    }} 
+                  >{entrata.Anno}</td>
+                  <td style={{color:getColor(entrata.gen - usciteSpese[i].gen, 1)}}>{entrata.gen - usciteSpese[i].gen} €</td>
+                  <td style={{color:getColor(entrata.feb - usciteSpese[i].feb)}}>{entrata.feb - usciteSpese[i].feb} €</td>
+                  <td style={{color:getColor(entrata.mar - usciteSpese[i].mar)}}>{entrata.mar - usciteSpese[i].mar} €</td>
+                  <td style={{color:getColor(entrata.apr - usciteSpese[i].apr)}}>{entrata.apr - usciteSpese[i].apr} €</td>
+                  <td style={{color:getColor(entrata.mag - usciteSpese[i].mag)}}>{entrata.mag - usciteSpese[i].mag} €</td>
+                  <td style={{color:getColor(entrata.giu - usciteSpese[i].giu)}}>{entrata.giu - usciteSpese[i].giu} €</td>
+                  <td style={{color:getColor(entrata.lug - usciteSpese[i].lug)}}>{entrata.lug - usciteSpese[i].lug} €</td>
+                  <td style={{color:getColor(entrata.ago - usciteSpese[i].ago)}}>{entrata.ago - usciteSpese[i].ago} €</td>
+                  <td style={{color:getColor(entrata.set - usciteSpese[i].set)}}>{entrata.set - usciteSpese[i].set} €</td>
+                  <td style={{color:getColor(entrata.ott - usciteSpese[i].ott)}}>{entrata.ott - usciteSpese[i].ott} €</td>
+                  <td style={{color:getColor(entrata.nov - usciteSpese[i].nov)}}>{entrata.nov - usciteSpese[i].nov} €</td>
+                  <td style={{color:getColor(entrata.dic - usciteSpese[i].dic)}}>{entrata.dic - usciteSpese[i].dic} €</td>
+                  <td style={{color:getColor(entrata.totale_anno - usciteSpese[i].totale_anno)}}>{entrata.totale_anno - usciteSpese[i].totale_anno} €</td>
                 </tr>
               )
             ))}
             <tr key={0}>
-              <td>{entrateLavori[0].Anno}</td>
-              <td>{entrateLavori[0].gen - usciteSpese[0].gen} €</td>
-              <td>{entrateLavori[0].feb - usciteSpese[0].feb} €</td>
-              <td>{entrateLavori[0].mar - usciteSpese[0].mar} €</td>
-              <td>{entrateLavori[0].apr - usciteSpese[0].apr} €</td>
-              <td>{entrateLavori[0].mag - usciteSpese[0].mag} €</td>
-              <td>{entrateLavori[0].giu - usciteSpese[0].giu} €</td>
-              <td>{entrateLavori[0].lug - usciteSpese[0].lug} €</td>
-              <td>{entrateLavori[0].ago - usciteSpese[0].ago} €</td>
-              <td>{entrateLavori[0].set - usciteSpese[0].set} €</td>
-              <td>{entrateLavori[0].ott - usciteSpese[0].ott} €</td>
-              <td>{entrateLavori[0].nov - usciteSpese[0].nov} €</td>
-              <td>{entrateLavori[0].dic - usciteSpese[0].dic} €</td>
-              <td>{entrateLavori[0].totale_anno - usciteSpese[0].totale_anno} €</td>
+              <td
+                style={{
+                  fontWeight: "bold",
+                }} 
+              >{entrateLavori[0].Anno}</td>
+              <td style={{color:getColor(entrateLavori[0].gen - usciteSpese[0].gen, 1)}}>{entrateLavori[0].gen - usciteSpese[0].gen} €</td>
+              <td style={{color:getColor(entrateLavori[0].feb - usciteSpese[0].feb)}}>{entrateLavori[0].feb - usciteSpese[0].feb} €</td>
+              <td style={{color:getColor(entrateLavori[0].mar - usciteSpese[0].mar)}}>{entrateLavori[0].mar - usciteSpese[0].mar} €</td>
+              <td style={{color:getColor(entrateLavori[0].apr - usciteSpese[0].apr)}}>{entrateLavori[0].apr - usciteSpese[0].apr} €</td>
+              <td style={{color:getColor(entrateLavori[0].mag - usciteSpese[0].mag)}}>{entrateLavori[0].mag - usciteSpese[0].mag} €</td>
+              <td style={{color:getColor(entrateLavori[0].giu - usciteSpese[0].giu)}}>{entrateLavori[0].giu - usciteSpese[0].giu} €</td>
+              <td style={{color:getColor(entrateLavori[0].lug - usciteSpese[0].lug)}}>{entrateLavori[0].lug - usciteSpese[0].lug} €</td>
+              <td style={{color:getColor(entrateLavori[0].ago - usciteSpese[0].ago)}}>{entrateLavori[0].ago - usciteSpese[0].ago} €</td>
+              <td style={{color:getColor(entrateLavori[0].set - usciteSpese[0].set)}}>{entrateLavori[0].set - usciteSpese[0].set} €</td>
+              <td style={{color:getColor(entrateLavori[0].ott - usciteSpese[0].ott)}}>{entrateLavori[0].ott - usciteSpese[0].ott} €</td>
+              <td style={{color:getColor(entrateLavori[0].nov - usciteSpese[0].nov)}}>{entrateLavori[0].nov - usciteSpese[0].nov} €</td>
+              <td style={{color:getColor(entrateLavori[0].dic - usciteSpese[0].dic)}}>{entrateLavori[0].dic - usciteSpese[0].dic} €</td>
+              <td style={{color:getColor(entrateLavori[0].totale_anno - usciteSpese[0].totale_anno)}}>{entrateLavori[0].totale_anno - usciteSpese[0].totale_anno} €</td>
             </tr>
           </tbody>
         </Table>
