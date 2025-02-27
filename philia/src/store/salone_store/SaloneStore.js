@@ -5,6 +5,7 @@ import { operazioniSaloni } from "../../vario/Operazioni";
 
 let entrateLavori = [];
 let usciteSpese = [];
+let spese = [];
 
 class SaloneStore extends EventEmitter {
   constructor() {
@@ -14,8 +15,11 @@ class SaloneStore extends EventEmitter {
 
   handleActions(action) {
     switch (action.type) {
-      case operazioniSaloni.INSERISCI_USCITA:
-        this.runOperation(action.payload, operazioniSaloni.INSERISCI_USCITA);
+      case operazioniSaloni.INSERISCI_SPESA:
+        this.runOperation(action.payload, operazioniSaloni.INSERISCI_SPESA);
+        break;
+      case operazioniSaloni.VISUALIZZA_SPESE:
+        this.runOperation(action.payload, operazioniSaloni.VISUALIZZA_SPESE);
         break;
       case operazioniSaloni.VISUALIZZA_ENTRATE_LAVORI:
         this.runOperation(action.payload, operazioniSaloni.VISUALIZZA_ENTRATE_LAVORI);
@@ -32,9 +36,11 @@ class SaloneStore extends EventEmitter {
   async runOperation(data, operazione) {
     try {
       const response = await axios.post("/" + operazione, data);
-      if (operazione === operazioniSaloni.VISUALIZZA_ENTRATE_LAVORI)
+      if (operazione === operazioniSaloni.VISUALIZZA_SPESE)
+        spese = response.data.spese;
+      else if (operazione === operazioniSaloni.VISUALIZZA_ENTRATE_LAVORI)
         entrateLavori = response.data.entrateLavori;
-      if (operazione === operazioniSaloni.VISUALIZZA_USCITE_SPESE)
+      else if (operazione === operazioniSaloni.VISUALIZZA_USCITE_SPESE)
         usciteSpese = response.data.usciteSpese;
       this.emitChange(operazione);
     } 
@@ -47,12 +53,20 @@ class SaloneStore extends EventEmitter {
     this.emit(eventType);
   }
 
+  getSpese() {
+    return spese;
+  }
+
   getEntrateLavori() {
     return entrateLavori;
   }
   
   getUsciteSpese() {
     return usciteSpese;
+  }
+
+  setSpese(spese) {
+    this.spese = spese;
   }
 
   setEntrateLavori(entrateLavori) {

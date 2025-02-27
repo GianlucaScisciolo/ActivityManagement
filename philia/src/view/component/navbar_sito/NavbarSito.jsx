@@ -31,7 +31,7 @@ const NavbarSito = () => {
   const [dropdownClienti, setDropdownClienti] = useState(false);
   const [dropdownProfessionisti, setDropdownProfessionisti] = useState(false);
   const [dropdownLavori, setDropdownLavori] = useState(false);
-  const [dropdownUscite, setDropdownUscite] = useState(false);
+  const [dropdownSpese, setDropdownSpese] = useState(false);
   const [dropdownStile, setDropdownStile] = useState(false);
   const [dropdownSfondo, setDropdownSfondo] = useState(false);
   const [dropdownItem, setDropdownItem] = useState(false);
@@ -159,11 +159,12 @@ const NavbarSito = () => {
                   <StyledNavDropdownItem as="a" href="https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ2GRuG5B0k6Qyo2DLBkT1-OOXXC1XO60HQkWAl3Txvc3z-PcBL0EYhfc62sAor46nbg-szeiADZ" target="_blank" rel="noopener noreferrer">Prenotazione</StyledNavDropdownItem>
 
               </StyledNavDropdown>
-              <StyledNavDropdown title="Uscite" show={dropdownUscite}
-                onMouseEnter={() => handleMouseEnter(setDropdownUscite)}
-                onMouseLeave={() => handleMouseLeave(setDropdownUscite)}
+              <StyledNavDropdown title="Spese" show={dropdownSpese}
+                onMouseEnter={() => handleMouseEnter(setDropdownSpese)}
+                onMouseLeave={() => handleMouseLeave(setDropdownSpese)}
               >
-                <StyledNavDropdownItem as={NavLink} to="/nuova-uscita">Nuova uscita</StyledNavDropdownItem>
+                <StyledNavDropdownItem as={NavLink} to="/nuova-spesa">Nuova spesa</StyledNavDropdownItem>
+                <StyledNavDropdownItem as={NavLink} to="/spese">Spese</StyledNavDropdownItem>
               </StyledNavDropdown>
             </>
           )}

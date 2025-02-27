@@ -15,7 +15,7 @@ import {
   SQL_INSERIMENTO_LAVORO, SQL_SELEZIONE_LAVORI, SQL_ELIMINA_LAVORI, SQL_ELIMINA_LAVORI_RANGE_GIORNI, SQL_MODIFICA_LAVORO
 } from './LavoroSQL.js';
 import {
-  SQL_INSERIMENTO_USCITA, SQL_SELEZIONE_ENTRATE_LAVORI, SQL_SELEZIONE_USCITE_SPESE
+  SQL_INSERIMENTO_SPESA, SQL_SELEZIONE_SPESE, SQL_SELEZIONE_ENTRATE_LAVORI, SQL_SELEZIONE_USCITE_SPESE 
 } from './SaloneSQL.js';
 
 const app = express();
@@ -333,7 +333,7 @@ app.post("/MODIFICA_LAVORI", async (req, res) => {
 
 /*************************************************** Saloni **************************************************/
 
-app.post("/INSERISCI_USCITA", async (req, res) => {
+app.post("/INSERISCI_SPESA", async (req, res) => {
   const params = [
     `${req.body.nome}`, 
     `${req.body.giorno}`, 
@@ -342,15 +342,36 @@ app.post("/INSERISCI_USCITA", async (req, res) => {
     `${req.body.note}` 
   ];    
   try {
-    const result = await executeQuery(SQL_INSERIMENTO_USCITA, params);
-    return res.status(200).json({ message: 'Uscita inserita con successo', id: result.insertId });
+    const result = await executeQuery(SQL_INSERIMENTO_SPESA, params);
+    return res.status(200).json({ message: 'Spesa inserita con successo', id: result.insertId });
   } 
   catch (err) {
     if (err.code === 'ER_DUP_ENTRY') {
-      return res.status(409).json({ message: 'Errore, uscita gia\' presente.' });
+      return res.status(409).json({ message: 'Errore, spesa gia\' presente.' });
     }
-    console.error('Errore durante l\'inserimento dell\'uscita: ', err);
+    console.error('Errore durante l\'inserimento della spesa: ', err);
     return res.status(500).json({ message: 'Errore del server' });
+  }
+});
+
+app.post("/VISUALIZZA_SPESE", async (req, res) => {
+  req.body.primo_giorno = (req.body.primo_giorno) ? req.body.primo_giorno : "1111-01-01";
+  req.body.ultimo_giorno = (req.body.ultimo_giorno) ? req.body.ultimo_giorno : "9999-01-01";
+  req.body.totale_min = (req.body.totale_min) ? req.body.totale_min : Number.MIN_VALUE;
+  req.body.totale_max = (req.body.totale_max) ? req.body.totale_max : Number.MAX_VALUE;
+  const params = [
+    `%${req.body.nome}%`, `${req.body.totale_min}`, `${req.body.totale_max}`, `${req.body.primo_giorno}`, `${req.body.ultimo_giorno}`, 
+  ];
+  params.push((!req.body.descrizione) ? '%' : `%${req.body.descrizione}%`);
+  params.push((!req.body.note) ? '%' : `%${req.body.note}%`);
+  
+  try {
+    const data = await executeQuery(SQL_SELEZIONE_SPESE(req.body.descrizione, req.body.note), params);
+    res.status(200).json({ spese: data });
+  } 
+  catch (err) {
+    console.error('Errore durante l\'esecuzione della query: ', err);
+    res.status(500).json({ message: 'Errore durante l\'esecuzione della query' });
   }
 });
 

@@ -1,0 +1,75 @@
+export function getCampiNuovaSpesa(item, handleOnChange, handleOnClick, handleOnBlur) {
+  return {
+    header: "Nuova spesa", 
+    label: ["Nome*", "Descrizione", "Totale*", "Giorno*", "Note"],  
+    type: [null, null, "number", "date", null], 
+    step: [null, null, "0.50", null, null], 
+    min: [null, null, "0.50", null, null], 
+    name: ["nome", "descrizione", "totale", "giorno", "note"], 
+    value: [item.nome, item.descrizione, item.totale, item.giorno, item.note], 
+    placeholder: ["Nome*", "Descrizione", "Totale*", "Giorno*", "Note"], 
+    errore: [item.errore_nome, item.errore_descrizione, item.errore_totale, item.errore_giorno, item.errore_note], 
+    options: [null, null, null, null, null],
+    onChange: handleOnChange, 
+    onClick: handleOnClick, 
+    onBlur: handleOnBlur
+  };
+};
+
+export function getCampiRicercaSpese(item, handleOnChange, handleOnClick, handleOnBlur) {
+  /*
+    const [datiRicerca, setDatiRicerca] = useState({
+      nome: "", 
+      descrizione: "", 
+      prezzo_min: "",
+      prezzo_max: "",  
+      primo_giorno: "", 
+      ultimo_giorno: "", 
+      note: ""
+    });
+  */
+  return {
+    header: "Ricerca spese", 
+    label: ["Nome", "Descrizione", "Totale minimo", "Totale massimo", "Primo giorno", "Ultimo giorno", "Note"], 
+    type: [null, null, "number", "number", "date", "date", null], 
+    step: [null, null, "0.50", "0.50", null, null, null], 
+    min: [null, null, null, null, null, null, null], 
+    name: ["nome", "descrizione", "totale_min", "totale_max", "primo_giorno", "ultimo_giorno", "note"], 
+    value: [item.nome, item.descrizione, item.totale_min, item.totale_max, item.primo_giorno, item.ultimo_giorno, item.note], 
+    placeholder: ["Nome", "Descrizione", "Totale minimo", "Totale massimo", "Primo giorno", "Ultimo giorno", "Note"], 
+    onChange: handleOnChange, 
+    onClick: handleOnClick, 
+    onBlur: handleOnBlur
+  };
+};
+
+export function getCampiSpesaEsistente(nullo, item, handleOnChange, handleOnClick, handleOnBlur) {
+  return {
+    header: "Spesa", 
+    tipoSelezione: item.tipo_selezione,  
+    type: [null, null, "number", "date", null], 
+    step: [null, null, "0.50", null, null], 
+    min: [null, null, "0.50", null, null], 
+    name: ["nome", "descrizione", "totale", "giorno", "note"], 
+    value: [item.nome, item.descrizione, item.totale, item.giorno, item.note], 
+    placeholder: ["Nome*", "Descrizione", "Totale*", "Giorno*", "Note"], 
+    valoreModificabile: [false, true, true, true, true], 
+    options: [null, null, null, null, null], 
+    onChange: handleOnChange, 
+    onClick: handleOnClick, 
+    onBlur: handleOnBlur
+  };
+};
+
+export const indiciNuovaSpesa = [0, 1, 2, 3, 4];
+export const indiciRicercaSpese = [0, 1, 2, 3, 4, 5, 6];
+export const indiciSpesaEsistente = [0, 1, 2, 3, 4];
+
+
+
+
+
+
+
+
+

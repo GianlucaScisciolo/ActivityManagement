@@ -53,7 +53,7 @@ const Salone = () => {
           { id: '2', tipo: "CardUsciteSpese", usciteSpese: usciteSpese, x: 2000, y: 100 }, 
           { id: '3', tipo: "CardRicavi", entrateLavori: entrateLavori, usciteSpese: usciteSpese, x: 100, y: 1000 }
         ]);
-        setAggiornamento("FINE"); // Set to a different value to prevent infinite loop
+        setAggiornamento("FINE");
       }      
       else {
         console.log("Aggiornamento in corso...");

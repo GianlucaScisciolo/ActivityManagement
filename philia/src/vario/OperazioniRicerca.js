@@ -4,7 +4,8 @@ import lavoroStore from "../store/lavoro_store/LavoroStore.js";
 import PersonaAction from "../action/persona_action/PersonaAction.js"
 import ServizioAction from "../action/servizio_action/ServizioAction.js"
 import LavoroAction from "../action/lavoro_action/LavoroAction.js";
-import { operazioniPersone, operazioniServizi, operazioniLavori } from "./Operazioni.js";
+import SaloneAction from "../action/salone_action/SaloneAction.js";
+import { operazioniPersone, operazioniServizi, operazioniLavori, operazioniSaloni } from "./Operazioni.js";
 
 export const aggiornamentoLista = (tipoLista, setLista) => {
   if(tipoLista === "clienti") {
@@ -46,6 +47,10 @@ const eseguiRicercaLavori = (e, setLista, datiRicerca) => {
   LavoroAction.dispatchAction(datiRicerca, operazioniLavori.VISUALIZZA_LAVORI);
 };
 
+const eseguiRicercaSpese = (e, setLista, datiRicerca) => {
+  SaloneAction.dispatchAction(datiRicerca, operazioniSaloni.VISUALIZZA_SPESE);
+};
+
 export const eseguiRicerca = (e, tipoLista, setLista, datiRicerca) => {
   e.preventDefault();
 
@@ -57,6 +62,9 @@ export const eseguiRicerca = (e, tipoLista, setLista, datiRicerca) => {
   }
   else if(tipoLista === "lavori") {
     eseguiRicercaLavori(e, setLista, datiRicerca)
+  }
+  else if(tipoLista === "spese") {
+    eseguiRicercaSpese(e, setLista, datiRicerca)
   }
   else {
     alert("Errore, tipo lista non valido.");

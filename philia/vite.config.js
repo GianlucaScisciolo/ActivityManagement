@@ -51,7 +51,8 @@ export default defineConfig({
       '/OTTIENI_LAVORI_GIORNO': 'http://localhost:3000', 
 
       // Saloni
-      '/INSERISCI_USCITA': 'http://localhost:3000',
+      '/INSERISCI_SPESA': 'http://localhost:3000', 
+      '/VISUALIZZA_SPESE': 'http://localhost:3000', 
       '/VISUALIZZA_ENTRATE_LAVORI': 'http://localhost:3000',
       '/VISUALIZZA_USCITE_SPESE': 'http://localhost:3000',
     }

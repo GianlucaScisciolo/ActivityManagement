@@ -16,7 +16,8 @@ import Lavori from "./view/lavoro_view/Lavori.jsx";
 import Profilo from "./view/autenticazione_view/Profilo.jsx";
 import FileLavori from "./view/lavoro_view/FileLavori.jsx";
 import Salone from "./view/salone_view/Salone.jsx";
-import NuovaUscita from "./view/salone_view/NuovaUscita.jsx";
+import NuovaSpesa from "./view/salone_view/NuovaSpesa.jsx";
+import Spese from "./view/salone_view/Spese.jsx"
 
 console.log("Store:", store.getState());
 
@@ -40,7 +41,8 @@ const Root = () => {
             <Route path="/lavori" element={<Lavori />} />
             <Route path="/nuovo-lavoro" element={<NuovoLavoro />} />
             <Route path="/file-lavori" element={<FileLavori />} />
-            <Route path="/nuova-uscita" element={<NuovaUscita />} />
+            <Route path="/nuova-spesa" element={<NuovaSpesa />} />
+            <Route path="/spese" element={<Spese />} />
             <Route path="/salone" element={<Salone />} />
           </>
         )}
