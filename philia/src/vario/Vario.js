@@ -36,20 +36,45 @@
 //   }
 // };
 
-export const handleInputChange = (e, setItem, items, setItems, tipoItem, id) => {
+// export const handleInputChange = (e, setItem) => {
+//   const { name, value } = e.target;
+//   setItem(prevState => ({
+//     ...prevState, 
+//     [name]: value
+//   }));
+  
+//   if(name === "id_cliente") {
+//     setItem(prevState => ({
+//       ...prevState, 
+//       "id_professionista": 0
+//     }));
+//   }
+//   else if(name === "id_professionista") {
+//     setItem(prevState => ({
+//       ...prevState, 
+//       "id_cliente": 0
+//     }));
+//   }
+// };
+
+export const handleInputChange = (e, setItem, tipoItem, campi, i) => {
+  e.preventDefault();
   const { name, value } = e.target;
   
   if(tipoItem === "cliente" || tipoItem === "servizio" || tipoItem === "lavoro" || tipoItem === "spesa") {
-    const updatedItems = items.map(item => {
-      if(id === item.id) {
-        return {
-          ...item,
-          [name]: value
-        };
-      }
-      return item;
-    });
-    setItems(updatedItems);
+    // const updatedItems = items.map(item => {
+    //   if (id === item.id) {
+    //     return {
+    //       ...item,
+    //       [name]: value
+    //     };
+    //   }
+    //   return item;  // Ensure every iteration returns an item
+    // });
+    
+    // setItems(updatedItems);
+    campi.value[i] = value; 
+    console.log(campi.value[i]);
   }
   else {  
     setItem(prevState => ({
@@ -71,6 +96,32 @@ export const handleInputChange = (e, setItem, items, setItems, tipoItem, id) => 
     }
   }
 };
+// export const handleInputChange = async (e, setItem) => {
+//   const { name, value } = e.target;
+
+//   await setItem(prevState => ({
+//     ...prevState, 
+//     [name]: value
+//   }));
+
+//   switch (name) {
+//     case "id_cliente":
+//       await setItem(prevState => ({
+//         ...prevState, 
+//         "id_professionista": 0
+//       }));
+//       break;
+//     case "id_professionista":
+//       await setItem(prevState => ({
+//         ...prevState, 
+//         "id_cliente": 0
+//       }));
+//       break;
+//     default:
+//       break;
+//   }
+// };
+
 
 export const handleInputChangeNuovoLavoro = (e, setItem) => {
   const nome_campi = [

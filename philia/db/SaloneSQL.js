@@ -1,28 +1,28 @@
-export const SQL_INSERIMENTO_SPESA = ` 
-  INSERT INTO spesa (nome, giorno, descrizione, totale, note) 
-  VALUES (?, ?, ?, ?, ?); 
-`;
+// export const SQL_INSERIMENTO_SPESA = ` 
+//   INSERT INTO spesa (nome, giorno, descrizione, totale, note) 
+//   VALUES (?, ?, ?, ?, ?); 
+// `;
 
-export function SQL_SELEZIONE_SPESE(descrizione, note) { 
-  let sql = ` 
-    SELECT 
-      id, 
-      nome, 
-      descrizione, 
-      totale, 
-      giorno, 
-      note, 
-      0 AS tipo_selezione 
-    FROM 
-      spesa 
-    WHERE 
-      nome LIKE ? AND (totale BETWEEN ? AND ?) AND (giorno BETWEEN ? AND ?) 
-  `;
-  sql += (!descrizione) ? " AND (descrizione LIKE ? OR descrizione IS NULL) " : " AND descrizione LIKE ? ";
-  sql += (!note) ? " AND (note LIKE ? OR note IS NULL); " : " AND note LIKE ?; ";
+// export function SQL_SELEZIONE_SPESE(descrizione, note) { 
+//   let sql = ` 
+//     SELECT 
+//       id, 
+//       nome, 
+//       descrizione, 
+//       totale, 
+//       DATE_FORMAT(giorno, "%Y-%m-%d") AS giorno, 
+//       note, 
+//       0 AS tipo_selezione 
+//     FROM 
+//       spesa 
+//     WHERE 
+//       nome LIKE ? AND (totale BETWEEN ? AND ?) AND (giorno BETWEEN ? AND ?) 
+//   `;
+//   sql += (!descrizione) ? " AND (descrizione LIKE ? OR descrizione IS NULL) " : " AND descrizione LIKE ? ";
+//   sql += (!note) ? " AND (note LIKE ? OR note IS NULL); " : " AND note LIKE ?; ";
 
-  return sql;
-};
+//   return sql;
+// };
 
 export function SQL_ELIMINA_SPESE(ids) {
   return (` 
@@ -32,6 +32,13 @@ export function SQL_ELIMINA_SPESE(ids) {
       id IN (${ids}); 
   `);
 }
+
+export const SQL_ELIMINA_SPESE_RANGE_GIORNI = ` 
+  DELETE FROM 
+    spesa 
+  WHERE 
+    giorno BETWEEN ? AND ?; 
+`;
 
 export const SQL_MODIFICA_SPESA = `
   UPDATE 

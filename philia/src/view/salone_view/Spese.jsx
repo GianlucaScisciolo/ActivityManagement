@@ -16,17 +16,29 @@ import {
   getCampiRicercaSpese, getCampiSpesaEsistente, 
   indiciRicercaSpese, indiciSpesaEsistente
 } from "./SpeseVario";
+import { useDispatch } from "react-redux";
+import { aggiornaSpese } from "../../store/redux/SpeseSlice";
+/*
+
+// 
+
+
+
+*/
 
 const Spese = () => {
   const formSession = useSelector((state) => state.formSession.value);
   const itemSession = useSelector((state) => state.itemSession.value);
+  const speseSession = useSelector((state) => state.speseSession.value);
+  const dispatch = useDispatch();
   
-  const [spese, setSpese] = useState(-1);
+  const [spese, setSpese] = useState(0);
   const [selectedTrashCount, setSelectedTrashCount] = useState(0);
   const [selectedPencilCount, setSelectedPencilCount] = useState(0);
   const [selectedIdsEliminazione, setSelectedIdsEliminazione] = useState([]);
   const [selectedIdsModifica, setSelectedIdsModifica] = useState([]);
   const [datiRicerca, setDatiRicerca] = useState({
+    tipo_item: "spesa", 
     nome: "", 
     descrizione: "", 
     totale_min: "",
@@ -47,13 +59,61 @@ const Spese = () => {
     (formSession.view === "card") ? CardRicercaItems : RowRicercaItems
   )
 
-  useEffect(() => {
-    const onChange = () => setSpese(saloneStore.getSpese());
-    saloneStore.addChangeListener(operazioniSaloni.VISUALIZZA_SPESE, onChange);
-    return () => {
-      saloneStore.removeChangeListener(operazioniSaloni.VISUALIZZA_SPESE, onChange);
-    };
-  }, []);
+  const [aggiornamento, setAggiornamento] = useState(false);
+
+  // useEffect(() => {
+  //   const onChange = () => {
+  //     dispatch(aggiornaSpese({
+  //       spese: response.data.spese,
+  //     }));
+  //   };
+  //   saloneStore.addChangeListener(operazioniSaloni.VISUALIZZA_SPESE, onChange);
+  //   return () => {
+  //     saloneStore.removeChangeListener(operazioniSaloni.VISUALIZZA_SPESE, onChange);
+  //   };
+
+  // }, []);
+  // useEffect(() => {
+  //   console.log("|"+speseSession.spese+"|");
+  //   if(speseSession.spese !== 0 && speseSession.spese !== "0") {
+  //     console.log("<"+speseSession.spese+">");
+  //     if(speseSession.spese === -1) {
+  //       dispatch(aggiornaSpese({
+  //         spese: saloneStore.getSpese(),
+  //       }));
+  //       setAggiornamento(!aggiornamento);
+  //     }
+  //   }
+  //   // console.log(speseSession.spese);
+  // });
+
+  // console.log(speseSession.spese);
+
+  const handleSearch = async (e) => {
+    e.preventDefault();
+        
+    try {
+      const response = await fetch('/VISUALIZZA_ITEMS', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(datiRicerca),
+      });
+
+      if(response.status === 200) {
+        const result = await response.json();
+        setSpese(result.items);
+      }
+      else {
+        alert("Errore durante la ricerca delle spese, riprova più tardi.");
+      }
+    }
+    catch (error) {
+      console.error('Errore:', error);
+      alert("Errore durante la ricerca delle spese, riprova più tardi.");
+    }
+  }
 
   return (
     <>
@@ -61,14 +121,19 @@ const Spese = () => {
 
       <div className="main-content" />
 
+      {/* <button>{speseSess</button> */}
+
       <RicercaSpeseTag 
         campi={getCampiRicercaSpese(datiRicerca, (e) => handleInputChange(e, setDatiRicerca), null, null)} 
         indici={indiciRicercaSpese}
-        eseguiRicerca={(e) => eseguiRicerca(e, "spese", setSpese, datiRicerca)}
+        // eseguiRicerca={(e) => eseguiRicerca(e, "spese", null, datiRicerca, dispatch)}
+        handleSearch={(e) => handleSearch(e)}
       />
-
+  {/* (e, tipoLista, setLista, datiRicerca, dispatch) */}
       <br /> <br /> <br /> <br />
       
+      {/* <button>{speseSession.spese.length}</button> */}
+
       <Items 
         tipoItem={"spesa"} 
         items={spese} 
@@ -82,15 +147,14 @@ const Spese = () => {
 
       <br /> <br /> <br /> <br />
 
-      <OperazioniItems 
+      {/* <OperazioniItems 
         selectedIdsModifica={selectedIdsModifica} 
         selectedIdsEliminazione={selectedIdsEliminazione}
         modifica={(e) => modifica(e, "spesa", selectedIdsModifica, setSelectedIdsModifica, spese, setSpese)} 
         elimina={(e) => elimina(e, "spesa", selectedIdsEliminazione, setSelectedIdsEliminazione, spese, setSpese)}
-      /> 
+      />  */}
 
-        {/* 
-        */}
+
       <br /> <br /> <br /> <br />
     </>
   );

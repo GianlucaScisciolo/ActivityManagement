@@ -165,6 +165,7 @@ const NavbarSito = () => {
               >
                 <StyledNavDropdownItem as={NavLink} to="/nuova-spesa">Nuova spesa</StyledNavDropdownItem>
                 <StyledNavDropdownItem as={NavLink} to="/spese">Spese</StyledNavDropdownItem>
+                <StyledNavDropdownItem as={NavLink} to="/file-spese">File spese</StyledNavDropdownItem>
               </StyledNavDropdown>
             </>
           )}

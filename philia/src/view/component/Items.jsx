@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import { CardItemEsistente } from "../../trasportabile/card_item/CardItem";
 import { RowItemEsistente } from "../../trasportabile/row_item/RowItem";
@@ -102,9 +102,30 @@ export const Items = ({tipoItem, items, setItems, selectOperation, emptyIsConsid
       </>
     );
   }
+
+  const modifica = (e, item) => {
+    // e.preventDefault();
+    const { name, value } = e.target;
+    setItems((prevItems) => {
+      const newItems = prevItems.map(currentItem => 
+        currentItem.id === item.id 
+          ? { ...currentItem, [name]: value }
+          : currentItem
+      );
+      // Ritornare l'elemento modificato
+      setTimeout(() => updatedItems({target: {name, value}}, item), 0);
+      return newItems;
+    });
+  };
   
-  const ItemElements = ({items}) => {
-    // const [idServizi, setIdServizi] = useState([]);
+  const updatedItems = (e, item) => {
+    console.log("TMP");
+    modifica(e, item);
+  };
+  
+
+  
+  const ItemElements = () => {
     return (
       <>
         {items.map((item, index) => {
@@ -117,9 +138,13 @@ export const Items = ({tipoItem, items, setItems, selectOperation, emptyIsConsid
             <ItemEsistenteTag 
               key={index} 
               item={item} 
-              campi={campi(OptionsServizi(servizi, descrizione, sottoStringa, setIdServizi), item, (e) => handleInputChange(e, null, items, setItems, tipoItem, item.id), null, null)} 
+              campi={campi(OptionsServizi(servizi, descrizione, sottoStringa, setIdServizi), item, null, null, null)} 
               indici={indici} 
               selectOperation={selectOperation} 
+              items={items} 
+              setItems={setItems} 
+              tipoItem={tipoItem}
+              onChange={(e) => updatedItems(e, item)}
             />
           )
         })}
@@ -127,19 +152,21 @@ export const Items = ({tipoItem, items, setItems, selectOperation, emptyIsConsid
     );
   }
 
+
   return (
     <>
-      {(items.length <= 0 && emptyIsConsidered) && (
+      {((items.length <= 0 && emptyIsConsidered)) && (
         <div className='contenitore-1'>Nessun {tipoItem} trovato!!</div>
       )}
       {(items.length > 0) && (
         <>
           {itemSession.view === "card" ? (
             <div className="contenitore-3">
-              <ItemElements items={items} />
+              {/* <ItemElements items={items} setItems={setItems} tipoItem={tipoItem} /> */}
+              <ItemElements />
             </div>
           ) : (
-            <ItemElements items={items} />
+            <ItemElements />
           )}
         </>
       )} 

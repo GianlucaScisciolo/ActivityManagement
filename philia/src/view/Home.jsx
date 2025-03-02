@@ -33,6 +33,7 @@ const StyledSaveNotSelected = styled(Save)`
 const Home = () => {
   const formSession = useSelector((state) => state.formSession.value);
   const itemSession = useSelector((state) => state.itemSession.value);
+  const autenticazioneSession = useSelector((state) => state.autenticazioneSession.value);
   
   const dispatch = useDispatch();
   const scegliWidgets = (e) => {
@@ -55,23 +56,26 @@ const Home = () => {
       <Header />
 
       <br /> <br /> <br />
+      {(autenticazioneSession.isLogged === true) && (
+        <>
+          <div style={{ display: "flex", justifyContent: "flex-end", marginRight: "200px" }}>
+            <button
+              style={{
+                backgroundColor: "transparent",
+                border: "none",
+                cursor: "pointer",
+                outline: "none",
+                padding: "10px",
+                borderRadius: "100%"
+              }}
+            >
+              <AddWidgetsTag className="right" onClick={(e) => scegliWidgets(e)} />
+            </button>
+          </div>
 
-      <div style={{ display: "flex", justifyContent: "flex-end", marginRight: "200px" }}>
-        <button
-          style={{
-            backgroundColor: "transparent",
-            border: "none",
-            cursor: "pointer",
-            outline: "none",
-            padding: "10px",
-            borderRadius: "100%"
-          }}
-        >
-          <AddWidgetsTag className="right" onClick={(e) => scegliWidgets(e)} />
-        </button>
-      </div>
-
-      <DragAndDropWidgetHomePage plusCliccato={plusCliccato} />
+          <DragAndDropWidgetHomePage plusCliccato={plusCliccato} />
+        </>
+      )}
     </>
   );
 }

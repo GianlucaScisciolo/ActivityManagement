@@ -20,6 +20,7 @@ import {
 import ProvaOptions from "./ProvaOptions";
 import { getSelectTag } from "../../trasportabile/form_item/FormItem";
 import { Items } from "../component/Items";
+import { controlloLavoro } from "../../vario/Controlli";
 
 const NuovoLavoro = () => {
   const formSession = useSelector((state) => state.formSession.value);
@@ -36,6 +37,7 @@ const NuovoLavoro = () => {
     (formSession.view === "card") ? CardNuovoItem : RowNuovoItem
   )
   const [nuovoLavoro, setNuovoLavoro] = useState({
+    tipo_item: "lavoro", 
     tipo_selezione: 1, 
     id_cliente: "", 
     cliente: "", 
@@ -66,8 +68,8 @@ const NuovoLavoro = () => {
 
   const handleInsert = async (e) => {
     e.preventDefault();
-    let descrizione = "";
     if (confirm("Sei sicuro di voler salvare il lavoro?")) {
+      let descrizione = "";
       for(let servizio of servizi) {
         if(nuovoLavoro.id_servizi.includes(servizio.id)) {
           nuovoLavoro.totale += servizio.prezzo;
@@ -85,58 +87,41 @@ const NuovoLavoro = () => {
         }
       }
       nuovoLavoro["descrizione"] = descrizione;
-      console.log(nuovoLavoro);
-      // if (controlloServizio(nuovoServizio, setNuovoServizio) > 0) 
+      
+      // if (controlloLavoro(nuovoLavoro, setNuovoLavoro) > 0) 
       //   return;
       
       try {
-        const response = await fetch('/INSERISCI_LAVORO', {
+        const response = await fetch('/INSERISCI_ITEM', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify(nuovoLavoro),
         });
-        if (!response.ok) {
-          const errorData = await response.json();
-          if (response.status === 409) {
-            alert(errorData.message); 
-          } 
-          else {
-            throw new Error('Errore durante l\'inserimento del lavoro. ');
-          }
-        } 
-        else {
+
+        if(response.status === 200) {
           const result = await response.json();
-          nuovoLavoro.note = (nuovoLavoro.note.split(' ').join('') === "") ? "Nota non inserita." : nuovoLavoro.note;
-          setLavori(prevLavori => [...prevLavori, { ...nuovoLavoro, id: result.id }]);
-          setNuovoLavoro({
-            tipo_selezione: 1, 
-            id_cliente: "", 
-            cliente: "", 
-            id_servizi: [], 
-            servizio: "", 
-            giorno: "", 
-            descrizione: ", ",
-            totale: 0,
-            note: "", 
-            errore_cliente: "", 
-            errore_servizio: "", 
-            errore_giorno: "", 
-            errore_note: "" 
-          });
-          alert("L'inserimento del lavoro è andato a buon fine!!");
+          nuovoLavoro.id = result.id;
+          setLavori(prevLavori => [...prevLavori, nuovoLavoro]);
+          alert("L\'inserimento del lavoro è andato a buon fine!!");
         }
-      } 
+        else if(response.status === 400) {
+          alert("Errore: lavoro gia\' presente.")
+        }
+        else {
+          alert("Errore durante il salvataggio del nuovo lavoro, riprova più tardi1.");
+        }
+      }
       catch (error) {
         console.error('Errore:', error);
-        alert("C'è stato un errore durante l'inserimento del lavoro. Riprova più tardi.");
+        alert("Errore durante il salvataggio del nuovo lavoro, riprova più tardi2.");
       }
     }
     else {
       alert("Salvataggio annullato.");
     }
-  };
+  }
 
   const OptionsClienti = ({ clienti }) => {
     const NomeTagSelect = getSelectTag(1);

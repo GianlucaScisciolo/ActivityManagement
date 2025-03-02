@@ -9,28 +9,31 @@ import { eseguiRicerca } from "../../vario/OperazioniRicerca";
 import { FormRicercaItems } from "../../trasportabile/form_item/FormItem";
 import { CardRicercaItems } from "../../trasportabile/card_item/CardItem";
 import { RowRicercaItems } from "../../trasportabile/row_item/RowItem";
-import servizioStore from "../../store/servizio_store/ServizioStore";
-import { operazioniServizi } from "../../vario/Operazioni";
+import saloneStore from "../../store/salone_store/SaloneStore";
+import { operazioniSaloni } from "../../vario/Operazioni";
 import { Items } from "../component/Items";
 import { 
-  getCampiRicercaServizi, getCampiServizioEsistente, 
-  indiciRicercaServizi, indiciServizioEsistente
-} from "./ServiziVario";
+  getCampiRicercaSpese, getCampiSpesaEsistente, 
+  indiciRicercaSpese, indiciSpesaEsistente
+} from "./SpeseVario";
 
-const Servizi = () => {
+const Spese = () => {
   const formSession = useSelector((state) => state.formSession.value);
   const itemSession = useSelector((state) => state.itemSession.value);
-
-  const [servizi, setServizi] = useState(-1);
+  const speseSession = useSelector((state) => state.speseSession.value);
+  
+  const [spese, setSpese] = useState(speseSession.spese);
   const [selectedTrashCount, setSelectedTrashCount] = useState(0);
   const [selectedPencilCount, setSelectedPencilCount] = useState(0);
   const [selectedIdsEliminazione, setSelectedIdsEliminazione] = useState([]);
   const [selectedIdsModifica, setSelectedIdsModifica] = useState([]);
   const [datiRicerca, setDatiRicerca] = useState({
-    tipo_item: "servizio", 
     nome: "", 
-    prezzo_min: "",
-    prezzo_max: "",  
+    descrizione: "", 
+    totale_min: "",
+    totale_max: "",  
+    primo_giorno: "", 
+    ultimo_giorno: "", 
     note: ""
   });
   
@@ -41,35 +44,17 @@ const Servizi = () => {
     )
   }
 
-  const RicercaServiziTag = (formSession.view === "form") ? FormRicercaItems : (
+  const RicercaSpeseTag = (formSession.view === "form") ? FormRicercaItems : (
     (formSession.view === "card") ? CardRicercaItems : RowRicercaItems
   )
 
-  const handleSearch = async (e) => {
-    e.preventDefault();
-        
-    try {
-      const response = await fetch('/VISUALIZZA_ITEMS', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(datiRicerca),
-      });
-
-      if(response.status === 200) {
-        const result = await response.json();
-        setServizi(result.items);
-      }
-      else {
-        alert("Errore durante la ricerca dei servizi, riprova più tardi.");
-      }
-    }
-    catch (error) {
-      console.error('Errore:', error);
-      alert("Errore durante la ricerca dei clienti, riprova più tardi.");
-    }
-  }
+  useEffect(() => {
+    const onChange = () => setSpese(saloneStore.getSpese());
+    saloneStore.addChangeListener(operazioniSaloni.VISUALIZZA_SPESE, onChange);
+    return () => {
+      saloneStore.removeChangeListener(operazioniSaloni.VISUALIZZA_SPESE, onChange);
+    };
+  }, []);
 
   return (
     <>
@@ -77,23 +62,22 @@ const Servizi = () => {
 
       <div className="main-content" />
 
-      <RicercaServiziTag 
-        campi={getCampiRicercaServizi(datiRicerca, (e) => handleInputChange(e, setDatiRicerca), null, null)} 
-        indici={indiciRicercaServizi}
-        // eseguiRicerca={(e) => eseguiRicerca(e, "servizi", setServizi, datiRicerca)}
-        handleSearch={(e) => handleSearch(e)}
+      <RicercaSpeseTag 
+        campi={getCampiRicercaSpese(datiRicerca, (e) => handleInputChange(e, setDatiRicerca), null, null)} 
+        indici={indiciRicercaSpese}
+        eseguiRicerca={(e) => eseguiRicerca(e, "spese", setSpese, datiRicerca)}
       />
 
       <br /> <br /> <br /> <br />
       
       <Items 
-        tipoItem={"servizio"} 
-        items={servizi} 
-        setItems={setServizi}
+        tipoItem={"spesa"} 
+        items={spese} 
+        setItems={setSpese}
         selectOperation={selectOperation}
         emptyIsConsidered={true} 
-        campi={getCampiServizioEsistente}
-        indici={indiciServizioEsistente}
+        campi={getCampiSpesaEsistente}
+        indici={indiciSpesaEsistente}
         servizi={null}
       />
 
@@ -102,13 +86,15 @@ const Servizi = () => {
       <OperazioniItems 
         selectedIdsModifica={selectedIdsModifica} 
         selectedIdsEliminazione={selectedIdsEliminazione}
-        modifica={(e) => modifica(e, "servizio", selectedIdsModifica, setSelectedIdsModifica, servizi, setServizi)} 
-        elimina={(e) => elimina(e, "servizio", selectedIdsEliminazione, setSelectedIdsEliminazione, servizi, setServizi)}
-      />
+        modifica={(e) => modifica(e, "spesa", selectedIdsModifica, setSelectedIdsModifica, spese, setSpese)} 
+        elimina={(e) => elimina(e, "spesa", selectedIdsEliminazione, setSelectedIdsEliminazione, spese, setSpese)}
+      /> 
 
+        {/* 
+        */}
       <br /> <br /> <br /> <br />
     </>
   );
 }
 
-export default Servizi;
+export default Spese;

@@ -25,7 +25,8 @@ const NuovaSpesa = () => {
   const [selectedIdsEliminazione, setSelectedIdsEliminazione] = useState([]);
   const [selectedIdsModifica, setSelectedIdsModifica] = useState([]);
   const [nuovaSpesa, setNuovaSpesa] = useState({
-    tipo_selezione: 1,
+    tipo_item: "spesa", 
+    tipo_selezione: 0,
     nome: "",
     giorno: "",
     descrizione: "",
@@ -52,46 +53,30 @@ const NuovaSpesa = () => {
         return;
       
       try {
-        const response = await fetch('/INSERISCI_SPESA', {
+        const response = await fetch('/INSERISCI_ITEM', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify(nuovaSpesa),
         });
-        if (!response.ok) {
-          const errorData = await response.json();
-          if (response.status === 409) {
-            alert(errorData.message); 
-          } 
-          else {
-            throw new Error('Errore durante l\'inserimento della spesa.');
-          }
-        } 
-        else {
+
+        if(response.status === 200) {
           const result = await response.json();
-          
-          setSpese(prevSpese => [...prevSpese, { ...nuovaSpesa, id: result.id }]);
-          setNuovaSpesa({
-            tipo_selezione: 1,
-            nome: "",
-            giorno: "",
-            descrizione: "",
-            totale: 0,
-            note: "", 
-            errore_nome: "",
-            errore_giorno: "",
-            errore_descrizione: "",
-            errore_totale: "",
-            errore_note: "",
-          });
-  
-          alert("L'inserimento della spesa è andato a buon fine!!");
+          nuovaSpesa.id = result.id;
+          setSpese(prevSpese => [...prevSpese, nuovaSpesa]);
+          alert("L\'inserimento della spesa è andato a buon fine!!");
+        }
+        else if(response.status === 400) {
+          alert("Errore: spesa gia\' presente.")
+        }
+        else {
+          alert("Errore durante il salvataggio della nuova spesa, riprova più tardi.");
         }
       } 
       catch (error) {
         console.error('Errore:', error);
-        alert("C'è stato un errore durante l\'inserimento della spesa. Riprova più tardi.");
+        alert("Errore durante il salvataggio della nuova spesa, riprova più tardi.");
       }
     }
     else {

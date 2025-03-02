@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { faFilePdf, faFileExcel } from '@fortawesome/free-solid-svg-icons';
 import { 
   StyledListGroupItem, StyledRow, StyledCol, StyledSaveNotSelected, grandezzaIcona, 
   StyledSearchNotSelected, StyledArrowTopNotSelected, StyledArrowBottomNotSelected, 
@@ -7,7 +8,8 @@ import {
   StyledTextAreaBlock, StyledTextAreaModifica, StyledTextAreaElimina, 
   StyledForm, StyledHeader, SlideContainer, StyledSpanErrore, 
   StyledSelectBlock, StyledSelectModifica, StyledSelectElimina, 
-  StyledEyeClosedNotSelected, StyledEyeOpenNotSelected, StyledEuroNotSelected 
+  StyledEyeClosedNotSelected, StyledEyeOpenNotSelected, StyledEuroNotSelected, 
+  StyledFileIconNotSelected, StyledDownloadNotSelected, StyledTrashNotSelected 
 } from "./StyledFormItem";
 
 export function getSelectTag(tipoSelezione) {
@@ -56,10 +58,10 @@ export function OperazioniNuovoItem({eseguiSalvataggio}) {
   )
 }
 
-export function OperazioniCercaItems({ setIsVisible, arrowUp, setArrowUp, eseguiRicerca }) {
+export function OperazioniCercaItems({ setIsVisible, arrowUp, setArrowUp, handleSearch }) {
   return (
     <StyledListGroupItem style={{ border: "5px solid #000000", backgroundColor: "#000000", paddingTop: "3%" }}>
-      <StyledSearchNotSelected size={grandezzaIcona} style={{ marginRight: "50%" }} onClick={eseguiRicerca} />
+      <StyledSearchNotSelected size={grandezzaIcona} style={{ marginRight: "50%" }} onClick={handleSearch} />
       {arrowUp && (
         <StyledArrowTopNotSelected size={grandezzaIcona} onClick={() => nascondiForm(setIsVisible, setArrowUp)} />
       )}
@@ -82,6 +84,27 @@ export function OperazioniModificaProfilo({eseguiModificaProfilo}) {
   return (
     <StyledListGroupItem style={{ border: "5px solid #000000", backgroundColor: "#000000", paddingTop: "3%", paddingBottom: "3%" }}>
       <StyledPencilNotSelected size={grandezzaIcona} onClick={eseguiModificaProfilo} />
+    </StyledListGroupItem>
+  );
+};
+
+function OperazioniFileItems({ottieniFileRangePDF, ottieniFileRangeExcel, eliminaItemsRange}) {
+  return (
+    <StyledListGroupItem style={{ border: "5px solid #000000", backgroundColor: "#000000", paddingTop: "3%" }}>
+      <div>
+        <StyledFileIconNotSelected icon={faFilePdf} size="2xl" style={{ marginRight: "50%" }} />
+        <StyledFileIconNotSelected icon={faFileExcel} size="2xl" />
+      </div>
+      <br />
+      <div>
+        <StyledDownloadNotSelected size={grandezzaIcona} style={{ marginRight: "50%" }} onClick={ottieniFileRangePDF} />
+        <StyledDownloadNotSelected size={grandezzaIcona} onClick={ottieniFileRangeExcel} />
+      </div>
+      <br />
+      <div>
+        <StyledTrashNotSelected size={grandezzaIcona} onClick={eliminaItemsRange} />
+      </div>
+      <br />
     </StyledListGroupItem>
   );
 };
@@ -143,7 +166,7 @@ export function FormNuovoItem({campi, indici, eseguiSalvataggio}) {
   );
 }
 
-export function FormRicercaItems({campi, indici, eseguiRicerca}) {
+export function FormRicercaItems({campi, indici, handleSearch}) {
   const [isVisible, setIsVisible] = useState(true);
   const [arrowUp, setArrowUp] = useState(true);
   let maxHeight = (isVisible) ? "2000px" : "0px";
@@ -185,7 +208,8 @@ export function FormRicercaItems({campi, indici, eseguiRicerca}) {
         setIsVisible={setIsVisible}
         arrowUp={arrowUp}
         setArrowUp={setArrowUp}
-        eseguiRicerca={eseguiRicerca}
+        // eseguiRicerca={eseguiRicerca}
+        handleSearch={handleSearch}
       />
     </StyledForm>
   );
@@ -336,6 +360,55 @@ export function FormProfilo({campi, indici, eseguiModificaProfilo}) {
     </StyledForm>
   );
 }
+
+export function FormFileItems({campi, indici, ottieniFileRangePDF, ottieniFileRangeExcel, eliminaItemsRange}) {
+  const [isVisible, setIsVisible] = useState(true);
+  const [arrowUp, setArrowUp] = useState(true);
+  let maxHeight = (isVisible) ? "2000px" : "0px";
+  let InputTag = getInputTag(1, true);
+  let TextAreaTag = getTextAreaTag(1, true);
+
+  return (
+    <StyledForm>
+      <StyledHeader>{campi["header"]}</StyledHeader>
+      <SlideContainer style={{maxHeight: `${maxHeight}`}}>
+        {indici.map((i) => {
+          // onClick={handleGiornoClick(setUltimoGiornoType)}
+          // onBlur={handleGiornoBlur(setUltimoGiornoType, item, setItem)}
+          // onChange={(e) => handleInputChange(e, setItem)}
+          const NomeTag = (campi.type[i]) ? getInputTag(1, true) : (
+            getTextAreaTag(1, true)
+          );
+          return ( 
+            <React.Fragment key={i}>
+              <StyledLabel htmlFor={campi.name[i]}>{campi.label[i]}</StyledLabel>
+              <NomeTag 
+                key={i}
+                rows={1}
+                name={campi.name[i]}
+                type={campi.type[i]}
+                step={campi.step[i]}
+                value={campi.value[i]}
+                placeholder={campi.placeholder[i]}
+                onChange={campi.onChange}
+                onClick={campi.onClick}
+                onBlur={campi.onBlur}
+              />
+            </React.Fragment>
+          );
+        })}
+        <br /> <br />
+      </SlideContainer>
+      <OperazioniFileItems 
+        ottieniFileRangePDF={ottieniFileRangePDF} 
+        ottieniFileRangeExcel={ottieniFileRangeExcel} 
+        eliminaItemsRange={eliminaItemsRange} 
+      />
+    </StyledForm>
+  );
+}
+
+
 
 
 

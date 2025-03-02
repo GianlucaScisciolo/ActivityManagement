@@ -5,7 +5,7 @@ import { operazioniSaloni } from "../../vario/Operazioni";
 
 let entrateLavori = [];
 let usciteSpese = [];
-let spese = [];
+let spese = -1;
 
 class SaloneStore extends EventEmitter {
   constructor() {
@@ -23,6 +23,9 @@ class SaloneStore extends EventEmitter {
         break;
       case operazioniSaloni.ELIMINA_SPESE:
         this.runOperation(action.payload, operazioniSaloni.ELIMINA_SPESE);
+        break;
+      case operazioniSaloni.ELIMINA_SPESE_RANGE_GIORNI:
+        this.runOperation(action.payload, operazioniSaloni.ELIMINA_SPESE_RANGE_GIORNI);
         break;
       case operazioniSaloni.MODIFICA_SPESE:
         this.modificaSpese(action.payload);
@@ -42,8 +45,9 @@ class SaloneStore extends EventEmitter {
   async runOperation(data, operazione) {
     try {
       const response = await axios.post("/" + operazione, data);
-      if (operazione === operazioniSaloni.VISUALIZZA_SPESE)
+      if (operazione === operazioniSaloni.VISUALIZZA_SPESE) {
         spese = response.data.spese;
+      }
       else if (operazione === operazioniSaloni.VISUALIZZA_ENTRATE_LAVORI)
         entrateLavori = response.data.entrateLavori;
       else if (operazione === operazioniSaloni.VISUALIZZA_USCITE_SPESE)

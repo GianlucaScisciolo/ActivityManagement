@@ -1,66 +1,62 @@
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import Header from "../component/Header";
-import LavoroAction from "../../action/lavoro_action/LavoroAction";
-import { operazioniLavori } from "../../vario/Operazioni";
-import lavoroStore from "../../store/lavoro_store/LavoroStore";
+import { handleInputChange } from "../../vario/Vario";
+import SaloneAction from "../../action/salone_action/SaloneAction";
+import { operazioniSaloni } from "../../vario/Operazioni";
+import saloneStore from "../../store/salone_store/SaloneStore";
 import { aggiornamentoLista } from "../../vario/OperazioniRicerca";
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import { formatoDate, formatoTime } from "../../vario/Tempo";
-import { generaFileLavoriPDF, generaFileLavoriExcel } from "../../vario/File";
-import { FormFileLavori } from "../component/form_item/FormsLavori";
-import { CardFileLavori } from "../component/card_item/CardsLavori";
-import { RowFileLavori } from "../component/row_item/RowsLavori";
+// import Row from 'react-bootstrap/Row';
+// import Col from 'react-bootstrap/Col';
+// import { formatoDate, formatoTime } from "../../vario/Tempo";
+import { generaFileSpesePDF, generaFileSpeseExcel } from "../../vario/File";
+// import { FormFileLavori } from "../component/form_item/FormsLavori";
+// import { CardFileLavori } from "../component/card_item/CardsLavori";
+// import { RowFileLavori } from "../component/row_item/RowsLavori";
+import { FormFileItems } from "../../trasportabile/form_item/FormItem";
+import { 
+  getCampiFile, 
+  indiciFile
+} from "./SpeseVario";
 
-const FileLavori = () => {
+const FileSpese = () => {
   const formSession = useSelector((state) => state.formSession.value);
   const itemSession = useSelector((state) => state.itemSession.value);
   
   const [datiRicerca, setDatiRicerca] = useState({
-    nome_cliente: "",
-    cognome_cliente: "",
-    nome_professionista: "",
-    professione: "",
+    nome: "", 
+    descrizione: "", 
+    totale_min: "", 
+    totale_max: "", 
     primo_giorno: "",
     ultimo_giorno: "",
-    descrizione: "",
     note: "",
   });
-  const [lavori, setLavori] = useState(-1);
+  const [spese, setSpese] = useState(-1);
   const [aggiornamentoCompletato, setAggiornamentoCompletato] = useState("");
   const [tipoFile, setTipoFile] = useState('');
-  const [eliminaLavori, setEliminaLavori] = useState(false);
-  
-  const updateDatiLastSearch = () => {
-    console.log("Dati aggiornati.");
-  };
-
-  const ottieniLavori = async () => {
-    lavoroStore.azzeraLavori(); // rende lavori === -1
-    await LavoroAction.dispatchAction(datiRicerca, operazioniLavori.VISUALIZZA_LAVORI);
+    
+  const ottieniSpese = async () => {
+    saloneStore.setSpese();
+    await SaloneAction.dispatchAction(datiRicerca, operazioniSaloni.VISUALIZZA_SPESE);
     setAggiornamentoCompletato(false);
   };
 
-  const ottieniLavoriRange = async (e, tipoFile) => {
+  const ottieniSpeseRange = async (e, tipoFile) => {
     e.preventDefault();
     if (confirm("Sei sicuro di voler ottenere il file?")) {
       setTipoFile(tipoFile);
-      await ottieniLavori();
+      await ottieniSpese();
     }
     else {
       alert("Operazione annullata.");
     }
   };
 
-  const eliminaLavoriRange = async (e) => {
+  const eliminaSpeseRange = async (e) => {
     e.preventDefault();
-    if (confirm("Sei sicuro di voler eliminare i lavori?")) {
-      const dati = {
-        "primo_giorno": datiRicerca.primo_giorno,
-        "ultimo_giorno": datiRicerca.ultimo_giorno
-      }
-      LavoroAction.dispatchAction(dati, operazioniLavori.ELIMINA_LAVORI_RANGE_GIORNI);
+    if (confirm("Sei sicuro di voler eliminare le spese?")) {
+      SaloneAction.dispatchAction(datiRicerca, operazioniSaloni.ELIMINA_SPESE_RANGE_GIORNI);
       alert("Eliminazione effettuata.");
 
       setDatiRicerca(prevState => ({
@@ -74,26 +70,24 @@ const FileLavori = () => {
     }
   }
 
-  const controllo = () => {
-    alert("Numero lavori clienti = " + lavoriClienti.length + "\nNumero lavori professionisti = " + lavoriProfessionisti.length);
-  };
-
+  const FormFileTag = FormFileItems; 
+  
   useEffect(() => {
     if (aggiornamentoCompletato === false) {
-      aggiornamentoLista("lavori", setLavori);
+      aggiornamentoLista("spese", setSpese);
       console.log("Aggiornamento in corso ...");
     }
   }, [aggiornamentoCompletato]);
 
   useEffect(() => {
-    if (aggiornamentoCompletato === false && lavori !== -1) {
+    if (aggiornamentoCompletato === false && spese !== -1) {
       setAggiornamentoCompletato(true);
       console.log("Aggiornamento completato.")
       if(tipoFile === "pdf") {
-        generaFileLavoriPDF(lavori);
+        generaFileSpesePDF(spese);
       }
       else if(tipoFile === "excel") {
-        generaFileLavoriExcel(lavori);
+        generaFileSpeseExcel(spese);
       }
       setDatiRicerca(prevState => ({
         ...prevState,
@@ -101,14 +95,26 @@ const FileLavori = () => {
         ultimo_giorno: ""
       }));
     }
-  }, [lavori]);
-
+  }, [spese]);
+  
   return (
     <>
       <Header />
 
       <div className="main-content" />
       
+      <FormFileTag 
+        campi={getCampiFile(datiRicerca, (e) => handleInputChange(e, setDatiRicerca), null, null)} 
+        indici={indiciFile} 
+        ottieniFileRangePDF={(e) => ottieniSpeseRange(e, "pdf")}
+        ottieniFileRangeExcel={(e) => ottieniSpeseRange(e, "excel")} 
+        eliminaItemsRange={(e) => eliminaSpeseRange(e)} 
+      />
+
+      {/*
+        campi={getCampiRicercaLavori(datiRicerca, (e) => handleInputChange(e, setDatiRicerca), null, null)} 
+        indici={indiciRicercaLavori}
+        eseguiRicerca={(e) => eseguiRicerca(e, "lavori", setLavori, datiRicerca)}
       {(formSession.view === "form") && (
         <FormFileLavori 
           item={datiRicerca} 
@@ -138,11 +144,12 @@ const FileLavori = () => {
           />
         </center>
       )}
+      */}
     </>
   );
 };
 
-export default FileLavori;
+export default FileSpese;
 
 
 

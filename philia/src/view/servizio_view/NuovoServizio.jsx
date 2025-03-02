@@ -24,6 +24,7 @@ const NuovoServizio = () => {
   const [selectedIdsEliminazione, setSelectedIdsEliminazione] = useState([]);
   const [selectedIdsModifica, setSelectedIdsModifica] = useState([]);
   const [nuovoServizio, setNuovoServizio] = useState({
+    tipo_item: "servizio", 
     tipo_selezione: 1,
     nome: "",
     prezzo: "0.50",
@@ -47,44 +48,29 @@ const NuovoServizio = () => {
         return;
       
       try {
-        const response = await fetch('/INSERISCI_SERVIZIO', {
+        const response = await fetch('/INSERISCI_ITEM', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify(nuovoServizio),
         });
-        if (!response.ok) {
-          const errorData = await response.json();
-          if (response.status === 409) {
-            alert(errorData.message); 
-          } 
-          else {
-            throw new Error('Errore durante l\'inserimento del servizio.');
-          }
-        } 
-        else {
+        if(response.status === 200) {
           const result = await response.json();
-          // console.log("ID NUOVO SERVIZIO: " + result.id);
-          nuovoServizio.note = (nuovoServizio.note.split(' ').join('') === "") ? "Nota non inserita." : nuovoServizio.note;
-  
-          setServizi(prevServizi => [...prevServizi, { ...nuovoServizio, id: result.id }]);
-          setNuovoServizio({
-            tipo_selezione: 0,
-            nome: "",
-            prezzo: "0.50",
-            note: "", 
-            errore_nome: "", 
-            errore_prezzo: "", 
-            errore_note: ""
-          });
-  
-          alert("L'inserimento del servizio è andato a buon fine!!");
+          nuovoServizio.id = result.id;
+          setServizi(prevServizi => [...prevServizi, nuovoServizio]);
+          alert("L\'inserimento del servizio è andato a buon fine!!");
+        }
+        else if(response.status === 400) {
+          alert("Errore: servizio gia\' presente.")
+        }
+        else {
+          alert("Errore durante il salvataggio del nuovo servizio, riprova più tardi.");
         }
       } 
       catch (error) {
         console.error('Errore:', error);
-        alert("C'è stato un errore durante l'inserimento del servizio. Riprova più tardi.");
+        alert("Errore durante il salvataggio del nuovo servizio, riprova più tardi.");
       }
     }
     else {

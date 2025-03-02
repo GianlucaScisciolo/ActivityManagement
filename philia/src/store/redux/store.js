@@ -5,6 +5,7 @@ import { sfondoReducer } from "./SfondoSlice";
 import { itemReducer } from "./ItemSlice";
 import { formReducer } from "./FormSlice";
 import { widgetsReducer } from "./WidgetsSlice";
+import { speseReducer } from "./SpeseSlice";
 
 const store = configureStore({
   reducer: {
@@ -14,6 +15,7 @@ const store = configureStore({
     itemSession: itemReducer,
     formSession: formReducer,
     widgetsSession: widgetsReducer, 
+    speseSession: speseReducer, 
   },
 });
 

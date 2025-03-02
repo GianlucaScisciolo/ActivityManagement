@@ -17,17 +17,6 @@ export function getCampiNuovaSpesa(item, handleOnChange, handleOnClick, handleOn
 };
 
 export function getCampiRicercaSpese(item, handleOnChange, handleOnClick, handleOnBlur) {
-  /*
-    const [datiRicerca, setDatiRicerca] = useState({
-      nome: "", 
-      descrizione: "", 
-      prezzo_min: "",
-      prezzo_max: "",  
-      primo_giorno: "", 
-      ultimo_giorno: "", 
-      note: ""
-    });
-  */
   return {
     header: "Ricerca spese", 
     label: ["Nome", "Descrizione", "Totale minimo", "Totale massimo", "Primo giorno", "Ultimo giorno", "Note"], 
@@ -55,6 +44,24 @@ export function getCampiSpesaEsistente(nullo, item, handleOnChange, handleOnClic
     placeholder: ["Nome*", "Descrizione", "Totale*", "Giorno*", "Note"], 
     valoreModificabile: [false, true, true, true, true], 
     options: [null, null, null, null, null], 
+    onChange: handleOnChange,  
+    onClick: handleOnClick, 
+    onBlur: handleOnBlur
+  };
+};
+// campi={campi(OptionsServizi(servizi, descrizione, sottoStringa, setIdServizi), item, (e) => handleInputChange(e, null, items, setItems, tipoItem, item.id), null, null)} 
+            
+
+export function getCampiFile(item, handleOnChange, handleOnClick, handleOnBlur) {
+  return {
+    header: "File spese", 
+    label: ["Primo giorno", "Ultimo giorno"], 
+    type: ["date", "date"], 
+    step: [null, null], 
+    min: [null, null], 
+    name: ["primo_giorno", "ultimo_giorno"], 
+    value: [item.primo_giorno, item.ultimo_giorno], 
+    placeholder: ["Primo giorno", "Ultimo giorno"], 
     onChange: handleOnChange, 
     onClick: handleOnClick, 
     onBlur: handleOnBlur
@@ -63,7 +70,8 @@ export function getCampiSpesaEsistente(nullo, item, handleOnChange, handleOnClic
 
 export const indiciNuovaSpesa = [0, 1, 2, 3, 4];
 export const indiciRicercaSpese = [0, 1, 2, 3, 4, 5, 6];
-export const indiciSpesaEsistente = [0, 1, 2, 3, 4];
+export const indiciSpesaEsistente = [0, 1, 2, 3, 4]; 
+export const indiciFile = [0, 1];
 
 
 

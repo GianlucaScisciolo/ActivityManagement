@@ -28,7 +28,6 @@ const Clienti = () => {
   const itemSession = useSelector((state) => state.itemSession.value);
   
   const [datiRicerca, setDatiRicerca] = useState({
-    tipo_item: "cliente", 
     nome: "", 
     cognome: "", 
     contatto: "", 
@@ -43,36 +42,17 @@ const Clienti = () => {
     )
   }
 
+  useEffect(() => {
+    const onChange = () => setClienti(personaStore.getClienti());
+    personaStore.addChangeListener(operazioniPersone.VISUALIZZA_CLIENTI, onChange);
+    return () => {
+      personaStore.removeChangeListener(operazioniPersone.VISUALIZZA_CLIENTI, onChange);
+    };
+  }, []);
+
   const RicercaClientiTag = (formSession.view === "form") ? FormRicercaItems : (
     (formSession.view === "card") ? CardRicercaItems : RowRicercaItems
   )
-
-  const handleSearch = async (e) => {
-    e.preventDefault();
-        
-    try {
-      const response = await fetch('/VISUALIZZA_ITEMS', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(datiRicerca),
-      });
-
-      if(response.status === 200) {
-        const result = await response.json();
-        setClienti(result.items);
-      }
-      else {
-        alert("Errore durante la ricerca dei clienti, riprova più tardi.");
-      }
-    }
-    catch (error) {
-      console.error('Errore:', error);
-      alert("Errore durante la ricerca dei clienti, riprova più tardi.");
-    }
-        
-  }
   
   return (
     <>
@@ -83,8 +63,7 @@ const Clienti = () => {
       <RicercaClientiTag 
         campi={getCampiRicercaClienti(datiRicerca, (e) => handleInputChange(e, setDatiRicerca), null, null)} 
         indici={indiciRicercaClienti}
-        // eseguiRicerca={(e) => eseguiRicerca(e, "clienti", setClienti, datiRicerca)}
-        handleSearch={(e) => handleSearch(e)}
+        eseguiRicerca={(e) => eseguiRicerca(e, "clienti", setClienti, datiRicerca)}
       />
 
       <br /> <br /> <br /> <br />

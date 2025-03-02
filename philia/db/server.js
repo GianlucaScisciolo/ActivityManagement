@@ -2,21 +2,13 @@ import express from 'express';
 import mysql from 'mysql2';
 import cors from 'cors';
 import bodyParser from 'body-parser';
+import { ClienteSQL } from './ClienteSQL.js';
+import { LavoroSQL } from './LavoroSQL.js';
+import { ServizioSQL } from './ServizioSQL.js'
+import { SpesaSQL } from './SpesaSQL.js';
 import { 
   SQL_SELECT_UTENTE, SQL_MODIFICA_UTENTE 
 } from './AutenticazioneSQL.js';
-import { 
-  SQL_INSERIMENTO_CLIENTE, SQL_SELEZIONE_CLIENTI, SQL_SELEZIONE_TUTTI_I_CLIENTI, SQL_ELIMINA_CLIENTI, SQL_MODIFICA_CLIENTE
-} from './PersonaSQL.js';
-import { 
-  SQL_INSERIMENTO_SERVIZIO, SQL_SELEZIONE_SERVIZI, SQL_SELEZIONE_TUTTI_I_SERVIZI, SQL_ELIMINA_SERVIZI, SQL_MODIFICA_SERVIZIO 
-} from './ServizioSQL.js'; 
-import {
-  SQL_INSERIMENTO_LAVORO, SQL_SELEZIONE_LAVORI, SQL_ELIMINA_LAVORI, SQL_ELIMINA_LAVORI_RANGE_GIORNI, SQL_MODIFICA_LAVORO
-} from './LavoroSQL.js';
-import {
-  SQL_INSERIMENTO_SPESA, SQL_SELEZIONE_SPESE, SQL_ELIMINA_SPESE, SQL_MODIFICA_SPESA, SQL_SELEZIONE_ENTRATE_LAVORI, SQL_SELEZIONE_USCITE_SPESE 
-} from './SaloneSQL.js';
 
 const app = express();
 
@@ -150,36 +142,92 @@ app.post("/MODIFICA_PROFILO", async (req, res) => {
 
 /*************************************************************************************************************/
 
-/************************************************** Persona **************************************************/
+/************************************************** Item **************************************************/
 
-app.post("/INSERISCI_CLIENTE", async (req, res) => {
-  const params = [
-    `${req.body.nome}`, 
-    `${req.body.cognome}`, 
-    `${(req.body.contatto) ? req.body.contatto : "Contatto non inserito."}`, 
-    `${(req.body.email) ? req.body.email : "Email non inserita."}`, 
-    `${req.body.note}`
-  ];  
+app.post("/INSERISCI_ITEM", async(req, res) => {
+  const clienteSQL = new ClienteSQL();
+  const lavoroSQL = new LavoroSQL();
+  const servizioSQL = new ServizioSQL();
+  const spesaSQL = new SpesaSQL();
+  let sql = "";
+  let params = [];
+  switch(req.body.tipo_item) {
+    case "cliente":
+      sql = clienteSQL.SQL_INSERIMENTO_CLIENTE;
+      params = clienteSQL.params_inserimento_cliente(req.body);
+      break;
+    case "servizio":
+      sql = servizioSQL.SQL_INSERIMENTO_SERVIZIO;
+      params = servizioSQL.params_inserimento_servizio(req.body);
+      break;
+    case "lavoro":
+      sql = lavoroSQL.SQL_INSERIMENTO_LAVORO;
+      params = lavoroSQL.params_inserimento_lavoro(req.body);
+      break;
+    case "spesa":
+      sql = spesaSQL.SQL_INSERIMENTO_SPESA;
+      params = spesaSQL.params_inserimento_spesa(req.body);
+      break;
+    default:
+      alert("Errore, riprova piu\' tardi.");
+      return;
+  }
+
   try {
-    const result = await executeQuery(SQL_INSERIMENTO_CLIENTE, params);
+    const result = await executeQuery(sql, params);
     const insertedId = result.insertId; // ottengo l'id inserito
-    return res.status(201).json({ message: 'Cliente inserito con successo', id: insertedId });
+    return res.status(200).json({ id: insertedId });
   } 
   catch (err) {
     if (err.code === 'ER_DUP_ENTRY') {
-      return res.status(409).json({ message: 'Errore, cliente gia\' presente' });
+      return res.status(400).json();
     }
-    console.error('Errore durante l\'inserimento del cliente: ', err);
-    return res.status(500).json({ message: 'Errore del server' });
+    return res.status(500).json();
   }
 });
 
-app.post("/VISUALIZZA_CLIENTI", async (req, res) => {
-  console.log(req.body.email);
-  const params = [`%${req.body.nome}%`, `%${req.body.cognome}%`, `%${req.body.contatto}%`, `%${req.body.email}%`];
-  params.push((!req.body.note) ? '%' : `%${req.body.note}%`);
-  return getResults(SQL_SELEZIONE_CLIENTI(req.body.note), params, res);
+app.post("/VISUALIZZA_ITEMS", async(req, res) => {
+  const clienteSQL = new ClienteSQL();
+  const lavoroSQL = new LavoroSQL();
+  const servizioSQL = new ServizioSQL();
+  const spesaSQL = new SpesaSQL();
+  let sql = "";
+  let params = [];
+  switch(req.body.tipo_item) {
+    case "cliente":
+      sql = clienteSQL.sql_selezione_clienti(req.body);
+      params = clienteSQL.params_selezione_clienti(req.body);
+      break;
+    case "servizio":
+      sql = servizioSQL.sql_selezione_servizi(req.body);
+      params = servizioSQL.params_selezione_servizi(req.body);
+      break;
+    case "lavoro":
+      sql = lavoroSQL.sql_selezione_lavori(req.body);
+      params = lavoroSQL.params_selezione_lavori(req.body);
+      break;
+    case "spesa":
+      sql = spesaSQL.sql_selezione_spese(req.body);
+      params = spesaSQL.params_selezione_spese(req.body);
+      break;
+    default:
+      return res.status(500).json();
+  }
+
+  try {
+    const result = await executeQuery(sql, params);
+    return res.status(200).json({ items: result });
+  } 
+  catch (err) {
+    return res.status(500).json();
+  }
 });
+
+app
+
+
+
+/************************************************** Persona **************************************************/
 
 app.post("/OTTIENI_TUTTI_I_CLIENTI", async (req, res) => {
   const params = [];
@@ -208,33 +256,6 @@ app.post("/MODIFICA_CLIENTI", async (req, res) => {
 
 /*********************************************** Servizi **********************************************/
 
-app.post("/INSERISCI_SERVIZIO", async (req, res) => {
-  const params = [
-    `${req.body.nome}`, 
-    `${req.body.prezzo}`, 
-    `${req.body.note}`, 
-  ];    
-  try {
-    const result = await executeQuery(SQL_INSERIMENTO_SERVIZIO, params);
-    return res.status(201).json({ message: 'Cliente inserito con successo', id: result.insertId });
-  } 
-  catch (err) {
-    if (err.code === 'ER_DUP_ENTRY') {
-      return res.status(409).json({ message: 'Errore, servizio gia\' presente.' });
-    }
-    console.error('Errore durante l\'inserimento del servizio: ', err);
-    return res.status(500).json({ message: 'Errore del server' });
-  }
-});
-
-app.post("/VISUALIZZA_SERVIZI", async (req, res) => {
-  const prezzo_min = (req.body.prezzo_min) ? req.body.prezzo_min : Number.MIN_VALUE;
-  const prezzo_max = (req.body.prezzo_max) ? req.body.prezzo_max : Number.MAX_VALUE;
-  const params = [`%${req.body.nome}%`, `${prezzo_min}`, `${prezzo_max}`];
-  params.push((!req.body.note) ? '%' : `%${req.body.note}%`);
-  return getResults(SQL_SELEZIONE_SERVIZI(req.body.note), params, res);
-});
-
 app.post("/OTTIENI_TUTTI_I_SERVIZI", async (req, res) => {
   const params = [];
   try {
@@ -261,36 +282,6 @@ app.post("/MODIFICA_SERVIZI", async (req, res) => {
 /*************************************************************************************************************/
 
 /*************************************************** Lavori **************************************************/
-
-app.post("/INSERISCI_LAVORO", async (req, res) => {
-  // console.log("----------------|||| " + req.body.id_cliente +  "||||------------");
-  const params = [
-    `${req.body.id_cliente}`, 
-    `${req.body.giorno}`, 
-    `${req.body.descrizione}`,
-    `${req.body.totale}`, 
-    `${req.body.note}`, 
-  ];
-  try {
-    const result = await executeQuery(SQL_INSERIMENTO_LAVORO, params);
-    return res.status(200).json({ message: 'Lavoro inserito con successo', id: result.insertId });
-  }
-  catch (err) {
-    console.error('Errore durante l\'inserimento del lavoro: ', err);
-    return res.status(500).json({ message: 'Errore del server' });
-  }
-});
-
-app.post("/VISUALIZZA_LAVORI", async (req, res) => {
-  req.body.primo_giorno = (req.body.primo_giorno) ? req.body.primo_giorno : "1111-01-01";
-  req.body.ultimo_giorno = (req.body.ultimo_giorno) ? req.body.ultimo_giorno : "9999-01-01";
-  const params = [
-    `%${req.body.nome_cliente}%`, `%${req.body.cognome_cliente}%`, 
-    `${req.body.primo_giorno}`, `${req.body.ultimo_giorno}`, `%${req.body.descrizione}%` 
-  ];
-  params.push((!req.body.note) ? '%' : `%${req.body.note}%`);
-  return getResults(SQL_SELEZIONE_LAVORI(req.body.note), params, res);
-});
 
 app.post("/ELIMINA_LAVORI", async (req, res) => {
   const { ids = [] } = req.body;
@@ -333,52 +324,17 @@ app.post("/MODIFICA_LAVORI", async (req, res) => {
 
 /*************************************************** Saloni **************************************************/
 
-app.post("/INSERISCI_SPESA", async (req, res) => {
-  const params = [
-    `${req.body.nome}`, 
-    `${req.body.giorno}`, 
-    `${req.body.descrizione}`, 
-    `${req.body.totale}`, 
-    `${req.body.note}` 
-  ];    
-  try {
-    const result = await executeQuery(SQL_INSERIMENTO_SPESA, params);
-    return res.status(200).json({ message: 'Spesa inserita con successo', id: result.insertId });
-  } 
-  catch (err) {
-    if (err.code === 'ER_DUP_ENTRY') {
-      return res.status(409).json({ message: 'Errore, spesa gia\' presente.' });
-    }
-    console.error('Errore durante l\'inserimento della spesa: ', err);
-    return res.status(500).json({ message: 'Errore del server' });
-  }
-});
-
-app.post("/VISUALIZZA_SPESE", async (req, res) => {
-  req.body.primo_giorno = (req.body.primo_giorno) ? req.body.primo_giorno : "1111-01-01";
-  req.body.ultimo_giorno = (req.body.ultimo_giorno) ? req.body.ultimo_giorno : "9999-01-01";
-  req.body.totale_min = (req.body.totale_min) ? req.body.totale_min : Number.MIN_VALUE;
-  req.body.totale_max = (req.body.totale_max) ? req.body.totale_max : Number.MAX_VALUE;
-  const params = [
-    `%${req.body.nome}%`, `${req.body.totale_min}`, `${req.body.totale_max}`, `${req.body.primo_giorno}`, `${req.body.ultimo_giorno}`, 
-  ];
-  params.push((!req.body.descrizione) ? '%' : `%${req.body.descrizione}%`);
-  params.push((!req.body.note) ? '%' : `%${req.body.note}%`);
-  
-  try {
-    const data = await executeQuery(SQL_SELEZIONE_SPESE(req.body.descrizione, req.body.note), params);
-    res.status(200).json({ spese: data });
-  } 
-  catch (err) {
-    console.error('Errore durante l\'esecuzione della query: ', err);
-    res.status(500).json({ message: 'Errore durante l\'esecuzione della query' });
-  }
-});
-
 app.post("/ELIMINA_SPESE", async (req, res) => {
   const { ids = [] } = req.body;
   const placeholders = ids.map(() => '?').join(', ');
   return getResults(SQL_ELIMINA_SPESE(placeholders), ids, res);
+});
+
+app.post("/ELIMINA_SPESE_RANGE_GIORNI", async (req, res) => {
+  req.body.primo_giorno = (req.body.primo_giorno) ? req.body.primo_giorno : "1111-01-01";
+  req.body.ultimo_giorno = (req.body.ultimo_giorno) ? req.body.ultimo_giorno : "9999-01-01";
+  const params = [`${req.body.primo_giorno}`, `${req.body.ultimo_giorno}`];
+  return getResults(SQL_ELIMINA_SPESE_RANGE_GIORNI, params, res);
 });
 
 app.post("/MODIFICA_SPESE", async (req, res) => {

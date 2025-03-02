@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Card, Table } from 'react-bootstrap';
 import { 
   StyledPencilNotSelected, StyledPencilSelected, grandezzaIcona, 
@@ -17,6 +17,7 @@ import {
 } from './StyledCardItem';
 import { faFilePdf, faFileExcel } from '@fortawesome/free-solid-svg-icons';
 import { Trash2, Pencil } from 'lucide-react';
+import { handleInputChange } from '../../vario/Vario';
 
 function getColor(value, j){
   // (i > 0) ? (
@@ -256,46 +257,49 @@ export function CardRicercaItems({campi, indici, eseguiRicerca}) {
     </center>
   );
 }
+/*
+            <ItemEsistenteTag 
+              key={index} 
+              item={item} 
+              campi={campi(OptionsServizi(servizi, descrizione, sottoStringa, setIdServizi), item, updatedItems, null, null)} 
+              indici={indici} 
+              selectOperation={selectOperation} 
+              items={items} 
+              setItems={setItems} 
+              tipoItem={tipoItem}
+            />
+*/
+export function CardItemEsistente({ item, campi, indici, selectOperation, items, setItems, tipoItem, onChange }) {
+  const inputRef = useRef(null);
 
-
-export function CardItemEsistente({item, campi, indici, selectOperation}) {
-  let maxHeight = "2000px";
   return (
     <>
       <StyledCard>
         <StyledCardHeader>{campi["header"]}</StyledCardHeader>
-        <SlideContainer style={{maxHeight: `${maxHeight}`}}>
+        <SlideContainer>
           {indici.map((i) => {
-            // onClick={handleGiornoClick(setUltimoGiornoType)}
-            // onBlur={handleGiornoBlur(setUltimoGiornoType, item, setItem)}
-            // onChange={(e) => handleInputChange(e, setItem)}
-            const NomeTag = (campi.type[i]) ? getInputTag(campi.tipoSelezione, campi.valoreModificabile[i]) : (
-              getTextAreaTag(campi.tipoSelezione, campi.valoreModificabile[i])
-            );
-            return ( 
+            const NomeTag = campi.type[i] ? getInputTag(campi.tipoSelezione, campi.valoreModificabile[i]) : getTextAreaTag(campi.tipoSelezione, campi.valoreModificabile[i]);
+            return (
               <React.Fragment key={i}>
                 <StyledRow>
                   <NomeTag 
+                    ref={inputRef} // Add the ref here
                     rows={1}
-                    style={(campi.name[i] === "totale") ? {maxWidth:"80%"} : null}
+                    style={(campi.name[i] === "totale") ? { maxWidth: "80%" } : null}
                     name={campi.name[i]}
                     type={campi.type[i]}
                     value={campi.value[i]}
                     placeholder={campi.placeholder[i]}
-                    onChange={campi.onChange}
-                    onClick={campi.onClick}
+                    // onChange={(e) => updatedItems(e, item)}
+                    onChange={onChange}
+                    onClick={null}
                     onBlur={campi.onBlur}
                   />
                   {(campi.name[i] === "totale") && (
                     <StyledEuroNotSelected
-                      style={{
-                        // border: "5px solid #000000",
-                        maxWidth: "20%",
-                        marginLeft: "-6px", 
-                        marginTop: "13px"
-                      }} 
-                      size={grandezzaIcona} 
-                      onClick={null} 
+                      style={{ maxWidth: "20%", marginLeft: "-6px", marginTop: "13px" }}
+                      size={grandezzaIcona}
+                      onClick={null}
                     />
                   )}
                   {campi.options[i]}
@@ -306,12 +310,16 @@ export function CardItemEsistente({item, campi, indici, selectOperation}) {
         </SlideContainer>
         <OperazioniItemEsistente 
           selectOperation={selectOperation} 
-          item={item} 
+          item={item}
         />
       </StyledCard>
     </>
-  )
+  );
 }
+
+
+
+
 
 export function CardLogin({campi, indici, eseguiLogin}) {
   let maxHeight = "2000px";
@@ -766,14 +774,3 @@ export function CardRicavi({ entrateLavori, usciteSpese }) {
     </Card>
   );
 }
-
-
-
-
-
-
-
-
-
-
-

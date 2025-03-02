@@ -31,6 +31,7 @@ const Lavori = () => {
   const [selectedIdsEliminazione, setSelectedIdsEliminazione] = useState([]);
   const [selectedIdsModifica, setSelectedIdsModifica] = useState([]);
   const [datiRicerca, setDatiRicerca] = useState({
+    tipo_item: "lavoro", 
     nome_cliente: "", 
     cognome_cliente: "", 
     primo_giorno: "",
@@ -55,35 +56,61 @@ const Lavori = () => {
     setServizi(serviziFiltrati);
   };
   
-  useEffect(() => {
-    const onChange = () => setLavori(lavoroStore.getLavori());
-    lavoroStore.addChangeListener(operazioniLavori.VISUALIZZA_LAVORI, onChange);
-    return () => {
-      lavoroStore.removeChangeListener(operazioniLavori.VISUALIZZA_LAVORI, onChange);
-    };
-  }, []);
+  // useEffect(() => {
+  //   const onChange = () => setLavori(lavoroStore.getLavori());
+  //   lavoroStore.addChangeListener(operazioniLavori.VISUALIZZA_LAVORI, onChange);
+  //   return () => {
+  //     lavoroStore.removeChangeListener(operazioniLavori.VISUALIZZA_LAVORI, onChange);
+  //   };
+  // }, []);
 
-  useEffect(() => {
-    getAllServizi();
-    const onChange = () => setServizi(servizioStore.getServizi());
-    servizioStore.addChangeListener(operazioniServizi.OTTIENI_TUTTI_I_SERVIZI, onChange);
-    servizioStore.removeChangeListener(operazioniServizi.OTTIENI_TUTTI_I_SERVIZI, onChange);
-    console.log("Aggiornamento in corso...");
-    setAggiornamento(true);
-  }, []);
+  // useEffect(() => {
+  //   getAllServizi();
+  //   const onChange = () => setServizi(servizioStore.getServizi());
+  //   servizioStore.addChangeListener(operazioniServizi.OTTIENI_TUTTI_I_SERVIZI, onChange);
+  //   servizioStore.removeChangeListener(operazioniServizi.OTTIENI_TUTTI_I_SERVIZI, onChange);
+  //   console.log("Aggiornamento in corso...");
+  //   setAggiornamento(true);
+  // }, []);
 
-  useEffect(() => {
-    if(aggiornamento !== 0) {
-      if(servizi !== -1) {
-        console.log("Aggiornamento effettuato.");
-      }      
+  // useEffect(() => {
+  //   if(aggiornamento !== 0) {
+  //     if(servizi !== -1) {
+  //       console.log("Aggiornamento effettuato.");
+  //     }      
+  //     else {
+  //       console.log("Aggiornamento in corso...");
+  //       setServizi(servizioStore.getServizi());
+  //       setAggiornamento(!aggiornamento);
+  //     }
+  //   }
+  // }, [aggiornamento]);
+
+  const handleSearch = async (e) => {
+    e.preventDefault();
+        
+    try {
+      const response = await fetch('/VISUALIZZA_ITEMS', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(datiRicerca),
+      });
+
+      if(response.status === 200) {
+        const result = await response.json();
+        setLavori(result.items);
+      }
       else {
-        console.log("Aggiornamento in corso...");
-        setServizi(servizioStore.getServizi());
-        setAggiornamento(!aggiornamento);
+        alert("Errore durante la ricerca dei lavori, riprova più tardi.");
       }
     }
-  }, [aggiornamento]);
+    catch (error) {
+      console.error('Errore:', error);
+      alert("Errore durante la ricerca dei lavori, riprova più tardi.");
+    }
+  }
 
   return (
     <>
@@ -94,7 +121,8 @@ const Lavori = () => {
       <RicercaLavoriTag 
         campi={getCampiRicercaLavori(datiRicerca, (e) => handleInputChange(e, setDatiRicerca), null, null)} 
         indici={indiciRicercaLavori}
-        eseguiRicerca={(e) => eseguiRicerca(e, "lavori", setLavori, datiRicerca)}
+        // eseguiRicerca={(e) => eseguiRicerca(e, "lavori", setLavori, datiRicerca)}
+        handleSearch={(e) => handleSearch(e)}
       />
 
       <br /> <br /> <br /> <br />

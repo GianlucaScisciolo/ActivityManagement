@@ -28,6 +28,7 @@ const NuovoCliente = () => {
   const [selectedIdsModifica, setSelectedIdsModifica] = useState([]);
 
   const [nuovoCliente, setNuovoCliente] = useState({
+    tipo_item: "cliente", 
     tipo_selezione: 0,
     nome: "",
     cognome: "",
@@ -55,58 +56,36 @@ const NuovoCliente = () => {
         return;
       
       try {
-        const response = await fetch('/INSERISCI_CLIENTE', {
+        const response = await fetch('/INSERISCI_ITEM', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify(nuovoCliente),
         });
-    
-        if (!response.ok) {
-          const errorData = await response.json();
-          if (response.status === 409) {
-            alert(errorData.message); 
-          } 
-          else {
-            throw new Error('Errore durante l\'inserimento del cliente');
-          }
-        } 
-        else {
+
+        if(response.status === 200) {
           const result = await response.json();
-          const nuovoClienteId = result.id; // Ottengo l'id inserito
-          
-          nuovoCliente.contatto = (nuovoCliente.contatto.split(' ').join('') === "") ? "Contatto non inserito." : nuovoCliente.contatto;
-          nuovoCliente.note = (nuovoCliente.note.split(' ').join('') === "") ? "Nota non inserita." : nuovoCliente.note;
-  
-          // Aggiorna l'oggetto con l'ID ottenuto
-          setClienti(prevClienti => [...prevClienti, { ...nuovoCliente, id: nuovoClienteId }]);
-          setNuovoCliente({
-            tipo_selezione: 0,
-            nome: "",
-            cognome: "",
-            contatto: "",
-            email: "",
-            note: "", 
-            errore_nome: "", 
-            errore_cognome: "", 
-            errore_contatto: "", 
-            errore_email: "",
-            errore_note: ""
-          });
-  
-          alert("L'inserimento del cliente è andato a buon fine!!");
+          nuovoCliente.id = result.id;
+          setClienti(prevClienti => [...prevClienti, nuovoCliente]);
+          alert("L\'inserimento del cliente è andato a buon fine!!");
         }
-      } 
+        else if(response.status === 400) {
+          alert("Errore: cliente gia\' presente.")
+        }
+        else {
+          alert("Errore durante il salvataggio del nuovo cliente, riprova più tardi.");
+        }
+      }
       catch (error) {
         console.error('Errore:', error);
-        alert("C'è stato un errore durante l'inserimento del cliente. Riprova più tardi.");
+        alert("Errore durante il salvataggio del nuovo cliente, riprova più tardi.");
       }
     }
     else {
       alert("Salvataggio annullato.");
     }
-  };
+  }
   
   const handleChangeInsertJustNumber = (e) => {
     e.target.value = e.target.value.replace(/\D/g, '');

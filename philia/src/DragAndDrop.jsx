@@ -105,10 +105,12 @@ const onClickWidget = (e, widget, dispatch, navigate) => {
       navigate("/nuovo-cliente");
     else if(widget.nome === "clienti") 
       navigate("/clienti");
+
     else if(widget.nome === "nuovo_servizio") 
       navigate("/nuovo-servizio");
     else if(widget.nome === "servizi") 
       navigate("/servizi");
+    
     else if(widget.nome === "nuovo_lavoro") 
       navigate("/nuovo-lavoro");
     else if(widget.nome === "lavori") 
@@ -117,6 +119,14 @@ const onClickWidget = (e, widget, dispatch, navigate) => {
       navigate("/file-lavori");
     else if(widget.nome === "prenotazione") 
       window.open("https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ2GRuG5B0k6Qyo2DLBkT1-OOXXC1XO60HQkWAl3Txvc3z-PcBL0EYhfc62sAor46nbg-szeiADZ", "_blank");
+    
+    else if(widget.nome === "nuovo_servizio") 
+      navigate("/nuovo-servizio");
+    else if(widget.nome === "servizi") 
+      navigate("/servizi");
+    else if(widget.nome === "file_servizi") 
+      navigate("/file-servizi");
+    
     else if(widget.nome === "salone") 
       navigate("/salone");
     else if(widget.nome === "profilo") 
@@ -201,23 +211,37 @@ export const DragAndDropWidgetHomePage = ({plusCliccato}) => {
       {(plusCliccato === true) ? (<>
         <WidgetTag widget={widgetsSession.nuovo_cliente} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
         <WidgetTag widget={widgetsSession.clienti} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
+        
         <WidgetTag widget={widgetsSession.nuovo_servizio} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
         <WidgetTag widget={widgetsSession.servizi} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
+        
         <WidgetTag widget={widgetsSession.nuovo_lavoro} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
         <WidgetTag widget={widgetsSession.lavori} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
         <WidgetTag widget={widgetsSession.file_lavori} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
         <WidgetTag widget={widgetsSession.prenotazione} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
+        
+        <WidgetTag widget={widgetsSession.nuova_spesa} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
+        <WidgetTag widget={widgetsSession.spese} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
+        <WidgetTag widget={widgetsSession.file_spese} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
+        
         <WidgetTag widget={widgetsSession.salone} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
         <WidgetTag widget={widgetsSession.profilo} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
       </>) : (<>
         {(widgetsSession.nuovo_cliente.tipoVisualizzazione !== 0) && (<WidgetTag widget={widgetsSession.nuovo_cliente} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
         {(widgetsSession.clienti.tipoVisualizzazione !== 0) && (<WidgetTag widget={widgetsSession.clienti} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
+        
         {(widgetsSession.nuovo_servizio.tipoVisualizzazione !== 0) && (<WidgetTag widget={widgetsSession.nuovo_servizio} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
         {(widgetsSession.servizi.tipoVisualizzazione !== 0) && (<WidgetTag widget={widgetsSession.servizi} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
+        
         {(widgetsSession.nuovo_lavoro.tipoVisualizzazione !== 0) && (<WidgetTag widget={widgetsSession.nuovo_lavoro} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
         {(widgetsSession.lavori.tipoVisualizzazione !== 0) && (<WidgetTag widget={widgetsSession.lavori} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
         {(widgetsSession.file_lavori.tipoVisualizzazione !== 0) && (<WidgetTag widget={widgetsSession.file_lavori} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
         {(widgetsSession.prenotazione.tipoVisualizzazione !== 0) && (<WidgetTag widget={widgetsSession.prenotazione} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
+        
+        {(widgetsSession.nuova_spesa.tipoVisualizzazione !== 0) && (<WidgetTag widget={widgetsSession.nuova_spesa} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
+        {(widgetsSession.spese.tipoVisualizzazione !== 0) && (<WidgetTag widget={widgetsSession.spese} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
+        {(widgetsSession.file_spese.tipoVisualizzazione !== 0) && (<WidgetTag widget={widgetsSession.file_spese} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
+                
         {(widgetsSession.salone.tipoVisualizzazione !== 0) && (<WidgetTag widget={widgetsSession.salone} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
         {(widgetsSession.profilo.tipoVisualizzazione !== 0) && (<WidgetTag widget={widgetsSession.profilo} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
       </>)}

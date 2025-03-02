@@ -1,51 +1,87 @@
-export const SQL_INSERIMENTO_SERVIZIO = ` 
-  INSERT INTO servizio (nome, prezzo, note) 
-  VALUES (?, ?, ?); 
-`;
-
-export function SQL_SELEZIONE_SERVIZI(note) { 
-  let sql = `
-    SELECT 
-      id, 
-      nome, 
-      prezzo, 
-      IFNULL(NULLIF(note, ''), 'Nota non inserita.') AS note, 
-      0 AS tipo_selezione 
-    FROM 
-      servizio 
-    WHERE 
-      nome LIKE ? AND (prezzo BETWEEN ? AND ?) 
+export class ServizioSQL {
+  SQL_INSERIMENTO_SERVIZIO = ` 
+    INSERT INTO servizio (nome, prezzo, note) 
+    VALUES (?, ?, ?); 
   `;
 
-  sql += (!note) ? " AND (note LIKE ? OR note IS NULL); " : " AND note LIKE ?; ";
+  SQL_SELEZIONE_TUTTI_I_SERVIZI = `
+    SELECT 
+      id, nome, prezzo 
+    FROM 
+      servizio; 
+  `;
 
-  return sql;
-};
-
-export const SQL_SELEZIONE_TUTTI_I_SERVIZI = `
-  SELECT 
-    id, nome, prezzo 
-  FROM 
-    servizio; 
-`;
-
-export function SQL_ELIMINA_SERVIZI(ids) {
-  return (` 
-    DELETE FROM 
+  SQL_MODIFICA_SERVIZIO = `
+    UPDATE 
       servizio 
+    SET 
+      nome = ?, prezzo = ?, note = ? 
     WHERE 
-      id IN (${ids}); 
-  `);
-}
+      id = ?; 
+  `;
+  
+  constructor() {
 
-export const SQL_MODIFICA_SERVIZIO = `
-  UPDATE 
-    servizio 
-  SET 
-    nome = ?, prezzo = ?, note = ? 
-  WHERE 
-    id = ?; 
-`;
+  }
+  
+  sql_selezione_servizi(params) { 
+    let sql = `
+      SELECT 
+        id, 
+        nome, 
+        prezzo, 
+        IFNULL(NULLIF(note, ''), 'Nota non inserita.') AS note, 
+        0 AS tipo_selezione 
+      FROM 
+        servizio 
+      WHERE 
+        nome LIKE ? AND (prezzo BETWEEN ? AND ?) 
+    `;
+  
+    sql += (!params.note) ? " AND (note LIKE ? OR note IS NULL); " : " AND note LIKE ?; ";
+  
+    return sql;
+  };
+
+  sql_eliminazione_servizi(ids) {
+    return (` 
+      DELETE FROM 
+        servizio 
+      WHERE 
+        id IN (${ids}); 
+    `);
+  }
+  
+  params_inserimento_servizio(params) {
+    return [
+      `${params.nome}`, 
+      `${params.prezzo}`, 
+      `${params.note}`, 
+    ];
+  }
+
+  params_selezione_tutti_i_servizi(params) {
+    return [];
+  }
+
+  params_modifica_servizio(params) {
+    return [];
+  }
+
+  params_selezione_servizi(params_in) {
+    let params_out = [
+      `%${params_in.nome}%`, 
+      `${(params_in.prezzo_min) ? params_in.prezzo_min : Number.MIN_VALUE}`, 
+      `${(params_in.prezzo_max) ? params_in.prezzo_max : Number.MAX_VALUE}`, 
+    ];
+    params_out.push((!params_in.note) ? '%' : `%${params_in.note}%`)
+    return params_out;
+  }
+
+  params_eliminazione_servizi(params) {
+    return [];
+  }
+}
 
 
 
