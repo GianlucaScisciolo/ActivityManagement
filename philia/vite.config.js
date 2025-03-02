@@ -24,6 +24,8 @@ export default defineConfig({
       // Items
       '/INSERISCI_ITEM': 'http://localhost:3000', 
       '/VISUALIZZA_ITEMS': 'http://localhost:3000', 
+      '/OTTIENI_TUTTI_GLI_ITEMS': 'http://localhost:3000', 
+      '/ELIMINA_ITEMS': 'http://localhost:3000', 
       
       // Persone
       '/OTTIENI_TUTTI_I_CLIENTI': 'http://localhost:3000',

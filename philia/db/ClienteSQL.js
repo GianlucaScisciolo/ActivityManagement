@@ -47,11 +47,12 @@ export class ClienteSQL {
   };
 
   sql_eliminazione_clienti(ids) {
+    const placeholders = ids.map(() => '?').join(', ');
     return (` 
       DELETE FROM 
         cliente 
       WHERE 
-        id IN (${ids}); 
+        id IN (${placeholders}); 
     `);
   }
 
@@ -72,7 +73,7 @@ export class ClienteSQL {
     `${req.body.note}`
   */
 
-  params_selezione_tutti_i_clienti(params) {
+  params_selezione_tutti_i_clienti() {
     return [];
   }
 
@@ -91,7 +92,7 @@ export class ClienteSQL {
     return params_out;
   }
 
-  params_eliminazione_clienti(params) {
+  params_eliminazione_clienti(ids) {
     return [];
   }
 }

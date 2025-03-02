@@ -237,62 +237,63 @@ const NuovoLavoro = () => {
     );
   }
   
-  const getClientiFiltrati = async () => {
-    await PersonaAction.dispatchAction(null, operazioniPersone.OTTIENI_TUTTI_I_CLIENTI);
-    const clientiFiltrati = personaStore.getClienti();
-    setClienti(clientiFiltrati);
+  const getAllClienti = async () => {
+    try {
+      const response = await fetch('/OTTIENI_TUTTI_GLI_ITEMS', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({tipo_item: "cliente"}),
+      });
+
+      if(response.status === 200) {
+        const result = await response.json();
+        setClienti(result.items);
+      }
+      else {
+        alert("Errore durante l\'ottenimento dei clienti per l\'inserimento di un nuovo lavoro, riprova più tardi.");
+      }
+    }
+    catch (error) {
+      console.error('Errore:', error);
+      alert("Errore durante l\'ottenimento dei clienti per l\'inserimento di un nuovo lavoro, riprova più tardi.");
+    }
   };
 
   const getAllServizi = async () => {
-    await ServizioAction.dispatchAction(null, operazioniServizi.OTTIENI_TUTTI_I_SERVIZI);
-    const serviziFiltrati = servizioStore.getServizi();
-    setServizi(serviziFiltrati);
+    try {
+      const response = await fetch('/OTTIENI_TUTTI_GLI_ITEMS', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({tipo_item: "servizio"}),
+      });
+
+      if(response.status === 200) {
+        const result = await response.json();
+        setServizi(result.items);
+      }
+      else {
+        alert("Errore durante l\'ottenimento dei clienti per l\'inserimento di un nuovo lavoro, riprova più tardi.");
+      }
+    }
+    catch (error) {
+      console.error('Errore:', error);
+      alert("Errore durante l\'ottenimento dei clienti per l\'inserimento di un nuovo lavoro, riprova più tardi.");
+    }
   };
 
 
 
   useEffect(() => {
-    getClientiFiltrati();
-    const onChange = () => setClienti(personaStore.getClienti());
-    personaStore.addChangeListener(operazioniPersone.OTTIENI_TUTTI_I_CLIENTI, onChange);
-    return () => personaStore.removeChangeListener(operazioniPersone.OTTIENI_TUTTI_I_CLIENTI, onChange);
+    getAllClienti();
   }, []);
 
   useEffect(() => {
     getAllServizi();
-    const onChange = () => setServizi(servizioStore.getServizi());
-    servizioStore.addChangeListener(operazioniServizi.OTTIENI_TUTTI_I_SERVIZI, onChange);
-    servizioStore.removeChangeListener(operazioniServizi.OTTIENI_TUTTI_I_SERVIZI, onChange);
-    console.log("Aggiornamento in corso...");
-    setAggiornamento(true);
   }, []);
-
-  useEffect(() => {
-    if(aggiornamento !== 0) {
-      if(servizi !== -1) {
-        console.log("Aggiornamento effettuato.");
-      }      
-      else {
-        console.log("Aggiornamento in corso...");
-        setServizi(servizioStore.getServizi());
-        setAggiornamento(!aggiornamento);
-      }
-    }
-  }, [aggiornamento]);
-
-  useEffect(() => {
-    // if(servizi !== 0) {
-      if(servizi === -1) {
-        console.log("Aggiornamento in corso...");
-        // setServizi(servizioStore.getServizi());
-        setAggiornamento(!aggiornamento);
-      }
-      else {
-        console.log("Aggiornamento completato.");
-      }
-    // }
-  }, [aggiornamento])
-
 
   return (
     <>
@@ -307,7 +308,6 @@ const NuovoLavoro = () => {
       />
       
       <br /> <br /> <br /> <br />
-      {/* ({tipoItem, items, setItems, selectOperation, emptyIsConsidered, campi, indici, servizi})  */}
       <Items 
         tipoItem={"lavoro"} 
         items={lavori} 

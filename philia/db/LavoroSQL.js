@@ -64,14 +64,16 @@ export class LavoroSQL {
   }
 
   sql_eliminazione_lavori(ids) {
+    const placeholders = ids.map(() => '?').join(', ');
+    
     return (` 
       DELETE FROM 
         lavoro 
       WHERE 
-        id IN (${ids}); 
+        id IN (${placeholders}); 
     `);
   }
-
+  
   params_inserimento_lavoro(params) {   
     return [
       `${params.id_cliente}`, 

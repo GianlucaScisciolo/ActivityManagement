@@ -44,11 +44,13 @@ export class ServizioSQL {
   };
 
   sql_eliminazione_servizi(ids) {
+    const placeholders = ids.map(() => '?').join(', ');
+    
     return (` 
       DELETE FROM 
         servizio 
       WHERE 
-        id IN (${ids}); 
+        id IN (${placeholders}); 
     `);
   }
   
@@ -60,7 +62,7 @@ export class ServizioSQL {
     ];
   }
 
-  params_selezione_tutti_i_servizi(params) {
+  params_selezione_tutti_i_servizi() {
     return [];
   }
 

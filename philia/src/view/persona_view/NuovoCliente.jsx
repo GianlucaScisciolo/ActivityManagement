@@ -86,7 +86,7 @@ const NuovoCliente = () => {
       alert("Salvataggio annullato.");
     }
   }
-  
+
   const handleChangeInsertJustNumber = (e) => {
     e.target.value = e.target.value.replace(/\D/g, '');
     e.target.value = e.target.value.slice(0, 11);
@@ -133,6 +133,7 @@ const NuovoCliente = () => {
         selectedIdsEliminazione={selectedIdsEliminazione}
         modifica={(e) => modifica(e, "cliente", selectedIdsModifica, setSelectedIdsModifica, clienti, setClienti)} 
         elimina={(e) => elimina(e, "cliente", selectedIdsEliminazione, setSelectedIdsEliminazione, clienti, setClienti)}
+        // handleDelete={(e) => handleDelete(e)}
       />
 
       <br /> <br /> <br /> <br />

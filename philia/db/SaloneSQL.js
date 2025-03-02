@@ -24,14 +24,14 @@
 //   return sql;
 // };
 
-export function SQL_ELIMINA_SPESE(ids) {
-  return (` 
-    DELETE FROM 
-      spesa 
-    WHERE 
-      id IN (${ids}); 
-  `);
-}
+// export function SQL_ELIMINA_SPESE(ids) {
+//   return (` 
+//     DELETE FROM 
+//       spesa 
+//     WHERE 
+//       id IN (${ids}); 
+//   `);
+// }
 
 export const SQL_ELIMINA_SPESE_RANGE_GIORNI = ` 
   DELETE FROM 

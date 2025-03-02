@@ -71,6 +71,42 @@ const Servizi = () => {
     }
   }
 
+  const handleDelete = async (e) => {
+    e.preventDefault();
+    if (confirm("Sei sicuro di voler eliminare i servizi?")) {
+      const dati = {
+        tipo_item: "servizio", 
+        ids: selectedIdsEliminazione
+      }
+      const itemsDaEliminare = servizi.filter(servizio => dati.ids.includes(servizio.id));
+      const itemsRestanti = servizi.filter(servizio => !dati.ids.includes(servizio.id));
+      try {
+        const response = await fetch('/ELIMINA_ITEMS', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(dati),
+        });
+        if(response.status === 200) {          
+          setServizi(itemsRestanti);
+          setSelectedIdsEliminazione([]);
+          alert("Eliminazione completata con successo.");
+        }
+        else {
+          alert("Errore durante l\'eliminazione dei servizi, riprova più tardi.");
+        }
+      }
+      catch (error) {
+        console.error('Errore:', error);
+        alert("Errore durante l\'eliminazione dei servizi, riprova più tardi.");
+      }
+    }
+    else {
+      alert("Eliminazione annullata.");
+    }
+  }
+
   return (
     <>
       <Header />
@@ -103,7 +139,8 @@ const Servizi = () => {
         selectedIdsModifica={selectedIdsModifica} 
         selectedIdsEliminazione={selectedIdsEliminazione}
         modifica={(e) => modifica(e, "servizio", selectedIdsModifica, setSelectedIdsModifica, servizi, setServizi)} 
-        elimina={(e) => elimina(e, "servizio", selectedIdsEliminazione, setSelectedIdsEliminazione, servizi, setServizi)}
+        // elimina={(e) => elimina(e, "servizio", selectedIdsEliminazione, setSelectedIdsEliminazione, servizi, setServizi)}
+        handleDelete={(e) => handleDelete(e)}
       />
 
       <br /> <br /> <br /> <br />

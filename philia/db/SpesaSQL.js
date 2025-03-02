@@ -30,6 +30,17 @@ export class SpesaSQL {
     return sql;
   };
 
+  sql_eliminazione_spese(ids) {
+    const placeholders = ids.map(() => '?').join(', ');
+
+    return (` 
+      DELETE FROM 
+        spesa 
+      WHERE 
+        id IN (${placeholders}); 
+    `);
+  }
+  
   params_inserimento_spesa(params) {
     return [
       `${params.nome}`, 

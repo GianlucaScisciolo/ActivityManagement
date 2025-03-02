@@ -1,7 +1,7 @@
 import Row from "react-bootstrap/esm/Row";
 import Col from "react-bootstrap/esm/Col";
 
-export const OperazioniItems = ({selectedIdsModifica, selectedIdsEliminazione, modifica, elimina}) => {
+export const OperazioniItems = ({selectedIdsModifica, selectedIdsEliminazione, modifica, handleDelete}) => {
   return (
     <>
       <div className='contenitore-2'>
@@ -10,7 +10,7 @@ export const OperazioniItems = ({selectedIdsModifica, selectedIdsEliminazione, m
             <Col><button className="bottone-blu-non-selezionato" onClick={modifica}>Modifica</button></Col>
           )}
           {selectedIdsEliminazione.length > 0 && (
-            <Col><button className="bottone-rosso-non-selezionato" onClick={elimina}>Elimina</button></Col>
+            <Col><button className="bottone-rosso-non-selezionato" onClick={handleDelete}>Elimina</button></Col>
           )}
         </Row>
       </div>

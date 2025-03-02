@@ -71,7 +71,42 @@ const Clienti = () => {
       console.error('Errore:', error);
       alert("Errore durante la ricerca dei clienti, riprova più tardi.");
     }
-        
+  }
+
+  const handleDelete = async (e) => {
+    e.preventDefault();
+    if (confirm("Sei sicuro di voler eliminare i clienti?")) {
+      const dati = {
+        tipo_item: "cliente", 
+        ids: selectedIdsEliminazione
+      }
+      const itemsDaEliminare = clienti.filter(cliente => dati.ids.includes(cliente.id));
+      const itemsRestanti = clienti.filter(cliente => !dati.ids.includes(cliente.id));
+      try {
+        const response = await fetch('/ELIMINA_ITEMS', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(dati),
+        });
+        if(response.status === 200) {          
+          setClienti(itemsRestanti);
+          setSelectedIdsEliminazione([]);
+          alert("Eliminazione completata con successo.");
+        }
+        else {
+          alert("Errore durante l\'eliminazione dei clienti, riprova più tardi.");
+        }
+      }
+      catch (error) {
+        console.error('Errore:', error);
+        alert("Errore durante l\'eliminazione dei clienti, riprova più tardi.");
+      }
+    }
+    else {
+      alert("Eliminazione annullata.");
+    }
   }
   
   return (
@@ -106,7 +141,8 @@ const Clienti = () => {
         selectedIdsModifica={selectedIdsModifica} 
         selectedIdsEliminazione={selectedIdsEliminazione}
         modifica={(e) => modifica(e, "cliente", selectedIdsModifica, setSelectedIdsModifica, clienti, setClienti)} 
-        elimina={(e) => elimina(e, "cliente", selectedIdsEliminazione, setSelectedIdsEliminazione, clienti, setClienti)}
+        // elimina={(e) => elimina(e, "cliente", selectedIdsEliminazione, setSelectedIdsEliminazione, clienti, setClienti)}
+        handleDelete={(e) => handleDelete(e)}
       />
       
       <br /> <br /> <br /> <br />

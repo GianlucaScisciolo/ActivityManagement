@@ -223,29 +223,69 @@ app.post("/VISUALIZZA_ITEMS", async(req, res) => {
   }
 });
 
-app
+app.post("/OTTIENI_TUTTI_GLI_ITEMS", async(req, res) => {
+  const clienteSQL = new ClienteSQL();
+  const servizioSQL = new ServizioSQL();
+  let sql = "";
+  let params = [];
+  switch(req.body.tipo_item) {
+    case "cliente": 
+      sql = clienteSQL.SQL_SELEZIONE_TUTTI_I_CLIENTI;
+      params = clienteSQL.params_selezione_tutti_i_clienti();
+      break;
+    case "servizio":
+      sql = servizioSQL.SQL_SELEZIONE_TUTTI_I_SERVIZI;
+      params = servizioSQL.params_selezione_tutti_i_servizi();
+      break;
+    default:
+      return res.status(500).json();
+  }
 
+  try {
+    const result = await executeQuery(sql, params);
+    return res.status(200).json({ items: result });
+  } 
+  catch (err) {
+    return res.status(500).json();
+  }
+});
+
+app.post("/ELIMINA_ITEMS", async(req, res) => {
+  const clienteSQL = new ClienteSQL();
+  const lavoroSQL = new LavoroSQL();
+  const servizioSQL = new ServizioSQL();
+  const spesaSQL = new SpesaSQL();
+  let sql = "";
+  switch(req.body.tipo_item) {
+    case "cliente":
+      sql = clienteSQL.sql_eliminazione_clienti(req.body.ids);
+      break;
+    case "servizio":
+      sql = servizioSQL.sql_eliminazione_servizi(req.body.ids);
+      break;
+    case "lavoro":
+      sql = lavoroSQL.sql_eliminazione_lavori(req.body.ids);
+      break;
+    case "spesa":
+      sql = spesaSQL.sql_eliminazione_spese(req.body.ids);
+      break;
+    default:
+      return res.status(500).json();
+  }
+
+  try {
+    const result = await executeQuery(sql, req.body.ids);
+    return res.status(200).json();
+  } 
+  catch (err) {
+    return res.status(500).json();
+  }
+})
 
 
 /************************************************** Persona **************************************************/
 
-app.post("/OTTIENI_TUTTI_I_CLIENTI", async (req, res) => {
-  const params = [];
-  try {
-    const data = await executeQuery(SQL_SELEZIONE_TUTTI_I_CLIENTI, []);
-    res.status(200).json(data);
-  } 
-  catch (err) {
-    console.error('Errore durante l\'esecuzione della query: ', err);
-    res.status(500).json({ message: 'Errore durante l\'esecuzione della query' });
-  }
-});
 
-app.post("/ELIMINA_CLIENTI", async (req, res) => {
-  const { ids = [] } = req.body;
-  const placeholders = ids.map(() => '?').join(', ');
-  return getResults(SQL_ELIMINA_CLIENTI(placeholders), ids, res);
-});
 
 app.post("/MODIFICA_CLIENTI", async (req, res) => {
   const params = [`${req.body.contatto}`, `${req.body.email}`, `${req.body.note}`, `${req.body.id}`];
@@ -256,24 +296,6 @@ app.post("/MODIFICA_CLIENTI", async (req, res) => {
 
 /*********************************************** Servizi **********************************************/
 
-app.post("/OTTIENI_TUTTI_I_SERVIZI", async (req, res) => {
-  const params = [];
-  try {
-    const data = await executeQuery(SQL_SELEZIONE_TUTTI_I_SERVIZI, []);
-    res.status(200).json(data);
-  } 
-  catch (err) {
-    console.error('Errore durante l\'esecuzione della query: ', err);
-    res.status(500).json({ message: 'Errore durante l\'esecuzione della query' });
-  }
-});
-
-app.post("/ELIMINA_SERVIZI", async (req, res) => {
-  const { ids = [] } = req.body;
-  const placeholders = ids.map(() => '?').join(', ');
-  return getResults(SQL_ELIMINA_SERVIZI(placeholders), ids, res);
-});
-
 app.post("/MODIFICA_SERVIZI", async (req, res) => {
   const params = [`${req.body.nome}`, `${req.body.prezzo}`, `${req.body.note}`, `${req.body.id}`];
   return getResults(SQL_MODIFICA_SERVIZIO, params, res);
@@ -282,12 +304,6 @@ app.post("/MODIFICA_SERVIZI", async (req, res) => {
 /*************************************************************************************************************/
 
 /*************************************************** Lavori **************************************************/
-
-app.post("/ELIMINA_LAVORI", async (req, res) => {
-  const { ids = [] } = req.body;
-  const placeholders = ids.map(() => '?').join(', ');
-  return getResults(SQL_ELIMINA_LAVORI(placeholders), ids, res);
-});
 
 app.post("/ELIMINA_LAVORI_RANGE_GIORNI", async (req, res) => {
   req.body.primo_giorno = (req.body.primo_giorno) ? req.body.primo_giorno : "1111-01-01";
@@ -323,12 +339,6 @@ app.post("/MODIFICA_LAVORI", async (req, res) => {
 /*************************************************************************************************************/
 
 /*************************************************** Saloni **************************************************/
-
-app.post("/ELIMINA_SPESE", async (req, res) => {
-  const { ids = [] } = req.body;
-  const placeholders = ids.map(() => '?').join(', ');
-  return getResults(SQL_ELIMINA_SPESE(placeholders), ids, res);
-});
 
 app.post("/ELIMINA_SPESE_RANGE_GIORNI", async (req, res) => {
   req.body.primo_giorno = (req.body.primo_giorno) ? req.body.primo_giorno : "1111-01-01";

@@ -112,6 +112,42 @@ const Lavori = () => {
     }
   }
 
+  const handleDelete = async (e) => {
+    e.preventDefault();
+    if (confirm("Sei sicuro di voler eliminare i lavori?")) {
+      const dati = {
+        tipo_item: "lavoro", 
+        ids: selectedIdsEliminazione
+      }
+      const itemsDaEliminare = lavori.filter(lavoro => dati.ids.includes(lavoro.id));
+      const itemsRestanti = lavori.filter(lavoro => !dati.ids.includes(lavoro.id));
+      try {
+        const response = await fetch('/ELIMINA_ITEMS', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(dati),
+        });
+        if(response.status === 200) {          
+          setLavori(itemsRestanti);
+          setSelectedIdsEliminazione([]);
+          alert("Eliminazione completata con successo.");
+        }
+        else {
+          alert("Errore durante l\'eliminazione dei lavori, riprova più tardi.");
+        }
+      }
+      catch (error) {
+        console.error('Errore:', error);
+        alert("Errore durante l\'eliminazione dei lavori, riprova più tardi.");
+      }
+    }
+    else {
+      alert("Eliminazione annullata.");
+    }
+  }
+
   return (
     <>
       <Header />
@@ -146,7 +182,8 @@ const Lavori = () => {
         selectedIdsModifica={selectedIdsModifica} 
         selectedIdsEliminazione={selectedIdsEliminazione}
         modifica={(e) => modifica(e, "lavoro", selectedIdsModifica, setSelectedIdsModifica, lavori, setLavori)} 
-        elimina={(e) => elimina(e, "lavoro", selectedIdsEliminazione, setSelectedIdsEliminazione, lavori, setLavori)}
+        // elimina={(e) => elimina(e, "lavoro", selectedIdsEliminazione, setSelectedIdsEliminazione, lavori, setLavori)}
+        handleDelete={(e) => handleDelete(e)}
       />
 
       <br /> <br /> <br /> <br />
