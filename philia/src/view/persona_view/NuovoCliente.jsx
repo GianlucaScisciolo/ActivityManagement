@@ -15,6 +15,7 @@ import {
   indiciNuovoCliente, indiciClienteEsistente 
 } from './ClientiVario';
 import { handleInputChange } from '../../vario/Vario';
+import PaginaWeb from '../../riutilizzabile/PaginaWeb';
 
 const NuovoCliente = () => {
   const formSession = useSelector((state) => state.formSession.value);
@@ -102,19 +103,45 @@ const NuovoCliente = () => {
 
   return (
     <>
-      <Header />
+      <PaginaWeb 
+        componenti={
+          {
+            nuovo_item: {
+              campi: getCampiNuovoCliente(nuovoCliente, (e) => handleInputChange(e, setNuovoCliente), null, null), 
+              indici: indiciNuovoCliente, 
+              handle_insert: (e) => handleInsert(e) 
+            }, 
+            items: {
+              tipo_item: "cliente", 
+              items: clienti, 
+              set_items: setClienti, 
+              select_operation: selectOperation, 
+              campi: getCampiClienteEsistente, 
+              indici: indiciClienteEsistente, 
+              servizi: null
+            },
+            operazioni_items: {
+              selected_ids_modifica: selectedIdsModifica, 
+              selected_ids_eliminazione: selectedIdsEliminazione, 
+              handle_edit: null, 
+              handle_delete: null
+            }
+          }
+        }
+      />
+      {/* <Header /> */}
       
-      <div className="main-content" />
+      {/* <div className="main-content" /> */}
 
-      <NuovoClienteTag 
+      {/* <NuovoClienteTag 
         campi={getCampiNuovoCliente(nuovoCliente, (e) => handleInputChange(e, setNuovoCliente), null, null)}  
         indici={indiciNuovoCliente} 
         eseguiSalvataggio={(e) => handleInsert(e)} 
-      />
+      /> */}
 
-      <br /> <br /> <br /> <br />
+      {/* <br /> <br /> <br /> <br /> */}
 
-      <Items 
+      {/* <Items 
         tipoItem={"cliente"} 
         items={clienti} 
         setItems={setClienti}
@@ -123,19 +150,19 @@ const NuovoCliente = () => {
         campi={getCampiClienteEsistente}
         indici={indiciClienteEsistente}
         servizi={null}
-      />
+      /> */}
       
-      <br /> <br /> <br /> <br />
+      {/* <br /> <br /> <br /> <br /> */}
 
-      <OperazioniItems 
+      {/* <OperazioniItems 
         selectedIdsModifica={selectedIdsModifica} 
         selectedIdsEliminazione={selectedIdsEliminazione}
         modifica={(e) => modifica(e, "cliente", selectedIdsModifica, setSelectedIdsModifica, clienti, setClienti)} 
         elimina={(e) => elimina(e, "cliente", selectedIdsEliminazione, setSelectedIdsEliminazione, clienti, setClienti)}
         // handleDelete={(e) => handleDelete(e)}
-      />
+      /> */}
 
-      <br /> <br /> <br /> <br />
+      {/* <br /> <br /> <br /> <br /> */}
     </>
   );
 };

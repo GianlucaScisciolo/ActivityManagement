@@ -15,6 +15,7 @@ import {
   indiciRicercaClienti, indiciClienteEsistente
 } from './ClientiVario';
 import { handleInputChange } from '../../vario/Vario';
+import PaginaWeb from '../../riutilizzabile/PaginaWeb';
 
 const Clienti = () => {
   const [clienti, setClienti] = useState(-1);
@@ -163,20 +164,43 @@ const Clienti = () => {
   
   return (
     <>
-      <Header />
-
-      <div className="main-content" />
+      <PaginaWeb 
+        componenti={
+          {
+            ricerca_items: {
+              campi: getCampiRicercaClienti(datiRicerca, (e) => handleInputChange(e, setDatiRicerca), null, null), 
+              indici: indiciRicercaClienti, 
+              handle_search: (e) => handleSearch(e)
+            }, 
+            items: {
+              tipo_item: "cliente", 
+              items: clienti, 
+              set_items: setClienti, 
+              select_operation: selectOperation, 
+              campi: getCampiClienteEsistente, 
+              indici: indiciClienteEsistente, 
+              servizi: null
+            },
+            operazioni_items: {
+              selected_ids_modifica: selectedIdsModifica, 
+              selected_ids_eliminazione: selectedIdsEliminazione, 
+              handle_edit: (e) => handleEdit(e), 
+              handle_delete: (e) => handleDelete(e)
+            }
+          }
+        }
+      />
       
-      <RicercaClientiTag 
+      {/* <RicercaClientiTag 
         campi={getCampiRicercaClienti(datiRicerca, (e) => handleInputChange(e, setDatiRicerca), null, null)} 
         indici={indiciRicercaClienti}
         // eseguiRicerca={(e) => eseguiRicerca(e, "clienti", setClienti, datiRicerca)}
         handleSearch={(e) => handleSearch(e)}
-      />
+      /> */}
 
-      <br /> <br /> <br /> <br />
+      {/* <br /> <br /> <br /> <br /> */}
       
-      <Items 
+      {/* <Items 
         tipoItem={"cliente"} 
         items={clienti} 
         setItems={setClienti}
@@ -185,20 +209,20 @@ const Clienti = () => {
         campi={getCampiClienteEsistente}
         indici={indiciClienteEsistente}
         servizi={null}
-      />
+      /> */}
 
-      <br /> <br /> <br /> <br />
+      {/* <br /> <br /> <br /> <br /> */}
       
-      <OperazioniItems 
+      {/* <OperazioniItems 
         selectedIdsModifica={selectedIdsModifica} 
         selectedIdsEliminazione={selectedIdsEliminazione}
         // modifica={(e) => modifica(e, "cliente", selectedIdsModifica, setSelectedIdsModifica, clienti, setClienti)} 
         // elimina={(e) => elimina(e, "cliente", selectedIdsEliminazione, setSelectedIdsEliminazione, clienti, setClienti)}
         handleEdit={(e) => handleEdit(e)} 
         handleDelete={(e) => handleDelete(e)}
-      />
+      /> */}
       
-      <br /> <br /> <br /> <br />
+      {/* <br /> <br /> <br /> <br /> */}
     </>
   );
 }
