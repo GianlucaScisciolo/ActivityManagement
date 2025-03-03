@@ -1,15 +1,6 @@
 import React, { useState } from 'react';
-import Header from '../component/Header';
 import { controlloCliente } from '../../vario/Controlli';
-import { useSelector, useDispatch } from 'react-redux';
-import Row from 'react-bootstrap/esm/Row';
-import Col from 'react-bootstrap/esm/Col';
-import { FormNuovoItem } from '../../riutilizzabile/form_item/FormItem';
-import { CardNuovoItem } from '../../riutilizzabile/card_item/CardItem';
-import { RowNuovoItem } from '../../riutilizzabile/row_item/RowItem';
-import { modifica } from '../../vario/OperazioniModifica';
-import { Items } from '../component/Items';
-import { OperazioniItems, selectOperationBody } from '../component/Operazioni';
+import { selectOperationBody } from '../component/Operazioni';
 import { 
   getCampiNuovoCliente, getCampiClienteEsistente, 
   indiciNuovoCliente, indiciClienteEsistente 
@@ -18,9 +9,6 @@ import { handleInputChange } from '../../vario/Vario';
 import PaginaWeb from '../../riutilizzabile/PaginaWeb';
 
 const NuovoCliente = () => {
-  const formSession = useSelector((state) => state.formSession.value);
-  const itemSession = useSelector((state) => state.itemSession.value);
-
   const [clienti, setClienti] = useState([]);
   const [selectedTrashCount, setSelectedTrashCount] = useState(0);
   const [selectedPencilCount, setSelectedPencilCount] = useState(0);
@@ -87,20 +75,6 @@ const NuovoCliente = () => {
     }
   }
 
-  const handleChangeInsertJustNumber = (e) => {
-    e.target.value = e.target.value.replace(/\D/g, '');
-    e.target.value = e.target.value.slice(0, 11);
-  };
-
-  // const eseguiSalvataggio = (e, setErrori) => {
-  //   e.preventDefault();
-  //   handleInsert(nuovoCliente, setNuovoCliente, setClienti, setErrori);
-  // }
-
-  const NuovoClienteTag = (formSession.view === "form") ? FormNuovoItem : (
-    (formSession.view === "card") ? CardNuovoItem : RowNuovoItem
-  )
-
   return (
     <>
       <PaginaWeb 
@@ -129,42 +103,17 @@ const NuovoCliente = () => {
           }
         }
       />
-      {/* <Header /> */}
-      
-      {/* <div className="main-content" /> */}
-
-      {/* <NuovoClienteTag 
-        campi={getCampiNuovoCliente(nuovoCliente, (e) => handleInputChange(e, setNuovoCliente), null, null)}  
-        indici={indiciNuovoCliente} 
-        eseguiSalvataggio={(e) => handleInsert(e)} 
-      /> */}
-
-      {/* <br /> <br /> <br /> <br /> */}
-
-      {/* <Items 
-        tipoItem={"cliente"} 
-        items={clienti} 
-        setItems={setClienti}
-        selectOperation={selectOperation}
-        emptyIsConsidered={true} 
-        campi={getCampiClienteEsistente}
-        indici={indiciClienteEsistente}
-        servizi={null}
-      /> */}
-      
-      {/* <br /> <br /> <br /> <br /> */}
-
-      {/* <OperazioniItems 
-        selectedIdsModifica={selectedIdsModifica} 
-        selectedIdsEliminazione={selectedIdsEliminazione}
-        modifica={(e) => modifica(e, "cliente", selectedIdsModifica, setSelectedIdsModifica, clienti, setClienti)} 
-        elimina={(e) => elimina(e, "cliente", selectedIdsEliminazione, setSelectedIdsEliminazione, clienti, setClienti)}
-        // handleDelete={(e) => handleDelete(e)}
-      /> */}
-
-      {/* <br /> <br /> <br /> <br /> */}
     </>
   );
 };
 
 export default NuovoCliente;
+
+
+
+
+
+
+
+
+

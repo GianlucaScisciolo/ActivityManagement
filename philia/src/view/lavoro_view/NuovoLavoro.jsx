@@ -1,30 +1,14 @@
 import { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
-import Header from "../component/Header";
-import { modifica } from "../../vario/OperazioniModifica";
-import PersonaAction from "../../action/persona_action/PersonaAction";
-import ServizioAction from "../../action/servizio_action/ServizioAction";
-import personaStore from "../../store/persona_store/PersonaStore";
-import servizioStore from "../../store/servizio_store/ServizioStore";
-import { operazioniPersone, operazioniServizi } from "../../vario/Operazioni";
 import { handleInputChange } from "../../vario/Vario";
-import { OperazioniItems, selectOperationBody } from "../component/Operazioni";
-import { FormNuovoItem } from "../../riutilizzabile/form_item/FormItem";
-import { CardNuovoItem } from "../../riutilizzabile/card_item/CardItem";
-import { RowNuovoItem } from "../../riutilizzabile/row_item/RowItem";
+import { selectOperationBody } from "../component/Operazioni";
 import { 
   getCampiNuovoLavoro, getCampiLavoroEsistente, 
   indiciNuovoLavoro, indiciLavoroEsistente  
 } from "./LavoriVario";
-import ProvaOptions from "./ProvaOptions";
 import { getSelectTag } from "../../riutilizzabile/form_item/FormItem";
-import { Items } from "../component/Items";
-import { controlloLavoro } from "../../vario/Controlli";
 import PaginaWeb from "../../riutilizzabile/PaginaWeb";
 
 const NuovoLavoro = () => {
-  const formSession = useSelector((state) => state.formSession.value);
-  const itemSession = useSelector((state) => state.itemSession.value);
   const [clienti, setClienti] = useState(-1);
   const [servizi, setServizi] = useState(-1);
   const [lavori, setLavori] = useState([]);
@@ -32,13 +16,9 @@ const NuovoLavoro = () => {
   const [selectedPencilCount, setSelectedPencilCount] = useState(0);
   const [selectedIdsEliminazione, setSelectedIdsEliminazione] = useState([]);
   const [selectedIdsModifica, setSelectedIdsModifica] = useState([]);
-  const [aggiornamento, setAggiornamento] = useState(0);
-  const NuovoLavoroTag = (formSession.view === "form") ? FormNuovoItem : (
-    (formSession.view === "card") ? CardNuovoItem : RowNuovoItem
-  )
   const [nuovoLavoro, setNuovoLavoro] = useState({
     tipo_item: "lavoro", 
-    tipo_selezione: 1, 
+    tipo_selezione: 0, 
     id_cliente: "", 
     cliente: "", 
     id_servizi: [], 
@@ -52,7 +32,7 @@ const NuovoLavoro = () => {
     errore_giorno: "", 
     errore_note: "" 
   })
-
+  
   const handleGiornoClick = (setGiornoType) => {
     return () => {
       setGiornoType('date');
@@ -285,8 +265,6 @@ const NuovoLavoro = () => {
     }
   };
 
-
-
   useEffect(() => {
     getAllClienti();
   }, []);
@@ -323,39 +301,6 @@ const NuovoLavoro = () => {
           }
         }
       />
-      {/* <Header /> */}
-
-      {/* <div className="main-content" /> */}
-
-      {/* <NuovoLavoroTag 
-        campi={getCampiNuovoLavoro(nuovoLavoro, OptionsClienti({clienti}), OptionsServizi({servizi}), (e) => handleInputChange(e, setNuovoLavoro), null, null)} 
-        indici={indiciNuovoLavoro} 
-        eseguiSalvataggio={(e) => handleInsert(e)} 
-      /> */}
-      
-      {/* <br /> <br /> <br /> <br /> */}
-      
-      {/* <Items 
-        tipoItem={"lavoro"} 
-        items={lavori} 
-        setItems={setLavori}
-        selectOperation={selectOperation}
-        emptyIsConsidered={true} 
-        campi={getCampiLavoroEsistente}
-        indici={indiciLavoroEsistente} 
-        servizi={servizi}
-      /> */}
-      
-      {/* <br /> <br /> <br /> <br /> */}
-
-      {/* <OperazioniItems 
-        selectedIdsModifica={selectedIdsModifica} 
-        selectedIdsEliminazione={selectedIdsEliminazione}
-        modifica={(e) => modifica(e, "lavoro", selectedIdsModifica, setSelectedIdsModifica, lavori, setLavori)} 
-        elimina={(e) => elimina(e, "lavoro", selectedIdsEliminazione, setSelectedIdsEliminazione, lavori, setLavori)}
-      /> */}
-      
-      {/* <br /> <br /> <br /> <br /> */}
     </>
   );
 }

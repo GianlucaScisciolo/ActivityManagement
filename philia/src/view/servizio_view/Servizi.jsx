@@ -1,16 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useSelector } from "react-redux";
-import Header from "../component/Header";
-import { OperazioniItems, selectOperationBody } from "../component/Operazioni";
-import { modifica } from "../../vario/OperazioniModifica";
+import { selectOperationBody } from "../component/Operazioni";
 import { handleInputChange } from "../../vario/Vario";
-import { eseguiRicerca } from "../../vario/OperazioniRicerca";
 import { FormRicercaItems } from "../../riutilizzabile/form_item/FormItem";
 import { CardRicercaItems } from "../../riutilizzabile/card_item/CardItem";
 import { RowRicercaItems } from "../../riutilizzabile/row_item/RowItem";
-import servizioStore from "../../store/servizio_store/ServizioStore";
-import { operazioniServizi } from "../../vario/Operazioni";
-import { Items } from "../component/Items";
 import { 
   getCampiRicercaServizi, getCampiServizioEsistente, 
   indiciRicercaServizi, indiciServizioEsistente
@@ -188,43 +182,6 @@ const Servizi = () => {
           }
         }
       />
-
-      {/* <Header /> */}
-
-      {/* <div className="main-content" /> */}
-
-      {/* <RicercaServiziTag 
-        campi={getCampiRicercaServizi(datiRicerca, (e) => handleInputChange(e, setDatiRicerca), null, null)} 
-        indici={indiciRicercaServizi}
-        // eseguiRicerca={(e) => eseguiRicerca(e, "servizi", setServizi, datiRicerca)}
-        handleSearch={(e) => handleSearch(e)}
-      /> */}
-
-      {/* <br /> <br /> <br /> <br /> */}
-      
-      {/* <Items 
-        tipoItem={"servizio"} 
-        items={servizi} 
-        setItems={setServizi}
-        selectOperation={selectOperation}
-        emptyIsConsidered={true} 
-        campi={getCampiServizioEsistente}
-        indici={indiciServizioEsistente}
-        servizi={null}
-      /> */}
-
-      {/* <br /> <br /> <br /> <br /> */}
-
-      {/* <OperazioniItems 
-        selectedIdsModifica={selectedIdsModifica} 
-        selectedIdsEliminazione={selectedIdsEliminazione}
-        // modifica={(e) => modifica(e, "servizio", selectedIdsModifica, setSelectedIdsModifica, servizi, setServizi)} 
-        // elimina={(e) => elimina(e, "servizio", selectedIdsEliminazione, setSelectedIdsEliminazione, servizi, setServizi)}
-        handleEdit={(e) => handleEdit(e)}
-        handleDelete={(e) => handleDelete(e)}
-      /> */}
-
-      {/* <br /> <br /> <br /> <br /> */}
     </>
   );
 }

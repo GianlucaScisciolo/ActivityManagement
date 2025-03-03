@@ -85,7 +85,11 @@ export function OperazioniNuovoItem({eseguiSalvataggio}) {
     <StyledListGroupItem style={{border: "5px solid #000000", backgroundColor:"#000000", paddingTop: "3%"}}>
       <StyledRow>
         <StyledCol>
-          <StyledSaveNotSelected size={grandezzaIcona} onClick={eseguiSalvataggio} />
+          <StyledSaveNotSelected 
+            className="salvaItemButton" 
+            size={grandezzaIcona} 
+            onClick={eseguiSalvataggio} 
+          />
         </StyledCol>
       </StyledRow>
     </StyledListGroupItem>
@@ -95,12 +99,25 @@ export function OperazioniNuovoItem({eseguiSalvataggio}) {
 export function OperazioniCercaItems({ setIsVisible, arrowUp, setArrowUp, eseguiRicerca }) {
   return (
     <StyledListGroupItem style={{ border: "5px solid #000000", backgroundColor: "#000000", paddingTop: "3%" }}>
-      <StyledSearchNotSelected size={grandezzaIcona} style={{ marginRight: "50%" }} onClick={eseguiRicerca} />
+      <StyledSearchNotSelected 
+        className="ricercaItemsButton" 
+        size={grandezzaIcona} 
+        style={{ marginRight: "50%" }} 
+        onClick={eseguiRicerca} 
+      />
       {arrowUp && (
-        <StyledArrowTopNotSelected size={grandezzaIcona} onClick={() => nascondiForm(setIsVisible, setArrowUp)} />
+        <StyledArrowTopNotSelected 
+          className="nascondiFormButton" 
+          size={grandezzaIcona} 
+          onClick={() => nascondiForm(setIsVisible, setArrowUp)} 
+        />
       )}
       {!arrowUp && (
-        <StyledArrowBottomNotSelected size={grandezzaIcona} onClick={() => nascondiForm(setIsVisible, setArrowUp)} />
+        <StyledArrowBottomNotSelected 
+          className="mostraFormButton" 
+          size={grandezzaIcona} 
+          onClick={() => nascondiForm(setIsVisible, setArrowUp)} 
+        />
       )}
     </StyledListGroupItem>
   );
@@ -112,8 +129,17 @@ export function OperazioniItemEsistente ({ selectOperation, item }) {
 
   return (
     <StyledListGroupItem style={{ border: "5px solid #000000", backgroundColor: "#000000", paddingTop: "3%" }}>
-      <PencilTag size={grandezzaIcona} onClick={() => selectOperation("pencil", item)} style={{ marginRight: "50%" }} />
-      <TrashTag  size={grandezzaIcona} onClick={() => selectOperation("trash", item)} />
+      <PencilTag 
+        className="modificaItemButton" 
+        size={grandezzaIcona} 
+        onClick={() => selectOperation("pencil", item)} 
+        style={{ marginRight: "50%" }} 
+      />
+      <TrashTag 
+        className="eliminaItemButton" 
+        size={grandezzaIcona} 
+        onClick={() => selectOperation("trash", item)} 
+      />
     </StyledListGroupItem>
   )
 }
@@ -142,7 +168,11 @@ export function OperazioniFileItems({ottieniLavoriRangePDF, ottieniLavoriRangeEx
 export function OperazioniLogin({eseguiLogin}) {
   return (
     <StyledListGroupItem style={{ border: "5px solid #000000", backgroundColor: "#000000", paddingTop: "3%", paddingBottom: "3%" }}>
-      <StyledLoginNotSelected size={grandezzaIcona} onClick={eseguiLogin} />
+      <StyledLoginNotSelected 
+        className="loginButton" 
+        size={grandezzaIcona} 
+        onClick={eseguiLogin} 
+      />
     </StyledListGroupItem>
   );
 };
@@ -150,7 +180,11 @@ export function OperazioniLogin({eseguiLogin}) {
 export function OperazioniModificaProfilo({eseguiModificaProfilo}) {
   return (
     <StyledListGroupItem style={{ border: "5px solid #000000", backgroundColor: "#000000", paddingTop: "3%", paddingBottom: "3%" }}>
-      <StyledPencilNotSelected2 size={grandezzaIcona} onClick={eseguiModificaProfilo} />
+      <StyledPencilNotSelected2 
+        className="modificaProfiloButton"
+        size={grandezzaIcona} 
+        onClick={eseguiModificaProfilo} 
+      />
     </StyledListGroupItem>
   );
 };
@@ -178,6 +212,7 @@ export function CardNuovoItem({campi, indici, eseguiSalvataggio}) {
                     style={(campi.name[i] === "prezzo") ? {maxWidth:"80%"} : null}
                     rows={1}
                     name={campi.name[i]}
+                    id={campi.id[i]}
                     type={campi.type[i]}
                     step={campi.step[i]}
                     value={campi.value[i]}
@@ -237,6 +272,7 @@ export function CardRicercaItems({campi, indici, eseguiRicerca}) {
                 key={i}
                 rows={1}
                 name={campi.name[i]}
+                id={campi.id[i]}
                 type={campi.type[i]}
                 value={campi.value[i]}
                 placeholder={campi.placeholder[i]}
@@ -257,18 +293,7 @@ export function CardRicercaItems({campi, indici, eseguiRicerca}) {
     </center>
   );
 }
-/*
-            <ItemEsistenteTag 
-              key={index} 
-              item={item} 
-              campi={campi(OptionsServizi(servizi, descrizione, sottoStringa, setIdServizi), item, updatedItems, null, null)} 
-              indici={indici} 
-              selectOperation={selectOperation} 
-              items={items} 
-              setItems={setItems} 
-              tipoItem={tipoItem}
-            />
-*/
+
 export function CardItemEsistente({ item, campi, indici, selectOperation, items, setItems, tipoItem, onChange }) {
   const inputRef = useRef(null);
 
@@ -287,6 +312,7 @@ export function CardItemEsistente({ item, campi, indici, selectOperation, items,
                     rows={1}
                     style={(campi.name[i] === "totale") ? { maxWidth: "80%" } : null}
                     name={campi.name[i]}
+                    id={campi.id[i]}
                     type={campi.type[i]}
                     value={campi.value[i]}
                     placeholder={campi.placeholder[i]}
@@ -317,10 +343,6 @@ export function CardItemEsistente({ item, campi, indici, selectOperation, items,
   );
 }
 
-
-
-
-
 export function CardLogin({campi, indici, eseguiLogin}) {
   let maxHeight = "2000px";
   const [inputType, setInputType] = useState('password');
@@ -346,7 +368,8 @@ export function CardLogin({campi, indici, eseguiLogin}) {
                   <NomeTag 
                     style={(campi.name[i] === "password") ? {maxWidth:"80%"} : null}
                     rows={1}
-                    name={campi.name[i]}
+                    name={campi.name[i]} 
+                    id={campi.id[i]}
                     type={(campi.name[i] === "password") ? inputType : campi.type[i]}
                     step={campi.step[i]}
                     min={campi.min[i]}
@@ -424,7 +447,8 @@ export function CardProfilo({campi, indici, eseguiModificaProfilo}) {
                   <NomeTag 
                     style={(campi.name[i].includes("password")) ? {maxWidth:"80%"} : null}
                     rows={1}
-                    name={campi.name[i]}
+                    name={campi.name[i]} 
+                    id={campi.id[i]}
                     type={(campi.name[i].includes("password")) ? (
                       (campi.name[i] === "password_attuale") ? passwordAttualeType : (
                         (campi.name[i] === "nuova_password")) ? nuovaPasswordType : confermaNuovaPasswordType

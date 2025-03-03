@@ -1,19 +1,16 @@
-// Nuovo pagamento
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import Header from "../component/Header";
-import { OperazioniItems, selectOperationBody } from "../component/Operazioni";
+import { selectOperationBody } from "../component/Operazioni";
 import { handleInputChange } from "../../vario/Vario";
 import { FormNuovoItem } from "../../riutilizzabile/form_item/FormItem";
 import { CardNuovoItem } from "../../riutilizzabile/card_item/CardItem";
 import { RowNuovoItem } from "../../riutilizzabile/row_item/RowItem";
 import { controlloSpesa } from "../../vario/Controlli";
-import { Items } from "../component/Items";
-import { modifica } from "../../vario/OperazioniModifica";
 import { 
   getCampiNuovaSpesa, getCampiSpesaEsistente, 
   indiciNuovaSpesa, indiciSpesaEsistente 
 } from "./SpeseVario";
+import PaginaWeb from "../../riutilizzabile/PaginaWeb";
 
 const NuovaSpesa = () => {
   const formSession = useSelector((state) => state.formSession.value);
@@ -89,39 +86,32 @@ const NuovaSpesa = () => {
 
   return (
     <>
-      <Header />
-
-      <div className="main-content" />
-
-      <NuovaSpesaTag 
-        campi={getCampiNuovaSpesa(nuovaSpesa, (e) => handleInputChange(e, setNuovaSpesa), null, null)}  
-        indici={indiciNuovaSpesa} 
-        eseguiSalvataggio={(e) => handleInsert(e)} 
+      <PaginaWeb 
+        componenti={
+          {
+            nuovo_item: {
+              campi: getCampiNuovaSpesa(nuovaSpesa, (e) => handleInputChange(e, setNuovaSpesa), null, null), 
+              indici: indiciNuovaSpesa, 
+              handle_insert: (e) => handleInsert(e) 
+            }, 
+            items: {
+              tipo_item: "spesa", 
+              items: spese, 
+              set_items: setSpese, 
+              select_operation: selectOperation, 
+              campi: getCampiSpesaEsistente, 
+              indici: indiciSpesaEsistente, 
+              servizi: null
+            },
+            operazioni_items: {
+              selected_ids_modifica: selectedIdsModifica, 
+              selected_ids_eliminazione: selectedIdsEliminazione, 
+              handle_edit: null, 
+              handle_delete: null
+            }
+          }
+        }
       />
-
-      <br /> <br /> <br /> <br />
-
-      <Items 
-        tipoItem={"spesa"} 
-        items={spese} 
-        setItems={setSpese}
-        selectOperation={selectOperation}
-        emptyIsConsidered={true} 
-        campi={getCampiSpesaEsistente}
-        indici={indiciSpesaEsistente}
-        servizi={null}
-      />
-
-      <br /> <br /> <br /> <br />
-
-      <OperazioniItems 
-        selectedIdsModifica={selectedIdsModifica} 
-        selectedIdsEliminazione={selectedIdsEliminazione}
-        modifica={(e) => modifica(e, "spesa", selectedIdsModifica, setSelectedIdsModifica, spese, setSpese)} 
-        elimina={(e) => elimina(e, "spesa", selectedIdsEliminazione, setSelectedIdsEliminazione, spese, setSpese)}
-      />
-
-      <br /> <br /> <br /> <br />
     </>
   )
 }

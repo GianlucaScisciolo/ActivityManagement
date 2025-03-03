@@ -1,15 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import Header from '../component/Header';
-import { modifica } from '../../vario/OperazioniModifica';
-import { useSelector, useDispatch } from 'react-redux';
-import personaStore from '../../store/persona_store/PersonaStore';
-import { operazioniPersone } from '../../vario/Operazioni';
-import { FormRicercaItems } from '../../riutilizzabile/form_item/FormItem';
-import { CardRicercaItems } from '../../riutilizzabile/card_item/CardItem';
-import { RowRicercaItems } from '../../riutilizzabile/row_item/RowItem';
-import { eseguiRicerca } from '../../vario/OperazioniRicerca';
-import { Items } from '../component/Items';
-import { OperazioniItems, selectOperationBody } from '../component/Operazioni';
+import React, { useState } from 'react';
+import { selectOperationBody } from '../component/Operazioni';
 import { 
   getCampiRicercaClienti, getCampiClienteEsistente, 
   indiciRicercaClienti, indiciClienteEsistente
@@ -24,9 +14,6 @@ const Clienti = () => {
   const [selectedIdsEliminazione, setSelectedIdsEliminazione] = useState([]);
   const [selectedIdsModifica, setSelectedIdsModifica] = useState([]);
 
-  const formSession = useSelector((state) => state.formSession.value);
-  const itemSession = useSelector((state) => state.itemSession.value);
-  
   const [datiRicerca, setDatiRicerca] = useState({
     tipo_item: "cliente", 
     nome: "", 
@@ -42,10 +29,6 @@ const Clienti = () => {
       setSelectedPencilCount, setSelectedTrashCount
     )
   }
-
-  const RicercaClientiTag = (formSession.view === "form") ? FormRicercaItems : (
-    (formSession.view === "card") ? CardRicercaItems : RowRicercaItems
-  )
 
   const handleSearch = async (e) => {
     e.preventDefault();
@@ -190,39 +173,6 @@ const Clienti = () => {
           }
         }
       />
-      
-      {/* <RicercaClientiTag 
-        campi={getCampiRicercaClienti(datiRicerca, (e) => handleInputChange(e, setDatiRicerca), null, null)} 
-        indici={indiciRicercaClienti}
-        // eseguiRicerca={(e) => eseguiRicerca(e, "clienti", setClienti, datiRicerca)}
-        handleSearch={(e) => handleSearch(e)}
-      /> */}
-
-      {/* <br /> <br /> <br /> <br /> */}
-      
-      {/* <Items 
-        tipoItem={"cliente"} 
-        items={clienti} 
-        setItems={setClienti}
-        selectOperation={selectOperation}
-        emptyIsConsidered={true} 
-        campi={getCampiClienteEsistente}
-        indici={indiciClienteEsistente}
-        servizi={null}
-      /> */}
-
-      {/* <br /> <br /> <br /> <br /> */}
-      
-      {/* <OperazioniItems 
-        selectedIdsModifica={selectedIdsModifica} 
-        selectedIdsEliminazione={selectedIdsEliminazione}
-        // modifica={(e) => modifica(e, "cliente", selectedIdsModifica, setSelectedIdsModifica, clienti, setClienti)} 
-        // elimina={(e) => elimina(e, "cliente", selectedIdsEliminazione, setSelectedIdsEliminazione, clienti, setClienti)}
-        handleEdit={(e) => handleEdit(e)} 
-        handleDelete={(e) => handleDelete(e)}
-      /> */}
-      
-      {/* <br /> <br /> <br /> <br /> */}
     </>
   );
 }

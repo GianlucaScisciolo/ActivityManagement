@@ -90,7 +90,11 @@ function getTrashTag(tipoSelezione) {
 export function OperazioniNuovoItem({eseguiSalvataggio}) {
   return (
     <StyledColOperazioni>
-      <StyledSaveNotSelected size={grandezzaIcona} onClick={eseguiSalvataggio} />
+      <StyledSaveNotSelected 
+        className="salvaItemButton" 
+        size={grandezzaIcona} 
+        onClick={eseguiSalvataggio} 
+      />
     </StyledColOperazioni>
   )
 }
@@ -98,12 +102,25 @@ export function OperazioniNuovoItem({eseguiSalvataggio}) {
 export function OperazioniCercaItems({ visibilita, setVisibilita, arrowUp, setArrowUp, eseguiRicerca }) {
   return (
     <StyledColOperazioni>
-      <StyledSearchNotSelected size={grandezzaIcona} style={{ marginRight: "50%" }} onClick={eseguiRicerca} />
+      <StyledSearchNotSelected 
+        className="ricercaItemsButton" 
+        size={grandezzaIcona} 
+        style={{ marginRight: "50%" }} 
+        onClick={eseguiRicerca} 
+      />
       {arrowUp && (
-        <StyledArrowLeftNotSelected size={grandezzaIcona} onClick={() => nascondiForm(visibilita, setVisibilita, setArrowUp)} />
+        <StyledArrowLeftNotSelected 
+          className="nascondiFormButton"
+          size={grandezzaIcona} 
+          onClick={() => nascondiForm(visibilita, setVisibilita, setArrowUp)} 
+        />
       )}
       {!arrowUp && (
-        <StyledArrowRightNotSelected size={grandezzaIcona} onClick={() => mostraForm(visibilita, setVisibilita, setArrowUp)} />
+        <StyledArrowRightNotSelected 
+          className="mostraFormButton" 
+          size={grandezzaIcona} 
+          onClick={() => mostraForm(visibilita, setVisibilita, setArrowUp)} 
+        />
       )}
     </StyledColOperazioni>
   );
@@ -114,8 +131,17 @@ export function OperazioniItemEsistente ({ selectOperation, item }) {
   let PencilTag = getPencilTag(item.tipo_selezione);
   return (
     <StyledColOperazioni>
-      <PencilTag size={grandezzaIcona} onClick={() => selectOperation("pencil", item)} style={{ marginRight: "50%" }} />
-      <TrashTag  size={grandezzaIcona} onClick={() => selectOperation("trash", item)} />
+      <PencilTag 
+        className="modificaItemButton"
+        size={grandezzaIcona} 
+        onClick={() => selectOperation("pencil", item)} 
+        style={{ marginRight: "50%" }} 
+      />
+      <TrashTag 
+        className="eliminaItemButton" 
+        size={grandezzaIcona} 
+        onClick={() => selectOperation("trash", item)} 
+      />
     </StyledColOperazioni>
   )
 }
@@ -141,7 +167,11 @@ export function OperazioniFileItems({ottieniLavoriRangePDF, ottieniLavoriRangeEx
 export function OperazioniLogin({eseguiLogin}) {
   return (
     <StyledColOperazioni>
-      <StyledLoginNotSelected size={grandezzaIcona} onClick={eseguiLogin} />
+      <StyledLoginNotSelected 
+        className="loginButton" 
+        size={grandezzaIcona} 
+        onClick={eseguiLogin} 
+      />
     </StyledColOperazioni>
   );
 };
@@ -149,7 +179,11 @@ export function OperazioniLogin({eseguiLogin}) {
 export function OperazioniModificaProfilo({eseguiModificaProfilo}) {
   return (
     <StyledColOperazioni>
-      <StyledPencilNotSelectedModificaProfilo size={grandezzaIcona} onClick={eseguiModificaProfilo} />
+      <StyledPencilNotSelectedModificaProfilo 
+        className="modificaProfiloButton" 
+        size={grandezzaIcona} 
+        onClick={eseguiModificaProfilo} 
+      />
     </StyledColOperazioni>
   );
 };
@@ -177,6 +211,7 @@ export function RowNuovoItem({campi, indici, eseguiSalvataggio}) {
                     rows={1}
                     style={(campi.name[i] === "prezzo") ? {maxWidth:"90%"} : null}
                     name={campi.name[i]}
+                    id={campi.id[i]}
                     type={campi.type[i]}
                     step={campi.step[i]}
                     value={campi.value[i]}
@@ -235,6 +270,7 @@ export function RowRicercaItems({campi, indici, eseguiRicerca}) {
                 <NomeTag 
                   rows={1}
                   name={campi.name[i]}
+                  id={campi.id[i]}
                   type={campi.type[i]}
                   step={campi.step[i]}
                   value={campi.value[i]}
@@ -286,6 +322,7 @@ export function RowItemEsistente({item, campi, indici, selectOperation}) {
                   style={(campi.name[i] === "totale") ? {maxWidth:"80%"} : null}
                   rows={1}
                   name={campi.name[i]}
+                  id={campi.id[i]}
                   type={campi.type[i]}
                   step={campi.step[i]}
                   value={campi.value[i]}
@@ -341,6 +378,7 @@ export function RowLogin({campi, indici, eseguiLogin}) {
                     style={(campi.name[i] === "password") ? {maxWidth:"80%"} : null}
                     rows={1}
                     name={campi.name[i]}
+                    id={campi.id[i]}
                     type={(campi.name[i] === "password") ? inputType : campi.type[i]}
                     step={campi.step[i]}
                     min={campi.min[i]}
@@ -416,6 +454,7 @@ export function RowProfilo({campi, indici, eseguiLogin}) {
                   style={(campi.name[i].includes("password")) ? {maxWidth:"80%"} : null}
                     rows={1}
                     name={campi.name[i]}
+                    id={campi.id[i]}
                     type={(campi.name[i].includes("password")) ? (
                       (campi.name[i] === "password_attuale") ? passwordAttualeType : (
                         (campi.name[i] === "nuova_password")) ? nuovaPasswordType : confermaNuovaPasswordType

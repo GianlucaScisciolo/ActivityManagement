@@ -51,7 +51,11 @@ export function OperazioniNuovoItem({eseguiSalvataggio}) {
     <StyledListGroupItem style={{border: "5px solid #000000", backgroundColor:"#000000", paddingTop: "3%"}}>
       <StyledRow>
         <StyledCol>
-          <StyledSaveNotSelected size={grandezzaIcona} onClick={eseguiSalvataggio} />
+          <StyledSaveNotSelected 
+            className="salvaItemButton" 
+            size={grandezzaIcona} 
+            onClick={eseguiSalvataggio} 
+          />
         </StyledCol>
       </StyledRow>
     </StyledListGroupItem>
@@ -61,12 +65,25 @@ export function OperazioniNuovoItem({eseguiSalvataggio}) {
 export function OperazioniCercaItems({ setIsVisible, arrowUp, setArrowUp, handleSearch }) {
   return (
     <StyledListGroupItem style={{ border: "5px solid #000000", backgroundColor: "#000000", paddingTop: "3%" }}>
-      <StyledSearchNotSelected size={grandezzaIcona} style={{ marginRight: "50%" }} onClick={handleSearch} />
+      <StyledSearchNotSelected 
+        className="ricercaItemsButton" 
+        size={grandezzaIcona} 
+        style={{ marginRight: "50%" }} 
+        onClick={handleSearch} 
+      />
       {arrowUp && (
-        <StyledArrowTopNotSelected size={grandezzaIcona} onClick={() => nascondiForm(setIsVisible, setArrowUp)} />
+        <StyledArrowTopNotSelected 
+          className="nascondiFormButton" 
+          size={grandezzaIcona} 
+          onClick={() => nascondiForm(setIsVisible, setArrowUp)} 
+        />
       )}
       {!arrowUp && (
-        <StyledArrowBottomNotSelected size={grandezzaIcona} onClick={() => nascondiForm(setIsVisible, setArrowUp)} />
+        <StyledArrowBottomNotSelected 
+          className="mostraFormButton"
+          size={grandezzaIcona} 
+          onClick={() => nascondiForm(setIsVisible, setArrowUp)} 
+        />
       )}
     </StyledListGroupItem>
   );
@@ -75,7 +92,11 @@ export function OperazioniCercaItems({ setIsVisible, arrowUp, setArrowUp, handle
 export function OperazioniLogin({eseguiLogin}) {
   return (
     <StyledListGroupItem style={{ border: "5px solid #000000", backgroundColor: "#000000", paddingTop: "3%", paddingBottom: "3%" }}>
-      <StyledLoginNotSelected size={grandezzaIcona} onClick={eseguiLogin} />
+      <StyledLoginNotSelected 
+        className="loginButton" 
+        size={grandezzaIcona} 
+        onClick={eseguiLogin} 
+      />
     </StyledListGroupItem>
   );
 };
@@ -83,7 +104,11 @@ export function OperazioniLogin({eseguiLogin}) {
 export function OperazioniModificaProfilo({eseguiModificaProfilo}) {
   return (
     <StyledListGroupItem style={{ border: "5px solid #000000", backgroundColor: "#000000", paddingTop: "3%", paddingBottom: "3%" }}>
-      <StyledPencilNotSelected size={grandezzaIcona} onClick={eseguiModificaProfilo} />
+      <StyledPencilNotSelected 
+        className="modificaProfiloButton"
+        size={grandezzaIcona} 
+        onClick={eseguiModificaProfilo} 
+      />
     </StyledListGroupItem>
   );
 };
@@ -131,6 +156,7 @@ export function FormNuovoItem({campi, indici, eseguiSalvataggio}) {
                   style={(campi.name[i] === "prezzo") ? {maxWidth:"90%"} : null}
                   rows={1}
                   name={campi.name[i]}
+                  id={campi.id[i]}
                   type={campi.type[i]}
                   step={campi.step[i]}
                   value={campi.value[i]}
@@ -191,6 +217,7 @@ export function FormRicercaItems({campi, indici, handleSearch}) {
                 key={i}
                 rows={1}
                 name={campi.name[i]}
+                id={campi.id[i]}
                 type={campi.type[i]}
                 step={campi.step[i]}
                 value={campi.value[i]}
@@ -240,7 +267,8 @@ export function FormLogin({campi, indici, eseguiLogin}) {
                 <NomeTag 
                   style={(campi.name[i] === "password") ? {maxWidth:"90%"} : null}
                   rows={1}
-                  name={campi.name[i]}
+                  name={campi.name[i]} 
+                  id={campi.id[i]}
                   type={(campi.name[i] === "password") ? inputType : campi.type[i]}
                   step={campi.step[i]}
                   min={campi.min[i]}
@@ -321,6 +349,7 @@ export function FormProfilo({campi, indici, eseguiModificaProfilo}) {
                   style={(campi.name[i].includes("password")) ? {maxWidth:"90%"} : null}
                   rows={1}
                   name={campi.name[i]}
+                  id={campi.id[i]}
                   type={(campi.name[i].includes("password")) ? (
                     (campi.name[i] === "password_attuale") ? passwordAttualeType : (
                       (campi.name[i] === "nuova_password")) ? nuovaPasswordType : confermaNuovaPasswordType
@@ -386,6 +415,7 @@ export function FormFileItems({campi, indici, ottieniFileRangePDF, ottieniFileRa
                 key={i}
                 rows={1}
                 name={campi.name[i]}
+                id={campi.id[i]}
                 type={campi.type[i]}
                 step={campi.step[i]}
                 value={campi.value[i]}

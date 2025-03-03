@@ -1,29 +1,16 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useSelector } from "react-redux";
-import Header from "../component/Header";
-import { OperazioniItems, selectOperationBody } from "../component/Operazioni";
-import { modifica } from "../../vario/OperazioniModifica";
+import { selectOperationBody } from "../component/Operazioni";
 import { handleInputChange } from "../../vario/Vario";
-import { eseguiRicerca } from "../../vario/OperazioniRicerca";
 import { FormRicercaItems } from "../../riutilizzabile/form_item/FormItem";
 import { CardRicercaItems } from "../../riutilizzabile/card_item/CardItem";
 import { RowRicercaItems } from "../../riutilizzabile/row_item/RowItem";
-import saloneStore from "../../store/salone_store/SaloneStore";
-import { operazioniSaloni } from "../../vario/Operazioni";
-import { Items } from "../component/Items";
 import { 
   getCampiRicercaSpese, getCampiSpesaEsistente, 
   indiciRicercaSpese, indiciSpesaEsistente
 } from "./SpeseVario";
 import { useDispatch } from "react-redux";
-import { aggiornaSpese } from "../../store/redux/SpeseSlice";
-/*
-
-// 
-
-
-
-*/
+import PaginaWeb from "../../riutilizzabile/PaginaWeb";
 
 const Spese = () => {
   const formSession = useSelector((state) => state.formSession.value);
@@ -205,48 +192,43 @@ const Spese = () => {
 
   return (
     <>
-      <Header />
-
-      <div className="main-content" />
-
-      {/* <button>{speseSess</button> */}
-
-      <RicercaSpeseTag 
-        campi={getCampiRicercaSpese(datiRicerca, (e) => handleInputChange(e, setDatiRicerca), null, null)} 
-        indici={indiciRicercaSpese}
-        // eseguiRicerca={(e) => eseguiRicerca(e, "spese", null, datiRicerca, dispatch)}
-        handleSearch={(e) => handleSearch(e)}
+      <PaginaWeb 
+        componenti={
+          {
+            ricerca_items: {
+              campi: getCampiRicercaSpese(datiRicerca, (e) => handleInputChange(e, setDatiRicerca), null, null), 
+              indici: indiciRicercaSpese, 
+              handle_search: (e) => handleSearch(e)
+            }, 
+            items: {
+              tipo_item: "spesa", 
+              items: spese, 
+              set_items: setSpese, 
+              select_operation: selectOperation, 
+              campi: getCampiSpesaEsistente, 
+              indici: indiciSpesaEsistente, 
+              servizi: null
+            },
+            operazioni_items: {
+              selected_ids_modifica: selectedIdsModifica, 
+              selected_ids_eliminazione: selectedIdsEliminazione, 
+              handle_edit: (e) => handleEdit(e), 
+              handle_delete: (e) => handleDelete(e)
+            }
+          }
+        }
       />
-  {/* (e, tipoLista, setLista, datiRicerca, dispatch) */}
-      <br /> <br /> <br /> <br />
-      
-      {/* <button>{speseSession.spese.length}</button> */}
-
-      <Items 
-        tipoItem={"spesa"} 
-        items={spese} 
-        setItems={setSpese}
-        selectOperation={selectOperation}
-        emptyIsConsidered={true} 
-        campi={getCampiSpesaEsistente}
-        indici={indiciSpesaEsistente}
-        servizi={null}
-      />
-
-      <br /> <br /> <br /> <br />
-
-      <OperazioniItems 
-        selectedIdsModifica={selectedIdsModifica} 
-        selectedIdsEliminazione={selectedIdsEliminazione}
-        // modifica={(e) => modifica(e, "spesa", selectedIdsModifica, setSelectedIdsModifica, spese, setSpese)} 
-        // elimina={(e) => elimina(e, "spesa", selectedIdsEliminazione, setSelectedIdsEliminazione, spese, setSpese)}
-        handleEdit={(e) => handleEdit(e)} 
-        handleDelete={(e) => handleDelete(e)}
-      /> 
-      
-      <br /> <br /> <br /> <br />
     </>
   );
 }
 
 export default Spese;
+
+
+
+
+
+
+
+
+

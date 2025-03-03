@@ -1,19 +1,13 @@
-import { useState, useEffect } from "react";
-import Header from "../component/Header";
+import { useState } from "react";
 import { useSelector } from "react-redux";
 import { handleInputChange } from "../../vario/Vario";
-import { OperazioniItems, selectOperationBody } from "../component/Operazioni";
+import { selectOperationBody } from "../component/Operazioni";
 import { FormRicercaItems } from "../../riutilizzabile/form_item/FormItem";
 import { CardRicercaItems } from "../../riutilizzabile/card_item/CardItem";
 import { RowRicercaItems } from "../../riutilizzabile/row_item/RowItem";
-import LavoroDispatcher from "../../dispatcher/lavoro_dispatcher/LavoroDispatcher";
 import ServizioAction from "../../action/servizio_action/ServizioAction";
 import servizioStore from "../../store/servizio_store/ServizioStore";
-import lavoroStore from "../../store/lavoro_store/LavoroStore";
-import { operazioniServizi, operazioniLavori } from "../../vario/Operazioni";
-import { eseguiRicerca } from "../../vario/OperazioniRicerca";
-import { Items } from "../component/Items";
-import { modifica } from "../../vario/OperazioniModifica";
+import { operazioniServizi } from "../../vario/Operazioni";
 import { 
   getCampiRicercaLavori, getCampiLavoroEsistente, 
   indiciRicercaLavori, indiciLavoroEsistente 
@@ -22,8 +16,8 @@ import PaginaWeb from "../../riutilizzabile/PaginaWeb";
 
 const Lavori = () => {
   const formSession = useSelector((state) => state.formSession.value);
-  const itemSession = useSelector((state) => state.itemSession.value);
-  const [aggiornamento, setAggiornamento] = useState(0);
+  // const itemSession = useSelector((state) => state.itemSession.value);
+  // const [aggiornamento, setAggiornamento] = useState(0);
   const [lavori, setLavori] = useState(-1);
   const [servizi, setServizi] = useState(-1);
   const [selectedTrashCount, setSelectedTrashCount] = useState(0);
@@ -39,6 +33,7 @@ const Lavori = () => {
     descrizione: "",   
     note: ""
   });
+
   const selectOperation = (icon, item) => {
     selectOperationBody(
       icon, item, selectedIdsModifica, setSelectedIdsModifica, selectedIdsEliminazione, setSelectedIdsEliminazione, 
@@ -46,9 +41,9 @@ const Lavori = () => {
     )
   }
 
-  const RicercaLavoriTag = (formSession.view === "form") ? FormRicercaItems : (
-    (formSession.view === "card") ? CardRicercaItems : RowRicercaItems
-  )
+  // const RicercaLavoriTag = (formSession.view === "form") ? FormRicercaItems : (
+  //   (formSession.view === "card") ? CardRicercaItems : RowRicercaItems
+  // )
 
   const getAllServizi = async () => {
     await ServizioAction.dispatchAction(null, operazioniServizi.OTTIENI_TUTTI_I_SERVIZI);
@@ -186,44 +181,6 @@ const Lavori = () => {
           }
         }
       />
-      {/* <Header /> */}
-      
-      {/* <div className="main-content" /> */}
-
-      {/* <RicercaLavoriTag 
-        campi={getCampiRicercaLavori(datiRicerca, (e) => handleInputChange(e, setDatiRicerca), null, null)} 
-        indici={indiciRicercaLavori}
-        // eseguiRicerca={(e) => eseguiRicerca(e, "lavori", setLavori, datiRicerca)}
-        handleSearch={(e) => handleSearch(e)}
-      /> */}
-
-      {/* <br /> <br /> <br /> <br /> */}
-      
-      {/* {(lavori && lavori !== -1) && (
-        <Items 
-          tipoItem={"lavoro"} 
-          items={lavori} 
-          setItems={setLavori}
-          selectOperation={selectOperation}
-          emptyIsConsidered={true} 
-          campi={getCampiLavoroEsistente}
-          indici={indiciLavoroEsistente}
-          servizi={servizi}
-        />
-      )} */}
-      
-      {/* <br /> <br /> <br /> <br /> */}
-
-      {/* <OperazioniItems 
-        selectedIdsModifica={selectedIdsModifica} 
-        selectedIdsEliminazione={selectedIdsEliminazione}
-        // modifica={(e) => modifica(e, "lavoro", selectedIdsModifica, setSelectedIdsModifica, lavori, setLavori)} 
-        // elimina={(e) => elimina(e, "lavoro", selectedIdsEliminazione, setSelectedIdsEliminazione, lavori, setLavori)}
-        handleEdit={(e) => handleEdit(e)}
-        handleDelete={(e) => handleDelete(e)}
-      /> */}
-      
-      {/* <br /> <br /> <br /> <br /> */}
     </>
   );
 }

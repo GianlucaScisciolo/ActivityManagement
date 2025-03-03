@@ -1,14 +1,11 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import Header from "../component/Header";
-import { OperazioniItems, selectOperationBody } from "../component/Operazioni";
+import { selectOperationBody } from "../component/Operazioni";
 import { handleInputChange } from "../../vario/Vario";
 import { FormNuovoItem } from "../../riutilizzabile/form_item/FormItem";
 import { CardNuovoItem } from "../../riutilizzabile/card_item/CardItem";
 import { RowNuovoItem } from "../../riutilizzabile/row_item/RowItem";
 import { controlloServizio } from "../../vario/Controlli";
-import { Items } from "../component/Items";
-import { modifica } from "../../vario/OperazioniModifica";
 import { 
   getCampiNuovoServizio, getCampiServizioEsistente, 
   indiciNuovoServizio, indiciServizioEsistente 
@@ -110,40 +107,6 @@ const NuovoServizio = () => {
           }
         }
       />
-
-      {/* <Header /> */}
-
-      {/* <div className="main-content" /> */}
-
-      {/* <NuovoServizioTag 
-        campi={getCampiNuovoServizio(nuovoServizio, (e) => handleInputChange(e, setNuovoServizio), null, null)}  
-        indici={indiciNuovoServizio} 
-        eseguiSalvataggio={(e) => handleInsert(e)} 
-      /> */}
-
-      {/* <br /> <br /> <br /> <br /> */}
-
-      {/* <Items 
-        tipoItem={"servizio"} 
-        items={servizi} 
-        setItems={setServizi}
-        selectOperation={selectOperation}
-        emptyIsConsidered={true} 
-        campi={getCampiServizioEsistente}
-        indici={indiciServizioEsistente}
-        servizi={null}
-      /> */}
-
-      {/* <br /> <br /> <br /> <br /> */}
-
-      {/* <OperazioniItems 
-        selectedIdsModifica={selectedIdsModifica} 
-        selectedIdsEliminazione={selectedIdsEliminazione}
-        modifica={(e) => modifica(e, "servizio", selectedIdsModifica, setSelectedIdsModifica, servizi, setServizi)} 
-        elimina={(e) => elimina(e, "servizio", selectedIdsEliminazione, setSelectedIdsEliminazione, servizi, setServizi)}
-      /> */}
-
-      {/* <br /> <br /> <br /> <br /> */}
     </>
   )
 }
