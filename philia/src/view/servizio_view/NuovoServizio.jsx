@@ -13,6 +13,7 @@ import {
   getCampiNuovoServizio, getCampiServizioEsistente, 
   indiciNuovoServizio, indiciServizioEsistente 
 } from "./ServiziVario";
+import PaginaWeb from "../../riutilizzabile/PaginaWeb";
 
 const NuovoServizio = () => {
   const formSession = useSelector((state) => state.formSession.value);
@@ -83,19 +84,46 @@ const NuovoServizio = () => {
 
   return (
     <>
-      <Header />
+      <PaginaWeb 
+        componenti={
+          {
+            nuovo_item: {
+              campi: getCampiNuovoServizio(nuovoServizio, (e) => handleInputChange(e, setNuovoServizio), null, null), 
+              indici: indiciNuovoServizio, 
+              handle_insert: (e) => handleInsert(e) 
+            }, 
+            items: {
+              tipo_item: "servizio", 
+              items: servizi, 
+              set_items: setServizi, 
+              select_operation: selectOperation, 
+              campi: getCampiServizioEsistente, 
+              indici: indiciServizioEsistente, 
+              servizi: null
+            },
+            operazioni_items: {
+              selected_ids_modifica: selectedIdsModifica, 
+              selected_ids_eliminazione: selectedIdsEliminazione, 
+              handle_edit: null, 
+              handle_delete: null
+            }
+          }
+        }
+      />
 
-      <div className="main-content" />
+      {/* <Header /> */}
 
-      <NuovoServizioTag 
+      {/* <div className="main-content" /> */}
+
+      {/* <NuovoServizioTag 
         campi={getCampiNuovoServizio(nuovoServizio, (e) => handleInputChange(e, setNuovoServizio), null, null)}  
         indici={indiciNuovoServizio} 
         eseguiSalvataggio={(e) => handleInsert(e)} 
-      />
+      /> */}
 
-      <br /> <br /> <br /> <br />
+      {/* <br /> <br /> <br /> <br /> */}
 
-      <Items 
+      {/* <Items 
         tipoItem={"servizio"} 
         items={servizi} 
         setItems={setServizi}
@@ -104,18 +132,18 @@ const NuovoServizio = () => {
         campi={getCampiServizioEsistente}
         indici={indiciServizioEsistente}
         servizi={null}
-      />
+      /> */}
 
-      <br /> <br /> <br /> <br />
+      {/* <br /> <br /> <br /> <br /> */}
 
-      <OperazioniItems 
+      {/* <OperazioniItems 
         selectedIdsModifica={selectedIdsModifica} 
         selectedIdsEliminazione={selectedIdsEliminazione}
         modifica={(e) => modifica(e, "servizio", selectedIdsModifica, setSelectedIdsModifica, servizi, setServizi)} 
         elimina={(e) => elimina(e, "servizio", selectedIdsEliminazione, setSelectedIdsEliminazione, servizi, setServizi)}
-      />
+      /> */}
 
-      <br /> <br /> <br /> <br />
+      {/* <br /> <br /> <br /> <br /> */}
     </>
   )
 }

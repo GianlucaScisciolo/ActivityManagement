@@ -20,6 +20,7 @@ import ProvaOptions from "./ProvaOptions";
 import { getSelectTag } from "../../riutilizzabile/form_item/FormItem";
 import { Items } from "../component/Items";
 import { controlloLavoro } from "../../vario/Controlli";
+import PaginaWeb from "../../riutilizzabile/PaginaWeb";
 
 const NuovoLavoro = () => {
   const formSession = useSelector((state) => state.formSession.value);
@@ -296,18 +297,45 @@ const NuovoLavoro = () => {
 
   return (
     <>
-      <Header />
+      <PaginaWeb 
+        componenti={
+          {
+            nuovo_item: {
+              campi: getCampiNuovoLavoro(nuovoLavoro, OptionsClienti({clienti}), OptionsServizi({servizi}), (e) => handleInputChange(e, setNuovoLavoro), null, null), 
+              indici: indiciNuovoLavoro, 
+              handle_insert: (e) => handleInsert(e) 
+            }, 
+            items: {
+              tipo_item: "lavoro", 
+              items: lavori, 
+              set_items: setLavori, 
+              select_operation: selectOperation, 
+              campi: getCampiLavoroEsistente, 
+              indici: indiciLavoroEsistente, 
+              servizi: null
+            },
+            operazioni_items: {
+              selected_ids_modifica: selectedIdsModifica, 
+              selected_ids_eliminazione: selectedIdsEliminazione, 
+              handle_edit: null, 
+              handle_delete: null
+            }
+          }
+        }
+      />
+      {/* <Header /> */}
 
-      <div className="main-content" />
+      {/* <div className="main-content" /> */}
 
-      <NuovoLavoroTag 
+      {/* <NuovoLavoroTag 
         campi={getCampiNuovoLavoro(nuovoLavoro, OptionsClienti({clienti}), OptionsServizi({servizi}), (e) => handleInputChange(e, setNuovoLavoro), null, null)} 
         indici={indiciNuovoLavoro} 
         eseguiSalvataggio={(e) => handleInsert(e)} 
-      />
+      /> */}
       
-      <br /> <br /> <br /> <br />
-      <Items 
+      {/* <br /> <br /> <br /> <br /> */}
+      
+      {/* <Items 
         tipoItem={"lavoro"} 
         items={lavori} 
         setItems={setLavori}
@@ -316,18 +344,18 @@ const NuovoLavoro = () => {
         campi={getCampiLavoroEsistente}
         indici={indiciLavoroEsistente} 
         servizi={servizi}
-      />
+      /> */}
       
-      <br /> <br /> <br /> <br />
+      {/* <br /> <br /> <br /> <br /> */}
 
-      <OperazioniItems 
+      {/* <OperazioniItems 
         selectedIdsModifica={selectedIdsModifica} 
         selectedIdsEliminazione={selectedIdsEliminazione}
         modifica={(e) => modifica(e, "lavoro", selectedIdsModifica, setSelectedIdsModifica, lavori, setLavori)} 
         elimina={(e) => elimina(e, "lavoro", selectedIdsEliminazione, setSelectedIdsEliminazione, lavori, setLavori)}
-      />
+      /> */}
       
-      <br /> <br /> <br /> <br />
+      {/* <br /> <br /> <br /> <br /> */}
     </>
   );
 }

@@ -15,6 +15,7 @@ import {
   getCampiRicercaServizi, getCampiServizioEsistente, 
   indiciRicercaServizi, indiciServizioEsistente
 } from "./ServiziVario";
+import PaginaWeb from "../../riutilizzabile/PaginaWeb";
 
 const Servizi = () => {
   const formSession = useSelector((state) => state.formSession.value);
@@ -161,20 +162,47 @@ const Servizi = () => {
 
   return (
     <>
-      <Header />
+      <PaginaWeb 
+        componenti={
+          {
+            ricerca_items: {
+              campi: getCampiRicercaServizi(datiRicerca, (e) => handleInputChange(e, setDatiRicerca), null, null), 
+              indici: indiciRicercaServizi, 
+              handle_search: (e) => handleSearch(e)
+            }, 
+            items: {
+              tipo_item: "servizio", 
+              items: servizi, 
+              set_items: setServizi, 
+              select_operation: selectOperation, 
+              campi: getCampiServizioEsistente, 
+              indici: indiciServizioEsistente, 
+              servizi: null
+            },
+            operazioni_items: {
+              selected_ids_modifica: selectedIdsModifica, 
+              selected_ids_eliminazione: selectedIdsEliminazione, 
+              handle_edit: (e) => handleEdit(e), 
+              handle_delete: (e) => handleDelete(e)
+            }
+          }
+        }
+      />
 
-      <div className="main-content" />
+      {/* <Header /> */}
 
-      <RicercaServiziTag 
+      {/* <div className="main-content" /> */}
+
+      {/* <RicercaServiziTag 
         campi={getCampiRicercaServizi(datiRicerca, (e) => handleInputChange(e, setDatiRicerca), null, null)} 
         indici={indiciRicercaServizi}
         // eseguiRicerca={(e) => eseguiRicerca(e, "servizi", setServizi, datiRicerca)}
         handleSearch={(e) => handleSearch(e)}
-      />
+      /> */}
 
-      <br /> <br /> <br /> <br />
+      {/* <br /> <br /> <br /> <br /> */}
       
-      <Items 
+      {/* <Items 
         tipoItem={"servizio"} 
         items={servizi} 
         setItems={setServizi}
@@ -183,20 +211,20 @@ const Servizi = () => {
         campi={getCampiServizioEsistente}
         indici={indiciServizioEsistente}
         servizi={null}
-      />
+      /> */}
 
-      <br /> <br /> <br /> <br />
+      {/* <br /> <br /> <br /> <br /> */}
 
-      <OperazioniItems 
+      {/* <OperazioniItems 
         selectedIdsModifica={selectedIdsModifica} 
         selectedIdsEliminazione={selectedIdsEliminazione}
         // modifica={(e) => modifica(e, "servizio", selectedIdsModifica, setSelectedIdsModifica, servizi, setServizi)} 
         // elimina={(e) => elimina(e, "servizio", selectedIdsEliminazione, setSelectedIdsEliminazione, servizi, setServizi)}
         handleEdit={(e) => handleEdit(e)}
         handleDelete={(e) => handleDelete(e)}
-      />
+      /> */}
 
-      <br /> <br /> <br /> <br />
+      {/* <br /> <br /> <br /> <br /> */}
     </>
   );
 }
