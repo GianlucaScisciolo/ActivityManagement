@@ -96,6 +96,34 @@ const FileSpese = () => {
       }));
     }
   }, [spese]);
+
+  const handleDelete = async (e) => {
+    e.preventDefault();
+    if (confirm("Sei sicuro di voler eliminare le spese?")) {
+      const dati = {
+        tipo_item: "spesa", 
+        "primo_giorno": datiRicerca.primo_giorno, 
+        "ultimo_giorno": datiRicerca.ultimo_giorno 
+      }
+    
+      const response = await fetch('/ELIMINA_ITEMS_RANGE_GIORNI', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(dati),
+      });
+      if(response.status === 200) {
+        alert("Eliminazione completata con successo.");
+      }
+      else {
+        alert("Errore durante l\'eliminazione delle spese, riprova più tardi."); 
+      }
+    }
+    else {
+      alert("Eliminazione annullata.");
+    }
+  }
   
   return (
     <>
@@ -108,43 +136,8 @@ const FileSpese = () => {
         indici={indiciFile} 
         ottieniFileRangePDF={(e) => ottieniSpeseRange(e, "pdf")}
         ottieniFileRangeExcel={(e) => ottieniSpeseRange(e, "excel")} 
-        eliminaItemsRange={(e) => eliminaSpeseRange(e)} 
+        eliminaItemsRange={(e) => handleDelete(e)} 
       />
-
-      {/*
-        campi={getCampiRicercaLavori(datiRicerca, (e) => handleInputChange(e, setDatiRicerca), null, null)} 
-        indici={indiciRicercaLavori}
-        eseguiRicerca={(e) => eseguiRicerca(e, "lavori", setLavori, datiRicerca)}
-      {(formSession.view === "form") && (
-        <FormFileLavori 
-          item={datiRicerca} 
-          setItem={setDatiRicerca} 
-          ottieniLavoriRangePDF={(e) => ottieniLavoriRange(e, "pdf")}
-          ottieniLavoriRangeExcel={(e) => ottieniLavoriRange(e, "excel")} 
-          eliminaLavoriRange={(e) => eliminaLavoriRange(e)}
-        />
-      )}
-      {(formSession.view === "row") && (
-        <RowFileLavori 
-          item={datiRicerca} 
-          setItem={setDatiRicerca}
-          ottieniLavoriRangePDF={(e) => ottieniLavoriRange(e, "pdf")}
-          ottieniLavoriRangeExcel={(e) => ottieniLavoriRange(e, "excel")} 
-          eliminaLavoriRange={(e) => eliminaLavoriRange(e)} 
-        />
-      )}
-      {(formSession.view === "card") && (
-        <center>
-          <CardFileLavori 
-            item={datiRicerca} 
-            setItem={setDatiRicerca} 
-            ottieniLavoriRangePDF={(e) => ottieniLavoriRange(e, "pdf")}
-            ottieniLavoriRangeExcel={(e) => ottieniLavoriRange(e, "excel")} 
-            eliminaLavoriRange={(e) => eliminaLavoriRange(e)} 
-          />
-        </center>
-      )}
-      */}
     </>
   );
 };

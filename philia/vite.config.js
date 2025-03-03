@@ -24,36 +24,12 @@ export default defineConfig({
       // Items
       '/INSERISCI_ITEM': 'http://localhost:3000', 
       '/VISUALIZZA_ITEMS': 'http://localhost:3000', 
+      '/VISUALIZZA_ENTRATE_ITEMS': 'http://localhost:3000', 
+      '/VISUALIZZA_USCITE_ITEMS': 'http://localhost:3000', 
       '/OTTIENI_TUTTI_GLI_ITEMS': 'http://localhost:3000', 
       '/ELIMINA_ITEMS': 'http://localhost:3000', 
-      
-      // Persone
-      '/OTTIENI_TUTTI_I_CLIENTI': 'http://localhost:3000',
-      '/ELIMINA_CLIENTI': 'http://localhost:3000',
-      '/MODIFICA_CLIENTI': 'http://localhost:3000',
-      
-      // Professionisti
-      '/OTTIENI_TUTTI_I_PROFESSIONISTI': 'http://localhost:3000',
-      '/ELIMINA_PROFESSIONISTI': 'http://localhost:3000',
-      '/MODIFICA_PROFESSIONISTI': 'http://localhost:3000',
-      
-      // Servizi
-      '/OTTIENI_TUTTI_I_SERVIZI': 'http://localhost:3000', 
-      '/ELIMINA_SERVIZI': 'http://localhost:3000', 
-      '/MODIFICA_SERVIZI': 'http://localhost:3000', 
-
-      // Lavori
-      '/ELIMINA_LAVORI': 'http://localhost:3000',
-      '/ELIMINA_LAVORI_RANGE_GIORNI': 'http://localhost:3000',
-      '/MODIFICA_LAVORI': 'http://localhost:3000', 
-      '/OTTIENI_LAVORI_GIORNO': 'http://localhost:3000', 
-
-      // Saloni
-      '/ELIMINA_SPESE': 'http://localhost:3000', 
-      '/ELIMINA_SPESE_RANGE_GIORNI': 'http://localhost:3000', 
-      '/MODIFICA_SPESE': 'http://localhost:3000', 
-      '/VISUALIZZA_ENTRATE_LAVORI': 'http://localhost:3000',
-      '/VISUALIZZA_USCITE_SPESE': 'http://localhost:3000',
+      '/ELIMINA_ITEMS_RANGE_GIORNI': 'http://localhost:3000', 
+      '/MODIFICA_ITEM': 'http://localhost:3000', 
     }
   }
 });

@@ -223,6 +223,50 @@ app.post("/VISUALIZZA_ITEMS", async(req, res) => {
   }
 });
 
+app.post("/VISUALIZZA_ENTRATE_ITEMS", async(req, res) => {
+  const lavoroSQL = new LavoroSQL();
+  let sql = "";
+  let params = [];
+  switch(req.body.tipo_item) {
+    case "lavoro":
+      sql = lavoroSQL.SQL_SELEZIONE_ENTRATE_LAVORI;
+      params = lavoroSQL.params_selezione_entrate_lavori(req.body);
+      break;
+    default:
+      return res.status(500).json();
+  }
+
+  try {
+    const result = await executeQuery(sql, params);
+    return res.status(200).json({ items: result });
+  } 
+  catch (err) {
+    return res.status(500).json();
+  }
+});
+
+app.post("/VISUALIZZA_USCITE_ITEMS", async(req, res) => {
+  const spesaSQL = new SpesaSQL();
+  let sql = "";
+  let params = [];
+  switch(req.body.tipo_item) {
+    case "spesa":
+      sql = spesaSQL.SQL_SELEZIONE_USCITE_SPESE;
+      params = spesaSQL.params_selezione_uscite_spese(req.body);
+      break;
+    default:
+      return res.status(500).json();
+  }
+
+  try {
+    const result = await executeQuery(sql, params);
+    return res.status(200).json({ items: result });
+  } 
+  catch (err) {
+    return res.status(500).json();
+  }
+});
+
 app.post("/OTTIENI_TUTTI_GLI_ITEMS", async(req, res) => {
   const clienteSQL = new ClienteSQL();
   const servizioSQL = new ServizioSQL();
@@ -274,117 +318,116 @@ app.post("/ELIMINA_ITEMS", async(req, res) => {
   }
 
   try {
-    const result = await executeQuery(sql, req.body.ids);
+    await executeQuery(sql, req.body.ids);
     return res.status(200).json();
   } 
   catch (err) {
     return res.status(500).json();
   }
-})
-
-
-/************************************************** Persona **************************************************/
-
-
-
-app.post("/MODIFICA_CLIENTI", async (req, res) => {
-  const params = [`${req.body.contatto}`, `${req.body.email}`, `${req.body.note}`, `${req.body.id}`];
-  return getResults(SQL_MODIFICA_CLIENTE, params, res);
 });
 
-/*************************************************************************************************************/
+app.post("/ELIMINA_ITEMS_RANGE_GIORNI", async(req, res) => {
+  const clienteSQL = new ClienteSQL();
+  const lavoroSQL = new LavoroSQL();
+  const servizioSQL = new ServizioSQL();
+  const spesaSQL = new SpesaSQL();
+  let sql = "";
+  let params = [];
+  switch(req.body.tipo_item) {
+    case "lavoro":
+      sql = lavoroSQL.SQL_ELIMINAZIONE_LAVORI_RANGE_GIORNI; 
+      params = lavoroSQL.params_eliminazione_lavori_range_giorni(req.body);
+      break;
+    case "spesa":
+      sql = spesaSQL.SQL_ELIMINAZIONE_SPESE_RANGE_GIORNI;
+      params = spesaSQL.params_eliminazione_spese_range_giorni(req.body);
+      break;
+    default:
+      return res.status(500).json();
+  }
 
-/*********************************************** Servizi **********************************************/
-
-app.post("/MODIFICA_SERVIZI", async (req, res) => {
-  const params = [`${req.body.nome}`, `${req.body.prezzo}`, `${req.body.note}`, `${req.body.id}`];
-  return getResults(SQL_MODIFICA_SERVIZIO, params, res);
+  try {
+    await executeQuery(sql, params);
+    return res.status(200).json();
+  } 
+  catch (err) {
+    return res.status(500).json();
+  }
 });
 
-/*************************************************************************************************************/
+app.post("/MODIFICA_ITEM", async(req, res) => {
+  const clienteSQL = new ClienteSQL();
+  const lavoroSQL = new LavoroSQL();
+  const servizioSQL = new ServizioSQL();
+  const spesaSQL = new SpesaSQL();
+  let sql = "";
+  let params = [];
+  switch(req.body.tipo_item) {
+    case "cliente":
+      sql = clienteSQL.SQL_MODIFICA_CLIENTE;
+      params = clienteSQL.params_modifica_cliente(req.body.item);
+      break;
+    case "servizio":
+      sql = servizioSQL.SQL_MODIFICA_SERVIZIO;
+      params = servizioSQL.params_modifica_servizio(req.body.item);
+      break;
+    case "lavoro":
+      // Da aggiustare ancora
+      sql = lavoroSQL.SQL_MODIFICA_LAVORO
+      params = lavoroSQL.params_modifica_lavoro(req.body);
+      break;
+    case "spesa":
+      sql = spesaSQL.SQL_MODIFICA_SPESA;
+      params = spesaSQL.params_modifica_spesa(req.body.item);
+      break;
+    default:
+      return res.status(500).json();
+  }
+
+  try {
+    await executeQuery(sql, params);
+    return res.status(200).json();
+  } 
+  catch (err) {
+    if (err.code === 'ER_DUP_ENTRY') {
+      return res.status(400).json();
+    }
+    return res.status(500).json();
+  }
+
+  // await beginTransaction();
+  // await commitTransaction();
+});
 
 /*************************************************** Lavori **************************************************/
 
-app.post("/ELIMINA_LAVORI_RANGE_GIORNI", async (req, res) => {
-  req.body.primo_giorno = (req.body.primo_giorno) ? req.body.primo_giorno : "1111-01-01";
-  req.body.ultimo_giorno = (req.body.ultimo_giorno) ? req.body.ultimo_giorno : "9999-01-01";
-  const params = [`${req.body.primo_giorno}`, `${req.body.ultimo_giorno}`];
-  return getResults(SQL_ELIMINA_LAVORI_RANGE_GIORNI, params, res);
-});
-
-app.post("/MODIFICA_LAVORI", async (req, res) => {
-  try {
-    for(let servizio of req.body[1]) {
-      for(let i = 0; i < req.body[0].length; i++) {
-        if(req.body[0][i].id_servizi.includes(servizio.id)) {
-          req.body[0][i].descrizione += servizio.nome + " - " + servizio.prezzo + " €, ";
-        }
-      }
-    }
-    await beginTransaction();
-    for (let lavoro of req.body[0]) {
-      let parametri = [`${lavoro.giorno}`, `${lavoro.descrizione}`, `${lavoro.note}`, `${lavoro.id}`];
-      await executeQuery(SQL_MODIFICA_LAVORO, parametri);
-    }
-    await commitTransaction();
-    return res.status(200);
-  } 
-  catch (err) {
-    await rollbackTransaction();
-    console.error('Errore durante la modifica dei lavori: ', err);
-    return res.status(500).json({ message: 'Errore del server.' });
-  }
-});
+// app.post("/MODIFICA_LAVORI", async (req, res) => {
+//   try {
+//     for(let servizio of req.body[1]) {
+//       for(let i = 0; i < req.body[0].length; i++) {
+//         if(req.body[0][i].id_servizi.includes(servizio.id)) {
+//           req.body[0][i].descrizione += servizio.nome + " - " + servizio.prezzo + " €, ";
+//         }
+//       }
+//     }
+//     await beginTransaction();
+//     for (let lavoro of req.body[0]) {
+//       let parametri = [`${lavoro.giorno}`, `${lavoro.descrizione}`, `${lavoro.note}`, `${lavoro.id}`];
+//       await executeQuery(SQL_MODIFICA_LAVORO, parametri);
+//     }
+//     await commitTransaction();
+//     return res.status(200);
+//   } 
+//   catch (err) {
+//     await rollbackTransaction();
+//     console.error('Errore durante la modifica dei lavori: ', err);
+//     return res.status(500).json({ message: 'Errore del server.' });
+//   }
+// });
 
 /*************************************************************************************************************/
 
-/*************************************************** Saloni **************************************************/
 
-app.post("/ELIMINA_SPESE_RANGE_GIORNI", async (req, res) => {
-  req.body.primo_giorno = (req.body.primo_giorno) ? req.body.primo_giorno : "1111-01-01";
-  req.body.ultimo_giorno = (req.body.ultimo_giorno) ? req.body.ultimo_giorno : "9999-01-01";
-  const params = [`${req.body.primo_giorno}`, `${req.body.ultimo_giorno}`];
-  return getResults(SQL_ELIMINA_SPESE_RANGE_GIORNI, params, res);
-});
-
-app.post("/MODIFICA_SPESE", async (req, res) => {
-  const params = [`${req.body.descrizione}`, `${req.body.totale}`, `${req.body.giorno}`, `${req.body.note}`, `${req.body.id}`];
-  return getResults(SQL_MODIFICA_SPESA, params, res);
-});
-
-app.post("/VISUALIZZA_ENTRATE_LAVORI", async (req, res) => {
-  const params = [];
-  // return getResults(SQL_SELEZIONE_ENTRATE_LAVORI, params, res);
-  try {
-    const data = await executeQuery(SQL_SELEZIONE_ENTRATE_LAVORI, params);
-    // console.log("--------------------------------------------------");
-    // console.log(data);
-    // console.log("--------------------------------------------------");
-    res.status(200).json({ entrateLavori: data });
-  } 
-  catch (err) {
-    console.error('Errore durante l\'esecuzione della query: ', err);
-    res.status(500).json({ message: 'Errore durante l\'esecuzione della query' });
-  }
-});
-
-app.post("/VISUALIZZA_USCITE_SPESE", async (req, res) => {
-  const params = [];
-  
-  try {
-    const data = await executeQuery(SQL_SELEZIONE_USCITE_SPESE, params);
-    // console.log("--------------------------------------------------");
-    // console.log(data);
-    // console.log("--------------------------------------------------");
-    res.status(200).json({ usciteSpese: data });
-  } 
-  catch (err) {
-    console.error('Errore durante l\'esecuzione della query: ', err);
-    res.status(500).json({ message: 'Errore durante l\'esecuzione della query' });
-  }
-});
-
-/*************************************************************************************************************/
 
 
 

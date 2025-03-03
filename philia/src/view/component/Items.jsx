@@ -113,7 +113,7 @@ export const Items = ({tipoItem, items, setItems, selectOperation, emptyIsConsid
           : currentItem
       );
       // Ritornare l'elemento modificato
-      setTimeout(() => updatedItems({target: {name, value}}, item), 0);
+      // setTimeout(() => updatedItems({target: {name, value}}, item), 0);
       return newItems;
     });
   };

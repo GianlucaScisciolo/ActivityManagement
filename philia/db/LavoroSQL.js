@@ -10,6 +10,59 @@ export class LavoroSQL {
     WHERE 
       giorno BETWEEN ? AND ?; 
   `;
+
+  SQL_SELEZIONE_ENTRATE_LAVORI = ` 
+    -- Creazione di una tabella temporanea con tutti i mesi degli ultimi 5 anni 
+    WITH RECURSIVE DateRange AS ( 
+      SELECT DATE_FORMAT(CURDATE() - INTERVAL 4 YEAR, '%Y-01-01') AS giorno 
+      UNION ALL 
+      SELECT DATE_ADD(giorno, INTERVAL 1 MONTH) 
+      FROM DateRange 
+      WHERE giorno < CURDATE() - INTERVAL 1 MONTH 
+    ) 
+    SELECT 
+      YEAR(DateRange.giorno) AS Anno, 
+      SUM(IF(MONTH(DateRange.giorno) = 1, IFNULL(lavoro.totale, 0), 0)) AS gen, 
+      SUM(IF(MONTH(DateRange.giorno) = 2, IFNULL(lavoro.totale, 0), 0)) AS feb, 
+      SUM(IF(MONTH(DateRange.giorno) = 3, IFNULL(lavoro.totale, 0), 0)) AS mar, 
+      SUM(IF(MONTH(DateRange.giorno) = 4, IFNULL(lavoro.totale, 0), 0)) AS apr, 
+      SUM(IF(MONTH(DateRange.giorno) = 5, IFNULL(lavoro.totale, 0), 0)) AS mag, 
+      SUM(IF(MONTH(DateRange.giorno) = 6, IFNULL(lavoro.totale, 0), 0)) AS giu, 
+      SUM(IF(MONTH(DateRange.giorno) = 7, IFNULL(lavoro.totale, 0), 0)) AS lug, 
+      SUM(IF(MONTH(DateRange.giorno) = 8, IFNULL(lavoro.totale, 0), 0)) AS ago, 
+      SUM(IF(MONTH(DateRange.giorno) = 9, IFNULL(lavoro.totale, 0), 0)) AS \`set\`, 
+      SUM(IF(MONTH(DateRange.giorno) = 10, IFNULL(lavoro.totale, 0), 0)) AS ott, 
+      SUM(IF(MONTH(DateRange.giorno) = 11, IFNULL(lavoro.totale, 0), 0)) AS nov, 
+      SUM(IF(MONTH(DateRange.giorno) = 12, IFNULL(lavoro.totale, 0), 0)) AS dic, 
+      SUM(IFNULL(lavoro.totale, 0)) AS totale_anno 
+    FROM 
+      DateRange 
+    LEFT JOIN 
+      lavoro ON YEAR(DateRange.giorno) = YEAR(lavoro.giorno) AND MONTH(DateRange.giorno) = MONTH(lavoro.giorno) 
+    GROUP BY 
+      YEAR(DateRange.giorno) 
+    UNION ALL 
+    SELECT 
+      'Totale', 
+      SUM(IF(MONTH(DateRange.giorno) = 1, IFNULL(lavoro.totale, 0), 0)), 
+      SUM(IF(MONTH(DateRange.giorno) = 2, IFNULL(lavoro.totale, 0), 0)), 
+      SUM(IF(MONTH(DateRange.giorno) = 3, IFNULL(lavoro.totale, 0), 0)), 
+      SUM(IF(MONTH(DateRange.giorno) = 4, IFNULL(lavoro.totale, 0), 0)), 
+      SUM(IF(MONTH(DateRange.giorno) = 5, IFNULL(lavoro.totale, 0), 0)), 
+      SUM(IF(MONTH(DateRange.giorno) = 6, IFNULL(lavoro.totale, 0), 0)), 
+      SUM(IF(MONTH(DateRange.giorno) = 7, IFNULL(lavoro.totale, 0), 0)), 
+      SUM(IF(MONTH(DateRange.giorno) = 8, IFNULL(lavoro.totale, 0), 0)), 
+      SUM(IF(MONTH(DateRange.giorno) = 9, IFNULL(lavoro.totale, 0), 0)), 
+      SUM(IF(MONTH(DateRange.giorno) = 10, IFNULL(lavoro.totale, 0), 0)), 
+      SUM(IF(MONTH(DateRange.giorno) = 11, IFNULL(lavoro.totale, 0), 0)), 
+      SUM(IF(MONTH(DateRange.giorno) = 12, IFNULL(lavoro.totale, 0), 0)), 
+      SUM(IFNULL(lavoro.totale, 0)) 
+    FROM 
+      DateRange 
+    LEFT JOIN 
+      lavoro ON YEAR(DateRange.giorno) = YEAR(lavoro.giorno) AND MONTH(DateRange.giorno) = MONTH(lavoro.giorno) 
+    ORDER BY Anno Desc; 
+  `;
   
   SQL_MODIFICA_LAVORO = `
     UPDATE 
@@ -84,11 +137,14 @@ export class LavoroSQL {
     ];
   }
 
-  params_eliminazione_lavori_range_giorni() {
-    return [];
+  params_eliminazione_lavori_range_giorni(params) {
+    return [
+      `${(params.primo_giorno) ? params.primo_giorno : "1111-01-01"}`, 
+      `${(params.ultimo_giorno) ? params.ultimo_giorno : "9999-12-31"}` 
+    ];
   }
 
-  params_modifica_lavoro() {
+  params_modifica_lavoro(params) {
     return [];
   }
 
@@ -102,6 +158,10 @@ export class LavoroSQL {
     ];
     params_out.push((!params_in.note) ? '%' : `%${params_in.note}%`);
     return params_out;
+  }
+
+  params_selezione_entrate_lavori(params) {
+    return [];
   }
 
   params_eliminazione_lavori() {

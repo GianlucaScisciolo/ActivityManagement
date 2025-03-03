@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import Header from '../component/Header';
-import { elimina } from '../../vario/OperazioniEliminazione';
 import { modifica } from '../../vario/OperazioniModifica';
 import { useSelector, useDispatch } from 'react-redux';
 import personaStore from '../../store/persona_store/PersonaStore';
@@ -108,6 +107,59 @@ const Clienti = () => {
       alert("Eliminazione annullata.");
     }
   }
+
+  const handleEdit = async (e) => {
+    e.preventDefault();
+    if (confirm("Sei sicuro di voler modificare i clienti?")) {
+      let clientiDaNonModificare = clienti.filter(cliente => !selectedIdsModifica.includes(cliente.id));
+      let clientiDaModificare = clienti.filter(cliente => selectedIdsModifica.includes(cliente.id)); 
+      // let copiaClientiDaModificare = [...clientiDaModificare];
+      
+      let esitiModifica = [];
+      for(let i = 0; i < clientiDaModificare.length; i++) {
+        const dati = {
+          tipo_item: "cliente", 
+          item: clientiDaModificare[i] 
+        }
+        const response = await fetch('/MODIFICA_ITEM', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(dati),
+        });
+        if(response.status === 200) {           
+          esitiModifica.push([clientiDaModificare[i], "Modifica avvenuta con successo."]);
+        }
+        else if(response.status === 400) {
+          esitiModifica.push([clientiDaModificare[i], "Errore durante la modifica: cliente x gia\' presente."]);
+          // copiaClientiDaModificare[i] = clientiDaModificare[i];
+        }
+        else {
+          esitiModifica.push([clientiDaModificare[i], "Errore durante la modifica del cliente x."]);
+          // copiaClientiDaModificare[i] = clientiDaModificare[i];
+        }
+      }
+
+      let clientiAggiornati = [];
+      for (let i = 0; i < clienti.length; i++) {
+        let clienteAggiornato = { ...clienti[i] };
+        if(clienteAggiornato.tipo_selezione === 1) {
+          clienteAggiornato.tipo_selezione = 0;
+        }
+        clientiAggiornati.push(clienteAggiornato);
+      }
+      setClienti(clientiAggiornati);
+
+      setSelectedIdsModifica([]);
+
+      // alert("Risultati modifica:\n")
+      alert("Modifica effettuata.");
+    }
+    else {
+      alert("Salvataggio annullato.");
+    }
+  }
   
   return (
     <>
@@ -140,8 +192,9 @@ const Clienti = () => {
       <OperazioniItems 
         selectedIdsModifica={selectedIdsModifica} 
         selectedIdsEliminazione={selectedIdsEliminazione}
-        modifica={(e) => modifica(e, "cliente", selectedIdsModifica, setSelectedIdsModifica, clienti, setClienti)} 
+        // modifica={(e) => modifica(e, "cliente", selectedIdsModifica, setSelectedIdsModifica, clienti, setClienti)} 
         // elimina={(e) => elimina(e, "cliente", selectedIdsEliminazione, setSelectedIdsEliminazione, clienti, setClienti)}
+        handleEdit={(e) => handleEdit(e)} 
         handleDelete={(e) => handleDelete(e)}
       />
       

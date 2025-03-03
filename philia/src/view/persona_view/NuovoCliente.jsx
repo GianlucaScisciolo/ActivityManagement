@@ -8,7 +8,6 @@ import { FormNuovoItem } from '../../trasportabile/form_item/FormItem';
 import { CardNuovoItem } from '../../trasportabile/card_item/CardItem';
 import { RowNuovoItem } from '../../trasportabile/row_item/RowItem';
 import { modifica } from '../../vario/OperazioniModifica';
-import { elimina } from '../../vario/OperazioniEliminazione';
 import { Items } from '../component/Items';
 import { OperazioniItems, selectOperationBody } from '../component/Operazioni';
 import { 

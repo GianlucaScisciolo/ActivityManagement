@@ -78,7 +78,12 @@ export class ClienteSQL {
   }
 
   params_modifica_cliente(params) {
-    return [];
+    return [
+      `${params.contatto}`, 
+      `${params.email}`, 
+      `${params.note}`, 
+      `${params.id}`
+    ];
   }
 
   params_selezione_clienti(params_in) {

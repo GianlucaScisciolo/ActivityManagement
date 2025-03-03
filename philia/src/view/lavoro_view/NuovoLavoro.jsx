@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import Header from "../component/Header";
 import { modifica } from "../../vario/OperazioniModifica";
-import { elimina } from "../../vario/OperazioniEliminazione";
 import PersonaAction from "../../action/persona_action/PersonaAction";
 import ServizioAction from "../../action/servizio_action/ServizioAction";
 import personaStore from "../../store/persona_store/PersonaStore";

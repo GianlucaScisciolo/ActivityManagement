@@ -53,31 +53,6 @@ const FileLavori = () => {
     }
   };
 
-  const eliminaLavoriRange = async (e) => {
-    e.preventDefault();
-    if (confirm("Sei sicuro di voler eliminare i lavori?")) {
-      const dati = {
-        "primo_giorno": datiRicerca.primo_giorno,
-        "ultimo_giorno": datiRicerca.ultimo_giorno
-      }
-      LavoroAction.dispatchAction(dati, operazioniLavori.ELIMINA_LAVORI_RANGE_GIORNI);
-      alert("Eliminazione effettuata.");
-
-      setDatiRicerca(prevState => ({
-        ...prevState,
-        primo_giorno: "", 
-        ultimo_giorno: ""
-      }));
-    }
-    else {
-      alert("Eliminazione annullata.");
-    }
-  }
-
-  const controllo = () => {
-    alert("Numero lavori clienti = " + lavoriClienti.length + "\nNumero lavori professionisti = " + lavoriProfessionisti.length);
-  };
-
   useEffect(() => {
     if (aggiornamentoCompletato === false) {
       aggiornamentoLista("lavori", setLavori);
@@ -103,41 +78,53 @@ const FileLavori = () => {
     }
   }, [lavori]);
 
+
+  const handleDelete = async (e) => {
+    e.preventDefault();
+    if (confirm("Sei sicuro di voler eliminare i lavori?")) {
+      const dati = {
+        tipo_item: "lavoro", 
+        "primo_giorno": datiRicerca.primo_giorno, 
+        "ultimo_giorno": datiRicerca.ultimo_giorno 
+      }
+    
+      const response = await fetch('/ELIMINA_ITEMS_RANGE_GIORNI', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(dati),
+      });
+      if(response.status === 200) {
+        alert("Eliminazione completata con successo.");
+      }
+      else {
+        alert("Errore durante l\'eliminazione dei lavori, riprova più tardi."); 
+      }
+    }
+    else {
+      alert("Eliminazione annullata.");
+    }
+  }
+
+  const FormFileLavoriTag = (formSession.view === "form") ? FormFileLavori : (
+    (formSession.view === "card") ? CardFileLavori : RowFileLavori
+  );
+
   return (
     <>
       <Header />
 
       <div className="main-content" />
       
-      {(formSession.view === "form") && (
-        <FormFileLavori 
-          item={datiRicerca} 
-          setItem={setDatiRicerca} 
-          ottieniLavoriRangePDF={(e) => ottieniLavoriRange(e, "pdf")}
-          ottieniLavoriRangeExcel={(e) => ottieniLavoriRange(e, "excel")} 
-          eliminaLavoriRange={(e) => eliminaLavoriRange(e)}
-        />
-      )}
-      {(formSession.view === "row") && (
-        <RowFileLavori 
-          item={datiRicerca} 
-          setItem={setDatiRicerca}
-          ottieniLavoriRangePDF={(e) => ottieniLavoriRange(e, "pdf")}
-          ottieniLavoriRangeExcel={(e) => ottieniLavoriRange(e, "excel")} 
-          eliminaLavoriRange={(e) => eliminaLavoriRange(e)} 
-        />
-      )}
-      {(formSession.view === "card") && (
-        <center>
-          <CardFileLavori 
-            item={datiRicerca} 
-            setItem={setDatiRicerca} 
-            ottieniLavoriRangePDF={(e) => ottieniLavoriRange(e, "pdf")}
-            ottieniLavoriRangeExcel={(e) => ottieniLavoriRange(e, "excel")} 
-            eliminaLavoriRange={(e) => eliminaLavoriRange(e)} 
-          />
-        </center>
-      )}
+      <FormFileLavoriTag 
+      item={datiRicerca}
+      setItem={setDatiRicerca}
+      ottieniLavoriRangePDF={(e) => ottieniLavoriRange(e, "pdf")}
+      ottieniLavoriRangeExcel={(e) => ottieniLavoriRange(e, "excel")}
+      eliminaLavoriRange={(e) => handleDelete(e)}
+      />
+
     </>
   );
 };

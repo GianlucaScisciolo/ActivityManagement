@@ -14,7 +14,6 @@ import { operazioniServizi, operazioniLavori } from "../../vario/Operazioni";
 import { eseguiRicerca } from "../../vario/OperazioniRicerca";
 import { Items } from "../component/Items";
 import { modifica } from "../../vario/OperazioniModifica";
-import { elimina } from "../../vario/OperazioniEliminazione";
 import { 
   getCampiRicercaLavori, getCampiLavoroEsistente, 
   indiciRicercaLavori, indiciLavoroEsistente 
@@ -148,6 +147,16 @@ const Lavori = () => {
     }
   }
 
+  const handleEdit = async (e) => {
+    e.preventDefault();
+    if (confirm("Sei sicuro di voler modificare le spese?")) {
+      alert("Operazione da aggiustare ancora.");
+    }
+    else {
+      alert("Modifica annullata.");
+    }
+  }
+
   return (
     <>
       <Header />
@@ -181,11 +190,12 @@ const Lavori = () => {
       <OperazioniItems 
         selectedIdsModifica={selectedIdsModifica} 
         selectedIdsEliminazione={selectedIdsEliminazione}
-        modifica={(e) => modifica(e, "lavoro", selectedIdsModifica, setSelectedIdsModifica, lavori, setLavori)} 
+        // modifica={(e) => modifica(e, "lavoro", selectedIdsModifica, setSelectedIdsModifica, lavori, setLavori)} 
         // elimina={(e) => elimina(e, "lavoro", selectedIdsEliminazione, setSelectedIdsEliminazione, lavori, setLavori)}
+        handleEdit={(e) => handleEdit(e)}
         handleDelete={(e) => handleDelete(e)}
       />
-
+      
       <br /> <br /> <br /> <br />
     </>
   );

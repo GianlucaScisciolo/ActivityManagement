@@ -67,7 +67,13 @@ export class ServizioSQL {
   }
 
   params_modifica_servizio(params) {
-    return [];
+    // const params = [];
+    return [
+      `${params.nome}`, 
+      `${params.prezzo}`, 
+      `${params.note}`, 
+      `${params.id}` 
+    ];
   }
 
   params_selezione_servizi(params_in) {

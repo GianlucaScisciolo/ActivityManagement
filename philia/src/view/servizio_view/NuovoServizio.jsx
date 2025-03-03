@@ -9,7 +9,6 @@ import { RowNuovoItem } from "../../trasportabile/row_item/RowItem";
 import { controlloServizio } from "../../vario/Controlli";
 import { Items } from "../component/Items";
 import { modifica } from "../../vario/OperazioniModifica";
-import { elimina } from "../../vario/OperazioniEliminazione";
 import { 
   getCampiNuovoServizio, getCampiServizioEsistente, 
   indiciNuovoServizio, indiciServizioEsistente 

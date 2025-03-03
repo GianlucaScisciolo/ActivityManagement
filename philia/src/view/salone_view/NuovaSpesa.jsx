@@ -10,7 +10,6 @@ import { RowNuovoItem } from "../../trasportabile/row_item/RowItem";
 import { controlloSpesa } from "../../vario/Controlli";
 import { Items } from "../component/Items";
 import { modifica } from "../../vario/OperazioniModifica";
-import { elimina } from "../../vario/OperazioniEliminazione";
 import { 
   getCampiNuovaSpesa, getCampiSpesaEsistente, 
   indiciNuovaSpesa, indiciSpesaEsistente 

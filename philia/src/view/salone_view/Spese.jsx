@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import Header from "../component/Header";
 import { OperazioniItems, selectOperationBody } from "../component/Operazioni";
-import { elimina } from "../../vario/OperazioniEliminazione";
 import { modifica } from "../../vario/OperazioniModifica";
 import { handleInputChange } from "../../vario/Vario";
 import { eseguiRicerca } from "../../vario/OperazioniRicerca";
@@ -151,6 +150,59 @@ const Spese = () => {
     }
   }
 
+  const handleEdit = async (e) => {
+    e.preventDefault();
+    if (confirm("Sei sicuro di voler modificare le spese?")) {
+      let speseDaNonModificare = spese.filter(spesa => !selectedIdsModifica.includes(spesa.id));
+      let speseDaModificare = spese.filter(spesa => selectedIdsModifica.includes(spesa.id)); 
+      // let copiaSpeseDaModificare = [...speseDaModificare];
+      
+      let esitiModifica = [];
+      for(let i = 0; i < speseDaModificare.length; i++) {
+        const dati = {
+          tipo_item: "spesa", 
+          item: speseDaModificare[i] 
+        }
+        const response = await fetch('/MODIFICA_ITEM', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(dati),
+        });
+        if(response.status === 200) {           
+          esitiModifica.push([speseDaModificare[i], "Modifica avvenuta con successo."]);
+        }
+        else if(response.status === 400) {
+          esitiModifica.push([speseDaModificare[i], "Errore durante la modifica: spesa x gia\' presente."]);
+          // copiaSpeseDaModificare[i] = speseDaModificare[i];
+        }
+        else {
+          esitiModifica.push([speseDaModificare[i], "Errore durante la modifica della spesa x."]);
+          // copiaSpeseDaModificare[i] = speseDaModificare[i];
+        }
+      }
+
+      let speseAggiornate = [];
+      for (let i = 0; i < spese.length; i++) {
+        let spesaAggiornata = { ...spese[i] };
+        if(spesaAggiornata.tipo_selezione === 1) {
+          spesaAggiornata.tipo_selezione = 0;
+        }
+        speseAggiornate.push(spesaAggiornata);
+      }
+      setSpese(speseAggiornate);
+
+      setSelectedIdsModifica([]);
+
+      // alert("Risultati modifica:\n")
+      alert("Modifica effettuata.");
+    }
+    else {
+      alert("Salvataggio annullato.");
+    }
+  };
+
   return (
     <>
       <Header />
@@ -186,12 +238,12 @@ const Spese = () => {
       <OperazioniItems 
         selectedIdsModifica={selectedIdsModifica} 
         selectedIdsEliminazione={selectedIdsEliminazione}
-        modifica={(e) => modifica(e, "spesa", selectedIdsModifica, setSelectedIdsModifica, spese, setSpese)} 
+        // modifica={(e) => modifica(e, "spesa", selectedIdsModifica, setSelectedIdsModifica, spese, setSpese)} 
         // elimina={(e) => elimina(e, "spesa", selectedIdsEliminazione, setSelectedIdsEliminazione, spese, setSpese)}
+        handleEdit={(e) => handleEdit(e)} 
         handleDelete={(e) => handleDelete(e)}
       /> 
-
-
+      
       <br /> <br /> <br /> <br />
     </>
   );
