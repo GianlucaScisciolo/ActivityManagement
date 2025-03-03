@@ -10,9 +10,9 @@ import { eseguiLogin } from '../../store/redux/AutenticazioneSessionSlice';
 import { generateRandomString, encryptPassword, PEPPER_HEX, passwordIsCorrect } from '../../vario/Sicurezza';
 import { controlloLogin } from '../../vario/Controlli';
 import { getCampiLogin, indiciLogin } from './AutenticazioneVario';
-import { FormLogin } from '../../trasportabile/form_item/FormItem';
-import { CardLogin } from '../../trasportabile/card_item/CardItem';
-import { RowLogin } from '../../trasportabile/row_item/RowItem';
+import { FormLogin } from '../../riutilizzabile/form_item/FormItem';
+import { CardLogin } from '../../riutilizzabile/card_item/CardItem';
+import { RowLogin } from '../../riutilizzabile/row_item/RowItem';
 
 const Login = () => {
   const [utente, setUtente] = useState(0);

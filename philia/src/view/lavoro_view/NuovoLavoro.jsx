@@ -9,15 +9,15 @@ import servizioStore from "../../store/servizio_store/ServizioStore";
 import { operazioniPersone, operazioniServizi } from "../../vario/Operazioni";
 import { handleInputChange } from "../../vario/Vario";
 import { OperazioniItems, selectOperationBody } from "../component/Operazioni";
-import { FormNuovoItem } from "../../trasportabile/form_item/FormItem";
-import { CardNuovoItem } from "../../trasportabile/card_item/CardItem";
-import { RowNuovoItem } from "../../trasportabile/row_item/RowItem";
+import { FormNuovoItem } from "../../riutilizzabile/form_item/FormItem";
+import { CardNuovoItem } from "../../riutilizzabile/card_item/CardItem";
+import { RowNuovoItem } from "../../riutilizzabile/row_item/RowItem";
 import { 
   getCampiNuovoLavoro, getCampiLavoroEsistente, 
   indiciNuovoLavoro, indiciLavoroEsistente  
 } from "./LavoriVario";
 import ProvaOptions from "./ProvaOptions";
-import { getSelectTag } from "../../trasportabile/form_item/FormItem";
+import { getSelectTag } from "../../riutilizzabile/form_item/FormItem";
 import { Items } from "../component/Items";
 import { controlloLavoro } from "../../vario/Controlli";
 

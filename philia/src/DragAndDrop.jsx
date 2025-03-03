@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { CardWidget, CardEntrateLavori, CardUsciteSpese, CardRicavi } from './trasportabile/card_item/CardItem';
+import { CardWidget, CardEntrateLavori, CardUsciteSpese, CardRicavi } from './riutilizzabile/card_item/CardItem';
 import { modificaWidget } from './store/redux/WidgetsSlice';
 import { useNavigate } from 'react-router-dom';
 

@@ -9,9 +9,9 @@ import { controlloProfilo } from "../../vario/Controlli";
 import { eseguiModificaAutenticazioneSession } from "../../store/redux/AutenticazioneSessionSlice";
 import Row from 'react-bootstrap/esm/Row';
 import Col from 'react-bootstrap/esm/Col';
-import { FormProfilo } from "../../trasportabile/form_item/FormItem";
-import { CardProfilo } from "../../trasportabile/card_item/CardItem";
-import { RowProfilo } from "../../trasportabile/row_item/RowItem";
+import { FormProfilo } from "../../riutilizzabile/form_item/FormItem";
+import { CardProfilo } from "../../riutilizzabile/card_item/CardItem";
+import { RowProfilo } from "../../riutilizzabile/row_item/RowItem";
 import { 
   getCampiProfilo, indiciProfilo 
 } from "./AutenticazioneVario"

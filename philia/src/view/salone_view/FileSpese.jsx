@@ -13,7 +13,7 @@ import { generaFileSpesePDF, generaFileSpeseExcel } from "../../vario/File";
 // import { FormFileLavori } from "../component/form_item/FormsLavori";
 // import { CardFileLavori } from "../component/card_item/CardsLavori";
 // import { RowFileLavori } from "../component/row_item/RowsLavori";
-import { FormFileItems } from "../../trasportabile/form_item/FormItem";
+import { FormFileItems } from "../../riutilizzabile/form_item/FormItem";
 import { 
   getCampiFile, 
   indiciFile

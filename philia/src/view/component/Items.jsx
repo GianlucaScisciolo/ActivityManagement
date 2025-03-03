@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
-import { CardItemEsistente } from "../../trasportabile/card_item/CardItem";
-import { RowItemEsistente } from "../../trasportabile/row_item/RowItem";
+import { CardItemEsistente } from "../../riutilizzabile/card_item/CardItem";
+import { RowItemEsistente } from "../../riutilizzabile/row_item/RowItem";
 import { CardLavoroEsistente } from "./card_item/CardsLavori";
 import { RowLavoroEsistente } from "./row_item/RowsLavori";
 import { handleInputChangeLavoroEsistente, handleInputChange } from "../../vario/Vario";
