@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { handleInputChange } from "../../vario/Vario";
 import { selectOperationBody } from "../component/Operazioni";
 import { 
@@ -8,15 +9,19 @@ import {
 import { getSelectTag } from "../../riutilizzabile/form_item/FormItem";
 import PaginaWeb from "../../riutilizzabile/PaginaWeb";
 import PaginaWebNewItem from "../../riutilizzabile/PaginaWebNewItem";
+import { aggiornaTipoSelezione, inserimentoLavoro } from "../../store/redux/LavoriSlice";
 
 const NuovoLavoro = () => {
+  const lavoriSession = useSelector((state) => state.lavoriSession.value);
+  const dispatch = useDispatch();
+  
   const [clienti, setClienti] = useState(-1);
   const [servizi, setServizi] = useState(-1);
-  const [lavori, setLavori] = useState([]);
   const [selectedTrashCount, setSelectedTrashCount] = useState(0);
   const [selectedPencilCount, setSelectedPencilCount] = useState(0);
   const [selectedIdsEliminazione, setSelectedIdsEliminazione] = useState([]);
   const [selectedIdsModifica, setSelectedIdsModifica] = useState([]);
+
   const [nuovoLavoro, setNuovoLavoro] = useState({
     tipo_item: "lavoro", 
     tipo_selezione: 0, 
@@ -39,11 +44,18 @@ const NuovoLavoro = () => {
       setGiornoType('date');
     };
   };
+
+  const aggiornaTipoSelezioneItem = (id, nuova_selezione) => {
+    dispatch(aggiornaTipoSelezione({
+      id_lavoro: id, 
+      nuova_selezione: nuova_selezione
+    }));
+  }
   
   const selectOperation = (icon, item) => {
     selectOperationBody(
       icon, item, selectedIdsModifica, setSelectedIdsModifica, selectedIdsEliminazione, setSelectedIdsEliminazione, 
-      setSelectedPencilCount, setSelectedTrashCount
+      setSelectedPencilCount, setSelectedTrashCount, aggiornaTipoSelezioneItem 
     )
   }
 
@@ -84,7 +96,9 @@ const NuovoLavoro = () => {
         if(response.status === 200) {
           const result = await response.json();
           nuovoLavoro.id = result.id;
-          setLavori(prevLavori => [...prevLavori, nuovoLavoro]);
+          dispatch(inserimentoLavoro({
+            nuovoLavoro: nuovoLavoro 
+          }));
           alert("L\'inserimento del lavoro è andato a buon fine!!");
         }
         else if(response.status === 400) {
@@ -355,8 +369,8 @@ const NuovoLavoro = () => {
             indiciNuovoItem: indiciNuovoLavoro, 
             handleInsert: (e) => handleInsert(e), 
             tipoItem: "lavoro", 
-            items: lavori, 
-            setItems: setLavori, 
+            items: lavoriSession.nuoviLavori, 
+            setItems: null, 
             selectOperation: selectOperation, 
             campiItemEsistente: getCampiLavoroEsistente, 
             indiciItemEsistente: indiciLavoroEsistente, 

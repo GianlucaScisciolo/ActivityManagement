@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { selectOperationBody } from '../component/Operazioni';
 import { 
   getCampiRicercaClienti, getCampiClienteEsistente, 
@@ -7,9 +8,13 @@ import {
 import { handleInputChange } from '../../vario/Vario';
 import PaginaWeb from '../../riutilizzabile/PaginaWeb';
 import PaginaWebRicercaItems from '../../riutilizzabile/PaginaWebRicercaItems';
+import { aggiornaClienti } from '../../store/redux/ClientiSlice';
+import { aggiornaTipoSelezione } from '../../store/redux/ClientiSlice';
 
 const Clienti = () => {
-  const [clienti, setClienti] = useState(-1);
+  const clientiSession = useSelector((state) => state.clientiSession.value);
+  const dispatch = useDispatch();
+  
   const [selectedTrashCount, setSelectedTrashCount] = useState(0);
   const [selectedPencilCount, setSelectedPencilCount] = useState(0);
   const [selectedIdsEliminazione, setSelectedIdsEliminazione] = useState([]);
@@ -24,13 +29,20 @@ const Clienti = () => {
     note: ""
   });
 
+  const aggiornaTipoSelezioneItem = (id, nuova_selezione) => {
+    dispatch(aggiornaTipoSelezione({
+      id_cliente: id, 
+      nuova_selezione: nuova_selezione
+    }));
+  }
+
   const selectOperation = (icon, item) => {
     selectOperationBody(
       icon, item, selectedIdsModifica, setSelectedIdsModifica, selectedIdsEliminazione, setSelectedIdsEliminazione, 
-      setSelectedPencilCount, setSelectedTrashCount
+      setSelectedPencilCount, setSelectedTrashCount, aggiornaTipoSelezioneItem
     )
   }
-
+  
   const handleSearch = async (e) => {
     e.preventDefault();
         
@@ -45,7 +57,9 @@ const Clienti = () => {
 
       if(response.status === 200) {
         const result = await response.json();
-        setClienti(result.items);
+        dispatch(aggiornaClienti({
+          clienti: result.items, 
+        }));
       }
       else {
         alert("Errore durante la ricerca dei clienti, riprova più tardi.");
@@ -64,8 +78,8 @@ const Clienti = () => {
         tipo_item: "cliente", 
         ids: selectedIdsEliminazione
       }
-      const itemsDaEliminare = clienti.filter(cliente => dati.ids.includes(cliente.id));
-      const itemsRestanti = clienti.filter(cliente => !dati.ids.includes(cliente.id));
+      const itemsDaEliminare = clientiSession.clienti.filter(cliente => dati.ids.includes(cliente.id));
+      const itemsRestanti = clientiSession.clienti.filter(cliente => !dati.ids.includes(cliente.id));
       try {
         const response = await fetch('/ELIMINA_ITEMS', {
           method: 'POST',
@@ -75,7 +89,10 @@ const Clienti = () => {
           body: JSON.stringify(dati),
         });
         if(response.status === 200) {          
-          setClienti(itemsRestanti);
+          // setClienti(itemsRestanti);
+          dispatch(aggiornaClienti({
+            clienti: itemsRestanti, 
+          }));
           setSelectedIdsEliminazione([]);
           alert("Eliminazione completata con successo.");
         }
@@ -155,16 +172,16 @@ const Clienti = () => {
             indiciRicercaItems: indiciRicercaClienti, 
             handleSearch: (e) => handleSearch(e), 
             tipoItem: "cliente", 
-            items: clienti, 
-            setItems: setClienti, 
+            items: clientiSession.clienti, 
+            setItems: null, 
             selectOperation: selectOperation, 
             campiItemEsistente: getCampiClienteEsistente, 
             indiciItemEsistente: indiciClienteEsistente, 
             servizi: null, 
             selectedIdsModifica: selectedIdsModifica, 
             selectedIdsEliminazione: selectedIdsEliminazione, 
-            handleEdit: null, 
-            handleDelete: null
+            handleEdit: (e) => handleEdit(e), 
+            handleDelete: (e) => handleDelete(e)
           }
         }
       />

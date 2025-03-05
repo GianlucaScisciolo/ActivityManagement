@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { handleInputChange } from "../../vario/Vario";
 import { selectOperationBody } from "../component/Operazioni";
 import { FormRicercaItems } from "../../riutilizzabile/form_item/FormItem";
@@ -14,12 +14,11 @@ import {
 } from "./LavoriVario";
 import PaginaWeb from "../../riutilizzabile/PaginaWeb";
 import PaginaWebRicercaItems from "../../riutilizzabile/PaginaWebRicercaItems";
+import { aggiornaLavori, aggiornaTipoSelezione } from "../../store/redux/LavoriSlice";
 
 const Lavori = () => {
-  const formSession = useSelector((state) => state.formSession.value);
-  // const itemSession = useSelector((state) => state.itemSession.value);
-  // const [aggiornamento, setAggiornamento] = useState(0);
-  const [lavori, setLavori] = useState(-1);
+  const lavoriSession = useSelector((state) => state.lavoriSession.value);
+  const dispatch = useDispatch();
   const [servizi, setServizi] = useState(-1);
   const [selectedTrashCount, setSelectedTrashCount] = useState(0);
   const [selectedPencilCount, setSelectedPencilCount] = useState(0);
@@ -35,53 +34,26 @@ const Lavori = () => {
     note: ""
   });
 
+  const aggiornaTipoSelezioneItem = (id, nuova_selezione) => {
+    dispatch(aggiornaTipoSelezione({
+      id_lavoro: id, 
+      nuova_selezione: nuova_selezione
+    }));
+  }
+
   const selectOperation = (icon, item) => {
     selectOperationBody(
       icon, item, selectedIdsModifica, setSelectedIdsModifica, selectedIdsEliminazione, setSelectedIdsEliminazione, 
-      setSelectedPencilCount, setSelectedTrashCount
+      setSelectedPencilCount, setSelectedTrashCount, aggiornaTipoSelezioneItem 
     )
   }
 
-  // const RicercaLavoriTag = (formSession.view === "form") ? FormRicercaItems : (
-  //   (formSession.view === "card") ? CardRicercaItems : RowRicercaItems
-  // )
-
-  const getAllServizi = async () => {
-    await ServizioAction.dispatchAction(null, operazioniServizi.OTTIENI_TUTTI_I_SERVIZI);
-    const serviziFiltrati = servizioStore.getServizi();
-    setServizi(serviziFiltrati);
-  };
+  // const getAllServizi = async () => {
+  //   await ServizioAction.dispatchAction(null, operazioniServizi.OTTIENI_TUTTI_I_SERVIZI);
+  //   const serviziFiltrati = servizioStore.getServizi();
+  //   setServizi(serviziFiltrati);
+  // };
   
-  // useEffect(() => {
-  //   const onChange = () => setLavori(lavoroStore.getLavori());
-  //   lavoroStore.addChangeListener(operazioniLavori.VISUALIZZA_LAVORI, onChange);
-  //   return () => {
-  //     lavoroStore.removeChangeListener(operazioniLavori.VISUALIZZA_LAVORI, onChange);
-  //   };
-  // }, []);
-
-  // useEffect(() => {
-  //   getAllServizi();
-  //   const onChange = () => setServizi(servizioStore.getServizi());
-  //   servizioStore.addChangeListener(operazioniServizi.OTTIENI_TUTTI_I_SERVIZI, onChange);
-  //   servizioStore.removeChangeListener(operazioniServizi.OTTIENI_TUTTI_I_SERVIZI, onChange);
-  //   console.log("Aggiornamento in corso...");
-  //   setAggiornamento(true);
-  // }, []);
-
-  // useEffect(() => {
-  //   if(aggiornamento !== 0) {
-  //     if(servizi !== -1) {
-  //       console.log("Aggiornamento effettuato.");
-  //     }      
-  //     else {
-  //       console.log("Aggiornamento in corso...");
-  //       setServizi(servizioStore.getServizi());
-  //       setAggiornamento(!aggiornamento);
-  //     }
-  //   }
-  // }, [aggiornamento]);
-
   const handleSearch = async (e) => {
     e.preventDefault();
         
@@ -96,7 +68,9 @@ const Lavori = () => {
 
       if(response.status === 200) {
         const result = await response.json();
-        setLavori(result.items);
+        dispatch(aggiornaLavori({
+          lavori: result.items,
+        }));
       }
       else {
         alert("Errore durante la ricerca dei lavori, riprova più tardi.");
@@ -115,8 +89,8 @@ const Lavori = () => {
         tipo_item: "lavoro", 
         ids: selectedIdsEliminazione
       }
-      const itemsDaEliminare = lavori.filter(lavoro => dati.ids.includes(lavoro.id));
-      const itemsRestanti = lavori.filter(lavoro => !dati.ids.includes(lavoro.id));
+      const itemsDaEliminare = lavoriSession.lavori.filter(lavoro => dati.ids.includes(lavoro.id));
+      const itemsRestanti = lavoriSession.lavori.filter(lavoro => !dati.ids.includes(lavoro.id));
       try {
         const response = await fetch('/ELIMINA_ITEMS', {
           method: 'POST',
@@ -126,7 +100,9 @@ const Lavori = () => {
           body: JSON.stringify(dati),
         });
         if(response.status === 200) {          
-          setLavori(itemsRestanti);
+          dispatch(aggiornaLavori({
+            lavori: itemsRestanti,
+          }));
           setSelectedIdsEliminazione([]);
           alert("Eliminazione completata con successo.");
         }
@@ -163,16 +139,16 @@ const Lavori = () => {
             indiciRicercaItems: indiciRicercaLavori, 
             handleSearch: (e) => handleSearch(e), 
             tipoItem: "lavoro", 
-            items: lavori, 
-            setItems: setLavori, 
+            items: lavoriSession.lavori, 
+            setItems: null, 
             selectOperation: selectOperation, 
             campiItemEsistente: getCampiLavoroEsistente, 
             indiciItemEsistente: indiciLavoroEsistente, 
             servizi: servizi, 
             selectedIdsModifica: selectedIdsModifica, 
             selectedIdsEliminazione: selectedIdsEliminazione, 
-            handleEdit: null, 
-            handleDelete: null
+            handleEdit: (e) => handleEdit(e), 
+            handleDelete: (e) => handleDelete(e)
           }
         }
       />

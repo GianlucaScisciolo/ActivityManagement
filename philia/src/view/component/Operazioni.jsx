@@ -1,5 +1,7 @@
 import Row from "react-bootstrap/esm/Row";
 import Col from "react-bootstrap/esm/Col";
+import { aggiornaTipoSelezione } from "../../store/redux/ClientiSlice";
+
 
 export const OperazioniItems = ({selectedIdsModifica, selectedIdsEliminazione, handleEdit, handleDelete}) => {
   return (
@@ -20,16 +22,16 @@ export const OperazioniItems = ({selectedIdsModifica, selectedIdsEliminazione, h
 
 export const selectOperationBody = (
   icon, item, selectedIdsModifica, setSelectedIdsModifica, selectedIdsEliminazione, setSelectedIdsEliminazione, 
-  setSelectedPencilCount, setSelectedTrashCount
+  setSelectedPencilCount, setSelectedTrashCount, aggiornaTipoSelezioneItem
 ) => {
   if(icon === "trash") {
     if(selectedIdsEliminazione.includes(item.id)) {
-      item.tipo_selezione = 0;
+      aggiornaTipoSelezioneItem(item.id, 0);
       setSelectedIdsEliminazione(prevIds => prevIds.filter(itemId => itemId !== item.id));
       setSelectedTrashCount(prevCount => Math.max(prevCount - 1, 0));
     }
     else {
-      item.tipo_selezione = 2;
+      aggiornaTipoSelezioneItem(item.id, 2);
       setSelectedIdsEliminazione(prevIds => [...prevIds, item.id]);
       setSelectedTrashCount(prevCount => prevCount + 1);
       setSelectedIdsModifica(prevIdsModifica => prevIdsModifica.filter(itemId => itemId !== item.id));
@@ -38,12 +40,12 @@ export const selectOperationBody = (
   }
   else if(icon === "pencil") {
     if(selectedIdsModifica.includes(item.id)) {
-      item.tipo_selezione = 0;
+      aggiornaTipoSelezioneItem(item.id, 0);
       setSelectedIdsModifica(prevIdsModifica => prevIdsModifica.filter(itemId => itemId !== item.id));
       setSelectedPencilCount(prevCount => Math.max(prevCount - 1, 0));
     }
     else {
-      item.tipo_selezione = 1;
+      aggiornaTipoSelezioneItem(item.id, 1);
       setSelectedIdsModifica(prevIdsModifica => [...prevIdsModifica, item.id]);
       setSelectedPencilCount(prevCount => prevCount + 1);
       setSelectedIdsEliminazione(prevIds => prevIds.filter(itemId => itemId !== item.id));

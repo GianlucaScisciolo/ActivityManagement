@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { controlloCliente } from '../../vario/Controlli';
 import { selectOperationBody } from '../component/Operazioni';
 import { 
@@ -8,14 +9,17 @@ import {
 import { handleInputChange } from '../../vario/Vario';
 import PaginaWeb from '../../riutilizzabile/PaginaWeb';
 import PaginaWebNewItem from '../../riutilizzabile/PaginaWebNewItem';
+import { aggiornaTipoSelezione, inserimentoCliente } from '../../store/redux/ClientiSlice';
 
 const NuovoCliente = () => {
-  const [clienti, setClienti] = useState([]);
+  const clientiSession = useSelector((state) => state.clientiSession.value);
+  const dispatch = useDispatch();
+
   const [selectedTrashCount, setSelectedTrashCount] = useState(0);
   const [selectedPencilCount, setSelectedPencilCount] = useState(0);
   const [selectedIdsEliminazione, setSelectedIdsEliminazione] = useState([]);
   const [selectedIdsModifica, setSelectedIdsModifica] = useState([]);
-
+  
   const [nuovoCliente, setNuovoCliente] = useState({
     tipo_item: "cliente", 
     tipo_selezione: 0,
@@ -31,10 +35,17 @@ const NuovoCliente = () => {
     errore_note: ""
   })
 
+  const aggiornaTipoSelezioneItem = (id, nuova_selezione) => {
+    dispatch(aggiornaTipoSelezione({
+      id_cliente: id, 
+      nuova_selezione: nuova_selezione
+    }));
+  }
+
   const selectOperation = (icon, item) => {
     selectOperationBody(
       icon, item, selectedIdsModifica, setSelectedIdsModifica, selectedIdsEliminazione, setSelectedIdsEliminazione, 
-      setSelectedPencilCount, setSelectedTrashCount
+      setSelectedPencilCount, setSelectedTrashCount, aggiornaTipoSelezioneItem 
     )
   }
   
@@ -56,7 +67,9 @@ const NuovoCliente = () => {
         if(response.status === 200) {
           const result = await response.json();
           nuovoCliente.id = result.id;
-          setClienti(prevClienti => [...prevClienti, nuovoCliente]);
+          dispatch(inserimentoCliente({
+            nuovoCliente: nuovoCliente
+          }));
           alert("L\'inserimento del cliente è andato a buon fine!!");
         }
         else if(response.status === 400) {
@@ -85,8 +98,8 @@ const NuovoCliente = () => {
             indiciNuovoItem: indiciNuovoCliente, 
             handleInsert: (e) => handleInsert(e), 
             tipoItem: "cliente", 
-            items: clienti, 
-            setItems: setClienti, 
+            items: clientiSession.nuoviClienti, 
+            setItems: null, 
             selectOperation: selectOperation, 
             campiItemEsistente: getCampiClienteEsistente, 
             indiciItemEsistente: indiciClienteEsistente, 

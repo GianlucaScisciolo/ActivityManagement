@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { selectOperationBody } from "../component/Operazioni";
 import { handleInputChange } from "../../vario/Vario";
 import { FormNuovoItem } from "../../riutilizzabile/form_item/FormItem";
@@ -12,15 +12,17 @@ import {
 } from "./SpeseVario";
 import PaginaWeb from "../../riutilizzabile/PaginaWeb";
 import PaginaWebNewItem from "../../riutilizzabile/PaginaWebNewItem";
+import { aggiornaTipoSelezione, inserimentoSpesa } from "../../store/redux/SpeseSlice";
 
 const NuovaSpesa = () => {
-  const formSession = useSelector((state) => state.formSession.value);
-  const itemSession = useSelector((state) => state.itemSession.value);
-  const [spese, setSpese] = useState([]);
+  const speseSession = useSelector((state) => state.speseSession.value);
+  const dispatch = useDispatch();
+  
   const [selectedTrashCount, setSelectedTrashCount] = useState(0);
   const [selectedPencilCount, setSelectedPencilCount] = useState(0);
   const [selectedIdsEliminazione, setSelectedIdsEliminazione] = useState([]);
   const [selectedIdsModifica, setSelectedIdsModifica] = useState([]);
+
   const [nuovaSpesa, setNuovaSpesa] = useState({
     tipo_item: "spesa", 
     tipo_selezione: 0,
@@ -36,10 +38,17 @@ const NuovaSpesa = () => {
     errore_note: "",
   })
 
+  const aggiornaTipoSelezioneItem = (id, nuova_selezione) => {
+    dispatch(aggiornaTipoSelezione({
+      id_spesa: id, 
+      nuova_selezione: nuova_selezione
+    }));
+  }
+
   const selectOperation = (icon, item) => {
     selectOperationBody(
       icon, item, selectedIdsModifica, setSelectedIdsModifica, selectedIdsEliminazione, setSelectedIdsEliminazione, 
-      setSelectedPencilCount, setSelectedTrashCount
+      setSelectedPencilCount, setSelectedTrashCount, aggiornaTipoSelezioneItem 
     )
   }
 
@@ -61,7 +70,9 @@ const NuovaSpesa = () => {
         if(response.status === 200) {
           const result = await response.json();
           nuovaSpesa.id = result.id;
-          setSpese(prevSpese => [...prevSpese, nuovaSpesa]);
+          dispatch(inserimentoSpesa({
+            nuovaSpesa: nuovaSpesa 
+          }));
           alert("L\'inserimento della spesa è andato a buon fine!!");
         }
         else if(response.status === 400) {
@@ -81,10 +92,6 @@ const NuovaSpesa = () => {
     }
   };
   
-  const NuovaSpesaTag = (formSession.view === "form") ? FormNuovoItem : (
-    (formSession.view === "card") ? CardNuovoItem : RowNuovoItem
-  )
-
   return (
     <>
       <PaginaWebNewItem 
@@ -94,8 +101,8 @@ const NuovaSpesa = () => {
             indiciNuovoItem: indiciNuovaSpesa, 
             handleInsert: (e) => handleInsert(e), 
             tipoItem: "spesa", 
-            items: spese, 
-            setItems: setSpese, 
+            items: speseSession.nuoveSpese, 
+            setItems: null, 
             selectOperation: selectOperation, 
             campiItemEsistente: getCampiSpesaEsistente, 
             indiciItemEsistente: indiciSpesaEsistente, 

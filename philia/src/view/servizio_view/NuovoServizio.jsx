@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { selectOperationBody } from "../component/Operazioni";
 import { handleInputChange } from "../../vario/Vario";
 import { FormNuovoItem } from "../../riutilizzabile/form_item/FormItem";
@@ -12,18 +12,20 @@ import {
 } from "./ServiziVario";
 import PaginaWeb from "../../riutilizzabile/PaginaWeb";
 import PaginaWebNewItem from "../../riutilizzabile/PaginaWebNewItem";
+import { aggiornaTipoSelezione, inserimentoServizio } from "../../store/redux/ServiziSlice";
 
 const NuovoServizio = () => {
-  const formSession = useSelector((state) => state.formSession.value);
-  const itemSession = useSelector((state) => state.itemSession.value);
-  const [servizi, setServizi] = useState([]);
+  const serviziSession = useSelector((state) => state.serviziSession.value);
+  const dispatch = useDispatch();
+
   const [selectedTrashCount, setSelectedTrashCount] = useState(0);
   const [selectedPencilCount, setSelectedPencilCount] = useState(0);
   const [selectedIdsEliminazione, setSelectedIdsEliminazione] = useState([]);
   const [selectedIdsModifica, setSelectedIdsModifica] = useState([]);
+  
   const [nuovoServizio, setNuovoServizio] = useState({
     tipo_item: "servizio", 
-    tipo_selezione: 1,
+    tipo_selezione: 0,
     nome: "",
     prezzo: "0.50",
     note: "", 
@@ -32,10 +34,17 @@ const NuovoServizio = () => {
     errore_note: ""
   })
 
+  const aggiornaTipoSelezioneItem = (id, nuova_selezione) => {
+    dispatch(aggiornaTipoSelezione({
+      id_servizio: id, 
+      nuova_selezione: nuova_selezione
+    }));
+  }
+
   const selectOperation = (icon, item) => {
     selectOperationBody(
       icon, item, selectedIdsModifica, setSelectedIdsModifica, selectedIdsEliminazione, setSelectedIdsEliminazione, 
-      setSelectedPencilCount, setSelectedTrashCount
+      setSelectedPencilCount, setSelectedTrashCount, aggiornaTipoSelezioneItem 
     )
   }
 
@@ -56,7 +65,9 @@ const NuovoServizio = () => {
         if(response.status === 200) {
           const result = await response.json();
           nuovoServizio.id = result.id;
-          setServizi(prevServizi => [...prevServizi, nuovoServizio]);
+          dispatch(inserimentoServizio({
+            nuovoServizio: nuovoServizio
+          }));
           alert("L\'inserimento del servizio è andato a buon fine!!");
         }
         else if(response.status === 400) {
@@ -76,10 +87,6 @@ const NuovoServizio = () => {
     }
   };
   
-  const NuovoServizioTag = (formSession.view === "form") ? FormNuovoItem : (
-    (formSession.view === "card") ? CardNuovoItem : RowNuovoItem
-  )
-
   return (
     <>
       <PaginaWebNewItem 
@@ -89,8 +96,8 @@ const NuovoServizio = () => {
             indiciNuovoItem: indiciNuovoServizio, 
             handleInsert: (e) => handleInsert(e), 
             tipoItem: "servizio", 
-            items: servizi, 
-            setItems: setServizi, 
+            items: serviziSession.nuoviServizi, 
+            setItems: null, 
             selectOperation: selectOperation, 
             campiItemEsistente: getCampiServizioEsistente, 
             indiciItemEsistente: indiciServizioEsistente, 

@@ -12,18 +12,17 @@ import {
 import { useDispatch } from "react-redux";
 import PaginaWeb from "../../riutilizzabile/PaginaWeb";
 import PaginaWebRicercaItems from "../../riutilizzabile/PaginaWebRicercaItems";
+import { aggiornaSpese, aggiornaTipoSelezione } from "../../store/redux/SpeseSlice";
 
 const Spese = () => {
-  const formSession = useSelector((state) => state.formSession.value);
-  const itemSession = useSelector((state) => state.itemSession.value);
   const speseSession = useSelector((state) => state.speseSession.value);
   const dispatch = useDispatch();
   
-  const [spese, setSpese] = useState(0);
   const [selectedTrashCount, setSelectedTrashCount] = useState(0);
   const [selectedPencilCount, setSelectedPencilCount] = useState(0);
   const [selectedIdsEliminazione, setSelectedIdsEliminazione] = useState([]);
   const [selectedIdsModifica, setSelectedIdsModifica] = useState([]);
+  
   const [datiRicerca, setDatiRicerca] = useState({
     tipo_item: "spesa", 
     nome: "", 
@@ -34,47 +33,20 @@ const Spese = () => {
     ultimo_giorno: "", 
     note: ""
   });
+
+  const aggiornaTipoSelezioneItem = (id, nuova_selezione) => {
+    dispatch(aggiornaTipoSelezione({
+      id_spesa: id, 
+      nuova_selezione: nuova_selezione
+    }));
+  }
   
   const selectOperation = (icon, item) => {
     selectOperationBody(
       icon, item, selectedIdsModifica, setSelectedIdsModifica, selectedIdsEliminazione, setSelectedIdsEliminazione, 
-      setSelectedPencilCount, setSelectedTrashCount
+      setSelectedPencilCount, setSelectedTrashCount, aggiornaTipoSelezioneItem
     )
   }
-
-  const RicercaSpeseTag = (formSession.view === "form") ? FormRicercaItems : (
-    (formSession.view === "card") ? CardRicercaItems : RowRicercaItems
-  )
-
-  const [aggiornamento, setAggiornamento] = useState(false);
-
-  // useEffect(() => {
-  //   const onChange = () => {
-  //     dispatch(aggiornaSpese({
-  //       spese: response.data.spese,
-  //     }));
-  //   };
-  //   saloneStore.addChangeListener(operazioniSaloni.VISUALIZZA_SPESE, onChange);
-  //   return () => {
-  //     saloneStore.removeChangeListener(operazioniSaloni.VISUALIZZA_SPESE, onChange);
-  //   };
-
-  // }, []);
-  // useEffect(() => {
-  //   console.log("|"+speseSession.spese+"|");
-  //   if(speseSession.spese !== 0 && speseSession.spese !== "0") {
-  //     console.log("<"+speseSession.spese+">");
-  //     if(speseSession.spese === -1) {
-  //       dispatch(aggiornaSpese({
-  //         spese: saloneStore.getSpese(),
-  //       }));
-  //       setAggiornamento(!aggiornamento);
-  //     }
-  //   }
-  //   // console.log(speseSession.spese);
-  // });
-
-  // console.log(speseSession.spese);
 
   const handleSearch = async (e) => {
     e.preventDefault();
@@ -90,7 +62,9 @@ const Spese = () => {
 
       if(response.status === 200) {
         const result = await response.json();
-        setSpese(result.items);
+        dispatch(aggiornaSpese({
+          spese: result.items,
+        }));
       }
       else {
         alert("Errore durante la ricerca delle spese, riprova più tardi.");
@@ -109,8 +83,8 @@ const Spese = () => {
         tipo_item: "spesa", 
         ids: selectedIdsEliminazione
       }
-      const itemsDaEliminare = spese.filter(spesa => dati.ids.includes(spesa.id));
-      const itemsRestanti = spese.filter(spesa => !dati.ids.includes(spesa.id));
+      const itemsDaEliminare = speseSession.spese.filter(spesa => dati.ids.includes(spesa.id));
+      const itemsRestanti = speseSession.spese.filter(spesa => !dati.ids.includes(spesa.id));
       try {
         const response = await fetch('/ELIMINA_ITEMS', {
           method: 'POST',
@@ -120,7 +94,9 @@ const Spese = () => {
           body: JSON.stringify(dati),
         });
         if(response.status === 200) {          
-          setSpese(itemsRestanti);
+          dispatch(aggiornaSpese({
+            spese: itemsRestanti, 
+          }))
           setSelectedIdsEliminazione([]);
           alert("Eliminazione completata con successo.");
         }
@@ -200,16 +176,16 @@ const Spese = () => {
             indiciRicercaItems: indiciRicercaSpese, 
             handleSearch: (e) => handleSearch(e), 
             tipoItem: "spesa", 
-            items: spese, 
-            setItems: setSpese, 
+            items: speseSession.spese, 
+            setItems: null, 
             selectOperation: selectOperation, 
             campiItemEsistente: getCampiSpesaEsistente, 
             indiciItemEsistente: indiciSpesaEsistente, 
             servizi: null, 
             selectedIdsModifica: selectedIdsModifica, 
             selectedIdsEliminazione: selectedIdsEliminazione, 
-            handleEdit: null, 
-            handleDelete: null
+            handleEdit: (e) => handleEdit(e),  
+            handleDelete: (e) => handleDelete(e)
           }
         }
       />

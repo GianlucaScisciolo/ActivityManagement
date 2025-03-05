@@ -5,7 +5,10 @@ import { sfondoReducer } from "./SfondoSlice";
 import { itemReducer } from "./ItemSlice";
 import { formReducer } from "./FormSlice";
 import { widgetsReducer } from "./WidgetsSlice";
+import { clientiReducer } from "./ClientiSlice";
+import { lavoriReducer } from "./LavoriSlice";
 import { speseReducer } from "./SpeseSlice";
+import { serviziReducer } from "./ServiziSlice";
 
 const store = configureStore({
   reducer: {
@@ -15,8 +18,20 @@ const store = configureStore({
     itemSession: itemReducer,
     formSession: formReducer,
     widgetsSession: widgetsReducer, 
+    clientiSession: clientiReducer, 
+    lavoriSession: lavoriReducer,
     speseSession: speseReducer, 
+    serviziSession: serviziReducer, 
   },
 });
 
 export default store;
+
+
+
+
+
+
+
+
+

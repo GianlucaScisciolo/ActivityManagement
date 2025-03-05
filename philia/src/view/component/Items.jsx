@@ -1,16 +1,29 @@
 import { useState, useEffect, useRef } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { CardItemEsistente } from "../../riutilizzabile/card_item/CardItem";
 import { RowItemEsistente } from "../../riutilizzabile/row_item/RowItem";
-import { CardLavoroEsistente } from "./card_item/CardsLavori";
-import { RowLavoroEsistente } from "./row_item/RowsLavori";
-import { handleInputChangeLavoroEsistente, handleInputChange } from "../../vario/Vario";
+// import { CardLavoroEsistente } from "./card_item/CardsLavori";
+// import { RowLavoroEsistente } from "./row_item/RowsLavori";
+// import { handleInputChangeLavoroEsistente, handleInputChange } from "../../vario/Vario";
+import { aggiornaCliente } from "../../store/redux/ClientiSlice";
+import { aggiornaLavoro } from "../../store/redux/LavoriSlice";
+import { aggiornaSpesa } from "../../store/redux/SpeseSlice";
+import { aggiornaServizio } from "../../store/redux/ServiziSlice";
 
 export const Items = ({tipoItem, items, setItems, selectOperation, emptyIsConsidered, campi, indici, servizi}) => {
   const formSession = useSelector((state) => state.formSession.value);
   const itemSession = useSelector((state) => state.itemSession.value);
+  const dispatch = useDispatch();
   const ItemEsistenteTag = (itemSession.view === "card") ? CardItemEsistente : RowItemEsistente;
 
+  const OptionsServizi = (servizi, descrizione, sottoStringa, setIdServizi) => {
+    return (
+    <>
+      Da definire!!!!
+    </>
+    )
+  }
+  /*
   const OptionsServizi = (servizi, descrizione, sottoStringa, setIdServizi) => {
     if (!servizi) {
       return null;
@@ -102,40 +115,71 @@ export const Items = ({tipoItem, items, setItems, selectOperation, emptyIsConsid
       </>
     );
   }
+  */
 
-  const modifica = (e, item) => {
+  // const modifica = (e, item) => {
+  //   // e.preventDefault();
+  //   const { name, value } = e.target;
+  //   setItems((prevItems) => {
+  //     const newItems = prevItems.map(currentItem => 
+  //       currentItem.id === item.id 
+  //         ? { ...currentItem, [name]: value }
+  //         : currentItem
+  //     );
+  //     // Ritornare l'elemento modificato
+  //     // setTimeout(() => updatedItems({target: {name, value}}, item), 0);
+  //     return newItems;
+  //   });
+  // };
+  
+  const updatedItems = (e, item, inputRef) => {
     // e.preventDefault();
     const { name, value } = e.target;
-    setItems((prevItems) => {
-      const newItems = prevItems.map(currentItem => 
-        currentItem.id === item.id 
-          ? { ...currentItem, [name]: value }
-          : currentItem
-      );
-      // Ritornare l'elemento modificato
-      // setTimeout(() => updatedItems({target: {name, value}}, item), 0);
-      return newItems;
-    });
+    if(tipoItem === "cliente") {
+      dispatch(aggiornaCliente({
+        id_cliente: item.id, 
+        nome_attributo: name,
+        nuovo_valore: value
+      }));
+    }
+    else if(tipoItem === "lavoro") {
+      dispatch(aggiornaLavoro({
+        id_lavoro: item.id, 
+        nome_attributo: name,
+        nuovo_valore: value
+      }));
+    }
+    else if(tipoItem === "spesa") {
+      dispatch(aggiornaSpesa({
+        id_spesa: item.id, 
+        nome_attributo: name,
+        nuovo_valore: value
+      }));
+    }
+    else if(tipoItem === "servizio") {
+      dispatch(aggiornaServizio({
+        id_servizio: item.id, 
+        nome_attributo: name,
+        nuovo_valore: value
+      }));
+    }
   };
-  
-  const updatedItems = (e, item) => {
-    console.log("TMP");
-    modifica(e, item);
-  };
-  
 
   
   const ItemElements = () => {
+    
     return (
       <>
         {items.map((item, index) => {
-          item["servizio"] = (item.servizio) ? item.servizio : "";
+          // item["servizio"] = (item.servizio) ? item.servizio : "";
           const descrizione = item.descrizione;
           const sottoStringa = item.servizio;
           const [idServizi, setIdServizi] = useState([]);
-          item["id_servizi"] = idServizi;
+          const inputRef = useRef(null);
+          // item["id_servizi"] = idServizi;
           return (
             <ItemEsistenteTag 
+              ref={inputRef}
               key={index} 
               item={item} 
               campi={campi(OptionsServizi(servizi, descrizione, sottoStringa, setIdServizi), item, null, null, null)} 
@@ -144,7 +188,7 @@ export const Items = ({tipoItem, items, setItems, selectOperation, emptyIsConsid
               items={items} 
               setItems={setItems} 
               tipoItem={tipoItem}
-              onChange={(e) => updatedItems(e, item)}
+              onChange={(e) => updatedItems(e, item, inputRef)}
             />
           )
         })}
