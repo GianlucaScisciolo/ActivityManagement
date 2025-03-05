@@ -11,6 +11,7 @@ import {
   indiciNuovaSpesa, indiciSpesaEsistente 
 } from "./SpeseVario";
 import PaginaWeb from "../../riutilizzabile/PaginaWeb";
+import PaginaWebNewItem from "../../riutilizzabile/PaginaWebNewItem";
 
 const NuovaSpesa = () => {
   const formSession = useSelector((state) => state.formSession.value);
@@ -86,29 +87,23 @@ const NuovaSpesa = () => {
 
   return (
     <>
-      <PaginaWeb 
+      <PaginaWebNewItem 
         componenti={
           {
-            nuovo_item: {
-              campi: getCampiNuovaSpesa(nuovaSpesa, (e) => handleInputChange(e, setNuovaSpesa), null, null), 
-              indici: indiciNuovaSpesa, 
-              handle_insert: (e) => handleInsert(e) 
-            }, 
-            items: {
-              tipo_item: "spesa", 
-              items: spese, 
-              set_items: setSpese, 
-              select_operation: selectOperation, 
-              campi: getCampiSpesaEsistente, 
-              indici: indiciSpesaEsistente, 
-              servizi: null
-            },
-            operazioni_items: {
-              selected_ids_modifica: selectedIdsModifica, 
-              selected_ids_eliminazione: selectedIdsEliminazione, 
-              handle_edit: null, 
-              handle_delete: null
-            }
+            campiNuovoItem: getCampiNuovaSpesa(nuovaSpesa, (e) => handleInputChange(e, setNuovaSpesa), null, null), 
+            indiciNuovoItem: indiciNuovaSpesa, 
+            handleInsert: (e) => handleInsert(e), 
+            tipoItem: "spesa", 
+            items: spese, 
+            setItems: setSpese, 
+            selectOperation: selectOperation, 
+            campiItemEsistente: getCampiSpesaEsistente, 
+            indiciItemEsistente: indiciSpesaEsistente, 
+            servizi: null, 
+            selectedIdsModifica: selectedIdsModifica, 
+            selectedIdsEliminazione: selectedIdsEliminazione, 
+            handleEdit: null, 
+            handleDelete: null
           }
         }
       />

@@ -11,6 +11,7 @@ import {
 } from "./SpeseVario";
 import { useDispatch } from "react-redux";
 import PaginaWeb from "../../riutilizzabile/PaginaWeb";
+import PaginaWebRicercaItems from "../../riutilizzabile/PaginaWebRicercaItems";
 
 const Spese = () => {
   const formSession = useSelector((state) => state.formSession.value);
@@ -192,29 +193,23 @@ const Spese = () => {
 
   return (
     <>
-      <PaginaWeb 
-        componenti={
+      <PaginaWebRicercaItems 
+        componenti={ 
           {
-            ricerca_items: {
-              campi: getCampiRicercaSpese(datiRicerca, (e) => handleInputChange(e, setDatiRicerca), null, null), 
-              indici: indiciRicercaSpese, 
-              handle_search: (e) => handleSearch(e)
-            }, 
-            items: {
-              tipo_item: "spesa", 
-              items: spese, 
-              set_items: setSpese, 
-              select_operation: selectOperation, 
-              campi: getCampiSpesaEsistente, 
-              indici: indiciSpesaEsistente, 
-              servizi: null
-            },
-            operazioni_items: {
-              selected_ids_modifica: selectedIdsModifica, 
-              selected_ids_eliminazione: selectedIdsEliminazione, 
-              handle_edit: (e) => handleEdit(e), 
-              handle_delete: (e) => handleDelete(e)
-            }
+            campiRicercaItems: getCampiRicercaSpese(datiRicerca, (e) => handleInputChange(e, setDatiRicerca), null, null),
+            indiciRicercaItems: indiciRicercaSpese, 
+            handleSearch: (e) => handleSearch(e), 
+            tipoItem: "spesa", 
+            items: spese, 
+            setItems: setSpese, 
+            selectOperation: selectOperation, 
+            campiItemEsistente: getCampiSpesaEsistente, 
+            indiciItemEsistente: indiciSpesaEsistente, 
+            servizi: null, 
+            selectedIdsModifica: selectedIdsModifica, 
+            selectedIdsEliminazione: selectedIdsEliminazione, 
+            handleEdit: null, 
+            handleDelete: null
           }
         }
       />

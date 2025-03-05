@@ -7,6 +7,7 @@ import {
 } from "./LavoriVario";
 import { getSelectTag } from "../../riutilizzabile/form_item/FormItem";
 import PaginaWeb from "../../riutilizzabile/PaginaWeb";
+import PaginaWebNewItem from "../../riutilizzabile/PaginaWebNewItem";
 
 const NuovoLavoro = () => {
   const [clienti, setClienti] = useState(-1);
@@ -19,7 +20,7 @@ const NuovoLavoro = () => {
   const [nuovoLavoro, setNuovoLavoro] = useState({
     tipo_item: "lavoro", 
     tipo_selezione: 0, 
-    id_cliente: "", 
+    id_cliente: 0, 
     cliente: "", 
     id_servizi: [], 
     servizio: "", 
@@ -104,7 +105,12 @@ const NuovoLavoro = () => {
   }
 
   const OptionsClienti = ({ clienti }) => {
-    const NomeTagSelect = getSelectTag(1);
+    const [clientiSelezionati, setClientiSelezionati] = useState([]);
+    const [clientiNonSelezionati, setClientiNonSelezionati] = useState(Object.values(clienti));
+
+    useEffect(() => {
+      setClientiNonSelezionati(Object.values(clienti));
+    }, [clienti]);
     
     const optionStr = (cliente) => {
       return cliente.nome + " " + cliente.cognome +
@@ -114,24 +120,92 @@ const NuovoLavoro = () => {
     
     const sottoStringa = nuovoLavoro.cliente;
 
+    const handleCheckboxChange = (e, cliente) => {
+      if (e.target.checked) {
+        if (clientiSelezionati.length === 0) {
+          setClientiSelezionati([cliente]);
+          setClientiNonSelezionati(clientiNonSelezionati.filter(c => c.id !== cliente.id));
+          setNuovoLavoro(prevState => ({
+            ...prevState,
+            id_cliente: cliente.id
+          }));
+        } 
+        else {
+          // Sposta il cliente già presente in clientiSelezionati a clientiNonSelezionati
+          const clienteCorrente = clientiSelezionati[0];
+          setClientiNonSelezionati([
+            ...clientiNonSelezionati,
+            clienteCorrente
+          ].filter(c => c.id !== cliente.id));
+    
+          // Aggiorna il cliente selezionato
+          setClientiSelezionati([cliente]);
+          setNuovoLavoro(prevState => ({
+            ...prevState,
+            id_cliente: cliente.id
+          }));
+        }
+      } else {
+        // Deseleziona il cliente e reimposta lo stato
+        setClientiSelezionati([]);
+        setClientiNonSelezionati([...clientiNonSelezionati, cliente]);
+        setNuovoLavoro(prevState => ({
+          ...prevState,
+          id_cliente: 0
+        }));
+      }
+    };
+    
+
     return (
       <>
-        {/* {(clienti !== -1) && ( */}
-          <NomeTagSelect name="id_cliente" value={nuovoLavoro.id_cliente} onChange={(e) => handleInputChange(e, setNuovoLavoro)}>
-            <option key={-1} value="">Seleziona il cliente.</option>
-            {Object.values(clienti).filter(cliente => 
-              optionStr(cliente).toLowerCase().includes(sottoStringa.toLowerCase())
-            ).map((cliente, index) => (
-              <option key={index} value={cliente.id}>
-                {optionStr(cliente)}
-              </option>
-            ))}
-          </NomeTagSelect>
-        {/* )} */}
+        {(clienti !== -1) && (
+          <>
+            <div>
+              Seleziona solo 1 cliente:<br />
+              {clientiNonSelezionati.filter(cliente => 
+                optionStr(cliente).toLowerCase().includes(sottoStringa.toLowerCase())
+              ).map((cliente, index) => (
+                <div key={index} className="checkbox-wrapper clientiNonSelezionati">
+                  <input 
+                    type="checkbox" 
+                    id={"cliente_non_sel_" + index} 
+                    name={"cliente_non_sel_" + index} 
+                    value={cliente.id}
+                    checked={false}
+                    onChange={(e) => handleCheckboxChange(e, cliente)}
+                    className="custom-checkbox-rounded"
+                  />
+                  <label htmlFor={"cliente_non_sel_" + index}>
+                    {optionStr(cliente)}
+                  </label>
+                </div>                
+              ))}
+            </div>
+            <div>
+              {clientiSelezionati.map((cliente, index) => (
+                <div key={index} className="checkbox-wrapper clientiSelezionati">
+                  <input 
+                    type="checkbox" 
+                    id={"cliente_sel_" + index} 
+                    name={"cliente_sel_" + index} 
+                    value={cliente.id} 
+                    checked={true}
+                    onChange={(e) => handleCheckboxChange(e, cliente)}
+                    className="custom-checkbox-rounded"
+                  />
+                  <label htmlFor={"cliente_sel_" + index}>
+                    {optionStr(cliente)}
+                  </label>
+                </div>
+              ))}
+            </div>
+          </>
+        )}
       </>
     );
   }
-  
+
   const OptionsServizi = ({ servizi }) => {
     const [serviziSelezionati, setServiziSelezionati] = useState([]);
     const [serviziNonSelezionati, setServiziNonSelezionati] = useState(Object.values(servizi));
@@ -172,7 +246,7 @@ const NuovoLavoro = () => {
         {(servizi !== -1) && (
           <>
             <div>
-              Servizi non selezionati:<br />
+              Seleziona almeno 1 servizio:<br />
               {serviziNonSelezionati.filter(servizio => 
                 optionStr(servizio).toLowerCase().includes(sottoStringa.toLowerCase())
               ).map((servizio, index) => (
@@ -184,7 +258,7 @@ const NuovoLavoro = () => {
                     value={servizio.id}
                     checked={false}
                     onChange={(e) => handleCheckboxChange(e, servizio)}
-                    className="custom-checkbox"
+                    className="custom-checkbox serviziNonSelezionati"
                   />
                   <label htmlFor={"servizio_non_sel_" + index}>
                     {optionStr(servizio)}
@@ -193,7 +267,6 @@ const NuovoLavoro = () => {
               ))}
             </div>
             <div>
-              Servizi selezionati (seleziona almeno un servizio):<br />
               {serviziSelezionati.map((servizio, index) => (
                 <div key={index} className="checkbox-wrapper">
                   <input 
@@ -203,7 +276,7 @@ const NuovoLavoro = () => {
                     value={servizio.id} 
                     checked={true}
                     onChange={(e) => handleCheckboxChange(e, servizio)}
-                    className="custom-checkbox"
+                    className="custom-checkbox serviziSelezionati"
                   />
                   <label htmlFor={"servizio_sel_" + index}>
                     {optionStr(servizio)}
@@ -275,29 +348,23 @@ const NuovoLavoro = () => {
 
   return (
     <>
-      <PaginaWeb 
+      <PaginaWebNewItem 
         componenti={
           {
-            nuovo_item: {
-              campi: getCampiNuovoLavoro(nuovoLavoro, OptionsClienti({clienti}), OptionsServizi({servizi}), (e) => handleInputChange(e, setNuovoLavoro), null, null), 
-              indici: indiciNuovoLavoro, 
-              handle_insert: (e) => handleInsert(e) 
-            }, 
-            items: {
-              tipo_item: "lavoro", 
-              items: lavori, 
-              set_items: setLavori, 
-              select_operation: selectOperation, 
-              campi: getCampiLavoroEsistente, 
-              indici: indiciLavoroEsistente, 
-              servizi: null
-            },
-            operazioni_items: {
-              selected_ids_modifica: selectedIdsModifica, 
-              selected_ids_eliminazione: selectedIdsEliminazione, 
-              handle_edit: null, 
-              handle_delete: null
-            }
+            campiNuovoItem: getCampiNuovoLavoro(nuovoLavoro, OptionsClienti({clienti}), OptionsServizi({servizi}), (e) => handleInputChange(e, setNuovoLavoro), null, null), 
+            indiciNuovoItem: indiciNuovoLavoro, 
+            handleInsert: (e) => handleInsert(e), 
+            tipoItem: "lavoro", 
+            items: lavori, 
+            setItems: setLavori, 
+            selectOperation: selectOperation, 
+            campiItemEsistente: getCampiLavoroEsistente, 
+            indiciItemEsistente: indiciLavoroEsistente, 
+            servizi: null, 
+            selectedIdsModifica: selectedIdsModifica, 
+            selectedIdsEliminazione: selectedIdsEliminazione, 
+            handleEdit: null, 
+            handleDelete: null
           }
         }
       />

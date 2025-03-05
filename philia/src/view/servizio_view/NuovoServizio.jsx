@@ -11,6 +11,7 @@ import {
   indiciNuovoServizio, indiciServizioEsistente 
 } from "./ServiziVario";
 import PaginaWeb from "../../riutilizzabile/PaginaWeb";
+import PaginaWebNewItem from "../../riutilizzabile/PaginaWebNewItem";
 
 const NuovoServizio = () => {
   const formSession = useSelector((state) => state.formSession.value);
@@ -81,29 +82,23 @@ const NuovoServizio = () => {
 
   return (
     <>
-      <PaginaWeb 
+      <PaginaWebNewItem 
         componenti={
           {
-            nuovo_item: {
-              campi: getCampiNuovoServizio(nuovoServizio, (e) => handleInputChange(e, setNuovoServizio), null, null), 
-              indici: indiciNuovoServizio, 
-              handle_insert: (e) => handleInsert(e) 
-            }, 
-            items: {
-              tipo_item: "servizio", 
-              items: servizi, 
-              set_items: setServizi, 
-              select_operation: selectOperation, 
-              campi: getCampiServizioEsistente, 
-              indici: indiciServizioEsistente, 
-              servizi: null
-            },
-            operazioni_items: {
-              selected_ids_modifica: selectedIdsModifica, 
-              selected_ids_eliminazione: selectedIdsEliminazione, 
-              handle_edit: null, 
-              handle_delete: null
-            }
+            campiNuovoItem: getCampiNuovoServizio(nuovoServizio, (e) => handleInputChange(e, setNuovoServizio), null, null), 
+            indiciNuovoItem: indiciNuovoServizio, 
+            handleInsert: (e) => handleInsert(e), 
+            tipoItem: "servizio", 
+            items: servizi, 
+            setItems: setServizi, 
+            selectOperation: selectOperation, 
+            campiItemEsistente: getCampiServizioEsistente, 
+            indiciItemEsistente: indiciServizioEsistente, 
+            servizi: null, 
+            selectedIdsModifica: selectedIdsModifica, 
+            selectedIdsEliminazione: selectedIdsEliminazione, 
+            handleEdit: null, 
+            handleDelete: null
           }
         }
       />

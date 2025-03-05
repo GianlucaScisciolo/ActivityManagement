@@ -6,7 +6,7 @@ import {
 } from './ClientiVario';
 import { handleInputChange } from '../../vario/Vario';
 import PaginaWeb from '../../riutilizzabile/PaginaWeb';
-import PaginaWebRicercaItems from '../../riutilizzabile/PaginaWebRicercaItems';
+// import { selectOperation, handleSearch, handleDelete, handleEdit } from './OperazioniClienti';
 
 const Clienti = () => {
   const [clienti, setClienti] = useState(-1);
@@ -148,23 +148,29 @@ const Clienti = () => {
   
   return (
     <>
-      <PaginaWebRicercaItems 
+      <PaginaWeb 
         componenti={
           {
-            campiRicercaItems: getCampiRicercaClienti(datiRicerca, (e) => handleInputChange(e, setDatiRicerca), null, null),
-            indiciRicercaItems: indiciRicercaClienti, 
-            handleSearch: (e) => handleSearch(e), 
-            tipoItem: "cliente", 
-            items: clienti, 
-            setItems: setClienti, 
-            selectOperation: selectOperation, 
-            campiItemEsistente: getCampiClienteEsistente, 
-            indiciItemEsistente: indiciClienteEsistente, 
-            servizi: null, 
-            selectedIdsModifica: selectedIdsModifica, 
-            selectedIdsEliminazione: selectedIdsEliminazione, 
-            handleEdit: null, 
-            handleDelete: null
+            ricerca_items: {
+              campi: getCampiRicercaClienti(datiRicerca, (e) => handleInputChange(e, setDatiRicerca), null, null), 
+              indici: indiciRicercaClienti, 
+              handle_search: (e) => handleSearch(e)
+            }, 
+            items: {
+              tipo_item: "cliente", 
+              items: clienti, 
+              set_items: setClienti, 
+              select_operation: selectOperation, 
+              campi: getCampiClienteEsistente, 
+              indici: indiciClienteEsistente, 
+              servizi: null
+            },
+            operazioni_items: {
+              selected_ids_modifica: selectedIdsModifica, 
+              selected_ids_eliminazione: selectedIdsEliminazione, 
+              handle_edit: (e) => handleEdit(e), 
+              handle_delete: (e) => handleDelete(e)
+            }
           }
         }
       />

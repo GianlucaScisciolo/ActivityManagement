@@ -122,10 +122,23 @@
   margin-left:20%;
 }
 
-.custom-checkbox {
+.custom-checkbox, .custom-checkbox-rounded {
   width: 30px;  /* Larghezza della casella di selezione */
   height: 30px; /* Altezza della casella di selezione */
-  margin-right: 10px; /* Spaziatura tra la casella di selezione e il label */
+  margin-right: 20px; /* Spaziatura tra la casella di selezione e il label */
+  background-color: #FFFFFF;
+  /* border: 2px solid #0050EF; */
+  cursor: pointer;
+
+  &:checked {
+    background-color: #0050EF; /* Colore di sfondo quando è selezionata */
+  }
+}
+
+.custom-checkbox-rounded {
+  -webkit-appearance: none; /* Rimuove lo stile predefinito */
+  appearance: none; /* Compatibilità con altri browser */
+  border-radius: 100%; /* Rende la checkbox rotonda */
 }
 
 /**********/

@@ -7,7 +7,6 @@ import {
 } from './ClientiVario';
 import { handleInputChange } from '../../vario/Vario';
 import PaginaWeb from '../../riutilizzabile/PaginaWeb';
-import PaginaWebNewItem from '../../riutilizzabile/PaginaWebNewItem';
 
 const NuovoCliente = () => {
   const [clienti, setClienti] = useState([]);
@@ -78,23 +77,29 @@ const NuovoCliente = () => {
 
   return (
     <>
-      <PaginaWebNewItem 
+      <PaginaWeb 
         componenti={
           {
-            campiNuovoItem: getCampiNuovoCliente(nuovoCliente, (e) => handleInputChange(e, setNuovoCliente), null, null), 
-            indiciNuovoItem: indiciNuovoCliente, 
-            handleInsert: (e) => handleInsert(e), 
-            tipoItem: "cliente", 
-            items: clienti, 
-            setItems: setClienti, 
-            selectOperation: selectOperation, 
-            campiItemEsistente: getCampiClienteEsistente, 
-            indiciItemEsistente: indiciClienteEsistente, 
-            servizi: null, 
-            selectedIdsModifica: selectedIdsModifica, 
-            selectedIdsEliminazione: selectedIdsEliminazione, 
-            handleEdit: null, 
-            handleDelete: null
+            nuovo_item: {
+              campi: getCampiNuovoCliente(nuovoCliente, (e) => handleInputChange(e, setNuovoCliente), null, null), 
+              indici: indiciNuovoCliente, 
+              handle_insert: (e) => handleInsert(e) 
+            }, 
+            items: {
+              tipo_item: "cliente", 
+              items: clienti, 
+              set_items: setClienti, 
+              select_operation: selectOperation, 
+              campi: getCampiClienteEsistente, 
+              indici: indiciClienteEsistente, 
+              servizi: null
+            },
+            operazioni_items: {
+              selected_ids_modifica: selectedIdsModifica, 
+              selected_ids_eliminazione: selectedIdsEliminazione, 
+              handle_edit: null, 
+              handle_delete: null
+            }
           }
         }
       />

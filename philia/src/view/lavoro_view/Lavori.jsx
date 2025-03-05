@@ -13,6 +13,7 @@ import {
   indiciRicercaLavori, indiciLavoroEsistente 
 } from "./LavoriVario";
 import PaginaWeb from "../../riutilizzabile/PaginaWeb";
+import PaginaWebRicercaItems from "../../riutilizzabile/PaginaWebRicercaItems";
 
 const Lavori = () => {
   const formSession = useSelector((state) => state.formSession.value);
@@ -155,29 +156,23 @@ const Lavori = () => {
 
   return (
     <>
-      <PaginaWeb 
+      <PaginaWebRicercaItems 
         componenti={
           {
-            ricerca_items: {
-              campi: getCampiRicercaLavori(datiRicerca, (e) => handleInputChange(e, setDatiRicerca), null, null), 
-              indici: indiciRicercaLavori, 
-              handle_search: (e) => handleSearch(e)
-            }, 
-            items: {
-              tipo_item: "lavoro", 
-              items: lavori, 
-              set_items: setLavori, 
-              select_operation: selectOperation, 
-              campi: getCampiLavoroEsistente, 
-              indici: indiciLavoroEsistente, 
-              servizi: servizi
-            },
-            operazioni_items: {
-              selected_ids_modifica: selectedIdsModifica, 
-              selected_ids_eliminazione: selectedIdsEliminazione, 
-              handle_edit: (e) => handleEdit(e), 
-              handle_delete: (e) => handleDelete(e)
-            }
+            campiRicercaItems: getCampiRicercaLavori(datiRicerca, (e) => handleInputChange(e, setDatiRicerca), null, null), 
+            indiciRicercaItems: indiciRicercaLavori, 
+            handleSearch: (e) => handleSearch(e), 
+            tipoItem: "lavoro", 
+            items: lavori, 
+            setItems: setLavori, 
+            selectOperation: selectOperation, 
+            campiItemEsistente: getCampiLavoroEsistente, 
+            indiciItemEsistente: indiciLavoroEsistente, 
+            servizi: servizi, 
+            selectedIdsModifica: selectedIdsModifica, 
+            selectedIdsEliminazione: selectedIdsEliminazione, 
+            handleEdit: null, 
+            handleDelete: null
           }
         }
       />

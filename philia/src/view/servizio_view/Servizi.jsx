@@ -10,6 +10,7 @@ import {
   indiciRicercaServizi, indiciServizioEsistente
 } from "./ServiziVario";
 import PaginaWeb from "../../riutilizzabile/PaginaWeb";
+import PaginaWebRicercaItems from "../../riutilizzabile/PaginaWebRicercaItems";
 
 const Servizi = () => {
   const formSession = useSelector((state) => state.formSession.value);
@@ -156,29 +157,23 @@ const Servizi = () => {
 
   return (
     <>
-      <PaginaWeb 
-        componenti={
+      <PaginaWebRicercaItems 
+        componenti={ 
           {
-            ricerca_items: {
-              campi: getCampiRicercaServizi(datiRicerca, (e) => handleInputChange(e, setDatiRicerca), null, null), 
-              indici: indiciRicercaServizi, 
-              handle_search: (e) => handleSearch(e)
-            }, 
-            items: {
-              tipo_item: "servizio", 
-              items: servizi, 
-              set_items: setServizi, 
-              select_operation: selectOperation, 
-              campi: getCampiServizioEsistente, 
-              indici: indiciServizioEsistente, 
-              servizi: null
-            },
-            operazioni_items: {
-              selected_ids_modifica: selectedIdsModifica, 
-              selected_ids_eliminazione: selectedIdsEliminazione, 
-              handle_edit: (e) => handleEdit(e), 
-              handle_delete: (e) => handleDelete(e)
-            }
+            campiRicercaItems: getCampiRicercaServizi(datiRicerca, (e) => handleInputChange(e, setDatiRicerca), null, null),
+            indiciRicercaItems: indiciRicercaServizi, 
+            handleSearch: (e) => handleSearch(e), 
+            tipoItem: "servizio", 
+            items: servizi, 
+            setItems: setServizi, 
+            selectOperation: selectOperation, 
+            campiItemEsistente: getCampiServizioEsistente, 
+            indiciItemEsistente: indiciServizioEsistente, 
+            servizi: null, 
+            selectedIdsModifica: selectedIdsModifica, 
+            selectedIdsEliminazione: selectedIdsEliminazione, 
+            handleEdit: null, 
+            handleDelete: null
           }
         }
       />
