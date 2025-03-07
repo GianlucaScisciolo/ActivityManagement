@@ -63,7 +63,7 @@ export function getCampiFile(item, handleOnChange, handleOnClick, handleOnBlur) 
     step: [null, null], 
     min: [null, null], 
     name: ["primo_giorno", "ultimo_giorno"], 
-    id: ["file_primo_giorno_lavoro", "file_ultimo_giorno_lavoro"], 
+    id: ["file_primo_giorno_spesa", "file_ultimo_giorno_spesa"], 
     value: [item.primo_giorno, item.ultimo_giorno], 
     placeholder: ["Primo giorno", "Ultimo giorno"], 
     onChange: handleOnChange, 

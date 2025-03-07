@@ -1,19 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useSelector } from "react-redux";
 import Header from "../component/Header";
 import { handleInputChange } from "../../vario/Vario";
-import SaloneAction from "../../action/salone_action/SaloneAction";
-import { operazioniSaloni } from "../../vario/Operazioni";
-import saloneStore from "../../store/salone_store/SaloneStore";
-import { aggiornamentoLista } from "../../vario/OperazioniRicerca";
-// import Row from 'react-bootstrap/Row';
-// import Col from 'react-bootstrap/Col';
-// import { formatoDate, formatoTime } from "../../vario/Tempo";
 import { generaFileSpesePDF, generaFileSpeseExcel } from "../../vario/File";
-// import { FormFileLavori } from "../component/form_item/FormsLavori";
-// import { CardFileLavori } from "../component/card_item/CardsLavori";
-// import { RowFileLavori } from "../component/row_item/RowsLavori";
 import { FormFileItems } from "../../riutilizzabile/form_item/FormItem";
+import { CardFileItems } from "../../riutilizzabile/card_item/CardItem";
+import { RowFileItems } from "../../riutilizzabile/row_item/RowItem";
 import { 
   getCampiFile, 
   indiciFile
@@ -21,9 +13,10 @@ import {
 
 const FileSpese = () => {
   const formSession = useSelector((state) => state.formSession.value);
-  const itemSession = useSelector((state) => state.itemSession.value);
-  
+  const [spese, setSpese] = useState(-1);
+  const [tipoFile, setTipoFile] = useState("");
   const [datiRicerca, setDatiRicerca] = useState({
+    tipo_item: "spesa", 
     nome: "", 
     descrizione: "", 
     totale_min: "", 
@@ -32,71 +25,41 @@ const FileSpese = () => {
     ultimo_giorno: "",
     note: "",
   });
-  const [spese, setSpese] = useState(-1);
-  const [aggiornamentoCompletato, setAggiornamentoCompletato] = useState("");
-  const [tipoFile, setTipoFile] = useState('');
-    
-  const ottieniSpese = async () => {
-    saloneStore.setSpese();
-    await SaloneAction.dispatchAction(datiRicerca, operazioniSaloni.VISUALIZZA_SPESE);
-    setAggiornamentoCompletato(false);
-  };
-
+  
   const ottieniSpeseRange = async (e, tipoFile) => {
     e.preventDefault();
+
     if (confirm("Sei sicuro di voler ottenere il file?")) {
       setTipoFile(tipoFile);
-      await ottieniSpese();
+      
+      const response = await fetch('/VISUALIZZA_ITEMS', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(datiRicerca),
+      });
+
+      if(response.status === 200) {
+        const result = await response.json();
+        setSpese(result.items);
+
+        if(tipoFile === "pdf") {
+          generaFileSpesePDF(spese);
+        }
+        else if(tipoFile === "excel") {
+          generaFileSpeseExcel(spese);
+        }
+      }
+      else {
+        alert("Errore durante la ricerca delle spese, riprova più tardi.");
+      }
     }
     else {
       alert("Operazione annullata.");
     }
-  };
-
-  const eliminaSpeseRange = async (e) => {
-    e.preventDefault();
-    if (confirm("Sei sicuro di voler eliminare le spese?")) {
-      SaloneAction.dispatchAction(datiRicerca, operazioniSaloni.ELIMINA_SPESE_RANGE_GIORNI);
-      alert("Eliminazione effettuata.");
-
-      setDatiRicerca(prevState => ({
-        ...prevState,
-        primo_giorno: "", 
-        ultimo_giorno: ""
-      }));
-    }
-    else {
-      alert("Eliminazione annullata.");
-    }
   }
-
-  const FormFileTag = FormFileItems; 
-  
-  useEffect(() => {
-    if (aggiornamentoCompletato === false) {
-      aggiornamentoLista("spese", setSpese);
-      console.log("Aggiornamento in corso ...");
-    }
-  }, [aggiornamentoCompletato]);
-
-  useEffect(() => {
-    if (aggiornamentoCompletato === false && spese !== -1) {
-      setAggiornamentoCompletato(true);
-      console.log("Aggiornamento completato.")
-      if(tipoFile === "pdf") {
-        generaFileSpesePDF(spese);
-      }
-      else if(tipoFile === "excel") {
-        generaFileSpeseExcel(spese);
-      }
-      setDatiRicerca(prevState => ({
-        ...prevState,
-        primo_giorno: "", 
-        ultimo_giorno: ""
-      }));
-    }
-  }, [spese]);
-
+    
   const handleDelete = async (e) => {
     e.preventDefault();
     if (confirm("Sei sicuro di voler eliminare le spese?")) {
@@ -124,7 +87,11 @@ const FileSpese = () => {
       alert("Eliminazione annullata.");
     }
   }
-  
+
+  const FormFileTag = (formSession.view === "form") ? FormFileItems : (
+    (formSession.view === "card") ? CardFileItems : RowFileItems
+  );
+
   return (
     <>
       <Header />

@@ -53,9 +53,27 @@ export function getCampiLavoroEsistente(servizi, item, handleOnChange, handleOnC
   };
 };
 
+export function getCampiFile(item, handleOnChange, handleOnClick, handleOnBlur) {
+  return {
+    header: "File lavori", 
+    label: ["Primo giorno", "Ultimo giorno"], 
+    type: ["date", "date"], 
+    step: [null, null], 
+    min: [null, null], 
+    name: ["primo_giorno", "ultimo_giorno"], 
+    id: ["file_primo_giorno_lavoro", "file_ultimo_giorno_lavoro"], 
+    value: [item.primo_giorno, item.ultimo_giorno], 
+    placeholder: ["Primo giorno", "Ultimo giorno"], 
+    onChange: handleOnChange, 
+    onClick: handleOnClick, 
+    onBlur: handleOnBlur
+  };
+};
+
 export const indiciNuovoLavoro = [0, 1, 2, 3];
 export const indiciRicercaLavori = [0, 1, 2, 3, 4, 5];
 export const indiciLavoroEsistente = [0, 1, 2, 3, 4];
+export const indiciFile = [0, 1];
 
 
 

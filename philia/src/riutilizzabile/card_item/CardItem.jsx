@@ -144,7 +144,7 @@ export function OperazioniItemEsistente ({ selectOperation, item }) {
   )
 }
 
-export function OperazioniFileItems({ottieniLavoriRangePDF, ottieniLavoriRangeExcel, eliminaLavoriRange}) {
+function OperazioniFileItems({ottieniFileRangePDF, ottieniFileRangeExcel, eliminaItemsRange}) {
   return (
     <StyledListGroupItem style={{ border: "5px solid #000000", backgroundColor: "#000000", paddingTop: "3%" }}>
       <div>
@@ -153,12 +153,12 @@ export function OperazioniFileItems({ottieniLavoriRangePDF, ottieniLavoriRangeEx
       </div>
       <br />
       <div>
-        <StyledDownloadNotSelected size={grandezzaIcona} style={{ marginRight: "50%" }} onClick={ottieniLavoriRangePDF} />
-        <StyledDownloadNotSelected size={grandezzaIcona} onClick={ottieniLavoriRangeExcel} />
+        <StyledDownloadNotSelected size={grandezzaIcona} style={{ marginRight: "50%" }} onClick={ottieniFileRangePDF} />
+        <StyledDownloadNotSelected size={grandezzaIcona} onClick={ottieniFileRangeExcel} />
       </div>
       <br />
       <div>
-        <StyledTrashNotSelected2 size={grandezzaIcona} onClick={eliminaLavoriRange} />
+        <StyledTrashNotSelected size={grandezzaIcona} onClick={eliminaItemsRange} />
       </div>
       <br />
     </StyledListGroupItem>
@@ -342,6 +342,48 @@ export function CardItemEsistente({ item, campi, indici, selectOperation, items,
     </>
   );
 }
+
+export function CardFileItems({campi, indici, ottieniFileRangePDF, ottieniFileRangeExcel, eliminaItemsRange}) {
+  let maxHeight = "2000px";
+  
+  return (
+    <center>
+      <StyledCard>
+        <StyledCardHeader>{campi["header"]}</StyledCardHeader>
+        <SlideContainer style={{maxHeight: `${maxHeight}`}}>
+          {indici.map((i) => {
+            const NomeTag = (campi.type[i]) ? getInputTag(1, true) : (
+              getTextAreaTag(1, true)
+            );
+            return ( 
+              <React.Fragment key={i}>
+                <NomeTag 
+                  key={i}
+                  rows={1}
+                  name={campi.name[i]}
+                  id={campi.id[i]}
+                  type={campi.type[i]}
+                  step={campi.step[i]}
+                  value={campi.value[i]}
+                  placeholder={campi.placeholder[i]}
+                  onChange={campi.onChange}
+                  onClick={campi.onClick}
+                  onBlur={campi.onBlur}
+                />
+              </React.Fragment>
+            );
+          })}
+        </SlideContainer>
+        <OperazioniFileItems 
+          ottieniFileRangePDF={ottieniFileRangePDF} 
+          ottieniFileRangeExcel={ottieniFileRangeExcel} 
+          eliminaItemsRange={eliminaItemsRange} 
+        />
+      </StyledCard>
+    </center>
+  );
+}
+
 
 export function CardLogin({campi, indici, eseguiLogin}) {
   let maxHeight = "2000px";

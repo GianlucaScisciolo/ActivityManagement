@@ -146,19 +146,19 @@ export function OperazioniItemEsistente ({ selectOperation, item }) {
   )
 }
 
-export function OperazioniFileItems({ottieniLavoriRangePDF, ottieniLavoriRangeExcel, eliminaLavoriRange}) {
+export function OperazioniFileItems({ottieniFileRangePDF, ottieniFileRangeExcel, eliminaItemsRange}) {
   return (
     <>
       <StyledColOperazioni>
         <StyledFileIconNotSelected icon={faFilePdf} style={{ marginRight: "50%" }} size="2xl" />
-        <StyledDownloadNotSelected size={grandezzaIcona} onClick={ottieniLavoriRangePDF} />
+        <StyledDownloadNotSelected size={grandezzaIcona} onClick={ottieniFileRangePDF} />
       </StyledColOperazioni>
       <StyledColOperazioni>
         <StyledFileIconNotSelected icon={faFileExcel} style={{ marginRight: "50%" }} size="2xl" />
-        <StyledDownloadNotSelected size={grandezzaIcona} onClick={ottieniLavoriRangeExcel} />
+        <StyledDownloadNotSelected size={grandezzaIcona} onClick={ottieniFileRangeExcel} />
       </StyledColOperazioni>
       <StyledColOperazioni>
-        <StyledTrashNotSelected2 size={grandezzaIcona} onClick={eliminaLavoriRange} />
+        <StyledTrashNotSelected2 size={grandezzaIcona} onClick={eliminaItemsRange} />
       </StyledColOperazioni>
     </>
   );
@@ -345,6 +345,41 @@ export function RowItemEsistente({item, campi, indici, selectOperation}) {
                   )}
               </StyledRow>
             </div>
+            </StyledCol>
+          </React.Fragment>
+        );
+      })}
+    </StyledRow>
+  )
+}
+
+export function RowFileItems({campi, indici, ottieniFileRangePDF, ottieniFileRangeExcel, eliminaItemsRange}) {
+  return (
+    <StyledRow>
+      <OperazioniFileItems 
+        ottieniFileRangePDF={ottieniFileRangePDF} 
+        ottieniFileRangeExcel={ottieniFileRangeExcel} 
+        eliminaItemsRange={eliminaItemsRange} 
+      />
+      {indici.map((i) => {
+        const NomeTag = (campi.type[i]) ? getInputTag(1, true) : (
+          getTextAreaTag(1, true)
+        );
+        return ( 
+          <React.Fragment key={i}>
+            <StyledCol>
+              <NomeTag 
+                rows={1}
+                name={campi.name[i]}
+                id={campi.id[i]}
+                type={campi.type[i]}
+                step={campi.step[i]}
+                value={campi.value[i]}
+                placeholder={campi.placeholder[i]}
+                onChange={campi.onChange}
+                onClick={campi.onClick}
+                onBlur={campi.onBlur}
+              />
             </StyledCol>
           </React.Fragment>
         );

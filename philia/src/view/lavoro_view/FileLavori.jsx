@@ -1,138 +1,112 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useSelector } from "react-redux";
 import Header from "../component/Header";
-import LavoroAction from "../../action/lavoro_action/LavoroAction";
-import { operazioniLavori } from "../../vario/Operazioni";
-import lavoroStore from "../../store/lavoro_store/LavoroStore";
-import { aggiornamentoLista } from "../../vario/OperazioniRicerca";
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import { formatoDate, formatoTime } from "../../vario/Tempo";
+import { handleInputChange } from "../../vario/Vario";
 import { generaFileLavoriPDF, generaFileLavoriExcel } from "../../vario/File";
-// import { FormFileLavori } from "../component/form_item/FormsLavori";
-// import { CardFileLavori } from "../component/card_item/CardsLavori";
-// import { RowFileLavori } from "../component/row_item/RowsLavori";
+import { FormFileItems } from "../../riutilizzabile/form_item/FormItem";
+import { CardFileItems } from "../../riutilizzabile/card_item/CardItem";
+import { RowFileItems } from "../../riutilizzabile/row_item/RowItem";
+import {
+  getCampiFile, 
+  indiciFile 
+} from "./lavoriVario";
 
 const FileLavori = () => {
-  return (
-    <>In corso.</>
-  )
-}
-// const FileLavori = () => {
-//   const formSession = useSelector((state) => state.formSession.value);
-//   const itemSession = useSelector((state) => state.itemSession.value);
+  const formSession = useSelector((state) => state.formSession.value);
+  const [lavori, setLavori] = useState(-1);
+  const [tipoFile, setTipoFile] = useState("");
+  const [datiRicerca, setDatiRicerca] = useState({
+    tipo_item: "lavoro", 
+    nome_cliente: "", 
+    cognome_cliente: "", 
+    primo_giorno: "",
+    ultimo_giorno: "",
+    descrizione: "",   
+    note: ""
+  });
   
-//   const [datiRicerca, setDatiRicerca] = useState({
-//     nome_cliente: "",
-//     cognome_cliente: "",
-//     nome_professionista: "",
-//     professione: "",
-//     primo_giorno: "",
-//     ultimo_giorno: "",
-//     descrizione: "",
-//     note: "",
-//   });
-//   const [lavori, setLavori] = useState(-1);
-//   const [aggiornamentoCompletato, setAggiornamentoCompletato] = useState("");
-//   const [tipoFile, setTipoFile] = useState('');
-//   const [eliminaLavori, setEliminaLavori] = useState(false);
-  
-//   const updateDatiLastSearch = () => {
-//     console.log("Dati aggiornati.");
-//   };
+  const ottieniLavoriRange = async (e, tipoFile) => {
+    e.preventDefault();
 
-//   const ottieniLavori = async () => {
-//     lavoroStore.azzeraLavori(); // rende lavori === -1
-//     await LavoroAction.dispatchAction(datiRicerca, operazioniLavori.VISUALIZZA_LAVORI);
-//     setAggiornamentoCompletato(false);
-//   };
-
-//   const ottieniLavoriRange = async (e, tipoFile) => {
-//     e.preventDefault();
-//     if (confirm("Sei sicuro di voler ottenere il file?")) {
-//       setTipoFile(tipoFile);
-//       await ottieniLavori();
-//     }
-//     else {
-//       alert("Operazione annullata.");
-//     }
-//   };
-
-//   useEffect(() => {
-//     if (aggiornamentoCompletato === false) {
-//       aggiornamentoLista("lavori", setLavori);
-//       console.log("Aggiornamento in corso ...");
-//     }
-//   }, [aggiornamentoCompletato]);
-
-//   useEffect(() => {
-//     if (aggiornamentoCompletato === false && lavori !== -1) {
-//       setAggiornamentoCompletato(true);
-//       console.log("Aggiornamento completato.")
-//       if(tipoFile === "pdf") {
-//         generaFileLavoriPDF(lavori);
-//       }
-//       else if(tipoFile === "excel") {
-//         generaFileLavoriExcel(lavori);
-//       }
-//       setDatiRicerca(prevState => ({
-//         ...prevState,
-//         primo_giorno: "", 
-//         ultimo_giorno: ""
-//       }));
-//     }
-//   }, [lavori]);
-
-
-//   const handleDelete = async (e) => {
-//     e.preventDefault();
-//     if (confirm("Sei sicuro di voler eliminare i lavori?")) {
-//       const dati = {
-//         tipo_item: "lavoro", 
-//         "primo_giorno": datiRicerca.primo_giorno, 
-//         "ultimo_giorno": datiRicerca.ultimo_giorno 
-//       }
-    
-//       const response = await fetch('/ELIMINA_ITEMS_RANGE_GIORNI', {
-//         method: 'POST',
-//         headers: {
-//           'Content-Type': 'application/json',
-//         },
-//         body: JSON.stringify(dati),
-//       });
-//       if(response.status === 200) {
-//         alert("Eliminazione completata con successo.");
-//       }
-//       else {
-//         alert("Errore durante l\'eliminazione dei lavori, riprova più tardi."); 
-//       }
-//     }
-//     else {
-//       alert("Eliminazione annullata.");
-//     }
-//   }
-
-//   const FormFileLavoriTag = (formSession.view === "form") ? FormFileLavori : (
-//     (formSession.view === "card") ? CardFileLavori : RowFileLavori
-//   );
-
-//   return (
-//     <>
-//       <Header />
-
-//       <div className="main-content" />
+    if (confirm("Sei sicuro di voler ottenere il file?")) {
+      setTipoFile(tipoFile);
       
-//       <FormFileLavoriTag 
-//       item={datiRicerca}
-//       setItem={setDatiRicerca}
-//       ottieniLavoriRangePDF={(e) => ottieniLavoriRange(e, "pdf")}
-//       ottieniLavoriRangeExcel={(e) => ottieniLavoriRange(e, "excel")}
-//       eliminaLavoriRange={(e) => handleDelete(e)}
-//       />
+      const response = await fetch('/VISUALIZZA_ITEMS', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(datiRicerca),
+      });
 
-//     </>
-//   );
-// };
+      if(response.status === 200) {
+        const result = await response.json();
+        setLavori(result.items);
+
+        if(tipoFile === "pdf") {
+          generaFileLavoriPDF(lavori);
+        }
+        else if(tipoFile === "excel") {
+          generaFileLavoriExcel(lavori);
+        }
+      }
+      else {
+        alert("Errore durante la ricerca dei lavori, riprova più tardi.");
+      }
+    }
+    else {
+      alert("Operazione annullata.");
+    }
+  }
+    
+  const handleDelete = async (e) => {
+    e.preventDefault();
+    if (confirm("Sei sicuro di voler eliminare i lavori?")) {
+      const dati = {
+        tipo_item: "lavoro", 
+        "primo_giorno": datiRicerca.primo_giorno, 
+        "ultimo_giorno": datiRicerca.ultimo_giorno 
+      }
+    
+      const response = await fetch('/ELIMINA_ITEMS_RANGE_GIORNI', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(dati),
+      });
+      if(response.status === 200) {
+        alert("Eliminazione completata con successo.");
+      }
+      else {
+        alert("Errore durante l\'eliminazione dei lavori, riprova più tardi."); 
+      }
+    }
+    else {
+      alert("Eliminazione annullata.");
+    }
+  }
+
+  const FormFileTag = (formSession.view === "form") ? FormFileItems : (
+    (formSession.view === "card") ? CardFileItems : RowFileItems
+  );
+  
+  return (
+    <>
+      <Header />
+
+      <div className="main-content" />
+      
+      <FormFileTag 
+        campi={getCampiFile(datiRicerca, (e) => handleInputChange(e, setDatiRicerca), null, null)} 
+        indici={indiciFile} 
+        ottieniFileRangePDF={(e) => ottieniLavoriRange(e, "pdf")}
+        ottieniFileRangeExcel={(e) => ottieniLavoriRange(e, "excel")} 
+        eliminaItemsRange={(e) => handleDelete(e)} 
+      />
+    </>
+  );
+};
 
 export default FileLavori;
 

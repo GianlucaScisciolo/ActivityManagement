@@ -113,8 +113,8 @@ const Clienti = () => {
   const handleEdit = async (e) => {
     e.preventDefault();
     if (confirm("Sei sicuro di voler modificare i clienti?")) {
-      let clientiDaNonModificare = clienti.filter(cliente => !selectedIdsModifica.includes(cliente.id));
-      let clientiDaModificare = clienti.filter(cliente => selectedIdsModifica.includes(cliente.id)); 
+      let clientiDaNonModificare = clientiSession.clienti.filter(cliente => !selectedIdsModifica.includes(cliente.id));
+      let clientiDaModificare = clientiSession.clienti.filter(cliente => selectedIdsModifica.includes(cliente.id)); 
       // let copiaClientiDaModificare = [...clientiDaModificare];
       
       let esitiModifica = [];
