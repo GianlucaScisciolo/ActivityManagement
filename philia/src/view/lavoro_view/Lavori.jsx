@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { handleInputChange } from "../../vario/Vario";
 import { selectOperationBody } from "../component/Operazioni";
@@ -8,13 +8,10 @@ import { RowRicercaItems } from "../../riutilizzabile/row_item/RowItem";
 import ServizioAction from "../../action/servizio_action/ServizioAction";
 import servizioStore from "../../store/servizio_store/ServizioStore";
 import { operazioniServizi } from "../../vario/Operazioni";
-import { 
-  getCampiRicercaLavori, getCampiLavoroEsistente, 
-  indiciRicercaLavori, indiciLavoroEsistente 
-} from "./LavoriVario";
+import { getCampiRicercaLavori, getCampiLavoroEsistente, indiciRicercaLavori, indiciLavoroEsistente } from "./lavoriVario";
 import PaginaWeb from "../../riutilizzabile/PaginaWeb";
 import PaginaWebRicercaItems from "../../riutilizzabile/PaginaWebRicercaItems";
-import { aggiornaLavori, aggiornaTipoSelezione } from "../../store/redux/LavoriSlice";
+import { aggiornaLavori, aggiornaTipoSelezione, aggiornaLavoro } from "../../store/redux/LavoriSlice";
 
 const Lavori = () => {
   const lavoriSession = useSelector((state) => state.lavoriSession.value);
@@ -120,15 +117,97 @@ const Lavori = () => {
     }
   }
 
+  // const handleEdit = async (e) => {
+  //   e.preventDefault();
+  //   if (confirm("Sei sicuro di voler modificare le spese?")) {
+  //     alert("Operazione da aggiustare ancora.");
+  //   }
+  //   else {
+  //     alert("Modifica annullata.");
+  //   }
+  // }
+
   const handleEdit = async (e) => {
     e.preventDefault();
-    if (confirm("Sei sicuro di voler modificare le spese?")) {
-      alert("Operazione da aggiustare ancora.");
+
+    if (confirm("Sei sicuro di voler modificare i lavori?")) {
+      let lavoriDaNonModificare = lavoriSession.lavori.filter(lavoro => !selectedIdsModifica.includes(lavoro.id));
+      let lavoriDaModificare = lavoriSession.lavori.filter(lavoro => selectedIdsModifica.includes(lavoro.id));
+      let esitiModifica = [];
+      for(let i = 0; i < lavoriDaModificare.length; i++) {
+        const dati = {
+          tipo_item: "lavoro", 
+          item: lavoriDaModificare[i] 
+        }
+        const response = await fetch('/MODIFICA_ITEM', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(dati),
+        });
+        if(response.status === 200) {           
+          esitiModifica.push([lavoriDaModificare[i], "Modifica avvenuta con successo."]);
+        }
+        else if(response.status === 400) {
+          esitiModifica.push([lavoriDaModificare[i], "Errore durante la modifica: lavoro x gia\' presente."]);
+          // copiaLavoriDaModificare[i] = lavoriDaModificare[i];
+        }
+        else {
+          esitiModifica.push([lavoriDaModificare[i], "Errore durante la modifica del lavoro x."]);
+          // copiaLavoriDaModificare[i] = lavoriDaModificare[i];
+        }
+      }
+
+      let lavoriAggiornati = [];
+      for (let i = 0; i < lavoriSession.lavori.length; i++) {
+        let lavoroAggiornato = { ...lavoriSession.lavori[i] };
+        if(lavoroAggiornato.tipo_selezione === 1) {
+          lavoroAggiornato.tipo_selezione = 0;
+        }
+        lavoriAggiornati.push(lavoroAggiornato);
+      }
+      dispatch(aggiornaLavori({
+        lavori: lavoriAggiornati, 
+      }));
+
+      setSelectedIdsModifica([]);
+
+      // alert("Risultati modifica:\n")
+      alert("Modifica effettuata.");
     }
     else {
-      alert("Modifica annullata.");
+      alert("Salvataggio annullato.");
     }
   }
+
+  const getAllServizi = async () => {
+    try {
+      const response = await fetch('/OTTIENI_TUTTI_GLI_ITEMS', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({tipo_item: "servizio"}),
+      });
+
+      if(response.status === 200) {
+        const result = await response.json();
+        setServizi(result.items);
+      }
+      else {
+        alert("Errore durante l\'ottenimento dei clienti per l\'inserimento di un nuovo lavoro, riprova più tardi.");
+      }
+    }
+    catch (error) {
+      console.error('Errore:', error);
+      alert("Errore durante l\'ottenimento dei clienti per l\'inserimento di un nuovo lavoro, riprova più tardi.");
+    }
+  };
+
+  useEffect(() => {
+    getAllServizi();
+  }, []);
 
   return (
     <>

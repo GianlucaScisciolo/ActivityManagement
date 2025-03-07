@@ -144,7 +144,7 @@ export function OperazioniItemEsistente ({ selectOperation, item }) {
   )
 }
 
-function OperazioniFileItems({ottieniFileRangePDF, ottieniFileRangeExcel, eliminaItemsRange}) {
+export function OperazioniFileItems({ottieniFileRangePDF, ottieniFileRangeExcel, eliminaItemsRange}) {
   return (
     <StyledListGroupItem style={{ border: "5px solid #000000", backgroundColor: "#000000", paddingTop: "3%" }}>
       <div>
@@ -383,7 +383,6 @@ export function CardFileItems({campi, indici, ottieniFileRangePDF, ottieniFileRa
     </center>
   );
 }
-
 
 export function CardLogin({campi, indici, eseguiLogin}) {
   let maxHeight = "2000px";

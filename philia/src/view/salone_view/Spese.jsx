@@ -117,8 +117,8 @@ const Spese = () => {
   const handleEdit = async (e) => {
     e.preventDefault();
     if (confirm("Sei sicuro di voler modificare le spese?")) {
-      let speseDaNonModificare = spese.filter(spesa => !selectedIdsModifica.includes(spesa.id));
-      let speseDaModificare = spese.filter(spesa => selectedIdsModifica.includes(spesa.id)); 
+      let speseDaNonModificare = speseSession.spese.filter(spesa => !selectedIdsModifica.includes(spesa.id));
+      let speseDaModificare = speseSession.spese.filter(spesa => selectedIdsModifica.includes(spesa.id)); 
       // let copiaSpeseDaModificare = [...speseDaModificare];
       
       let esitiModifica = [];
@@ -148,14 +148,17 @@ const Spese = () => {
       }
 
       let speseAggiornate = [];
-      for (let i = 0; i < spese.length; i++) {
-        let spesaAggiornata = { ...spese[i] };
+      for (let i = 0; i < speseSession.spese.length; i++) {
+        let spesaAggiornata = { ...speseSession.spese[i] };
         if(spesaAggiornata.tipo_selezione === 1) {
           spesaAggiornata.tipo_selezione = 0;
         }
         speseAggiornate.push(spesaAggiornata);
       }
-      setSpese(speseAggiornate);
+      // setSpese(speseAggiornate);
+      dispatch(aggiornaSpese({
+        spese: speseAggiornate, 
+      }));
 
       setSelectedIdsModifica([]);
 

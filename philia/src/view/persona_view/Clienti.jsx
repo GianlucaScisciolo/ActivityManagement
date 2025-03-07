@@ -144,14 +144,16 @@ const Clienti = () => {
       }
 
       let clientiAggiornati = [];
-      for (let i = 0; i < clienti.length; i++) {
-        let clienteAggiornato = { ...clienti[i] };
+      for (let i = 0; i < clientiSession.clienti.length; i++) {
+        let clienteAggiornato = { ...clientiSession.clienti[i] };
         if(clienteAggiornato.tipo_selezione === 1) {
           clienteAggiornato.tipo_selezione = 0;
         }
         clientiAggiornati.push(clienteAggiornato);
       }
-      setClienti(clientiAggiornati);
+      dispatch(aggiornaClienti({
+        clienti: clientiAggiornati, 
+      }));
 
       setSelectedIdsModifica([]);
 
@@ -185,6 +187,7 @@ const Clienti = () => {
           }
         }
       />
+      <button>{clientiSession.clienti.length}</button>
     </>
   );
 }

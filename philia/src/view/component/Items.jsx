@@ -16,32 +16,32 @@ export const Items = ({tipoItem, items, setItems, selectOperation, emptyIsConsid
   const dispatch = useDispatch();
   const ItemEsistenteTag = (itemSession.view === "card") ? CardItemEsistente : RowItemEsistente;
 
-  const OptionsServizi = (servizi, descrizione, sottoStringa, setIdServizi) => {
-    return (
-    <>
-      Da definire!!!!
-    </>
-    )
-  }
-  /*
-  const OptionsServizi = (servizi, descrizione, sottoStringa, setIdServizi) => {
+  const OptionsServizi = (servizi, descrizione, sottoStringa, item) => {
+    
     if (!servizi) {
       return null;
     }
-    const [serviziSelezionati, setServiziSelezionati] = useState([]);
+    // const [serviziSelezionati, setServiziSelezionati] = useState([]);
     const [serviziNonSelezionati, setServiziNonSelezionati] = useState(Object.values(servizi));
-    
-    useEffect(() => {
-      const serviziSelezionatiAttuali = descrizione.split(',').map(item => item.trim()).filter(item => item !== "");
-      for(let i = 0; i < serviziSelezionatiAttuali.length; i++) {
-        serviziSelezionatiAttuali[i] = serviziSelezionatiAttuali[i].split('-').map(item => item.trim()).filter(item => item !== "");
-        serviziSelezionatiAttuali[i] = {
-          nome: serviziSelezionatiAttuali[i][0], 
-          prezzo: serviziSelezionatiAttuali[i][1].substring(0, serviziSelezionatiAttuali[i][1].length-2)
-        };
-      }
-      setServiziSelezionati(serviziSelezionatiAttuali);
-    }, []);
+    // let [serviziSelezionatiAttuali, setServiziSelezionatiAttuali] = useState([]);
+    // useEffect(() => {
+    //   setServiziSelezionatiAttuali(descrizione.split(',').map(item => item.trim()).filter(item => item !== ""));
+    //   for(let i = 0; i < serviziSelezionatiAttuali.length; i++) {
+    //     serviziSelezionatiAttuali[i] = serviziSelezionatiAttuali[i].split('-').map(item => item.trim()).filter(item => item !== "");
+    //     serviziSelezionatiAttuali[i] = {
+    //       nome: serviziSelezionatiAttuali[i][0], 
+    //       prezzo: serviziSelezionatiAttuali[i][1].substring(0, serviziSelezionatiAttuali[i][1].length-2)
+    //     };
+    //   }
+      // setServiziSelezionati(serviziSelezionatiAttuali);
+      //----------------------------------------------------------------------------------------------------//
+      // dispatch(aggiornaLavoro({
+      //   id_lavoro: item.id, 
+      //   nome_attributo: "serviziSelezionati", 
+      //   nuovo_valore: serviziSelezionatiAttuali
+      // }));
+      //----------------------------------------------------------------------------------------------------//
+    // }, []);
 
     useEffect(() => {
       setServiziNonSelezionati(Object.values(servizi));
@@ -53,25 +53,41 @@ export const Items = ({tipoItem, items, setItems, selectOperation, emptyIsConsid
 
     const handleCheckboxChange = (e, servizio) => {
       if (e.target.checked) {
-        const updatedSelezionati = [...serviziSelezionati, servizio];
-        setServiziSelezionati(updatedSelezionati);
-        setServiziNonSelezionati(serviziNonSelezionati.filter(s => s.id !== servizio.id));
-        setIdServizi(prevIds => [...prevIds, servizio.id]);
+        dispatch(aggiornaLavoro({
+          id_lavoro: item.id, 
+          nome_attributo: "serviziSelezionati", 
+          nuovo_valore: [...item["serviziSelezionati"], servizio]
+        }));
+        setServiziNonSelezionati(serviziNonSelezionati.filter(s => (optionStr(s)) !== optionStr(servizio)));
       } 
       else {
-        const updatedSelezionati = serviziSelezionati.filter(s => s.id !== servizio.id);
-        setServiziSelezionati(updatedSelezionati);
-        setServiziNonSelezionati([...serviziNonSelezionati, servizio]);
-        setIdServizi(prevIds => prevIds.filter(id => id !== servizio.id));
+        // setServiziSelezionati(updatedSelezionati);
+        dispatch(aggiornaLavoro({
+          id_lavoro: item.id, 
+          nome_attributo: "serviziSelezionati", 
+          nuovo_valore: item["serviziSelezionati"].filter(s => (optionStr(s)) !== optionStr(servizio))
+        }));
+        // setServiziNonSelezionati([...serviziNonSelezionati, servizio]);
+        let isPresent = false;
+        for(let s of serviziNonSelezionati) {
+          if(optionStr(s) === optionStr(servizio)) {
+            isPresent = true;
+            break;
+          } 
+        }
+        if(isPresent !== true) {
+          const updatedNonSelezionati = [...serviziNonSelezionati, servizio];
+          setServiziNonSelezionati(updatedNonSelezionati);
+        }
+        // setIdServizi(prevIds => prevIds.filter(id => id !== servizio.id));
       }
     };
-
     return (
       <>
         {(servizi !== -1) && (
           <>
             <div>
-              Servizi non selezionati:<br />
+              Seleziona almeno 1 servizio:<br />
               {serviziNonSelezionati.filter(servizio => 
                 optionStr(servizio).toLowerCase().includes(sottoStringa.toLowerCase())
               ).map((servizio, index) => (
@@ -80,7 +96,7 @@ export const Items = ({tipoItem, items, setItems, selectOperation, emptyIsConsid
                     type="checkbox" 
                     id={"servizio_non_sel_" + index} 
                     name={"servizio_non_sel_" + index} 
-                    value={servizio.id}
+                    value={optionStr(servizio)}
                     checked={false}
                     onChange={(e) => handleCheckboxChange(e, servizio)}
                     className="custom-checkbox"
@@ -92,14 +108,13 @@ export const Items = ({tipoItem, items, setItems, selectOperation, emptyIsConsid
               ))}
             </div>
             <div>
-              Servizi selezionati (seleziona almeno un servizio):<br />
-              {serviziSelezionati.map((servizio, index) => (
+              {item["serviziSelezionati"].map((servizio, index) => (
                 <div key={index} className="checkbox-wrapper">
                   <input 
                     type="checkbox" 
                     id={"servizio_sel_" + index} 
                     name={"servizio_sel_" + index} 
-                    value={servizio.id} 
+                    value={optionStr(servizio)} 
                     checked={true}
                     onChange={(e) => handleCheckboxChange(e, servizio)}
                     className="custom-checkbox"
@@ -115,23 +130,7 @@ export const Items = ({tipoItem, items, setItems, selectOperation, emptyIsConsid
       </>
     );
   }
-  */
 
-  // const modifica = (e, item) => {
-  //   // e.preventDefault();
-  //   const { name, value } = e.target;
-  //   setItems((prevItems) => {
-  //     const newItems = prevItems.map(currentItem => 
-  //       currentItem.id === item.id 
-  //         ? { ...currentItem, [name]: value }
-  //         : currentItem
-  //     );
-  //     // Ritornare l'elemento modificato
-  //     // setTimeout(() => updatedItems({target: {name, value}}, item), 0);
-  //     return newItems;
-  //   });
-  // };
-  
   const updatedItems = (e, item, inputRef) => {
     // e.preventDefault();
     const { name, value } = e.target;
@@ -167,28 +166,28 @@ export const Items = ({tipoItem, items, setItems, selectOperation, emptyIsConsid
 
   
   const ItemElements = () => {
-    
     return (
       <>
         {items.map((item, index) => {
           // item["servizio"] = (item.servizio) ? item.servizio : "";
           const descrizione = item.descrizione;
-          const sottoStringa = item.servizio;
-          const [idServizi, setIdServizi] = useState([]);
+          const sottoStringa = (item.servizio) ? item.servizio : "";
+          // const [serviziSelezionati, setServiziSelezionati] = useState([]);
           const inputRef = useRef(null);
-          // item["id_servizi"] = idServizi;
+          // item["id_servizi"] = idServizi;          
           return (
             <ItemEsistenteTag 
               ref={inputRef}
               key={index} 
               item={item} 
-              campi={campi(OptionsServizi(servizi, descrizione, sottoStringa, setIdServizi), item, null, null, null)} 
+              campi={campi(OptionsServizi(servizi, descrizione, sottoStringa, item), item, null, null, null)} 
               indici={indici} 
               selectOperation={selectOperation} 
               items={items} 
               setItems={setItems} 
               tipoItem={tipoItem}
               onChange={(e) => updatedItems(e, item, inputRef)}
+              // itemsSelezionati=
             />
           )
         })}

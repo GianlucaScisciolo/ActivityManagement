@@ -216,6 +216,19 @@ app.post("/VISUALIZZA_ITEMS", async(req, res) => {
 
   try {
     const result = await executeQuery(sql, params);
+    if(req.body.tipo_item === "lavoro") {
+      for(let i = 0; i < result.length; i++) {
+        const serviziSelezionatiAttuali = result[i].descrizione.split(',').map(item => item.trim()).filter(item => item !== "");
+        for(let i = 0; i < serviziSelezionatiAttuali.length; i++) {
+          serviziSelezionatiAttuali[i] = serviziSelezionatiAttuali[i].split('-').map(item => item.trim()).filter(item => item !== "");
+          serviziSelezionatiAttuali[i] = {
+            nome: serviziSelezionatiAttuali[i][0], 
+            prezzo: serviziSelezionatiAttuali[i][1].substring(0, serviziSelezionatiAttuali[i][1].length-2)
+          };
+        }
+        result[i]["serviziSelezionati"] = serviziSelezionatiAttuali;
+      }
+    }
     return res.status(200).json({ items: result });
   } 
   catch (err) {
@@ -372,9 +385,9 @@ app.post("/MODIFICA_ITEM", async(req, res) => {
       params = servizioSQL.params_modifica_servizio(req.body.item);
       break;
     case "lavoro":
-      // Da aggiustare ancora
+      console.log(req.body);
       sql = lavoroSQL.SQL_MODIFICA_LAVORO
-      params = lavoroSQL.params_modifica_lavoro(req.body);
+      params = lavoroSQL.params_modifica_lavoro(req.body.item);
       break;
     case "spesa":
       sql = spesaSQL.SQL_MODIFICA_SPESA;

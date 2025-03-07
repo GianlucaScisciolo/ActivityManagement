@@ -5,7 +5,7 @@ import { selectOperationBody } from "../component/Operazioni";
 import { 
   getCampiNuovoLavoro, getCampiLavoroEsistente, 
   indiciNuovoLavoro, indiciLavoroEsistente  
-} from "./LavoriVario";
+} from "./lavoriVario";
 import { getSelectTag } from "../../riutilizzabile/form_item/FormItem";
 import PaginaWeb from "../../riutilizzabile/PaginaWeb";
 import PaginaWebNewItem from "../../riutilizzabile/PaginaWebNewItem";

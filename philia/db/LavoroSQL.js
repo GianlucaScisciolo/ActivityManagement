@@ -145,7 +145,23 @@ export class LavoroSQL {
   }
 
   params_modifica_lavoro(params) {
-    return [];
+    /**/
+    console.log(params);
+    console.log(params["serviziSelezionati"]);
+    let descrizione = "";
+    for(let servizio of params["serviziSelezionati"]) {
+      descrizione += servizio.nome + " - " + servizio.prezzo + " €, ";
+    }
+    params.descrizione = descrizione;
+    /**/
+   
+    return [
+      `${params.giorno}`, 
+      `${params.descrizione}`, 
+      `${params.note}`, 
+      `${params.id}`, 
+    ];
+    
   }
 
   params_selezione_lavori(params_in) {

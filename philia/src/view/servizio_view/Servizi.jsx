@@ -144,14 +144,17 @@ const Servizi = () => {
       }
 
       let serviziAggiornati = [];
-      for (let i = 0; i < servizi.length; i++) {
-        let servizioAggiornato = { ...servizi[i] };
+      for (let i = 0; i < serviziSession.servizi.length; i++) {
+        let servizioAggiornato = { ...serviziSession.servizi[i] };
         if(servizioAggiornato.tipo_selezione === 1) {
           servizioAggiornato.tipo_selezione = 0;
         }
         serviziAggiornati.push(servizioAggiornato);
       }
-      setServizi(serviziAggiornati);
+      // setServizi(serviziAggiornati);
+      dispatch(aggiornaServizi({
+        servizi: serviziAggiornati, 
+      }))
 
       setSelectedIdsModifica([]);
 
