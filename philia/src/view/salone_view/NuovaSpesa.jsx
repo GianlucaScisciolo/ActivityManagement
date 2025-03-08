@@ -1,15 +1,12 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { selectOperationBody } from "../component/Operazioni";
-import { handleInputChange } from "../../vario/Vario";
+import { handleInputChange, handleInputClick, handleInputBlur } from "../../vario/Vario";
 import { FormNuovoItem } from "../../riutilizzabile/form_item/FormItem";
 import { CardNuovoItem } from "../../riutilizzabile/card_item/CardItem";
 import { RowNuovoItem } from "../../riutilizzabile/row_item/RowItem";
 import { controlloSpesa } from "../../vario/Controlli";
-import { 
-  getCampiNuovaSpesa, getCampiSpesaEsistente, 
-  indiciNuovaSpesa, indiciSpesaEsistente 
-} from "./SpeseVario";
+import { getCampiNuovaSpesa, getCampiSpesaEsistente, indiciNuovaSpesa, indiciSpesaEsistente } from "./SpeseVario";
 import PaginaWeb from "../../riutilizzabile/PaginaWeb";
 import PaginaWebNewItem from "../../riutilizzabile/PaginaWebNewItem";
 import { aggiornaTipoSelezione, inserimentoSpesa } from "../../store/redux/SpeseSlice";
@@ -97,7 +94,12 @@ const NuovaSpesa = () => {
       <PaginaWebNewItem 
         componenti={
           {
-            campiNuovoItem: getCampiNuovaSpesa(nuovaSpesa, (e) => handleInputChange(e, setNuovaSpesa), null, null), 
+            campiNuovoItem: getCampiNuovaSpesa(
+              nuovaSpesa, 
+              (e) => handleInputChange(e, setNuovaSpesa), 
+              (e) => handleInputClick(e), 
+              (e) => handleInputBlur(e) 
+            ), 
             indiciNuovoItem: indiciNuovaSpesa, 
             handleInsert: (e) => handleInsert(e), 
             tipoItem: "spesa", 

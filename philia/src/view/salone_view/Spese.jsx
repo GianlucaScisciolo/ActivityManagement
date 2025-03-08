@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { selectOperationBody } from "../component/Operazioni";
-import { handleInputChange } from "../../vario/Vario";
+import { handleInputChange, handleInputClick, handleInputBlur } from "../../vario/Vario";
 import { FormRicercaItems } from "../../riutilizzabile/form_item/FormItem";
 import { CardRicercaItems } from "../../riutilizzabile/card_item/CardItem";
 import { RowRicercaItems } from "../../riutilizzabile/row_item/RowItem";
@@ -175,7 +175,12 @@ const Spese = () => {
       <PaginaWebRicercaItems 
         componenti={ 
           {
-            campiRicercaItems: getCampiRicercaSpese(datiRicerca, (e) => handleInputChange(e, setDatiRicerca), null, null),
+            campiRicercaItems: getCampiRicercaSpese(
+              datiRicerca, 
+              (e) => handleInputChange(e, setDatiRicerca), 
+              (e) => handleInputClick(e), 
+              (e) => handleInputBlur(e) 
+            ),
             indiciRicercaItems: indiciRicercaSpese, 
             handleSearch: (e) => handleSearch(e), 
             tipoItem: "spesa", 

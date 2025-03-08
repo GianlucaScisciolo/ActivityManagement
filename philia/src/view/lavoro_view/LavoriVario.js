@@ -1,8 +1,17 @@
+// export const handleGiornoBlur = (setGiornoType, item, setItem) => {
+//   return () => {
+//     if(!item.giorno)
+//       setGiornoType('text');
+//     else
+//       setGiornoType('date');
+//   };
+// };
+
 export function getCampiNuovoLavoro(item, clienti, servizi, handleOnChange, handleOnClick, handleOnBlur) {
   return {
     header: "Nuovo lavoro", 
     label: ["Cliente*", "Servizio*", "Giorno*", "Note"],  
-    type: [null, null, "Date", null], 
+    type: [null, null, "text", null], 
     step: [null, null, null, null], 
     min: [null, null, null, null], 
     name: ["cliente", "servizio", "giorno", "note"], 
@@ -21,7 +30,7 @@ export function getCampiRicercaLavori(item, handleOnChange, handleOnClick, handl
   return {
     header: "Ricerca lavori", 
     label: ["Nome cliente", "Cognome cliente", "Primo giorno", "Ultimo giorno", "Descrizione", "Note"], 
-    type: [null, null, "date", "date", null, null], 
+    type: [null, null, "text", "text", null, null], 
     step: [null, null, null, null, null, null], 
     min: [null, null, null, null, null, null], 
     name: ["nome_cliente", "cognome_cliente", "primo_giorno", "ultimo_giorno", "descrizione", "note"], 
@@ -57,7 +66,7 @@ export function getCampiFile(item, handleOnChange, handleOnClick, handleOnBlur) 
   return {
     header: "File lavori", 
     label: ["Primo giorno", "Ultimo giorno"], 
-    type: ["date", "date"], 
+    type: ["text", "text"], 
     step: [null, null], 
     min: [null, null], 
     name: ["primo_giorno", "ultimo_giorno"], 

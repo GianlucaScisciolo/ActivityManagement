@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { handleInputChange } from "../../vario/Vario";
+import { handleInputChange, handleInputClick, handleInputBlur } from "../../vario/Vario";
 import { selectOperationBody } from "../component/Operazioni";
 import { 
   getCampiNuovoLavoro, getCampiLavoroEsistente, 
@@ -377,7 +377,14 @@ const NuovoLavoro = () => {
       <PaginaWebNewItem 
         componenti={
           {
-            campiNuovoItem: getCampiNuovoLavoro(nuovoLavoro, OptionsClienti({clienti}), OptionsServizi({servizi}), (e) => handleInputChange(e, setNuovoLavoro), null, null), 
+            campiNuovoItem: getCampiNuovoLavoro(
+              nuovoLavoro, 
+              OptionsClienti({clienti}), 
+              OptionsServizi({servizi}), 
+              (e) => handleInputChange(e, setNuovoLavoro), 
+              (e) => handleInputClick(e), 
+              (e) => handleInputBlur(e) 
+            ),
             indiciNuovoItem: indiciNuovoLavoro, 
             handleInsert: (e) => handleInsert(e), 
             tipoItem: "lavoro", 

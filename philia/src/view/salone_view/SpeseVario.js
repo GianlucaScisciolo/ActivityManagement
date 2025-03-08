@@ -2,7 +2,7 @@ export function getCampiNuovaSpesa(item, handleOnChange, handleOnClick, handleOn
   return {
     header: "Nuova spesa", 
     label: ["Nome*", "Descrizione", "Totale*", "Giorno*", "Note"],  
-    type: [null, null, "number", "date", null], 
+    type: [null, null, "number", "text", null], 
     step: [null, null, "0.50", null, null], 
     min: [null, null, "0.50", null, null], 
     name: ["nome", "descrizione", "totale", "giorno", "note"], 
@@ -21,7 +21,7 @@ export function getCampiRicercaSpese(item, handleOnChange, handleOnClick, handle
   return {
     header: "Ricerca spese", 
     label: ["Nome", "Descrizione", "Totale minimo", "Totale massimo", "Primo giorno", "Ultimo giorno", "Note"], 
-    type: [null, null, "number", "number", "date", "date", null], 
+    type: [null, null, "number", "number", "text", "text", null], 
     step: [null, null, "0.50", "0.50", null, null, null], 
     min: [null, null, null, null, null, null, null], 
     name: ["nome", "descrizione", "totale_min", "totale_max", "primo_giorno", "ultimo_giorno", "note"], 
@@ -59,7 +59,7 @@ export function getCampiFile(item, handleOnChange, handleOnClick, handleOnBlur) 
   return {
     header: "File spese", 
     label: ["Primo giorno", "Ultimo giorno"], 
-    type: ["date", "date"], 
+    type: ["text", "text"], 
     step: [null, null], 
     min: [null, null], 
     name: ["primo_giorno", "ultimo_giorno"], 

@@ -1,8 +1,3 @@
-const matchRegex = (value, regexStr) => {
-  const regex = new RegExp(regexStr);
-  return regex.test(value);
-};
-
 export const handleInputChange = (e, setItem) => {
   e.preventDefault();
   const { name, value, id } = e.target;
@@ -93,14 +88,26 @@ export const handleInputChange = (e, setItem) => {
   }
 };
 
-export const handleGiornoBlur = (setGiornoType, item, setItem) => {
-  return () => {
-    if(!item.giorno)
-      setGiornoType('text');
-    else
-      setGiornoType('date');
-  };
-};
+export const handleInputClick = (e) => {
+  if([
+    "nuovo_giorno_lavoro", "ricerca_primo_giorno_lavoro", "ricerca_ultimo_giorno_lavoro", 
+    "file_primo_giorno_lavoro", "file_ultimo_giorno_lavoro", 
+    "nuovo_giorno_spesa", "ricerca_primo_giorno_spesa", "ricerca_ultimo_giorno_spesa", 
+    "file_primo_giorno_spesa", "file_ultimo_giorno_spesa" 
+  ].includes(e.target.id)) {
+    e.target.type = "date";
+  }
+}
+export const handleInputBlur = (e) => {
+  if(([
+    "nuovo_giorno_lavoro", "ricerca_primo_giorno_lavoro", "ricerca_ultimo_giorno_lavoro", 
+    "file_primo_giorno_lavoro", "file_ultimo_giorno_lavoro", 
+    "nuovo_giorno_spesa", "ricerca_primo_giorno_spesa", "ricerca_ultimo_giorno_spesa", 
+    "file_primo_giorno_spesa", "file_ultimo_giorno_spesa" 
+  ].includes(e.target.id)) && !(e.target.value)) {
+    e.target.type = "text";
+  }
+}
 
 
 

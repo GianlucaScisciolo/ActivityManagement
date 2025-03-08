@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { handleInputChange } from "../../vario/Vario";
+import { handleInputChange, handleInputClick, handleInputBlur } from "../../vario/Vario";
 import { selectOperationBody } from "../component/Operazioni";
 import { FormRicercaItems } from "../../riutilizzabile/form_item/FormItem";
 import { CardRicercaItems } from "../../riutilizzabile/card_item/CardItem";
@@ -198,7 +198,12 @@ const Lavori = () => {
       <PaginaWebRicercaItems 
         componenti={
           {
-            campiRicercaItems: getCampiRicercaLavori(datiRicerca, (e) => handleInputChange(e, setDatiRicerca), null, null), 
+            campiRicercaItems: getCampiRicercaLavori(
+              datiRicerca, 
+              (e) => handleInputChange(e, setDatiRicerca), 
+              (e) => handleInputClick(e), 
+              (e) => handleInputBlur(e)  
+            ), 
             indiciRicercaItems: indiciRicercaLavori, 
             handleSearch: (e) => handleSearch(e), 
             tipoItem: "lavoro", 

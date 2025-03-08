@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import Header from "../component/Header";
-import { handleInputChange } from "../../vario/Vario";
+import { handleInputChange, handleInputClick, handleInputBlur } from "../../vario/Vario";
 import { generaFileSpesePDF, generaFileSpeseExcel } from "../../vario/File";
 import { FormFileItems } from "../../riutilizzabile/form_item/FormItem";
 import { CardFileItems } from "../../riutilizzabile/card_item/CardItem";
@@ -99,7 +99,12 @@ const FileSpese = () => {
       <div className="main-content" />
       
       <FormFileTag 
-        campi={getCampiFile(datiRicerca, (e) => handleInputChange(e, setDatiRicerca), null, null)} 
+        campi={getCampiFile(
+          datiRicerca, 
+          (e) => handleInputChange(e, setDatiRicerca), 
+          (e) => handleInputClick(e), 
+          (e) => handleInputBlur(e) 
+        )} 
         indici={indiciFile} 
         ottieniFileRangePDF={(e) => ottieniSpeseRange(e, "pdf")}
         ottieniFileRangeExcel={(e) => ottieniSpeseRange(e, "excel")} 
