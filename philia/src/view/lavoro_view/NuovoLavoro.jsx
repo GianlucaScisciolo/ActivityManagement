@@ -12,8 +12,13 @@ import PaginaWebNewItem from "../../riutilizzabile/PaginaWebNewItem";
 import { aggiornaTipoSelezione, inserimentoLavoro } from "../../store/redux/LavoriSlice";
 
 const NuovoLavoro = () => {
+  const formSession = useSelector((state) => state.formSession.value);
+  const itemSession = useSelector((state) => state.itemSession.value);
   const lavoriSession = useSelector((state) => state.lavoriSession.value);
   const dispatch = useDispatch();
+
+  const classeFormWrapperCheckbox = (formSession.view === "form") ? "checkbox-wrapper-form" : "checkbox-wrapper";
+  const classeItemWrapperCheckbox = (itemSession.view === "form") ? "checkbox-wrapper-form" : "checkbox-wrapper";
   
   const [clienti, setClienti] = useState(-1);
   const [servizi, setServizi] = useState(-1);
@@ -80,37 +85,43 @@ const NuovoLavoro = () => {
         }
       }
       nuovoLavoro["descrizione"] = descrizione;
+      /**/
+      const serviziSelezionatiAttuali = descrizione.split(',').map(item => item.trim()).filter(item => item !== "");
+      for(let i = 0; i < serviziSelezionatiAttuali.length; i++) {
+        serviziSelezionatiAttuali[i] = serviziSelezionatiAttuali[i].split('-').map(item => item.trim()).filter(item => item !== "");
+        serviziSelezionatiAttuali[i] = {
+          nome: serviziSelezionatiAttuali[i][0], 
+          prezzo: serviziSelezionatiAttuali[i][1].substring(0, serviziSelezionatiAttuali[i][1].length-2)
+        };
+      }
+      nuovoLavoro["serviziSelezionati"] = serviziSelezionatiAttuali;
+      
+      /**/
       
       // if (controlloLavoro(nuovoLavoro, setNuovoLavoro) > 0) 
       //   return;
       
-      try {
-        const response = await fetch('/INSERISCI_ITEM', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(nuovoLavoro),
-        });
+      const response = await fetch('/INSERISCI_ITEM', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(nuovoLavoro),
+      });
 
-        if(response.status === 200) {
-          const result = await response.json();
-          nuovoLavoro.id = result.id;
-          dispatch(inserimentoLavoro({
-            nuovoLavoro: nuovoLavoro 
-          }));
-          alert("L\'inserimento del lavoro è andato a buon fine!!");
-        }
-        else if(response.status === 400) {
-          alert("Errore: lavoro gia\' presente.")
-        }
-        else {
-          alert("Errore durante il salvataggio del nuovo lavoro, riprova più tardi1.");
-        }
+      if(response.status === 200) {
+        const result = await response.json();
+        nuovoLavoro.id = result.id;
+        dispatch(inserimentoLavoro({
+          nuovoLavoro: nuovoLavoro 
+        }));
+        alert("L\'inserimento del lavoro è andato a buon fine!!");
       }
-      catch (error) {
-        console.error('Errore:', error);
-        alert("Errore durante il salvataggio del nuovo lavoro, riprova più tardi2.");
+      else if(response.status === 400) {
+        alert("Errore: lavoro gia\' presente.")
+      }
+      else {
+        alert("Errore durante il salvataggio del nuovo lavoro, riprova più tardi1.");
       }
     }
     else {
@@ -180,7 +191,7 @@ const NuovoLavoro = () => {
               {clientiNonSelezionati.filter(cliente => 
                 optionStr(cliente).toLowerCase().includes(sottoStringa.toLowerCase())
               ).map((cliente, index) => (
-                <div key={index} className="checkbox-wrapper clientiNonSelezionati">
+                <div key={index} className={classeFormWrapperCheckbox + " clientiNonSelezionati"}>
                   <input 
                     type="checkbox" 
                     id={"cliente_non_sel_" + index} 
@@ -198,7 +209,7 @@ const NuovoLavoro = () => {
             </div>
             <div>
               {clientiSelezionati.map((cliente, index) => (
-                <div key={index} className="checkbox-wrapper clientiSelezionati">
+                <div key={index} className={classeFormWrapperCheckbox + " clientiSelezionati"}>
                   <input 
                     type="checkbox" 
                     id={"cliente_sel_" + index} 
@@ -256,6 +267,7 @@ const NuovoLavoro = () => {
     };
 
     return (
+
       <>
         {(servizi !== -1) && (
           <>
@@ -264,7 +276,7 @@ const NuovoLavoro = () => {
               {serviziNonSelezionati.filter(servizio => 
                 optionStr(servizio).toLowerCase().includes(sottoStringa.toLowerCase())
               ).map((servizio, index) => (
-                <div key={index} className="checkbox-wrapper">
+                <div key={index} className={classeFormWrapperCheckbox}>
                   <input 
                     type="checkbox" 
                     id={"servizio_non_sel_" + index} 
@@ -282,7 +294,7 @@ const NuovoLavoro = () => {
             </div>
             <div>
               {serviziSelezionati.map((servizio, index) => (
-                <div key={index} className="checkbox-wrapper">
+                <div key={index} className={classeFormWrapperCheckbox}>
                   <input 
                     type="checkbox" 
                     id={"servizio_sel_" + index} 
@@ -374,7 +386,7 @@ const NuovoLavoro = () => {
             selectOperation: selectOperation, 
             campiItemEsistente: getCampiLavoroEsistente, 
             indiciItemEsistente: indiciLavoroEsistente, 
-            servizi: null, 
+            servizi: servizi, 
             selectedIdsModifica: selectedIdsModifica, 
             selectedIdsEliminazione: selectedIdsEliminazione, 
             handleEdit: null, 

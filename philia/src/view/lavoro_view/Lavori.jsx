@@ -45,12 +45,6 @@ const Lavori = () => {
     )
   }
 
-  // const getAllServizi = async () => {
-  //   await ServizioAction.dispatchAction(null, operazioniServizi.OTTIENI_TUTTI_I_SERVIZI);
-  //   const serviziFiltrati = servizioStore.getServizi();
-  //   setServizi(serviziFiltrati);
-  // };
-  
   const handleSearch = async (e) => {
     e.preventDefault();
         
@@ -116,16 +110,6 @@ const Lavori = () => {
       alert("Eliminazione annullata.");
     }
   }
-
-  // const handleEdit = async (e) => {
-  //   e.preventDefault();
-  //   if (confirm("Sei sicuro di voler modificare le spese?")) {
-  //     alert("Operazione da aggiustare ancora.");
-  //   }
-  //   else {
-  //     alert("Modifica annullata.");
-  //   }
-  // }
 
   const handleEdit = async (e) => {
     e.preventDefault();

@@ -99,14 +99,14 @@ export function OperazioniNuovoItem({eseguiSalvataggio}) {
   )
 }
 
-export function OperazioniCercaItems({ visibilita, setVisibilita, arrowUp, setArrowUp, eseguiRicerca }) {
+export function OperazioniCercaItems({ visibilita, setVisibilita, arrowUp, setArrowUp, handleSearch }) {
   return (
     <StyledColOperazioni>
       <StyledSearchNotSelected 
         className="ricercaItemsButton" 
         size={grandezzaIcona} 
         style={{ marginRight: "50%" }} 
-        onClick={eseguiRicerca} 
+        onClick={handleSearch} 
       />
       {arrowUp && (
         <StyledArrowLeftNotSelected 
@@ -209,7 +209,7 @@ export function RowNuovoItem({campi, indici, eseguiSalvataggio}) {
                 <StyledRow>
                   <NomeTag 
                     rows={1}
-                    style={(campi.name[i] === "prezzo") ? {maxWidth:"90%"} : null}
+                    style={(["prezzo", "totale"].includes(campi.name[i])) ? {maxWidth:"90%"} : null}
                     name={campi.name[i]}
                     id={campi.id[i]}
                     type={campi.type[i]}
@@ -220,7 +220,7 @@ export function RowNuovoItem({campi, indici, eseguiSalvataggio}) {
                     onClick={campi.onClick}
                     onBlur={campi.onBlur}
                   />
-                  {(campi.name[i] === "prezzo") && (
+                  {(["prezzo", "totale"].includes(campi.name[i])) && (
                     <StyledEuroNotSelected
                       style={{
                         // border: "5px solid #000000",
@@ -244,7 +244,7 @@ export function RowNuovoItem({campi, indici, eseguiSalvataggio}) {
   );
 }
 
-export function RowRicercaItems({campi, indici, eseguiRicerca}) {
+export function RowRicercaItems({campi, indici, handleSearch}) {
   let [visibilita, setVisibilita] = useState([true, true, true, true, true, true, true, true]);
   const [arrowUp, setArrowUp] = useState(true);
   let InputTag = getInputTag(1, true);
@@ -257,7 +257,7 @@ export function RowRicercaItems({campi, indici, eseguiRicerca}) {
         setVisibilita={setVisibilita} 
         arrowUp={arrowUp} 
         setArrowUp={setArrowUp} 
-        eseguiRicerca={eseguiRicerca}
+        handleSearch={handleSearch}
       />
       {indici.map((i) => {
         const NomeTag = (campi.type[i]) ? getInputTag(1, true) : (
@@ -267,18 +267,33 @@ export function RowRicercaItems({campi, indici, eseguiRicerca}) {
           <React.Fragment key={i}>
             <StyledCol>
               {(visibilita[i]) && (
-                <NomeTag 
-                  rows={1}
-                  name={campi.name[i]}
-                  id={campi.id[i]}
-                  type={campi.type[i]}
-                  step={campi.step[i]}
-                  value={campi.value[i]}
-                  placeholder={campi.placeholder[i]}
-                  onChange={campi.onChange}
-                  onClick={campi.onClick}
-                  onBlur={campi.onBlur}
-                />
+                <>
+                  <NomeTag 
+                    style={(["prezzo_min", "prezzo_max", "totale_min", "totale_max"].includes(campi.name[i])) ? {maxWidth:"90%"} : null}
+                    rows={1}
+                    name={campi.name[i]}
+                    id={campi.id[i]}
+                    type={campi.type[i]}
+                    step={campi.step[i]}
+                    value={campi.value[i]}
+                    placeholder={campi.placeholder[i]}
+                    onChange={campi.onChange}
+                    onClick={campi.onClick}
+                    onBlur={campi.onBlur}
+                  />
+                  {(["prezzo_min", "prezzo_max", "totale_min", "totale_max"].includes(campi.name[i])) && (
+                    <StyledEuroNotSelected
+                      style={{
+                        // border: "5px solid #000000",
+                        maxWidth: "10%",
+                        marginLeft: "-6px", 
+                        marginTop: "13px"
+                      }} 
+                      size={grandezzaIcona} 
+                      onClick={null} 
+                    />
+                  )}
+                </>
               )}
             </StyledCol>
           </React.Fragment>
@@ -288,7 +303,7 @@ export function RowRicercaItems({campi, indici, eseguiRicerca}) {
   );
 }
 
-export function RowItemEsistente({item, campi, indici, selectOperation}) {
+export function RowItemEsistente({ item, campi, indici, selectOperation, items, setItems, tipoItem, onChange }) {
   const NomeTagHeader = getTextAreaTag(campi.tipoSelezione, false);
 
   return (
@@ -327,7 +342,8 @@ export function RowItemEsistente({item, campi, indici, selectOperation}) {
                   step={campi.step[i]}
                   value={campi.value[i]}
                   placeholder={campi.placeholder[i]}
-                  onChange={campi.onChange}
+                  onChange={onChange}
+                  readOnly={item.tipo_selezione !== 1}
                   onClick={campi.onClick}
                   onBlur={campi.onBlur}
                 />

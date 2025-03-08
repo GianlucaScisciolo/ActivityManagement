@@ -17,57 +17,92 @@ export const Items = ({tipoItem, items, setItems, selectOperation, emptyIsConsid
   const ItemEsistenteTag = (itemSession.view === "card") ? CardItemEsistente : RowItemEsistente;
 
   const OptionsServizi = (servizi, descrizione, sottoStringa, item) => {
-    
+
     if (!servizi) {
       return null;
     }
-    // const [serviziSelezionati, setServiziSelezionati] = useState([]);
-    const [serviziNonSelezionati, setServiziNonSelezionati] = useState(Object.values(servizi));
-    // let [serviziSelezionatiAttuali, setServiziSelezionatiAttuali] = useState([]);
-    // useEffect(() => {
-    //   setServiziSelezionatiAttuali(descrizione.split(',').map(item => item.trim()).filter(item => item !== ""));
-    //   for(let i = 0; i < serviziSelezionatiAttuali.length; i++) {
-    //     serviziSelezionatiAttuali[i] = serviziSelezionatiAttuali[i].split('-').map(item => item.trim()).filter(item => item !== "");
-    //     serviziSelezionatiAttuali[i] = {
-    //       nome: serviziSelezionatiAttuali[i][0], 
-    //       prezzo: serviziSelezionatiAttuali[i][1].substring(0, serviziSelezionatiAttuali[i][1].length-2)
-    //     };
-    //   }
-      // setServiziSelezionati(serviziSelezionatiAttuali);
-      //----------------------------------------------------------------------------------------------------//
-      // dispatch(aggiornaLavoro({
-      //   id_lavoro: item.id, 
-      //   nome_attributo: "serviziSelezionati", 
-      //   nuovo_valore: serviziSelezionatiAttuali
-      // }));
-      //----------------------------------------------------------------------------------------------------//
-    // }, []);
 
-    useEffect(() => {
-      setServiziNonSelezionati(Object.values(servizi));
-    }, [servizi]);
-    
     const optionStr = (servizio) => {
       return servizio.nome + " - " + servizio.prezzo + " €";
     }
 
+    const [serviziNonSelezionati, setServiziNonSelezionati] = useState([]);
+
+    /**/
+    const serviziSelezionatiAttuali = item.descrizione.split(',').map(item => item.trim()).filter(item => item !== "");
+    for(let i = 0; i < serviziSelezionatiAttuali.length; i++) {
+      serviziSelezionatiAttuali[i] = serviziSelezionatiAttuali[i].split('-').map(item => item.trim()).filter(item => item !== "");
+      serviziSelezionatiAttuali[i] = {
+        nome: serviziSelezionatiAttuali[i][0], 
+        prezzo: serviziSelezionatiAttuali[i][1].substring(0, serviziSelezionatiAttuali[i][1].length-2)
+      };
+    }
+    /**/
+
+    useEffect(() => {
+      if (!servizi) {
+        return null;
+      }
+      const nonSelezionati = [];
+      if(servizi !== -1 && servizi) {
+        for (let s of (servizi || [])) {
+          let nonSelezionato = true;
+          for (let ss of item["serviziSelezionati"]) {
+            if (optionStr(s) === optionStr(ss)) {
+              nonSelezionato = false;
+              break;
+            }
+          }
+          if (nonSelezionato === true) {
+            nonSelezionati.push(s);
+          }
+        }  
+      }
+      if(serviziSelezionatiAttuali !== -1 && serviziSelezionatiAttuali) {
+        for (let s of (serviziSelezionatiAttuali || [])) {
+          let nonSelezionato = true;
+          for (let ss of item["serviziSelezionati"]) {
+            if (optionStr(s) === optionStr(ss)) {
+              nonSelezionato = false;
+              break;
+            }
+          }
+          if (nonSelezionato === true) {
+            nonSelezionati.push(s);
+          }
+        }  
+      }
+
+      setServiziNonSelezionati(nonSelezionati);
+    }, [servizi, item]);
+    
+    
     const handleCheckboxChange = (e, servizio) => {
+      e.preventDefault();
       if (e.target.checked) {
+        console.log("!!!! Checked !!!!");
         dispatch(aggiornaLavoro({
           id_lavoro: item.id, 
           nome_attributo: "serviziSelezionati", 
           nuovo_valore: [...item["serviziSelezionati"], servizio]
         }));
-        setServiziNonSelezionati(serviziNonSelezionati.filter(s => (optionStr(s)) !== optionStr(servizio)));
+        // setServiziNonSelezionati(serviziNonSelezionati.filter(s => (optionStr(s)) !== optionStr(servizio)));
+        let aggiornamentoNonSelezionati = [];
+        for(let s of serviziNonSelezionati) {
+          if(optionStr(s) !== optionStr(servizio)) {
+            aggiornamentoNonSelezionati.push(s);
+          }
+        }
+        setServiziNonSelezionati(aggiornamentoNonSelezionati);
       } 
       else {
-        // setServiziSelezionati(updatedSelezionati);
+        console.log("!!!! Not checked !!!!");
         dispatch(aggiornaLavoro({
           id_lavoro: item.id, 
           nome_attributo: "serviziSelezionati", 
           nuovo_valore: item["serviziSelezionati"].filter(s => (optionStr(s)) !== optionStr(servizio))
         }));
-        // setServiziNonSelezionati([...serviziNonSelezionati, servizio]);
+        
         let isPresent = false;
         for(let s of serviziNonSelezionati) {
           if(optionStr(s) === optionStr(servizio)) {
@@ -79,9 +114,11 @@ export const Items = ({tipoItem, items, setItems, selectOperation, emptyIsConsid
           const updatedNonSelezionati = [...serviziNonSelezionati, servizio];
           setServiziNonSelezionati(updatedNonSelezionati);
         }
-        // setIdServizi(prevIds => prevIds.filter(id => id !== servizio.id));
       }
     };
+
+    const classeWrapperCheckbox = (itemSession.view === "form") ? "checkbox-wrapper-form" : "checkbox-wrapper";
+
     return (
       <>
         {(servizi !== -1) && (
@@ -91,7 +128,7 @@ export const Items = ({tipoItem, items, setItems, selectOperation, emptyIsConsid
               {serviziNonSelezionati.filter(servizio => 
                 optionStr(servizio).toLowerCase().includes(sottoStringa.toLowerCase())
               ).map((servizio, index) => (
-                <div key={index} className="checkbox-wrapper">
+                <div key={index} className={classeWrapperCheckbox}>
                   <input 
                     type="checkbox" 
                     id={"servizio_non_sel_" + index} 
@@ -174,7 +211,7 @@ export const Items = ({tipoItem, items, setItems, selectOperation, emptyIsConsid
           const sottoStringa = (item.servizio) ? item.servizio : "";
           // const [serviziSelezionati, setServiziSelezionati] = useState([]);
           const inputRef = useRef(null);
-          // item["id_servizi"] = idServizi;          
+          // item["id_servizi"] = idServizi;
           return (
             <ItemEsistenteTag 
               ref={inputRef}

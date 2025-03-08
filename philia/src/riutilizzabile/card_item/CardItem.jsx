@@ -19,7 +19,7 @@ import { faFilePdf, faFileExcel } from '@fortawesome/free-solid-svg-icons';
 import { Trash2, Pencil } from 'lucide-react';
 import { handleInputChange } from '../../vario/Vario';
 
-function getColor(value, j){
+function getColor(value, j, tipo){
   // (i > 0) ? (
   //                       value < 0 ? "#FF0000" : (value > 0 ? "#00FF00" : "#FFFFFF")) : "#0000FF"
   return (j === 0) ? ("#FFFFFF") : (
@@ -96,14 +96,14 @@ export function OperazioniNuovoItem({eseguiSalvataggio}) {
   )
 }
 
-export function OperazioniCercaItems({ setIsVisible, arrowUp, setArrowUp, eseguiRicerca }) {
+export function OperazioniCercaItems({ setIsVisible, arrowUp, setArrowUp, handleSearch }) {
   return (
     <StyledListGroupItem style={{ border: "5px solid #000000", backgroundColor: "#000000", paddingTop: "3%" }}>
       <StyledSearchNotSelected 
         className="ricercaItemsButton" 
         size={grandezzaIcona} 
         style={{ marginRight: "50%" }} 
-        onClick={eseguiRicerca} 
+        onClick={handleSearch} 
       />
       {arrowUp && (
         <StyledArrowTopNotSelected 
@@ -208,8 +208,7 @@ export function CardNuovoItem({campi, indici, eseguiSalvataggio}) {
               <React.Fragment key={i}>
                 <StyledRow>
                   <NomeTag 
-                    key={i}
-                    style={(campi.name[i] === "prezzo") ? {maxWidth:"80%"} : null}
+                    style={(["prezzo", "totale"].includes(campi.name[i])) ? {maxWidth:"80%"} : null}
                     rows={1}
                     name={campi.name[i]}
                     id={campi.id[i]}
@@ -221,7 +220,7 @@ export function CardNuovoItem({campi, indici, eseguiSalvataggio}) {
                     onClick={campi.onClick}
                     onBlur={campi.onBlur}
                   />
-                  {(campi.name[i] === "prezzo") && (
+                  {(["prezzo", "totale"].includes(campi.name[i])) && (
                     <StyledEuroNotSelected
                       style={{
                         // border: "5px solid #000000",
@@ -248,7 +247,7 @@ export function CardNuovoItem({campi, indici, eseguiSalvataggio}) {
   );
 }
 
-export function CardRicercaItems({campi, indici, eseguiRicerca}) {
+export function CardRicercaItems({campi, indici, handleSearch}) {
   const [isVisible, setIsVisible] = useState(true);
   const [arrowUp, setArrowUp] = useState(true);
   let maxHeight = (isVisible) ? "2000px" : "0px";
@@ -268,18 +267,34 @@ export function CardRicercaItems({campi, indici, eseguiRicerca}) {
               getTextAreaTag(1, true)
             );
             return ( 
-              <NomeTag 
-                key={i}
-                rows={1}
-                name={campi.name[i]}
-                id={campi.id[i]}
-                type={campi.type[i]}
-                value={campi.value[i]}
-                placeholder={campi.placeholder[i]}
-                onChange={campi.onChange}
-                onClick={campi.onClick}
-                onBlur={campi.onBlur}
-              />
+              <React.Fragment key={i}>
+                <StyledRow>
+                  <NomeTag 
+                    style={(["prezzo_min", "prezzo_max", "totale_min", "totale_max"].includes(campi.name[i])) ? {maxWidth:"80%"} : null}
+                    rows={1}
+                    name={campi.name[i]}
+                    id={campi.id[i]}
+                    type={campi.type[i]}
+                    value={campi.value[i]}
+                    placeholder={campi.placeholder[i]}
+                    onChange={campi.onChange}
+                    onClick={campi.onClick}
+                    onBlur={campi.onBlur}
+                  />
+                  {(["prezzo_min", "prezzo_max", "totale_min", "totale_max"].includes(campi.name[i])) && (
+                    <StyledEuroNotSelected
+                      style={{
+                        // border: "5px solid #000000",
+                        maxWidth: "20%",
+                        marginLeft: "-6px", 
+                        marginTop: "13px"
+                      }} 
+                      size={grandezzaIcona} 
+                      onClick={null} 
+                    />
+                  )}
+                </StyledRow>
+              </React.Fragment>
             );
           })}
         </SlideContainer>
@@ -287,8 +302,17 @@ export function CardRicercaItems({campi, indici, eseguiRicerca}) {
           setIsVisible={setIsVisible}
           arrowUp={arrowUp}
           setArrowUp={setArrowUp}
-          eseguiRicerca={eseguiRicerca}
+          handleSearch={handleSearch}
         />
+        {/*
+              <OperazioniCercaItems
+                setIsVisible={setIsVisible}
+                arrowUp={arrowUp}
+                setArrowUp={setArrowUp}
+                // eseguiRicerca={eseguiRicerca}
+                handleSearch={handleSearch}
+              />
+        */}
       </StyledCard>
     </center>
   );
@@ -316,8 +340,8 @@ export function CardItemEsistente({ item, campi, indici, selectOperation, items,
                     type={campi.type[i]}
                     value={campi.value[i]}
                     placeholder={campi.placeholder[i]}
-                    // onChange={(e) => updatedItems(e, item)}
                     onChange={onChange}
+                    readOnly={item.tipo_selezione !== 1}
                     onClick={null}
                     onBlur={campi.onBlur}
                   />
@@ -623,7 +647,7 @@ export function CardEntrateLavori({ entrateLavori }) {
                   {Object.values(lavoro).map((value, j) => (
                     <td 
                       style={{
-                        color: getColor(value, j),
+                        color: getColor(value, j, "entrata"),
                         fontWeight: (j === 0) ? "bold" : null,
                       }} 
                       key={j}
@@ -638,7 +662,7 @@ export function CardEntrateLavori({ entrateLavori }) {
               {Object.values(entrateLavori[0]).map((value, j) => (
                 <td
                   style={{
-                    color: getColor(value, j),
+                    color: getColor(value, j, "entrata"),
                     fontWeight: (j === 0) ? "bold" : null,
                   }}  
                   key={j}
@@ -709,7 +733,7 @@ export function CardUsciteSpese({ usciteSpese }) {
                   {Object.values(spesa).map((value, j) => (
                     <td
                       style={{
-                        color: getColor(value, j),
+                        color: getColor(-value, j, "uscita"),
                         fontWeight: (j === 0) ? "bold" : null,
                       }}  
                       key={j}
@@ -724,7 +748,7 @@ export function CardUsciteSpese({ usciteSpese }) {
               {Object.values(usciteSpese[0]).map((value, j) => (
                 <td
                   style={{
-                    color: getColor(value, j),
+                    color: getColor(-value, j, "uscita"),
                     fontWeight: (j === 0) ? "bold" : null,
                   }}  
                   key={j}

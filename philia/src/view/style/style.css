@@ -115,11 +115,18 @@
   background-color: #500000;
 }
 
-.checkbox-wrapper {
+.checkbox-wrapper, .checkbox-wrapper-form {
   display: flex;
   align-items: center;
   margin-bottom: 10px; /* Spaziatura tra i checkbox */
-  margin-left:20%;
+}
+
+.checkbox-wrapper {
+  margin-left:20px;
+}
+
+.checkbox-wrapper-form {
+  margin-left: 200px;
 }
 
 .custom-checkbox, .custom-checkbox-rounded {

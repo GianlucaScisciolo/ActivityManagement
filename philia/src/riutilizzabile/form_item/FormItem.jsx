@@ -148,12 +148,12 @@ export function FormNuovoItem({campi, indici, eseguiSalvataggio}) {
           const NomeTag = (campi.type[i]) ? getInputTag(1, true) : (
             getTextAreaTag(1, true)
           );
-          return ( 
-            <React.Fragment key={i}>
-              <StyledLabel htmlFor={campi.name[i]}>{campi.label[i]}</StyledLabel>
-              <StyledRow>  
+          
+          const Elemento = () => {
+            return (
+              <>
                 <NomeTag 
-                  style={(campi.name[i] === "prezzo") ? {maxWidth:"90%"} : null}
+                  style={(["prezzo", "totale"].includes(campi.name[i])) ? {marginLeft:"-10%", marginRight:0, minWidth:"105%"} : null}
                   rows={1}
                   name={campi.name[i]}
                   id={campi.id[i]}
@@ -165,12 +165,10 @@ export function FormNuovoItem({campi, indici, eseguiSalvataggio}) {
                   onClick={campi.onClick}
                   onBlur={campi.onBlur}
                 />
-                {(campi.name[i] === "prezzo") && (
+                {(["prezzo", "totale"].includes(campi.name[i])) && (
                   <StyledEuroNotSelected
                     style={{
-                      // border: "5px solid #000000",
-                      maxWidth: "10%",
-                      marginLeft: "-6px", 
+                      maxWidth: "5%",
                       marginTop: "13px"
                     }} 
                     size={grandezzaIcona} 
@@ -178,7 +176,16 @@ export function FormNuovoItem({campi, indici, eseguiSalvataggio}) {
                   />
                 )}
                 {campi.options[i]}
-              </StyledRow>
+              </>
+            );
+          }
+
+          return ( 
+            <React.Fragment key={i}>
+              <StyledLabel htmlFor={campi.name[i]}>{campi.label[i]}</StyledLabel>
+              {(campi.name[i] === "prezzo") ? (
+                <StyledRow><Elemento /></StyledRow>
+              ) : (<Elemento />)}
               {(campi.errore[i] !== "") && (<StyledSpanErrore>{campi.errore[i]}</StyledSpanErrore>)}
             </React.Fragment>
           );
