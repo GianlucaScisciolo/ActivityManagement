@@ -20,13 +20,13 @@ export const grandezzaIcona = 50;
 
 export const StyledCard = styled(Card)`
   width: 18rem;
-  background-color: #111111;
+  background-color: transparent;
   overflow: hidden;
-  border: 5px solid #000000;
   border-radius: 40px;
   color: white;
   text-align: center;
   padding: 0;
+  border: transparent;
 `;
 
 export const StyledRow = styled(Row)`
@@ -70,6 +70,8 @@ export const SlideContainer = styled.div`
   /* max-height: ${(props) => (props.isVisible ? '1000px' : '0')};  */
   overflow: hidden;
   transition: max-height 2s ease-out;
+  background-color: #111111;
+  border: 10px solid #000000;
 `;
 
 export const StyledTextArea = styled.textarea`
@@ -140,19 +142,6 @@ export const StyledSaveNotSelected = styled(Save)`
     color: #0050EF;
   }
 `;
-
-// const StyledPlus = styled(Plus)`
-//   ${styledIconNotSelected}
-//   background-color: #000000;
-//   padding: 10px;
-//   width: 80px;
-//   height: auto;
-//   border-radius: 100%;
-//   transition: 0.5s all ease-out;
-//   &:hover {
-//     color: #0050EF;
-//   }
-// `;
 
 export const StyledEyeClosedNotSelected = styled(EyeClosed)`
   ${styledIconNotSelected}

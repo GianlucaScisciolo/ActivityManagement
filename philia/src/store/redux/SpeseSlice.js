@@ -4,8 +4,8 @@ export const speseSlice = createSlice ({
   name: "speseSession",
   initialState: {
     value: {
-      spese: [], 
-      nuoveSpese: [],
+      spese: -1, 
+      nuoveSpese: -1,
     } 
   },
   reducers: {
@@ -29,6 +29,9 @@ export const speseSlice = createSlice ({
       }
     },
     inserimentoSpesa: (state, action) => {
+      if(state.value.nuoveSpese === -1) {
+        state.value.nuoveSpese = [];
+      }
       state.value.nuoveSpese.push(action.payload.nuovaSpesa);
     },
   },

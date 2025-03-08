@@ -11,32 +11,29 @@ export const grandezzaIcona = 50;
 
 export const StyledRow = styled(Row)`
   display: flex;
-  align-items: center;  /* Allinea verticalmente */
-  justify-content: space-between;  /* Distribuisce lo spazio tra gli elementi */
-  flex-wrap: wrap;  /* Evita il wrapping degli elementi */
+  align-items: stretch; /* Allinea tutte le colonne in altezza */
+  justify-content: space-between;
+  flex-wrap: wrap;
   padding-left: 3%;
   padding-right: 3%;
 `;
 
 export const StyledCol = styled(Col)`
-  position: relative; 
-  color: #FFFFFF;
-  border-radius: 40px;
-  padding: 0;
+  /* background-color: gray; */
   flex: 1;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-direction: column; /* Per organizzare il contenuto verticalmente */
+  align-items: flex-start; /* Allinea gli elementi al bordo sinistro (se necessario) */
+  justify-content: flex-start; /* Allinea gli elementi in alto */
   text-align: center;
-  height: auto;
-  min-height: 50px;
-  min-width: 300px;
-  /* max-width: 300px; */
+  border-radius: 40px;
+  padding: 10px; /* Aggiunge spazi interni */
   margin: 10px;
-  @media (max-width: 600px) {
-    min-width: 300px;
-  }
+  min-height: 100px;
+  color: #FFFFFF;
 `;
+
+
 
 export const StyledColAnimato = styled(StyledCol)`
   /* color: #FFFFFF; */
@@ -55,7 +52,10 @@ export const StyledColBlack = styled(StyledCol)`
 export const StyledColOperazioni = styled(StyledCol)`
   border: 5px solid #000000;
   background-color: #000000;
-  max-width: 1px;
+  min-width: 230px;
+  max-width: 230px;
+  min-height: 80px;
+  max-height: 80px;
 `;
 
 export const StyledColBlue = styled(StyledCol)`
@@ -67,14 +67,6 @@ export const StyledColRed = styled(StyledCol)`
   border: 5px solid #000000;
   background-color: #500000;
 `;
-
-// export const StyledSpanErrore = styled.span`
-//   color: #500000;
-//   text-align: center;
-//   margin-bottom: 5%;
-//   background-color: #000000;
-//   border-radius: 40px;
-// `
 
 export const SlideContainer = styled.div`
   display: flex;

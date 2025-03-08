@@ -4,8 +4,8 @@ export const clientiSlice = createSlice ({
   name: "clientiSession",
   initialState: {
     value: {
-      clienti: [], 
-      nuoviClienti: [],
+      clienti: -1, 
+      nuoviClienti: -1,
     } 
   },
   reducers: {
@@ -29,6 +29,9 @@ export const clientiSlice = createSlice ({
       }
     },
     inserimentoCliente: (state, action) => {
+      if(state.value.nuoviClienti === -1) {
+        state.value.nuoviClienti = [];
+      }
       state.value.nuoviClienti.push(action.payload.nuovoCliente);
     },
   },

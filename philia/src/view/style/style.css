@@ -1,5 +1,8 @@
 * {
+  /* font-size: 25px; */
   font-size: 25px;
+  /* font-weight: bold; */
+  
 }
 
 /* Assicurati di aggiungere un margine superiore sufficiente */
@@ -130,13 +133,15 @@
 }
 
 .custom-checkbox, .custom-checkbox-rounded {
+  color: #000000;
+  font-size: 100px;
   width: 30px;  /* Larghezza della casella di selezione */
   height: 30px; /* Altezza della casella di selezione */
   margin-right: 20px; /* Spaziatura tra la casella di selezione e il label */
   background-color: #FFFFFF;
   /* border: 2px solid #0050EF; */
   cursor: pointer;
-
+  
   &:checked {
     background-color: #0050EF; /* Colore di sfondo quando è selezionata */
   }

@@ -4,8 +4,8 @@ export const lavoriSlice = createSlice ({
   name: "lavoriSession",
   initialState: {
     value: {
-      lavori: [], 
-      nuoviLavori: [],
+      lavori: -1, 
+      nuoviLavori: -1,
     } 
   },
   reducers: {
@@ -29,6 +29,9 @@ export const lavoriSlice = createSlice ({
       }
     }, 
     inserimentoLavoro: (state, action) => {
+      if(state.value.nuoviLavori === -1) {
+        state.value.nuoviLavori = [];
+      }
       state.value.nuoviLavori.push(action.payload.nuovoLavoro);
     },
   },

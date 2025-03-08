@@ -90,11 +90,11 @@ function getTrashTag(tipoSelezione) {
 export function OperazioniNuovoItem({eseguiSalvataggio}) {
   return (
     <StyledColOperazioni>
-      <StyledSaveNotSelected 
-        className="salvaItemButton" 
-        size={grandezzaIcona} 
-        onClick={eseguiSalvataggio} 
-      />
+        <StyledSaveNotSelected 
+          className="center salvaItemButton" 
+          size={grandezzaIcona} 
+          onClick={eseguiSalvataggio} 
+        />
     </StyledColOperazioni>
   )
 }
@@ -102,26 +102,28 @@ export function OperazioniNuovoItem({eseguiSalvataggio}) {
 export function OperazioniCercaItems({ visibilita, setVisibilita, arrowUp, setArrowUp, handleSearch }) {
   return (
     <StyledColOperazioni>
-      <StyledSearchNotSelected 
-        className="ricercaItemsButton" 
-        size={grandezzaIcona} 
-        style={{ marginRight: "50%" }} 
-        onClick={handleSearch} 
-      />
-      {arrowUp && (
-        <StyledArrowLeftNotSelected 
-          className="nascondiFormButton"
+      <div style={{width: "100%"}}>
+        <StyledSearchNotSelected 
+          className="left ricercaItemsButton" 
           size={grandezzaIcona} 
-          onClick={() => nascondiForm(visibilita, setVisibilita, setArrowUp)} 
+          // style={{ marginRight: "50%" }} 
+          onClick={handleSearch} 
         />
-      )}
-      {!arrowUp && (
-        <StyledArrowRightNotSelected 
-          className="mostraFormButton" 
-          size={grandezzaIcona} 
-          onClick={() => mostraForm(visibilita, setVisibilita, setArrowUp)} 
-        />
-      )}
+        {arrowUp && (
+          <StyledArrowLeftNotSelected 
+            className="right nascondiFormButton"
+            size={grandezzaIcona} 
+            onClick={() => nascondiForm(visibilita, setVisibilita, setArrowUp)} 
+          />
+        )}
+        {!arrowUp && (
+          <StyledArrowRightNotSelected 
+            className="right mostraFormButton" 
+            size={grandezzaIcona} 
+            onClick={() => mostraForm(visibilita, setVisibilita, setArrowUp)} 
+          />
+        )}
+      </div>
     </StyledColOperazioni>
   );
 };
@@ -131,17 +133,19 @@ export function OperazioniItemEsistente ({ selectOperation, item }) {
   let PencilTag = getPencilTag(item.tipo_selezione);
   return (
     <StyledColOperazioni>
-      <PencilTag 
-        className="modificaItemButton"
-        size={grandezzaIcona} 
-        onClick={() => selectOperation("pencil", item)} 
-        style={{ marginRight: "50%" }} 
-      />
-      <TrashTag 
-        className="eliminaItemButton" 
-        size={grandezzaIcona} 
-        onClick={() => selectOperation("trash", item)} 
-      />
+      <div style={{width: "100%"}}>
+        <PencilTag 
+          className="left modificaItemButton"
+          size={grandezzaIcona} 
+          onClick={() => selectOperation("pencil", item)} 
+          style={{ marginRight: "50%" }} 
+        />
+        <TrashTag 
+          className="rigth eliminaItemButton" 
+          size={grandezzaIcona} 
+          onClick={() => selectOperation("trash", item)} 
+        />
+      </div>
     </StyledColOperazioni>
   )
 }
@@ -150,15 +154,21 @@ export function OperazioniFileItems({ottieniFileRangePDF, ottieniFileRangeExcel,
   return (
     <>
       <StyledColOperazioni>
-        <StyledFileIconNotSelected icon={faFilePdf} style={{ marginRight: "50%" }} size="2xl" />
-        <StyledDownloadNotSelected size={grandezzaIcona} onClick={ottieniFileRangePDF} />
+        <div style={{width: "100%"}}>
+          <StyledFileIconNotSelected icon={faFilePdf} className="left" style={{ marginRight: "50%" }} size="2xl" />
+          <StyledDownloadNotSelected size={grandezzaIcona} className="rigth" onClick={ottieniFileRangePDF} />
+        </div>
       </StyledColOperazioni>
       <StyledColOperazioni>
-        <StyledFileIconNotSelected icon={faFileExcel} style={{ marginRight: "50%" }} size="2xl" />
-        <StyledDownloadNotSelected size={grandezzaIcona} onClick={ottieniFileRangeExcel} />
+        <div style={{width: "100%"}}>
+          <StyledFileIconNotSelected icon={faFileExcel} className="left" style={{ marginRight: "50%" }} size="2xl" />
+          <StyledDownloadNotSelected size={grandezzaIcona} className="rigth" onClick={ottieniFileRangeExcel} />
+        </div>
       </StyledColOperazioni>
       <StyledColOperazioni>
-        <StyledTrashNotSelected2 size={grandezzaIcona} onClick={eliminaItemsRange} />
+        <div style={{width: "100%"}}>
+          <StyledTrashNotSelected2 size={grandezzaIcona} className="center" onClick={eliminaItemsRange} />
+        </div>
       </StyledColOperazioni>
     </>
   );
@@ -168,7 +178,7 @@ export function OperazioniLogin({eseguiLogin}) {
   return (
     <StyledColOperazioni>
       <StyledLoginNotSelected 
-        className="loginButton" 
+        className="center loginButton" 
         size={grandezzaIcona} 
         onClick={eseguiLogin} 
       />
@@ -180,7 +190,7 @@ export function OperazioniModificaProfilo({eseguiModificaProfilo}) {
   return (
     <StyledColOperazioni>
       <StyledPencilNotSelectedModificaProfilo 
-        className="modificaProfiloButton" 
+        className="center modificaProfiloButton" 
         size={grandezzaIcona} 
         onClick={eseguiModificaProfilo} 
       />
@@ -226,7 +236,7 @@ export function RowNuovoItem({campi, indici, eseguiSalvataggio}) {
                         // border: "5px solid #000000",
                         maxWidth: "10%",
                         marginLeft: "-6px", 
-                        marginTop: "13px"
+                        // marginTop: "13px"
                       }} 
                       size={grandezzaIcona} 
                       onClick={null} 
@@ -266,35 +276,37 @@ export function RowRicercaItems({campi, indici, handleSearch}) {
         return ( 
           <React.Fragment key={i}>
             <StyledCol>
-              {(visibilita[i]) && (
-                <>
-                  <NomeTag 
-                    style={(["prezzo_min", "prezzo_max", "totale_min", "totale_max"].includes(campi.name[i])) ? {maxWidth:"90%"} : null}
-                    rows={1}
-                    name={campi.name[i]}
-                    id={campi.id[i]}
-                    type={campi.type[i]}
-                    step={campi.step[i]}
-                    value={campi.value[i]}
-                    placeholder={campi.placeholder[i]}
-                    onChange={campi.onChange}
-                    onClick={campi.onClick}
-                    onBlur={campi.onBlur}
-                  />
-                  {(["prezzo_min", "prezzo_max", "totale_min", "totale_max"].includes(campi.name[i])) && (
-                    <StyledEuroNotSelected
-                      style={{
-                        // border: "5px solid #000000",
-                        maxWidth: "10%",
-                        marginLeft: "-6px", 
-                        marginTop: "13px"
-                      }} 
-                      size={grandezzaIcona} 
-                      onClick={null} 
-                    />
+              <div style={{width: "100%"}}>
+                <StyledRow>
+                  {(visibilita[i]) && (
+                    <>
+                      <NomeTag 
+                        style={(["prezzo_min", "prezzo_max", "totale_min", "totale_max"].includes(campi.name[i])) ? {maxWidth:"90%"} : null}
+                        rows={1}
+                        name={campi.name[i]}
+                        id={campi.id[i]}
+                        type={campi.type[i]}
+                        step={campi.step[i]}
+                        value={campi.value[i]}
+                        placeholder={campi.placeholder[i]}
+                        onChange={campi.onChange}
+                        onClick={campi.onClick}
+                        onBlur={campi.onBlur}
+                      />
+                      {(["prezzo_min", "prezzo_max", "totale_min", "totale_max"].includes(campi.name[i])) && (
+                        <StyledEuroNotSelected
+                          style={{
+                            maxWidth: "20%",
+                            marginLeft: "-6px", 
+                          }} 
+                          size={grandezzaIcona} 
+                          onClick={null} 
+                        />
+                      )}
+                    </>
                   )}
-                </>
-              )}
+                </StyledRow>
+              </div>
             </StyledCol>
           </React.Fragment>
         );
@@ -313,18 +325,19 @@ export function RowItemEsistente({ item, campi, indici, selectOperation, items, 
         item={item} 
       />
       <StyledCol>
-        <NomeTagHeader
-          rows={1}
-          name="header"
-          value={campi.header}
-          placeholder={campi.header}
-          readOnly
-        />
+        <div style={{width: "100%"}}>
+          <StyledRow>
+            <NomeTagHeader
+              rows={1}
+              name="header"
+              value={campi.header}
+              placeholder={campi.header}
+              readOnly
+            />
+          </StyledRow>
+        </div>
       </StyledCol>
       {indici.map((i) => {
-        // onClick={handleGiornoClick(setUltimoGiornoType)}
-        // onBlur={handleGiornoBlur(setUltimoGiornoType, item, setItem)}
-        // onChange={(e) => handleInputChange(e, setItem)}
         const NomeTag = (campi.type[i]) ? getInputTag(campi.tipoSelezione, campi.valoreModificabile[i]) : (
           getTextAreaTag(campi.tipoSelezione, campi.valoreModificabile[i])
         );
@@ -334,7 +347,7 @@ export function RowItemEsistente({ item, campi, indici, selectOperation, items, 
             <div style={{width: "100%"}}>
               <StyledRow>
                 <NomeTag 
-                  style={(campi.name[i] === "totale") ? {maxWidth:"80%"} : null}
+                  style={["prezzo", "totale"].includes(campi.name[i]) ? {maxWidth:"80%"} : null}
                   rows={1}
                   name={campi.name[i]}
                   id={campi.id[i]}
@@ -347,18 +360,19 @@ export function RowItemEsistente({ item, campi, indici, selectOperation, items, 
                   onClick={campi.onClick}
                   onBlur={campi.onBlur}
                 />
-                {(campi.name[i] === "totale") && (
-                    <StyledEuroNotSelected
-                      style={{
-                        // border: "5px solid #000000",
-                        maxWidth: "20%",
-                        marginLeft: "-6px", 
-                        marginTop: "13px"
-                      }} 
-                      size={grandezzaIcona} 
-                      onClick={null} 
-                    />
-                  )}
+                {(["prezzo", "totale"].includes(campi.name[i])) && (
+                  <StyledEuroNotSelected
+                    style={{
+                      // border: "5px solid #000000",
+                      maxWidth: "20%",
+                      marginLeft: "-6px", 
+                      // marginTop: "13px"
+                    }} 
+                    size={grandezzaIcona} 
+                    onClick={null} 
+                  />
+                )}
+                {campi.options[i]}
               </StyledRow>
             </div>
             </StyledCol>
@@ -384,18 +398,22 @@ export function RowFileItems({campi, indici, ottieniFileRangePDF, ottieniFileRan
         return ( 
           <React.Fragment key={i}>
             <StyledCol>
-              <NomeTag 
-                rows={1}
-                name={campi.name[i]}
-                id={campi.id[i]}
-                type={campi.type[i]}
-                step={campi.step[i]}
-                value={campi.value[i]}
-                placeholder={campi.placeholder[i]}
-                onChange={campi.onChange}
-                onClick={campi.onClick}
-                onBlur={campi.onBlur}
-              />
+              <div style={{width: "100%"}}>
+                <StyledRow>
+                  <NomeTag 
+                    rows={1}
+                    name={campi.name[i]}
+                    id={campi.id[i]}
+                    type={campi.type[i]}
+                    step={campi.step[i]}
+                    value={campi.value[i]}
+                    placeholder={campi.placeholder[i]}
+                    onChange={campi.onChange}
+                    onClick={campi.onClick}
+                    onBlur={campi.onBlur}
+                  />
+                </StyledRow>
+              </div>
             </StyledCol>
           </React.Fragment>
         );
@@ -442,10 +460,8 @@ export function RowLogin({campi, indici, eseguiLogin}) {
                   {(campi.name[i] === "password") && (
                     <StyledEyeTag
                       style={{
-                        // border: "5px solid #000000",
                         maxWidth: "20%",
                         marginLeft: "-6px", 
-                        marginTop: "13px"
                       }} 
                       size={grandezzaIcona} 
                       onClick={onChangeVisibilityPassword} 
@@ -463,7 +479,7 @@ export function RowLogin({campi, indici, eseguiLogin}) {
   );
 }
 
-export function RowProfilo({campi, indici, eseguiLogin}) {
+export function RowProfilo({campi, indici, eseguiModificaProfilo}) {
   const [passwordAttualeType, setPasswordAttualeType] = useState('password');
   const [nuovaPasswordType, setNuovaPasswordType] = useState('password');
   const [confermaNuovaPasswordType, setConfermaNuovaPasswordType] = useState('password');
@@ -483,7 +499,7 @@ export function RowProfilo({campi, indici, eseguiLogin}) {
 
   return (
     <StyledRow>
-      <OperazioniLogin eseguiLogin={eseguiLogin} />
+      <OperazioniModificaProfilo eseguiModificaProfilo={eseguiModificaProfilo} />
       {indici.map((i) => {
         const NomeTag = (campi.type[i]) ? getInputTag(1, true) : (
           getTextAreaTag(1, true)
@@ -502,7 +518,7 @@ export function RowProfilo({campi, indici, eseguiLogin}) {
               <div style={{width: "100%"}}>
                 <StyledRow>
                   <NomeTag 
-                  style={(campi.name[i].includes("password")) ? {maxWidth:"80%"} : null}
+                    style={(campi.name[i].includes("password")) ? {maxWidth:"80%"} : null}
                     rows={1}
                     name={campi.name[i]}
                     id={campi.id[i]}
@@ -524,7 +540,6 @@ export function RowProfilo({campi, indici, eseguiLogin}) {
                         // border: "5px solid #000000",
                         maxWidth: "20%",
                         marginLeft: "-6px", 
-                        marginTop: "13px"
                       }} 
                       size={grandezzaIcona} 
                       onClick={(e) => onChangeVisibilityPassword(e, campi.name[i])} 

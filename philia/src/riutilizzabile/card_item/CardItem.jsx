@@ -304,15 +304,6 @@ export function CardRicercaItems({campi, indici, handleSearch}) {
           setArrowUp={setArrowUp}
           handleSearch={handleSearch}
         />
-        {/*
-              <OperazioniCercaItems
-                setIsVisible={setIsVisible}
-                arrowUp={arrowUp}
-                setArrowUp={setArrowUp}
-                // eseguiRicerca={eseguiRicerca}
-                handleSearch={handleSearch}
-              />
-        */}
       </StyledCard>
     </center>
   );
@@ -651,7 +642,7 @@ export function CardEntrateLavori({ entrateLavori }) {
                         fontWeight: (j === 0) ? "bold" : null,
                       }} 
                       key={j}
-                    >{value} {j > 0 ? "€" : ""}</td>
+                    >{parseFloat(value).toFixed(2)} {j > 0 ? "€" : ""}</td>
                   ))}
                 </tr>
               )
@@ -666,7 +657,7 @@ export function CardEntrateLavori({ entrateLavori }) {
                     fontWeight: (j === 0) ? "bold" : null,
                   }}  
                   key={j}
-                >{value} {j > 0 ? "€" : ""}</td>
+                >{parseFloat(value).toFixed(2)} {j > 0 ? "€" : ""}</td>
               ))}
             </tr>
           </tbody>
@@ -737,7 +728,7 @@ export function CardUsciteSpese({ usciteSpese }) {
                         fontWeight: (j === 0) ? "bold" : null,
                       }}  
                       key={j}
-                    >{value} {j > 0 ? "€" : ""}</td>
+                    >{parseFloat(-value).toFixed(2)} {j > 0 ? "€" : ""}</td>
                   ))}
                 </tr>
               )
@@ -752,7 +743,7 @@ export function CardUsciteSpese({ usciteSpese }) {
                     fontWeight: (j === 0) ? "bold" : null,
                   }}  
                   key={j}
-                >{value} {j > 0 ? "€" : ""}</td>
+                >{parseFloat(-value).toFixed(2)} {j > 0 ? "€" : ""}</td>
               ))}
             </tr>
           </tbody>
@@ -821,19 +812,19 @@ export function CardRicavi({ entrateLavori, usciteSpese }) {
                       fontWeight: "bold",
                     }} 
                   >{entrata.Anno}</td>
-                  <td style={{color:getColor(entrata.gen - usciteSpese[i].gen, 1)}}>{entrata.gen - usciteSpese[i].gen} €</td>
-                  <td style={{color:getColor(entrata.feb - usciteSpese[i].feb)}}>{entrata.feb - usciteSpese[i].feb} €</td>
-                  <td style={{color:getColor(entrata.mar - usciteSpese[i].mar)}}>{entrata.mar - usciteSpese[i].mar} €</td>
-                  <td style={{color:getColor(entrata.apr - usciteSpese[i].apr)}}>{entrata.apr - usciteSpese[i].apr} €</td>
-                  <td style={{color:getColor(entrata.mag - usciteSpese[i].mag)}}>{entrata.mag - usciteSpese[i].mag} €</td>
-                  <td style={{color:getColor(entrata.giu - usciteSpese[i].giu)}}>{entrata.giu - usciteSpese[i].giu} €</td>
-                  <td style={{color:getColor(entrata.lug - usciteSpese[i].lug)}}>{entrata.lug - usciteSpese[i].lug} €</td>
-                  <td style={{color:getColor(entrata.ago - usciteSpese[i].ago)}}>{entrata.ago - usciteSpese[i].ago} €</td>
-                  <td style={{color:getColor(entrata.set - usciteSpese[i].set)}}>{entrata.set - usciteSpese[i].set} €</td>
-                  <td style={{color:getColor(entrata.ott - usciteSpese[i].ott)}}>{entrata.ott - usciteSpese[i].ott} €</td>
-                  <td style={{color:getColor(entrata.nov - usciteSpese[i].nov)}}>{entrata.nov - usciteSpese[i].nov} €</td>
-                  <td style={{color:getColor(entrata.dic - usciteSpese[i].dic)}}>{entrata.dic - usciteSpese[i].dic} €</td>
-                  <td style={{color:getColor(entrata.totale_anno - usciteSpese[i].totale_anno)}}>{entrata.totale_anno - usciteSpese[i].totale_anno} €</td>
+                  <td style={{color:getColor(entrata.gen - usciteSpese[i].gen, 1)}}>{parseFloat(entrata.gen - usciteSpese[i].gen).toFixed(2)} €</td>
+                  <td style={{color:getColor(entrata.feb - usciteSpese[i].feb)}}>{parseFloat(entrata.feb - usciteSpese[i].feb).toFixed(2)} €</td>
+                  <td style={{color:getColor(entrata.mar - usciteSpese[i].mar)}}>{parseFloat(entrata.mar - usciteSpese[i].mar).toFixed(2)} €</td>
+                  <td style={{color:getColor(entrata.apr - usciteSpese[i].apr)}}>{parseFloat(entrata.apr - usciteSpese[i].apr).toFixed(2)} €</td>
+                  <td style={{color:getColor(entrata.mag - usciteSpese[i].mag)}}>{parseFloat(entrata.mag - usciteSpese[i].mag).toFixed(2)} €</td>
+                  <td style={{color:getColor(entrata.giu - usciteSpese[i].giu)}}>{parseFloat(entrata.giu - usciteSpese[i].giu).toFixed(2)} €</td>
+                  <td style={{color:getColor(entrata.lug - usciteSpese[i].lug)}}>{parseFloat(entrata.lug - usciteSpese[i].lug).toFixed(2)} €</td>
+                  <td style={{color:getColor(entrata.ago - usciteSpese[i].ago)}}>{parseFloat(entrata.ago - usciteSpese[i].ago).toFixed(2)} €</td>
+                  <td style={{color:getColor(entrata.set - usciteSpese[i].set)}}>{parseFloat(entrata.set - usciteSpese[i].set).toFixed(2)} €</td>
+                  <td style={{color:getColor(entrata.ott - usciteSpese[i].ott)}}>{parseFloat(entrata.ott - usciteSpese[i].ott).toFixed(2)} €</td>
+                  <td style={{color:getColor(entrata.nov - usciteSpese[i].nov)}}>{parseFloat(entrata.nov - usciteSpese[i].nov).toFixed(2)} €</td>
+                  <td style={{color:getColor(entrata.dic - usciteSpese[i].dic)}}>{parseFloat(entrata.dic - usciteSpese[i].dic).toFixed(2)} €</td>
+                  <td style={{color:getColor(entrata.totale_anno - usciteSpese[i].totale_anno)}}>{parseFloat(entrata.totale_anno - usciteSpese[i].totale_anno).toFixed(2)} €</td>
                 </tr>
               )
             ))}
@@ -843,19 +834,19 @@ export function CardRicavi({ entrateLavori, usciteSpese }) {
                   fontWeight: "bold",
                 }} 
               >{entrateLavori[0].Anno}</td>
-              <td style={{color:getColor(entrateLavori[0].gen - usciteSpese[0].gen, 1)}}>{entrateLavori[0].gen - usciteSpese[0].gen} €</td>
-              <td style={{color:getColor(entrateLavori[0].feb - usciteSpese[0].feb)}}>{entrateLavori[0].feb - usciteSpese[0].feb} €</td>
-              <td style={{color:getColor(entrateLavori[0].mar - usciteSpese[0].mar)}}>{entrateLavori[0].mar - usciteSpese[0].mar} €</td>
-              <td style={{color:getColor(entrateLavori[0].apr - usciteSpese[0].apr)}}>{entrateLavori[0].apr - usciteSpese[0].apr} €</td>
-              <td style={{color:getColor(entrateLavori[0].mag - usciteSpese[0].mag)}}>{entrateLavori[0].mag - usciteSpese[0].mag} €</td>
-              <td style={{color:getColor(entrateLavori[0].giu - usciteSpese[0].giu)}}>{entrateLavori[0].giu - usciteSpese[0].giu} €</td>
-              <td style={{color:getColor(entrateLavori[0].lug - usciteSpese[0].lug)}}>{entrateLavori[0].lug - usciteSpese[0].lug} €</td>
-              <td style={{color:getColor(entrateLavori[0].ago - usciteSpese[0].ago)}}>{entrateLavori[0].ago - usciteSpese[0].ago} €</td>
-              <td style={{color:getColor(entrateLavori[0].set - usciteSpese[0].set)}}>{entrateLavori[0].set - usciteSpese[0].set} €</td>
-              <td style={{color:getColor(entrateLavori[0].ott - usciteSpese[0].ott)}}>{entrateLavori[0].ott - usciteSpese[0].ott} €</td>
-              <td style={{color:getColor(entrateLavori[0].nov - usciteSpese[0].nov)}}>{entrateLavori[0].nov - usciteSpese[0].nov} €</td>
-              <td style={{color:getColor(entrateLavori[0].dic - usciteSpese[0].dic)}}>{entrateLavori[0].dic - usciteSpese[0].dic} €</td>
-              <td style={{color:getColor(entrateLavori[0].totale_anno - usciteSpese[0].totale_anno)}}>{entrateLavori[0].totale_anno - usciteSpese[0].totale_anno} €</td>
+              <td style={{color:getColor(entrateLavori[0].gen - usciteSpese[0].gen, 1)}}>{parseFloat(entrateLavori[0].gen - usciteSpese[0].gen).toFixed(2)} €</td>
+              <td style={{color:getColor(entrateLavori[0].feb - usciteSpese[0].feb)}}>{parseFloat(entrateLavori[0].feb - usciteSpese[0].feb).toFixed(2)} €</td>
+              <td style={{color:getColor(entrateLavori[0].mar - usciteSpese[0].mar)}}>{parseFloat(entrateLavori[0].mar - usciteSpese[0].mar).toFixed(2)} €</td>
+              <td style={{color:getColor(entrateLavori[0].apr - usciteSpese[0].apr)}}>{parseFloat(entrateLavori[0].apr - usciteSpese[0].apr).toFixed(2)} €</td>
+              <td style={{color:getColor(entrateLavori[0].mag - usciteSpese[0].mag)}}>{parseFloat(entrateLavori[0].mag - usciteSpese[0].mag).toFixed(2)} €</td>
+              <td style={{color:getColor(entrateLavori[0].giu - usciteSpese[0].giu)}}>{parseFloat(entrateLavori[0].giu - usciteSpese[0].giu).toFixed(2)} €</td>
+              <td style={{color:getColor(entrateLavori[0].lug - usciteSpese[0].lug)}}>{parseFloat(entrateLavori[0].lug - usciteSpese[0].lug).toFixed(2)} €</td>
+              <td style={{color:getColor(entrateLavori[0].ago - usciteSpese[0].ago)}}>{parseFloat(entrateLavori[0].ago - usciteSpese[0].ago).toFixed(2)} €</td>
+              <td style={{color:getColor(entrateLavori[0].set - usciteSpese[0].set)}}>{parseFloat(entrateLavori[0].set - usciteSpese[0].set).toFixed(2)} €</td>
+              <td style={{color:getColor(entrateLavori[0].ott - usciteSpese[0].ott)}}>{parseFloat(entrateLavori[0].ott - usciteSpese[0].ott).toFixed(2)} €</td>
+              <td style={{color:getColor(entrateLavori[0].nov - usciteSpese[0].nov)}}>{parseFloat(entrateLavori[0].nov - usciteSpese[0].nov).toFixed(2)} €</td>
+              <td style={{color:getColor(entrateLavori[0].dic - usciteSpese[0].dic)}}>{parseFloat(entrateLavori[0].dic - usciteSpese[0].dic).toFixed(2)} €</td>
+              <td style={{color:getColor(entrateLavori[0].totale_anno - usciteSpese[0].totale_anno)}}>{parseFloat(entrateLavori[0].totale_anno - usciteSpese[0].totale_anno).toFixed(2)} €</td>
             </tr>
           </tbody>
         </Table>
