@@ -152,53 +152,53 @@ export const Items = ({tipoItem, items, setItems, selectOperation, emptyIsConsid
     );
   }
 
-  const updatedItems = (e, item, inputRef) => {
-    // e.preventDefault();
-    const { name, value } = e.target;
-    if(tipoItem === "cliente") {
-      dispatch(aggiornaCliente({
-        id_cliente: item.id, 
-        nome_attributo: name,
-        nuovo_valore: value
-      }));
-    }
-    else if(tipoItem === "lavoro") {
-      dispatch(aggiornaLavoro({
-        id_lavoro: item.id, 
-        nome_attributo: name,
-        nuovo_valore: value
-      }));
-    }
-    else if(tipoItem === "spesa") {
-      dispatch(aggiornaSpesa({
-        id_spesa: item.id, 
-        nome_attributo: name,
-        nuovo_valore: value
-      }));
-    }
-    else if(tipoItem === "servizio") {
-      dispatch(aggiornaServizio({
-        id_servizio: item.id, 
-        nome_attributo: name,
-        nuovo_valore: value
-      }));
-    }
-  };
+  // const updatedItems = (e, item) => {
+  //   e.preventDefault();
+  //   const { name, value } = e.target;
+  //   if(tipoItem === "cliente") {
+  //     dispatch(aggiornaCliente({
+  //       id_cliente: item.id, 
+  //       nome_attributo: name,
+  //       nuovo_valore: value
+  //     }));
+  //   }
+  //   else if(tipoItem === "lavoro") {
+  //     dispatch(aggiornaLavoro({
+  //       id_lavoro: item.id, 
+  //       nome_attributo: name,
+  //       nuovo_valore: value
+  //     }));
+  //   }
+  //   else if(tipoItem === "spesa") {
+  //     dispatch(aggiornaSpesa({
+  //       id_spesa: item.id, 
+  //       nome_attributo: name,
+  //       nuovo_valore: value
+  //     }));
+  //   }
+  //   else if(tipoItem === "servizio") {
+  //     dispatch(aggiornaServizio({
+  //       id_servizio: item.id, 
+  //       nome_attributo: name,
+  //       nuovo_valore: value
+  //     }));
+  //   }
+  //   // inputRef.current.focus();
+  //   const inputRef = useRef(null);
+  //   inputRef.current.focus();
+  // };
 
-  
+
   const ItemElements = () => {
     return (
       <>
         {items.map((item, index) => {
-          // item["servizio"] = (item.servizio) ? item.servizio : "";
           const descrizione = item.descrizione;
           const sottoStringa = (item.servizio) ? item.servizio : "";
-          // const [serviziSelezionati, setServiziSelezionati] = useState([]);
           const inputRef = useRef(null);
-          // item["id_servizi"] = idServizi;
           return (
             <ItemEsistenteTag 
-              ref={inputRef}
+              // ref={inputRef}
               key={index} 
               item={item} 
               campi={campi(OptionsServizi(servizi, descrizione, sottoStringa, item), item, null, null, null)} 
@@ -207,8 +207,8 @@ export const Items = ({tipoItem, items, setItems, selectOperation, emptyIsConsid
               items={items} 
               setItems={setItems} 
               tipoItem={tipoItem}
-              onChange={(e) => updatedItems(e, item, inputRef)}
-              // itemsSelezionati=
+              dispatch={dispatch}
+              // onChange={updatedItems}
             />
           )
         })}

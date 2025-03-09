@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { 
   StyledPencilNotSelected, StyledPencilSelected, grandezzaIcona, 
   StyledTrashNotSelected, StyledTrashSelected, 
@@ -16,6 +16,10 @@ import {
 } from "./StyledRowItem";
 import { Trash2, Pencil } from 'lucide-react';
 import { faFilePdf, faFileExcel } from '@fortawesome/free-solid-svg-icons';
+import { aggiornaCliente } from '../../store/redux/ClientiSlice';
+import { aggiornaServizio } from '../../store/redux/ServiziSlice';
+import { aggiornaSpesa } from '../../store/redux/SpeseSlice';
+import { aggiornaLavoro } from '../../store/redux/LavoriSlice';
 
 export function getSelectTag(tipoSelezione) {
   return (tipoSelezione !== 1 && tipoSelezione !== 2) ? StyledSelectBlock : (
@@ -315,8 +319,54 @@ export function RowRicercaItems({campi, indici, handleSearch}) {
   );
 }
 
-export function RowItemEsistente({ item, campi, indici, selectOperation, items, setItems, tipoItem, onChange }) {
+export function RowItemEsistente({ item, campi, indici, selectOperation, items, setItems, tipoItem, dispatch }) {
   const NomeTagHeader = getTextAreaTag(campi.tipoSelezione, false);
+  const inputRefs = useRef([]); // Array di riferimenti per ogni input
+  const [localValues, setLocalValues] = useState(() =>
+    indici.reduce((acc, i) => ({ ...acc, [i]: campi.value[i] }), {})
+  ); // Gestione dello stato locale
+
+  const handleChange = (e, index) => {
+    const { value } = e.target;
+
+    // Aggiorna solo lo stato locale
+    setLocalValues((prevValues) => ({
+      ...prevValues,
+      [index]: value,
+    }));
+  };
+
+  const handleBlur = (e, item, index) => {
+    const { name, value } = e.target;
+
+    // Dispatch dell'azione solo quando l'elemento perde il focus
+    if (tipoItem === "cliente") {
+      dispatch(aggiornaCliente({
+        id_cliente: item.id,
+        nome_attributo: name,
+        nuovo_valore: value,
+      }));
+    } else if (tipoItem === "lavoro") {
+      dispatch(aggiornaLavoro({
+        id_lavoro: item.id,
+        nome_attributo: name,
+        nuovo_valore: value,
+      }));
+    } else if (tipoItem === "spesa") {
+      dispatch(aggiornaSpesa({
+        id_spesa: item.id,
+        nome_attributo: name,
+        nuovo_valore: value,
+      }));
+    } else if (tipoItem === "servizio") {
+      dispatch(aggiornaServizio({
+        id_servizio: item.id,
+        nome_attributo: name,
+        nuovo_valore: value,
+      }));
+    }
+  };
+  
 
   return (
     <StyledRow>
@@ -353,12 +403,12 @@ export function RowItemEsistente({ item, campi, indici, selectOperation, items, 
                   id={campi.id[i]}
                   type={campi.type[i]}
                   step={campi.step[i]}
-                  value={campi.value[i]}
+                  value={localValues[i]}
                   placeholder={campi.placeholder[i]}
-                  onChange={onChange}
+                  onChange={(e) => handleChange(e, i)}
+                  // onClick={campi.onClick}
+                  onBlur={(e) => handleBlur(e, item, i)}
                   readOnly={item.tipo_selezione !== 1}
-                  onClick={campi.onClick}
-                  onBlur={campi.onBlur}
                 />
                 {(["prezzo", "totale"].includes(campi.name[i])) && (
                   <StyledEuroNotSelected

@@ -18,6 +18,10 @@ import {
 import { faFilePdf, faFileExcel } from '@fortawesome/free-solid-svg-icons';
 import { Trash2, Pencil } from 'lucide-react';
 import { handleInputChange } from '../../vario/Vario';
+import { aggiornaCliente } from '../../store/redux/ClientiSlice';
+import { aggiornaServizio } from '../../store/redux/ServiziSlice';
+import { aggiornaSpesa } from '../../store/redux/SpeseSlice';
+import { aggiornaLavoro } from '../../store/redux/LavoriSlice';
 
 function getColor(value, j, tipo){
   // (i > 0) ? (
@@ -309,54 +313,100 @@ export function CardRicercaItems({campi, indici, handleSearch}) {
   );
 }
 
-export function CardItemEsistente({ item, campi, indici, selectOperation, items, setItems, tipoItem, onChange }) {
-  const inputRef = useRef(null);
+// import React, { useRef, useState } from "react";
+
+export function CardItemEsistente({ item, campi, indici, selectOperation, tipoItem, dispatch }) {
+  const inputRefs = useRef([]); // Array di riferimenti per ogni input
+  const [localValues, setLocalValues] = useState(() =>
+    indici.reduce((acc, i) => ({ ...acc, [i]: campi.value[i] }), {})
+  ); // Gestione dello stato locale
+
+  const handleChange = (e, index) => {
+    const { value } = e.target;
+
+    // Aggiorna solo lo stato locale
+    setLocalValues((prevValues) => ({
+      ...prevValues,
+      [index]: value,
+    }));
+  };
+
+  const handleBlur = (e, item, index) => {
+    const { name, value } = e.target;
+
+    // Dispatch dell'azione solo quando l'elemento perde il focus
+    if (tipoItem === "cliente") {
+      dispatch(aggiornaCliente({
+        id_cliente: item.id,
+        nome_attributo: name,
+        nuovo_valore: value,
+      }));
+    } else if (tipoItem === "lavoro") {
+      dispatch(aggiornaLavoro({
+        id_lavoro: item.id,
+        nome_attributo: name,
+        nuovo_valore: value,
+      }));
+    } else if (tipoItem === "spesa") {
+      dispatch(aggiornaSpesa({
+        id_spesa: item.id,
+        nome_attributo: name,
+        nuovo_valore: value,
+      }));
+    } else if (tipoItem === "servizio") {
+      dispatch(aggiornaServizio({
+        id_servizio: item.id,
+        nome_attributo: name,
+        nuovo_valore: value,
+      }));
+    }
+  };
 
   return (
-    <>
-      <StyledCard>
-        <StyledCardHeader>{campi["header"]}</StyledCardHeader>
-        <SlideContainer>
-          {indici.map((i) => {
-            const NomeTag = campi.type[i] ? getInputTag(campi.tipoSelezione, campi.valoreModificabile[i]) : getTextAreaTag(campi.tipoSelezione, campi.valoreModificabile[i]);
-            return (
-              <React.Fragment key={i}>
-                <StyledRow>
-                  <NomeTag 
-                    ref={inputRef} // Add the ref here
-                    rows={1}
-                    style={(campi.name[i] === "totale") ? { maxWidth: "80%" } : null}
-                    name={campi.name[i]}
-                    id={campi.id[i]}
-                    type={campi.type[i]}
-                    value={campi.value[i]}
-                    placeholder={campi.placeholder[i]}
-                    onChange={onChange}
-                    readOnly={item.tipo_selezione !== 1}
-                    onClick={null}
-                    onBlur={campi.onBlur}
+    <StyledCard>
+      <StyledCardHeader>{campi["header"]}</StyledCardHeader>
+      <SlideContainer>
+        {indici.map((i) => {
+          const NomeTag = campi.type[i]
+            ? getInputTag(campi.tipoSelezione, campi.valoreModificabile[i])
+            : getTextAreaTag(campi.tipoSelezione, campi.valoreModificabile[i]);
+
+          return (
+            <React.Fragment key={`input-${i}`}>
+              <StyledRow>
+                <NomeTag
+                  ref={(el) => (inputRefs.current[i] = el)} // Assegna il riferimento
+                  rows={1}
+                  style={campi.name[i] === "totale" ? { maxWidth: "80%" } : null}
+                  name={campi.name[i]}
+                  id={campi.id[i]}
+                  type={campi.type[i]}
+                  value={localValues[i]} // Usa lo stato locale per il valore
+                  placeholder={campi.placeholder[i]}
+                  onChange={(e) => handleChange(e, i)} // Aggiorna lo stato locale
+                  onBlur={(e) => handleBlur(e, item, i)} // Dispatch quando perde il focus
+                  readOnly={item.tipo_selezione !== 1}
+                />
+                {campi.name[i] === "totale" && (
+                  <StyledEuroNotSelected
+                    style={{ maxWidth: "20%", marginLeft: "-6px", marginTop: "13px" }}
+                    size={grandezzaIcona}
                   />
-                  {(campi.name[i] === "totale") && (
-                    <StyledEuroNotSelected
-                      style={{ maxWidth: "20%", marginLeft: "-6px", marginTop: "13px" }}
-                      size={grandezzaIcona}
-                      onClick={null}
-                    />
-                  )}
-                  {campi.options[i]}
-                </StyledRow>
-              </React.Fragment>
-            );
-          })}
-        </SlideContainer>
-        <OperazioniItemEsistente 
-          selectOperation={selectOperation} 
-          item={item}
-        />
-      </StyledCard>
-    </>
+                )}
+                {campi.options[i]}
+              </StyledRow>
+            </React.Fragment>
+          );
+        })}
+      </SlideContainer>
+      <OperazioniItemEsistente selectOperation={selectOperation} item={item} />
+    </StyledCard>
   );
 }
+
+
+
+
 
 export function CardFileItems({campi, indici, ottieniFileRangePDF, ottieniFileRangeExcel, eliminaItemsRange}) {
   let maxHeight = "2000px";
