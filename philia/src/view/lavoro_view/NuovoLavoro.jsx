@@ -10,6 +10,7 @@ import { getSelectTag } from "../../riutilizzabile/form_item/FormItem";
 import PaginaWeb from "../../riutilizzabile/PaginaWeb";
 import PaginaWebNewItem from "../../riutilizzabile/PaginaWebNewItem";
 import { aggiornaTipoSelezione, inserimentoLavoro } from "../../store/redux/LavoriSlice";
+import { controlloLavoro } from "../../vario/Controlli";
 
 const NuovoLavoro = () => {
   const formSession = useSelector((state) => state.formSession.value);
@@ -39,7 +40,7 @@ const NuovoLavoro = () => {
     totale: 0, 
     note: "", 
     errore_cliente: "", 
-    errore_servizio: "", 
+    errore_servizi: "", 
     errore_giorno: "", 
     errore_note: "" 
   })
@@ -98,8 +99,8 @@ const NuovoLavoro = () => {
       
       /**/
       
-      // if (controlloLavoro(nuovoLavoro, setNuovoLavoro) > 0) 
-      //   return;
+      if (controlloLavoro(nuovoLavoro, setNuovoLavoro) > 0) 
+        return;
       
       const response = await fetch('/INSERISCI_ITEM', {
         method: 'POST',

@@ -274,7 +274,7 @@ export function CardRicercaItems({campi, indici, handleSearch}) {
                     rows={1}
                     name={campi.name[i]}
                     id={campi.id[i]}
-                    type={campi.type[i]}
+                    type={campi.value[i]}
                     value={campi.value[i]}
                     placeholder={campi.placeholder[i]}
                     onChange={campi.onChange}

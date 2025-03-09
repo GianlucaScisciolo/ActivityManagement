@@ -13,18 +13,38 @@ export const serviziSlice = createSlice ({
       state.value.servizi = action.payload.servizi 
     },
     aggiornaTipoSelezione: (state, action) => {
-      for(let servizio of [...state.value.servizi, ...state.value.nuoviServizi]) {
-        if(servizio.id === action.payload.id_servizio) {
-          servizio.tipo_selezione = action.payload.nuova_selezione;
-          break;
+      if(state.value.servizi !== -1) {
+        for(let i = 0; i < state.value.servizi.length; i++) {
+          if(state.value.servizi[i].id === action.payload.id_servizio) {
+            state.value.servizi[i].tipo_selezione = action.payload.nuova_selezione;
+            break;
+          }
+        }
+      }
+      if(state.value.nuoviServizi !== -1) {
+        for(let i = 0; i < state.value.nuoviServizi.length; i++) {
+          if(state.value.nuoviServizi[i].id === action.payload.id_servizio) {
+            state.value.nuoviServizi[i].tipo_selezione = action.payload.nuova_selezione;
+            break;
+          }
         }
       }
     }, 
     aggiornaServizio: (state, action) => {
-      for(let servizio of [...state.value.servizi, ...state.value.nuoviServizi]) {
-        if(servizio.id === action.payload.id_servizio) {
-          servizio[action.payload.nome_attributo] = action.payload.nuovo_valore;
-          break;
+      if(state.value.servizi !== -1) {
+        for(let i = 0; i < state.value.servizi.length; i++) {
+          if(state.value.servizi[i].id === action.payload.id_servizio) {
+            state.value.servizi[i][action.payload.nome_attributo] = action.payload.nuovo_valore;
+            break;
+          }
+        }
+      }
+      if(state.value.nuoviServizi !== -1) {
+        for(let i = 0; i < state.value.nuoviServizi.length; i++) {
+          if(state.value.nuoviServizi[i].id === action.payload.id_servizio) {
+            state.value.nuoviServizi[i][action.payload.nome_attributo] = action.payload.nuovo_valore;
+            break;
+          }
         }
       }
     }, 

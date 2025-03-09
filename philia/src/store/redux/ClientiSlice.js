@@ -13,18 +13,38 @@ export const clientiSlice = createSlice ({
       state.value.clienti = action.payload.clienti 
     },
     aggiornaTipoSelezione: (state, action) => {
-      for(let cliente of [...state.value.clienti, ...state.value.nuoviClienti]) {
-        if(cliente.id === action.payload.id_cliente) {
-          cliente.tipo_selezione = action.payload.nuova_selezione;
-          break;
+      if(state.value.clienti !== -1) {
+        for(let i = 0; i < state.value.clienti.length; i++) {
+          if(state.value.clienti[i].id === action.payload.id_cliente) {
+            state.value.clienti[i].tipo_selezione = action.payload.nuova_selezione;
+            break;
+          }
+        }
+      }
+      if(state.value.nuoviClienti !== -1) {
+        for(let i = 0; i < state.value.nuoviClienti.length; i++) {
+          if(state.value.nuoviClienti[i].id === action.payload.id_cliente) {
+            state.value.nuoviClienti[i].tipo_selezione = action.payload.nuova_selezione;
+            break;
+          }
         }
       }
     }, 
     aggiornaCliente: (state, action) => {
-      for(let cliente of [...state.value.clienti, ...state.value.nuoviClienti]) {
-        if(cliente.id === action.payload.id_cliente) {
-          cliente[action.payload.nome_attributo] = action.payload.nuovo_valore;
-          break;
+      if(state.value.clienti !== -1) {
+        for(let i = 0; i < state.value.clienti.length; i++) {
+          if(state.value.clienti[i].id === action.payload.id_cliente) {
+            state.value.clienti[i][action.payload.nome_attributo] = action.payload.nuovo_valore;
+            break;
+          }
+        }
+      }
+      if(state.value.nuoviClienti !== -1) {
+        for(let i = 0; i < state.value.nuoviClienti.length; i++) {
+          if(state.value.nuoviClienti[i].id === action.payload.id_cliente) {
+            state.value.nuoviClienti[i][action.payload.nome_attributo] = action.payload.nuovo_valore;
+            break;
+          }
         }
       }
     },

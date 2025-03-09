@@ -9,7 +9,7 @@ function getInt(numStr) {
 
 const isEmpty = (value) => {
   // return ((value === null) || (value === "") || (value !== null && value.split(' ').join('') === ""));
-  return value == null || value.trim() === "";
+  return !value;
 }
 
 const isInRange = (num, min, max) => {
@@ -33,33 +33,17 @@ const isNumber = (numStr) => {
   return !isNaN(num) && isFinite(num);  
 }
 
-export const controlloProfessionista = (data, settersErrori) => {
-  return 0;
-}
-
 export const controlloCliente = (data, settersErrori) => {
-  /*
-  Controlli clienti:
-  empty:
-    nome != empty FATTO
-    cognome != empty FATTO
-    contatto != enpty FATTO
-  length:
-    1 <= nome.length <= 30 FATTO
-    1 <= cognome.length <= 30 FATTO
-    1 <= contatto.length <= 11 FATTO
-    0 <= note <= 65535 FATTO
-  */
-  
   let numErrori = 0;
+  let messaggioErrore = "";
   setErrore(settersErrori, "errore_nome", "");
   setErrore(settersErrori, "errore_cognome", "");
-  setErrore(settersErrori, "errore_email", "");
   setErrore(settersErrori, "errore_contatto", "");
+  setErrore(settersErrori, "errore_email", "");
   setErrore(settersErrori, "errore_note", "");
 
   // controllo sul nome
-  let messaggioErrore = "";
+  messaggioErrore = "";
   if (isEmpty(data.nome)) {
     numErrori += 1; 
     messaggioErrore = "Inserire il nome";
@@ -108,9 +92,9 @@ export const controlloCliente = (data, settersErrori) => {
   
   // controllo sulle note
   messaggioErrore = "";
-  if(!isInRange(data.note.length, 0, 65535)) {
+  if(!isInRange(data.note.length, 0, 200)) {
     numErrori += 1;
-    messaggioErrore = "Lunghezza note non valida, deve avere un numero di caratteri tra 1 e 65.535 estremi inclusi.";
+    messaggioErrore = "Lunghezza note non valida, deve avere un numero di caratteri tra 1 e 200 estremi inclusi.";
   }
   setErrore(settersErrori, "errore_note", messaggioErrore);
   // alert(numErrori);
@@ -119,12 +103,13 @@ export const controlloCliente = (data, settersErrori) => {
 
 export const controlloServizio = (data, settersErrori) => {
   let numErrori = 0;
+  let messaggioErrore = "";
   setErrore(settersErrori, "errore_nome", "");
   setErrore(settersErrori, "errore_prezzo", "");
   setErrore(settersErrori, "errore_note", "");
   
   // controllo sul nome
-  let messaggioErrore = "";
+  messaggioErrore = "";
   if (isEmpty(data.nome)) {
     numErrori += 1; 
     messaggioErrore = "Inserire il nome";
@@ -142,9 +127,9 @@ export const controlloServizio = (data, settersErrori) => {
     messaggioErrore = (isEmpty(data.prezzo.toString())) ? "Inserire il prezzo." : (
       "Il prezzo inserito non è un numero.");
   }
-  else if(!isInRange(parseFloat(data.prezzo.toString()), 0.50, Number.MAX_VALUE)) {
+  else if(!isInRange(parseFloat(data.prezzo.toString()), 0.01, Number.MAX_VALUE)) {
     numErrori += 1;
-    messaggioErrore = "Inserire un presso di almeno 0.50 €."
+    messaggioErrore = "Inserire un prezzo di almeno 0.01 €."
   }
   setErrore(settersErrori, "errore_prezzo", messaggioErrore);
   
@@ -155,14 +140,117 @@ export const controlloServizio = (data, settersErrori) => {
     messaggioErrore = "Lunghezza note non valida, deve avere un numero di caratteri tra 0 e 200 estremi inclusi.";
   }
   setErrore(settersErrori, "errore_note", messaggioErrore);
+
+  return numErrori;
+}
+
+export const controlloSpesa = (data, settersErrori) => {
+  let numErrori = 0;
+  let messaggioErrore = "";
+  setErrore(settersErrori, "errore_nome", "");
+  setErrore(settersErrori, "errore_giorno", "");
+  setErrore(settersErrori, "errore_descrizione", "");
+  setErrore(settersErrori, "errore_totale", "");
+  setErrore(settersErrori, "errore_note", "");
+
+  // controllo sul nome
+  messaggioErrore = "";
+  if (isEmpty(data.nome)) {
+    numErrori += 1; 
+    messaggioErrore = "Inserire il nome";
+  }
+  else if(!isInRange(data.nome.length, 1, 50)) {
+    numErrori += 1; 
+    messaggioErrore = "Lunghezza nome non valido, deve avere un numero di caratteri tra 1 e 50 estremi inclusi.";
+  }
+  setErrore(settersErrori, "errore_nome", messaggioErrore);
+
+  // controllo sul giorno
+  messaggioErrore = "";
+  if (isEmpty(data.giorno)) {
+    numErrori += 1; 
+    messaggioErrore = "Inserire il giorno.";
+  }
+  setErrore(settersErrori, "errore_giorno", messaggioErrore);
+
+  // controllo sulla descrizione
+  messaggioErrore = "";
+  if(!isInRange(data.descrizione.length, 0, 65535)) {
+    numErrori += 1;
+    messaggioErrore = "Lunghezza descrizione non valida, deve avere un numero di caratteri tra 0 e 65535 estremi inclusi.";
+  }
+  setErrore(settersErrori, "errore_descrizione", messaggioErrore);
+
+  // controllo sul totale
+  messaggioErrore = "";
+  if(!isNumber(data.totale.toString())) {
+    numErrori += 1;
+    messaggioErrore = (isEmpty(data.totale.toString())) ? "Inserire il totale." : (
+      "Il totale inserito non è un numero.");
+  }
+  else if(!isInRange(parseFloat(data.totale.toString()), 0.01, Number.MAX_VALUE)) {
+    numErrori += 1;
+    messaggioErrore = "Inserire un totale di almeno 0.01 €."
+  }
+  setErrore(settersErrori, "errore_totale", messaggioErrore);
+  
+  // controllo sulle note
+  messaggioErrore = "";
+  if(!isInRange(data.note.length, 0, 200)) {
+    numErrori += 1;
+    messaggioErrore = "Lunghezza note non valida, deve avere un numero di caratteri tra 0 e 200 estremi inclusi.";
+  }
+  setErrore(settersErrori, "errore_note", messaggioErrore);
+
+  return numErrori;
 }
 
 export const controlloLavoro = (data, settersErrori) => {  
   let numErrori = 0;
+  let messaggioErrore = "";
 
-  let messaggioErrore1 = "";
-  let messaggioErrore2 = "";
+  setErrore(settersErrori, "errore_cliente", "");
+  setErrore(settersErrori, "errore_servizi", "");
+  setErrore(settersErrori, "errore_giorno", "");
+  setErrore(settersErrori, "errore_note", "");
   
+  console.log(data);
+  
+  // controllo sul cliente
+  messaggioErrore = "";
+  if (data.id_cliente === 0) {
+    numErrori += 1; 
+    messaggioErrore = "Selezionare un cliente.";
+  }
+  setErrore(settersErrori, "errore_cliente", messaggioErrore);
+
+  // controllo sui servizi
+  if(isEmpty(data.id_servizi) || data.id_servizi.length === 0) {
+    numErrori += 1; 
+    messaggioErrore = "Selezionare almeno un servizio.";
+  }
+  setErrore(settersErrori, "errore_servizi", messaggioErrore);
+
+  // controllo sul giorno
+  messaggioErrore = "";
+  if (isEmpty(data.giorno)) {
+    numErrori += 1; 
+    messaggioErrore = "Inserire il giorno.";
+  }
+  setErrore(settersErrori, "errore_giorno", messaggioErrore);
+
+  // controllo sulle note
+  messaggioErrore = "";
+  if(!isInRange(data.note.length, 0, 200)) {
+    numErrori += 1;
+    messaggioErrore = "Lunghezza note non valida, deve avere un numero di caratteri tra 0 e 200 estremi inclusi.";
+  }
+  setErrore(settersErrori, "errore_note", messaggioErrore);
+  
+  return numErrori;
+  
+  
+  /*
   // controllo sul cliente e sul professionista
   messaggioErrore1 = "";
   // alert(getInt(data.id_cliente) + " - " + getInt(data.id_professionista));
@@ -218,6 +306,7 @@ export const controlloLavoro = (data, settersErrori) => {
 
   // alert(numErrori);
   return numErrori;
+  */
 }
 
 export const controlloLogin = (dati, settersErrori) => {
@@ -336,9 +425,6 @@ export const controlloProfilo = (dati, settersErrori) => {
   return numErrori;
 }
 
-export const controlloSpesa = (dati, settersErrori) => {
-  return 0;
-}
 
 
 

@@ -1,12 +1,3 @@
-// export const handleGiornoBlur = (setGiornoType, item, setItem) => {
-//   return () => {
-//     if(!item.giorno)
-//       setGiornoType('text');
-//     else
-//       setGiornoType('date');
-//   };
-// };
-
 export function getCampiNuovoLavoro(item, clienti, servizi, handleOnChange, handleOnClick, handleOnBlur) {
   return {
     header: "Nuovo lavoro", 
@@ -18,7 +9,7 @@ export function getCampiNuovoLavoro(item, clienti, servizi, handleOnChange, hand
     id: ["nuovo_cliente_lavoro", "nuovo_servizio_lavoro", "nuovo_giorno_lavoro", "nuove_note_lavoro"], 
     value: [item.cliente, item.servizio, item.giorno, item.note], 
     placeholder: ["Cliente*", "Servizio*", "Giorno*", "Note"],
-    errore: [item.errore_cliente, item.errore_servizio, item.errore_giorno, item.errore_note], 
+    errore: [item.errore_cliente, item.errore_servizi, item.errore_giorno, item.errore_note], 
     options: [clienti, servizi, null, null], 
     onChange: handleOnChange, 
     onClick: handleOnClick, 
@@ -52,7 +43,7 @@ export function getCampiLavoroEsistente(servizi, item, handleOnChange, handleOnC
     min: [null, null, null, null, null],
     name: ["cliente", "servizio", "totale", "giorno", "note"], 
     id: ["cliente_lavoro", "servizio_lavoro", "totale_lavoro", "giorno_lavoro", "note_lavoro"], 
-    value: [item.cliente, item.servizio, item.totale, item.giorno, item.note], 
+    value: [item.cliente, item.servizio, parseFloat(item.totale).toFixed(2), item.giorno, item.note], 
     placeholder: ["Cliente", "Servizio", "Totale", "Giorno", "Note"], 
     valoreModificabile: [false, true, false, true, true], 
     options: [null, servizi, null, null, null],

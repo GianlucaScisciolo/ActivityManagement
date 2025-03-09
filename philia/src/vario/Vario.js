@@ -99,14 +99,17 @@ export const handleInputClick = (e) => {
   }
 }
 export const handleInputBlur = (e) => {
-  if(([
+  if([
     "nuovo_giorno_lavoro", "ricerca_primo_giorno_lavoro", "ricerca_ultimo_giorno_lavoro", 
     "file_primo_giorno_lavoro", "file_ultimo_giorno_lavoro", 
     "nuovo_giorno_spesa", "ricerca_primo_giorno_spesa", "ricerca_ultimo_giorno_spesa", 
     "file_primo_giorno_spesa", "file_ultimo_giorno_spesa" 
-  ].includes(e.target.id)) && !(e.target.value)) {
-    e.target.type = "text";
+  ].includes(e.target.id)) {
+    e.target.type = (!e.target.value) ? "text" : "date";
+    // e.target.value = (!e.target.value|| e.target.value === "") ? "NO" : "SI"
+    // console.log(e.target.value);
   }
+
 }
 
 

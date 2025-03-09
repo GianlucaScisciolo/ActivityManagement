@@ -13,18 +13,38 @@ export const speseSlice = createSlice ({
       state.value.spese = action.payload.spese 
     },
     aggiornaTipoSelezione: (state, action) => {
-      for(let spesa of [...state.value.spese, ...state.value.nuoveSpese]) {
-        if(spesa.id === action.payload.id_spesa) {
-          spesa.tipo_selezione = action.payload.nuova_selezione;
-          break;
+      if(state.value.spese !== -1) {
+        for(let i = 0; i < state.value.spese.length; i++) {
+          if(state.value.spese[i].id === action.payload.id_spesa) {
+            state.value.spese[i].tipo_selezione = action.payload.nuova_selezione;
+            break;
+          }
+        }
+      }
+      if(state.value.nuoveSpese !== -1) {
+        for(let i = 0; i < state.value.nuoveSpese.length; i++) {
+          if(state.value.nuoveSpese[i].id === action.payload.id_spesa) {
+            state.value.nuoveSpese[i].tipo_selezione = action.payload.nuova_selezione;
+            break;
+          }
         }
       }
     }, 
     aggiornaSpesa: (state, action) => {
-      for(let spesa of [...state.value.spese, ...state.value.nuoveSpese]) {
-        if(spesa.id === action.payload.id_spesa) {
-          spesa[action.payload.nome_attributo] = action.payload.nuovo_valore;
-          break;
+      if(state.value.spese !== -1) {
+        for(let i = 0; i < state.value.spese.length; i++) {
+          if(state.value.spese[i].id === action.payload.id_spesa) {
+            state.value.spese[i][action.payload.nome_attributo] = action.payload.nuovo_valore;
+            break;
+          }
+        }
+      }
+      if(state.value.nuoveSpese !== -1) {
+        for(let i = 0; i < state.value.nuoveSpese.length; i++) {
+          if(state.value.nuoveSpese[i].id === action.payload.id_spesa) {
+            state.value.nuoveSpese[i][action.payload.nome_attributo] = action.payload.nuovo_valore;
+            break;
+          }
         }
       }
     },

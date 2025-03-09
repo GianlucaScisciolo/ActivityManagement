@@ -40,45 +40,36 @@ export const Items = ({tipoItem, items, setItems, selectOperation, emptyIsConsid
     /**/
 
     useEffect(() => {
-      if (!servizi) {
-        return null;
+      if (!servizi || servizi === -1) {
+        return;
       }
-      const nonSelezionati = [];
-      if(servizi !== -1 && servizi) {
-        for (let s of (servizi || [])) {
-          let nonSelezionato = true;
-          for (let ss of item["serviziSelezionati"]) {
-            if (optionStr(s) === optionStr(ss)) {
-              nonSelezionato = false;
-              break;
-            }
-          }
-          if (nonSelezionato === true) {
-            nonSelezionati.push(s);
-          }
-        }  
+    
+      // Trova i servizi non selezionati
+      const nonSelezionati = (servizi || []).filter(s => 
+        !item["serviziSelezionati"].some(ss => optionStr(s) === optionStr(ss))
+      );
+    
+      // Gestisci anche `serviziSelezionatiAttuali`
+      if (serviziSelezionatiAttuali && serviziSelezionatiAttuali !== -1) {
+        const extraNonSelezionati = (serviziSelezionatiAttuali || []).filter(s => 
+          !item["serviziSelezionati"].some(ss => optionStr(s) === optionStr(ss))
+        );
+        nonSelezionati.push(...extraNonSelezionati);
       }
-      if(serviziSelezionatiAttuali !== -1 && serviziSelezionatiAttuali) {
-        for (let s of (serviziSelezionatiAttuali || [])) {
-          let nonSelezionato = true;
-          for (let ss of item["serviziSelezionati"]) {
-            if (optionStr(s) === optionStr(ss)) {
-              nonSelezionato = false;
-              break;
-            }
-          }
-          if (nonSelezionato === true) {
-            nonSelezionati.push(s);
-          }
-        }  
-      }
-
-      setServiziNonSelezionati(nonSelezionati);
+    
+      // Elimina duplicati
+      const uniciNonSelezionati = nonSelezionati.filter((v, i, a) => 
+        a.findIndex(t => optionStr(t) === optionStr(v)) === i
+      );
+    
+      setServiziNonSelezionati(uniciNonSelezionati);
     }, [servizi, item]);
+    
     
     
     const handleCheckboxChange = (e, servizio) => {
       e.preventDefault();
+    
       if (e.target.checked) {
         console.log("!!!! Checked !!!!");
         dispatch(aggiornaLavoro({
@@ -86,36 +77,29 @@ export const Items = ({tipoItem, items, setItems, selectOperation, emptyIsConsid
           nome_attributo: "serviziSelezionati", 
           nuovo_valore: [...item["serviziSelezionati"], servizio]
         }));
-        // setServiziNonSelezionati(serviziNonSelezionati.filter(s => (optionStr(s)) !== optionStr(servizio)));
-        let aggiornamentoNonSelezionati = [];
-        for(let s of serviziNonSelezionati) {
-          if(optionStr(s) !== optionStr(servizio)) {
-            aggiornamentoNonSelezionati.push(s);
-          }
-        }
+    
+        // Filtra i duplicati in modo più diretto
+        const aggiornamentoNonSelezionati = serviziNonSelezionati.filter(s => optionStr(s) !== optionStr(servizio));
         setServiziNonSelezionati(aggiornamentoNonSelezionati);
-      } 
-      else {
+      } else {
         console.log("!!!! Not checked !!!!");
         dispatch(aggiornaLavoro({
           id_lavoro: item.id, 
           nome_attributo: "serviziSelezionati", 
-          nuovo_valore: item["serviziSelezionati"].filter(s => (optionStr(s)) !== optionStr(servizio))
+          nuovo_valore: item["serviziSelezionati"].filter(s => optionStr(s) !== optionStr(servizio))
         }));
-        
-        let isPresent = false;
-        for(let s of serviziNonSelezionati) {
-          if(optionStr(s) === optionStr(servizio)) {
-            isPresent = true;
-            break;
-          } 
-        }
-        if(isPresent !== true) {
-          const updatedNonSelezionati = [...serviziNonSelezionati, servizio];
-          setServiziNonSelezionati(updatedNonSelezionati);
-        }
+    
+        // Aggiungi il servizio solo se non è già presente
+        const aggiornamentoNonSelezionati = [...serviziNonSelezionati, servizio]
+          .filter((v, i, a) => a.findIndex(t => optionStr(t) === optionStr(v)) === i);
+        setServiziNonSelezionati(aggiornamentoNonSelezionati);
       }
+    
+      // Rimuovi i duplicati alla fine
+      const nonSelezionati = serviziNonSelezionati.filter((v, i, a) => a.findIndex(t => optionStr(t) === optionStr(v)) === i);
+      setServiziNonSelezionati(nonSelezionati);
     };
+    
 
     const classeWrapperCheckbox = (itemSession.view === "form") ? "checkbox-wrapper-form" : "checkbox-wrapper";
 

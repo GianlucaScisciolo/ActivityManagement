@@ -13,18 +13,38 @@ export const lavoriSlice = createSlice ({
       state.value.lavori = action.payload.lavori 
     },
     aggiornaTipoSelezione: (state, action) => {
-      for(let lavoro of [...state.value.lavori, ...state.value.nuoviLavori]) {
-        if(lavoro.id === action.payload.id_lavoro) {
-          lavoro.tipo_selezione = action.payload.nuova_selezione;
-          break;
+      if(state.value.lavori !== -1) {
+        for(let i = 0; i < state.value.lavori.length; i++) {
+          if(state.value.lavori[i].id === action.payload.id_lavoro) {
+            state.value.lavori[i].tipo_selezione = action.payload.nuova_selezione;
+            break;
+          }
+        }
+      }
+      if(state.value.nuoviLavori !== -1) {
+        for(let i = 0; i < state.value.nuoviLavori.length; i++) {
+          if(state.value.nuoviLavori[i].id === action.payload.id_lavoro) {
+            state.value.nuoviLavori[i].tipo_selezione = action.payload.nuova_selezione;
+            break;
+          }
         }
       }
     }, 
     aggiornaLavoro: (state, action) => {
-      for(let lavoro of [...state.value.lavori, ...state.value.nuoviLavori]) {
-        if(lavoro.id === action.payload.id_lavoro) {
-          lavoro[action.payload.nome_attributo] = action.payload.nuovo_valore;
-          break;
+      if(state.value.lavori !== -1) {
+        for(let i = 0; i < state.value.lavori.length; i++) {
+          if(state.value.lavori[i].id === action.payload.id_lavoro) {
+            state.value.lavori[i][action.payload.nome_attributo] = action.payload.nuovo_valore;
+            break;
+          }
+        }
+      }
+      if(state.value.nuoviLavori !== -1) {
+        for(let i = 0; i < state.value.nuoviLavori.length; i++) {
+          if(state.value.nuoviLavori[i].id === action.payload.id_lavoro) {
+            state.value.nuoviLavori[i][action.payload.nome_attributo] = action.payload.nuovo_valore;
+            break;
+          }
         }
       }
     }, 
