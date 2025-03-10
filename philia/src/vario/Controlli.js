@@ -248,65 +248,6 @@ export const controlloLavoro = (data, settersErrori) => {
   setErrore(settersErrori, "errore_note", messaggioErrore);
   
   return numErrori;
-  
-  
-  /*
-  // controllo sul cliente e sul professionista
-  messaggioErrore1 = "";
-  // alert(getInt(data.id_cliente) + " - " + getInt(data.id_professionista));
-  if(getInt(data.id_cliente) === 0 && getInt(data.id_professionista) === 0) {
-    numErrori += 1; 
-    messaggioErrore1 = "Selezionare il cliente oppure il professionista (non entrambi).";
-  }
-  setErrore(settersErrori, "errore_cliente_e_professionista", messaggioErrore1);
-
-  // controllo sul giorno
-  messaggioErrore1 = "";
-  if (isEmpty(data.giorno)) {
-    numErrori += 1; 
-    messaggioErrore1 = "Inserire il giorno.";
-  }
-  setErrore(settersErrori, "errore_giorno", messaggioErrore1);
-
-  // controllo sull'orario iniziale
-  messaggioErrore1 = "";
-  if (isEmpty(data.orario_inizio)) {
-    numErrori += 1; 
-    messaggioErrore1 = "Inserire l\'orario iniziale.";
-  }
-  setErrore(settersErrori, "errore_orario_inizio", messaggioErrore1);
-
-  // controllo sull'orario finale
-  // messaggioErrore1 = "";
-  // if (isEmpty(data.orario_fine)) {
-  //   numErrori += 1; 
-  //   messaggioErrore1 = "Inserire l\'orario finale.";
-  // }
-  // setErrore(settersErrori, "errore_orario_fine", messaggioErrore1);
-
-  // controllo sulla descrizione
-  messaggioErrore1 = "";
-  if (isEmpty(data.descrizione)) {
-    numErrori += 1; 
-    messaggioErrore1 = "Inserire la descrizione.";
-  }
-  else if(!isInRange(data.descrizione.length, 1, 100)) {
-    numErrori += 1; 
-    messaggioErrore1 = "Lunghezza descrizione non valida, deve avere un numero di caratteri tra 1 e 100 estremi inclusi.";
-  }
-  setErrore(settersErrori, "errore_descrizione", messaggioErrore1);
-  
-  // controllo sulle note
-  messaggioErrore1 = "";
-  if(!isInRange(data.note.length, 0, 65535)) {
-    numErrori += 1; 
-    messaggioErrore1 = "Lunghezza note non valida, deve avere un numero di caratteri tra 1 e 65.535 estremi inclusi.";
-  }
-  setErrore(settersErrori, "errore_note", messaggioErrore1);
-
-  // alert(numErrori);
-  return numErrori;
-  */
 }
 
 export const controlloLogin = (dati, settersErrori) => {

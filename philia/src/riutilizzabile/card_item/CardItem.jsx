@@ -322,17 +322,71 @@ export function CardItemEsistente({ item, campi, indici, selectOperation, tipoIt
   ); // Gestione dello stato locale
 
   const handleChange = (e, index) => {
-    const { value } = e.target;
-
-    // Aggiorna solo lo stato locale
-    setLocalValues((prevValues) => ({
-      ...prevValues,
-      [index]: value,
-    }));
+    e.preventDefault();
+    const { name, value, id } = e.target;
+    console.log(id);
+  
+    let modificabile = true;
+  
+    if([
+      "note_cliente", "note_servizio", "note_lavoro", "note_spesa" 
+    ].includes(id)) {
+      if(value.length > 200) {
+        modificabile = false;
+      }
+    }
+    else if([
+      "descrizione_spesa" 
+    ].includes(id)) {
+      if(value.length > 1000) {
+        modificabile = false;
+      }
+    }
+    else if([
+      "nome_servizio" 
+    ].includes(id)) {
+      if(value.length > 100) {
+        modificabile = false;
+      }
+    }
+    else if ([
+      "prezzo_servizio", "totale_spesa" 
+    ].includes(id)) {
+      // console.log("|" + value + "|");
+      const isDecimal = !isNaN(value) && Number(value) === parseFloat(value);
+      if (!isDecimal || value < 0) {
+        modificabile = false;
+      }
+    }
+    else if([
+      "email_cliente" 
+    ].includes(id)) {
+      if(value.length > 254) {
+        modificabile = false;
+      }
+    }
+    else if([
+      "contatto_cliente" 
+    ].includes(id)) {
+      if(value === "") {
+        modificabile = true;
+      }
+      else if (!(/^\d+$/.test(value)) || !((value.startsWith("0") && value.length <= 11) || (value.startsWith("3") && value.length <= 10))) {
+        modificabile = false;
+      }
+    }
+    
+    // Aggiorno solo lo stato locale
+    if(modificabile === true) {
+      setLocalValues((prevValues) => ({
+        ...prevValues,
+        [index]: value,
+      }));
+    }
   };
 
   const handleBlur = (e, item, index) => {
-    const { name, value } = e.target;
+    const { name, value, type } = e.target;
 
     // Dispatch dell'azione solo quando l'elemento perde il focus
     if (tipoItem === "cliente") {
@@ -360,7 +414,17 @@ export function CardItemEsistente({ item, campi, indici, selectOperation, tipoIt
         nuovo_valore: value,
       }));
     }
+
+    if(["giorno_spesa", "giorno_lavoro"].includes(e.target.id)) {
+      e.target.type = (!e.target.value) ? "text" : "date";
+    }
   };
+
+  const handleClick = (e) => {
+    if(["giorno_spesa", "giorno_lavoro"].includes(e.target.id)) {
+      e.target.type = "date";
+    }
+  }
 
   return (
     <StyledCard>
@@ -385,6 +449,7 @@ export function CardItemEsistente({ item, campi, indici, selectOperation, tipoIt
                   placeholder={campi.placeholder[i]}
                   onChange={(e) => handleChange(e, i)} // Aggiorna lo stato locale
                   onBlur={(e) => handleBlur(e, item, i)} // Dispatch quando perde il focus
+                  onClick={(e) => handleClick(e)}
                   readOnly={item.tipo_selezione !== 1}
                 />
                 {campi.name[i] === "totale" && (

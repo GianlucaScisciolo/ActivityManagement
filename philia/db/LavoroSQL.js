@@ -68,7 +68,7 @@ export class LavoroSQL {
     UPDATE 
       lavoro 
     SET 
-      giorno = ?, descrizione = ?, note = ? 
+      giorno = ?, descrizione = ?, totale = ?, note = ? 
     WHERE 
       id = ?; 
   `;
@@ -149,15 +149,21 @@ export class LavoroSQL {
     console.log(params);
     console.log(params["serviziSelezionati"]);
     let descrizione = "";
+    let totale = 0.0;
     for(let servizio of params["serviziSelezionati"]) {
       descrizione += servizio.nome + " - " + servizio.prezzo + " €, ";
+      totale += parseFloat(servizio.prezzo);
     }
     params.descrizione = descrizione;
+    params.totale = totale;
+    console.log(params.descrizione);
+    console.log(params.totale);
     /**/
    
     return [
       `${params.giorno}`, 
       `${params.descrizione}`, 
+      `${params.totale}`, 
       `${params.note}`, 
       `${params.id}`, 
     ];

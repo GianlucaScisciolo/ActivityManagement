@@ -412,34 +412,6 @@ app.post("/MODIFICA_ITEM", async(req, res) => {
   // await commitTransaction();
 });
 
-/*************************************************** Lavori **************************************************/
-
-// app.post("/MODIFICA_LAVORI", async (req, res) => {
-//   try {
-//     for(let servizio of req.body[1]) {
-//       for(let i = 0; i < req.body[0].length; i++) {
-//         if(req.body[0][i].id_servizi.includes(servizio.id)) {
-//           req.body[0][i].descrizione += servizio.nome + " - " + servizio.prezzo + " €, ";
-//         }
-//       }
-//     }
-//     await beginTransaction();
-//     for (let lavoro of req.body[0]) {
-//       let parametri = [`${lavoro.giorno}`, `${lavoro.descrizione}`, `${lavoro.note}`, `${lavoro.id}`];
-//       await executeQuery(SQL_MODIFICA_LAVORO, parametri);
-//     }
-//     await commitTransaction();
-//     return res.status(200);
-//   } 
-//   catch (err) {
-//     await rollbackTransaction();
-//     console.error('Errore durante la modifica dei lavori: ', err);
-//     return res.status(500).json({ message: 'Errore del server.' });
-//   }
-// });
-
-/*************************************************************************************************************/
-
 
 
 

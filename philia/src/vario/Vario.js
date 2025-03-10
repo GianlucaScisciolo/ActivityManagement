@@ -22,7 +22,7 @@ export const handleInputChange = (e, setItem) => {
   else if([
     "nuova_descrizione_spesa" 
   ].includes(id)) {
-    if(value.length > 65535) {
+    if(value.length > 1000) {
       modificabile = false;
     }
   }
@@ -106,8 +106,6 @@ export const handleInputBlur = (e) => {
     "file_primo_giorno_spesa", "file_ultimo_giorno_spesa" 
   ].includes(e.target.id)) {
     e.target.type = (!e.target.value) ? "text" : "date";
-    // e.target.value = (!e.target.value|| e.target.value === "") ? "NO" : "SI"
-    // console.log(e.target.value);
   }
 
 }
