@@ -32,7 +32,7 @@ export const Items = ({ tipoItem, items, setItems, selectOperation, emptyIsConsi
 
     // Calcolo e aggiornamento del totale
     useEffect(() => {
-      if (item["serviziSelezionati"] !== -1) {
+      if (tipoItem === "lavoro" && item["serviziSelezionati"] !== -1) {
         let totale = 0;
         for (let s of item["serviziSelezionati"]) {
           totale += parseFloat(s.prezzo) || 0;
@@ -112,7 +112,7 @@ export const Items = ({ tipoItem, items, setItems, selectOperation, emptyIsConsi
                 ))}
             </div>
             <div>
-              {item["serviziSelezionati"].map((servizio, index) => (
+              {tipoItem === "lavoro" && item["serviziSelezionati"].map((servizio, index) => (
                 <div key={index} className="checkbox-wrapper">
                   <input
                     type="checkbox"

@@ -22,6 +22,7 @@ import { aggiornaCliente } from '../../store/redux/ClientiSlice';
 import { aggiornaServizio } from '../../store/redux/ServiziSlice';
 import { aggiornaSpesa } from '../../store/redux/SpeseSlice';
 import { aggiornaLavoro } from '../../store/redux/LavoriSlice';
+import { controlloCliente } from '../../vario/Controlli';
 
 function getColor(value, j, tipo){
   // (i > 0) ? (
@@ -313,8 +314,6 @@ export function CardRicercaItems({campi, indici, handleSearch}) {
   );
 }
 
-// import React, { useRef, useState } from "react";
-
 export function CardItemEsistente({ item, campi, indici, selectOperation, tipoItem, dispatch }) {
   const inputRefs = useRef([]); // Array di riferimenti per ogni input
   const [localValues, setLocalValues] = useState(() =>
@@ -441,25 +440,27 @@ export function CardItemEsistente({ item, campi, indici, selectOperation, tipoIt
                 <NomeTag
                   ref={(el) => (inputRefs.current[i] = el)} // Assegna il riferimento
                   rows={1}
-                  style={campi.name[i] === "totale" ? { maxWidth: "80%" } : null}
+                  style={["prezzo", "totale"].includes(campi.name[i]) ? { maxWidth: "80%" } : null}
                   name={campi.name[i]}
                   id={campi.id[i]}
                   type={campi.type[i]}
-                  value={localValues[i]} // Usa lo stato locale per il valore
+                  step={campi.step[i]}
+                  value={localValues[i]} // stato locale per il valore
                   placeholder={campi.placeholder[i]}
                   onChange={(e) => handleChange(e, i)} // Aggiorna lo stato locale
                   onBlur={(e) => handleBlur(e, item, i)} // Dispatch quando perde il focus
                   onClick={(e) => handleClick(e)}
                   readOnly={item.tipo_selezione !== 1}
                 />
-                {campi.name[i] === "totale" && (
+                {(["prezzo", "totale"].includes(campi.name[i])) && (
                   <StyledEuroNotSelected
-                    style={{ maxWidth: "20%", marginLeft: "-6px", marginTop: "13px" }}
+                    style={{ maxWidth: "20%", marginLeft: "-6px", marginTop: "10px" }}
                     size={grandezzaIcona}
                   />
                 )}
                 {campi.options[i]}
               </StyledRow>
+              {(campi.errore[i]) && (<StyledSpanErrore>{campi.errore[i]}</StyledSpanErrore>)}
             </React.Fragment>
           );
         })}

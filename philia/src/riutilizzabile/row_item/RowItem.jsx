@@ -319,25 +319,79 @@ export function RowRicercaItems({campi, indici, handleSearch}) {
   );
 }
 
-export function RowItemEsistente({ item, campi, indici, selectOperation, items, setItems, tipoItem, dispatch }) {
+export function RowItemEsistente({ item, campi, indici, selectOperation, tipoItem, dispatch }) {
   const NomeTagHeader = getTextAreaTag(campi.tipoSelezione, false);
-  const inputRefs = useRef([]); // Array di riferimenti per ogni input
   const [localValues, setLocalValues] = useState(() =>
     indici.reduce((acc, i) => ({ ...acc, [i]: campi.value[i] }), {})
   ); // Gestione dello stato locale
-
+  
   const handleChange = (e, index) => {
-    const { value } = e.target;
-
-    // Aggiorna solo lo stato locale
-    setLocalValues((prevValues) => ({
-      ...prevValues,
-      [index]: value,
-    }));
+    e.preventDefault();
+    const { name, value, id } = e.target;
+    console.log(id);
+  
+    let modificabile = true;
+  
+    if([
+      "note_cliente", "note_servizio", "note_lavoro", "note_spesa" 
+    ].includes(id)) {
+      if(value.length > 200) {
+        modificabile = false;
+      }
+    }
+    else if([
+      "descrizione_spesa" 
+    ].includes(id)) {
+      if(value.length > 1000) {
+        modificabile = false;
+      }
+    }
+    else if([
+      "nome_servizio" 
+    ].includes(id)) {
+      if(value.length > 100) {
+        modificabile = false;
+      }
+    }
+    else if ([
+      "prezzo_servizio", "totale_spesa" 
+    ].includes(id)) {
+      // console.log("|" + value + "|");
+      const isDecimal = !isNaN(value) && Number(value) === parseFloat(value);
+      if (!isDecimal || value < 0) {
+        modificabile = false;
+      }
+    }
+    else if([
+      "email_cliente" 
+    ].includes(id)) {
+      if(value.length > 254) {
+        modificabile = false;
+      }
+    }
+    else if([
+      "contatto_cliente" 
+    ].includes(id)) {
+      if(value === "") {
+        modificabile = true;
+      }
+      else if (!(/^\d+$/.test(value)) || !((value.startsWith("0") && value.length <= 11) || (value.startsWith("3") && value.length <= 10))) {
+        modificabile = false;
+      }
+    }
+    
+    // Aggiorno solo lo stato locale
+    if(modificabile === true) {
+      setLocalValues((prevValues) => ({
+        ...prevValues,
+        [index]: value,
+      }));
+    }
   };
 
+  
   const handleBlur = (e, item, index) => {
-    const { name, value } = e.target;
+    const { name, value, type } = e.target;
 
     // Dispatch dell'azione solo quando l'elemento perde il focus
     if (tipoItem === "cliente") {
@@ -365,15 +419,22 @@ export function RowItemEsistente({ item, campi, indici, selectOperation, items, 
         nuovo_valore: value,
       }));
     }
+
+    if(["giorno_spesa", "giorno_lavoro"].includes(e.target.id)) {
+      e.target.type = (!e.target.value) ? "text" : "date";
+    }
   };
-  
+
+  const handleClick = (e) => {
+    if(["giorno_spesa", "giorno_lavoro"].includes(e.target.id)) {
+      e.target.type = "date";
+    }
+  }
 
   return (
     <StyledRow>
-      <OperazioniItemEsistente 
-        selectOperation={selectOperation} 
-        item={item} 
-      />
+      <OperazioniItemEsistente selectOperation={selectOperation} item={item} />
+      
       <StyledCol>
         <div style={{width: "100%"}}>
           <StyledRow>
@@ -387,6 +448,7 @@ export function RowItemEsistente({ item, campi, indici, selectOperation, items, 
           </StyledRow>
         </div>
       </StyledCol>
+      
       {indici.map((i) => {
         const NomeTag = (campi.type[i]) ? getInputTag(campi.tipoSelezione, campi.valoreModificabile[i]) : (
           getTextAreaTag(campi.tipoSelezione, campi.valoreModificabile[i])
@@ -406,24 +468,19 @@ export function RowItemEsistente({ item, campi, indici, selectOperation, items, 
                   value={localValues[i]}
                   placeholder={campi.placeholder[i]}
                   onChange={(e) => handleChange(e, i)}
-                  // onClick={campi.onClick}
-                  onBlur={(e) => handleBlur(e, item, i)}
+                  onBlur={(e) => handleBlur(e, item, i)} 
+                  onClick={(e) => handleClick(e)}
                   readOnly={item.tipo_selezione !== 1}
                 />
                 {(["prezzo", "totale"].includes(campi.name[i])) && (
                   <StyledEuroNotSelected
-                    style={{
-                      // border: "5px solid #000000",
-                      maxWidth: "20%",
-                      marginLeft: "-6px", 
-                      // marginTop: "13px"
-                    }} 
+                    style={{ maxWidth: "20%", marginLeft: "-6px" }} 
                     size={grandezzaIcona} 
-                    onClick={null} 
                   />
                 )}
                 {campi.options[i]}
               </StyledRow>
+              {(campi.errore[i]) && (<StyledSpanErrore>{campi.errore[i]}</StyledSpanErrore>)}
             </div>
             </StyledCol>
           </React.Fragment>

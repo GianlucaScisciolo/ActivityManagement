@@ -214,7 +214,7 @@ export const controlloLavoro = (data, settersErrori) => {
   setErrore(settersErrori, "errore_giorno", "");
   setErrore(settersErrori, "errore_note", "");
   
-  console.log(data);
+  // console.log(data);
   
   // controllo sul cliente
   messaggioErrore = "";
@@ -230,6 +230,13 @@ export const controlloLavoro = (data, settersErrori) => {
     messaggioErrore = "Selezionare almeno un servizio.";
   }
   setErrore(settersErrori, "errore_servizi", messaggioErrore);
+  messaggioErrore = "";
+  console.log("---------- " + parseFloat(data.totale) + " ----------");
+  if(parseFloat(data.totale) <= 0) {
+    numErrori += 1; 
+    messaggioErrore = "Selezionare almeno un servizio.";
+  }
+  setErrore(settersErrori, "errore_totale", messaggioErrore);
 
   // controllo sul giorno
   messaggioErrore = "";

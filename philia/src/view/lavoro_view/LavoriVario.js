@@ -1,3 +1,6 @@
+import { useEffect, useState } from "react";
+import { controlloLavoro } from "../../vario/Controlli";
+
 export function getCampiNuovoLavoro(item, clienti, servizi, handleOnChange, handleOnClick, handleOnBlur) {
   return {
     header: "Nuovo lavoro", 
@@ -35,6 +38,18 @@ export function getCampiRicercaLavori(item, handleOnChange, handleOnClick, handl
 };
 
 export function getCampiLavoroEsistente(servizi, item, handleOnChange, handleOnClick, handleOnBlur) {
+  const [errori, setErrori] = useState({
+    errore_cliente: "", 
+    errore_servizi: "", 
+    errore_totale: "", 
+    errore_giorno: "", 
+    errore_note: ""
+  }); 
+  
+  useEffect(() => {
+    controlloLavoro(item, setErrori);
+  }, [item]);
+  
   return {
     header: "Lavoro", 
     tipoSelezione: item.tipo_selezione,  
@@ -45,6 +60,7 @@ export function getCampiLavoroEsistente(servizi, item, handleOnChange, handleOnC
     id: ["cliente_lavoro", "servizio_lavoro", "totale_lavoro", "giorno_lavoro", "note_lavoro"], 
     value: [item.cliente, item.servizio, parseFloat(item.totale).toFixed(2), item.giorno, item.note], 
     placeholder: ["Cliente", "Servizio", "Totale", "Giorno", "Note"], 
+    errore: [errori.errore_cliente, errori.errore_totale, null, errori.errore_giorno, errori.errore_note], 
     valoreModificabile: [false, true, false, true, true], 
     options: [null, servizi, null, null, null],
     onChange: handleOnChange, 

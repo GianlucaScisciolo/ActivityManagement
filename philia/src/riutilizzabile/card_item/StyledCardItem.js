@@ -285,7 +285,7 @@ export const StyledOption =  styled.option`
 `;
 
 export const StyledSpanErrore =  styled.span`
-  color: #FF0000;
+  color: #FFFFFF;
   /* background-color: #000000; */
   padding: 10px;
 `;

@@ -1,3 +1,6 @@
+import { useState, useEffect } from "react";
+import { controlloCliente } from "../../vario/Controlli";
+
 export function getCampiNuovoCliente(item, handleOnChange, handleOnClick, handleOnBlur) {
   return {
     header: "Nuovo cliente", 
@@ -35,6 +38,17 @@ export function getCampiRicercaClienti(item, handleOnChange, handleOnClick, hand
 };
 
 export function getCampiClienteEsistente(servizi, item, handleOnChange, handleOnClick, handleOnBlur) {
+  const [errori, setErrori] = useState({
+    errore_contatto: "", 
+    errore_email: "", 
+    errore_note: ""
+  });
+
+  useEffect(() => {
+    controlloCliente(item, setErrori);
+  }, [item]);
+
+
   return {
     header: "Cliente", 
     tipoSelezione: item.tipo_selezione,  
@@ -45,6 +59,7 @@ export function getCampiClienteEsistente(servizi, item, handleOnChange, handleOn
     id: ["nome_e_cognome_cliente", "contatto_cliente", "email_cliente", "note_cliente"], 
     value: [item.nome + " " + item.cognome, item.contatto, item.email, item.note], 
     placeholder: ["Nome e cognome", "Contatto", "Email", "Note"], 
+    errore: [null, errori.errore_contatto, errori.errore_email, errori.errore_note], 
     valoreModificabile: [false, true, true, true], 
     options: [null, null, null, null], 
     onChange: handleOnChange, 

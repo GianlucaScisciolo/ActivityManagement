@@ -1,3 +1,6 @@
+import { useState, useEffect } from "react";
+import { controlloServizio } from "../../vario/Controlli";
+
 export function getCampiNuovoServizio(item, handleOnChange, handleOnClick, handleOnBlur) {
   return {
     header: "Nuovo servizio", 
@@ -21,12 +24,12 @@ export function getCampiRicercaServizi(item, handleOnChange, handleOnClick, hand
   return {
     header: "Ricerca servizi", 
     label: ["Nome", "Prezzo minimo", "Prezzo massimo", "Note"], 
-    type: [null, "number", "number", null], 
-    step: [null, "0.50", "0.50", null], 
+    type: [null, "text", "text", null], 
+    step: [null, null, null, null], 
     min: [null, null, null, null], 
     name: ["nome", "prezzo_min", "prezzo_max", "note"], 
     id: ["ricerca_nome_servizio", "ricerca_prezzo_min_servizio", "ricerca_prezzo_max_servizio", "ricerca_note_servizio"], 
-    value: [item.nome, parseFloat(item.prezzo_min).toFixed(2), parseFloat(item.prezzo_max).toFixed(2), item.note], 
+    value: [item.nome, item.prezzo_min, item.prezzo_max, item.note], 
     placeholder: ["Nome", "Prezzo minimo", "Prezzo massimo", "Note"], 
     onChange: handleOnChange, 
     onClick: handleOnClick, 
@@ -35,6 +38,16 @@ export function getCampiRicercaServizi(item, handleOnChange, handleOnClick, hand
 };
 
 export function getCampiServizioEsistente(servizi, item, handleOnChange, handleOnClick, handleOnBlur) {
+  const [errori, setErrori] = useState({
+    errore_nome: "", 
+    errore_prezzo: "", 
+    errore_note: "" 
+  }); 
+
+  useEffect(() => {
+    controlloServizio(item, setErrori);
+  }, [item]);
+
   return {
     header: "Servizio", 
     tipoSelezione: item.tipo_selezione,  
@@ -45,6 +58,7 @@ export function getCampiServizioEsistente(servizi, item, handleOnChange, handleO
     id: ["nome_servizio", "prezzo_servizio", "note_servizio"], 
     value: [item.nome, parseFloat(item.prezzo).toFixed(2), item.note], 
     placeholder: ["Nome", "Prezzo", "Note"], 
+    errore: [errori.errore_nome, errori.errore_prezzo, errori.errore_note], 
     valoreModificabile: [true, true, true], 
     options: [null, null, null], 
     onChange: handleOnChange, 

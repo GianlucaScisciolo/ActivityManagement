@@ -10,6 +10,7 @@ import PaginaWeb from '../../riutilizzabile/PaginaWeb';
 import PaginaWebRicercaItems from '../../riutilizzabile/PaginaWebRicercaItems';
 import { aggiornaClienti } from '../../store/redux/ClientiSlice';
 import { aggiornaTipoSelezione } from '../../store/redux/ClientiSlice';
+import { controlloCliente } from '../../vario/Controlli';
 
 const Clienti = () => {
   const clientiSession = useSelector((state) => state.clientiSession.value);

@@ -1,3 +1,6 @@
+import { useState, useEffect } from "react";
+import { controlloSpesa } from "../../vario/Controlli";
+
 export function getCampiNuovaSpesa(item, handleOnChange, handleOnClick, handleOnBlur) {
   return {
     header: "Nuova spesa", 
@@ -21,12 +24,12 @@ export function getCampiRicercaSpese(item, handleOnChange, handleOnClick, handle
   return {
     header: "Ricerca spese", 
     label: ["Nome", "Descrizione", "Totale minimo", "Totale massimo", "Primo giorno", "Ultimo giorno", "Note"], 
-    type: [null, null, "number", "number", "text", "text", null], 
-    step: [null, null, "0.50", "0.50", null, null, null], 
+    type: [null, null, "text", "text", "text", "text", null], 
+    step: [null, null, null, null, null, null, null], 
     min: [null, null, null, null, null, null, null], 
     name: ["nome", "descrizione", "totale_min", "totale_max", "primo_giorno", "ultimo_giorno", "note"], 
     id: ["ricerca_nome_spesa", "ricerca_descrizione_spesa", "ricerca_totale_min_spesa", "ricerca_totale_max_spesa", "ricerca_primo_giorno_spesa", "ricerca_ultimo_giorno_spesa", "ricerca_note_spesa"], 
-    value: [item.nome, item.descrizione, parseFloat(item.totale_min).toFixed(2), parseFloat(item.totale_max).toFixed(2), item.primo_giorno, item.ultimo_giorno, item.note], 
+    value: [item.nome, item.descrizione, item.totale_min, item.totale_max, item.primo_giorno, item.ultimo_giorno, item.note], 
     placeholder: ["Nome", "Descrizione", "Totale minimo", "Totale massimo", "Primo giorno", "Ultimo giorno", "Note"], 
     onChange: handleOnChange, 
     onClick: handleOnClick, 
@@ -35,6 +38,18 @@ export function getCampiRicercaSpese(item, handleOnChange, handleOnClick, handle
 };
 
 export function getCampiSpesaEsistente(nullo, item, handleOnChange, handleOnClick, handleOnBlur) {
+  const [errori, setErrori] = useState({
+    errore_nome: "", 
+    errore_descrizione: "", 
+    errore_totale: "", 
+    errore_giorno: "", 
+    errore_note: ""
+  }); 
+  
+  useEffect(() => {
+    controlloSpesa(item, setErrori);
+  }, [item]);
+
   return {
     header: "Spesa", 
     tipoSelezione: item.tipo_selezione,  
@@ -45,6 +60,7 @@ export function getCampiSpesaEsistente(nullo, item, handleOnChange, handleOnClic
     id: ["nome-spesa", "descrizione_spesa", "totale_spesa", "giorno_spesa", "note_spesa"], 
     value: [item.nome, item.descrizione, parseFloat(item.totale).toFixed(2), item.giorno, item.note], 
     placeholder: ["Nome*", "Descrizione", "Totale*", "Giorno*", "Note"], 
+    errore: [errori.errore_nome, errori.errore_descrizione, errori.errore_totale, errori.errore_giorno, errori.errore_note], 
     valoreModificabile: [false, true, true, true, true], 
     options: [null, null, null, null, null], 
     onChange: handleOnChange,  
