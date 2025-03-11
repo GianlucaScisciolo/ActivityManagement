@@ -206,6 +206,11 @@ export function RowNuovoItem({campi, indici, eseguiSalvataggio}) {
   let InputTag = getInputTag(1, true);
   let TextAreaTag = getTextAreaTag(1, true);
 
+  const handleRightClick = (e, placeholder) => {
+    e.preventDefault();
+    alert(placeholder);
+  }
+
   return (
     <StyledRow>
       <OperazioniNuovoItem eseguiSalvataggio={eseguiSalvataggio} />
@@ -233,6 +238,7 @@ export function RowNuovoItem({campi, indici, eseguiSalvataggio}) {
                     onChange={campi.onChange}
                     onClick={campi.onClick}
                     onBlur={campi.onBlur}
+                    onContextMenu={(e) => handleRightClick(e, campi.placeholder[i])}
                   />
                   {(["prezzo", "totale"].includes(campi.name[i])) && (
                     <StyledEuroNotSelected
@@ -263,6 +269,11 @@ export function RowRicercaItems({campi, indici, handleSearch}) {
   const [arrowUp, setArrowUp] = useState(true);
   let InputTag = getInputTag(1, true);
   let TextAreaTag = getTextAreaTag(1, true);
+
+  const handleRightClick = (e, placeholder) => {
+    e.preventDefault();
+    alert(placeholder);
+  }
 
   return (
     <StyledRow>
@@ -296,6 +307,7 @@ export function RowRicercaItems({campi, indici, handleSearch}) {
                         onChange={campi.onChange}
                         onClick={campi.onClick}
                         onBlur={campi.onBlur}
+                        onContextMenu={(e) => handleRightClick(e, campi.placeholder[i])}
                       />
                       {(["prezzo_min", "prezzo_max", "totale_min", "totale_max"].includes(campi.name[i])) && (
                         <StyledEuroNotSelected
@@ -324,6 +336,11 @@ export function RowItemEsistente({ item, campi, indici, selectOperation, tipoIte
   const [localValues, setLocalValues] = useState(() =>
     indici.reduce((acc, i) => ({ ...acc, [i]: campi.value[i] }), {})
   ); // Gestione dello stato locale
+
+  const handleRightClick = (e, placeholder) => {
+    e.preventDefault();
+    alert(placeholder);
+  }
   
   const handleChange = (e, index) => {
     e.preventDefault();
@@ -471,6 +488,7 @@ export function RowItemEsistente({ item, campi, indici, selectOperation, tipoIte
                   onBlur={(e) => handleBlur(e, item, i)} 
                   onClick={(e) => handleClick(e)}
                   readOnly={item.tipo_selezione !== 1}
+                  onContextMenu={(e) => handleRightClick(e, campi.placeholder[i])}
                 />
                 {(["prezzo", "totale"].includes(campi.name[i])) && (
                   <StyledEuroNotSelected
@@ -491,6 +509,11 @@ export function RowItemEsistente({ item, campi, indici, selectOperation, tipoIte
 }
 
 export function RowFileItems({campi, indici, ottieniFileRangePDF, ottieniFileRangeExcel, eliminaItemsRange}) {
+  const handleRightClick = (e, placeholder) => {
+    e.preventDefault();
+    alert(placeholder);
+  }
+
   return (
     <StyledRow>
       <OperazioniFileItems 
@@ -518,6 +541,7 @@ export function RowFileItems({campi, indici, ottieniFileRangePDF, ottieniFileRan
                     onChange={campi.onChange}
                     onClick={campi.onClick}
                     onBlur={campi.onBlur}
+                    onContextMenu={(e) => handleRightClick(e, campi.placeholder[i])}
                   />
                 </StyledRow>
               </div>
@@ -536,6 +560,11 @@ export function RowLogin({campi, indici, eseguiLogin}) {
     e.preventDefault();
     setInputType(inputType === 'text' ? 'password' : 'text');
   };
+
+  const handleRightClick = (e, placeholder) => {
+    e.preventDefault();
+    alert(placeholder);
+  }
 
   return (
     <StyledRow>
@@ -563,6 +592,7 @@ export function RowLogin({campi, indici, eseguiLogin}) {
                     onChange={campi.onChange}
                     onClick={campi.onClick}
                     onBlur={campi.onBlur}
+                    onContextMenu={(e) => handleRightClick(e, campi.placeholder[i])}
                   />
                   {(campi.name[i] === "password") && (
                     <StyledEyeTag
@@ -604,6 +634,11 @@ export function RowProfilo({campi, indici, eseguiModificaProfilo}) {
     } 
   };
 
+  const handleRightClick = (e, placeholder) => {
+    e.preventDefault();
+    alert(placeholder);
+  }
+
   return (
     <StyledRow>
       <OperazioniModificaProfilo eseguiModificaProfilo={eseguiModificaProfilo} />
@@ -640,6 +675,7 @@ export function RowProfilo({campi, indici, eseguiModificaProfilo}) {
                     onChange={campi.onChange}
                     onClick={campi.onClick}
                     onBlur={campi.onBlur}
+                    onContextMenu={(e) => handleRightClick(e, campi.placeholder[i])}
                   />
                   {(campi.name[i].includes("password")) && (
                     <StyledEyeTag

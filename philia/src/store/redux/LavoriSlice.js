@@ -56,6 +56,18 @@ export const lavoriSlice = createSlice ({
             state.value.lavori[i]["descrizione"] = state.value.lavori[i]["descrizione_attuale"];
             state.value.lavori[i]["totale"] = state.value.lavori[i]["totale_attuale"]; 
             state.value.lavori[i]["note"] = state.value.lavori[i]["note_attuale"]; 
+
+            /**/
+            let serviziSelezionati = state.value.lavori[i]["descrizione_attuale"].split(',').map(item => item.trim()).filter(item => item !== "");
+            for(let i = 0; i < serviziSelezionati.length; i++) {
+              serviziSelezionati[i] = serviziSelezionati[i].split('-').map(item => item.trim()).filter(item => item !== "");
+              serviziSelezionati[i] = {
+                nome: serviziSelezionati[i][0], 
+                prezzo: serviziSelezionati[i][1].substring(0, serviziSelezionati[i][1].length-2)
+              };
+            }
+            state.value.lavori[i]["serviziSelezionati"] = serviziSelezionati;
+            /**/
             break;
           }
         }
@@ -67,6 +79,18 @@ export const lavoriSlice = createSlice ({
             state.value.nuoviLavori[i]["descrizione"] = state.value.nuoviLavori[i]["descrizione_attuale"];
             state.value.nuoviLavori[i]["totale"] = state.value.nuoviLavori[i]["totale_attuale"]; 
             state.value.nuoviLavori[i]["note"] = state.value.nuoviLavori[i]["note_attuale"]; 
+
+            /**/
+            let serviziSelezionati = state.value.nuoviLavori[i]["descrizione_attuale"].split(',').map(item => item.trim()).filter(item => item !== "");
+            for(let i = 0; i < serviziSelezionati.length; i++) {
+              serviziSelezionati[i] = serviziSelezionati[i].split('-').map(item => item.trim()).filter(item => item !== "");
+              serviziSelezionati[i] = {
+                nome: serviziSelezionati[i][0], 
+                prezzo: serviziSelezionati[i][1].substring(0, serviziSelezionati[i][1].length-2)
+              };
+            }
+            state.value.nuoviLavori[i]["serviziSelezionati"] = serviziSelezionati;
+            /**/
             break;
           }
         }

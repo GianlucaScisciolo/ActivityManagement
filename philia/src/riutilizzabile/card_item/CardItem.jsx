@@ -196,6 +196,11 @@ export function OperazioniModificaProfilo({eseguiModificaProfilo}) {
 
 export function CardNuovoItem({campi, indici, eseguiSalvataggio}) {
   let maxHeight = "2000px";
+
+  const handleRightClick = (e, placeholder) => {
+    e.preventDefault();
+    alert(placeholder);
+  }
   
   return (
     <center>
@@ -203,9 +208,6 @@ export function CardNuovoItem({campi, indici, eseguiSalvataggio}) {
         <StyledCardHeader>{campi["header"]}</StyledCardHeader>
         <SlideContainer style={{maxHeight: `${maxHeight}`}}>
           {indici.map((i) => {
-            // onClick={handleGiornoClick(setUltimoGiornoType)}
-            // onBlur={handleGiornoBlur(setUltimoGiornoType, item, setItem)}
-            // onChange={(e) => handleInputChange(e, setItem)}
             const NomeTag = (campi.type[i]) ? getInputTag(1, true) : (
               getTextAreaTag(1, true)
             );
@@ -224,6 +226,7 @@ export function CardNuovoItem({campi, indici, eseguiSalvataggio}) {
                     onChange={campi.onChange}
                     onClick={campi.onClick}
                     onBlur={campi.onBlur}
+                    onContextMenu={(e) => handleRightClick(e, campi.placeholder[i])}
                   />
                   {(["prezzo", "totale"].includes(campi.name[i])) && (
                     <StyledEuroNotSelected
@@ -259,15 +262,17 @@ export function CardRicercaItems({campi, indici, handleSearch}) {
   let InputTag = getInputTag(1, true);
   let TextAreaTag = getTextAreaTag(1, true);
 
+  const handleRightClick = (e, placeholder) => {
+    e.preventDefault();
+    alert(placeholder);
+  }
+
   return (
     <center>
       <StyledCard>
         <StyledCardHeader>{campi["header"]}</StyledCardHeader>
         <SlideContainer style={{maxHeight: `${maxHeight}`}}>
           {indici.map((i) => {
-            // onClick={handleGiornoClick(setUltimoGiornoType)}
-            // onBlur={handleGiornoBlur(setUltimoGiornoType, item, setItem)}
-            // onChange={(e) => handleInputChange(e, setItem)}
             const NomeTag = (campi.type[i]) ? getInputTag(1, true) : (
               getTextAreaTag(1, true)
             );
@@ -285,6 +290,7 @@ export function CardRicercaItems({campi, indici, handleSearch}) {
                     onChange={campi.onChange}
                     onClick={campi.onClick}
                     onBlur={campi.onBlur}
+                    onContextMenu={(e) => handleRightClick(e, campi.placeholder[i])}
                   />
                   {(["prezzo_min", "prezzo_max", "totale_min", "totale_max"].includes(campi.name[i])) && (
                     <StyledEuroNotSelected
@@ -319,6 +325,11 @@ export function CardItemEsistente({ item, campi, indici, selectOperation, tipoIt
   const [localValues, setLocalValues] = useState(() =>
     indici.reduce((acc, i) => ({ ...acc, [i]: campi.value[i] }), {})
   ); // Gestione dello stato locale
+
+  const handleRightClick = (e, placeholder) => {
+    e.preventDefault();
+    alert(placeholder);
+  }
 
   const handleChange = (e, index) => {
     e.preventDefault();
@@ -451,6 +462,7 @@ export function CardItemEsistente({ item, campi, indici, selectOperation, tipoIt
                   onBlur={(e) => handleBlur(e, item, i)} // Dispatch quando perde il focus
                   onClick={(e) => handleClick(e)}
                   readOnly={item.tipo_selezione !== 1}
+                  onContextMenu={(e) => handleRightClick(e, campi.placeholder[i])}
                 />
                 {(["prezzo", "totale"].includes(campi.name[i])) && (
                   <StyledEuroNotSelected
@@ -476,6 +488,11 @@ export function CardItemEsistente({ item, campi, indici, selectOperation, tipoIt
 
 export function CardFileItems({campi, indici, ottieniFileRangePDF, ottieniFileRangeExcel, eliminaItemsRange}) {
   let maxHeight = "2000px";
+
+  const handleRightClick = (e, placeholder) => {
+    e.preventDefault();
+    alert(placeholder);
+  }
   
   return (
     <center>
@@ -500,6 +517,7 @@ export function CardFileItems({campi, indici, ottieniFileRangePDF, ottieniFileRa
                   onChange={campi.onChange}
                   onClick={campi.onClick}
                   onBlur={campi.onBlur}
+                  onContextMenu={(e) => handleRightClick(e, campi.placeholder[i])}
                 />
               </React.Fragment>
             );
@@ -523,6 +541,11 @@ export function CardLogin({campi, indici, eseguiLogin}) {
     e.preventDefault();
     setInputType(inputType === 'text' ? 'password' : 'text');
   };
+
+  const handleRightClick = (e, placeholder) => {
+    e.preventDefault();
+    alert(placeholder);
+  }
   
   return (
     <center>
@@ -550,6 +573,7 @@ export function CardLogin({campi, indici, eseguiLogin}) {
                     onChange={campi.onChange}
                     onClick={campi.onClick}
                     onBlur={campi.onBlur}
+                    onContextMenu={(e) => handleRightClick(e, campi.placeholder[i])}
                   />
                   {(campi.name[i] === "password") && (
                     <StyledEyeTag
@@ -597,6 +621,11 @@ export function CardProfilo({campi, indici, eseguiModificaProfilo}) {
     } 
   };
 
+  const handleRightClick = (e, placeholder) => {
+    e.preventDefault();
+    alert(placeholder);
+  }
+
   return (
     <center>
       <StyledCard>
@@ -632,6 +661,7 @@ export function CardProfilo({campi, indici, eseguiModificaProfilo}) {
                     onChange={campi.onChange}
                     onClick={campi.onClick}
                     onBlur={campi.onBlur}
+                    onContextMenu={(e) => handleRightClick(e, campi.placeholder[i])}
                   />
                   {(campi.name[i].includes("password")) && (
                     <StyledEyeTag
