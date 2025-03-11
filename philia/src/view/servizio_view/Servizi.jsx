@@ -5,13 +5,10 @@ import { handleInputChange } from "../../vario/Vario";
 import { FormRicercaItems } from "../../riutilizzabile/form_item/FormItem";
 import { CardRicercaItems } from "../../riutilizzabile/card_item/CardItem";
 import { RowRicercaItems } from "../../riutilizzabile/row_item/RowItem";
-import { 
-  getCampiRicercaServizi, getCampiServizioEsistente, 
-  indiciRicercaServizi, indiciServizioEsistente
-} from "./ServiziVario";
+import { getCampiRicercaServizi, getCampiServizioEsistente, indiciRicercaServizi, indiciServizioEsistente } from "./ServiziVario";
 import PaginaWeb from "../../riutilizzabile/PaginaWeb";
 import PaginaWebRicercaItems from "../../riutilizzabile/PaginaWebRicercaItems";
-import { aggiornaServizi, aggiornaTipoSelezione } from "../../store/redux/ServiziSlice";
+import { aggiornaServizi, aggiornaTipoSelezione, getServizioPrimaDellaModifica, getServizioDopoLaModifica } from "../../store/redux/ServiziSlice";
 
 const Servizi = () => {
   const serviziSession = useSelector((state) => state.serviziSession.value);
@@ -40,7 +37,7 @@ const Servizi = () => {
   const selectOperation = (icon, item) => {
     selectOperationBody(
       icon, item, selectedIdsModifica, setSelectedIdsModifica, selectedIdsEliminazione, setSelectedIdsEliminazione, 
-      setSelectedPencilCount, setSelectedTrashCount, aggiornaTipoSelezioneItem 
+      setSelectedPencilCount, setSelectedTrashCount, aggiornaTipoSelezioneItem, dispatch, "servizio" 
     )
   }
   
@@ -117,7 +114,9 @@ const Servizi = () => {
       let serviziDaModificare = serviziSession.servizi.filter(servizio => selectedIdsModifica.includes(servizio.id)); 
       // let copiaServiziDaModificare = [...serviziDaModificare];
       
-      let esitiModifica = [];
+      let idServiziNonModificati = [];
+      let idServiziModificati = [];
+      let esitoModifica = "Esito modifica:\n";
       for(let i = 0; i < serviziDaModificare.length; i++) {
         const dati = {
           tipo_item: "servizio", 
@@ -131,15 +130,16 @@ const Servizi = () => {
           body: JSON.stringify(dati),
         });
         if(response.status === 200) {           
-          esitiModifica.push([serviziDaModificare[i], "Modifica avvenuta con successo."]);
+          esitoModifica += "Servizio numero " + (i+1) + ": modifica avvenuta con successo.\n";
+          idServiziModificati.push(serviziDaModificare[i].id);
         }
         else if(response.status === 400) {
-          esitiModifica.push([serviziDaModificare[i], "Errore durante la modifica: servizio x gia\' presente."]);
-          // copiaServiziDaModificare[i] = serviziDaModificare[i];
+          esitoModifica += "Servizio numero " + (i+1) + ": errore durante la modifica: spesa gia\' presente.\n";
+          idServiziNonModificati.push(serviziDaModificare[i].id);
         }
         else {
-          esitiModifica.push([serviziDaModificare[i], "Errore durante la modifica del servizio x."]);
-          // copiaServiziDaModificare[i] = serviziDaModificare[i];
+          esitoModifica += "Servizio numero " + (i+1) + ": errore durante la modifica.\n";
+          idServiziNonModificati.push(serviziDaModificare[i].id);
         }
       }
 
@@ -154,12 +154,26 @@ const Servizi = () => {
       // setServizi(serviziAggiornati);
       dispatch(aggiornaServizi({
         servizi: serviziAggiornati, 
-      }))
+      }));
 
+      for(let id of idServiziNonModificati) {
+        console.log("\\"+id+"/");
+        dispatch(getServizioPrimaDellaModifica({
+          id_servizio: id
+        }));
+      }
+
+      for(let id of idServiziModificati) {
+        console.log("\\"+id+"/");
+        dispatch(getServizioDopoLaModifica({
+          id_servizio: id
+        }));
+      }
+      
       setSelectedIdsModifica([]);
 
       // alert("Risultati modifica:\n")
-      alert("Modifica effettuata.");
+      alert(esitoModifica);
     }
     else {
       alert("Salvataggio annullato.");

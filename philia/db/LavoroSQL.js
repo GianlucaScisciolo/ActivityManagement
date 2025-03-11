@@ -96,14 +96,14 @@ export class LavoroSQL {
             ELSE "" 
           END 
         ) AS cliente, 
-        c.nome AS nome_cliente, 
-        c.cognome AS cognome_cliente, 
-        c.contatto AS contatto, 
-        c.email AS email, 
         DATE_FORMAT(l.giorno, "%Y-%m-%d") AS giorno, 
+        DATE_FORMAT(l.giorno, "%Y-%m-%d") AS giorno_attuale, 
         l.descrizione AS descrizione, 
+        l.descrizione AS descrizione_attuale, 
         l.totale AS totale, 
-        l.note AS note 
+        l.totale AS totale_attuale, 
+        l.note AS note, 
+        l.note AS note_attuale 
       FROM 
         lavoro l 
         LEFT JOIN cliente c ON l.id_cliente = c.id 

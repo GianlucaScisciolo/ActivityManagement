@@ -1,6 +1,10 @@
 import Row from "react-bootstrap/esm/Row";
 import Col from "react-bootstrap/esm/Col";
 import { aggiornaTipoSelezione } from "../../store/redux/ClientiSlice";
+import { getClientePrimaDellaModifica } from "../../store/redux/ClientiSlice";
+import { getServizioPrimaDellaModifica } from "../../store/redux/ServiziSlice";
+import { getSpesaPrimaDellaModifica } from "../../store/redux/SpeseSlice";
+import { getLavoroPrimaDellaModifica } from "../../store/redux/LavoriSlice";
 
 
 export const OperazioniItems = ({selectedIdsModifica, selectedIdsEliminazione, handleEdit, handleDelete}) => {
@@ -22,7 +26,7 @@ export const OperazioniItems = ({selectedIdsModifica, selectedIdsEliminazione, h
 
 export const selectOperationBody = (
   icon, item, selectedIdsModifica, setSelectedIdsModifica, selectedIdsEliminazione, setSelectedIdsEliminazione, 
-  setSelectedPencilCount, setSelectedTrashCount, aggiornaTipoSelezioneItem
+  setSelectedPencilCount, setSelectedTrashCount, aggiornaTipoSelezioneItem, dispatch, tipoItem 
 ) => {
   if(icon === "trash") {
     if(selectedIdsEliminazione.includes(item.id)) {
@@ -40,6 +44,27 @@ export const selectOperationBody = (
   }
   else if(icon === "pencil") {
     if(selectedIdsModifica.includes(item.id)) {
+      // QUI !!!!
+      if(tipoItem === "cliente") {
+        dispatch(getClientePrimaDellaModifica({
+          id_cliente: item.id,
+        }));
+      }
+      else if(tipoItem === "servizio") {
+        dispatch(getServizioPrimaDellaModifica({
+          id_servizio: item.id,
+        }));
+      }
+      else if(tipoItem === "spesa") {
+        dispatch(getSpesaPrimaDellaModifica({
+          id_spesa: item.id, 
+        }));
+      }
+      else if(tipoItem === "lavoro") {
+        dispatch(getLavoroPrimaDellaModifica({
+          id_lavoro: item.id, 
+        }));
+      }
       aggiornaTipoSelezioneItem(item.id, 0);
       setSelectedIdsModifica(prevIdsModifica => prevIdsModifica.filter(itemId => itemId !== item.id));
       setSelectedPencilCount(prevCount => Math.max(prevCount - 1, 0));

@@ -11,7 +11,7 @@ import { operazioniServizi } from "../../vario/Operazioni";
 import { getCampiRicercaLavori, getCampiLavoroEsistente, indiciRicercaLavori, indiciLavoroEsistente } from "./lavoriVario";
 import PaginaWeb from "../../riutilizzabile/PaginaWeb";
 import PaginaWebRicercaItems from "../../riutilizzabile/PaginaWebRicercaItems";
-import { aggiornaLavori, aggiornaTipoSelezione, aggiornaLavoro } from "../../store/redux/LavoriSlice";
+import { aggiornaLavori, aggiornaTipoSelezione, getLavoroPrimaDellaModifica, getLavoroDopoLaModifica } from "../../store/redux/LavoriSlice";
 
 const Lavori = () => {
   const lavoriSession = useSelector((state) => state.lavoriSession.value);
@@ -41,7 +41,7 @@ const Lavori = () => {
   const selectOperation = (icon, item) => {
     selectOperationBody(
       icon, item, selectedIdsModifica, setSelectedIdsModifica, selectedIdsEliminazione, setSelectedIdsEliminazione, 
-      setSelectedPencilCount, setSelectedTrashCount, aggiornaTipoSelezioneItem 
+      setSelectedPencilCount, setSelectedTrashCount, aggiornaTipoSelezioneItem, dispatch, "lavoro" 
     )
   }
 
@@ -117,7 +117,10 @@ const Lavori = () => {
     if (confirm("Sei sicuro di voler modificare i lavori?")) {
       let lavoriDaNonModificare = lavoriSession.lavori.filter(lavoro => !selectedIdsModifica.includes(lavoro.id));
       let lavoriDaModificare = lavoriSession.lavori.filter(lavoro => selectedIdsModifica.includes(lavoro.id));
-      let esitiModifica = [];
+
+      let idLavoriNonModificati = [];
+      let idLavoriModificati = [];
+      let esitoModifica = "Esito modifica:\n";
       for(let i = 0; i < lavoriDaModificare.length; i++) {
         const dati = {
           tipo_item: "lavoro", 
@@ -131,15 +134,16 @@ const Lavori = () => {
           body: JSON.stringify(dati),
         });
         if(response.status === 200) {           
-          esitiModifica.push([lavoriDaModificare[i], "Modifica avvenuta con successo."]);
+          esitoModifica += "Lavoro numero " + (i+1) + ": modifica avvenuta con successo.\n";
+          idLavoriModificati.push(lavoriDaModificare[i].id);
         }
         else if(response.status === 400) {
-          esitiModifica.push([lavoriDaModificare[i], "Errore durante la modifica: lavoro x gia\' presente."]);
-          // copiaLavoriDaModificare[i] = lavoriDaModificare[i];
+          esitoModifica += "Lavoro numero " + (i+1) + ": errore durante la modifica: lavoro gia\' presente.\n";
+          idLavoriNonModificati.push(lavoriDaModificare[i].id);
         }
         else {
-          esitiModifica.push([lavoriDaModificare[i], "Errore durante la modifica del lavoro x."]);
-          // copiaLavoriDaModificare[i] = lavoriDaModificare[i];
+          esitoModifica += "Lavoro numero " + (i+1) + ": errore durante la modifica.\n";
+          idLavoriNonModificati.push(lavoriDaModificare[i].id);
         }
       }
 
@@ -155,10 +159,23 @@ const Lavori = () => {
         lavori: lavoriAggiornati, 
       }));
 
+      for(let id of idLavoriNonModificati) {
+        console.log("\\"+id+"/");
+        dispatch(getLavoroPrimaDellaModifica({
+          id_lavoro: id
+        }));
+      }
+
+      for(let id of idLavoriModificati) {
+        console.log("\\"+id+"/");
+        dispatch(getLavoroDopoLaModifica({
+          id_lavoro: id
+        }));
+      }
+
       setSelectedIdsModifica([]);
 
-      // alert("Risultati modifica:\n")
-      alert("Modifica effettuata.");
+      alert(esitoModifica);
     }
     else {
       alert("Salvataggio annullato.");

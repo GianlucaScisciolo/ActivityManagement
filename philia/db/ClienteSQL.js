@@ -32,8 +32,11 @@ export class ClienteSQL {
         nome, 
         cognome, 
         contatto, 
+        contatto AS contatto_attuale, 
         email, 
-        IFNULL(NULLIF(note, ''), 'Nota non inserita.') AS note, 
+        email AS email_attuale, 
+        note, 
+        note AS note_attuale, 
         0 AS tipo_selezione 
       FROM 
         cliente 

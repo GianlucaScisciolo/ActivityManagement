@@ -48,6 +48,50 @@ export const serviziSlice = createSlice ({
         }
       }
     }, 
+    getServizioPrimaDellaModifica: (state, action) => {
+      if(state.value.servizi !== -1) {
+        for(let i = 0; i < state.value.servizi.length; i++) {
+          if(state.value.servizi[i].id === action.payload.id_servizio) {
+            state.value.servizi[i]["nome"] = state.value.servizi[i]["nome_attuale"];
+            state.value.servizi[i]["prezzo"] = state.value.servizi[i]["prezzo_attuale"]; 
+            state.value.servizi[i]["note"] = state.value.servizi[i]["note_attuale"]; 
+            break;
+          }
+        }
+      }
+      if(state.value.nuoviServizi !== -1) {
+        for(let i = 0; i < state.value.nuoviServizi.length; i++) {
+          if(state.value.nuoviServizi[i].id === action.payload.id_servizio) {
+            state.value.nuoviServizi[i]["nome"] = state.value.nuoviServizi[i]["nome_attuale"];
+            state.value.nuoviServizi[i]["prezzo"] = state.value.nuoviServizi[i]["prezzo_attuale"]; 
+            state.value.nuoviServizi[i]["note"] = state.value.nuoviServizi[i]["note_attuale"]; 
+            break;
+          }
+        }
+      }
+    },
+    getServizioDopoLaModifica: (state, action) => {
+      if(state.value.servizi !== -1) {
+        for(let i = 0; i < state.value.servizi.length; i++) {
+          if(state.value.servizi[i].id === action.payload.id_servizio) {
+            state.value.servizi[i]["nome_attuale"] = state.value.servizi[i]["nome"];
+            state.value.servizi[i]["prezzo_attuale"] = state.value.servizi[i]["prezzo"]; 
+            state.value.servizi[i]["note_attuale"] = state.value.servizi[i]["note"]; 
+            break;
+          }
+        }
+      }
+      if(state.value.nuoviServizi !== -1) {
+        for(let i = 0; i < state.value.nuoviServizi.length; i++) {
+          if(state.value.nuoviServizi[i].id === action.payload.id_servizio) {
+            state.value.nuoviServizi[i]["nome_attuale"] = state.value.nuoviServizi[i]["nome"];
+            state.value.nuoviServizi[i]["prezzo_attuale"] = state.value.nuoviServizi[i]["prezzo"]; 
+            state.value.nuoviServizi[i]["note_attuale"] = state.value.nuoviServizi[i]["note"]; 
+            break;
+          }
+        }
+      }
+    },
     inserimentoServizio: (state, action) => {
       if(state.value.nuoviServizi === -1) {
         state.value.nuoviServizi = [];
@@ -57,7 +101,9 @@ export const serviziSlice = createSlice ({
   },
 })
 
-export const { aggiornaServizi, aggiornaTipoSelezione, aggiornaServizio, inserimentoServizio } = serviziSlice.actions;
+export const { 
+  aggiornaServizi, aggiornaTipoSelezione, aggiornaServizio, getServizioPrimaDellaModifica, getServizioDopoLaModifica, inserimentoServizio 
+} = serviziSlice.actions;
 export const serviziReducer = serviziSlice.reducer;
 
 

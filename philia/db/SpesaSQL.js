@@ -84,9 +84,13 @@ export class SpesaSQL {
         id, 
         nome, 
         descrizione, 
+        descrizione AS descrizione_attuale, 
         totale, 
+        totale AS totale_attuale, 
         DATE_FORMAT(giorno, "%Y-%m-%d") AS giorno, 
+        DATE_FORMAT(giorno, "%Y-%m-%d") AS giorno_attuale, 
         note, 
+        note AS note_attuale, 
         0 AS tipo_selezione 
       FROM 
         spesa 

@@ -29,8 +29,11 @@ export class ServizioSQL {
       SELECT 
         id, 
         nome, 
+        nome AS nome_attuale, 
         prezzo, 
-        IFNULL(NULLIF(note, ''), 'Nota non inserita.') AS note, 
+        prezzo AS prezzo_attuale, 
+        note, 
+        note AS note_attuale,  
         0 AS tipo_selezione 
       FROM 
         servizio 

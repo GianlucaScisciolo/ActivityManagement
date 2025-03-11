@@ -9,7 +9,7 @@ import { handleInputChange } from '../../vario/Vario';
 import PaginaWeb from '../../riutilizzabile/PaginaWeb';
 import PaginaWebRicercaItems from '../../riutilizzabile/PaginaWebRicercaItems';
 import { aggiornaClienti } from '../../store/redux/ClientiSlice';
-import { aggiornaTipoSelezione } from '../../store/redux/ClientiSlice';
+import { aggiornaTipoSelezione, getClientePrimaDellaModifica, getClienteDopoLaModifica } from '../../store/redux/ClientiSlice';
 import { controlloCliente } from '../../vario/Controlli';
 
 const Clienti = () => {
@@ -40,7 +40,7 @@ const Clienti = () => {
   const selectOperation = (icon, item) => {
     selectOperationBody(
       icon, item, selectedIdsModifica, setSelectedIdsModifica, selectedIdsEliminazione, setSelectedIdsEliminazione, 
-      setSelectedPencilCount, setSelectedTrashCount, aggiornaTipoSelezioneItem
+      setSelectedPencilCount, setSelectedTrashCount, aggiornaTipoSelezioneItem, dispatch, "cliente"
     )
   }
   
@@ -116,9 +116,10 @@ const Clienti = () => {
     if (confirm("Sei sicuro di voler modificare i clienti?")) {
       let clientiDaNonModificare = clientiSession.clienti.filter(cliente => !selectedIdsModifica.includes(cliente.id));
       let clientiDaModificare = clientiSession.clienti.filter(cliente => selectedIdsModifica.includes(cliente.id)); 
-      // let copiaClientiDaModificare = [...clientiDaModificare];
       
-      let esitiModifica = [];
+      let idClientiNonModificati = [];
+      let idClientiModificati = [];
+      let esitoModifica = "Esito modifica:\n";
       for(let i = 0; i < clientiDaModificare.length; i++) {
         const dati = {
           tipo_item: "cliente", 
@@ -132,15 +133,16 @@ const Clienti = () => {
           body: JSON.stringify(dati),
         });
         if(response.status === 200) {           
-          esitiModifica.push([clientiDaModificare[i], "Modifica avvenuta con successo."]);
+          esitoModifica += "Cliente numero " + (i+1) + ": modifica avvenuta con successo.\n";
+          idClientiModificati.push(clientiDaModificare[i].id);
         }
         else if(response.status === 400) {
-          esitiModifica.push([clientiDaModificare[i], "Errore durante la modifica: cliente x gia\' presente."]);
-          // copiaClientiDaModificare[i] = clientiDaModificare[i];
+          esitoModifica += "Cliente numero " + (i+1) + ": errore durante la modifica: cliente gia\' presente.\n";
+          idClientiNonModificati.push(clientiDaModificare[i].id);
         }
         else {
-          esitiModifica.push([clientiDaModificare[i], "Errore durante la modifica del cliente x."]);
-          // copiaClientiDaModificare[i] = clientiDaModificare[i];
+          esitoModifica += "Cliente numero " + (i+1) + ": errore durante la modifica.\n";
+          idClientiNonModificati.push(clientiDaModificare[i].id);
         }
       }
 
@@ -156,10 +158,24 @@ const Clienti = () => {
         clienti: clientiAggiornati, 
       }));
 
+      for(let id of idClientiNonModificati) {
+        console.log("\\"+id+"/");
+        dispatch(getClientePrimaDellaModifica({
+          id_cliente: id
+        }));
+      }
+
+      for(let id of idClientiModificati) {
+        console.log("\\"+id+"/");
+        dispatch(getClienteDopoLaModifica({
+          id_cliente: id
+        }));
+      }
+
       setSelectedIdsModifica([]);
 
       // alert("Risultati modifica:\n")
-      alert("Modifica effettuata.");
+      alert(esitoModifica);
     }
     else {
       alert("Salvataggio annullato.");

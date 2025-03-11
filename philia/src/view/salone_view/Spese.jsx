@@ -5,14 +5,11 @@ import { handleInputChange, handleInputClick, handleInputBlur } from "../../vari
 import { FormRicercaItems } from "../../riutilizzabile/form_item/FormItem";
 import { CardRicercaItems } from "../../riutilizzabile/card_item/CardItem";
 import { RowRicercaItems } from "../../riutilizzabile/row_item/RowItem";
-import { 
-  getCampiRicercaSpese, getCampiSpesaEsistente, 
-  indiciRicercaSpese, indiciSpesaEsistente
-} from "./SpeseVario";
+import { getCampiRicercaSpese, getCampiSpesaEsistente, indiciRicercaSpese, indiciSpesaEsistente } from "./SpeseVario";
 import { useDispatch } from "react-redux";
 import PaginaWeb from "../../riutilizzabile/PaginaWeb";
 import PaginaWebRicercaItems from "../../riutilizzabile/PaginaWebRicercaItems";
-import { aggiornaSpese, aggiornaTipoSelezione } from "../../store/redux/SpeseSlice";
+import { aggiornaSpese, aggiornaTipoSelezione, getSpesaPrimaDellaModifica, getSpesaDopoLaModifica } from "../../store/redux/SpeseSlice";
 
 const Spese = () => {
   const speseSession = useSelector((state) => state.speseSession.value);
@@ -44,7 +41,7 @@ const Spese = () => {
   const selectOperation = (icon, item) => {
     selectOperationBody(
       icon, item, selectedIdsModifica, setSelectedIdsModifica, selectedIdsEliminazione, setSelectedIdsEliminazione, 
-      setSelectedPencilCount, setSelectedTrashCount, aggiornaTipoSelezioneItem
+      setSelectedPencilCount, setSelectedTrashCount, aggiornaTipoSelezioneItem, dispatch, "spesa" 
     )
   }
 
@@ -121,7 +118,9 @@ const Spese = () => {
       let speseDaModificare = speseSession.spese.filter(spesa => selectedIdsModifica.includes(spesa.id)); 
       // let copiaSpeseDaModificare = [...speseDaModificare];
       
-      let esitiModifica = [];
+      let idSpeseNonModificate = [];
+      let idSpeseModificate = [];
+      let esitoModifica = "Esito modifica:\n";
       for(let i = 0; i < speseDaModificare.length; i++) {
         const dati = {
           tipo_item: "spesa", 
@@ -135,15 +134,16 @@ const Spese = () => {
           body: JSON.stringify(dati),
         });
         if(response.status === 200) {           
-          esitiModifica.push([speseDaModificare[i], "Modifica avvenuta con successo."]);
+          esitoModifica += "Spesa numero " + (i+1) + ": modifica avvenuta con successo.\n";
+          idSpeseModificate.push(speseDaModificare[i].id);
         }
         else if(response.status === 400) {
-          esitiModifica.push([speseDaModificare[i], "Errore durante la modifica: spesa x gia\' presente."]);
-          // copiaSpeseDaModificare[i] = speseDaModificare[i];
+          esitoModifica += "Spesa numero " + (i+1) + ": errore durante la modifica: spesa gia\' presente.\n";
+          idSpeseNonModificate.push(speseDaModificare[i].id);
         }
         else {
-          esitiModifica.push([speseDaModificare[i], "Errore durante la modifica della spesa x."]);
-          // copiaSpeseDaModificare[i] = speseDaModificare[i];
+          esitoModifica += "Spesa numero " + (i+1) + ": errore durante la modifica.\n";
+          idSpeseNonModificate.push(speseDaModificare[i].id);
         }
       }
 
@@ -160,10 +160,23 @@ const Spese = () => {
         spese: speseAggiornate, 
       }));
 
+      for(let id of idSpeseNonModificate) {
+        console.log("\\"+id+"/");
+        dispatch(getSpesaPrimaDellaModifica({
+          id_spesa: id
+        }));
+      }
+      for(let id of idSpeseModificate) {
+        console.log("\\"+id+"/");
+        dispatch(getSpesaDopoLaModifica({
+          id_spesa: id
+        }));
+      }
+
       setSelectedIdsModifica([]);
 
       // alert("Risultati modifica:\n")
-      alert("Modifica effettuata.");
+      alert(esitoModifica);
     }
     else {
       alert("Salvataggio annullato.");

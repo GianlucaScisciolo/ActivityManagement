@@ -142,59 +142,77 @@ export function FormNuovoItem({campi, indici, eseguiSalvataggio}) {
       <StyledHeader>{campi["header"]}</StyledHeader>  
       <SlideContainer style={{maxHeight: `${maxHeight}`}}>
         {indici.map((i) => {
-          // onClick={handleGiornoClick(setUltimoGiornoType)}
-          // onBlur={handleGiornoBlur(setUltimoGiornoType, item, setItem)}
-          // onChange={(e) => handleInputChange(e, setItem)}
           const NomeTag = (campi.type[i]) ? getInputTag(1, true) : (
             getTextAreaTag(1, true)
           );
-          
-          const Elemento = () => {
-            return (
-              <>
-                <NomeTag 
-                  style={(["prezzo", "totale"].includes(campi.name[i])) ? {marginLeft:"-10%", marginRight:0, minWidth:"105%"} : null}
-                  rows={1}
-                  name={campi.name[i]}
-                  id={campi.id[i]}
-                  type={campi.type[i]}
-                  step={campi.step[i]}
-                  value={campi.value[i]}
-                  placeholder={campi.placeholder[i]}
-                  onChange={campi.onChange}
-                  onClick={campi.onClick}
-                  onBlur={campi.onBlur}
-                />
-                {(["prezzo", "totale"].includes(campi.name[i])) && (
-                  <StyledEuroNotSelected
-                    style={{
-                      maxWidth: "5%",
-                      marginTop: "13px"
-                    }} 
-                    size={grandezzaIcona} 
-                    onClick={null} 
-                  />
-                )}
-                {campi.options[i]}
-              </>
-            );
-          }
 
           return ( 
             <React.Fragment key={i}>
               <StyledLabel htmlFor={campi.name[i]}>{campi.label[i]}</StyledLabel>
               {(campi.name[i] === "prezzo") ? (
-                <StyledRow><Elemento /></StyledRow>
-              ) : (<Elemento />)}
+                <StyledRow>
+                  <>
+                    <NomeTag 
+                      style={(["prezzo", "totale"].includes(campi.name[i])) ? {marginLeft:"-10%", marginRight:0, minWidth:"105%"} : null}
+                      rows={1}
+                      name={campi.name[i]}
+                      id={campi.id[i]}
+                      type={campi.type[i]}
+                      step={campi.step[i]}
+                      value={campi.value[i]}
+                      placeholder={campi.placeholder[i]}
+                      onChange={campi.onChange}
+                      onClick={campi.onClick}
+                      onBlur={campi.onBlur}
+                    />
+                    {(["prezzo", "totale"].includes(campi.name[i])) && (
+                      <StyledEuroNotSelected
+                        style={{
+                          maxWidth: "5%",
+                          marginTop: "13px"
+                        }} 
+                        size={grandezzaIcona} 
+                        onClick={null} 
+                      />
+                    )}
+                    {campi.options[i]}
+                  </>
+                </StyledRow>
+              ) : (
+                <>
+                  <NomeTag 
+                    style={(["prezzo", "totale"].includes(campi.name[i])) ? {marginLeft:"-10%", marginRight:0, minWidth:"105%"} : null}
+                    rows={1}
+                    name={campi.name[i]}
+                    id={campi.id[i]}
+                    type={campi.type[i]}
+                    step={campi.step[i]}
+                    value={campi.value[i]}
+                    placeholder={campi.placeholder[i]}
+                    onChange={campi.onChange}
+                    onClick={campi.onClick}
+                    onBlur={campi.onBlur}
+                  />
+                  {(["prezzo", "totale"].includes(campi.name[i])) && (
+                    <StyledEuroNotSelected
+                      style={{
+                        maxWidth: "5%",
+                        marginTop: "13px"
+                      }} 
+                      size={grandezzaIcona} 
+                      onClick={null} 
+                    />
+                  )}
+                  {campi.options[i]}
+                </>
+              )}
               {(campi.errore[i] !== "") && (<StyledSpanErrore>{campi.errore[i]}</StyledSpanErrore>)}
             </React.Fragment>
           );
         })}
         <br /> <br />
       </SlideContainer>
-      <OperazioniNuovoItem 
-        eseguiSalvataggio={eseguiSalvataggio} 
-      />
+      <OperazioniNuovoItem eseguiSalvataggio={eseguiSalvataggio} />
     </StyledForm>
   );
 }
