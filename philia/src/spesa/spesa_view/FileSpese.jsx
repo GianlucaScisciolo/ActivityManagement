@@ -6,12 +6,10 @@ import { generaFileSpesePDF, generaFileSpeseExcel } from "../../vario/File";
 import { FormFileItems } from "../../riutilizzabile/form_item/FormItem";
 import { CardFileItems } from "../../riutilizzabile/card_item/CardItem";
 import { RowFileItems } from "../../riutilizzabile/row_item/RowItem";
-import { 
-  getCampiFile, 
-  indiciFile
-} from "../spesa_action/SpeseVario";
+import { SpesaAction } from "../spesa_action/SpesaAction.js";
 
 const FileSpese = () => {
+  const spesaAction = new SpesaAction();
   const formSession = useSelector((state) => state.formSession.value);
   const [spese, setSpese] = useState(-1);
   const [tipoFile, setTipoFile] = useState("");
@@ -99,13 +97,13 @@ const FileSpese = () => {
       <div className="main-content" />
       
       <FormFileTag 
-        campi={getCampiFile(
+        campi={spesaAction.getCampiFile(
           datiRicerca, 
           (e) => handleInputChange(e, setDatiRicerca), 
           (e) => handleInputClick(e), 
           (e) => handleInputBlur(e) 
         )} 
-        indici={indiciFile} 
+        indici={spesaAction.INDICI_FILE} 
         ottieniFileRangePDF={(e) => ottieniSpeseRange(e, "pdf")}
         ottieniFileRangeExcel={(e) => ottieniSpeseRange(e, "excel")} 
         eliminaItemsRange={(e) => handleDelete(e)} 

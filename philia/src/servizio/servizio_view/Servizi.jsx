@@ -2,11 +2,13 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { selectOperationBody } from "../../app/app_view/component/Operazioni";
 import { handleInputChange } from "../../vario/Vario";
-import { getCampiRicercaServizi, getCampiServizioEsistente, indiciRicercaServizi, indiciServizioEsistente } from "../servizio_action/ServiziVario";
+// import { getCampiRicercaServizi, getCampiServizioEsistente, indiciRicercaServizi, indiciServizioEsistente } from "../servizio_action/ServiziVario";
+import { ServizioAction } from "../servizio_action/ServizioAction";
 import PaginaWebRicercaItems from "../../riutilizzabile/PaginaWebRicercaItems";
 import { aggiornaServizi, aggiornaTipoSelezione, getServizioPrimaDellaModifica, getServizioDopoLaModifica } from "../../store/redux/ServiziSlice";
 
 const Servizi = () => {
+  const servizioAction = new ServizioAction();
   const serviziSession = useSelector((state) => state.serviziSession.value);
   const dispatch = useDispatch();
 
@@ -181,15 +183,15 @@ const Servizi = () => {
       <PaginaWebRicercaItems 
         componenti={ 
           {
-            campiRicercaItems: getCampiRicercaServizi(datiRicerca, (e) => handleInputChange(e, setDatiRicerca), null, null),
-            indiciRicercaItems: indiciRicercaServizi, 
+            campiRicercaItems: servizioAction.getCampiRicercaServizi(datiRicerca, (e) => handleInputChange(e, setDatiRicerca), null, null),
+            indiciRicercaItems: servizioAction.INDICI_RICERCA_SERVIZI, 
             handleSearch: (e) => handleSearch(e), 
             tipoItem: "servizio", 
             items: serviziSession.servizi, 
             setItems: null, 
             selectOperation: selectOperation, 
-            campiItemEsistente: getCampiServizioEsistente, 
-            indiciItemEsistente: indiciServizioEsistente, 
+            campiItemEsistente: servizioAction.getCampiServizioEsistente, 
+            indiciItemEsistente: servizioAction.INDICI_SERVIZIO_ESISTENTE, 
             servizi: null, 
             selectedIdsModifica: selectedIdsModifica, 
             selectedIdsEliminazione: selectedIdsEliminazione, 

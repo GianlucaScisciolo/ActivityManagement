@@ -2,16 +2,14 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { controlloCliente } from '../../vario/Controlli';
 import { selectOperationBody } from '../../app/app_view/component/Operazioni';
-import { 
-  getCampiNuovoCliente, getCampiClienteEsistente, 
-  indiciNuovoCliente, indiciClienteEsistente 
-} from '../cliente_action/ClientiVario';
+import { ClienteAction } from "../cliente_action/ClienteAction.js";
 import { handleInputChange } from '../../vario/Vario';
 import PaginaWeb from '../../riutilizzabile/PaginaWeb';
 import PaginaWebNewItem from '../../riutilizzabile/PaginaWebNewItem';
 import { aggiornaTipoSelezione, inserimentoCliente } from '../../store/redux/ClientiSlice';
 
 const NuovoCliente = () => {
+  const clienteAction = new ClienteAction();
   const clientiSession = useSelector((state) => state.clientiSession.value);
   const dispatch = useDispatch();
 
@@ -94,15 +92,15 @@ const NuovoCliente = () => {
       <PaginaWebNewItem 
         componenti={
           {
-            campiNuovoItem: getCampiNuovoCliente(nuovoCliente, (e) => handleInputChange(e, setNuovoCliente), null, null), 
-            indiciNuovoItem: indiciNuovoCliente, 
+            campiNuovoItem: clienteAction.getCampiNuovoCliente(nuovoCliente, (e) => handleInputChange(e, setNuovoCliente), null, null), 
+            indiciNuovoItem: clienteAction.INDICI_NUOVO_CLIENTE, 
             handleInsert: (e) => handleInsert(e), 
             tipoItem: "cliente", 
             items: clientiSession.nuoviClienti, 
             setItems: null, 
             selectOperation: selectOperation, 
-            campiItemEsistente: getCampiClienteEsistente, 
-            indiciItemEsistente: indiciClienteEsistente, 
+            campiItemEsistente: clienteAction.getCampiClienteEsistente, 
+            indiciItemEsistente: clienteAction.INDICI_CLIENTE_ESISTENTE, 
             servizi: null, 
             selectedIdsModifica: selectedIdsModifica, 
             selectedIdsEliminazione: selectedIdsEliminazione, 

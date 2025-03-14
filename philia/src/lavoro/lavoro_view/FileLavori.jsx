@@ -6,12 +6,10 @@ import { generaFileLavoriPDF, generaFileLavoriExcel } from "../../vario/File";
 import { FormFileItems } from "../../riutilizzabile/form_item/FormItem";
 import { CardFileItems } from "../../riutilizzabile/card_item/CardItem";
 import { RowFileItems } from "../../riutilizzabile/row_item/RowItem";
-import {
-  getCampiFile, 
-  indiciFile 
-} from "../lavoro_action/LavoriVario";
+import { LavoroAction } from "../lavoro_action/LavoroAction";
 
 const FileLavori = () => {
+  const lavoroAction = new LavoroAction();
   const formSession = useSelector((state) => state.formSession.value);
   const [lavori, setLavori] = useState(-1);
   const [tipoFile, setTipoFile] = useState("");
@@ -98,13 +96,13 @@ const FileLavori = () => {
       <div className="main-content" />
       
       <FormFileTag 
-        campi={getCampiFile(
+        campi={lavoroAction.getCampiFile(
           datiRicerca, 
           (e) => handleInputChange(e, setDatiRicerca), 
           (e) => handleInputClick(e), 
           (e) => handleInputBlur(e) 
         )} 
-        indici={indiciFile} 
+        indici={lavoroAction.INDICI_FILE} 
         ottieniFileRangePDF={(e) => ottieniLavoriRange(e, "pdf")}
         ottieniFileRangeExcel={(e) => ottieniLavoriRange(e, "excel")} 
         eliminaItemsRange={(e) => handleDelete(e)} 

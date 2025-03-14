@@ -1,10 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectOperationBody } from '../../app/app_view/component/Operazioni';
-import { 
-  getCampiRicercaClienti, getCampiClienteEsistente, 
-  indiciRicercaClienti, indiciClienteEsistente
-} from '../cliente_action/ClientiVario';
+import { ClienteAction } from "../cliente_action/ClienteAction.js";
 import { handleInputChange } from '../../vario/Vario';
 import PaginaWeb from '../../riutilizzabile/PaginaWeb';
 import PaginaWebRicercaItems from '../../riutilizzabile/PaginaWebRicercaItems';
@@ -13,6 +10,7 @@ import { aggiornaTipoSelezione, getClientePrimaDellaModifica, getClienteDopoLaMo
 import { controlloCliente } from '../../vario/Controlli';
 
 const Clienti = () => {
+  const clienteAction = new ClienteAction();
   const clientiSession = useSelector((state) => state.clientiSession.value);
   const dispatch = useDispatch();
   
@@ -187,15 +185,15 @@ const Clienti = () => {
       <PaginaWebRicercaItems 
         componenti={
           {
-            campiRicercaItems: getCampiRicercaClienti(datiRicerca, (e) => handleInputChange(e, setDatiRicerca), null, null),
-            indiciRicercaItems: indiciRicercaClienti, 
+            campiRicercaItems: clienteAction.getCampiRicercaClienti(datiRicerca, (e) => handleInputChange(e, setDatiRicerca), null, null),
+            indiciRicercaItems: clienteAction.INDICI_RICERCA_CLIENTI, 
             handleSearch: (e) => handleSearch(e), 
             tipoItem: "cliente", 
             items: clientiSession.clienti, 
             setItems: null, 
             selectOperation: selectOperation, 
-            campiItemEsistente: getCampiClienteEsistente, 
-            indiciItemEsistente: indiciClienteEsistente, 
+            campiItemEsistente: clienteAction.getCampiClienteEsistente, 
+            indiciItemEsistente: clienteAction.INDICI_CLIENTE_ESISTENTE, 
             servizi: null, 
             selectedIdsModifica: selectedIdsModifica, 
             selectedIdsEliminazione: selectedIdsEliminazione, 

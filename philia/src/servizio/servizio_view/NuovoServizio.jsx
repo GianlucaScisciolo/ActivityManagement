@@ -3,15 +3,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { selectOperationBody } from "../../app/app_view/component/Operazioni";
 import { handleInputChange } from "../../vario/Vario";
 import { controlloServizio } from "../../vario/Controlli";
-import { 
-  getCampiNuovoServizio, getCampiServizioEsistente, 
-  indiciNuovoServizio, indiciServizioEsistente 
-} from "../servizio_action/ServiziVario";
+import { ServizioAction } from "../servizio_action/ServizioAction.js";
 import PaginaWeb from "../../riutilizzabile/PaginaWeb";
 import PaginaWebNewItem from "../../riutilizzabile/PaginaWebNewItem";
 import { aggiornaTipoSelezione, inserimentoServizio } from "../../store/redux/ServiziSlice";
 
 const NuovoServizio = () => {
+  const servizioAction = new ServizioAction();
   const serviziSession = useSelector((state) => state.serviziSession.value);
   const dispatch = useDispatch();
 
@@ -89,15 +87,15 @@ const NuovoServizio = () => {
       <PaginaWebNewItem 
         componenti={
           {
-            campiNuovoItem: getCampiNuovoServizio(nuovoServizio, (e) => handleInputChange(e, setNuovoServizio), null, null), 
-            indiciNuovoItem: indiciNuovoServizio, 
+            campiNuovoItem: servizioAction.getCampiNuovoServizio(nuovoServizio, (e) => handleInputChange(e, setNuovoServizio), null, null), 
+            indiciNuovoItem: servizioAction.INDICI_NUOVO_SERVIZIO, 
             handleInsert: (e) => handleInsert(e), 
             tipoItem: "servizio", 
             items: serviziSession.nuoviServizi, 
             setItems: null, 
             selectOperation: selectOperation, 
-            campiItemEsistente: getCampiServizioEsistente, 
-            indiciItemEsistente: indiciServizioEsistente, 
+            campiItemEsistente: servizioAction.getCampiServizioEsistente, 
+            indiciItemEsistente: servizioAction.INDICI_SERVIZIO_ESISTENTE, 
             servizi: null, 
             selectedIdsModifica: selectedIdsModifica, 
             selectedIdsEliminazione: selectedIdsEliminazione, 

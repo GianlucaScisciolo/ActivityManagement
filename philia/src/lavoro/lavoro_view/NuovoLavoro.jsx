@@ -2,10 +2,7 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { handleInputChange, handleInputClick, handleInputBlur } from "../../vario/Vario";
 import { selectOperationBody } from "../../app/app_view/component/Operazioni";
-import { 
-  getCampiNuovoLavoro, getCampiLavoroEsistente, 
-  indiciNuovoLavoro, indiciLavoroEsistente  
-} from "../lavoro_action/LavoriVario";
+import { LavoroAction } from "../lavoro_action/LavoroAction";
 import { getSelectTag } from "../../riutilizzabile/form_item/FormItem";
 import PaginaWeb from "../../riutilizzabile/PaginaWeb";
 import PaginaWebNewItem from "../../riutilizzabile/PaginaWebNewItem";
@@ -13,6 +10,7 @@ import { aggiornaTipoSelezione, inserimentoLavoro } from "../../store/redux/Lavo
 import { controlloLavoro } from "../../vario/Controlli";
 
 const NuovoLavoro = () => {
+  const lavoroAction = new LavoroAction();
   const formSession = useSelector((state) => state.formSession.value);
   const itemSession = useSelector((state) => state.itemSession.value);
   const lavoriSession = useSelector((state) => state.lavoriSession.value);
@@ -378,7 +376,7 @@ const NuovoLavoro = () => {
       <PaginaWebNewItem 
         componenti={
           {
-            campiNuovoItem: getCampiNuovoLavoro(
+            campiNuovoItem: lavoroAction.getCampiNuovoLavoro(
               nuovoLavoro, 
               OptionsClienti({clienti}), 
               OptionsServizi({servizi}), 
@@ -386,14 +384,14 @@ const NuovoLavoro = () => {
               (e) => handleInputClick(e), 
               (e) => handleInputBlur(e) 
             ),
-            indiciNuovoItem: indiciNuovoLavoro, 
+            indiciNuovoItem: lavoroAction.INDICI_NUOVO_LAVORO, 
             handleInsert: (e) => handleInsert(e), 
             tipoItem: "lavoro", 
             items: lavoriSession.nuoviLavori, 
             setItems: null, 
             selectOperation: selectOperation, 
-            campiItemEsistente: getCampiLavoroEsistente, 
-            indiciItemEsistente: indiciLavoroEsistente, 
+            campiItemEsistente: lavoroAction.getCampiLavoroEsistente, 
+            indiciItemEsistente: lavoroAction.INDICI_LAVORO_ESISTENTE, 
             servizi: servizi, 
             selectedIdsModifica: selectedIdsModifica, 
             selectedIdsEliminazione: selectedIdsEliminazione, 

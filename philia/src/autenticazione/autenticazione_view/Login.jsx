@@ -7,12 +7,13 @@ import { useSelector, useDispatch } from 'react-redux';
 import { eseguiLogin } from '../../store/redux/AutenticazioneSessionSlice';
 import { generateRandomString, encryptPassword, PEPPER_HEX, passwordIsCorrect } from '../../vario/Sicurezza';
 import { controlloLogin } from '../../vario/Controlli';
-import { getCampiLogin, indiciLogin } from '../autenticazione_action/AutenticazioneVario';
+import { AutenticazioneAction } from '../autenticazione_action/AutenticazioneAction';
 import { FormLogin } from '../../riutilizzabile/form_item/FormItem';
 import { CardLogin } from '../../riutilizzabile/card_item/CardItem';
 import { RowLogin } from '../../riutilizzabile/row_item/RowItem';
 
 const Login = () => {
+  const autenticazioneAction = new AutenticazioneAction();
   const [utente, setUtente] = useState(0);
   const [aggiornamento1, setAggiornamento1] = useState(false);
   const [aggiornamento2, setAggiornamento2] = useState(false);
@@ -96,8 +97,8 @@ const Login = () => {
       <div className="main-content" />
 
       <LoginTag 
-        campi={getCampiLogin(datiLogin, (e) => handleInputChange(e, setDatiLogin), null, null)} 
-        indici={indiciLogin} 
+        campi={autenticazioneAction.getCampiLogin(datiLogin, (e) => handleInputChange(e, setDatiLogin), null, null)} 
+        indici={autenticazioneAction.INDICI_LOGIN} 
         eseguiLogin={(e) => handleLogin(e)} 
       />
       

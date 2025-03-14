@@ -5,13 +5,14 @@ import { handleInputChange, handleInputClick, handleInputBlur } from "../../vari
 import { FormRicercaItems } from "../../riutilizzabile/form_item/FormItem";
 import { CardRicercaItems } from "../../riutilizzabile/card_item/CardItem";
 import { RowRicercaItems } from "../../riutilizzabile/row_item/RowItem";
-import { getCampiRicercaSpese, getCampiSpesaEsistente, indiciRicercaSpese, indiciSpesaEsistente } from "../spesa_action/SpeseVario";
+import { SpesaAction } from "../spesa_action/SpesaAction";
 import { useDispatch } from "react-redux";
 import PaginaWeb from "../../riutilizzabile/PaginaWeb";
 import PaginaWebRicercaItems from "../../riutilizzabile/PaginaWebRicercaItems";
 import { aggiornaSpese, aggiornaTipoSelezione, getSpesaPrimaDellaModifica, getSpesaDopoLaModifica } from "../../store/redux/SpeseSlice";
 
 const Spese = () => {
+  const spesaAction = new SpesaAction();
   const speseSession = useSelector((state) => state.speseSession.value);
   const dispatch = useDispatch();
   
@@ -188,20 +189,20 @@ const Spese = () => {
       <PaginaWebRicercaItems 
         componenti={ 
           {
-            campiRicercaItems: getCampiRicercaSpese(
+            campiRicercaItems: spesaAction.getCampiRicercaSpese(
               datiRicerca, 
               (e) => handleInputChange(e, setDatiRicerca), 
               (e) => handleInputClick(e), 
               (e) => handleInputBlur(e) 
             ),
-            indiciRicercaItems: indiciRicercaSpese, 
+            indiciRicercaItems: spesaAction.INDICI_RICERCA_SPESE, 
             handleSearch: (e) => handleSearch(e), 
             tipoItem: "spesa", 
             items: speseSession.spese, 
             setItems: null, 
             selectOperation: selectOperation, 
-            campiItemEsistente: getCampiSpesaEsistente, 
-            indiciItemEsistente: indiciSpesaEsistente, 
+            campiItemEsistente: spesaAction.getCampiSpesaEsistente, 
+            indiciItemEsistente: spesaAction.INDICI_SPESA_ESISTENTE, 
             servizi: null, 
             selectedIdsModifica: selectedIdsModifica, 
             selectedIdsEliminazione: selectedIdsEliminazione, 

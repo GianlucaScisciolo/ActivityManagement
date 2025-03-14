@@ -6,12 +6,13 @@ import { FormNuovoItem } from "../../riutilizzabile/form_item/FormItem";
 import { CardNuovoItem } from "../../riutilizzabile/card_item/CardItem";
 import { RowNuovoItem } from "../../riutilizzabile/row_item/RowItem";
 import { controlloSpesa } from "../../vario/Controlli";
-import { getCampiNuovaSpesa, getCampiSpesaEsistente, indiciNuovaSpesa, indiciSpesaEsistente } from "../spesa_action/SpeseVario";
+import { SpesaAction } from "../spesa_action/SpesaAction";
 import PaginaWeb from "../../riutilizzabile/PaginaWeb";
 import PaginaWebNewItem from "../../riutilizzabile/PaginaWebNewItem";
 import { aggiornaTipoSelezione, inserimentoSpesa } from "../../store/redux/SpeseSlice";
 
 const NuovaSpesa = () => {
+  const spesaAction = new SpesaAction();
   const speseSession = useSelector((state) => state.speseSession.value);
   const dispatch = useDispatch();
   
@@ -94,20 +95,20 @@ const NuovaSpesa = () => {
       <PaginaWebNewItem 
         componenti={
           {
-            campiNuovoItem: getCampiNuovaSpesa(
+            campiNuovoItem: spesaAction.getCampiNuovaSpesa(
               nuovaSpesa, 
               (e) => handleInputChange(e, setNuovaSpesa), 
               (e) => handleInputClick(e), 
               (e) => handleInputBlur(e) 
             ), 
-            indiciNuovoItem: indiciNuovaSpesa, 
+            indiciNuovoItem: spesaAction.INDICI_NUOVA_SPESA, 
             handleInsert: (e) => handleInsert(e), 
             tipoItem: "spesa", 
             items: speseSession.nuoveSpese, 
             setItems: null, 
             selectOperation: selectOperation, 
-            campiItemEsistente: getCampiSpesaEsistente, 
-            indiciItemEsistente: indiciSpesaEsistente, 
+            campiItemEsistente: spesaAction.getCampiSpesaEsistente, 
+            indiciItemEsistente: spesaAction.INDICI_SPESA_ESISTENTE, 
             servizi: null, 
             selectedIdsModifica: selectedIdsModifica, 
             selectedIdsEliminazione: selectedIdsEliminazione, 

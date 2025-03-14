@@ -2,11 +2,12 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { handleInputChange, handleInputClick, handleInputBlur } from "../../vario/Vario";
 import { selectOperationBody } from "../../app/app_view/component/Operazioni";
-import { getCampiRicercaLavori, getCampiLavoroEsistente, indiciRicercaLavori, indiciLavoroEsistente } from "../lavoro_action/LavoriVario";
+import { LavoroAction } from "../lavoro_action/LavoroAction.js";
 import PaginaWebRicercaItems from "../../riutilizzabile/PaginaWebRicercaItems";
 import { aggiornaLavori, aggiornaTipoSelezione, getLavoroPrimaDellaModifica, getLavoroDopoLaModifica } from "../../store/redux/LavoriSlice";
 
 const Lavori = () => {
+  const lavoroAction = new LavoroAction();
   const lavoriSession = useSelector((state) => state.lavoriSession.value);
   const dispatch = useDispatch();
   const [servizi, setServizi] = useState(-1);
@@ -208,20 +209,20 @@ const Lavori = () => {
       <PaginaWebRicercaItems 
         componenti={
           {
-            campiRicercaItems: getCampiRicercaLavori(
+            campiRicercaItems: lavoroAction.getCampiRicercaLavori(
               datiRicerca, 
               (e) => handleInputChange(e, setDatiRicerca), 
               (e) => handleInputClick(e), 
               (e) => handleInputBlur(e)  
             ), 
-            indiciRicercaItems: indiciRicercaLavori, 
+            indiciRicercaItems: lavoroAction.INDICI_RICERCA_LAVORI, 
             handleSearch: (e) => handleSearch(e), 
             tipoItem: "lavoro", 
             items: lavoriSession.lavori, 
             setItems: null, 
             selectOperation: selectOperation, 
-            campiItemEsistente: getCampiLavoroEsistente, 
-            indiciItemEsistente: indiciLavoroEsistente, 
+            campiItemEsistente: lavoroAction.getCampiLavoroEsistente, 
+            indiciItemEsistente: lavoroAction.INDICI_LAVORO_ESISTENTE, 
             servizi: servizi, 
             selectedIdsModifica: selectedIdsModifica, 
             selectedIdsEliminazione: selectedIdsEliminazione, 

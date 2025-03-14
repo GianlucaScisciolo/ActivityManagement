@@ -10,11 +10,10 @@ import { eseguiModificaAutenticazioneSession } from "../../store/redux/Autentica
 import { FormProfilo } from "../../riutilizzabile/form_item/FormItem";
 import { CardProfilo } from "../../riutilizzabile/card_item/CardItem";
 import { RowProfilo } from "../../riutilizzabile/row_item/RowItem";
-import { 
-  getCampiProfilo, indiciProfilo 
-} from "../autenticazione_action/AutenticazioneVario"
+import { AutenticazioneAction } from "../autenticazione_action/AutenticazioneAction.js";
 
 const Profilo = () => {
+  const autenticazioneAction = new AutenticazioneAction();
   const formSession = useSelector((state) => state.formSession.value);
   const autenticazioneSession = useSelector((state) => state.autenticazioneSession.value);
   const dispatch = useDispatch();
@@ -119,8 +118,8 @@ const Profilo = () => {
       <div className="main-content"></div>
 
       <ProfiloTag  
-        campi={getCampiProfilo(datiProfilo, (e) => handleInputChange(e, setDatiProfilo), null, null)} 
-        indici={indiciProfilo} 
+        campi={autenticazioneAction.getCampiProfilo(datiProfilo, (e) => handleInputChange(e, setDatiProfilo), null, null)} 
+        indici={autenticazioneAction.INDICI_PROFILO} 
         eseguiModificaProfilo={(e) => eseguiModificaProfilo(e)} 
       />
       
