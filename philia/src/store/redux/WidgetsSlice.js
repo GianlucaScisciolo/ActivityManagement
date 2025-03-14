@@ -1,11 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
-import clienti from '../../view/img/img_widget/clienti.png';
-import servizi from '../../view/img/img_widget/servizi.png';
-import lavori from '../../view/img/img_widget/lavori.png';
-import spese from '../../view/img/img_widget/spese.png';
-import prenotazione from '../../view/img/img_widget/prenotazione.png';
-import salone from '../../view/img/img_widget/salone.png';
-import profilo from '../../view/img/img_widget/profilo.png';
+import clienti from "../../app/app_view/img/img_widget/clienti.png";
+import servizi from '../../app/app_view/img/img_widget/servizi.png';
+import lavori from '../../app/app_view/img/img_widget/lavori.png';
+import spese from '../../app/app_view/img/img_widget/spese.png';
+import prenotazione from '../../app/app_view/img/img_widget/prenotazione.png';
+import salone from '../../app/app_view/img/img_widget/salone.png';
+import profilo from '../../app/app_view/img/img_widget/profilo.png';
 
 export const BC_NOT_SELECTED = "rgba(0, 0, 0, 0.5)";
 export const BC_SELECTED = "#0050EF";
