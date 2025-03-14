@@ -6,9 +6,7 @@ import { ClienteSQL } from './ClienteSQL.js';
 import { LavoroSQL } from './LavoroSQL.js';
 import { ServizioSQL } from './ServizioSQL.js'
 import { SpesaSQL } from './SpesaSQL.js';
-import { 
-  SQL_SELECT_UTENTE, SQL_MODIFICA_UTENTE 
-} from './AutenticazioneSQL.js';
+import { AutenticazioneSQL } from './AutenticazioneSQL.js';
 
 const app = express();
 
@@ -100,13 +98,13 @@ const getResults = async (sql, params, res) => {
 /*************************************************** Autenticazione **************************************************/
 
 app.post("/LOGIN", async (req, res) => {
-  const params = [`${req.body.username}`];
+  const autenticazioneSQL = new AutenticazioneSQL();
   try {
     await beginTransaction();
-    const [utentiResult] = await executeQuery(SQL_SELECT_UTENTE, params);
+    const [utentiResult] = await executeQuery(autenticazioneSQL.SQL_SELEZIONE_UTENTE, autenticazioneSQL.params_selezione_utente(req.body));
     await commitTransaction();
     const utente = utentiResult;
-    console.log(utente);
+    // console.log(utente);
     return res.status(200).json({ utente: utente });
   } 
   catch (err) {
@@ -117,19 +115,10 @@ app.post("/LOGIN", async (req, res) => {
 });
 
 app.post("/MODIFICA_PROFILO", async (req, res) => {
-  const params = [
-    `${req.body.nuovo_username}`, 
-    `${req.body.nuove_note}` 
-  ];
-  if (req.body.nuova_password !== "") {
-    params.push(`${req.body.nuova_password}`); 
-    params.push(`${req.body.nuovo_salt_hex}`); 
-  }
-  params.push(`${req.body.username_attuale}`); 
-  params.push(`${req.body.password_attuale}`); 
+  const autenticazioneSQL = new AutenticazioneSQL();
   try {
     await beginTransaction();
-    await executeQuery(SQL_MODIFICA_UTENTE(req.body.nuova_password), params);
+    await executeQuery(autenticazioneSQL.sql_modifica_utente(req.body), autenticazioneSQL.params_modifica_utente(req.body));
     await commitTransaction();
     return res.status(200);
   } 
