@@ -33,23 +33,7 @@ const Profilo = () => {
     errore_nuova_password: "", 
     errore_conferma_nuova_password: "",   
   })
-  const eseguiModificaProfilo = async (e) => {
-    e.preventDefault();
-    if (confirm("Sei sicuro di voler modificare il profilo?")) {
-      const datiLogin = {
-        username: autenticazioneSession.username,
-        password: ""
-      }
-      await login(e, datiLogin, setUtente);
-      autenticazioneStore.setUtente(-1);
-      setUtente(-1);
-      setAggiornamento1(!aggiornamento1);
-    }
-    else {
-      alert("Modifica profilo annullata.");
-      return;
-    }
-  };
+
   const ProfiloTag = (formSession.view === "form") ? FormProfilo : (
     (formSession.view === "card") ? CardProfilo : RowProfilo
   );
@@ -120,7 +104,7 @@ const Profilo = () => {
       <ProfiloTag  
         campi={autenticazioneAction.getCampiProfilo(datiProfilo, (e) => handleInputChange(e, setDatiProfilo), null, null)} 
         indici={autenticazioneAction.INDICI_PROFILO} 
-        eseguiModificaProfilo={(e) => eseguiModificaProfilo(e)} 
+        eseguiModificaProfilo={(e) => autenticazioneAction.handleEditProfile(e, autenticazioneSession, setUtente, autenticazioneStore, aggiornamento1, setAggiornamento1)} 
       />
       
       <br /> <br /> <br /> <br />

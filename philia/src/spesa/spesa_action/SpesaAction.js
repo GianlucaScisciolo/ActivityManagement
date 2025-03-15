@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { controlloSpesa } from "../../vario/Controlli";
-import { aggiornaSpese, getSpesaPrimaDellaModifica, getSpesaDopoLaModifica } from "../../store/redux/SpeseSlice";
+import { inserimentoSpesa, aggiornaSpese, getSpesaPrimaDellaModifica, getSpesaDopoLaModifica } from "../../store/redux/SpeseSlice";
+import { generaFileSpesePDF, generaFileSpeseExcel } from "../../vario/File";
 
 export class SpesaAction {
   INDICI_NUOVA_SPESA = [0, 1, 2, 3, 4];
@@ -97,6 +98,46 @@ export class SpesaAction {
     };
   };
 
+  async handleInsert(e, nuovaSpesa, setNuovaSpesa, dispatch) {
+    e.preventDefault();
+    if (confirm("Sei sicuro di voler salvare la spesa?")) {
+      if (controlloSpesa(nuovaSpesa, setNuovaSpesa) > 0) 
+        return;
+      
+      try {
+        const response = await fetch('/INSERISCI_ITEM', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(nuovaSpesa),
+        });
+
+        if(response.status === 200) {
+          const result = await response.json();
+          nuovaSpesa.id = result.id;
+          dispatch(inserimentoSpesa({
+            nuovaSpesa: nuovaSpesa 
+          }));
+          alert("L\'inserimento della spesa è andato a buon fine!!");
+        }
+        else if(response.status === 400) {
+          alert("Errore: spesa gia\' presente.")
+        }
+        else {
+          alert("Errore durante il salvataggio della nuova spesa, riprova più tardi.");
+        }
+      } 
+      catch (error) {
+        console.error('Errore:', error);
+        alert("Errore durante il salvataggio della nuova spesa, riprova più tardi.");
+      }
+    }
+    else {
+      alert("Salvataggio annullato.");
+    }
+  };
+
   async handleSearch(e, datiRicerca, dispatch) {
     e.preventDefault();
         
@@ -124,44 +165,68 @@ export class SpesaAction {
       alert("Errore durante la ricerca delle spese, riprova più tardi.");
     }
   }
-
-  async handleDelete(e, selectedIdsEliminazione, setSelectedIdsEliminazione, speseSession, dispatch) {
+  
+  async handleSearchSpeseRangeFile(e, tipoFile, setTipoFile, datiRicerca, spese, setSpese) {
     e.preventDefault();
-    if (confirm("Sei sicuro di voler eliminare le spese?")) {
-      const dati = {
-        tipo_item: "spesa", 
-        ids: selectedIdsEliminazione
-      }
-      const itemsDaEliminare = speseSession.spese.filter(spesa => dati.ids.includes(spesa.id));
-      const itemsRestanti = speseSession.spese.filter(spesa => !dati.ids.includes(spesa.id));
-      try {
-        const response = await fetch('/ELIMINA_ITEMS', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(dati),
-        });
-        if(response.status === 200) {          
-          dispatch(aggiornaSpese({
-            spese: itemsRestanti, 
-          }))
-          setSelectedIdsEliminazione([]);
-          alert("Eliminazione completata con successo.");
+
+    if (confirm("Sei sicuro di voler ottenere il file?")) {
+      setTipoFile(tipoFile);
+      
+      const response = await fetch('/VISUALIZZA_ITEMS', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(datiRicerca),
+      });
+
+      if(response.status === 200) {
+        const result = await response.json();
+        setSpese(result.items);
+
+        if(tipoFile === "pdf") {
+          generaFileSpesePDF(spese);
         }
-        else {
-          alert("Errore durante l\'eliminazione delle spese, riprova più tardi.");
+        else if(tipoFile === "excel") {
+          generaFileSpeseExcel(spese);
         }
       }
-      catch (error) {
-        console.error('Errore:', error);
-        alert("Errore durante l\'eliminazione delle spese, riprova più tardi.");
+      else {
+        alert("Errore durante la ricerca delle spese, riprova più tardi.");
       }
     }
     else {
-      alert("Eliminazione annullata.");
+      alert("Operazione annullata.");
     }
   }
+
+  async handleSearchUsciteSpese(setUsciteSpese) {
+    // setUsciteSpese(-1);
+    // saloneStore.setUsciteSpese(-1);
+    // await SaloneAction.dispatchAction(null, operazioniSaloni.VISUALIZZA_USCITE_SPESE);
+    // setUsciteSpese(saloneStore.getUsciteSpese());
+    // e.preventDefault();
+    
+    const dati = {
+      tipo_item: "spesa" 
+    };
+    
+    const response = await fetch('/VISUALIZZA_USCITE_ITEMS', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(dati), 
+    });
+    
+    if(response.status === 200) {
+      const result = await response.json();
+      setUsciteSpese(result.items);
+    }
+    else {
+      alert("Errore durante la ricerca delle uscite delle spese, riprova più tardi.");
+    }
+  };
 
   async handleEdit(e, speseSession, selectedIdsModifica, setSelectedIdsModifica, dispatch) {
     e.preventDefault();
@@ -234,6 +299,72 @@ export class SpesaAction {
       alert("Salvataggio annullato.");
     }
   };
+
+  async handleDelete(e, selectedIdsEliminazione, setSelectedIdsEliminazione, speseSession, dispatch) {
+    e.preventDefault();
+    if (confirm("Sei sicuro di voler eliminare le spese?")) {
+      const dati = {
+        tipo_item: "spesa", 
+        ids: selectedIdsEliminazione
+      }
+      const itemsDaEliminare = speseSession.spese.filter(spesa => dati.ids.includes(spesa.id));
+      const itemsRestanti = speseSession.spese.filter(spesa => !dati.ids.includes(spesa.id));
+      try {
+        const response = await fetch('/ELIMINA_ITEMS', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(dati),
+        });
+        if(response.status === 200) {          
+          dispatch(aggiornaSpese({
+            spese: itemsRestanti, 
+          }))
+          setSelectedIdsEliminazione([]);
+          alert("Eliminazione completata con successo.");
+        }
+        else {
+          alert("Errore durante l\'eliminazione delle spese, riprova più tardi.");
+        }
+      }
+      catch (error) {
+        console.error('Errore:', error);
+        alert("Errore durante l\'eliminazione delle spese, riprova più tardi.");
+      }
+    }
+    else {
+      alert("Eliminazione annullata.");
+    }
+  }
+
+  async handleDeleteSpeseRangeFile(e, datiRicerca) {
+    e.preventDefault();
+    if (confirm("Sei sicuro di voler eliminare le spese?")) {
+      const dati = {
+        tipo_item: "spesa", 
+        "primo_giorno": datiRicerca.primo_giorno, 
+        "ultimo_giorno": datiRicerca.ultimo_giorno 
+      }
+    
+      const response = await fetch('/ELIMINA_ITEMS_RANGE_GIORNI', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(dati),
+      });
+      if(response.status === 200) {
+        alert("Eliminazione completata con successo.");
+      }
+      else {
+        alert("Errore durante l\'eliminazione delle spese, riprova più tardi."); 
+      }
+    }
+    else {
+      alert("Eliminazione annullata.");
+    }
+  }
 }
 
 

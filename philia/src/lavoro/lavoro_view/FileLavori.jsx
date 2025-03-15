@@ -22,68 +22,6 @@ const FileLavori = () => {
     descrizione: "",   
     note: ""
   });
-  
-  const ottieniLavoriRange = async (e, tipoFile) => {
-    e.preventDefault();
-
-    if (confirm("Sei sicuro di voler ottenere il file?")) {
-      setTipoFile(tipoFile);
-      
-      const response = await fetch('/VISUALIZZA_ITEMS', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(datiRicerca),
-      });
-
-      if(response.status === 200) {
-        const result = await response.json();
-        setLavori(result.items);
-
-        if(tipoFile === "pdf") {
-          generaFileLavoriPDF(lavori);
-        }
-        else if(tipoFile === "excel") {
-          generaFileLavoriExcel(lavori);
-        }
-      }
-      else {
-        alert("Errore durante la ricerca dei lavori, riprova più tardi.");
-      }
-    }
-    else {
-      alert("Operazione annullata.");
-    }
-  }
-    
-  const handleDelete = async (e) => {
-    e.preventDefault();
-    if (confirm("Sei sicuro di voler eliminare i lavori?")) {
-      const dati = {
-        tipo_item: "lavoro", 
-        "primo_giorno": datiRicerca.primo_giorno, 
-        "ultimo_giorno": datiRicerca.ultimo_giorno 
-      }
-    
-      const response = await fetch('/ELIMINA_ITEMS_RANGE_GIORNI', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(dati),
-      });
-      if(response.status === 200) {
-        alert("Eliminazione completata con successo.");
-      }
-      else {
-        alert("Errore durante l\'eliminazione dei lavori, riprova più tardi."); 
-      }
-    }
-    else {
-      alert("Eliminazione annullata.");
-    }
-  }
 
   const FormFileTag = (formSession.view === "form") ? FormFileItems : (
     (formSession.view === "card") ? CardFileItems : RowFileItems
@@ -103,9 +41,9 @@ const FileLavori = () => {
           (e) => handleInputBlur(e) 
         )} 
         indici={lavoroAction.INDICI_FILE} 
-        ottieniFileRangePDF={(e) => ottieniLavoriRange(e, "pdf")}
-        ottieniFileRangeExcel={(e) => ottieniLavoriRange(e, "excel")} 
-        eliminaItemsRange={(e) => handleDelete(e)} 
+        ottieniFileRangePDF={(e) => lavoroAction.handleSearchLavoriRangeFile(e, "pdf", setTipoFile, datiRicerca, lavori, setLavori)}
+        ottieniFileRangeExcel={(e) => lavoroAction.handleSearchLavoriRangeFile(e, "excel", setTipoFile, datiRicerca, lavori, setLavori)} 
+        eliminaItemsRange={(e) => lavoroAction.handleDeleteLavoriRangeFile(e, datiRicerca)} 
       />
     </>
   );

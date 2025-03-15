@@ -24,68 +24,6 @@ const FileSpese = () => {
     note: "",
   });
   
-  const ottieniSpeseRange = async (e, tipoFile) => {
-    e.preventDefault();
-
-    if (confirm("Sei sicuro di voler ottenere il file?")) {
-      setTipoFile(tipoFile);
-      
-      const response = await fetch('/VISUALIZZA_ITEMS', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(datiRicerca),
-      });
-
-      if(response.status === 200) {
-        const result = await response.json();
-        setSpese(result.items);
-
-        if(tipoFile === "pdf") {
-          generaFileSpesePDF(spese);
-        }
-        else if(tipoFile === "excel") {
-          generaFileSpeseExcel(spese);
-        }
-      }
-      else {
-        alert("Errore durante la ricerca delle spese, riprova più tardi.");
-      }
-    }
-    else {
-      alert("Operazione annullata.");
-    }
-  }
-    
-  const handleDelete = async (e) => {
-    e.preventDefault();
-    if (confirm("Sei sicuro di voler eliminare le spese?")) {
-      const dati = {
-        tipo_item: "spesa", 
-        "primo_giorno": datiRicerca.primo_giorno, 
-        "ultimo_giorno": datiRicerca.ultimo_giorno 
-      }
-    
-      const response = await fetch('/ELIMINA_ITEMS_RANGE_GIORNI', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(dati),
-      });
-      if(response.status === 200) {
-        alert("Eliminazione completata con successo.");
-      }
-      else {
-        alert("Errore durante l\'eliminazione delle spese, riprova più tardi."); 
-      }
-    }
-    else {
-      alert("Eliminazione annullata.");
-    }
-  }
-
   const FormFileTag = (formSession.view === "form") ? FormFileItems : (
     (formSession.view === "card") ? CardFileItems : RowFileItems
   );
@@ -104,9 +42,9 @@ const FileSpese = () => {
           (e) => handleInputBlur(e) 
         )} 
         indici={spesaAction.INDICI_FILE} 
-        ottieniFileRangePDF={(e) => ottieniSpeseRange(e, "pdf")}
-        ottieniFileRangeExcel={(e) => ottieniSpeseRange(e, "excel")} 
-        eliminaItemsRange={(e) => handleDelete(e)} 
+        ottieniFileRangePDF={(e) => spesaAction.handleSearchSpeseRangeFile(e, "pdf", setTipoFile, datiRicerca, spese, setSpese)}
+        ottieniFileRangeExcel={(e) => spesaAction.handleSearchSpeseRangeFile(e, "excel", setTipoFile, datiRicerca, spese, setSpese)} 
+        eliminaItemsRange={(e) => spesaAction.handleDeleteSpeseRangeFile(e, datiRicerca)} 
       />
     </>
   );

@@ -43,45 +43,6 @@ const NuovoServizio = () => {
     )
   }
 
-  const handleInsert = async (e) => {
-    e.preventDefault();
-    if (confirm("Sei sicuro di voler salvare il servizio?")) {
-      if (controlloServizio(nuovoServizio, setNuovoServizio) > 0) 
-        return;
-      
-      try {
-        const response = await fetch('/INSERISCI_ITEM', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(nuovoServizio),
-        });
-        if(response.status === 200) {
-          const result = await response.json();
-          nuovoServizio.id = result.id;
-          dispatch(inserimentoServizio({
-            nuovoServizio: nuovoServizio
-          }));
-          alert("L\'inserimento del servizio è andato a buon fine!!");
-        }
-        else if(response.status === 400) {
-          alert("Errore: servizio gia\' presente.")
-        }
-        else {
-          alert("Errore durante il salvataggio del nuovo servizio, riprova più tardi.");
-        }
-      } 
-      catch (error) {
-        console.error('Errore:', error);
-        alert("Errore durante il salvataggio del nuovo servizio, riprova più tardi.");
-      }
-    }
-    else {
-      alert("Salvataggio annullato.");
-    }
-  };
-  
   return (
     <>
       <PaginaWebNewItem 
@@ -89,7 +50,7 @@ const NuovoServizio = () => {
           {
             campiNuovoItem: servizioAction.getCampiNuovoServizio(nuovoServizio, (e) => handleInputChange(e, setNuovoServizio), null, null), 
             indiciNuovoItem: servizioAction.INDICI_NUOVO_SERVIZIO, 
-            handleInsert: (e) => handleInsert(e), 
+            handleInsert: (e) => servizioAction.handleInsert(e, nuovoServizio, setNuovoServizio, dispatch), 
             tipoItem: "servizio", 
             items: serviziSession.nuoviServizi, 
             setItems: null, 

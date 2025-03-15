@@ -47,45 +47,7 @@ const NuovoCliente = () => {
     )
   }
   
-  const handleInsert = async (e) => {
-    e.preventDefault();
-    if (confirm("Sei sicuro di voler salvare il cliente?")) {
-      if (controlloCliente(nuovoCliente, setNuovoCliente) > 0) 
-        return;
-      
-      try {
-        const response = await fetch('/INSERISCI_ITEM', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(nuovoCliente),
-        });
 
-        if(response.status === 200) {
-          const result = await response.json();
-          nuovoCliente.id = result.id;
-          dispatch(inserimentoCliente({
-            nuovoCliente: nuovoCliente
-          }));
-          alert("L\'inserimento del cliente è andato a buon fine!!");
-        }
-        else if(response.status === 400) {
-          alert("Errore: cliente gia\' presente.")
-        }
-        else {
-          alert("Errore durante il salvataggio del nuovo cliente, riprova più tardi.");
-        }
-      }
-      catch (error) {
-        console.error('Errore:', error);
-        alert("Errore durante il salvataggio del nuovo cliente, riprova più tardi.");
-      }
-    }
-    else {
-      alert("Salvataggio annullato.");
-    }
-  }
 
   return (
     <>
@@ -94,7 +56,7 @@ const NuovoCliente = () => {
           {
             campiNuovoItem: clienteAction.getCampiNuovoCliente(nuovoCliente, (e) => handleInputChange(e, setNuovoCliente), null, null), 
             indiciNuovoItem: clienteAction.INDICI_NUOVO_CLIENTE, 
-            handleInsert: (e) => handleInsert(e), 
+            handleInsert: (e) => clienteAction.handleInsert(e, nuovoCliente, setNuovoCliente, dispatch), 
             tipoItem: "cliente", 
             items: clientiSession.nuoviClienti, 
             setItems: null, 
@@ -104,6 +66,8 @@ const NuovoCliente = () => {
             servizi: null, 
             selectedIdsModifica: selectedIdsModifica, 
             selectedIdsEliminazione: selectedIdsEliminazione, 
+            //handleEdit: (e) => clienteAction.handleEdit(e, clientiSession, selectedIdsModifica, setSelectedIdsModifica, dispatch), 
+            //handleDelete: (e) => clienteAction.handleDelete(e, selectedIdsEliminazione, setSelectedIdsEliminazione, clientiSession, dispatch)
             handleEdit: null, 
             handleDelete: null
           }

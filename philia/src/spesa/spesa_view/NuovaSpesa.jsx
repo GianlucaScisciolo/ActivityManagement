@@ -50,46 +50,6 @@ const NuovaSpesa = () => {
     )
   }
 
-  const handleInsert = async (e) => {
-    e.preventDefault();
-    if (confirm("Sei sicuro di voler salvare la spesa?")) {
-      if (controlloSpesa(nuovaSpesa, setNuovaSpesa) > 0) 
-        return;
-      
-      try {
-        const response = await fetch('/INSERISCI_ITEM', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(nuovaSpesa),
-        });
-
-        if(response.status === 200) {
-          const result = await response.json();
-          nuovaSpesa.id = result.id;
-          dispatch(inserimentoSpesa({
-            nuovaSpesa: nuovaSpesa 
-          }));
-          alert("L\'inserimento della spesa è andato a buon fine!!");
-        }
-        else if(response.status === 400) {
-          alert("Errore: spesa gia\' presente.")
-        }
-        else {
-          alert("Errore durante il salvataggio della nuova spesa, riprova più tardi.");
-        }
-      } 
-      catch (error) {
-        console.error('Errore:', error);
-        alert("Errore durante il salvataggio della nuova spesa, riprova più tardi.");
-      }
-    }
-    else {
-      alert("Salvataggio annullato.");
-    }
-  };
-  
   return (
     <>
       <PaginaWebNewItem 
@@ -102,7 +62,7 @@ const NuovaSpesa = () => {
               (e) => handleInputBlur(e) 
             ), 
             indiciNuovoItem: spesaAction.INDICI_NUOVA_SPESA, 
-            handleInsert: (e) => handleInsert(e), 
+            handleInsert: (e) => spesaAction.handleInsert(e, nuovaSpesa, setNuovaSpesa, dispatch), 
             tipoItem: "spesa", 
             items: speseSession.nuoveSpese, 
             setItems: null, 

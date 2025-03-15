@@ -59,7 +59,7 @@ const Clienti = () => {
             servizi: null, 
             selectedIdsModifica: selectedIdsModifica, 
             selectedIdsEliminazione: selectedIdsEliminazione, 
-            handleEdit: (e) => clienteAction.handleEdit(e, clientiSession, selectedIdsModifica, setSelectedIdsModifica, dispatch), 
+            handleEdit: (e) => clienteAction.handleEdit(e, clientiSession.nuoviClienti, selectedIdsModifica, setSelectedIdsModifica, dispatch), 
             handleDelete: (e) => clienteAction.handleDelete(e, selectedIdsEliminazione, setSelectedIdsEliminazione, clientiSession, dispatch)
           }
         }

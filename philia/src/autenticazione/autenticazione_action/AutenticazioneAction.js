@@ -1,3 +1,7 @@
+import { controlloLogin } from "../../vario/Controlli";
+import { eseguiLogin } from "../../store/redux/AutenticazioneSessionSlice";
+import { login } from "../../vario/OperazioniAutenticazione";
+
 export class AutenticazioneAction {
   INDICI_LOGIN = [0, 1];
   INDICI_PROFILO = [0, 1, 2, 3, 4];
@@ -42,6 +46,72 @@ export class AutenticazioneAction {
       onClick: handleOnClick, 
       onBlur: handleOnBlur
     };
+  };
+
+  async handleLogin(e, autenticazioneStore, setUtente, datiLogin, setDatiLogin, aggiornamento1, setAggiornamento1, navigate, dispatch) {
+    e.preventDefault();
+    autenticazioneStore.setUtente(-1);
+    setUtente(-1);
+    try {
+      const response = await fetch('/LOGIN', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(datiLogin),
+      });
+  
+      if (!response.ok) {
+        const errorData = await response.json();
+        if (response.status === 409) {
+          alert(errorData.message); 
+        } 
+        else {
+          throw new Error('Errore durante il login.');
+        }
+      }
+      else {
+        const result = await response.json();
+        datiLogin["num_utenti"] = (result.utente) ? 1 : 0;
+        if(datiLogin["num_utenti"] === 1) {
+          datiLogin["password_db"] = result.utente.password;
+          datiLogin["salt_hex_db"] = result.utente.salt_hex;
+        }
+        if(controlloLogin(datiLogin, setDatiLogin) > 0) {
+          return;
+        }
+        dispatch(eseguiLogin({
+          username: result.utente.username,
+          ruolo: result.utente.ruolo,
+          note: result.utente.note, 
+        }));
+        navigate("/");
+      }
+    } 
+    catch (error) {
+      console.error('Errore:', error);
+      alert("C'è stato un errore durante il login. Riprova più tardi.");
+    }
+    
+    setAggiornamento1(!aggiornamento1);
+  };
+
+  async handleEditProfile (e, autenticazioneSession, setUtente, autenticazioneStore, aggiornamento1, setAggiornamento1) {
+    e.preventDefault();
+    if (confirm("Sei sicuro di voler modificare il profilo?")) {
+      const datiLogin = {
+        username: autenticazioneSession.username,
+        password: ""
+      }
+      await login(e, datiLogin, setUtente);
+      autenticazioneStore.setUtente(-1);
+      setUtente(-1);
+      setAggiornamento1(!aggiornamento1);
+    }
+    else {
+      alert("Modifica profilo annullata.");
+      return;
+    }
   };
 }
 

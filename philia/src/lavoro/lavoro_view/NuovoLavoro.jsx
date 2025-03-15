@@ -63,71 +63,6 @@ const NuovoLavoro = () => {
     )
   }
 
-  const handleInsert = async (e) => {
-    e.preventDefault();
-    if (confirm("Sei sicuro di voler salvare il lavoro?")) {
-      let descrizione = "";
-      for(let servizio of servizi) {
-        if(nuovoLavoro.id_servizi.includes(servizio.id)) {
-          nuovoLavoro.totale += servizio.prezzo;
-          descrizione += servizio.nome + " - " + servizio.prezzo + " €, "
-        }
-      }
-      for(let cliente of clienti) {
-        console.log(cliente.id + " === " + nuovoLavoro.id_cliente);
-        if (parseInt(cliente.id) === parseInt(nuovoLavoro.id_cliente)) {
-          console.log("Cliente trovato!!");
-          nuovoLavoro["cliente"] = cliente.nome + " " + cliente.cognome +
-            ((cliente.contatto && cliente.contatto !== "Contatto non inserito.") ? (" - " + cliente.contatto) : "") + 
-            ((cliente.email && cliente.email !== "Email non inserita.") ? (" - " + cliente.email) : "");
-          break;
-        }
-      }
-      nuovoLavoro["descrizione"] = descrizione;
-      /**/
-      const serviziSelezionatiAttuali = descrizione.split(',').map(item => item.trim()).filter(item => item !== "");
-      for(let i = 0; i < serviziSelezionatiAttuali.length; i++) {
-        serviziSelezionatiAttuali[i] = serviziSelezionatiAttuali[i].split('-').map(item => item.trim()).filter(item => item !== "");
-        serviziSelezionatiAttuali[i] = {
-          nome: serviziSelezionatiAttuali[i][0], 
-          prezzo: serviziSelezionatiAttuali[i][1].substring(0, serviziSelezionatiAttuali[i][1].length-2)
-        };
-      }
-      nuovoLavoro["serviziSelezionati"] = serviziSelezionatiAttuali;
-      
-      /**/
-      
-      if (controlloLavoro(nuovoLavoro, setNuovoLavoro) > 0) 
-        return;
-      
-      const response = await fetch('/INSERISCI_ITEM', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(nuovoLavoro),
-      });
-
-      if(response.status === 200) {
-        const result = await response.json();
-        nuovoLavoro.id = result.id;
-        dispatch(inserimentoLavoro({
-          nuovoLavoro: nuovoLavoro 
-        }));
-        alert("L\'inserimento del lavoro è andato a buon fine!!");
-      }
-      else if(response.status === 400) {
-        alert("Errore: lavoro gia\' presente.")
-      }
-      else {
-        alert("Errore durante il salvataggio del nuovo lavoro, riprova più tardi1.");
-      }
-    }
-    else {
-      alert("Salvataggio annullato.");
-    }
-  }
-
   const OptionsClienti = ({ clienti }) => {
     const [clientiSelezionati, setClientiSelezionati] = useState([]);
     const [clientiNonSelezionati, setClientiNonSelezionati] = useState(Object.values(clienti));
@@ -385,7 +320,7 @@ const NuovoLavoro = () => {
               (e) => handleInputBlur(e) 
             ),
             indiciNuovoItem: lavoroAction.INDICI_NUOVO_LAVORO, 
-            handleInsert: (e) => handleInsert(e), 
+            handleInsert: (e) => lavoroAction.handleInsert(e, servizi, clienti, nuovoLavoro, setNuovoLavoro, dispatch), 
             tipoItem: "lavoro", 
             items: lavoriSession.nuoviLavori, 
             setItems: null, 

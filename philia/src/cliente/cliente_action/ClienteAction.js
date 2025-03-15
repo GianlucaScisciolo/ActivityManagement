@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { controlloCliente } from "../../vario/Controlli";
-import { aggiornaClienti, getClientePrimaDellaModifica, getClienteDopoLaModifica } from "../../store/redux/ClientiSlice";
+import { inserimentoCliente, aggiornaClienti, getClientePrimaDellaModifica, getClienteDopoLaModifica } from "../../store/redux/ClientiSlice";
 
 export class ClienteAction {
   INDICI_NUOVO_CLIENTE = [0, 1, 2, 3, 4];
@@ -77,6 +77,46 @@ export class ClienteAction {
       onBlur: handleOnBlur
     };
   };
+
+  async handleInsert(e, nuovoCliente, setNuovoCliente, dispatch) {
+    e.preventDefault();
+    if (confirm("Sei sicuro di voler salvare il cliente?")) {
+      if (controlloCliente(nuovoCliente, setNuovoCliente) > 0) 
+        return;
+      
+      try {
+        const response = await fetch('/INSERISCI_ITEM', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(nuovoCliente),
+        });
+
+        if(response.status === 200) {
+          const result = await response.json();
+          nuovoCliente.id = result.id;
+          dispatch(inserimentoCliente({
+            nuovoCliente: nuovoCliente
+          }));
+          alert("L\'inserimento del cliente è andato a buon fine!!");
+        }
+        else if(response.status === 400) {
+          alert("Errore: cliente gia\' presente.")
+        }
+        else {
+          alert("Errore durante il salvataggio del nuovo cliente, riprova più tardi.");
+        }
+      }
+      catch (error) {
+        console.error('Errore:', error);
+        alert("Errore durante il salvataggio del nuovo cliente, riprova più tardi.");
+      }
+    }
+    else {
+      alert("Salvataggio annullato.");
+    }
+  }
 
   async handleSearch(e, datiRicerca, dispatch) {
     e.preventDefault();

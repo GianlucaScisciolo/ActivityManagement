@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { controlloServizio } from "../../vario/Controlli";
-import { aggiornaServizi, getServizioPrimaDellaModifica, getServizioDopoLaModifica } from "../../store/redux/ServiziSlice";
+import { inserimentoServizio, aggiornaServizi, getServizioPrimaDellaModifica, getServizioDopoLaModifica } from "../../store/redux/ServiziSlice";
 
 export class ServizioAction {
   INDICI_NUOVO_SERVIZIO = [0, 1, 2];
@@ -75,6 +75,45 @@ export class ServizioAction {
       onClick: handleOnClick, 
       onBlur: handleOnBlur
     };
+  };
+
+  async handleInsert(e, nuovoServizio, setNuovoServizio, dispatch) {
+    e.preventDefault();
+    if (confirm("Sei sicuro di voler salvare il servizio?")) {
+      if (controlloServizio(nuovoServizio, setNuovoServizio) > 0) 
+        return;
+      
+      try {
+        const response = await fetch('/INSERISCI_ITEM', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(nuovoServizio),
+        });
+        if(response.status === 200) {
+          const result = await response.json();
+          nuovoServizio.id = result.id;
+          dispatch(inserimentoServizio({
+            nuovoServizio: nuovoServizio
+          }));
+          alert("L\'inserimento del servizio è andato a buon fine!!");
+        }
+        else if(response.status === 400) {
+          alert("Errore: servizio gia\' presente.")
+        }
+        else {
+          alert("Errore durante il salvataggio del nuovo servizio, riprova più tardi.");
+        }
+      } 
+      catch (error) {
+        console.error('Errore:', error);
+        alert("Errore durante il salvataggio del nuovo servizio, riprova più tardi.");
+      }
+    }
+    else {
+      alert("Salvataggio annullato.");
+    }
   };
 
   async handleSearch(e, datiRicerca, dispatch) {

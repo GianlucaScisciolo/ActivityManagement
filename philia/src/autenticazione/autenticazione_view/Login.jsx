@@ -29,54 +29,6 @@ const Login = () => {
   const formSession = useSelector((state) => state.formSession.value);
   const dispatch = useDispatch();
   
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    autenticazioneStore.setUtente(-1);
-    setUtente(-1);
-    try {
-      const response = await fetch('/LOGIN', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(datiLogin),
-      });
-  
-      if (!response.ok) {
-        const errorData = await response.json();
-        if (response.status === 409) {
-          alert(errorData.message); 
-        } 
-        else {
-          throw new Error('Errore durante il login.');
-        }
-      }
-      else {
-        const result = await response.json();
-        datiLogin["num_utenti"] = (result.utente) ? 1 : 0;
-        if(datiLogin["num_utenti"] === 1) {
-          datiLogin["password_db"] = result.utente.password;
-          datiLogin["salt_hex_db"] = result.utente.salt_hex;
-        }
-        if(controlloLogin(datiLogin, setDatiLogin) > 0) {
-          return;
-        }
-        dispatch(eseguiLogin({
-          username: result.utente.username,
-          ruolo: result.utente.ruolo,
-          note: result.utente.note, 
-        }));
-        navigate("/");
-      }
-    } 
-    catch (error) {
-      console.error('Errore:', error);
-      alert("C'è stato un errore durante il login. Riprova più tardi.");
-    }
-    
-    setAggiornamento1(!aggiornamento1);
-  };
-
   const prova = () => {
     const salt_hex = generateRandomString(32);
     const password = "PassWord10!!";
@@ -99,7 +51,7 @@ const Login = () => {
       <LoginTag 
         campi={autenticazioneAction.getCampiLogin(datiLogin, (e) => handleInputChange(e, setDatiLogin), null, null)} 
         indici={autenticazioneAction.INDICI_LOGIN} 
-        eseguiLogin={(e) => handleLogin(e)} 
+        eseguiLogin={(e) => autenticazioneAction.handleLogin(e, autenticazioneStore, setUtente, datiLogin, setDatiLogin, aggiornamento1, setAggiornamento1, navigate, dispatch)} 
       />
       
       {/* <button onClick={prova}>Genera!!</button> */}
