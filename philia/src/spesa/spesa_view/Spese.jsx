@@ -46,143 +46,7 @@ const Spese = () => {
     )
   }
 
-  const handleSearch = async (e) => {
-    e.preventDefault();
-        
-    try {
-      const response = await fetch('/VISUALIZZA_ITEMS', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(datiRicerca),
-      });
 
-      if(response.status === 200) {
-        const result = await response.json();
-        dispatch(aggiornaSpese({
-          spese: result.items,
-        }));
-      }
-      else {
-        alert("Errore durante la ricerca delle spese, riprova più tardi.");
-      }
-    }
-    catch (error) {
-      console.error('Errore:', error);
-      alert("Errore durante la ricerca delle spese, riprova più tardi.");
-    }
-  }
-
-  const handleDelete = async (e) => {
-    e.preventDefault();
-    if (confirm("Sei sicuro di voler eliminare le spese?")) {
-      const dati = {
-        tipo_item: "spesa", 
-        ids: selectedIdsEliminazione
-      }
-      const itemsDaEliminare = speseSession.spese.filter(spesa => dati.ids.includes(spesa.id));
-      const itemsRestanti = speseSession.spese.filter(spesa => !dati.ids.includes(spesa.id));
-      try {
-        const response = await fetch('/ELIMINA_ITEMS', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(dati),
-        });
-        if(response.status === 200) {          
-          dispatch(aggiornaSpese({
-            spese: itemsRestanti, 
-          }))
-          setSelectedIdsEliminazione([]);
-          alert("Eliminazione completata con successo.");
-        }
-        else {
-          alert("Errore durante l\'eliminazione delle spese, riprova più tardi.");
-        }
-      }
-      catch (error) {
-        console.error('Errore:', error);
-        alert("Errore durante l\'eliminazione delle spese, riprova più tardi.");
-      }
-    }
-    else {
-      alert("Eliminazione annullata.");
-    }
-  }
-
-  const handleEdit = async (e) => {
-    e.preventDefault();
-    if (confirm("Sei sicuro di voler modificare le spese?")) {
-      let speseDaNonModificare = speseSession.spese.filter(spesa => !selectedIdsModifica.includes(spesa.id));
-      let speseDaModificare = speseSession.spese.filter(spesa => selectedIdsModifica.includes(spesa.id)); 
-      // let copiaSpeseDaModificare = [...speseDaModificare];
-      
-      let idSpeseNonModificate = [];
-      let idSpeseModificate = [];
-      let esitoModifica = "Esito modifica:\n";
-      for(let i = 0; i < speseDaModificare.length; i++) {
-        const dati = {
-          tipo_item: "spesa", 
-          item: speseDaModificare[i] 
-        }
-        const response = await fetch('/MODIFICA_ITEM', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(dati),
-        });
-        if(response.status === 200) {           
-          esitoModifica += "Spesa numero " + (i+1) + ": modifica avvenuta con successo.\n";
-          idSpeseModificate.push(speseDaModificare[i].id);
-        }
-        else if(response.status === 400) {
-          esitoModifica += "Spesa numero " + (i+1) + ": errore durante la modifica: spesa gia\' presente.\n";
-          idSpeseNonModificate.push(speseDaModificare[i].id);
-        }
-        else {
-          esitoModifica += "Spesa numero " + (i+1) + ": errore durante la modifica.\n";
-          idSpeseNonModificate.push(speseDaModificare[i].id);
-        }
-      }
-
-      let speseAggiornate = [];
-      for (let i = 0; i < speseSession.spese.length; i++) {
-        let spesaAggiornata = { ...speseSession.spese[i] };
-        if(spesaAggiornata.tipo_selezione === 1) {
-          spesaAggiornata.tipo_selezione = 0;
-        }
-        speseAggiornate.push(spesaAggiornata);
-      }
-      // setSpese(speseAggiornate);
-      dispatch(aggiornaSpese({
-        spese: speseAggiornate, 
-      }));
-
-      for(let id of idSpeseNonModificate) {
-        console.log("\\"+id+"/");
-        dispatch(getSpesaPrimaDellaModifica({
-          id_spesa: id
-        }));
-      }
-      for(let id of idSpeseModificate) {
-        console.log("\\"+id+"/");
-        dispatch(getSpesaDopoLaModifica({
-          id_spesa: id
-        }));
-      }
-
-      setSelectedIdsModifica([]);
-
-      // alert("Risultati modifica:\n")
-      alert(esitoModifica);
-    }
-    else {
-      alert("Salvataggio annullato.");
-    }
-  };
 
   return (
     <>
@@ -196,7 +60,7 @@ const Spese = () => {
               (e) => handleInputBlur(e) 
             ),
             indiciRicercaItems: spesaAction.INDICI_RICERCA_SPESE, 
-            handleSearch: (e) => handleSearch(e), 
+            handleSearch: (e) => spesaAction.handleSearch(e, datiRicerca, dispatch), 
             tipoItem: "spesa", 
             items: speseSession.spese, 
             setItems: null, 
@@ -206,8 +70,8 @@ const Spese = () => {
             servizi: null, 
             selectedIdsModifica: selectedIdsModifica, 
             selectedIdsEliminazione: selectedIdsEliminazione, 
-            handleEdit: (e) => handleEdit(e),  
-            handleDelete: (e) => handleDelete(e)
+            handleEdit: (e) => spesaAction.handleEdit(e, speseSession, selectedIdsModifica, setSelectedIdsModifica, dispatch),  
+            handleDelete: (e) => spesaAction.handleDelete(e, selectedIdsEliminazione, setSelectedIdsEliminazione, speseSession, dispatch)
           }
         }
       />
