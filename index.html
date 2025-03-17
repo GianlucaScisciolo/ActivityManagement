@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="src/view/style/style.css">
+    <title>Philia</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="src/Main.jsx"></script>
+  </body>
+</html>
+
+
+
+
+
+
+
+
+
+ <!-- <!doctype html>
+ <html lang="en">
+   <head>
+     <meta charset="UTF-8" />
+     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+     <link rel="stylesheet" href="src/view/style/style.css">
+     <title>Philia</title>
+   </head>
+   <body>
+     <div id="root"></div>
+     <script>
+       // Script globale per bloccare Alt+freccia e Backspace
+       window.addEventListener('keydown', (e) => {
+         // Blocca Alt+Freccia Sinistra (Indietro) e Alt+Freccia Destra (Avanti)
+         if ((e.altKey && e.key === 'ArrowLeft') || (e.altKey && e.key === 'ArrowRight')) {
+           e.preventDefault();
+         }
+ 
+         // Blocca il tasto Backspace se non si scrive in un campo input o textarea
+         if (e.key === 'Backspace' && !['INPUT', 'TEXTAREA'].includes(e.target.tagName)) {
+           e.preventDefault();
+         }
+       });
+     </script>
+     <script type="module" src="src/Main.jsx"></script>
+   </body>
+ </html>
+  -->
