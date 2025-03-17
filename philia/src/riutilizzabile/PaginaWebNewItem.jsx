@@ -2,9 +2,9 @@ import { useSelector } from "react-redux";
 import { FormNuovoItem } from "./form_item/FormItem";
 import { CardNuovoItem } from "./card_item/CardItem";
 import { RowNuovoItem } from "./row_item/RowItem";
-import Header from "../app/app_view/component/Header";
-import { Items } from "../app/app_view/component/Items"
-import { OperazioniItems } from "../app/app_view/component/Operazioni";
+import Header from "../view/component/Header";
+import { Items } from "../view/component/Items"
+import { OperazioniItems } from "../view/component/Operazioni";
 
 const PaginaWebNewItem = ({ componenti }) => {
   const formSession = useSelector((state) => state.formSession.value);

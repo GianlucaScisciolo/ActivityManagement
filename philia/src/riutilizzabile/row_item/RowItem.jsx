@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import { 
   StyledPencilNotSelected, StyledPencilSelected, grandezzaIcona, 
   StyledTrashNotSelected, StyledTrashSelected, 
@@ -16,7 +16,7 @@ import {
 } from "./StyledRowItem";
 import { Trash2, Pencil } from 'lucide-react';
 import { faFilePdf, faFileExcel } from '@fortawesome/free-solid-svg-icons';
-import { aggiornaCliente } from '../../store/redux/ClientiSlice';
+import { aggiornaCliente } from "../../store/redux/ClientiSlice";
 import { aggiornaServizio } from '../../store/redux/ServiziSlice';
 import { aggiornaSpesa } from '../../store/redux/SpeseSlice';
 import { aggiornaLavoro } from '../../store/redux/LavoriSlice';

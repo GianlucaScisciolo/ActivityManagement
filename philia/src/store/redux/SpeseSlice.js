@@ -109,12 +109,3 @@ export const {
   aggiornaSpese, aggiornaTipoSelezione, aggiornaSpesa, getSpesaPrimaDellaModifica, getSpesaDopoLaModifica, inserimentoSpesa 
 } = speseSlice.actions;
 export const speseReducer = speseSlice.reducer;
-
-
-
-
-
-
-
-
-

@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { useDispatch, useSelector } from "react-redux";
 
 // Funzioni per caricare e salvare lo stato nel localStorage
 const loadFromLocalStorage = () => {

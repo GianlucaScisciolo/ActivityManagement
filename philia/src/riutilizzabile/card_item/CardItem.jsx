@@ -17,12 +17,10 @@ import {
 } from './StyledCardItem';
 import { faFilePdf, faFileExcel } from '@fortawesome/free-solid-svg-icons';
 import { Trash2, Pencil } from 'lucide-react';
-import { handleInputChange } from '../../vario/Vario';
-import { aggiornaCliente } from '../../store/redux/ClientiSlice';
+import { aggiornaCliente } from "../../store/redux/ClientiSlice";
 import { aggiornaServizio } from '../../store/redux/ServiziSlice';
 import { aggiornaSpesa } from '../../store/redux/SpeseSlice';
 import { aggiornaLavoro } from '../../store/redux/LavoriSlice';
-import { controlloCliente } from '../../vario/Controlli';
 
 function getColor(value, j, tipo){
   // (i > 0) ? (

@@ -133,12 +133,3 @@ export const {
   aggiornaLavori, aggiornaTipoSelezione, aggiornaLavoro, getLavoroPrimaDellaModifica, getLavoroDopoLaModifica, inserimentoLavoro 
 } = lavoriSlice.actions;
 export const lavoriReducer = lavoriSlice.reducer;
-
-
-
-
-
-
-
-
-

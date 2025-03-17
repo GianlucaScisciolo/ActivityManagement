@@ -120,7 +120,7 @@ app.post("/MODIFICA_PROFILO", async (req, res) => {
     await beginTransaction();
     await executeQuery(autenticazioneSQL.sql_modifica_utente(req.body), autenticazioneSQL.params_modifica_utente(req.body));
     await commitTransaction();
-    return res.status(200);
+    return res.status(200).json();
   } 
   catch (err) {
     await rollbackTransaction();

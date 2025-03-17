@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { useDispatch, useSelector } from "react-redux";
 
 const loadFromLocalStorage = () => {
   try {
@@ -46,12 +45,3 @@ export const sfondoSlice = createSlice({
 
 export const { changeWithImg, changeWithColoreRGB } = sfondoSlice.actions;
 export const sfondoReducer = sfondoSlice.reducer;
-
-
-
-
-
-
-
-
-

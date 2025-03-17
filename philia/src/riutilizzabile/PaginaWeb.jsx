@@ -1,14 +1,12 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import Header from "../app/app_view/component/Header";
+import Header from "../view/component/Header";
 import { FormNuovoItem } from "./form_item/FormItem";
 import { FormRicercaItems } from "./form_item/FormItem";
-import { CardNuovoItem } from "./card_item/CardItem";
-import { CardRicercaItems } from "./card_item/CardItem";
-import { RowNuovoItem } from "./row_item/RowItem";
-import { RowRicercaItems } from "./row_item/RowItem";
-import { Items } from "../app/app_view/component/Items";
-import { OperazioniItems } from "../app/app_view/component/Operazioni";
+import { CardNuovoItem, CardRicercaItems } from "./card_item/CardItem";
+import { RowNuovoItem, RowRicercaItems } from "./row_item/RowItem";
+import { Items } from "../view/component/Items";
+import { OperazioniItems } from "../view/component/Operazioni";
 
 const PaginaWeb = ({ componenti }) => {
   const formSession = useSelector((state) => state.formSession.value);
@@ -70,7 +68,6 @@ const PaginaWeb = ({ componenti }) => {
     </>
   );
 }
-
 
 export default PaginaWeb;
 

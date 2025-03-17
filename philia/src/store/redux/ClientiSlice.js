@@ -105,12 +105,3 @@ export const {
   aggiornaClienti, aggiornaTipoSelezione, aggiornaCliente, getClientePrimaDellaModifica, getClienteDopoLaModifica, inserimentoCliente 
 } = clientiSlice.actions;
 export const clientiReducer = clientiSlice.reducer;
-
-
-
-
-
-
-
-
-

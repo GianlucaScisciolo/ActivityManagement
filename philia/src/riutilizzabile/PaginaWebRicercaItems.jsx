@@ -2,9 +2,9 @@ import { useSelector } from "react-redux";
 import { FormRicercaItems } from "./form_item/FormItem";
 import { CardRicercaItems } from "./card_item/CardItem";
 import { RowRicercaItems } from "./row_item/RowItem";
-import Header from "../app/app_view/component/Header";
-import { Items } from "../app/app_view/component/Items";
-import { OperazioniItems } from "../app/app_view/component/Operazioni";
+import Header from "../view/component/Header";
+import { Items } from "../view/component/Items";
+import { OperazioniItems } from "../view/component/Operazioni";
 
 const PaginaWebRicercaItems = ({ componenti }) => {
   const formSession = useSelector((state) => state.formSession.value);

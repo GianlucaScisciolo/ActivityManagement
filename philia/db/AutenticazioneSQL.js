@@ -1,3 +1,5 @@
+import { encryptPassword, generateRandomString, PEPPER_HEX } from "../src/vario/Sicurezza.js";
+
 export class AutenticazioneSQL {
   SQL_SELEZIONE_UTENTE = ` 
     SELECT 
@@ -32,17 +34,21 @@ export class AutenticazioneSQL {
   }
 
   params_modifica_utente(params_in) {
+    // console.log(params_in);
     const params_out = [
       `${params_in.nuovo_username}`, 
-      `${params_in.nuove_note}` 
+      `${params_in.note}` 
     ];
     if (params_in.nuova_password !== "") {
-      params_out.push(`${params_in.nuova_password}`); 
-      params_out.push(`${params_in.nuovo_salt_hex}`); 
+      const nuovo_salt_hex = generateRandomString(32);
+      const nuova_password = encryptPassword(params_in.nuova_password, nuovo_salt_hex, PEPPER_HEX);
+      params_out.push(`${nuova_password}`); 
+      params_out.push(`${nuovo_salt_hex}`);
     }
-    params_out.push(`${params_in.username_attuale}`); 
-    params_out.push(`${params_in.password_attuale}`); 
-    
+    params_out.push(`${params_in.username_attuale}`);
+    const password_attuale = encryptPassword(params_in.password_attuale, params_in.salt_hex_db, PEPPER_HEX)
+    params_out.push(`${password_attuale}`); 
+    // console.log(params_out);
     return params_out
   }
 }

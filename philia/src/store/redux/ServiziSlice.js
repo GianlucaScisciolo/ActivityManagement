@@ -105,12 +105,3 @@ export const {
   aggiornaServizi, aggiornaTipoSelezione, aggiornaServizio, getServizioPrimaDellaModifica, getServizioDopoLaModifica, inserimentoServizio 
 } = serviziSlice.actions;
 export const serviziReducer = serviziSlice.reducer;
-
-
-
-
-
-
-
-
-
