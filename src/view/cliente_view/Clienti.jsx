@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
-import { ClienteAction } from "../../action/ClienteAction.js";
 import { ClienteForms } from "../../forms/ClienteForms.js";
+import { ClienteAction } from "../../action/ClienteAction.js";
 import { handleInputChange } from "../../vario/Vario.js";
 import PaginaWebRicercaItems from '../../riutilizzabile/PaginaWebRicercaItems.jsx';
+
+import { useSelector } from 'react-redux';
+
 
 const Clienti = () => {
   const clienteAction = new ClienteAction();
