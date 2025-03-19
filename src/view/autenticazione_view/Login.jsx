@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from "../component/Header";
 import { handleInputChange } from "../../vario/Vario";
-import { AutenticazioneStore } from "../../store/AutenticazioneStore";
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { generateRandomString, encryptPassword, PEPPER_HEX } from '../../vario/Sicurezza';
 import { AutenticazioneAction } from "../../action/AutenticazioneAction";
 import { AutenticazioneForms } from "../../forms/AutenticazioneForms";
@@ -27,7 +26,7 @@ const Login = () => {
   const navigate = useNavigate();
   const autenticazioneSession = useSelector((state) => state.autenticazioneSession.value);
   const formSession = useSelector((state) => state.formSession.value);
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   
   const prova = () => {
     const salt_hex = generateRandomString(32);
@@ -47,11 +46,11 @@ const Login = () => {
       <Header />
 
       <div className="main-content" />
-
+      
       <LoginTag 
         campi={autenticazioneForms.getCampiLogin(datiLogin, (e) => handleInputChange(e, setDatiLogin), null, null)} 
         indici={autenticazioneForms.INDICI_LOGIN} 
-        eseguiLogin={(e) => autenticazioneAction.handleLogin(e, setUtente, datiLogin, setDatiLogin, aggiornamento1, setAggiornamento1, navigate, dispatch)} 
+        eseguiLogin={(e) => autenticazioneAction.login(e, datiLogin, setDatiLogin, navigate)} 
       />
       
       {/* <button onClick={prova}>Genera!!</button> */}

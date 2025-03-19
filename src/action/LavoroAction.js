@@ -1,13 +1,14 @@
 import { controlloLavoro } from "../vario/Controlli";
-import { inserimentoLavoro, aggiornaLavori, getLavoroPrimaDellaModifica, getLavoroDopoLaModifica } from "../store/redux/LavoriSlice";
+import { inserimentoLavoro, aggiornaTipoSelezione, aggiornaLavori, getLavoroPrimaDellaModifica, getLavoroDopoLaModifica } from "../store/redux/LavoriSlice";
 import { generaFileLavoriPDF, generaFileLavoriExcel } from "../vario/File";
+import { dispatcher } from "../dispatcher/Dispatcher";
 
 export class LavoroAction {
   constructor() {
 
   }
   
-  async handleInsert(e, servizi, clienti, nuovoLavoro, setNuovoLavoro, dispatch) {
+  async inserimentoLavoro(e, servizi, clienti, nuovoLavoro, setNuovoLavoro) {
     e.preventDefault();
     if (confirm("Sei sicuro di voler salvare il lavoro?")) {
       let descrizione = "";
@@ -55,7 +56,7 @@ export class LavoroAction {
       if(response.status === 200) {
         const result = await response.json();
         nuovoLavoro.id = result.id;
-        dispatch(inserimentoLavoro({
+        dispatcher(inserimentoLavoro({
           nuovoLavoro: nuovoLavoro 
         }));
         alert("L\'inserimento del lavoro è andato a buon fine!!");
@@ -72,7 +73,7 @@ export class LavoroAction {
     }
   }
 
-  async handleSearch(e, datiRicerca, dispatch) {
+  async ricercaLavori(e, datiRicerca) {
     e.preventDefault();
         
     try {
@@ -86,7 +87,7 @@ export class LavoroAction {
 
       if(response.status === 200) {
         const result = await response.json();
-        dispatch(aggiornaLavori({
+        dispatcher(aggiornaLavori({
           lavori: result.items,
         }));
       }
@@ -156,7 +157,56 @@ export class LavoroAction {
     }
   };
 
-  async handleEdit(e, lavoriSession, selectedIdsModifica, setSelectedIdsModifica, dispatch) {
+  selezioneOperazioneLavoro(
+    icon, item, selectedIdsModifica, setSelectedIdsModifica, selectedIdsEliminazione, setSelectedIdsEliminazione, 
+    setSelectedPencilCount, setSelectedTrashCount
+  ) {
+    if(icon === "trash") {
+      if(selectedIdsEliminazione.includes(item.id)) {
+        dispatcher(aggiornaTipoSelezione({
+          id_lavoro: item.id, 
+          nuova_selezione: 0
+        }));
+        setSelectedIdsEliminazione(prevIds => prevIds.filter(itemId => itemId !== item.id));
+        setSelectedTrashCount(prevCount => Math.max(prevCount - 1, 0));
+      }
+      else {
+        dispatcher(aggiornaTipoSelezione({
+          id_lavoro: item.id, 
+          nuova_selezione: 2
+        }));
+        setSelectedIdsEliminazione(prevIds => [...prevIds, item.id]);
+        setSelectedTrashCount(prevCount => prevCount + 1);
+        setSelectedIdsModifica(prevIdsModifica => prevIdsModifica.filter(itemId => itemId !== item.id));
+        setSelectedPencilCount(prevCount => Math.max(prevCount - 1, 0));
+      }
+    }
+    else if(icon === "pencil") {
+      if(selectedIdsModifica.includes(item.id)) {
+        dispatcher(getLavoroPrimaDellaModifica({
+          id_cliente: item.id,
+        }));
+        dispatcher(aggiornaTipoSelezione({
+          id_lavoro: item.id, 
+          nuova_selezione: 0
+        }));
+        setSelectedIdsModifica(prevIdsModifica => prevIdsModifica.filter(itemId => itemId !== item.id));
+        setSelectedPencilCount(prevCount => Math.max(prevCount - 1, 0));
+      }
+      else {
+        dispatcher(aggiornaTipoSelezione({
+          id_lavoro: item.id, 
+          nuova_selezione: 1
+        }));
+        setSelectedIdsModifica(prevIdsModifica => [...prevIdsModifica, item.id]);
+        setSelectedPencilCount(prevCount => prevCount + 1);
+        setSelectedIdsEliminazione(prevIds => prevIds.filter(itemId => itemId !== item.id));
+        setSelectedTrashCount(prevCount => Math.max(prevCount - 1, 0));
+      }
+    }
+  }
+
+  async modificaLavori(e, lavoriSession, selectedIdsModifica, setSelectedIdsModifica) {
     e.preventDefault();
 
     if (confirm("Sei sicuro di voler modificare i lavori?")) {
@@ -200,20 +250,20 @@ export class LavoroAction {
         }
         lavoriAggiornati.push(lavoroAggiornato);
       }
-      dispatch(aggiornaLavori({
+      dispatcher(aggiornaLavori({
         lavori: lavoriAggiornati, 
       }));
 
       for(let id of idLavoriNonModificati) {
         console.log("\\"+id+"/");
-        dispatch(getLavoroPrimaDellaModifica({
+        dispatcher(getLavoroPrimaDellaModifica({
           id_lavoro: id
         }));
       }
 
       for(let id of idLavoriModificati) {
         console.log("\\"+id+"/");
-        dispatch(getLavoroDopoLaModifica({
+        dispatcher(getLavoroDopoLaModifica({
           id_lavoro: id
         }));
       }
@@ -227,7 +277,7 @@ export class LavoroAction {
     }
   }
 
-  async handleDelete(e, selectedIdsEliminazione, setSelectedIdsEliminazione, lavoriSession, dispatch) {
+  async eliminaLavori(e, selectedIdsEliminazione, setSelectedIdsEliminazione, lavoriSession) {
     e.preventDefault();
     if (confirm("Sei sicuro di voler eliminare i lavori?")) {
       const dati = {
@@ -245,7 +295,7 @@ export class LavoroAction {
           body: JSON.stringify(dati),
         });
         if(response.status === 200) {          
-          dispatch(aggiornaLavori({
+          dispatcher(aggiornaLavori({
             lavori: itemsRestanti,
           }));
           setSelectedIdsEliminazione([]);

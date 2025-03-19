@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { handleInputChange, handleInputClick, handleInputBlur } from "../../vario/Vario";
 import { selectOperationBody } from "../component/Operazioni";
 import { LavoroAction } from "../../action/LavoroAction";
@@ -13,7 +13,6 @@ const NuovoLavoro = () => {
   const formSession = useSelector((state) => state.formSession.value);
   const itemSession = useSelector((state) => state.itemSession.value);
   const lavoriSession = useSelector((state) => state.lavoriSession.value);
-  const dispatch = useDispatch();
 
   const classeFormWrapperCheckbox = (formSession.view === "form") ? "checkbox-wrapper-form" : "checkbox-wrapper";
   const classeItemWrapperCheckbox = (itemSession.view === "form") ? "checkbox-wrapper-form" : "checkbox-wrapper";
@@ -42,24 +41,11 @@ const NuovoLavoro = () => {
     errore_note: "" 
   })
   
-  const handleGiornoClick = (setGiornoType) => {
-    return () => {
-      setGiornoType('date');
-    };
-  };
-
-  const aggiornaTipoSelezioneItem = (id, nuova_selezione) => {
-    dispatch(aggiornaTipoSelezione({
-      id_lavoro: id, 
-      nuova_selezione: nuova_selezione
-    }));
-  }
-  
   const selectOperation = (icon, item) => {
-    selectOperationBody(
+    lavoroAction.selezioneOperazioneLavoro(
       icon, item, selectedIdsModifica, setSelectedIdsModifica, selectedIdsEliminazione, setSelectedIdsEliminazione, 
-      setSelectedPencilCount, setSelectedTrashCount, aggiornaTipoSelezioneItem 
-    )
+      setSelectedPencilCount, setSelectedTrashCount
+    );
   }
 
   const OptionsClienti = ({ clienti }) => {
@@ -319,7 +305,7 @@ const NuovoLavoro = () => {
               (e) => handleInputBlur(e) 
             ),
             indiciNuovoItem: lavoroForms.INDICI_NUOVO_LAVORO, 
-            handleInsert: (e) => lavoroAction.handleInsert(e, servizi, clienti, nuovoLavoro, setNuovoLavoro, dispatch), 
+            handleInsert: (e) => lavoroAction.inserimentoLavoro(e, servizi, clienti, nuovoLavoro, setNuovoLavoro), 
             tipoItem: "lavoro", 
             items: lavoriSession.nuoviLavori, 
             setItems: null, 

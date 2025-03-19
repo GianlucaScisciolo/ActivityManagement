@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { selectOperationBody } from "../component/Operazioni";
 import { handleInputChange, handleInputClick, handleInputBlur } from "../../vario/Vario";
 import { SpesaAction } from "../../action/SpesaAction";
@@ -11,8 +11,6 @@ const NuovaSpesa = () => {
   const spesaAction = new SpesaAction();
   const spesaForms = new SpesaForms();
   const speseSession = useSelector((state) => state.speseSession.value);
-  const dispatch = useDispatch();
-  
   const [selectedTrashCount, setSelectedTrashCount] = useState(0);
   const [selectedPencilCount, setSelectedPencilCount] = useState(0);
   const [selectedIdsEliminazione, setSelectedIdsEliminazione] = useState([]);
@@ -33,18 +31,11 @@ const NuovaSpesa = () => {
     errore_note: "",
   })
 
-  const aggiornaTipoSelezioneItem = (id, nuova_selezione) => {
-    dispatch(aggiornaTipoSelezione({
-      id_spesa: id, 
-      nuova_selezione: nuova_selezione
-    }));
-  }
-
   const selectOperation = (icon, item) => {
-    selectOperationBody(
+    spesaAction.selezioneOperazioneSpesa(
       icon, item, selectedIdsModifica, setSelectedIdsModifica, selectedIdsEliminazione, setSelectedIdsEliminazione, 
-      setSelectedPencilCount, setSelectedTrashCount, aggiornaTipoSelezioneItem 
-    )
+      setSelectedPencilCount, setSelectedTrashCount
+    );
   }
 
   return (
@@ -59,7 +50,7 @@ const NuovaSpesa = () => {
               (e) => handleInputBlur(e) 
             ), 
             indiciNuovoItem: spesaForms.INDICI_NUOVA_SPESA, 
-            handleInsert: (e) => spesaAction.handleInsert(e, nuovaSpesa, setNuovaSpesa, dispatch), 
+            handleInsert: (e) => spesaAction.inserimentoSpesa(e, nuovaSpesa, setNuovaSpesa), 
             tipoItem: "spesa", 
             items: speseSession.nuoveSpese, 
             setItems: null, 

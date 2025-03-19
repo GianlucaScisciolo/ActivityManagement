@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { selectOperationBody } from "../component/Operazioni.jsx";
 import { ClienteAction } from "../../action/ClienteAction.js";
 import { ClienteForms } from '../../forms/ClienteForms.js';
@@ -11,7 +11,6 @@ const NuovoCliente = () => {
   const clienteAction = new ClienteAction();
   const clienteForms = new ClienteForms();
   const clientiSession = useSelector((state) => state.clientiSession.value);
-  const dispatch = useDispatch();
 
   const [selectedTrashCount, setSelectedTrashCount] = useState(0);
   const [selectedPencilCount, setSelectedPencilCount] = useState(0);
@@ -33,22 +32,13 @@ const NuovoCliente = () => {
     errore_note: ""
   })
 
-  const aggiornaTipoSelezioneItem = (id, nuova_selezione) => {
-    dispatch(aggiornaTipoSelezione({
-      id_cliente: id, 
-      nuova_selezione: nuova_selezione
-    }));
-  }
-
   const selectOperation = (icon, item) => {
-    selectOperationBody(
+    clienteAction.selezioneOperazioneCliente(
       icon, item, selectedIdsModifica, setSelectedIdsModifica, selectedIdsEliminazione, setSelectedIdsEliminazione, 
-      setSelectedPencilCount, setSelectedTrashCount, aggiornaTipoSelezioneItem 
-    )
+      setSelectedPencilCount, setSelectedTrashCount
+    );
   }
   
-
-
   return (
     <>
       <PaginaWebNewItem 
@@ -56,7 +46,7 @@ const NuovoCliente = () => {
           {
             campiNuovoItem: clienteForms.getCampiNuovoCliente(nuovoCliente, (e) => handleInputChange(e, setNuovoCliente), null, null), 
             indiciNuovoItem: clienteForms.INDICI_NUOVO_CLIENTE, 
-            handleInsert: (e) => clienteAction.handleInsert(e, nuovoCliente, setNuovoCliente, dispatch), 
+            handleInsert: (e) => clienteAction.inserimentoCliente(e, nuovoCliente, setNuovoCliente), 
             tipoItem: "cliente", 
             items: clientiSession.nuoviClienti, 
             setItems: null, 

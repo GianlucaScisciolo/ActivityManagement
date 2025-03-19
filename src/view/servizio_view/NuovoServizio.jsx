@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { selectOperationBody } from "../component/Operazioni.jsx";
 import { handleInputChange } from "../../vario/Vario.js";
 import { ServizioAction } from "../../action/ServizioAction.js";
@@ -11,8 +11,6 @@ const NuovoServizio = () => {
   const servizioAction = new ServizioAction();
   const servizioForms = new ServizioForms();
   const serviziSession = useSelector((state) => state.serviziSession.value);
-  const dispatch = useDispatch();
-
   const [selectedTrashCount, setSelectedTrashCount] = useState(0);
   const [selectedPencilCount, setSelectedPencilCount] = useState(0);
   const [selectedIdsEliminazione, setSelectedIdsEliminazione] = useState([]);
@@ -29,18 +27,11 @@ const NuovoServizio = () => {
     errore_note: ""
   })
 
-  const aggiornaTipoSelezioneItem = (id, nuova_selezione) => {
-    dispatch(aggiornaTipoSelezione({
-      id_servizio: id, 
-      nuova_selezione: nuova_selezione
-    }));
-  }
-
   const selectOperation = (icon, item) => {
-    selectOperationBody(
+    servizioAction.selezioneOperazioneServizio(
       icon, item, selectedIdsModifica, setSelectedIdsModifica, selectedIdsEliminazione, setSelectedIdsEliminazione, 
-      setSelectedPencilCount, setSelectedTrashCount, aggiornaTipoSelezioneItem 
-    )
+      setSelectedPencilCount, setSelectedTrashCount
+    );
   }
 
   return (
@@ -50,7 +41,7 @@ const NuovoServizio = () => {
           {
             campiNuovoItem: servizioForms.getCampiNuovoServizio(nuovoServizio, (e) => handleInputChange(e, setNuovoServizio), null, null), 
             indiciNuovoItem: servizioForms.INDICI_NUOVO_SERVIZIO, 
-            handleInsert: (e) => servizioAction.handleInsert(e, nuovoServizio, setNuovoServizio, dispatch), 
+            handleInsert: (e) => servizioAction.inserisciServizio(e, nuovoServizio, setNuovoServizio), 
             tipoItem: "servizio", 
             items: serviziSession.nuoviServizi, 
             setItems: null, 

@@ -1,12 +1,13 @@
 import { controlloServizio } from "../vario/Controlli";
-import { inserimentoServizio, aggiornaServizi, getServizioPrimaDellaModifica, getServizioDopoLaModifica } from "../store/redux/ServiziSlice";
+import { inserimentoServizio, aggiornaTipoSelezione, aggiornaServizi, getServizioPrimaDellaModifica, getServizioDopoLaModifica } from "../store/redux/ServiziSlice";
+import { dispatcher } from "../dispatcher/Dispatcher";
 
 export class ServizioAction {
   constructor() {
 
   }
 
-  async handleInsert(e, nuovoServizio, setNuovoServizio, dispatch) {
+  async inserisciServizio(e, nuovoServizio, setNuovoServizio) {
     e.preventDefault();
     if (confirm("Sei sicuro di voler salvare il servizio?")) {
       if (controlloServizio(nuovoServizio, setNuovoServizio) > 0) 
@@ -23,7 +24,7 @@ export class ServizioAction {
         if(response.status === 200) {
           const result = await response.json();
           nuovoServizio.id = result.id;
-          dispatch(inserimentoServizio({
+          dispatcher(inserimentoServizio({
             nuovoServizio: nuovoServizio
           }));
           alert("L\'inserimento del servizio è andato a buon fine!!");
@@ -45,7 +46,7 @@ export class ServizioAction {
     }
   };
 
-  async handleSearch(e, datiRicerca, dispatch) {
+  async ricercaServizi(e, datiRicerca) {
     e.preventDefault();
         
     try {
@@ -59,7 +60,7 @@ export class ServizioAction {
 
       if(response.status === 200) {
         const result = await response.json();
-        dispatch(aggiornaServizi({
+        dispatcher(aggiornaServizi({
           servizi: result.items, 
         }));
       }
@@ -73,50 +74,60 @@ export class ServizioAction {
     }
   }
 
-  async handleDelete(e, selectedIdsEliminazione, setSelectedIdsEliminazione, serviziSession, dispatch) {
-    e.preventDefault();
-    if (confirm("Sei sicuro di voler eliminare i servizi?")) {
-      const dati = {
-        tipo_item: "servizio", 
-        ids: selectedIdsEliminazione
+  selezioneOperazioneServizio(
+    icon, item, selectedIdsModifica, setSelectedIdsModifica, selectedIdsEliminazione, setSelectedIdsEliminazione, 
+    setSelectedPencilCount, setSelectedTrashCount
+  ) {
+    if(icon === "trash") {
+      if(selectedIdsEliminazione.includes(item.id)) {
+        dispatcher(aggiornaTipoSelezione({
+          id_servizio: item.id, 
+          nuova_selezione: 0
+        }));
+        setSelectedIdsEliminazione(prevIds => prevIds.filter(itemId => itemId !== item.id));
+        setSelectedTrashCount(prevCount => Math.max(prevCount - 1, 0));
       }
-      const itemsDaEliminare = serviziSession.servizi.filter(servizio => dati.ids.includes(servizio.id));
-      const itemsRestanti = serviziSession.servizi.filter(servizio => !dati.ids.includes(servizio.id));
-      try {
-        const response = await fetch('/ELIMINA_ITEMS', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(dati),
-        });
-        if(response.status === 200) {          
-          dispatch(aggiornaServizi({
-            servizi: itemsRestanti, 
-          }))
-          setSelectedIdsEliminazione([]);
-          alert("Eliminazione completata con successo.");
-        }
-        else {
-          alert("Errore durante l\'eliminazione dei servizi, riprova più tardi.");
-        }
-      }
-      catch (error) {
-        console.error('Errore:', error);
-        alert("Errore durante l\'eliminazione dei servizi, riprova più tardi.");
+      else {
+        dispatcher(aggiornaTipoSelezione({
+          id_servizio: item.id, 
+          nuova_selezione: 2
+        }));
+        setSelectedIdsEliminazione(prevIds => [...prevIds, item.id]);
+        setSelectedTrashCount(prevCount => prevCount + 1);
+        setSelectedIdsModifica(prevIdsModifica => prevIdsModifica.filter(itemId => itemId !== item.id));
+        setSelectedPencilCount(prevCount => Math.max(prevCount - 1, 0));
       }
     }
-    else {
-      alert("Eliminazione annullata.");
+    else if(icon === "pencil") {
+      if(selectedIdsModifica.includes(item.id)) {
+        dispatcher(getServizioPrimaDellaModifica({
+          id_servizio: item.id,
+        }));
+        dispatcher(aggiornaTipoSelezione({
+          id_servizio: item.id, 
+          nuova_selezione: 0
+        }));
+        setSelectedIdsModifica(prevIdsModifica => prevIdsModifica.filter(itemId => itemId !== item.id));
+        setSelectedPencilCount(prevCount => Math.max(prevCount - 1, 0));
+      }
+      else {
+        dispatcher(aggiornaTipoSelezione({
+          id_servizio: item.id, 
+          nuova_selezione: 1
+        }));
+        setSelectedIdsModifica(prevIdsModifica => [...prevIdsModifica, item.id]);
+        setSelectedPencilCount(prevCount => prevCount + 1);
+        setSelectedIdsEliminazione(prevIds => prevIds.filter(itemId => itemId !== item.id));
+        setSelectedTrashCount(prevCount => Math.max(prevCount - 1, 0));
+      }
     }
   }
 
-  async handleEdit(e, serviziSession, selectedIdsModifica, setSelectedIdsModifica, dispatch) {
+  async modificaServizi(e, serviziSession, selectedIdsModifica, setSelectedIdsModifica) {
     e.preventDefault();
     if (confirm("Sei sicuro di voler modificare i servizi?")) {
       let serviziDaNonModificare = serviziSession.servizi.filter(servizio => !selectedIdsModifica.includes(servizio.id));
       let serviziDaModificare = serviziSession.servizi.filter(servizio => selectedIdsModifica.includes(servizio.id)); 
-      // let copiaServiziDaModificare = [...serviziDaModificare];
       
       let idServiziNonModificati = [];
       let idServiziModificati = [];
@@ -156,20 +167,20 @@ export class ServizioAction {
         serviziAggiornati.push(servizioAggiornato);
       }
       // setServizi(serviziAggiornati);
-      dispatch(aggiornaServizi({
+      dispatcher(aggiornaServizi({
         servizi: serviziAggiornati, 
       }));
 
       for(let id of idServiziNonModificati) {
         console.log("\\"+id+"/");
-        dispatch(getServizioPrimaDellaModifica({
+        dispatcher(getServizioPrimaDellaModifica({
           id_servizio: id
         }));
       }
 
       for(let id of idServiziModificati) {
         console.log("\\"+id+"/");
-        dispatch(getServizioDopoLaModifica({
+        dispatcher(getServizioDopoLaModifica({
           id_servizio: id
         }));
       }
@@ -181,6 +192,44 @@ export class ServizioAction {
     }
     else {
       alert("Salvataggio annullato.");
+    }
+  }
+
+  async eliminaServizi(e, selectedIdsEliminazione, setSelectedIdsEliminazione, serviziSession) {
+    e.preventDefault();
+    if (confirm("Sei sicuro di voler eliminare i servizi?")) {
+      const dati = {
+        tipo_item: "servizio", 
+        ids: selectedIdsEliminazione
+      }
+      const itemsDaEliminare = serviziSession.servizi.filter(servizio => dati.ids.includes(servizio.id));
+      const itemsRestanti = serviziSession.servizi.filter(servizio => !dati.ids.includes(servizio.id));
+      try {
+        const response = await fetch('/ELIMINA_ITEMS', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(dati),
+        });
+        if(response.status === 200) {          
+          dispatcher(aggiornaServizi({
+            servizi: itemsRestanti, 
+          }))
+          setSelectedIdsEliminazione([]);
+          alert("Eliminazione completata con successo.");
+        }
+        else {
+          alert("Errore durante l\'eliminazione dei servizi, riprova più tardi.");
+        }
+      }
+      catch (error) {
+        console.error('Errore:', error);
+        alert("Errore durante l\'eliminazione dei servizi, riprova più tardi.");
+      }
+    }
+    else {
+      alert("Eliminazione annullata.");
     }
   }
 }

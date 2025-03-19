@@ -1,16 +1,14 @@
 import { controlloCliente } from "../vario/Controlli";
-import { inserimentoCliente, aggiornaClienti, getClientePrimaDellaModifica, getClienteDopoLaModifica } from "../store/redux/ClientiSlice";
-// import { ClienteDispatcher } from "../dispatcher/Clientedispatcher";
+import { inserimentoCliente, aggiornaTipoSelezione, aggiornaClienti, getClientePrimaDellaModifica, getClienteDopoLaModifica } from "../store/redux/ClientiSlice";
+import { dispatcher } from "../dispatcher/Dispatcher";
 
 export class ClienteAction {
 
-  // ClienteDispatcher;
+  constructor() {
 
-  // constructor() {
-  //   ClienteDispatcher = new ClienteDispatcher();
-  // }
+  }
   
-  async handleInsert(e, nuovoCliente, setNuovoCliente, dispatch) {
+  async inserimentoCliente(e, nuovoCliente, setNuovoCliente) {
     e.preventDefault();
     if (confirm("Sei sicuro di voler salvare il cliente?")) {
       if (controlloCliente(nuovoCliente, setNuovoCliente) > 0) 
@@ -28,7 +26,7 @@ export class ClienteAction {
         if(response.status === 200) {
           const result = await response.json();
           nuovoCliente.id = result.id;
-          dispatch(inserimentoCliente({
+          dispatcher(inserimentoCliente({
             nuovoCliente: nuovoCliente
           }));
           alert("L\'inserimento del cliente è andato a buon fine!!");
@@ -50,7 +48,7 @@ export class ClienteAction {
     }
   }
 
-  async handleSearch(e, datiRicerca, dispatch) {
+  async ricercaClienti(e, datiRicerca) {
     e.preventDefault();
         
     try {
@@ -64,7 +62,7 @@ export class ClienteAction {
 
       if(response.status === 200) {
         const result = await response.json();
-        dispatch(aggiornaClienti({
+        dispatcher(aggiornaClienti({
           clienti: result.items, 
         }));
       }
@@ -78,46 +76,56 @@ export class ClienteAction {
     }
   }
 
-  async handleDelete(e, selectedIdsEliminazione, setSelectedIdsEliminazione, clientiSession, dispatch) {
-    e.preventDefault();
-    if (confirm("Sei sicuro di voler eliminare i clienti?")) {
-      const dati = {
-        tipo_item: "cliente", 
-        ids: selectedIdsEliminazione
+  selezioneOperazioneCliente(
+    icon, item, selectedIdsModifica, setSelectedIdsModifica, selectedIdsEliminazione, setSelectedIdsEliminazione, 
+    setSelectedPencilCount, setSelectedTrashCount
+  ) {
+    if(icon === "trash") {
+      if(selectedIdsEliminazione.includes(item.id)) {
+        dispatcher(aggiornaTipoSelezione({
+          id_cliente: item.id, 
+          nuova_selezione: 0
+        }));
+        setSelectedIdsEliminazione(prevIds => prevIds.filter(itemId => itemId !== item.id));
+        setSelectedTrashCount(prevCount => Math.max(prevCount - 1, 0));
       }
-      const itemsDaEliminare = clientiSession.clienti.filter(cliente => dati.ids.includes(cliente.id));
-      const itemsRestanti = clientiSession.clienti.filter(cliente => !dati.ids.includes(cliente.id));
-      try {
-        const response = await fetch('/ELIMINA_ITEMS', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(dati),
-        });
-        if(response.status === 200) {          
-          // setClienti(itemsRestanti);
-          dispatch(aggiornaClienti({
-            clienti: itemsRestanti, 
-          }));
-          setSelectedIdsEliminazione([]);
-          alert("Eliminazione completata con successo.");
-        }
-        else {
-          alert("Errore durante l\'eliminazione dei clienti, riprova più tardi.");
-        }
-      }
-      catch (error) {
-        console.error('Errore:', error);
-        alert("Errore durante l\'eliminazione dei clienti, riprova più tardi.");
+      else {
+        dispatcher(aggiornaTipoSelezione({
+          id_cliente: item.id, 
+          nuova_selezione: 2
+        }));
+        setSelectedIdsEliminazione(prevIds => [...prevIds, item.id]);
+        setSelectedTrashCount(prevCount => prevCount + 1);
+        setSelectedIdsModifica(prevIdsModifica => prevIdsModifica.filter(itemId => itemId !== item.id));
+        setSelectedPencilCount(prevCount => Math.max(prevCount - 1, 0));
       }
     }
-    else {
-      alert("Eliminazione annullata.");
+    else if(icon === "pencil") {
+      if(selectedIdsModifica.includes(item.id)) {
+        dispatcher(getClientePrimaDellaModifica({
+          id_cliente: item.id,
+        }));
+        dispatcher(aggiornaTipoSelezione({
+          id_cliente: item.id, 
+          nuova_selezione: 0
+        }));
+        setSelectedIdsModifica(prevIdsModifica => prevIdsModifica.filter(itemId => itemId !== item.id));
+        setSelectedPencilCount(prevCount => Math.max(prevCount - 1, 0));
+      }
+      else {
+        dispatcher(aggiornaTipoSelezione({
+          id_cliente: item.id, 
+          nuova_selezione: 1
+        }));
+        setSelectedIdsModifica(prevIdsModifica => [...prevIdsModifica, item.id]);
+        setSelectedPencilCount(prevCount => prevCount + 1);
+        setSelectedIdsEliminazione(prevIds => prevIds.filter(itemId => itemId !== item.id));
+        setSelectedTrashCount(prevCount => Math.max(prevCount - 1, 0));
+      }
     }
   }
 
-  async handleEdit(e, clientiSession, selectedIdsModifica, setSelectedIdsModifica, dispatch) {
+  async modificaClienti(e, clientiSession, selectedIdsModifica, setSelectedIdsModifica) {
     e.preventDefault();
     if (confirm("Sei sicuro di voler modificare i clienti?")) {
       let clientiDaNonModificare = clientiSession.clienti.filter(cliente => !selectedIdsModifica.includes(cliente.id));
@@ -160,20 +168,20 @@ export class ClienteAction {
         }
         clientiAggiornati.push(clienteAggiornato);
       }
-      dispatch(aggiornaClienti({
+      dispatcher(aggiornaClienti({
         clienti: clientiAggiornati, 
       }));
 
       for(let id of idClientiNonModificati) {
         console.log("\\"+id+"/");
-        dispatch(getClientePrimaDellaModifica({
+        dispatcher(getClientePrimaDellaModifica({
           id_cliente: id
         }));
       }
 
       for(let id of idClientiModificati) {
         console.log("\\"+id+"/");
-        dispatch(getClienteDopoLaModifica({
+        dispatcher(getClienteDopoLaModifica({
           id_cliente: id
         }));
       }
@@ -185,6 +193,45 @@ export class ClienteAction {
     }
     else {
       alert("Salvataggio annullato.");
+    }
+  }
+
+  async eliminaClienti(e, selectedIdsEliminazione, setSelectedIdsEliminazione, clientiSession) {
+    e.preventDefault();
+    if (confirm("Sei sicuro di voler eliminare i clienti?")) {
+      const dati = {
+        tipo_item: "cliente", 
+        ids: selectedIdsEliminazione
+      }
+      const itemsDaEliminare = clientiSession.clienti.filter(cliente => dati.ids.includes(cliente.id));
+      const itemsRestanti = clientiSession.clienti.filter(cliente => !dati.ids.includes(cliente.id));
+      try {
+        const response = await fetch('/ELIMINA_ITEMS', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(dati),
+        });
+        if(response.status === 200) {          
+          // setClienti(itemsRestanti);
+          dispatcher(aggiornaClienti({
+            clienti: itemsRestanti, 
+          }));
+          setSelectedIdsEliminazione([]);
+          alert("Eliminazione completata con successo.");
+        }
+        else {
+          alert("Errore durante l\'eliminazione dei clienti, riprova più tardi.");
+        }
+      }
+      catch (error) {
+        console.error('Errore:', error);
+        alert("Errore durante l\'eliminazione dei clienti, riprova più tardi.");
+      }
+    }
+    else {
+      alert("Eliminazione annullata.");
     }
   }
 }

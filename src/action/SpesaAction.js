@@ -1,13 +1,14 @@
 import { controlloSpesa } from "../vario/Controlli";
-import { inserimentoSpesa, aggiornaSpese, getSpesaPrimaDellaModifica, getSpesaDopoLaModifica } from "../store/redux/SpeseSlice";
+import { inserimentoSpesa, aggiornaTipoSelezione, aggiornaSpese, getSpesaPrimaDellaModifica, getSpesaDopoLaModifica } from "../store/redux/SpeseSlice";
 import { generaFileSpesePDF, generaFileSpeseExcel } from "../vario/File";
+import { dispatcher } from "../dispatcher/Dispatcher";
 
 export class SpesaAction {
   constructor() {
 
   }
 
-  async handleInsert(e, nuovaSpesa, setNuovaSpesa, dispatch) {
+  async inserimentoSpesa(e, nuovaSpesa, setNuovaSpesa) {
     e.preventDefault();
     if (confirm("Sei sicuro di voler salvare la spesa?")) {
       if (controlloSpesa(nuovaSpesa, setNuovaSpesa) > 0) 
@@ -25,7 +26,7 @@ export class SpesaAction {
         if(response.status === 200) {
           const result = await response.json();
           nuovaSpesa.id = result.id;
-          dispatch(inserimentoSpesa({
+          dispatcher(inserimentoSpesa({
             nuovaSpesa: nuovaSpesa 
           }));
           alert("L\'inserimento della spesa è andato a buon fine!!");
@@ -47,7 +48,7 @@ export class SpesaAction {
     }
   };
 
-  async handleSearch(e, datiRicerca, dispatch) {
+  async ricercaSpese(e, datiRicerca) {
     e.preventDefault();
         
     try {
@@ -61,7 +62,7 @@ export class SpesaAction {
 
       if(response.status === 200) {
         const result = await response.json();
-        dispatch(aggiornaSpese({
+        dispatcher(aggiornaSpese({
           spese: result.items,
         }));
       }
@@ -131,7 +132,56 @@ export class SpesaAction {
     }
   };
 
-  async handleEdit(e, speseSession, selectedIdsModifica, setSelectedIdsModifica, dispatch) {
+  selezioneOperazioneSpesa(
+    icon, item, selectedIdsModifica, setSelectedIdsModifica, selectedIdsEliminazione, setSelectedIdsEliminazione, 
+    setSelectedPencilCount, setSelectedTrashCount
+  ) {
+    if(icon === "trash") {
+      if(selectedIdsEliminazione.includes(item.id)) {
+        dispatcher(aggiornaTipoSelezione({
+          id_spesa: item.id, 
+          nuova_selezione: 0
+        }));
+        setSelectedIdsEliminazione(prevIds => prevIds.filter(itemId => itemId !== item.id));
+        setSelectedTrashCount(prevCount => Math.max(prevCount - 1, 0));
+      }
+      else {
+        dispatcher(aggiornaTipoSelezione({
+          id_spesa: item.id, 
+          nuova_selezione: 2
+        }));
+        setSelectedIdsEliminazione(prevIds => [...prevIds, item.id]);
+        setSelectedTrashCount(prevCount => prevCount + 1);
+        setSelectedIdsModifica(prevIdsModifica => prevIdsModifica.filter(itemId => itemId !== item.id));
+        setSelectedPencilCount(prevCount => Math.max(prevCount - 1, 0));
+      }
+    }
+    else if(icon === "pencil") {
+      if(selectedIdsModifica.includes(item.id)) {
+        dispatcher(getSpesaPrimaDellaModifica({
+          id_spesa: item.id,
+        }));
+        dispatcher(aggiornaTipoSelezione({
+          id_spesa: item.id, 
+          nuova_selezione: 0
+        }));
+        setSelectedIdsModifica(prevIdsModifica => prevIdsModifica.filter(itemId => itemId !== item.id));
+        setSelectedPencilCount(prevCount => Math.max(prevCount - 1, 0));
+      }
+      else {
+        dispatcher(aggiornaTipoSelezione({
+          id_spesa: item.id, 
+          nuova_selezione: 1
+        }));
+        setSelectedIdsModifica(prevIdsModifica => [...prevIdsModifica, item.id]);
+        setSelectedPencilCount(prevCount => prevCount + 1);
+        setSelectedIdsEliminazione(prevIds => prevIds.filter(itemId => itemId !== item.id));
+        setSelectedTrashCount(prevCount => Math.max(prevCount - 1, 0));
+      }
+    }
+  }
+
+  async modificaSpese(e, speseSession, selectedIdsModifica, setSelectedIdsModifica) {
     e.preventDefault();
     if (confirm("Sei sicuro di voler modificare le spese?")) {
       let speseDaNonModificare = speseSession.spese.filter(spesa => !selectedIdsModifica.includes(spesa.id));
@@ -176,19 +226,19 @@ export class SpesaAction {
         speseAggiornate.push(spesaAggiornata);
       }
       // setSpese(speseAggiornate);
-      dispatch(aggiornaSpese({
+      dispatcher(aggiornaSpese({
         spese: speseAggiornate, 
       }));
 
       for(let id of idSpeseNonModificate) {
         console.log("\\"+id+"/");
-        dispatch(getSpesaPrimaDellaModifica({
+        dispatcher(getSpesaPrimaDellaModifica({
           id_spesa: id
         }));
       }
       for(let id of idSpeseModificate) {
         console.log("\\"+id+"/");
-        dispatch(getSpesaDopoLaModifica({
+        dispatcher(getSpesaDopoLaModifica({
           id_spesa: id
         }));
       }
@@ -203,7 +253,7 @@ export class SpesaAction {
     }
   };
 
-  async handleDelete(e, selectedIdsEliminazione, setSelectedIdsEliminazione, speseSession, dispatch) {
+  async eliminaSpese(e, selectedIdsEliminazione, setSelectedIdsEliminazione, speseSession) {
     e.preventDefault();
     if (confirm("Sei sicuro di voler eliminare le spese?")) {
       const dati = {
@@ -221,7 +271,7 @@ export class SpesaAction {
           body: JSON.stringify(dati),
         });
         if(response.status === 200) {          
-          dispatch(aggiornaSpese({
+          dispatcher(aggiornaSpese({
             spese: itemsRestanti, 
           }))
           setSelectedIdsEliminazione([]);

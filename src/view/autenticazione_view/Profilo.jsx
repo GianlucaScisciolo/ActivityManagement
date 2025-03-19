@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import Header from "../component/Header";
 import { handleInputChange } from "../../vario/Vario";
 import { AutenticazioneAction } from "../../action/AutenticazioneAction"
@@ -26,7 +26,6 @@ const Profilo = () => {
     errore_nuova_password: "", 
     errore_conferma_nuova_password: "",   
   });
-  const dispatch = useDispatch();
   
   const ProfiloTag = (formSession.view === "form") ? FormProfilo : (
     (formSession.view === "card") ? CardProfilo : RowProfilo
@@ -41,8 +40,7 @@ const Profilo = () => {
       <ProfiloTag  
         campi={autenticazioneForms.getCampiProfilo(datiProfilo, (e) => handleInputChange(e, setDatiProfilo), null, null)} 
         indici={autenticazioneForms.INDICI_PROFILO} 
-        // eseguiModificaProfilo={(e) => autenticazioneAction.handleEditProfile(e, autenticazioneSession, setUtente, autenticazioneStore, aggiornamento1, setAggiornamento1)} 
-        eseguiModificaProfilo={(e) => autenticazioneAction.handleEditProfile(e, autenticazioneSession, datiProfilo, setDatiProfilo, dispatch)} 
+        eseguiModificaProfilo={(e) => autenticazioneAction.modificaProfilo(e, autenticazioneSession, datiProfilo, setDatiProfilo)} 
       />
     </>
   )

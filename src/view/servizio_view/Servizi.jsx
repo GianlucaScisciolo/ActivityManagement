@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { selectOperationBody } from "../component/Operazioni";
 import { handleInputChange } from "../../vario/Vario";
 import { ServizioAction } from "../../action/ServizioAction";
@@ -11,8 +11,6 @@ const Servizi = () => {
   const servizioAction = new ServizioAction();
   const servizioForms = new ServizioForms();
   const serviziSession = useSelector((state) => state.serviziSession.value);
-  const dispatch = useDispatch();
-
   const [selectedTrashCount, setSelectedTrashCount] = useState(0);
   const [selectedPencilCount, setSelectedPencilCount] = useState(0);
   const [selectedIdsEliminazione, setSelectedIdsEliminazione] = useState([]);
@@ -26,18 +24,11 @@ const Servizi = () => {
     note: ""
   });
 
-  const aggiornaTipoSelezioneItem = (id, nuova_selezione) => {
-    dispatch(aggiornaTipoSelezione({
-      id_servizio: id, 
-      nuova_selezione: nuova_selezione
-    }));
-  }
-  
   const selectOperation = (icon, item) => {
-    selectOperationBody(
+    servizioAction.selezioneOperazioneServizio(
       icon, item, selectedIdsModifica, setSelectedIdsModifica, selectedIdsEliminazione, setSelectedIdsEliminazione, 
-      setSelectedPencilCount, setSelectedTrashCount, aggiornaTipoSelezioneItem, dispatch, "servizio" 
-    )
+      setSelectedPencilCount, setSelectedTrashCount
+    );
   }
   
   return (
@@ -47,7 +38,7 @@ const Servizi = () => {
           {
             campiRicercaItems: servizioForms.getCampiRicercaServizi(datiRicerca, (e) => handleInputChange(e, setDatiRicerca), null, null),
             indiciRicercaItems: servizioForms.INDICI_RICERCA_SERVIZI, 
-            handleSearch: (e) => servizioAction.handleSearch(e, datiRicerca, dispatch), 
+            handleSearch: (e) => servizioAction.ricercaServizi(e, datiRicerca), 
             tipoItem: "servizio", 
             items: serviziSession.servizi, 
             setItems: null, 
@@ -57,8 +48,8 @@ const Servizi = () => {
             servizi: null, 
             selectedIdsModifica: selectedIdsModifica, 
             selectedIdsEliminazione: selectedIdsEliminazione, 
-            handleEdit: (e) => servizioAction.handleEdit(e, serviziSession, selectedIdsModifica, setSelectedIdsModifica, dispatch), 
-            handleDelete: (e) => servizioAction.handleDelete(e, selectedIdsEliminazione, setSelectedIdsEliminazione, serviziSession, dispatch)
+            handleEdit: (e) => servizioAction.modificaServizi(e, serviziSession, selectedIdsModifica, setSelectedIdsModifica), 
+            handleDelete: (e) => servizioAction.eliminaServizi(e, selectedIdsEliminazione, setSelectedIdsEliminazione, serviziSession)
           }
         }
       />

@@ -1,18 +1,14 @@
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { selectOperationBody } from "../component/Operazioni.jsx";
+import { useSelector } from 'react-redux';
 import { ClienteAction } from "../../action/ClienteAction.js";
 import { ClienteForms } from "../../forms/ClienteForms.js";
 import { handleInputChange } from "../../vario/Vario.js";
 import PaginaWebRicercaItems from '../../riutilizzabile/PaginaWebRicercaItems.jsx';
-import { aggiornaTipoSelezione } from "../../store/redux/ClientiSlice.js";
 
 const Clienti = () => {
   const clienteAction = new ClienteAction();
   const clienteForms = new ClienteForms();
   const clientiSession = useSelector((state) => state.clientiSession.value);
-  const dispatch = useDispatch();
-  
   const [selectedTrashCount, setSelectedTrashCount] = useState(0);
   const [selectedPencilCount, setSelectedPencilCount] = useState(0);
   const [selectedIdsEliminazione, setSelectedIdsEliminazione] = useState([]);
@@ -27,18 +23,11 @@ const Clienti = () => {
     note: ""
   });
 
-  const aggiornaTipoSelezioneItem = (id, nuova_selezione) => {
-    dispatch(aggiornaTipoSelezione({
-      id_cliente: id, 
-      nuova_selezione: nuova_selezione
-    }));
-  }
-
   const selectOperation = (icon, item) => {
-    selectOperationBody(
+    clienteAction.selezioneOperazioneCliente(
       icon, item, selectedIdsModifica, setSelectedIdsModifica, selectedIdsEliminazione, setSelectedIdsEliminazione, 
-      setSelectedPencilCount, setSelectedTrashCount, aggiornaTipoSelezioneItem, dispatch, "cliente"
-    )
+      setSelectedPencilCount, setSelectedTrashCount
+    );
   }
   
   return (
@@ -48,7 +37,7 @@ const Clienti = () => {
           {
             campiRicercaItems: clienteForms.getCampiRicercaClienti(datiRicerca, (e) => handleInputChange(e, setDatiRicerca), null, null),
             indiciRicercaItems: clienteForms.INDICI_RICERCA_CLIENTI, 
-            handleSearch: (e) => clienteAction.handleSearch(e, datiRicerca, dispatch), 
+            handleSearch: (e) => clienteAction.ricercaClienti(e, datiRicerca), 
             tipoItem: "cliente", 
             items: clientiSession.clienti, 
             setItems: null, 
@@ -58,8 +47,8 @@ const Clienti = () => {
             servizi: null, 
             selectedIdsModifica: selectedIdsModifica, 
             selectedIdsEliminazione: selectedIdsEliminazione, 
-            handleEdit: (e) => clienteAction.handleEdit(e, clientiSession.nuoviClienti, selectedIdsModifica, setSelectedIdsModifica, dispatch), 
-            handleDelete: (e) => clienteAction.handleDelete(e, selectedIdsEliminazione, setSelectedIdsEliminazione, clientiSession, dispatch)
+            handleEdit: (e) => clienteAction.modificaClienti(e, clientiSession, selectedIdsModifica, setSelectedIdsModifica), 
+            handleDelete: (e) => clienteAction.eliminaClienti(e, selectedIdsEliminazione, setSelectedIdsEliminazione, clientiSession)
           }
         }
       />

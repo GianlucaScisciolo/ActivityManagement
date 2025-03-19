@@ -1,12 +1,13 @@
 import { controlloLogin, controlloProfilo } from "../vario/Controlli";
 import { eseguiLogin } from "../store/redux/AutenticazioneSessionSlice";
+import { dispatcher } from "../dispatcher/Dispatcher";
 
 export class AutenticazioneAction {
   constructor() {
 
   }
 
-  async handleLogin(e, setUtente, datiLogin, setDatiLogin, aggiornamento1, setAggiornamento1, navigate, dispatch) {
+  async login(e, datiLogin, setDatiLogin, navigate) {
     e.preventDefault();
     const response = await fetch('/LOGIN', {
       method: 'POST',
@@ -16,29 +17,31 @@ export class AutenticazioneAction {
       body: JSON.stringify(datiLogin),
     });
 
-    if(response.status === 200) {
+    if (response.status === 200) {
       const result = await response.json();
-      datiLogin["num_utenti"] = (result.utente) ? 1 : 0;
-      if(datiLogin["num_utenti"] === 1) {
+      datiLogin["num_utenti"] = result.utente ? 1 : 0;
+
+      if (datiLogin["num_utenti"] === 1) {
         datiLogin["password_db"] = result.utente.password;
         datiLogin["salt_hex_db"] = result.utente.salt_hex;
       }
-      if(controlloLogin(datiLogin, setDatiLogin) > 0) {
+
+      if (controlloLogin(datiLogin, setDatiLogin) > 0) {
         return;
       }
-      dispatch(eseguiLogin({
+
+      dispatcher(eseguiLogin({
         username: result.utente.username,
         ruolo: result.utente.ruolo,
-        note: result.utente.note, 
+        note: result.utente.note,
       }));
       navigate("/");
-    }
-    else {
+    } else {
       alert("Errore durante il login, riprova più tardi.");
     }
-  };
+  }
 
-  async handleEditProfile(e, autenticazioneSession, datiProfilo, setDatiProfilo, dispatch) {
+  async modificaProfilo(e, autenticazioneSession, datiProfilo, setDatiProfilo) {
     e.preventDefault();
     if (confirm("Sei sicuro di voler modificare il profilo?")) {
       const datiLogin = {
@@ -70,7 +73,7 @@ export class AutenticazioneAction {
           body: JSON.stringify(datiProfilo),
         });
         if (profileResponse.status === 200) {
-          dispatch(eseguiLogin({
+          dispatcher(eseguiLogin({
             username: datiProfilo.nuovo_username,
             ruolo: autenticazioneSession.ruolo,
             note: datiProfilo.note,

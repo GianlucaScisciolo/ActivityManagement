@@ -27,18 +27,11 @@ const Lavori = () => {
     note: ""
   });
 
-  const aggiornaTipoSelezioneItem = (id, nuova_selezione) => {
-    dispatch(aggiornaTipoSelezione({
-      id_lavoro: id, 
-      nuova_selezione: nuova_selezione
-    }));
-  }
-
   const selectOperation = (icon, item) => {
-    selectOperationBody(
+    lavoroAction.selezioneOperazioneLavoro(
       icon, item, selectedIdsModifica, setSelectedIdsModifica, selectedIdsEliminazione, setSelectedIdsEliminazione, 
-      setSelectedPencilCount, setSelectedTrashCount, aggiornaTipoSelezioneItem, dispatch, "lavoro" 
-    )
+      setSelectedPencilCount, setSelectedTrashCount
+    );
   }
 
   const getAllServizi = async () => {
@@ -81,7 +74,7 @@ const Lavori = () => {
               (e) => handleInputBlur(e)  
             ), 
             indiciRicercaItems: lavoroForms.INDICI_RICERCA_LAVORI, 
-            handleSearch: (e) => lavoroAction.handleSearch(e, datiRicerca, dispatch), 
+            handleSearch: (e) => lavoroAction.ricercaLavori(e, datiRicerca), 
             tipoItem: "lavoro", 
             items: lavoriSession.lavori, 
             setItems: null, 
@@ -91,8 +84,8 @@ const Lavori = () => {
             servizi: servizi, 
             selectedIdsModifica: selectedIdsModifica, 
             selectedIdsEliminazione: selectedIdsEliminazione, 
-            handleEdit: (e) => lavoroAction.handleEdit(e, lavoriSession, selectedIdsModifica, setSelectedIdsModifica, dispatch), 
-            handleDelete: (e) => lavoroAction.handleDelete(e, selectedIdsEliminazione, setSelectedIdsEliminazione, lavoriSession, dispatch)
+            handleEdit: (e) => lavoroAction.modificaLavori(e, lavoriSession, selectedIdsModifica, setSelectedIdsModifica), 
+            handleDelete: (e) => lavoroAction.eliminaLavori(e, selectedIdsEliminazione, setSelectedIdsEliminazione, lavoriSession)
           }
         }
       />
