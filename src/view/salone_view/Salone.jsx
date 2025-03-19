@@ -8,8 +8,6 @@ import { SpesaAction } from "../../action/SpesaAction";
 const Salone = () => {
   const lavoroAction = new LavoroAction();
   const spesaAction = new SpesaAction();
-  const formSession = useSelector((state) => state.formSession.value);
-  const itemSession = useSelector((state) => state.itemSession.value);
   const [entrateLavori, setEntrateLavori] = useState(-1);
   const [usciteSpese, setUsciteSpese] = useState(-1);
   const [aggiornamento, setAggiornamento] = useState(0);

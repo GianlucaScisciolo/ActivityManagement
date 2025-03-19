@@ -1,16 +1,14 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import { selectOperationBody } from "../component/Operazioni";
 import { handleInputChange, handleInputClick, handleInputBlur } from "../../vario/Vario";
 import { SpesaAction } from "../../action/SpesaAction";
 import { SpesaForms } from "../../forms/SpesaForms";
 import PaginaWebRicercaItems from "../../riutilizzabile/PaginaWebRicercaItems";
-import { aggiornaTipoSelezione } from "../../store/redux/SpeseSlice";
 
 const Spese = () => {
   const spesaAction = new SpesaAction();
   const spesaForms = new SpesaForms();
-  const speseSession = useSelector((state) => state.speseSession.value);
+  const spesaReducer = useSelector((state) => state.spesaReducer.value);
   const [selectedTrashCount, setSelectedTrashCount] = useState(0);
   const [selectedPencilCount, setSelectedPencilCount] = useState(0);
   const [selectedIdsEliminazione, setSelectedIdsEliminazione] = useState([]);
@@ -48,7 +46,7 @@ const Spese = () => {
             indiciRicercaItems: spesaForms.INDICI_RICERCA_SPESE, 
             handleSearch: (e) => spesaAction.ricercaSpese(e, datiRicerca), 
             tipoItem: "spesa", 
-            items: speseSession.spese, 
+            items: spesaReducer.spese, 
             setItems: null, 
             selectOperation: selectOperation, 
             campiItemEsistente: spesaForms.getCampiSpesaEsistente, 
@@ -56,8 +54,8 @@ const Spese = () => {
             servizi: null, 
             selectedIdsModifica: selectedIdsModifica, 
             selectedIdsEliminazione: selectedIdsEliminazione, 
-            handleEdit: (e) => spesaAction.modificaSpese(e, speseSession, selectedIdsModifica, setSelectedIdsModifica),  
-            handleDelete: (e) => spesaAction.eliminaSpese(e, selectedIdsEliminazione, setSelectedIdsEliminazione, speseSession)
+            handleEdit: (e) => spesaAction.modificaSpese(e, spesaReducer, selectedIdsModifica, setSelectedIdsModifica),  
+            handleDelete: (e) => spesaAction.eliminaSpese(e, selectedIdsEliminazione, setSelectedIdsEliminazione, spesaReducer)
           }
         }
       />

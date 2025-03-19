@@ -1,5 +1,5 @@
 import { controlloLogin, controlloProfilo } from "../vario/Controlli";
-import { eseguiLogin } from "../store/redux/AutenticazioneSessionSlice";
+import { eseguiLogin } from "../store/redux/AutenticazioneSlice";
 import { dispatcher } from "../dispatcher/Dispatcher";
 
 export class AutenticazioneAction {

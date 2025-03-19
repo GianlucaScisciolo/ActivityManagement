@@ -31,7 +31,7 @@ const initialState = loadFromLocalStorage() || {
 
 // Definizione del slice
 export const formSlice = createSlice({
-  name: "formSession",
+  name: "form",
   initialState: initialState,
   reducers: {
     changeViewForm: (state, action) => {

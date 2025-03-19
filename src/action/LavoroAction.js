@@ -1,5 +1,7 @@
 import { controlloLavoro } from "../vario/Controlli";
-import { inserimentoLavoro, aggiornaTipoSelezione, aggiornaLavori, getLavoroPrimaDellaModifica, getLavoroDopoLaModifica } from "../store/redux/LavoriSlice";
+import { 
+  inserimentoLavoro, aggiornaTipoSelezione, aggiornaLavori, getLavoroPrimaDellaModifica, getLavoroDopoLaModifica 
+} from "../store/redux/LavoroSlice";
 import { generaFileLavoriPDF, generaFileLavoriExcel } from "../vario/File";
 import { dispatcher } from "../dispatcher/Dispatcher";
 

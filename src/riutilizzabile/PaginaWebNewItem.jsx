@@ -8,10 +8,10 @@ import { Items } from "../view/component/Items"
 import { OperazioniItems } from "../view/component/Operazioni";
 
 const PaginaWebNewItem = ({ componenti }) => {
-  const formSession = useSelector((state) => state.formSession.value);
+  const formReducer = useSelector((state) => state.formReducer.value);
 
-  const NuovoItemTag = (formSession.view === "form") ? FormNuovoItem : (
-    (formSession.view === "card") ? CardNuovoItem : RowNuovoItem
+  const NuovoItemTag = (formReducer.view === "form") ? FormNuovoItem : (
+    (formReducer.view === "card") ? CardNuovoItem : RowNuovoItem
   )
 
   return (

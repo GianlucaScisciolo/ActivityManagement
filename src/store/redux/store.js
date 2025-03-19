@@ -1,27 +1,25 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { counterReducer } from "./CounterSlice";
-import { autenticazioneSessionReducer } from "./AutenticazioneSessionSlice";
 import { sfondoReducer } from "./SfondoSlice";
 import { itemReducer } from "./ItemSlice";
 import { formReducer } from "./FormSlice";
-import { widgetsReducer } from "./WidgetsSlice";
-import { clientiReducer } from "./ClientiSlice";
-import { lavoriReducer } from "./LavoriSlice";
-import { speseReducer } from "./SpeseSlice";
-import { serviziReducer } from "./ServiziSlice";
+import { widgetReducer } from "./WidgetSlice";
+import { autenticazioneReducer } from "./AutenticazioneSlice";
+import { clienteReducer } from "./ClienteSlice";
+import { servizioReducer } from "./ServizioSlice";
+import { lavoroReducer } from "./LavoroSlice";
+import { spesaReducer } from "./SpesaSlice";
 
 const store = configureStore({
   reducer: {
-    counter: counterReducer,
-    autenticazioneSession: autenticazioneSessionReducer,
-    sfondoSession: sfondoReducer,
-    itemSession: itemReducer,
-    formSession: formReducer,
-    widgetsSession: widgetsReducer, 
-    clientiSession: clientiReducer, 
-    lavoriSession: lavoriReducer,
-    speseSession: speseReducer, 
-    serviziSession: serviziReducer, 
+    sfondoReducer: sfondoReducer,
+    itemReducer: itemReducer,
+    formReducer: formReducer,
+    widgetReducer: widgetReducer, 
+    autenticazioneReducer: autenticazioneReducer,
+    clienteReducer: clienteReducer, 
+    servizioReducer: servizioReducer, 
+    lavoroReducer: lavoroReducer,
+    spesaReducer: spesaReducer, 
   },
 });
 

@@ -1,5 +1,7 @@
 import { controlloSpesa } from "../vario/Controlli";
-import { inserimentoSpesa, aggiornaTipoSelezione, aggiornaSpese, getSpesaPrimaDellaModifica, getSpesaDopoLaModifica } from "../store/redux/SpeseSlice";
+import { 
+  inserimentoSpesa, aggiornaTipoSelezione, aggiornaSpese, getSpesaPrimaDellaModifica, getSpesaDopoLaModifica 
+} from "../store/redux/SpesaSlice";
 import { generaFileSpesePDF, generaFileSpeseExcel } from "../vario/File";
 import { dispatcher } from "../dispatcher/Dispatcher";
 

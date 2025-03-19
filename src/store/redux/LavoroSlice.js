@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-export const lavoriSlice = createSlice ({
-  name: "lavoriSession",
+export const lavoroSlice = createSlice ({
+  name: "lavoro",
   initialState: {
     value: {
       lavori: -1, 
@@ -131,5 +131,5 @@ export const lavoriSlice = createSlice ({
 
 export const { 
   aggiornaLavori, aggiornaTipoSelezione, aggiornaLavoro, getLavoroPrimaDellaModifica, getLavoroDopoLaModifica, inserimentoLavoro 
-} = lavoriSlice.actions;
-export const lavoriReducer = lavoriSlice.reducer;
+} = lavoroSlice.actions;
+export const lavoroReducer = lavoroSlice.reducer;

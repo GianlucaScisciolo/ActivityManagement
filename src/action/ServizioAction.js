@@ -1,5 +1,7 @@
 import { controlloServizio } from "../vario/Controlli";
-import { inserimentoServizio, aggiornaTipoSelezione, aggiornaServizi, getServizioPrimaDellaModifica, getServizioDopoLaModifica } from "../store/redux/ServiziSlice";
+import { 
+  inserimentoServizio, aggiornaTipoSelezione, aggiornaServizi, getServizioPrimaDellaModifica, getServizioDopoLaModifica 
+} from "../store/redux/ServizioSlice";
 import { dispatcher } from "../dispatcher/Dispatcher";
 
 export class ServizioAction {

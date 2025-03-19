@@ -104,8 +104,8 @@ const getColor = (tipoVisualizzazione) => {
   )
 }
 
-export const widgetsSlice = createSlice({
-  name: "widgetsSession",
+export const widgetSlice = createSlice({
+  name: "widget",
   initialState: initialState,
   reducers: {
     modificaWidget: (state, action) => {
@@ -144,5 +144,5 @@ export const widgetsSlice = createSlice({
   },
 });
 
-export const { modificaWidget, widgetSelected, widgetView } = widgetsSlice.actions;
-export const widgetsReducer = widgetsSlice.reducer;
+export const { modificaWidget, widgetSelected, widgetView } = widgetSlice.actions;
+export const widgetReducer = widgetSlice.reducer;

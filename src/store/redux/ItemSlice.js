@@ -29,7 +29,7 @@ const initialState = loadFromLocalStorage() || {
 
 // Definizione del slice
 export const itemSlice = createSlice({
-  name: "itemSession",
+  name: "item",
   initialState: initialState,
   reducers: {
     changeViewItem: (state, action) => {

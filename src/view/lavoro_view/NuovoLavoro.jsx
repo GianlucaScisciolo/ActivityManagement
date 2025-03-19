@@ -1,21 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { handleInputChange, handleInputClick, handleInputBlur } from "../../vario/Vario";
-import { selectOperationBody } from "../component/Operazioni";
 import { LavoroAction } from "../../action/LavoroAction";
 import { LavoroForms } from "../../forms/LavoroForms";
 import PaginaWebNewItem from "../../riutilizzabile/PaginaWebNewItem";
-import { aggiornaTipoSelezione } from "../../store/redux/LavoriSlice";
 
 const NuovoLavoro = () => {
   const lavoroAction = new LavoroAction();
   const lavoroForms = new LavoroForms();
-  const formSession = useSelector((state) => state.formSession.value);
-  const itemSession = useSelector((state) => state.itemSession.value);
-  const lavoriSession = useSelector((state) => state.lavoriSession.value);
+  const formReducer = useSelector((state) => state.formReducer.value);
+  const itemReducer = useSelector((state) => state.itemReducer.value);
+  const lavoroReducer = useSelector((state) => state.lavoroReducer.value);
 
-  const classeFormWrapperCheckbox = (formSession.view === "form") ? "checkbox-wrapper-form" : "checkbox-wrapper";
-  const classeItemWrapperCheckbox = (itemSession.view === "form") ? "checkbox-wrapper-form" : "checkbox-wrapper";
+  const classeFormWrapperCheckbox = (formReducer.view === "form") ? "checkbox-wrapper-form" : "checkbox-wrapper";
+  const classeItemWrapperCheckbox = (itemReducer.view === "form") ? "checkbox-wrapper-form" : "checkbox-wrapper";
   
   const [clienti, setClienti] = useState(-1);
   const [servizi, setServizi] = useState(-1);
@@ -307,7 +305,7 @@ const NuovoLavoro = () => {
             indiciNuovoItem: lavoroForms.INDICI_NUOVO_LAVORO, 
             handleInsert: (e) => lavoroAction.inserimentoLavoro(e, servizi, clienti, nuovoLavoro, setNuovoLavoro), 
             tipoItem: "lavoro", 
-            items: lavoriSession.nuoviLavori, 
+            items: lavoroReducer.nuoviLavori, 
             setItems: null, 
             selectOperation: selectOperation, 
             campiItemEsistente: lavoroForms.getCampiLavoroEsistente, 

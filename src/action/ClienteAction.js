@@ -1,5 +1,7 @@
 import { controlloCliente } from "../vario/Controlli";
-import { inserimentoCliente, aggiornaTipoSelezione, aggiornaClienti, getClientePrimaDellaModifica, getClienteDopoLaModifica } from "../store/redux/ClientiSlice";
+import { 
+  inserimentoCliente, aggiornaTipoSelezione, aggiornaClienti, getClientePrimaDellaModifica, getClienteDopoLaModifica 
+} from "../store/redux/ClienteSlice";
 import { dispatcher } from "../dispatcher/Dispatcher";
 
 export class ClienteAction {

@@ -29,17 +29,17 @@ import FileLavori from "./view/lavoro_view/FileLavori.jsx";
 // console.log("Store:", store.getState());
 
 const Root = () => {
-  const autenticazioneSession = useSelector((state) => state.autenticazioneSession.value);
+  const autenticazioneReducer = useSelector((state) => state.autenticazioneReducer.value);
 
   return (
     <BrowserRouter>
     
       <Routes>
         <Route path="/" element={<App />} />
-        {(autenticazioneSession.isLogged === false) && (
+        {(autenticazioneReducer.isLogged === false) && (
           <Route path="/login" element={<Login />} />
         )}
-        {(autenticazioneSession.isLogged === true) && (
+        {(autenticazioneReducer.isLogged === true) && (
           <>
             <Route path="/profilo" element={<Profilo />} />
             <Route path="/clienti" element={<Clienti />} />

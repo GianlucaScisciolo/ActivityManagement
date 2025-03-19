@@ -30,8 +30,8 @@ const initialState = loadFromLocalStorage() || {
   },
 };
 
-export const autenticazioneSessionSlice = createSlice({
-  name: "autenticazioneSession",
+export const autenticazioneSlice = createSlice({
+  name: "autenticazione",
   initialState: initialState,
   reducers: {
     eseguiLogin: (state, action) => {
@@ -48,7 +48,7 @@ export const autenticazioneSessionSlice = createSlice({
       state.value.isLogged = false;
       saveToLocalStorage(state);
     },
-    eseguiModificaAutenticazioneSession : (state, action) => {
+    eseguiModificaAutenticazione : (state, action) => {
       state.value.username = action.payload.username;
       state.value.note = action.payload.note;
       state.value.isLogged = true;
@@ -57,5 +57,5 @@ export const autenticazioneSessionSlice = createSlice({
   },
 });
 
-export const { eseguiLogin, eseguiLogout, eseguiModificaAutenticazioneSession } = autenticazioneSessionSlice.actions;
-export const autenticazioneSessionReducer = autenticazioneSessionSlice.reducer;
+export const { eseguiLogin, eseguiLogout, eseguiModificaAutenticazione } = autenticazioneSlice.actions;
+export const autenticazioneReducer = autenticazioneSlice.reducer;

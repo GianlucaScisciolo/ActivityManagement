@@ -11,12 +11,12 @@ import { RowProfilo } from "../../riutilizzabile/row_item/RowItem";
 const Profilo = () => {
   const autenticazioneAction = new AutenticazioneAction();
   const autenticazioneForms = new AutenticazioneForms();
-  const formSession = useSelector((state) => state.formSession.value);
-  const autenticazioneSession = useSelector((state) => state.autenticazioneSession.value);
+  const formReducer = useSelector((state) => state.formReducer.value);
+  const autenticazioneReducer = useSelector((state) => state.autenticazioneReducer.value);
   const [datiProfilo, setDatiProfilo] = useState({
-    username_attuale: autenticazioneSession.username, 
-    nuovo_username: autenticazioneSession.username, 
-    note: (autenticazioneSession.note) ? autenticazioneSession.note : "", 
+    username_attuale: autenticazioneReducer.username, 
+    nuovo_username: autenticazioneReducer.username, 
+    note: (autenticazioneReducer.note) ? autenticazioneReducer.note : "", 
     password_attuale: "",
     nuova_password: "", 
     conferma_nuova_password: "", 
@@ -27,8 +27,8 @@ const Profilo = () => {
     errore_conferma_nuova_password: "",   
   });
   
-  const ProfiloTag = (formSession.view === "form") ? FormProfilo : (
-    (formSession.view === "card") ? CardProfilo : RowProfilo
+  const ProfiloTag = (formReducer.view === "form") ? FormProfilo : (
+    (formReducer.view === "card") ? CardProfilo : RowProfilo
   );
 
   return (
@@ -40,7 +40,7 @@ const Profilo = () => {
       <ProfiloTag  
         campi={autenticazioneForms.getCampiProfilo(datiProfilo, (e) => handleInputChange(e, setDatiProfilo), null, null)} 
         indici={autenticazioneForms.INDICI_PROFILO} 
-        eseguiModificaProfilo={(e) => autenticazioneAction.modificaProfilo(e, autenticazioneSession, datiProfilo, setDatiProfilo)} 
+        eseguiModificaProfilo={(e) => autenticazioneAction.modificaProfilo(e, autenticazioneReducer, datiProfilo, setDatiProfilo)} 
       />
     </>
   )

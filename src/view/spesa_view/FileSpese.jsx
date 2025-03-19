@@ -11,7 +11,7 @@ import { SpesaForms } from "../../forms/SpesaForms.js"
 const FileSpese = () => {
   const spesaAction = new SpesaAction();
   const spesaForms = new SpesaForms();
-  const formSession = useSelector((state) => state.formSession.value);
+  const formReducer = useSelector((state) => state.formReducer.value);
   const [spese, setSpese] = useState(-1);
   const [tipoFile, setTipoFile] = useState("");
   const [datiRicerca, setDatiRicerca] = useState({
@@ -25,8 +25,8 @@ const FileSpese = () => {
     note: "",
   });
   
-  const FormFileTag = (formSession.view === "form") ? FormFileItems : (
-    (formSession.view === "card") ? CardFileItems : RowFileItems
+  const FormFileTag = (formReducer.view === "form") ? FormFileItems : (
+    (formReducer.view === "card") ? CardFileItems : RowFileItems
   );
 
   return (

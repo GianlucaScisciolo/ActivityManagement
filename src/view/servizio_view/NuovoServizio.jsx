@@ -1,16 +1,14 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import { selectOperationBody } from "../component/Operazioni.jsx";
 import { handleInputChange } from "../../vario/Vario.js";
 import { ServizioAction } from "../../action/ServizioAction.js";
 import { ServizioForms } from "../../forms/ServizioForms.js"
 import PaginaWebNewItem from "../../riutilizzabile/PaginaWebNewItem.jsx";
-import { aggiornaTipoSelezione } from "../../store/redux/ServiziSlice.js";
 
 const NuovoServizio = () => {
   const servizioAction = new ServizioAction();
   const servizioForms = new ServizioForms();
-  const serviziSession = useSelector((state) => state.serviziSession.value);
+  const servizioReducer = useSelector((state) => state.servizioReducer.value);
   const [selectedTrashCount, setSelectedTrashCount] = useState(0);
   const [selectedPencilCount, setSelectedPencilCount] = useState(0);
   const [selectedIdsEliminazione, setSelectedIdsEliminazione] = useState([]);
@@ -43,7 +41,7 @@ const NuovoServizio = () => {
             indiciNuovoItem: servizioForms.INDICI_NUOVO_SERVIZIO, 
             handleInsert: (e) => servizioAction.inserisciServizio(e, nuovoServizio, setNuovoServizio), 
             tipoItem: "servizio", 
-            items: serviziSession.nuoviServizi, 
+            items: servizioReducer.nuoviServizi, 
             setItems: null, 
             selectOperation: selectOperation, 
             campiItemEsistente: servizioForms.getCampiServizioEsistente, 

@@ -24,8 +24,7 @@ const Login = () => {
   });
   const [aggiornamentoCompletato, setAggiornamentoCompletato] = useState(0);
   const navigate = useNavigate();
-  const autenticazioneSession = useSelector((state) => state.autenticazioneSession.value);
-  const formSession = useSelector((state) => state.formSession.value);
+  const formReducer = useSelector((state) => state.formReducer.value);
   // const dispatch = useDispatch();
   
   const prova = () => {
@@ -37,8 +36,8 @@ const Login = () => {
     console.log("passxord_cifrata: " + password_cifrata);
   }
 
-  const LoginTag = (formSession.view === "form") ? FormLogin : (
-    (formSession.view === "card") ? CardLogin : RowLogin
+  const LoginTag = (formReducer.view === "form") ? FormLogin : (
+    (formReducer.view === "card") ? CardLogin : RowLogin
   )
 
   return (

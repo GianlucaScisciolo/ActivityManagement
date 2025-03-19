@@ -27,7 +27,7 @@ const initialState = loadFromLocalStorage() || {
 };
 
 export const sfondoSlice = createSlice({
-  name: "sfondoSession",
+  name: "sfondo",
   initialState: initialState,
   reducers: {
     changeWithImg: (state, action) => {

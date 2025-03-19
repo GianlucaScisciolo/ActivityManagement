@@ -8,7 +8,7 @@ import PaginaWebRicercaItems from '../../riutilizzabile/PaginaWebRicercaItems.js
 const Clienti = () => {
   const clienteAction = new ClienteAction();
   const clienteForms = new ClienteForms();
-  const clientiSession = useSelector((state) => state.clientiSession.value);
+  const clienteReducer = useSelector((state) => state.clienteReducer.value);
   const [selectedTrashCount, setSelectedTrashCount] = useState(0);
   const [selectedPencilCount, setSelectedPencilCount] = useState(0);
   const [selectedIdsEliminazione, setSelectedIdsEliminazione] = useState([]);
@@ -39,7 +39,7 @@ const Clienti = () => {
             indiciRicercaItems: clienteForms.INDICI_RICERCA_CLIENTI, 
             handleSearch: (e) => clienteAction.ricercaClienti(e, datiRicerca), 
             tipoItem: "cliente", 
-            items: clientiSession.clienti, 
+            items: clienteReducer.clienti, 
             setItems: null, 
             selectOperation: selectOperation, 
             campiItemEsistente: clienteForms.getCampiClienteEsistente, 
@@ -47,12 +47,12 @@ const Clienti = () => {
             servizi: null, 
             selectedIdsModifica: selectedIdsModifica, 
             selectedIdsEliminazione: selectedIdsEliminazione, 
-            handleEdit: (e) => clienteAction.modificaClienti(e, clientiSession, selectedIdsModifica, setSelectedIdsModifica), 
-            handleDelete: (e) => clienteAction.eliminaClienti(e, selectedIdsEliminazione, setSelectedIdsEliminazione, clientiSession)
+            handleEdit: (e) => clienteAction.modificaClienti(e, clienteReducer, selectedIdsModifica, setSelectedIdsModifica), 
+            handleDelete: (e) => clienteAction.eliminaClienti(e, selectedIdsEliminazione, setSelectedIdsEliminazione, clienteReducer)
           }
         }
       />
-      <button>{clientiSession.clienti.length}</button>
+      <button>{clienteReducer.clienti.length}</button>
     </>
   );
 }

@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-export const serviziSlice = createSlice ({
-  name: "serviziSession",
+export const servizioSlice = createSlice ({
+  name: "servizio",
   initialState: {
     value: {
       servizi: -1, 
@@ -103,5 +103,5 @@ export const serviziSlice = createSlice ({
 
 export const { 
   aggiornaServizi, aggiornaTipoSelezione, aggiornaServizio, getServizioPrimaDellaModifica, getServizioDopoLaModifica, inserimentoServizio 
-} = serviziSlice.actions;
-export const serviziReducer = serviziSlice.reducer;
+} = servizioSlice.actions;
+export const servizioReducer = servizioSlice.reducer;

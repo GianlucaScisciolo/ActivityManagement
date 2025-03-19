@@ -1,16 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { handleInputChange, handleInputClick, handleInputBlur } from "../../vario/Vario";
-import { selectOperationBody } from "../component/Operazioni.jsx";
 import { LavoroAction } from "../../action/LavoroAction.js";
 import { LavoroForms } from "../../forms/LavoroForms.js";
 import PaginaWebRicercaItems from "../../riutilizzabile/PaginaWebRicercaItems";
-import { aggiornaTipoSelezione } from "../../store/redux/LavoriSlice.js";
 
 const Lavori = () => {
   const lavoroAction = new LavoroAction();
   const lavoroForms = new LavoroForms();
-  const lavoriSession = useSelector((state) => state.lavoriSession.value);
+  const lavoroReducer = useSelector((state) => state.lavoroReducer.value);
   const dispatch = useDispatch();
   const [servizi, setServizi] = useState(-1);
   const [selectedTrashCount, setSelectedTrashCount] = useState(0);
@@ -76,7 +74,7 @@ const Lavori = () => {
             indiciRicercaItems: lavoroForms.INDICI_RICERCA_LAVORI, 
             handleSearch: (e) => lavoroAction.ricercaLavori(e, datiRicerca), 
             tipoItem: "lavoro", 
-            items: lavoriSession.lavori, 
+            items: lavoroReducer.lavori, 
             setItems: null, 
             selectOperation: selectOperation, 
             campiItemEsistente: lavoroForms.getCampiLavoroEsistente, 
@@ -84,8 +82,8 @@ const Lavori = () => {
             servizi: servizi, 
             selectedIdsModifica: selectedIdsModifica, 
             selectedIdsEliminazione: selectedIdsEliminazione, 
-            handleEdit: (e) => lavoroAction.modificaLavori(e, lavoriSession, selectedIdsModifica, setSelectedIdsModifica), 
-            handleDelete: (e) => lavoroAction.eliminaLavori(e, selectedIdsEliminazione, setSelectedIdsEliminazione, lavoriSession)
+            handleEdit: (e) => lavoroAction.modificaLavori(e, lavoroReducer, selectedIdsModifica, setSelectedIdsModifica), 
+            handleDelete: (e) => lavoroAction.eliminaLavori(e, selectedIdsEliminazione, setSelectedIdsEliminazione, lavoroReducer)
           }
         }
       />

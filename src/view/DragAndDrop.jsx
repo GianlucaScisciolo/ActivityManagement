@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { CardWidget, CardEntrateLavori, CardUsciteSpese, CardRicavi } from "../riutilizzabile/card_item/CardItem";
-import { modificaWidget } from "../store/redux/WidgetsSlice";
+import { modificaWidget } from "../store/redux/WidgetSlice";
 
 const DragAndDrop = ({ initialPositions, onClickWidget }) => {
   const [dragging, setDragging] = useState(false);
@@ -11,7 +11,7 @@ const DragAndDrop = ({ initialPositions, onClickWidget }) => {
   const [draggedElement, setDraggedElement] = useState(null);
   const gridSize = 310; // Definisci la larghezza delle celle della griglia
   const gridHeight = 410; // Definisci l'altezza delle celle della griglia
-  const widgetsSession = useSelector((state) => state.widgetsSession.value);
+  const widgetReducer = useSelector((state) => state.widgetReducer.value);
 
   const handleDragStart = (e, id) => {
     setDragging(true);
@@ -163,9 +163,7 @@ const WidgetTag = ({ widget, handleDragStart, handleDragEnd }) => {
 }
 
 export const DragAndDropWidgetHomePage = ({plusCliccato}) => {
-  const formSession = useSelector((state) => state.formSession.value);
-  const itemSession = useSelector((state) => state.itemSession.value);
-  const widgetsSession = useSelector((state) => state.widgetsSession.value);
+  const widgetReducer = useSelector((state) => state.widgetReducer.value);
   const [dragging, setDragging] = useState(false);
   const [offset, setOffset] = useState({ x: 0, y: 0 });
   const [draggedElement, setDraggedElement] = useState(null);
@@ -209,41 +207,41 @@ export const DragAndDropWidgetHomePage = ({plusCliccato}) => {
       }}
     >
       {(plusCliccato === true) ? (<>
-        <WidgetTag widget={widgetsSession.nuovo_cliente} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
-        <WidgetTag widget={widgetsSession.clienti} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
+        <WidgetTag widget={widgetReducer.nuovo_cliente} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
+        <WidgetTag widget={widgetReducer.clienti} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
         
-        <WidgetTag widget={widgetsSession.nuovo_servizio} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
-        <WidgetTag widget={widgetsSession.servizi} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
+        <WidgetTag widget={widgetReducer.nuovo_servizio} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
+        <WidgetTag widget={widgetReducer.servizi} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
         
-        <WidgetTag widget={widgetsSession.nuovo_lavoro} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
-        <WidgetTag widget={widgetsSession.lavori} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
-        <WidgetTag widget={widgetsSession.file_lavori} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
-        <WidgetTag widget={widgetsSession.prenotazione} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
+        <WidgetTag widget={widgetReducer.nuovo_lavoro} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
+        <WidgetTag widget={widgetReducer.lavori} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
+        <WidgetTag widget={widgetReducer.file_lavori} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
+        <WidgetTag widget={widgetReducer.prenotazione} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
         
-        <WidgetTag widget={widgetsSession.nuova_spesa} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
-        <WidgetTag widget={widgetsSession.spese} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
-        <WidgetTag widget={widgetsSession.file_spese} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
+        <WidgetTag widget={widgetReducer.nuova_spesa} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
+        <WidgetTag widget={widgetReducer.spese} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
+        <WidgetTag widget={widgetReducer.file_spese} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
         
-        <WidgetTag widget={widgetsSession.salone} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
-        <WidgetTag widget={widgetsSession.profilo} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
+        <WidgetTag widget={widgetReducer.salone} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
+        <WidgetTag widget={widgetReducer.profilo} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
       </>) : (<>
-        {(widgetsSession.nuovo_cliente.tipoVisualizzazione !== 0) && (<WidgetTag widget={widgetsSession.nuovo_cliente} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
-        {(widgetsSession.clienti.tipoVisualizzazione !== 0) && (<WidgetTag widget={widgetsSession.clienti} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
+        {(widgetReducer.nuovo_cliente.tipoVisualizzazione !== 0) && (<WidgetTag widget={widgetReducer.nuovo_cliente} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
+        {(widgetReducer.clienti.tipoVisualizzazione !== 0) && (<WidgetTag widget={widgetReducer.clienti} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
         
-        {(widgetsSession.nuovo_servizio.tipoVisualizzazione !== 0) && (<WidgetTag widget={widgetsSession.nuovo_servizio} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
-        {(widgetsSession.servizi.tipoVisualizzazione !== 0) && (<WidgetTag widget={widgetsSession.servizi} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
+        {(widgetReducer.nuovo_servizio.tipoVisualizzazione !== 0) && (<WidgetTag widget={widgetReducer.nuovo_servizio} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
+        {(widgetReducer.servizi.tipoVisualizzazione !== 0) && (<WidgetTag widget={widgetReducer.servizi} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
         
-        {(widgetsSession.nuovo_lavoro.tipoVisualizzazione !== 0) && (<WidgetTag widget={widgetsSession.nuovo_lavoro} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
-        {(widgetsSession.lavori.tipoVisualizzazione !== 0) && (<WidgetTag widget={widgetsSession.lavori} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
-        {(widgetsSession.file_lavori.tipoVisualizzazione !== 0) && (<WidgetTag widget={widgetsSession.file_lavori} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
-        {(widgetsSession.prenotazione.tipoVisualizzazione !== 0) && (<WidgetTag widget={widgetsSession.prenotazione} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
+        {(widgetReducer.nuovo_lavoro.tipoVisualizzazione !== 0) && (<WidgetTag widget={widgetReducer.nuovo_lavoro} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
+        {(widgetReducer.lavori.tipoVisualizzazione !== 0) && (<WidgetTag widget={widgetReducer.lavori} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
+        {(widgetReducer.file_lavori.tipoVisualizzazione !== 0) && (<WidgetTag widget={widgetReducer.file_lavori} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
+        {(widgetReducer.prenotazione.tipoVisualizzazione !== 0) && (<WidgetTag widget={widgetReducer.prenotazione} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
         
-        {(widgetsSession.nuova_spesa.tipoVisualizzazione !== 0) && (<WidgetTag widget={widgetsSession.nuova_spesa} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
-        {(widgetsSession.spese.tipoVisualizzazione !== 0) && (<WidgetTag widget={widgetsSession.spese} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
-        {(widgetsSession.file_spese.tipoVisualizzazione !== 0) && (<WidgetTag widget={widgetsSession.file_spese} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
+        {(widgetReducer.nuova_spesa.tipoVisualizzazione !== 0) && (<WidgetTag widget={widgetReducer.nuova_spesa} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
+        {(widgetReducer.spese.tipoVisualizzazione !== 0) && (<WidgetTag widget={widgetReducer.spese} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
+        {(widgetReducer.file_spese.tipoVisualizzazione !== 0) && (<WidgetTag widget={widgetReducer.file_spese} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
                 
-        {(widgetsSession.salone.tipoVisualizzazione !== 0) && (<WidgetTag widget={widgetsSession.salone} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
-        {(widgetsSession.profilo.tipoVisualizzazione !== 0) && (<WidgetTag widget={widgetsSession.profilo} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
+        {(widgetReducer.salone.tipoVisualizzazione !== 0) && (<WidgetTag widget={widgetReducer.salone} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
+        {(widgetReducer.profilo.tipoVisualizzazione !== 0) && (<WidgetTag widget={widgetReducer.profilo} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
       </>)}
     </div>
   );

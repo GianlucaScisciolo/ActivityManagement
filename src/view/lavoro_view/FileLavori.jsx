@@ -11,7 +11,7 @@ import { LavoroForms } from "../../forms/LavoroForms";
 const FileLavori = () => {
   const lavoroAction = new LavoroAction();
   const lavoroForms = new LavoroForms();
-  const formSession = useSelector((state) => state.formSession.value);
+  const formReducer = useSelector((state) => state.formReducer.value);
   const [lavori, setLavori] = useState(-1);
   const [tipoFile, setTipoFile] = useState("");
   const [datiRicerca, setDatiRicerca] = useState({
@@ -24,8 +24,8 @@ const FileLavori = () => {
     note: ""
   });
 
-  const FormFileTag = (formSession.view === "form") ? FormFileItems : (
-    (formSession.view === "card") ? CardFileItems : RowFileItems
+  const FormFileTag = (formReducer.view === "form") ? FormFileItems : (
+    (formReducer.view === "card") ? CardFileItems : RowFileItems
   );
   
   return (

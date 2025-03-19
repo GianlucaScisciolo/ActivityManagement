@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { Plus, Save } from 'lucide-react';
 import Header from "./component/Header";
 import { DragAndDropWidgetHomePage } from "./DragAndDrop";
-import { widgetSelected, widgetView } from "../store/redux/WidgetsSlice";
+import { widgetSelected, widgetView } from "../store/redux/WidgetSlice";
 
 const styledIconNotSelected = `
   color: #FFFFFF;
@@ -31,9 +31,7 @@ const StyledSaveNotSelected = styled(Save)`
 
 
 const Home = () => {
-  const formSession = useSelector((state) => state.formSession.value);
-  const itemSession = useSelector((state) => state.itemSession.value);
-  const autenticazioneSession = useSelector((state) => state.autenticazioneSession.value);
+  const autenticazioneReducer = useSelector((state) => state.autenticazioneReducer.value);
   
   const dispatch = useDispatch();
   const scegliWidgets = (e) => {
@@ -56,7 +54,7 @@ const Home = () => {
       <Header />
 
       <br /> <br /> <br />
-      {(autenticazioneSession.isLogged === true) && (
+      {(autenticazioneReducer.isLogged === true) && (
         <>
           <div style={{ display: "flex", justifyContent: "flex-end", marginRight: "200px" }}>
             <button

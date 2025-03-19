@@ -1,10 +1,10 @@
 import React from "react";
 import Row from "react-bootstrap/esm/Row";
 import Col from "react-bootstrap/esm/Col";
-import { getClientePrimaDellaModifica } from "../../store/redux/ClientiSlice";
-import { getServizioPrimaDellaModifica } from "../../store/redux/ServiziSlice";
-import { getSpesaPrimaDellaModifica } from "../../store/redux/SpeseSlice";
-import { getLavoroPrimaDellaModifica } from "../../store/redux/LavoriSlice";
+import { getClientePrimaDellaModifica } from "../../store/redux/ClienteSlice";
+import { getServizioPrimaDellaModifica } from "../../store/redux/ServizioSlice";
+import { getSpesaPrimaDellaModifica } from "../../store/redux/SpesaSlice";
+import { getLavoroPrimaDellaModifica } from "../../store/redux/LavoroSlice";
 
 
 export const OperazioniItems = ({selectedIdsModifica, selectedIdsEliminazione, handleEdit, handleDelete}) => {

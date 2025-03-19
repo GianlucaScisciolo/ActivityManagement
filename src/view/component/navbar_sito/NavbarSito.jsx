@@ -5,7 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { House } from 'lucide-react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { eseguiLogout } from "../../../store/redux/AutenticazioneSessionSlice";
+import { eseguiLogout } from "../../../store/redux/AutenticazioneSlice";
 import { changeWithImg, changeWithColoreRGB } from "../../../store/redux/SfondoSlice";
 import { changeViewItem } from "../../../store/redux/ItemSlice";
 import { changeViewForm } from "../../../store/redux/FormSlice";
@@ -17,10 +17,8 @@ import {
 } from './StyledNavbarSito';
 
 const NavbarSito = () => {
-  const autenticazioneSession = useSelector((state) => state.autenticazioneSession.value);
-  const sfondoSession = useSelector((state) => state.sfondoSession.value);
-  const itemSession = useSelector((state) => state.itemSession.value);
-  const formSession = useSelector((state) => state.formSession.value);
+  const autenticazioneReducer = useSelector((state) => state.autenticazioneReducer.value);
+  const sfondoReducer = useSelector((state) => state.sfondoReducer.value);
   
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -49,8 +47,8 @@ const NavbarSito = () => {
   }
 
   const applicaStileBody = () => {
-    if (sfondoSession.pathImg !== null) {
-      document.body.style.backgroundImage = `url(${sfondoSession.pathImg})`;
+    if (sfondoReducer.pathImg !== null) {
+      document.body.style.backgroundImage = `url(${sfondoReducer.pathImg})`;
       document.body.style.backgroundRepeat = 'no-repeat';
       document.body.style.backgroundSize = 'cover';
       document.body.style.backgroundAttachment = 'fixed';
@@ -62,9 +60,9 @@ const NavbarSito = () => {
       document.documentElement.style.maxWidth = '100%';
       document.documentElement.style.maxHeight = '100%';
     } 
-    else if (sfondoSession.coloreRGB !== null) {
+    else if (sfondoReducer.coloreRGB !== null) {
       document.body.style.backgroundImage = 'none';
-      document.body.style.backgroundColor = sfondoSession.coloreRGB;
+      document.body.style.backgroundColor = sfondoReducer.coloreRGB;
   
       // Nascondi solo lo scorrimento orizzontale
       document.documentElement.style.overflowX = 'hidden';
@@ -80,7 +78,7 @@ const NavbarSito = () => {
 
   useEffect(() => {
     applicaStileBody();
-  }, [sfondoSession]);
+  }, [sfondoReducer]);
 
   // Thunk function
   const cambioSfondo = (nomeSfondo) => (dispatch) => {
@@ -129,7 +127,7 @@ const NavbarSito = () => {
     <>
       <Navbar expand="lg">
         <StyledNavLeft>
-          {(autenticazioneSession.isLogged === true) && (
+          {(autenticazioneReducer.isLogged === true) && (
             <>
               <StyledNavDropdown title="Clienti" show={dropdownClienti}
                 onMouseEnter={() => handleMouseEnter(setDropdownClienti)}
@@ -259,10 +257,10 @@ const NavbarSito = () => {
             </StyledNavDropdown>
 
                
-            {(autenticazioneSession.isLogged === false) && (
+            {(autenticazioneReducer.isLogged === false) && (
               <StyledNavLink as={NavLink} to="/login">Login</StyledNavLink>
             )}
-            {(autenticazioneSession.isLogged === true) && (
+            {(autenticazioneReducer.isLogged === true) && (
               <>
                 <StyledNavLink as={NavLink} to="/salone">Salone</StyledNavLink>
                 <StyledNavLink as={NavLink} to="/profilo">Profilo</StyledNavLink>

@@ -2,13 +2,12 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { CardItemEsistente } from "../../riutilizzabile/card_item/CardItem";
 import { RowItemEsistente } from "../../riutilizzabile/row_item/RowItem";
-import { aggiornaLavoro } from "../../store/redux/LavoriSlice";
+import { aggiornaLavoro } from "../../store/redux/LavoroSlice";
 
 export const Items = ({ tipoItem, items, setItems, selectOperation, emptyIsConsidered, campi, indici, servizi }) => {
-  const formSession = useSelector((state) => state.formSession.value);
-  const itemSession = useSelector((state) => state.itemSession.value);
+  const itemReducer = useSelector((state) => state.itemReducer.value);
   const dispatch = useDispatch();
-  const ItemEsistenteTag = itemSession.view === "card" ? CardItemEsistente : RowItemEsistente;
+  const ItemEsistenteTag = itemReducer.view === "card" ? CardItemEsistente : RowItemEsistente;
 
   const OptionsServizi = (servizi, descrizione, sottoStringa, item) => {
     const optionStr = (servizio) => `${servizio.nome} - ${servizio.prezzo} €`;
@@ -83,7 +82,7 @@ export const Items = ({ tipoItem, items, setItems, selectOperation, emptyIsConsi
     };
 
     const classeWrapperCheckbox =
-      itemSession.view === "form" ? "checkbox-wrapper-form" : "checkbox-wrapper";
+      itemReducer.view === "form" ? "checkbox-wrapper-form" : "checkbox-wrapper";
 
     return (
       <>
@@ -164,7 +163,7 @@ export const Items = ({ tipoItem, items, setItems, selectOperation, emptyIsConsi
       )}
       {items.length > 0 && (
         <>
-          {itemSession.view === "card" ? (
+          {itemReducer.view === "card" ? (
             <div className="contenitore-3">
               <ItemElements />
             </div>
