@@ -30,7 +30,7 @@ const initialState = loadFromLocalStorage() || {
   },
 };
 
-export const autenticazioneSlice = createSlice({
+const autenticazioneSlice = createSlice({
   name: "autenticazione",
   initialState: initialState,
   reducers: {
@@ -57,5 +57,9 @@ export const autenticazioneSlice = createSlice({
   },
 });
 
-export const { eseguiLogin, eseguiLogout, eseguiModificaAutenticazione } = autenticazioneSlice.actions;
-export const autenticazioneReducer = autenticazioneSlice.reducer;
+export const autenticazioneSliceActions = {
+  eseguiLogin: autenticazioneSlice.actions.eseguiLogin,
+  eseguiLogout: autenticazioneSlice.actions.eseguiLogout,
+  eseguiModificaAutenticazione: autenticazioneSlice.actions.eseguiModificaAutenticazione,
+};
+export const autenticazioneSliceReducer = autenticazioneSlice.reducer;

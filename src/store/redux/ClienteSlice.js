@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-export const clienteSlice = createSlice ({
+const clienteSlice = createSlice ({
   name: "cliente",
   initialState: {
     value: {
@@ -101,7 +101,22 @@ export const clienteSlice = createSlice ({
   },
 })
 
-export const { 
-  aggiornaClienti, aggiornaTipoSelezione, aggiornaCliente, getClientePrimaDellaModifica, getClienteDopoLaModifica, inserimentoCliente 
-} = clienteSlice.actions;
-export const clienteReducer = clienteSlice.reducer;
+export const clienteSliceActions = {
+  aggiornaClienti: clienteSlice.actions.aggiornaClienti,
+  aggiornaTipoSelezione: clienteSlice.actions.aggiornaTipoSelezione,
+  aggiornaCliente: clienteSlice.actions.aggiornaCliente,
+  getClientePrimaDellaModifica: clienteSlice.actions.getClientePrimaDellaModifica,
+  getClienteDopoLaModifica: clienteSlice.actions.getClienteDopoLaModifica,
+  inserimentoCliente: clienteSlice.actions.inserimentoCliente,
+};
+
+export const clienteSliceReducer = clienteSlice.reducer;
+
+
+
+
+
+
+
+
+

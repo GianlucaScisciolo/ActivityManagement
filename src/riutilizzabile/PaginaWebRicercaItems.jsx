@@ -8,10 +8,10 @@ import { Items } from "../view/component/Items";
 import { OperazioniItems } from "../view/component/Operazioni";
 
 const PaginaWebRicercaItems = ({ componenti }) => {
-  const formReducer = useSelector((state) => state.formReducer.value);
+  const formSliceReducer = useSelector((state) => state.formSliceReducer.value);
 
-  const RicercaItemsTag = (formReducer.view === "form") ? FormRicercaItems : (
-    (formReducer.view === "card") ? CardRicercaItems : RowRicercaItems
+  const RicercaItemsTag = (formSliceReducer.view === "form") ? FormRicercaItems : (
+    (formSliceReducer.view === "card") ? CardRicercaItems : RowRicercaItems
   )
 
   return (

@@ -1,11 +1,9 @@
 import { controlloSpesa } from "../vario/Controlli";
-import { 
-  inserimentoSpesa, aggiornaTipoSelezione, aggiornaSpese, getSpesaPrimaDellaModifica, getSpesaDopoLaModifica 
-} from "../store/redux/SpesaSlice";
+import { spesaSliceActions } from "../store/redux/SpesaSlice";
 import { generaFileSpesePDF, generaFileSpeseExcel } from "../vario/File";
 import { dispatcher } from "../dispatcher/Dispatcher";
 
-export class SpesaAction {
+export class SpesaActions {
   constructor() {
 
   }
@@ -28,7 +26,7 @@ export class SpesaAction {
         if(response.status === 200) {
           const result = await response.json();
           nuovaSpesa.id = result.id;
-          dispatcher(inserimentoSpesa({
+          dispatcher(spesaSliceActions.inserimentoSpesa({
             nuovaSpesa: nuovaSpesa 
           }));
           alert("L\'inserimento della spesa è andato a buon fine!!");
@@ -64,7 +62,7 @@ export class SpesaAction {
 
       if(response.status === 200) {
         const result = await response.json();
-        dispatcher(aggiornaSpese({
+        dispatcher(spesaSliceActions.aggiornaSpese({
           spese: result.items,
         }));
       }
@@ -140,7 +138,7 @@ export class SpesaAction {
   ) {
     if(icon === "trash") {
       if(selectedIdsEliminazione.includes(item.id)) {
-        dispatcher(aggiornaTipoSelezione({
+        dispatcher(spesaSliceActions.aggiornaTipoSelezione({
           id_spesa: item.id, 
           nuova_selezione: 0
         }));
@@ -148,7 +146,7 @@ export class SpesaAction {
         setSelectedTrashCount(prevCount => Math.max(prevCount - 1, 0));
       }
       else {
-        dispatcher(aggiornaTipoSelezione({
+        dispatcher(spesaSliceActions.aggiornaTipoSelezione({
           id_spesa: item.id, 
           nuova_selezione: 2
         }));
@@ -160,10 +158,10 @@ export class SpesaAction {
     }
     else if(icon === "pencil") {
       if(selectedIdsModifica.includes(item.id)) {
-        dispatcher(getSpesaPrimaDellaModifica({
+        dispatcher(spesaSliceActions.getSpesaPrimaDellaModifica({
           id_spesa: item.id,
         }));
-        dispatcher(aggiornaTipoSelezione({
+        dispatcher(spesaSliceActions.aggiornaTipoSelezione({
           id_spesa: item.id, 
           nuova_selezione: 0
         }));
@@ -171,7 +169,7 @@ export class SpesaAction {
         setSelectedPencilCount(prevCount => Math.max(prevCount - 1, 0));
       }
       else {
-        dispatcher(aggiornaTipoSelezione({
+        dispatcher(spesaSliceActions.aggiornaTipoSelezione({
           id_spesa: item.id, 
           nuova_selezione: 1
         }));
@@ -228,19 +226,19 @@ export class SpesaAction {
         speseAggiornate.push(spesaAggiornata);
       }
       // setSpese(speseAggiornate);
-      dispatcher(aggiornaSpese({
+      dispatcher(spesaSliceActions.aggiornaSpese({
         spese: speseAggiornate, 
       }));
 
       for(let id of idSpeseNonModificate) {
         console.log("\\"+id+"/");
-        dispatcher(getSpesaPrimaDellaModifica({
+        dispatcher(spesaSliceActions.getSpesaPrimaDellaModifica({
           id_spesa: id
         }));
       }
       for(let id of idSpeseModificate) {
         console.log("\\"+id+"/");
-        dispatcher(getSpesaDopoLaModifica({
+        dispatcher(spesaSliceActions.getSpesaDopoLaModifica({
           id_spesa: id
         }));
       }
@@ -273,7 +271,7 @@ export class SpesaAction {
           body: JSON.stringify(dati),
         });
         if(response.status === 200) {          
-          dispatcher(aggiornaSpese({
+          dispatcher(spesaSliceActions.aggiornaSpese({
             spese: itemsRestanti, 
           }))
           setSelectedIdsEliminazione([]);

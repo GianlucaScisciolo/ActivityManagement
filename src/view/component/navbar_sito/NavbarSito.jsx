@@ -5,10 +5,10 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { House } from 'lucide-react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { eseguiLogout } from "../../../store/redux/AutenticazioneSlice";
-import { changeWithImg, changeWithColoreRGB } from "../../../store/redux/SfondoSlice";
-import { changeViewItem } from "../../../store/redux/ItemSlice";
-import { changeViewForm } from "../../../store/redux/FormSlice";
+import { autenticazioneSliceActions } from "../../../store/redux/AutenticazioneSlice";
+import { sfondoSliceActions } from "../../../store/redux/SfondoSlice";
+import { itemSliceActions } from "../../../store/redux/ItemSlice";
+import { formSliceActions } from "../../../store/redux/FormSlice";
 import immagineSfondo1 from "../../img/immagine_sfondo1.jpg";
 import immagineSfondo2 from '../../img/immagine_sfondo2.png';
 import { 
@@ -17,8 +17,8 @@ import {
 } from './StyledNavbarSito';
 
 const NavbarSito = () => {
-  const autenticazioneReducer = useSelector((state) => state.autenticazioneReducer.value);
-  const sfondoReducer = useSelector((state) => state.sfondoReducer.value);
+  const autenticazioneSliceReducer = useSelector((state) => state.autenticazioneSliceReducer.value);
+  const sfondoSliceReducer = useSelector((state) => state.sfondoSliceReducer.value);
   
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -43,12 +43,12 @@ const NavbarSito = () => {
   };  
 
   const logout = () => {
-    dispatch(eseguiLogout());
+    dispatch(autenticazioneSliceActions.eseguiLogout());
   }
 
   const applicaStileBody = () => {
-    if (sfondoReducer.pathImg !== null) {
-      document.body.style.backgroundImage = `url(${sfondoReducer.pathImg})`;
+    if (sfondoSliceReducer.pathImg !== null) {
+      document.body.style.backgroundImage = `url(${sfondoSliceReducer.pathImg})`;
       document.body.style.backgroundRepeat = 'no-repeat';
       document.body.style.backgroundSize = 'cover';
       document.body.style.backgroundAttachment = 'fixed';
@@ -60,9 +60,9 @@ const NavbarSito = () => {
       document.documentElement.style.maxWidth = '100%';
       document.documentElement.style.maxHeight = '100%';
     } 
-    else if (sfondoReducer.coloreRGB !== null) {
+    else if (sfondoSliceReducer.coloreRGB !== null) {
       document.body.style.backgroundImage = 'none';
-      document.body.style.backgroundColor = sfondoReducer.coloreRGB;
+      document.body.style.backgroundColor = sfondoSliceReducer.coloreRGB;
   
       // Nascondi solo lo scorrimento orizzontale
       document.documentElement.style.overflowX = 'hidden';
@@ -78,28 +78,28 @@ const NavbarSito = () => {
 
   useEffect(() => {
     applicaStileBody();
-  }, [sfondoReducer]);
+  }, [sfondoSliceReducer]);
 
   // Thunk function
   const cambioSfondo = (nomeSfondo) => (dispatch) => {
     switch(nomeSfondo) {
       case "immagine_1":
-        dispatch(changeWithImg({
+        dispatch(sfondoActions.changeWithImg({
           pathImg: immagineSfondo1
         }));
         break;
       case "immagine_2":
-        dispatch(changeWithImg({
+        dispatch(sfondoActions.changeWithImg({
           pathImg: immagineSfondo2
         }));
         break;
       case "sfondo_scuro":
-        dispatch(changeWithColoreRGB({
+        dispatch(sfondoActions.changeWithColoreRGB({
           coloreRGB: "#111111"
         }));
         break;
       case "sfondo_chiaro":
-        dispatch(changeWithColoreRGB({
+        dispatch(sfondoActions.changeWithColoreRGB({
           coloreRGB: "#8F8F8F"
         }));
         break;
@@ -112,12 +112,12 @@ const NavbarSito = () => {
     // Thunk function
     const cambioView = (tipoElemento, tipoView) => (dispatch) => {
       if(tipoElemento === "item") {
-        dispatch(changeViewItem({
+        dispatch(itemActions.changeViewItem({
           view: tipoView
         }));
       }
       else if(tipoElemento === "form") {
-        dispatch(changeViewForm({
+        dispatch(formActions.changeViewForm({
           view: tipoView
         }));
       }
@@ -127,7 +127,7 @@ const NavbarSito = () => {
     <>
       <Navbar expand="lg">
         <StyledNavLeft>
-          {(autenticazioneReducer.isLogged === true) && (
+          {(autenticazioneSliceReducer.isLogged === true) && (
             <>
               <StyledNavDropdown title="Clienti" show={dropdownClienti}
                 onMouseEnter={() => handleMouseEnter(setDropdownClienti)}
@@ -257,10 +257,10 @@ const NavbarSito = () => {
             </StyledNavDropdown>
 
                
-            {(autenticazioneReducer.isLogged === false) && (
+            {(autenticazioneSliceReducer.isLogged === false) && (
               <StyledNavLink as={NavLink} to="/login">Login</StyledNavLink>
             )}
-            {(autenticazioneReducer.isLogged === true) && (
+            {(autenticazioneSliceReducer.isLogged === true) && (
               <>
                 <StyledNavLink as={NavLink} to="/salone">Salone</StyledNavLink>
                 <StyledNavLink as={NavLink} to="/profilo">Profilo</StyledNavLink>

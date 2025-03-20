@@ -1,4 +1,4 @@
-export class SaloneAction {
+export class SaloneActions {
   constructor() {
 
   }

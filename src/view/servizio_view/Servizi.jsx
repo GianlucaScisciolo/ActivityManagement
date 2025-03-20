@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { handleInputChange } from "../../vario/Vario";
-import { ServizioAction } from "../../action/ServizioAction";
+import { ServizioActions } from "../../actions/ServizioActions";
 import { ServizioForms } from "../../forms/ServizioForms";
 import PaginaWebRicercaItems from "../../riutilizzabile/PaginaWebRicercaItems";
 
 const Servizi = () => {
-  const servizioAction = new ServizioAction();
+  const servizioActions = new ServizioActions();
   const servizioForms = new ServizioForms();
-  const serviziSession = useSelector((state) => state.servizioReducer.value);
+  const servizioSliceReducer = useSelector((state) => state.servizioSliceReducer.value);
   const [selectedTrashCount, setSelectedTrashCount] = useState(0);
   const [selectedPencilCount, setSelectedPencilCount] = useState(0);
   const [selectedIdsEliminazione, setSelectedIdsEliminazione] = useState([]);
@@ -23,7 +23,7 @@ const Servizi = () => {
   });
 
   const selectOperation = (icon, item) => {
-    servizioAction.selezioneOperazioneServizio(
+    servizioActions.selezioneOperazioneServizio(
       icon, item, selectedIdsModifica, setSelectedIdsModifica, selectedIdsEliminazione, setSelectedIdsEliminazione, 
       setSelectedPencilCount, setSelectedTrashCount
     );
@@ -36,9 +36,9 @@ const Servizi = () => {
           {
             campiRicercaItems: servizioForms.getCampiRicercaServizi(datiRicerca, (e) => handleInputChange(e, setDatiRicerca), null, null),
             indiciRicercaItems: servizioForms.INDICI_RICERCA_SERVIZI, 
-            handleSearch: (e) => servizioAction.ricercaServizi(e, datiRicerca), 
+            handleSearch: (e) => servizioActions.ricercaServizi(e, datiRicerca), 
             tipoItem: "servizio", 
-            items: servizioReducer.servizi, 
+            items: servizioSliceReducer.servizi, 
             setItems: null, 
             selectOperation: selectOperation, 
             campiItemEsistente: servizioForms.getCampiServizioEsistente, 
@@ -46,8 +46,8 @@ const Servizi = () => {
             servizi: null, 
             selectedIdsModifica: selectedIdsModifica, 
             selectedIdsEliminazione: selectedIdsEliminazione, 
-            handleEdit: (e) => servizioAction.modificaServizi(e, servizioReducer, selectedIdsModifica, setSelectedIdsModifica), 
-            handleDelete: (e) => servizioAction.eliminaServizi(e, selectedIdsEliminazione, setSelectedIdsEliminazione, serviziSession)
+            handleEdit: (e) => servizioActions.modificaServizi(e, servizioSliceReducer, selectedIdsModifica, setSelectedIdsModifica), 
+            handleDelete: (e) => servizioActions.eliminaServizi(e, selectedIdsEliminazione, setSelectedIdsEliminazione, serviziSession)
           }
         }
       />

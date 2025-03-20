@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-export const spesaSlice = createSlice ({
+const spesaSlice = createSlice ({
   name: "spesa",
   initialState: {
     value: {
@@ -105,7 +105,13 @@ export const spesaSlice = createSlice ({
   },
 })
 
-export const { 
-  aggiornaSpese, aggiornaTipoSelezione, aggiornaSpesa, getSpesaPrimaDellaModifica, getSpesaDopoLaModifica, inserimentoSpesa 
-} = spesaSlice.actions;
-export const spesaReducer = spesaSlice.reducer;
+export const spesaSliceActions = {
+  aggiornaSpese: spesaSlice.actions.aggiornaSpese,
+  aggiornaTipoSelezione: spesaSlice.actions.aggiornaTipoSelezione,
+  aggiornaSpesa: spesaSlice.actions.aggiornaSpesa,
+  getSpesaPrimaDellaModifica: spesaSlice.actions.getSpesaPrimaDellaModifica,
+  getSpesaDopoLaModifica: spesaSlice.actions.getSpesaDopoLaModifica,
+  inserimentoSpesa: spesaSlice.actions.inserimentoSpesa,
+};
+
+export const spesaSliceReducer = spesaSlice.reducer;

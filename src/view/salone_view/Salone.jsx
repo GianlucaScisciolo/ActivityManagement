@@ -2,24 +2,24 @@ import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import Header from "../component/Header";
 import DragAndDrop from "../DragAndDrop";
-import { LavoroAction } from "../../action/LavoroAction";
-import { SpesaAction } from "../../action/SpesaAction";
+import { LavoroActions } from "../../actions/LavoroActions";
+import { SpesaActions } from "../../actions/SpesaActions";
 
 const Salone = () => {
-  const lavoroAction = new LavoroAction();
-  const spesaAction = new SpesaAction();
+  const lavoroActions = new LavoroActions();
+  const spesaActions = new SpesaActions();
   const [entrateLavori, setEntrateLavori] = useState(-1);
   const [usciteSpese, setUsciteSpese] = useState(-1);
   const [aggiornamento, setAggiornamento] = useState(0);
   const [initialPositions, setInitialPositions] = useState([]);
   
   useEffect(() => {
-    lavoroAction.handleSearchEntrateLavori(setEntrateLavori);
+    lavoroActions.handleSearchEntrateLavori(setEntrateLavori);
   }, []);
 
   useEffect(() => {
     if(entrateLavori.length > 0)
-      spesaAction.handleSearchUsciteSpese(setUsciteSpese);
+      spesaActions.handleSearchUsciteSpese(setUsciteSpese);
   }, [entrateLavori]);
 
   useEffect(() => {

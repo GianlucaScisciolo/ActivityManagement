@@ -1,11 +1,9 @@
 import { controlloLavoro } from "../vario/Controlli";
-import { 
-  inserimentoLavoro, aggiornaTipoSelezione, aggiornaLavori, getLavoroPrimaDellaModifica, getLavoroDopoLaModifica 
-} from "../store/redux/LavoroSlice";
+import { lavoroSliceActions } from "../store/redux/LavoroSlice";
 import { generaFileLavoriPDF, generaFileLavoriExcel } from "../vario/File";
 import { dispatcher } from "../dispatcher/Dispatcher";
 
-export class LavoroAction {
+export class LavoroActions {
   constructor() {
 
   }
@@ -58,7 +56,7 @@ export class LavoroAction {
       if(response.status === 200) {
         const result = await response.json();
         nuovoLavoro.id = result.id;
-        dispatcher(inserimentoLavoro({
+        dispatcher(lavoroSliceActions.inserimentoLavoro({
           nuovoLavoro: nuovoLavoro 
         }));
         alert("L\'inserimento del lavoro è andato a buon fine!!");
@@ -89,7 +87,7 @@ export class LavoroAction {
 
       if(response.status === 200) {
         const result = await response.json();
-        dispatcher(aggiornaLavori({
+        dispatcher(lavoroSliceActions.aggiornaLavori({
           lavori: result.items,
         }));
       }
@@ -165,7 +163,7 @@ export class LavoroAction {
   ) {
     if(icon === "trash") {
       if(selectedIdsEliminazione.includes(item.id)) {
-        dispatcher(aggiornaTipoSelezione({
+        dispatcher(lavoroSliceActions.aggiornaTipoSelezione({
           id_lavoro: item.id, 
           nuova_selezione: 0
         }));
@@ -173,7 +171,7 @@ export class LavoroAction {
         setSelectedTrashCount(prevCount => Math.max(prevCount - 1, 0));
       }
       else {
-        dispatcher(aggiornaTipoSelezione({
+        dispatcher(lavoroSliceActions.aggiornaTipoSelezione({
           id_lavoro: item.id, 
           nuova_selezione: 2
         }));
@@ -185,10 +183,10 @@ export class LavoroAction {
     }
     else if(icon === "pencil") {
       if(selectedIdsModifica.includes(item.id)) {
-        dispatcher(getLavoroPrimaDellaModifica({
+        dispatcher(lavoroSliceActions.getLavoroPrimaDellaModifica({
           id_cliente: item.id,
         }));
-        dispatcher(aggiornaTipoSelezione({
+        dispatcher(lavoroSliceActions.aggiornaTipoSelezione({
           id_lavoro: item.id, 
           nuova_selezione: 0
         }));
@@ -196,7 +194,7 @@ export class LavoroAction {
         setSelectedPencilCount(prevCount => Math.max(prevCount - 1, 0));
       }
       else {
-        dispatcher(aggiornaTipoSelezione({
+        dispatcher(lavoroSliceActions.aggiornaTipoSelezione({
           id_lavoro: item.id, 
           nuova_selezione: 1
         }));
@@ -252,20 +250,20 @@ export class LavoroAction {
         }
         lavoriAggiornati.push(lavoroAggiornato);
       }
-      dispatcher(aggiornaLavori({
+      dispatcher(lavoroSliceActions.aggiornaLavori({
         lavori: lavoriAggiornati, 
       }));
 
       for(let id of idLavoriNonModificati) {
         console.log("\\"+id+"/");
-        dispatcher(getLavoroPrimaDellaModifica({
+        dispatcher(lavoroSliceActions.getLavoroPrimaDellaModifica({
           id_lavoro: id
         }));
       }
 
       for(let id of idLavoriModificati) {
         console.log("\\"+id+"/");
-        dispatcher(getLavoroDopoLaModifica({
+        dispatcher(lavoroSliceActions.getLavoroDopoLaModifica({
           id_lavoro: id
         }));
       }
@@ -297,7 +295,7 @@ export class LavoroAction {
           body: JSON.stringify(dati),
         });
         if(response.status === 200) {          
-          dispatcher(aggiornaLavori({
+          dispatcher(lavoroSliceActions.aggiornaLavori({
             lavori: itemsRestanti,
           }));
           setSelectedIdsEliminazione([]);

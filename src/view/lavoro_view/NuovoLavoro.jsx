@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { handleInputChange, handleInputClick, handleInputBlur } from "../../vario/Vario";
-import { LavoroAction } from "../../action/LavoroAction";
+import { LavoroActions } from "../../actions/LavoroActions";
 import { LavoroForms } from "../../forms/LavoroForms";
 import PaginaWebNewItem from "../../riutilizzabile/PaginaWebNewItem";
 
 const NuovoLavoro = () => {
-  const lavoroAction = new LavoroAction();
+  const lavoroActions = new LavoroActions();
   const lavoroForms = new LavoroForms();
-  const formReducer = useSelector((state) => state.formReducer.value);
-  const itemReducer = useSelector((state) => state.itemReducer.value);
-  const lavoroReducer = useSelector((state) => state.lavoroReducer.value);
+  const formSliceReducer = useSelector((state) => state.formSliceReducer.value);
+  const itemSliceReducer = useSelector((state) => state.itemSliceReducer.value);
+  const lavoroSliceReducer = useSelector((state) => state.lavoroSliceReducer.value);
 
-  const classeFormWrapperCheckbox = (formReducer.view === "form") ? "checkbox-wrapper-form" : "checkbox-wrapper";
-  const classeItemWrapperCheckbox = (itemReducer.view === "form") ? "checkbox-wrapper-form" : "checkbox-wrapper";
+  const classeFormWrapperCheckbox = (formSliceReducer.view === "form") ? "checkbox-wrapper-form" : "checkbox-wrapper";
+  const classeItemWrapperCheckbox = (itemSliceReducer.view === "form") ? "checkbox-wrapper-form" : "checkbox-wrapper";
   
   const [clienti, setClienti] = useState(-1);
   const [servizi, setServizi] = useState(-1);
@@ -40,7 +40,7 @@ const NuovoLavoro = () => {
   })
   
   const selectOperation = (icon, item) => {
-    lavoroAction.selezioneOperazioneLavoro(
+    lavoroActions.selezioneOperazioneLavoro(
       icon, item, selectedIdsModifica, setSelectedIdsModifica, selectedIdsEliminazione, setSelectedIdsEliminazione, 
       setSelectedPencilCount, setSelectedTrashCount
     );
@@ -303,9 +303,9 @@ const NuovoLavoro = () => {
               (e) => handleInputBlur(e) 
             ),
             indiciNuovoItem: lavoroForms.INDICI_NUOVO_LAVORO, 
-            handleInsert: (e) => lavoroAction.inserimentoLavoro(e, servizi, clienti, nuovoLavoro, setNuovoLavoro), 
+            handleInsert: (e) => lavoroActions.inserimentoLavoro(e, servizi, clienti, nuovoLavoro, setNuovoLavoro), 
             tipoItem: "lavoro", 
-            items: lavoroReducer.nuoviLavori, 
+            items: lavoroSliceReducer.nuoviLavori, 
             setItems: null, 
             selectOperation: selectOperation, 
             campiItemEsistente: lavoroForms.getCampiLavoroEsistente, 

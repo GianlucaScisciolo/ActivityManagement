@@ -26,7 +26,7 @@ const initialState = loadFromLocalStorage() || {
   },
 };
 
-export const sfondoSlice = createSlice({
+const sfondoSlice = createSlice({
   name: "sfondo",
   initialState: initialState,
   reducers: {
@@ -43,5 +43,9 @@ export const sfondoSlice = createSlice({
   },
 });
 
-export const { changeWithImg, changeWithColoreRGB } = sfondoSlice.actions;
-export const sfondoReducer = sfondoSlice.reducer;
+export const sfondoSliceActions = {
+  changeWithImg: sfondoSlice.actions.changeWithImg,
+  changeWithColoreRGB: sfondoSlice.actions.changeWithColoreRGB,
+};
+
+export const sfondoSliceReducer = sfondoSlice.reducer;

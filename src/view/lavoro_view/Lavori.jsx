@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { handleInputChange, handleInputClick, handleInputBlur } from "../../vario/Vario";
-import { LavoroAction } from "../../action/LavoroAction.js";
+import { LavoroActions } from "../../actions/LavoroActions.js";
 import { LavoroForms } from "../../forms/LavoroForms.js";
 import PaginaWebRicercaItems from "../../riutilizzabile/PaginaWebRicercaItems";
 
 const Lavori = () => {
-  const lavoroAction = new LavoroAction();
+  const lavoroActions = new LavoroActions();
   const lavoroForms = new LavoroForms();
-  const lavoroReducer = useSelector((state) => state.lavoroReducer.value);
+  const lavoroSliceReducer = useSelector((state) => state.lavoroSliceReducer.value);
   const dispatch = useDispatch();
   const [servizi, setServizi] = useState(-1);
   const [selectedTrashCount, setSelectedTrashCount] = useState(0);
@@ -26,7 +26,7 @@ const Lavori = () => {
   });
 
   const selectOperation = (icon, item) => {
-    lavoroAction.selezioneOperazioneLavoro(
+    lavoroActions.selezioneOperazioneLavoro(
       icon, item, selectedIdsModifica, setSelectedIdsModifica, selectedIdsEliminazione, setSelectedIdsEliminazione, 
       setSelectedPencilCount, setSelectedTrashCount
     );
@@ -72,9 +72,9 @@ const Lavori = () => {
               (e) => handleInputBlur(e)  
             ), 
             indiciRicercaItems: lavoroForms.INDICI_RICERCA_LAVORI, 
-            handleSearch: (e) => lavoroAction.ricercaLavori(e, datiRicerca), 
+            handleSearch: (e) => lavoroActions.ricercaLavori(e, datiRicerca), 
             tipoItem: "lavoro", 
-            items: lavoroReducer.lavori, 
+            items: lavoroSliceReducer.lavori, 
             setItems: null, 
             selectOperation: selectOperation, 
             campiItemEsistente: lavoroForms.getCampiLavoroEsistente, 
@@ -82,8 +82,8 @@ const Lavori = () => {
             servizi: servizi, 
             selectedIdsModifica: selectedIdsModifica, 
             selectedIdsEliminazione: selectedIdsEliminazione, 
-            handleEdit: (e) => lavoroAction.modificaLavori(e, lavoroReducer, selectedIdsModifica, setSelectedIdsModifica), 
-            handleDelete: (e) => lavoroAction.eliminaLavori(e, selectedIdsEliminazione, setSelectedIdsEliminazione, lavoroReducer)
+            handleEdit: (e) => lavoroActions.modificaLavori(e, lavoroSliceReducer, selectedIdsModifica, setSelectedIdsModifica), 
+            handleDelete: (e) => lavoroActions.eliminaLavori(e, selectedIdsEliminazione, setSelectedIdsEliminazione, lavoroSliceReducer)
           }
         }
       />

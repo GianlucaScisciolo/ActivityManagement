@@ -30,7 +30,7 @@ const initialState = loadFromLocalStorage() || {
 };
 
 // Definizione del slice
-export const formSlice = createSlice({
+const formSlice = createSlice({
   name: "form",
   initialState: initialState,
   reducers: {
@@ -41,6 +41,7 @@ export const formSlice = createSlice({
   },
 });
 
-// Esportazione delle azioni e del reducer
-export const { changeViewForm } = formSlice.actions;
-export const formReducer = formSlice.reducer;
+export const formSliceActions = {
+  changeViewForm: formSlice.actions.changeViewForm,
+};
+export const formSliceReducer = formSlice.reducer;

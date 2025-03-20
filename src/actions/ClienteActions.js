@@ -1,18 +1,17 @@
-import { controlloServizio } from "../vario/Controlli";
-import { 
-  inserimentoServizio, aggiornaTipoSelezione, aggiornaServizi, getServizioPrimaDellaModifica, getServizioDopoLaModifica 
-} from "../store/redux/ServizioSlice";
+import { controlloCliente } from "../vario/Controlli";
+import { clienteSliceActions } from "../store/redux/ClienteSlice";
 import { dispatcher } from "../dispatcher/Dispatcher";
 
-export class ServizioAction {
+export class ClienteActions {
+
   constructor() {
 
   }
-
-  async inserisciServizio(e, nuovoServizio, setNuovoServizio) {
+  
+  async inserimentoCliente(e, nuovoCliente, setNuovoCliente) {
     e.preventDefault();
-    if (confirm("Sei sicuro di voler salvare il servizio?")) {
-      if (controlloServizio(nuovoServizio, setNuovoServizio) > 0) 
+    if (confirm("Sei sicuro di voler salvare il cliente?")) {
+      if (controlloCliente(nuovoCliente, setNuovoCliente) > 0) 
         return;
       
       try {
@@ -21,34 +20,35 @@ export class ServizioAction {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify(nuovoServizio),
+          body: JSON.stringify(nuovoCliente),
         });
+
         if(response.status === 200) {
           const result = await response.json();
-          nuovoServizio.id = result.id;
-          dispatcher(inserimentoServizio({
-            nuovoServizio: nuovoServizio
+          nuovoCliente.id = result.id;
+          dispatcher(clienteSliceActions.inserimentoCliente({
+            nuovoCliente: nuovoCliente
           }));
-          alert("L\'inserimento del servizio è andato a buon fine!!");
+          alert("L\'inserimento del cliente è andato a buon fine!!");
         }
         else if(response.status === 400) {
-          alert("Errore: servizio gia\' presente.")
+          alert("Errore: cliente gia\' presente.")
         }
         else {
-          alert("Errore durante il salvataggio del nuovo servizio, riprova più tardi.");
+          alert("Errore durante il salvataggio del nuovo cliente, riprova più tardi.");
         }
-      } 
+      }
       catch (error) {
         console.error('Errore:', error);
-        alert("Errore durante il salvataggio del nuovo servizio, riprova più tardi.");
+        alert("Errore durante il salvataggio del nuovo cliente, riprova più tardi.");
       }
     }
     else {
       alert("Salvataggio annullato.");
     }
-  };
+  }
 
-  async ricercaServizi(e, datiRicerca) {
+  async ricercaClienti(e, datiRicerca) {
     e.preventDefault();
         
     try {
@@ -62,12 +62,12 @@ export class ServizioAction {
 
       if(response.status === 200) {
         const result = await response.json();
-        dispatcher(aggiornaServizi({
-          servizi: result.items, 
+        dispatcher(clienteSliceActions.aggiornaClienti({
+          clienti: result.items, 
         }));
       }
       else {
-        alert("Errore durante la ricerca dei servizi, riprova più tardi.");
+        alert("Errore durante la ricerca dei clienti, riprova più tardi.");
       }
     }
     catch (error) {
@@ -76,22 +76,22 @@ export class ServizioAction {
     }
   }
 
-  selezioneOperazioneServizio(
+  selezioneOperazioneCliente(
     icon, item, selectedIdsModifica, setSelectedIdsModifica, selectedIdsEliminazione, setSelectedIdsEliminazione, 
     setSelectedPencilCount, setSelectedTrashCount
   ) {
     if(icon === "trash") {
       if(selectedIdsEliminazione.includes(item.id)) {
-        dispatcher(aggiornaTipoSelezione({
-          id_servizio: item.id, 
+        dispatcher(clienteSliceActions.aggiornaTipoSelezione({
+          id_cliente: item.id, 
           nuova_selezione: 0
         }));
         setSelectedIdsEliminazione(prevIds => prevIds.filter(itemId => itemId !== item.id));
         setSelectedTrashCount(prevCount => Math.max(prevCount - 1, 0));
       }
       else {
-        dispatcher(aggiornaTipoSelezione({
-          id_servizio: item.id, 
+        dispatcher(clienteSliceActions.aggiornaTipoSelezione({
+          id_cliente: item.id, 
           nuova_selezione: 2
         }));
         setSelectedIdsEliminazione(prevIds => [...prevIds, item.id]);
@@ -102,19 +102,19 @@ export class ServizioAction {
     }
     else if(icon === "pencil") {
       if(selectedIdsModifica.includes(item.id)) {
-        dispatcher(getServizioPrimaDellaModifica({
-          id_servizio: item.id,
+        dispatcher(clienteSliceActions.getClientePrimaDellaModifica({
+          id_cliente: item.id,
         }));
-        dispatcher(aggiornaTipoSelezione({
-          id_servizio: item.id, 
+        dispatcher(clienteSliceActions.aggiornaTipoSelezione({
+          id_cliente: item.id, 
           nuova_selezione: 0
         }));
         setSelectedIdsModifica(prevIdsModifica => prevIdsModifica.filter(itemId => itemId !== item.id));
         setSelectedPencilCount(prevCount => Math.max(prevCount - 1, 0));
       }
       else {
-        dispatcher(aggiornaTipoSelezione({
-          id_servizio: item.id, 
+        dispatcher(clienteSliceActions.aggiornaTipoSelezione({
+          id_cliente: item.id, 
           nuova_selezione: 1
         }));
         setSelectedIdsModifica(prevIdsModifica => [...prevIdsModifica, item.id]);
@@ -125,19 +125,19 @@ export class ServizioAction {
     }
   }
 
-  async modificaServizi(e, serviziSession, selectedIdsModifica, setSelectedIdsModifica) {
+  async modificaClienti(e, clientiSession, selectedIdsModifica, setSelectedIdsModifica) {
     e.preventDefault();
-    if (confirm("Sei sicuro di voler modificare i servizi?")) {
-      let serviziDaNonModificare = serviziSession.servizi.filter(servizio => !selectedIdsModifica.includes(servizio.id));
-      let serviziDaModificare = serviziSession.servizi.filter(servizio => selectedIdsModifica.includes(servizio.id)); 
+    if (confirm("Sei sicuro di voler modificare i clienti?")) {
+      let clientiDaNonModificare = clientiSession.clienti.filter(cliente => !selectedIdsModifica.includes(cliente.id));
+      let clientiDaModificare = clientiSession.clienti.filter(cliente => selectedIdsModifica.includes(cliente.id)); 
       
-      let idServiziNonModificati = [];
-      let idServiziModificati = [];
+      let idClientiNonModificati = [];
+      let idClientiModificati = [];
       let esitoModifica = "Esito modifica:\n";
-      for(let i = 0; i < serviziDaModificare.length; i++) {
+      for(let i = 0; i < clientiDaModificare.length; i++) {
         const dati = {
-          tipo_item: "servizio", 
-          item: serviziDaModificare[i] 
+          tipo_item: "cliente", 
+          item: clientiDaModificare[i] 
         }
         const response = await fetch('/MODIFICA_ITEM', {
           method: 'POST',
@@ -147,46 +147,45 @@ export class ServizioAction {
           body: JSON.stringify(dati),
         });
         if(response.status === 200) {           
-          esitoModifica += "Servizio numero " + (i+1) + ": modifica avvenuta con successo.\n";
-          idServiziModificati.push(serviziDaModificare[i].id);
+          esitoModifica += "Cliente numero " + (i+1) + ": modifica avvenuta con successo.\n";
+          idClientiModificati.push(clientiDaModificare[i].id);
         }
         else if(response.status === 400) {
-          esitoModifica += "Servizio numero " + (i+1) + ": errore durante la modifica: spesa gia\' presente.\n";
-          idServiziNonModificati.push(serviziDaModificare[i].id);
+          esitoModifica += "Cliente numero " + (i+1) + ": errore durante la modifica: cliente gia\' presente.\n";
+          idClientiNonModificati.push(clientiDaModificare[i].id);
         }
         else {
-          esitoModifica += "Servizio numero " + (i+1) + ": errore durante la modifica.\n";
-          idServiziNonModificati.push(serviziDaModificare[i].id);
+          esitoModifica += "Cliente numero " + (i+1) + ": errore durante la modifica.\n";
+          idClientiNonModificati.push(clientiDaModificare[i].id);
         }
       }
 
-      let serviziAggiornati = [];
-      for (let i = 0; i < serviziSession.servizi.length; i++) {
-        let servizioAggiornato = { ...serviziSession.servizi[i] };
-        if(servizioAggiornato.tipo_selezione === 1) {
-          servizioAggiornato.tipo_selezione = 0;
+      let clientiAggiornati = [];
+      for (let i = 0; i < clientiSession.clienti.length; i++) {
+        let clienteAggiornato = { ...clientiSession.clienti[i] };
+        if(clienteAggiornato.tipo_selezione === 1) {
+          clienteAggiornato.tipo_selezione = 0;
         }
-        serviziAggiornati.push(servizioAggiornato);
+        clientiAggiornati.push(clienteAggiornato);
       }
-      // setServizi(serviziAggiornati);
-      dispatcher(aggiornaServizi({
-        servizi: serviziAggiornati, 
+      dispatcher(clienteSliceActions.aggiornaClienti({
+        clienti: clientiAggiornati, 
       }));
 
-      for(let id of idServiziNonModificati) {
+      for(let id of idClientiNonModificati) {
         console.log("\\"+id+"/");
-        dispatcher(getServizioPrimaDellaModifica({
-          id_servizio: id
+        dispatcher(clienteSliceActions.getClientePrimaDellaModifica({
+          id_cliente: id
         }));
       }
 
-      for(let id of idServiziModificati) {
+      for(let id of idClientiModificati) {
         console.log("\\"+id+"/");
-        dispatcher(getServizioDopoLaModifica({
-          id_servizio: id
+        dispatcher(clienteSliceActions.getClienteDopoLaModifica({
+          id_cliente: id
         }));
       }
-      
+
       setSelectedIdsModifica([]);
 
       // alert("Risultati modifica:\n")
@@ -197,15 +196,15 @@ export class ServizioAction {
     }
   }
 
-  async eliminaServizi(e, selectedIdsEliminazione, setSelectedIdsEliminazione, serviziSession) {
+  async eliminaClienti(e, selectedIdsEliminazione, setSelectedIdsEliminazione, clientiSession) {
     e.preventDefault();
-    if (confirm("Sei sicuro di voler eliminare i servizi?")) {
+    if (confirm("Sei sicuro di voler eliminare i clienti?")) {
       const dati = {
-        tipo_item: "servizio", 
+        tipo_item: "cliente", 
         ids: selectedIdsEliminazione
       }
-      const itemsDaEliminare = serviziSession.servizi.filter(servizio => dati.ids.includes(servizio.id));
-      const itemsRestanti = serviziSession.servizi.filter(servizio => !dati.ids.includes(servizio.id));
+      const itemsDaEliminare = clientiSession.clienti.filter(cliente => dati.ids.includes(cliente.id));
+      const itemsRestanti = clientiSession.clienti.filter(cliente => !dati.ids.includes(cliente.id));
       try {
         const response = await fetch('/ELIMINA_ITEMS', {
           method: 'POST',
@@ -215,19 +214,20 @@ export class ServizioAction {
           body: JSON.stringify(dati),
         });
         if(response.status === 200) {          
-          dispatcher(aggiornaServizi({
-            servizi: itemsRestanti, 
-          }))
+          // setClienti(itemsRestanti);
+          dispatcher(clienteSliceActions.aggiornaClienti({
+            clienti: itemsRestanti, 
+          }));
           setSelectedIdsEliminazione([]);
           alert("Eliminazione completata con successo.");
         }
         else {
-          alert("Errore durante l\'eliminazione dei servizi, riprova più tardi.");
+          alert("Errore durante l\'eliminazione dei clienti, riprova più tardi.");
         }
       }
       catch (error) {
         console.error('Errore:', error);
-        alert("Errore durante l\'eliminazione dei servizi, riprova più tardi.");
+        alert("Errore durante l\'eliminazione dei clienti, riprova più tardi.");
       }
     }
     else {

@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { Plus, Save } from 'lucide-react';
 import Header from "./component/Header";
 import { DragAndDropWidgetHomePage } from "./DragAndDrop";
-import { widgetSelected, widgetView } from "../store/redux/WidgetSlice";
+import { widgetSliceActions } from "../store/redux/WidgetSlice";
 
 const styledIconNotSelected = `
   color: #FFFFFF;
@@ -31,7 +31,7 @@ const StyledSaveNotSelected = styled(Save)`
 
 
 const Home = () => {
-  const autenticazioneReducer = useSelector((state) => state.autenticazioneReducer.value);
+  const autenticazioneSliceReducer = useSelector((state) => state.autenticazioneSliceReducer.value);
   
   const dispatch = useDispatch();
   const scegliWidgets = (e) => {
@@ -39,10 +39,10 @@ const Home = () => {
     // console.log(widgetsSession.lavori);
     setPlusCliccato(!plusCliccato);
     if(plusCliccato === true) {
-      dispatch(widgetView());
+      dispatch(widgetActions.widgetView());
     }
     else if(plusCliccato === false) {
-      dispatch(widgetSelected());      
+      dispatch(widgetActions.widgetSelected());
     }
   }
   
@@ -54,7 +54,7 @@ const Home = () => {
       <Header />
 
       <br /> <br /> <br />
-      {(autenticazioneReducer.isLogged === true) && (
+      {(autenticazioneSliceReducer.isLogged === true) && (
         <>
           <div style={{ display: "flex", justifyContent: "flex-end", marginRight: "200px" }}>
             <button

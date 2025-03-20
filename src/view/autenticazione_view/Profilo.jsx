@@ -2,21 +2,21 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import Header from "../component/Header";
 import { handleInputChange } from "../../vario/Vario";
-import { AutenticazioneAction } from "../../action/AutenticazioneAction"
+import { AutenticazioneActions } from "../../actions/AutenticazioneActions"
 import { AutenticazioneForms } from "../../forms/AutenticazioneForms";
 import { FormProfilo } from "../../riutilizzabile/form_item/FormItem";
 import { CardProfilo } from "../../riutilizzabile/card_item/CardItem";
 import { RowProfilo } from "../../riutilizzabile/row_item/RowItem";
 
 const Profilo = () => {
-  const autenticazioneAction = new AutenticazioneAction();
+  const autenticazioneActions = new AutenticazioneActions();
   const autenticazioneForms = new AutenticazioneForms();
-  const formReducer = useSelector((state) => state.formReducer.value);
-  const autenticazioneReducer = useSelector((state) => state.autenticazioneReducer.value);
+  const formSliceReducer = useSelector((state) => state.formSliceReducer.value);
+  const autenticazioneSliceReducer = useSelector((state) => state.autenticazioneSliceReducer.value);
   const [datiProfilo, setDatiProfilo] = useState({
-    username_attuale: autenticazioneReducer.username, 
-    nuovo_username: autenticazioneReducer.username, 
-    note: (autenticazioneReducer.note) ? autenticazioneReducer.note : "", 
+    username_attuale: autenticazioneSliceReducer.username, 
+    nuovo_username: autenticazioneSliceReducer.username, 
+    note: (autenticazioneSliceReducer.note) ? autenticazioneSliceReducer.note : "", 
     password_attuale: "",
     nuova_password: "", 
     conferma_nuova_password: "", 
@@ -27,8 +27,8 @@ const Profilo = () => {
     errore_conferma_nuova_password: "",   
   });
   
-  const ProfiloTag = (formReducer.view === "form") ? FormProfilo : (
-    (formReducer.view === "card") ? CardProfilo : RowProfilo
+  const ProfiloTag = (formSliceReducer.view === "form") ? FormProfilo : (
+    (formSliceReducer.view === "card") ? CardProfilo : RowProfilo
   );
 
   return (
@@ -40,7 +40,7 @@ const Profilo = () => {
       <ProfiloTag  
         campi={autenticazioneForms.getCampiProfilo(datiProfilo, (e) => handleInputChange(e, setDatiProfilo), null, null)} 
         indici={autenticazioneForms.INDICI_PROFILO} 
-        eseguiModificaProfilo={(e) => autenticazioneAction.modificaProfilo(e, autenticazioneReducer, datiProfilo, setDatiProfilo)} 
+        eseguiModificaProfilo={(e) => autenticazioneActions.modificaProfilo(e, autenticazioneSliceReducer, datiProfilo, setDatiProfilo)} 
       />
     </>
   )

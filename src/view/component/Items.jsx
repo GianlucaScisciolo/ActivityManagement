@@ -2,12 +2,12 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { CardItemEsistente } from "../../riutilizzabile/card_item/CardItem";
 import { RowItemEsistente } from "../../riutilizzabile/row_item/RowItem";
-import { aggiornaLavoro } from "../../store/redux/LavoroSlice";
+import { lavoroSliceActions } from "../../store/redux/LavoroSlice";
 
 export const Items = ({ tipoItem, items, setItems, selectOperation, emptyIsConsidered, campi, indici, servizi }) => {
-  const itemReducer = useSelector((state) => state.itemReducer.value);
+  const itemSliceReducer = useSelector((state) => state.itemSliceReducer.value);
   const dispatch = useDispatch();
-  const ItemEsistenteTag = itemReducer.view === "card" ? CardItemEsistente : RowItemEsistente;
+  const ItemEsistenteTag = itemSliceReducer.view === "card" ? CardItemEsistente : RowItemEsistente;
 
   const OptionsServizi = (servizi, descrizione, sottoStringa, item) => {
     const optionStr = (servizio) => `${servizio.nome} - ${servizio.prezzo} €`;
@@ -37,13 +37,11 @@ export const Items = ({ tipoItem, items, setItems, selectOperation, emptyIsConsi
           totale += parseFloat(s.prezzo) || 0;
         }
 
-        dispatch(
-          aggiornaLavoro({
-            id_lavoro: item.id,
-            nome_attributo: "totale",
-            nuovo_valore: totale,
-          })
-        );
+        dispatch(lavoroSliceActions.aggiornaLavoro({
+          id_lavoro: item.id,
+          nome_attributo: "totale",
+          nuovo_valore: totale,
+        }));
       }
     }, [item["serviziSelezionati"], item.id, dispatch]);
 
@@ -51,28 +49,24 @@ export const Items = ({ tipoItem, items, setItems, selectOperation, emptyIsConsi
       e.preventDefault();
 
       if (e.target.checked) {
-        dispatch(
-          aggiornaLavoro({
-            id_lavoro: item.id,
-            nome_attributo: "serviziSelezionati",
-            nuovo_valore: [...item["serviziSelezionati"], servizio],
-          })
-        );
+        dispatch(lavoroSliceActions.aggiornaLavoro({
+          id_lavoro: item.id,
+          nome_attributo: "serviziSelezionati",
+          nuovo_valore: [...item["serviziSelezionati"], servizio],
+        }));
 
         const aggiornamentoNonSelezionati = serviziNonSelezionati.filter(
           (s) => optionStr(s) !== optionStr(servizio)
         );
         setServiziNonSelezionati(aggiornamentoNonSelezionati);
       } else {
-        dispatch(
-          aggiornaLavoro({
-            id_lavoro: item.id,
-            nome_attributo: "serviziSelezionati",
-            nuovo_valore: item["serviziSelezionati"].filter(
-              (s) => optionStr(s) !== optionStr(servizio)
-            ),
-          })
-        );
+        dispatch(lavoroSliceActions.aggiornaLavoro({
+          id_lavoro: item.id,
+          nome_attributo: "serviziSelezionati",
+          nuovo_valore: item["serviziSelezionati"].filter(
+            (s) => optionStr(s) !== optionStr(servizio)
+          ),
+        }));
 
         const aggiornamentoNonSelezionati = [...serviziNonSelezionati, servizio].filter(
           (v, i, a) => a.findIndex((t) => optionStr(t) === optionStr(v)) === i
@@ -82,7 +76,7 @@ export const Items = ({ tipoItem, items, setItems, selectOperation, emptyIsConsi
     };
 
     const classeWrapperCheckbox =
-      itemReducer.view === "form" ? "checkbox-wrapper-form" : "checkbox-wrapper";
+      itemSliceReducer.view === "form" ? "checkbox-wrapper-form" : "checkbox-wrapper";
 
     return (
       <>
@@ -163,7 +157,7 @@ export const Items = ({ tipoItem, items, setItems, selectOperation, emptyIsConsi
       )}
       {items.length > 0 && (
         <>
-          {itemReducer.view === "card" ? (
+          {itemSliceReducer.view === "card" ? (
             <div className="contenitore-3">
               <ItemElements />
             </div>

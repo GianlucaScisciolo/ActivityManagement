@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { handleInputChange } from "../../vario/Vario.js";
-import { ServizioAction } from "../../action/ServizioAction.js";
+import { ServizioActions } from "../../actions/ServizioActions.js";
 import { ServizioForms } from "../../forms/ServizioForms.js"
 import PaginaWebNewItem from "../../riutilizzabile/PaginaWebNewItem.jsx";
 
 const NuovoServizio = () => {
-  const servizioAction = new ServizioAction();
+  const servizioActions = new ServizioActions();
   const servizioForms = new ServizioForms();
-  const servizioReducer = useSelector((state) => state.servizioReducer.value);
+  const servizioSliceReducer = useSelector((state) => state.servizioSliceReducer.value);
   const [selectedTrashCount, setSelectedTrashCount] = useState(0);
   const [selectedPencilCount, setSelectedPencilCount] = useState(0);
   const [selectedIdsEliminazione, setSelectedIdsEliminazione] = useState([]);
@@ -26,7 +26,7 @@ const NuovoServizio = () => {
   })
 
   const selectOperation = (icon, item) => {
-    servizioAction.selezioneOperazioneServizio(
+    servizioActions.selezioneOperazioneServizio(
       icon, item, selectedIdsModifica, setSelectedIdsModifica, selectedIdsEliminazione, setSelectedIdsEliminazione, 
       setSelectedPencilCount, setSelectedTrashCount
     );
@@ -39,9 +39,9 @@ const NuovoServizio = () => {
           {
             campiNuovoItem: servizioForms.getCampiNuovoServizio(nuovoServizio, (e) => handleInputChange(e, setNuovoServizio), null, null), 
             indiciNuovoItem: servizioForms.INDICI_NUOVO_SERVIZIO, 
-            handleInsert: (e) => servizioAction.inserisciServizio(e, nuovoServizio, setNuovoServizio), 
+            handleInsert: (e) => servizioActions.inserisciServizio(e, nuovoServizio, setNuovoServizio), 
             tipoItem: "servizio", 
-            items: servizioReducer.nuoviServizi, 
+            items: servizioSliceReducer.nuoviServizi, 
             setItems: null, 
             selectOperation: selectOperation, 
             campiItemEsistente: servizioForms.getCampiServizioEsistente, 

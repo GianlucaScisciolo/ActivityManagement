@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { handleInputChange, handleInputClick, handleInputBlur } from "../../vario/Vario";
-import { SpesaAction } from "../../action/SpesaAction";
+import { SpesaActions } from "../../actions/SpesaActions";
 import { SpesaForms } from "../../forms/SpesaForms";
 import PaginaWebNewItem from "../../riutilizzabile/PaginaWebNewItem";
 
 const NuovaSpesa = () => {
-  const spesaAction = new SpesaAction();
+  const spesaActions = new SpesaActions();
   const spesaForms = new SpesaForms();
-  const spesaReducer = useSelector((state) => state.spesaReducer.value);
+  const spesaSliceReducer = useSelector((state) => state.spesaSliceReducer.value);
   const [selectedTrashCount, setSelectedTrashCount] = useState(0);
   const [selectedPencilCount, setSelectedPencilCount] = useState(0);
   const [selectedIdsEliminazione, setSelectedIdsEliminazione] = useState([]);
@@ -30,7 +30,7 @@ const NuovaSpesa = () => {
   })
 
   const selectOperation = (icon, item) => {
-    spesaAction.selezioneOperazioneSpesa(
+    spesaActions.selezioneOperazioneSpesa(
       icon, item, selectedIdsModifica, setSelectedIdsModifica, selectedIdsEliminazione, setSelectedIdsEliminazione, 
       setSelectedPencilCount, setSelectedTrashCount
     );
@@ -48,9 +48,9 @@ const NuovaSpesa = () => {
               (e) => handleInputBlur(e) 
             ), 
             indiciNuovoItem: spesaForms.INDICI_NUOVA_SPESA, 
-            handleInsert: (e) => spesaAction.inserimentoSpesa(e, nuovaSpesa, setNuovaSpesa), 
+            handleInsert: (e) => spesaActions.inserimentoSpesa(e, nuovaSpesa, setNuovaSpesa), 
             tipoItem: "spesa", 
-            items: spesaReducer.nuoveSpese, 
+            items: spesaSliceReducer.nuoveSpese, 
             setItems: null, 
             selectOperation: selectOperation, 
             campiItemEsistente: spesaForms.getCampiSpesaEsistente, 

@@ -17,10 +17,10 @@ import {
 } from './StyledCardItem';
 import { faFilePdf, faFileExcel } from '@fortawesome/free-solid-svg-icons';
 import { Trash2, Pencil } from 'lucide-react';
-import { aggiornaCliente } from "../../store/redux/ClienteSlice";
-import { aggiornaServizio } from '../../store/redux/ServizioSlice';
-import { aggiornaSpesa } from '../../store/redux/SpesaSlice';
-import { aggiornaLavoro } from '../../store/redux/LavoroSlice';
+import { clienteSliceActions } from "../../store/redux/ClienteSlice";
+import { servizioSliceActions } from '../../store/redux/ServizioSlice';
+import { spesaSliceActions } from '../../store/redux/SpesaSlice';
+import { lavoroSliceActions } from '../../store/redux/LavoroSlice';
 
 function getColor(value, j, tipo){
   // (i > 0) ? (
@@ -398,25 +398,25 @@ export function CardItemEsistente({ item, campi, indici, selectOperation, tipoIt
 
     // Dispatch dell'azione solo quando l'elemento perde il focus
     if (tipoItem === "cliente") {
-      dispatch(aggiornaCliente({
+      dispatch(clienteActions.aggiornaCliente({
         id_cliente: item.id,
         nome_attributo: name,
         nuovo_valore: value,
       }));
     } else if (tipoItem === "lavoro") {
-      dispatch(aggiornaLavoro({
+      dispatch(lavoroActions.aggiornaLavoro({
         id_lavoro: item.id,
         nome_attributo: name,
         nuovo_valore: value,
       }));
     } else if (tipoItem === "spesa") {
-      dispatch(aggiornaSpesa({
+      dispatch(spesaActions.aggiornaSpesa({
         id_spesa: item.id,
         nome_attributo: name,
         nuovo_valore: value,
       }));
     } else if (tipoItem === "servizio") {
-      dispatch(aggiornaServizio({
+      dispatch(servizioActions.aggiornaServizio({
         id_servizio: item.id,
         nome_attributo: name,
         nuovo_valore: value,

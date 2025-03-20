@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ClienteForms } from "../../forms/ClienteForms.js";
-import { ClienteAction } from "../../action/ClienteAction.js";
+import { ClienteActions } from "../../actions/ClienteActions.js";
 import { handleInputChange } from "../../vario/Vario.js";
 import PaginaWebRicercaItems from '../../riutilizzabile/PaginaWebRicercaItems.jsx';
 
@@ -8,9 +8,9 @@ import { useSelector } from 'react-redux';
 
 
 const Clienti = () => {
-  const clienteAction = new ClienteAction();
+  const clienteActions = new ClienteActions();
   const clienteForms = new ClienteForms();
-  const clienteReducer = useSelector((state) => state.clienteReducer.value);
+  const clienteSliceReducer = useSelector((state) => state.clienteSliceReducer.value);
   const [selectedTrashCount, setSelectedTrashCount] = useState(0);
   const [selectedPencilCount, setSelectedPencilCount] = useState(0);
   const [selectedIdsEliminazione, setSelectedIdsEliminazione] = useState([]);
@@ -26,7 +26,7 @@ const Clienti = () => {
   });
 
   const selectOperation = (icon, item) => {
-    clienteAction.selezioneOperazioneCliente(
+    clienteActions.selezioneOperazioneCliente(
       icon, item, selectedIdsModifica, setSelectedIdsModifica, selectedIdsEliminazione, setSelectedIdsEliminazione, 
       setSelectedPencilCount, setSelectedTrashCount
     );
@@ -39,9 +39,9 @@ const Clienti = () => {
           {
             campiRicercaItems: clienteForms.getCampiRicercaClienti(datiRicerca, (e) => handleInputChange(e, setDatiRicerca), null, null),
             indiciRicercaItems: clienteForms.INDICI_RICERCA_CLIENTI, 
-            handleSearch: (e) => clienteAction.ricercaClienti(e, datiRicerca), 
+            handleSearch: (e) => clienteActions.ricercaClienti(e, datiRicerca), 
             tipoItem: "cliente", 
-            items: clienteReducer.clienti, 
+            items: clienteSliceReducer.clienti, 
             setItems: null, 
             selectOperation: selectOperation, 
             campiItemEsistente: clienteForms.getCampiClienteEsistente, 
@@ -49,12 +49,11 @@ const Clienti = () => {
             servizi: null, 
             selectedIdsModifica: selectedIdsModifica, 
             selectedIdsEliminazione: selectedIdsEliminazione, 
-            handleEdit: (e) => clienteAction.modificaClienti(e, clienteReducer, selectedIdsModifica, setSelectedIdsModifica), 
-            handleDelete: (e) => clienteAction.eliminaClienti(e, selectedIdsEliminazione, setSelectedIdsEliminazione, clienteReducer)
+            handleEdit: (e) => clienteActions.modificaClienti(e, clienteSliceReducer, selectedIdsModifica, setSelectedIdsModifica), 
+            handleDelete: (e) => clienteActions.eliminaClienti(e, selectedIdsEliminazione, setSelectedIdsEliminazione, clienteSliceReducer)
           }
         }
       />
-      <button>{clienteReducer.clienti.length}</button>
     </>
   );
 }

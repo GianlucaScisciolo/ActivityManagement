@@ -1,25 +1,25 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { sfondoReducer } from "./SfondoSlice";
-import { itemReducer } from "./ItemSlice";
-import { formReducer } from "./FormSlice";
-import { widgetReducer } from "./WidgetSlice";
-import { autenticazioneReducer } from "./AutenticazioneSlice";
-import { clienteReducer } from "./ClienteSlice";
-import { servizioReducer } from "./ServizioSlice";
-import { lavoroReducer } from "./LavoroSlice";
-import { spesaReducer } from "./SpesaSlice";
+import { sfondoSliceReducer } from "./SfondoSlice";
+import { itemSliceReducer } from "./ItemSlice";
+import { formSliceReducer } from "./FormSlice";
+import { widgetSliceReducer } from "./WidgetSlice";
+import { autenticazioneSliceReducer } from "./AutenticazioneSlice";
+import { clienteSliceReducer } from "./ClienteSlice";
+import { servizioSliceReducer } from "./ServizioSlice";
+import { lavoroSliceReducer } from "./LavoroSlice";
+import { spesaSliceReducer } from "./SpesaSlice";
 
 const store = configureStore({
   reducer: {
-    sfondoReducer: sfondoReducer,
-    itemReducer: itemReducer,
-    formReducer: formReducer,
-    widgetReducer: widgetReducer, 
-    autenticazioneReducer: autenticazioneReducer,
-    clienteReducer: clienteReducer, 
-    servizioReducer: servizioReducer, 
-    lavoroReducer: lavoroReducer,
-    spesaReducer: spesaReducer, 
+    sfondoSliceReducer: sfondoSliceReducer,
+    itemSliceReducer: itemSliceReducer,
+    formSliceReducer: formSliceReducer,
+    widgetSliceReducer: widgetSliceReducer, 
+    autenticazioneSliceReducer: autenticazioneSliceReducer,
+    clienteSliceReducer: clienteSliceReducer, 
+    servizioSliceReducer: servizioSliceReducer, 
+    lavoroSliceReducer: lavoroSliceReducer,
+    spesaSliceReducer: spesaSliceReducer, 
   },
 });
 

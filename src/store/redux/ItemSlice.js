@@ -28,7 +28,7 @@ const initialState = loadFromLocalStorage() || {
 };
 
 // Definizione del slice
-export const itemSlice = createSlice({
+const itemSlice = createSlice({
   name: "item",
   initialState: initialState,
   reducers: {
@@ -40,5 +40,7 @@ export const itemSlice = createSlice({
 });
 
 // Esportazione delle azioni e del reducer
-export const { changeViewItem } = itemSlice.actions;
-export const itemReducer = itemSlice.reducer;
+export const itemSliceActions = {
+  changeViewItem: itemSlice.actions.changeViewItem,
+};
+export const itemSliceReducer = itemSlice.reducer;

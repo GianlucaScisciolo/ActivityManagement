@@ -1,8 +1,8 @@
 import { controlloLogin, controlloProfilo } from "../vario/Controlli";
-import { eseguiLogin } from "../store/redux/AutenticazioneSlice";
+import { autenticazioneSliceActions } from "../store/redux/AutenticazioneSlice";
 import { dispatcher } from "../dispatcher/Dispatcher";
 
-export class AutenticazioneAction {
+export class AutenticazioneActions {
   constructor() {
 
   }
@@ -30,7 +30,7 @@ export class AutenticazioneAction {
         return;
       }
 
-      dispatcher(eseguiLogin({
+      dispatcher(autenticazioneSliceActions.eseguiLogin({
         username: result.utente.username,
         ruolo: result.utente.ruolo,
         note: result.utente.note,
@@ -73,7 +73,7 @@ export class AutenticazioneAction {
           body: JSON.stringify(datiProfilo),
         });
         if (profileResponse.status === 200) {
-          dispatcher(eseguiLogin({
+          dispatcher(autenticazioneSliceActions.eseguiLogin({
             username: datiProfilo.nuovo_username,
             ruolo: autenticazioneSession.ruolo,
             note: datiProfilo.note,

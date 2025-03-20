@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-export const servizioSlice = createSlice ({
+const servizioSlice = createSlice ({
   name: "servizio",
   initialState: {
     value: {
@@ -101,7 +101,21 @@ export const servizioSlice = createSlice ({
   },
 })
 
-export const { 
-  aggiornaServizi, aggiornaTipoSelezione, aggiornaServizio, getServizioPrimaDellaModifica, getServizioDopoLaModifica, inserimentoServizio 
-} = servizioSlice.actions;
-export const servizioReducer = servizioSlice.reducer;
+export const servizioSliceActions = {
+  aggiornaServizi: servizioSlice.actions.aggiornaServizi,
+  aggiornaTipoSelezione: servizioSlice.actions.aggiornaTipoSelezione,
+  aggiornaServizio: servizioSlice.actions.aggiornaServizio,
+  getServizioPrimaDellaModifica: servizioSlice.actions.getServizioPrimaDellaModifica,
+  getServizioDopoLaModifica: servizioSlice.actions.getServizioDopoLaModifica,
+  inserimentoServizio: servizioSlice.actions.inserimentoServizio
+};
+export const servizioSliceReducer = servizioSlice.reducer;
+
+
+
+
+
+
+
+
+

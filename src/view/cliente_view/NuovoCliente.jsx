@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { ClienteAction } from "../../action/ClienteAction.js";
+import { ClienteActions } from "../../actions/ClienteActions.js";
 import { ClienteForms } from '../../forms/ClienteForms.js';
 import { handleInputChange } from '../../vario/Vario.js';
 import PaginaWebNewItem from '../../riutilizzabile/PaginaWebNewItem.jsx';
 
 const NuovoCliente = () => {
-  const clienteAction = new ClienteAction();
+  const clienteActions = new ClienteActions();
   const clienteForms = new ClienteForms();
-  const clienteReducer = useSelector((state) => state.clienteReducer.value);
+  const clienteSliceReducer = useSelector((state) => state.clienteSliceReducer.value);
 
   const [selectedTrashCount, setSelectedTrashCount] = useState(0);
   const [selectedPencilCount, setSelectedPencilCount] = useState(0);
@@ -31,7 +31,7 @@ const NuovoCliente = () => {
   })
 
   const selectOperation = (icon, item) => {
-    clienteAction.selezioneOperazioneCliente(
+    clienteActions.selezioneOperazioneCliente(
       icon, item, selectedIdsModifica, setSelectedIdsModifica, selectedIdsEliminazione, setSelectedIdsEliminazione, 
       setSelectedPencilCount, setSelectedTrashCount
     );
@@ -44,9 +44,9 @@ const NuovoCliente = () => {
           {
             campiNuovoItem: clienteForms.getCampiNuovoCliente(nuovoCliente, (e) => handleInputChange(e, setNuovoCliente), null, null), 
             indiciNuovoItem: clienteForms.INDICI_NUOVO_CLIENTE, 
-            handleInsert: (e) => clienteAction.inserimentoCliente(e, nuovoCliente, setNuovoCliente), 
+            handleInsert: (e) => clienteActions.inserimentoCliente(e, nuovoCliente, setNuovoCliente), 
             tipoItem: "cliente", 
-            items: clienteReducer.nuoviClienti, 
+            items: clienteSliceReducer.nuoviClienti, 
             setItems: null, 
             selectOperation: selectOperation, 
             campiItemEsistente: clienteForms.getCampiClienteEsistente, 
@@ -54,8 +54,8 @@ const NuovoCliente = () => {
             servizi: null, 
             selectedIdsModifica: selectedIdsModifica, 
             selectedIdsEliminazione: selectedIdsEliminazione, 
-            //handleEdit: (e) => clienteAction.handleEdit(e, clienteReducer, selectedIdsModifica, setSelectedIdsModifica, dispatch), 
-            //handleDelete: (e) => clienteAction.handleDelete(e, selectedIdsEliminazione, setSelectedIdsEliminazione, clienteReducer, dispatch)
+            //handleEdit: (e) => clienteAction.handleEdit(e, clienteSliceReducer, selectedIdsModifica, setSelectedIdsModifica, dispatch), 
+            //handleDelete: (e) => clienteAction.handleDelete(e, selectedIdsEliminazione, setSelectedIdsEliminazione, clienteSliceReducer, dispatch)
             handleEdit: null, 
             handleDelete: null
           }
