@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import { handleInputChange, handleInputClick, handleInputBlur } from "../../vario/Vario";
+import { OperazioniForms } from "../../view/forms/OperazioniForms";
 import { SpesaActions } from "../../actions/SpesaActions";
-import { SpesaForms } from "../../forms/SpesaForms";
+import { SpesaForms } from "../../view/forms/SpesaForms";
 import PaginaWebNewItem from "../../riutilizzabile/PaginaWebNewItem";
 
 const NuovaSpesa = () => {
   const spesaActions = new SpesaActions();
   const spesaForms = new SpesaForms();
+  const operazioniForms = new OperazioniForms();
   const spesaSliceReducer = useSelector((state) => state.spesaSliceReducer.value);
   const [selectedTrashCount, setSelectedTrashCount] = useState(0);
   const [selectedPencilCount, setSelectedPencilCount] = useState(0);
@@ -43,9 +44,9 @@ const NuovaSpesa = () => {
           {
             campiNuovoItem: spesaForms.getCampiNuovaSpesa(
               nuovaSpesa, 
-              (e) => handleInputChange(e, setNuovaSpesa), 
-              (e) => handleInputClick(e), 
-              (e) => handleInputBlur(e) 
+              (e) => operazioniForms.handleInputChange(e, setNuovaSpesa), 
+              (e) => operazioniForms.handleInputClick(e), 
+              (e) => operazioniForms.handleInputBlur(e) 
             ), 
             indiciNuovoItem: spesaForms.INDICI_NUOVA_SPESA, 
             handleInsert: (e) => spesaActions.inserimentoSpesa(e, nuovaSpesa, setNuovaSpesa), 

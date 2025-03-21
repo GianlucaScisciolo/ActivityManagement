@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { handleInputChange, handleInputClick, handleInputBlur } from "../../vario/Vario";
+import { OperazioniForms } from "../../view/forms/OperazioniForms.js";
 import { LavoroActions } from "../../actions/LavoroActions.js";
-import { LavoroForms } from "../../forms/LavoroForms.js";
+import { LavoroForms } from "../../view/forms/LavoroForms.js";
 import PaginaWebRicercaItems from "../../riutilizzabile/PaginaWebRicercaItems";
 
 const Lavori = () => {
   const lavoroActions = new LavoroActions();
   const lavoroForms = new LavoroForms();
+  const operazioniForms = new OperazioniForms();
   const lavoroSliceReducer = useSelector((state) => state.lavoroSliceReducer.value);
   const dispatch = useDispatch();
   const [servizi, setServizi] = useState(-1);
@@ -67,9 +68,9 @@ const Lavori = () => {
           {
             campiRicercaItems: lavoroForms.getCampiRicercaLavori(
               datiRicerca, 
-              (e) => handleInputChange(e, setDatiRicerca), 
-              (e) => handleInputClick(e), 
-              (e) => handleInputBlur(e)  
+              (e) => operazioniForms.handleInputChange(e, setDatiRicerca), 
+              (e) => operazioniForms.handleInputClick(e), 
+              (e) => operazioniForms.handleInputBlur(e)  
             ), 
             indiciRicercaItems: lavoroForms.INDICI_RICERCA_LAVORI, 
             handleSearch: (e) => lavoroActions.ricercaLavori(e, datiRicerca), 

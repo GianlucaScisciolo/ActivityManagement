@@ -1,4 +1,4 @@
-import { controlloServizio } from "../vario/Controlli";
+import { controlloServizio } from "../utils/Controlli";
 import { servizioSliceActions } from "../store/redux/ServizioSlice";
 import { dispatcher } from "../dispatcher/Dispatcher";
 

@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import { handleInputChange } from "../../vario/Vario";
+import { OperazioniForms } from "../../view/forms/OperazioniForms";
 import { ServizioActions } from "../../actions/ServizioActions";
-import { ServizioForms } from "../../forms/ServizioForms";
+import { ServizioForms } from "../../view/forms/ServizioForms";
 import PaginaWebRicercaItems from "../../riutilizzabile/PaginaWebRicercaItems";
 
 const Servizi = () => {
   const servizioActions = new ServizioActions();
   const servizioForms = new ServizioForms();
+  const operazioniForms = new OperazioniForms();
   const servizioSliceReducer = useSelector((state) => state.servizioSliceReducer.value);
   const [selectedTrashCount, setSelectedTrashCount] = useState(0);
   const [selectedPencilCount, setSelectedPencilCount] = useState(0);
@@ -34,7 +35,7 @@ const Servizi = () => {
       <PaginaWebRicercaItems 
         componenti={ 
           {
-            campiRicercaItems: servizioForms.getCampiRicercaServizi(datiRicerca, (e) => handleInputChange(e, setDatiRicerca), null, null),
+            campiRicercaItems: servizioForms.getCampiRicercaServizi(datiRicerca, (e) => operazioniForms.handleInputChange(e, setDatiRicerca), null, null),
             indiciRicercaItems: servizioForms.INDICI_RICERCA_SERVIZI, 
             handleSearch: (e) => servizioActions.ricercaServizi(e, datiRicerca), 
             tipoItem: "servizio", 

@@ -1,4 +1,4 @@
-import { controlloCliente } from "../vario/Controlli";
+import { controlloCliente } from "../utils/Controlli";
 import { clienteSliceActions } from "../store/redux/ClienteSlice";
 import { dispatcher } from "../dispatcher/Dispatcher";
 

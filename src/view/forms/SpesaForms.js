@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { controlloSpesa } from "../vario/Controlli";
+import { controlloSpesa } from "../../utils/Controlli";
 
 export class SpesaForms {
   INDICI_NUOVA_SPESA = [0, 1, 2, 3, 4];

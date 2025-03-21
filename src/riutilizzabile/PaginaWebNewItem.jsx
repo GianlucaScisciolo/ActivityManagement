@@ -3,9 +3,9 @@ import { useSelector } from "react-redux";
 import { FormNuovoItem } from "./form_item/FormItem";
 import { CardNuovoItem } from "./card_item/CardItem";
 import { RowNuovoItem } from "./row_item/RowItem";
-import Header from "../view/component/Header";
-import { Items } from "../view/component/Items"
-import { OperazioniItems } from "../view/component/Operazioni";
+import Header from "../view/components/Header";
+import { Items } from "../view/components/Items"
+import { OperazioniItems } from "../view/components/Operazioni";
 
 const PaginaWebNewItem = ({ componenti }) => {
   const formSliceReducer = useSelector((state) => state.formSliceReducer.value);

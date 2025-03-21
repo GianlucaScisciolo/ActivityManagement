@@ -1,16 +1,17 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import Header from "../component/Header.jsx";
-import { handleInputChange, handleInputClick, handleInputBlur } from "../../vario/Vario.js";
+import Header from "../components/Header.jsx";
+import { OperazioniForms } from "../../view/forms/OperazioniForms.js";
 import { FormFileItems } from "../../riutilizzabile/form_item/FormItem.jsx";
 import { CardFileItems } from "../../riutilizzabile/card_item/CardItem.jsx";
 import { RowFileItems } from "../../riutilizzabile/row_item/RowItem.jsx";
 import { SpesaActions } from "../../actions/SpesaActions.js";
-import { SpesaForms } from "../../forms/SpesaForms.js"
+import { SpesaForms } from "../../view/forms/SpesaForms.js"
 
 const FileSpese = () => {
   const spesaActions = new SpesaActions();
   const spesaForms = new SpesaForms();
+  const operazioniForms = new OperazioniForms();
   const formSliceReducer = useSelector((state) => state.formSliceReducer.value);
   const [spese, setSpese] = useState(-1);
   const [tipoFile, setTipoFile] = useState("");
@@ -38,9 +39,9 @@ const FileSpese = () => {
       <FormFileTag 
         campi={spesaForms.getCampiFile(
           datiRicerca, 
-          (e) => handleInputChange(e, setDatiRicerca), 
-          (e) => handleInputClick(e), 
-          (e) => handleInputBlur(e) 
+          (e) => operazioniForms.handleInputChange(e, setDatiRicerca), 
+          (e) => operazioniForms.handleInputClick(e), 
+          (e) => operazioniForms.handleInputBlur(e) 
         )} 
         indici={spesaForms.INDICI_FILE} 
         ottieniFileRangePDF={(e) => spesaActions.handleSearchSpeseRangeFile(e, "pdf", setTipoFile, datiRicerca, spese, setSpese)}

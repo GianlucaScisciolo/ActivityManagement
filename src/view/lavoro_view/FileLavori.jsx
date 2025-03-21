@@ -1,16 +1,17 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import Header from "../component/Header";
-import { handleInputChange, handleInputClick, handleInputBlur } from "../../vario/Vario";
+import Header from "../components/Header";
+import { OperazioniForms } from "../../view/forms/OperazioniForms";
 import { FormFileItems } from "../../riutilizzabile/form_item/FormItem";
 import { CardFileItems } from "../../riutilizzabile/card_item/CardItem";
 import { RowFileItems } from "../../riutilizzabile/row_item/RowItem";
 import { LavoroActions } from "../../actions/LavoroActions";
-import { LavoroForms } from "../../forms/LavoroForms";
+import { LavoroForms } from "../../view/forms/LavoroForms";
 
 const FileLavori = () => {
   const lavoroActions = new LavoroActions();
   const lavoroForms = new LavoroForms();
+  const operazioniForms = new OperazioniForms();
   const formSliceReducer = useSelector((state) => state.formSliceReducer.value);
   const [lavori, setLavori] = useState(-1);
   const [tipoFile, setTipoFile] = useState("");
@@ -37,9 +38,9 @@ const FileLavori = () => {
       <FormFileTag 
         campi={lavoroForms.getCampiFile(
           datiRicerca, 
-          (e) => handleInputChange(e, setDatiRicerca), 
-          (e) => handleInputClick(e), 
-          (e) => handleInputBlur(e) 
+          (e) => operazioniForms.handleInputChange(e, setDatiRicerca), 
+          (e) => operazioniForms.handleInputClick(e), 
+          (e) => operazioniForms.handleInputBlur(e) 
         )} 
         indici={lavoroForms.INDICI_FILE} 
         ottieniFileRangePDF={(e) => lavoroActions.handleSearchLavoriRangeFile(e, "pdf", setTipoFile, datiRicerca, lavori, setLavori)}

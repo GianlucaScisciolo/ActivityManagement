@@ -1,12 +1,12 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import Header from "../view/component/Header";
+import Header from "../view/components/Header";
 import { FormNuovoItem } from "./form_item/FormItem";
 import { FormRicercaItems } from "./form_item/FormItem";
 import { CardNuovoItem, CardRicercaItems } from "./card_item/CardItem";
 import { RowNuovoItem, RowRicercaItems } from "./row_item/RowItem";
-import { Items } from "../view/component/Items";
-import { OperazioniItems } from "../view/component/Operazioni";
+import { Items } from "../view/components/Items";
+import { OperazioniItems } from "../view/components/Operazioni";
 
 const PaginaWeb = ({ componenti }) => {
   const formSliceReducer = useSelector((state) => state.formSliceReducer.value);

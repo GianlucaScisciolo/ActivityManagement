@@ -1,4 +1,4 @@
-import { encryptPassword, generateRandomString, PEPPER_HEX } from "../src/vario/Sicurezza.js";
+import { encryptPassword, generateRandomString, PEPPER_HEX } from "../src/utils/Sicurezza.js";
 
 export class AutenticazioneSQL {
   SQL_SELEZIONE_UTENTE = ` 

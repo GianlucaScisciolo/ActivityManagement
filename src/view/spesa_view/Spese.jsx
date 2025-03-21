@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import { handleInputChange, handleInputClick, handleInputBlur } from "../../vario/Vario";
+import { OperazioniForms } from "../../view/forms/OperazioniForms";
 import { SpesaActions } from "../../actions/SpesaActions";
-import { SpesaForms } from "../../forms/SpesaForms";
+import { SpesaForms } from "../../view/forms/SpesaForms";
 import PaginaWebRicercaItems from "../../riutilizzabile/PaginaWebRicercaItems";
 
 const Spese = () => {
   const spesaActions = new SpesaActions();
   const spesaForms = new SpesaForms();
+  const operazioniForms = new OperazioniForms();
   const spesaSliceReducer = useSelector((state) => state.spesaSliceReducer.value);
   const [selectedTrashCount, setSelectedTrashCount] = useState(0);
   const [selectedPencilCount, setSelectedPencilCount] = useState(0);
@@ -39,9 +40,9 @@ const Spese = () => {
           {
             campiRicercaItems: spesaForms.getCampiRicercaSpese(
               datiRicerca, 
-              (e) => handleInputChange(e, setDatiRicerca), 
-              (e) => handleInputClick(e), 
-              (e) => handleInputBlur(e) 
+              (e) => operazioniForms.handleInputChange(e, setDatiRicerca), 
+              (e) => operazioniForms.handleInputClick(e), 
+              (e) => operazioniForms.handleInputBlur(e) 
             ),
             indiciRicercaItems: spesaForms.INDICI_RICERCA_SPESE, 
             handleSearch: (e) => spesaActions.ricercaSpese(e, datiRicerca), 

@@ -1,6 +1,6 @@
-import { controlloLavoro } from "../vario/Controlli";
+import { controlloLavoro } from "../utils/Controlli";
 import { lavoroSliceActions } from "../store/redux/LavoroSlice";
-import { generaFileLavoriPDF, generaFileLavoriExcel } from "../vario/File";
+import { generaFileLavoriPDF, generaFileLavoriExcel } from "../utils/File";
 import { dispatcher } from "../dispatcher/Dispatcher";
 
 export class LavoroActions {

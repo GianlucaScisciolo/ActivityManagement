@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { controlloServizio } from "../vario/Controlli";
+import { controlloServizio } from "../../utils/Controlli";
 
 export class ServizioForms {
   INDICI_NUOVO_SERVIZIO = [0, 1, 2];

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { Plus, Save } from 'lucide-react';
-import Header from "./component/Header";
+import Header from "./components/Header";
 import { DragAndDropWidgetHomePage } from "./DragAndDrop";
 import { widgetSliceActions } from "../store/redux/WidgetSlice";
 

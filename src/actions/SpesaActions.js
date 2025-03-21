@@ -1,6 +1,6 @@
-import { controlloSpesa } from "../vario/Controlli";
+import { controlloSpesa } from "../utils/Controlli";
 import { spesaSliceActions } from "../store/redux/SpesaSlice";
-import { generaFileSpesePDF, generaFileSpeseExcel } from "../vario/File";
+import { generaFileSpesePDF, generaFileSpeseExcel } from "../utils/File";
 import { dispatcher } from "../dispatcher/Dispatcher";
 
 export class SpesaActions {

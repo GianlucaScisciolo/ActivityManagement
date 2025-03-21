@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { controlloCliente } from "../vario/Controlli";
+import { controlloCliente } from "../../utils/Controlli";
 
 export class ClienteForms {
   INDICI_NUOVO_CLIENTE = [0, 1, 2, 3, 4];

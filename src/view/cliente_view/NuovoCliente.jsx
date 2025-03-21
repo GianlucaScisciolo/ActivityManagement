@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { ClienteActions } from "../../actions/ClienteActions.js";
-import { ClienteForms } from '../../forms/ClienteForms.js';
-import { handleInputChange } from '../../vario/Vario.js';
+import { ClienteForms } from '../../view/forms/ClienteForms.js';
+import { OperazioniForms } from '../../view/forms/OperazioniForms.js';
 import PaginaWebNewItem from '../../riutilizzabile/PaginaWebNewItem.jsx';
 
 const NuovoCliente = () => {
   const clienteActions = new ClienteActions();
   const clienteForms = new ClienteForms();
+  const operazioniForms = new OperazioniForms();
   const clienteSliceReducer = useSelector((state) => state.clienteSliceReducer.value);
 
   const [selectedTrashCount, setSelectedTrashCount] = useState(0);
@@ -42,7 +43,7 @@ const NuovoCliente = () => {
       <PaginaWebNewItem 
         componenti={
           {
-            campiNuovoItem: clienteForms.getCampiNuovoCliente(nuovoCliente, (e) => handleInputChange(e, setNuovoCliente), null, null), 
+            campiNuovoItem: clienteForms.getCampiNuovoCliente(nuovoCliente, (e) => operazioniForms.handleInputChange(e, setNuovoCliente), null, null), 
             indiciNuovoItem: clienteForms.INDICI_NUOVO_CLIENTE, 
             handleInsert: (e) => clienteActions.inserimentoCliente(e, nuovoCliente, setNuovoCliente), 
             tipoItem: "cliente", 

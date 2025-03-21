@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { ClienteForms } from "../../forms/ClienteForms.js";
+import { ClienteForms } from "../../view/forms/ClienteForms.js";
 import { ClienteActions } from "../../actions/ClienteActions.js";
-import { handleInputChange } from "../../vario/Vario.js";
+import { OperazioniForms } from '../../view/forms/OperazioniForms.js';
 import PaginaWebRicercaItems from '../../riutilizzabile/PaginaWebRicercaItems.jsx';
 
 import { useSelector } from 'react-redux';
@@ -10,6 +10,7 @@ import { useSelector } from 'react-redux';
 const Clienti = () => {
   const clienteActions = new ClienteActions();
   const clienteForms = new ClienteForms();
+  const operazioniForms = new OperazioniForms();
   const clienteSliceReducer = useSelector((state) => state.clienteSliceReducer.value);
   const [selectedTrashCount, setSelectedTrashCount] = useState(0);
   const [selectedPencilCount, setSelectedPencilCount] = useState(0);
@@ -37,7 +38,7 @@ const Clienti = () => {
       <PaginaWebRicercaItems 
         componenti={
           {
-            campiRicercaItems: clienteForms.getCampiRicercaClienti(datiRicerca, (e) => handleInputChange(e, setDatiRicerca), null, null),
+            campiRicercaItems: clienteForms.getCampiRicercaClienti(datiRicerca, (e) => operazioniForms.handleInputChange(e, setDatiRicerca), null, null),
             indiciRicercaItems: clienteForms.INDICI_RICERCA_CLIENTI, 
             handleSearch: (e) => clienteActions.ricercaClienti(e, datiRicerca), 
             tipoItem: "cliente", 

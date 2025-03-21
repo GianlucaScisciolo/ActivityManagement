@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import { handleInputChange } from "../../vario/Vario.js";
+import { OperazioniForms } from "../../view/forms/OperazioniForms.js";
 import { ServizioActions } from "../../actions/ServizioActions.js";
-import { ServizioForms } from "../../forms/ServizioForms.js"
+import { ServizioForms } from "../../view/forms/ServizioForms.js"
 import PaginaWebNewItem from "../../riutilizzabile/PaginaWebNewItem.jsx";
 
 const NuovoServizio = () => {
   const servizioActions = new ServizioActions();
   const servizioForms = new ServizioForms();
+  const operazioniForms = new OperazioniForms();
   const servizioSliceReducer = useSelector((state) => state.servizioSliceReducer.value);
   const [selectedTrashCount, setSelectedTrashCount] = useState(0);
   const [selectedPencilCount, setSelectedPencilCount] = useState(0);
@@ -37,7 +38,7 @@ const NuovoServizio = () => {
       <PaginaWebNewItem 
         componenti={
           {
-            campiNuovoItem: servizioForms.getCampiNuovoServizio(nuovoServizio, (e) => handleInputChange(e, setNuovoServizio), null, null), 
+            campiNuovoItem: servizioForms.getCampiNuovoServizio(nuovoServizio, (e) => operazioniForms.handleInputChange(e, setNuovoServizio), null, null), 
             indiciNuovoItem: servizioForms.INDICI_NUOVO_SERVIZIO, 
             handleInsert: (e) => servizioActions.inserisciServizio(e, nuovoServizio, setNuovoServizio), 
             tipoItem: "servizio", 

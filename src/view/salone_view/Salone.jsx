@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import Header from "../component/Header";
+import Header from "../components/Header";
 import DragAndDrop from "../DragAndDrop";
 import { LavoroActions } from "../../actions/LavoroActions";
 import { SpesaActions } from "../../actions/SpesaActions";

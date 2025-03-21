@@ -1,4 +1,4 @@
-import { controlloLogin, controlloProfilo } from "../vario/Controlli";
+import { controlloLogin, controlloProfilo } from "../utils/Controlli";
 import { autenticazioneSliceActions } from "../store/redux/AutenticazioneSlice";
 import { dispatcher } from "../dispatcher/Dispatcher";
 

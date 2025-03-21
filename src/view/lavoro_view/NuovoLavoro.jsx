@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { handleInputChange, handleInputClick, handleInputBlur } from "../../vario/Vario";
+import { OperazioniForms } from "../../view/forms/OperazioniForms";
 import { LavoroActions } from "../../actions/LavoroActions";
-import { LavoroForms } from "../../forms/LavoroForms";
+import { LavoroForms } from "../../view/forms/LavoroForms";
 import PaginaWebNewItem from "../../riutilizzabile/PaginaWebNewItem";
 
 const NuovoLavoro = () => {
   const lavoroActions = new LavoroActions();
   const lavoroForms = new LavoroForms();
+  const operazioniForms = new OperazioniForms();
   const formSliceReducer = useSelector((state) => state.formSliceReducer.value);
   const itemSliceReducer = useSelector((state) => state.itemSliceReducer.value);
   const lavoroSliceReducer = useSelector((state) => state.lavoroSliceReducer.value);
@@ -298,9 +299,9 @@ const NuovoLavoro = () => {
               nuovoLavoro, 
               OptionsClienti({clienti}), 
               OptionsServizi({servizi}), 
-              (e) => handleInputChange(e, setNuovoLavoro), 
-              (e) => handleInputClick(e), 
-              (e) => handleInputBlur(e) 
+              (e) => operazioniForms.handleInputChange(e, setNuovoLavoro), 
+              (e) => operazioniForms.handleInputClick(e), 
+              (e) => operazioniForms.handleInputBlur(e) 
             ),
             indiciNuovoItem: lavoroForms.INDICI_NUOVO_LAVORO, 
             handleInsert: (e) => lavoroActions.inserimentoLavoro(e, servizi, clienti, nuovoLavoro, setNuovoLavoro), 

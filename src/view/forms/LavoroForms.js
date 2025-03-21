@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { controlloLavoro } from "../vario/Controlli";
+import { controlloLavoro } from "../../utils/Controlli";
 
 export class LavoroForms {
   INDICI_NUOVO_LAVORO = [0, 1, 2, 3];
