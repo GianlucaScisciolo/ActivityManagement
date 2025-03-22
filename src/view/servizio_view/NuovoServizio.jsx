@@ -15,6 +15,7 @@ const NuovoServizio = () => {
   const servizioForms = new ServizioForms();
   const operazioniForms = new OperazioniForms();
   const servizioSliceReducer = useSelector((state) => state.servizioSliceReducer.value);
+  const stileSliceReducer = useSelector((state) => state.stileSliceReducer.value);
   const [selectedTrashCount, setSelectedTrashCount] = useState(0);
   const [selectedPencilCount, setSelectedPencilCount] = useState(0);
   const [selectedIdsEliminazione, setSelectedIdsEliminazione] = useState([]);
@@ -47,6 +48,8 @@ const NuovoServizio = () => {
       <PaginaWebNewItem 
         componenti={
           {
+            stileSliceReducer: stileSliceReducer, 
+            lavoroActions: null, 
             campiNuovoItem: servizioForms.getCampiNuovoServizio(nuovoServizio, (e) => operazioniForms.handleInputChange(e, setNuovoServizio), null, null), 
             indiciNuovoItem: servizioForms.INDICI_NUOVO_SERVIZIO, 
             handleInsert: (e) => servizioActions.inserisciServizio(e, nuovoServizio, setNuovoServizio), 

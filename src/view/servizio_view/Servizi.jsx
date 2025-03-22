@@ -15,6 +15,7 @@ const Servizi = () => {
   const servizioForms = new ServizioForms();
   const operazioniForms = new OperazioniForms();
   const servizioSliceReducer = useSelector((state) => state.servizioSliceReducer.value);
+  const stileSliceReducer = useSelector((state) => state.stileSliceReducer.value);
   const [selectedTrashCount, setSelectedTrashCount] = useState(0);
   const [selectedPencilCount, setSelectedPencilCount] = useState(0);
   const [selectedIdsEliminazione, setSelectedIdsEliminazione] = useState([]);
@@ -44,6 +45,8 @@ const Servizi = () => {
       <PaginaWebRicercaItems 
         componenti={ 
           {
+            stileSliceReducer: stileSliceReducer, 
+            lavoroActions: null, 
             campiRicercaItems: servizioForms.getCampiRicercaServizi(datiRicerca, (e) => operazioniForms.handleInputChange(e, setDatiRicerca), null, null),
             indiciRicercaItems: servizioForms.INDICI_RICERCA_SERVIZI, 
             handleSearch: (e) => servizioActions.ricercaServizi(e, datiRicerca), 

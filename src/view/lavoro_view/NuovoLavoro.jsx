@@ -17,7 +17,7 @@ const NuovoLavoro = () => {
   const stileSliceReducer = useSelector((state) => state.stileSliceReducer.value);
   const lavoroSliceReducer = useSelector((state) => state.lavoroSliceReducer.value);
 
-  const classeFormWrapperCheckbox = (stileliceReducer.vistaForm === "form") ? "checkbox-wrapper-form" : "checkbox-wrapper";
+  const classeFormWrapperCheckbox = (stileSliceReducer.vistaForm === "form") ? "checkbox-wrapper-form" : "checkbox-wrapper";
   const classeItemWrapperCheckbox = (stileSliceReducer.vistaItem === "form") ? "checkbox-wrapper-form" : "checkbox-wrapper";
   
   const [clienti, setClienti] = useState(-1);
@@ -303,6 +303,8 @@ const NuovoLavoro = () => {
       <PaginaWebNewItem 
         componenti={
           {
+            stileSliceReducer: stileSliceReducer, 
+            lavoroActions: lavoroActions, 
             campiNuovoItem: lavoroForms.getCampiNuovoLavoro(
               nuovoLavoro, 
               OptionsClienti({clienti}), 

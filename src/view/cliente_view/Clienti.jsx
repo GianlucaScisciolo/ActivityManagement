@@ -15,6 +15,7 @@ const Clienti = () => {
   const clienteForms = new ClienteForms();
   const operazioniForms = new OperazioniForms();
   const clienteSliceReducer = useSelector((state) => state.clienteSliceReducer.value);
+  const stileSliceReducer = useSelector((state) => state.stileSliceReducer.value);
   const [selectedTrashCount, setSelectedTrashCount] = useState(0);
   const [selectedPencilCount, setSelectedPencilCount] = useState(0);
   const [selectedIdsEliminazione, setSelectedIdsEliminazione] = useState([]);
@@ -45,6 +46,8 @@ const Clienti = () => {
       <PaginaWebRicercaItems 
         componenti={
           {
+            stileSliceReducer: stileSliceReducer, 
+            lavoroActions: null, 
             campiRicercaItems: clienteForms.getCampiRicercaClienti(datiRicerca, (e) => operazioniForms.handleInputChange(e, setDatiRicerca), null, null),
             indiciRicercaItems: clienteForms.INDICI_RICERCA_CLIENTI, 
             handleSearch: (e) => clienteActions.ricercaClienti(e, datiRicerca), 

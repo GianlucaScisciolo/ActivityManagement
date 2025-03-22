@@ -33,6 +33,7 @@ const PaginaWebNewItem = ({ componenti }) => {
         campi={componenti.campiItemEsistente}
         indici={componenti.indiciItemEsistente}
         servizi={componenti.servizi}
+        lavoroActions={componenti.lavoroActions} // DA VEDERE !!!!
       />
 
       <br /> <br /> <br /> <br />

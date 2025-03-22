@@ -15,6 +15,7 @@ const Spese = () => {
   const spesaForms = new SpesaForms();
   const operazioniForms = new OperazioniForms();
   const spesaSliceReducer = useSelector((state) => state.spesaSliceReducer.value);
+  const stileSliceReducer = useSelector((state) => state.stileSliceReducer.value);
   const [selectedTrashCount, setSelectedTrashCount] = useState(0);
   const [selectedPencilCount, setSelectedPencilCount] = useState(0);
   const [selectedIdsEliminazione, setSelectedIdsEliminazione] = useState([]);
@@ -47,6 +48,8 @@ const Spese = () => {
       <PaginaWebRicercaItems 
         componenti={ 
           {
+            stileSliceReducer: stileSliceReducer, 
+            lavoroActions: null, 
             campiRicercaItems: spesaForms.getCampiRicercaSpese(
               datiRicerca, 
               (e) => operazioniForms.handleInputChange(e, setDatiRicerca), 

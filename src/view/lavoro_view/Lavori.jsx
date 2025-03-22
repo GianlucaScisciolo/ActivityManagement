@@ -15,6 +15,7 @@ const Lavori = () => {
   const lavoroForms = new LavoroForms();
   const operazioniForms = new OperazioniForms();
   const lavoroSliceReducer = useSelector((state) => state.lavoroSliceReducer.value);
+  const stileSliceReducer = useSelector((state) => state.stileSliceReducer.value);
   const [servizi, setServizi] = useState(-1);
   const [selectedTrashCount, setSelectedTrashCount] = useState(0);
   const [selectedPencilCount, setSelectedPencilCount] = useState(0);
@@ -74,6 +75,8 @@ const Lavori = () => {
       <PaginaWebRicercaItems 
         componenti={
           {
+            stileSliceReducer: stileSliceReducer, 
+            lavoroActions: lavoroActions, 
             campiRicercaItems: lavoroForms.getCampiRicercaLavori(
               datiRicerca, 
               (e) => operazioniForms.handleInputChange(e, setDatiRicerca), 
