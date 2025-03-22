@@ -14,8 +14,8 @@ const Clienti = () => {
   const clienteActions = new ClienteActions();
   const clienteForms = new ClienteForms();
   const operazioniForms = new OperazioniForms();
-  const clienteSliceReducer = useSelector((state) => state.clienteSliceReducer.value);
-  const stileSliceReducer = useSelector((state) => state.stileSliceReducer.value);
+  const clienteState = useSelector((state) => state.clienteSliceReducer.value);
+  const stileState = useSelector((state) => state.stileSliceReducer.value);
   const [selectedTrashCount, setSelectedTrashCount] = useState(0);
   const [selectedPencilCount, setSelectedPencilCount] = useState(0);
   const [selectedIdsEliminazione, setSelectedIdsEliminazione] = useState([]);
@@ -51,14 +51,14 @@ const Clienti = () => {
       <PaginaWebRicercaItems 
         componenti={
           {
-            stileSliceReducer: stileSliceReducer, 
+            stileState: stileState, 
             lavoroActions: null, 
             handleBlurItem: handleBlurItem, 
             campiRicercaItems: clienteForms.getCampiRicercaClienti(datiRicerca, (e) => operazioniForms.handleInputChange(e, setDatiRicerca), null, null),
             indiciRicercaItems: clienteForms.INDICI_RICERCA_CLIENTI, 
             handleSearch: (e) => clienteActions.ricercaClienti(e, datiRicerca), 
             tipoItem: "cliente", 
-            items: clienteSliceReducer.clienti, 
+            items: clienteState.clienti, 
             setItems: null, 
             selectOperation: selectOperation, 
             campiItemEsistente: clienteForms.getCampiClienteEsistente, 
@@ -66,8 +66,8 @@ const Clienti = () => {
             servizi: null, 
             selectedIdsModifica: selectedIdsModifica, 
             selectedIdsEliminazione: selectedIdsEliminazione, 
-            handleEdit: (e) => clienteActions.modificaClienti(e, clienteSliceReducer, selectedIdsModifica, setSelectedIdsModifica), 
-            handleDelete: (e) => clienteActions.eliminaClienti(e, selectedIdsEliminazione, setSelectedIdsEliminazione, clienteSliceReducer)
+            handleEdit: (e) => clienteActions.modificaClienti(e, clienteState, selectedIdsModifica, setSelectedIdsModifica), 
+            handleDelete: (e) => clienteActions.eliminaClienti(e, selectedIdsEliminazione, setSelectedIdsEliminazione, clienteState)
           }
         }
       />

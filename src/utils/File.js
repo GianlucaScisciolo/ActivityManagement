@@ -1,7 +1,9 @@
+// React e Redux
 // import jsPDF from 'jspdf';
 // import autoTable from 'jspdf-autotable';
 import ExcelJS from 'exceljs';
 import { saveAs } from 'file-saver';
+// Utils
 import { formatoDate } from './Tempo';
 
 export const generaFileLavoriPDF = (lavori) => {

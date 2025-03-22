@@ -8,10 +8,10 @@ import { OperazioniItems } from "./Operazioni";
 import { Items } from "./Items"
 
 const PaginaWebNewItem = ({ componenti }) => {
-  const stileSliceReducer = componenti.stileSliceReducer;
+  const stileState = componenti.stileState;
 
-  const NuovoItemTag = (stileSliceReducer.vistaForm === "form") ? FormNuovoItem : (
-    (stileSliceReducer.vistaForm === "card") ? CardNuovoItem : RowNuovoItem
+  const NuovoItemTag = (stileState.vistaForm === "form") ? FormNuovoItem : (
+    (stileState.vistaForm === "card") ? CardNuovoItem : RowNuovoItem
   )
 
   return (

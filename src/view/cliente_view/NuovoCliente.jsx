@@ -14,8 +14,8 @@ const NuovoCliente = () => {
   const clienteActions = new ClienteActions();
   const clienteForms = new ClienteForms();
   const operazioniForms = new OperazioniForms();
-  const clienteSliceReducer = useSelector((state) => state.clienteSliceReducer.value);
-  const stileSliceReducer = useSelector((state) => state.stileSliceReducer.value);
+  const clienteState = useSelector((state) => state.clienteSliceReducer.value);
+  const stileState = useSelector((state) => state.stileSliceReducer.value);
 
   const [selectedTrashCount, setSelectedTrashCount] = useState(0);
   const [selectedPencilCount, setSelectedPencilCount] = useState(0);
@@ -58,14 +58,14 @@ const NuovoCliente = () => {
       <PaginaWebNewItem 
         componenti={
           {
-            stileSliceReducer: stileSliceReducer, 
+            stileState: stileState, 
             lavoroActions: null, 
             handleBlurItem: handleBlurItem, 
             campiNuovoItem: clienteForms.getCampiNuovoCliente(nuovoCliente, (e) => operazioniForms.handleInputChange(e, setNuovoCliente), null, null), 
             indiciNuovoItem: clienteForms.INDICI_NUOVO_CLIENTE, 
             handleInsert: (e) => clienteActions.inserimentoCliente(e, nuovoCliente, setNuovoCliente), 
             tipoItem: "cliente", 
-            items: clienteSliceReducer.nuoviClienti, 
+            items: clienteState.nuoviClienti, 
             setItems: null, 
             selectOperation: selectOperation, 
             campiItemEsistente: clienteForms.getCampiClienteEsistente, 
@@ -73,8 +73,8 @@ const NuovoCliente = () => {
             servizi: null, 
             selectedIdsModifica: selectedIdsModifica, 
             selectedIdsEliminazione: selectedIdsEliminazione, 
-            //handleEdit: (e) => clienteAction.handleEdit(e, clienteSliceReducer, selectedIdsModifica, setSelectedIdsModifica, dispatch), 
-            //handleDelete: (e) => clienteAction.handleDelete(e, selectedIdsEliminazione, setSelectedIdsEliminazione, clienteSliceReducer, dispatch)
+            //handleEdit: (e) => clienteAction.handleEdit(e, clienteState, selectedIdsModifica, setSelectedIdsModifica, dispatch), 
+            //handleDelete: (e) => clienteAction.handleDelete(e, selectedIdsEliminazione, setSelectedIdsEliminazione, clienteState, dispatch)
             handleEdit: null, 
             handleDelete: null
           }

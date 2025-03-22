@@ -14,7 +14,7 @@ const DragAndDrop = ({ initialPositions, onClickWidget }) => {
   const [draggedElement, setDraggedElement] = useState(null);
   const gridSize = 310; // Definisci la larghezza delle celle della griglia
   const gridHeight = 410; // Definisci l'altezza delle celle della griglia
-  const saloneSliceReducer = useSelector((state) => state.saloneSliceReducer.value);
+  const saloneState = useSelector((state) => state.saloneSliceReducer.value);
 
   const handleDragStart = (e, id) => {
     setDragging(true);
@@ -166,7 +166,7 @@ const WidgetTag = ({ widget, handleDragStart, handleDragEnd }) => {
 }
 
 export const DragAndDropWidgetHomePage = ({plusCliccato}) => {
-  const saloneSliceReducer = useSelector((state) => state.saloneSliceReducer.value);
+  const saloneState = useSelector((state) => state.saloneSliceReducer.value);
   const [dragging, setDragging] = useState(false);
   const [offset, setOffset] = useState({ x: 0, y: 0 });
   const [draggedElement, setDraggedElement] = useState(null);
@@ -209,41 +209,41 @@ export const DragAndDropWidgetHomePage = ({plusCliccato}) => {
       }}
     >
       {(plusCliccato === true) ? (<>
-        <WidgetTag widget={saloneSliceReducer.nuovo_cliente} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
-        <WidgetTag widget={saloneSliceReducer.clienti} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
+        <WidgetTag widget={saloneState.nuovo_cliente} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
+        <WidgetTag widget={saloneState.clienti} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
         
-        <WidgetTag widget={saloneSliceReducer.nuovo_servizio} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
-        <WidgetTag widget={saloneSliceReducer.servizi} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
+        <WidgetTag widget={saloneState.nuovo_servizio} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
+        <WidgetTag widget={saloneState.servizi} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
         
-        <WidgetTag widget={saloneSliceReducer.nuovo_lavoro} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
-        <WidgetTag widget={saloneSliceReducer.lavori} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
-        <WidgetTag widget={saloneSliceReducer.file_lavori} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
-        <WidgetTag widget={saloneSliceReducer.prenotazione} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
+        <WidgetTag widget={saloneState.nuovo_lavoro} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
+        <WidgetTag widget={saloneState.lavori} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
+        <WidgetTag widget={saloneState.file_lavori} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
+        <WidgetTag widget={saloneState.prenotazione} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
         
-        <WidgetTag widget={saloneSliceReducer.nuova_spesa} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
-        <WidgetTag widget={saloneSliceReducer.spese} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
-        <WidgetTag widget={saloneSliceReducer.file_spese} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
+        <WidgetTag widget={saloneState.nuova_spesa} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
+        <WidgetTag widget={saloneState.spese} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
+        <WidgetTag widget={saloneState.file_spese} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
         
-        <WidgetTag widget={saloneSliceReducer.salone} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
-        <WidgetTag widget={saloneSliceReducer.profilo} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
+        <WidgetTag widget={saloneState.salone} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
+        <WidgetTag widget={saloneState.profilo} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
       </>) : (<>
-        {(saloneSliceReducer.nuovo_cliente.tipoVisualizzazione !== 0) && (<WidgetTag widget={saloneSliceReducer.nuovo_cliente} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
-        {(saloneSliceReducer.clienti.tipoVisualizzazione !== 0) && (<WidgetTag widget={saloneSliceReducer.clienti} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
+        {(saloneState.nuovo_cliente.tipoVisualizzazione !== 0) && (<WidgetTag widget={saloneState.nuovo_cliente} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
+        {(saloneState.clienti.tipoVisualizzazione !== 0) && (<WidgetTag widget={saloneState.clienti} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
         
-        {(saloneSliceReducer.nuovo_servizio.tipoVisualizzazione !== 0) && (<WidgetTag widget={saloneSliceReducer.nuovo_servizio} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
-        {(saloneSliceReducer.servizi.tipoVisualizzazione !== 0) && (<WidgetTag widget={saloneSliceReducer.servizi} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
+        {(saloneState.nuovo_servizio.tipoVisualizzazione !== 0) && (<WidgetTag widget={saloneState.nuovo_servizio} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
+        {(saloneState.servizi.tipoVisualizzazione !== 0) && (<WidgetTag widget={saloneState.servizi} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
         
-        {(saloneSliceReducer.nuovo_lavoro.tipoVisualizzazione !== 0) && (<WidgetTag widget={saloneSliceReducer.nuovo_lavoro} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
-        {(saloneSliceReducer.lavori.tipoVisualizzazione !== 0) && (<WidgetTag widget={saloneSliceReducer.lavori} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
-        {(saloneSliceReducer.file_lavori.tipoVisualizzazione !== 0) && (<WidgetTag widget={saloneSliceReducer.file_lavori} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
-        {(saloneSliceReducer.prenotazione.tipoVisualizzazione !== 0) && (<WidgetTag widget={saloneSliceReducer.prenotazione} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
+        {(saloneState.nuovo_lavoro.tipoVisualizzazione !== 0) && (<WidgetTag widget={saloneState.nuovo_lavoro} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
+        {(saloneState.lavori.tipoVisualizzazione !== 0) && (<WidgetTag widget={saloneState.lavori} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
+        {(saloneState.file_lavori.tipoVisualizzazione !== 0) && (<WidgetTag widget={saloneState.file_lavori} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
+        {(saloneState.prenotazione.tipoVisualizzazione !== 0) && (<WidgetTag widget={saloneState.prenotazione} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
         
-        {(saloneSliceReducer.nuova_spesa.tipoVisualizzazione !== 0) && (<WidgetTag widget={saloneSliceReducer.nuova_spesa} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
-        {(saloneSliceReducer.spese.tipoVisualizzazione !== 0) && (<WidgetTag widget={saloneSliceReducer.spese} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
-        {(saloneSliceReducer.file_spese.tipoVisualizzazione !== 0) && (<WidgetTag widget={saloneSliceReducer.file_spese} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
+        {(saloneState.nuova_spesa.tipoVisualizzazione !== 0) && (<WidgetTag widget={saloneState.nuova_spesa} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
+        {(saloneState.spese.tipoVisualizzazione !== 0) && (<WidgetTag widget={saloneState.spese} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
+        {(saloneState.file_spese.tipoVisualizzazione !== 0) && (<WidgetTag widget={saloneState.file_spese} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
                 
-        {(saloneSliceReducer.salone.tipoVisualizzazione !== 0) && (<WidgetTag widget={saloneSliceReducer.salone} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
-        {(saloneSliceReducer.profilo.tipoVisualizzazione !== 0) && (<WidgetTag widget={saloneSliceReducer.profilo} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
+        {(saloneState.salone.tipoVisualizzazione !== 0) && (<WidgetTag widget={saloneState.salone} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
+        {(saloneState.profilo.tipoVisualizzazione !== 0) && (<WidgetTag widget={saloneState.profilo} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
       </>)}
     </div>
   );

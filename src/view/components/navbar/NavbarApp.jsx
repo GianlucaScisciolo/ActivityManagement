@@ -6,6 +6,8 @@ import Navbar from 'react-bootstrap/Navbar';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { House } from 'lucide-react';
 // View
+import immagineSfondo1 from "../../img/immagine_sfondo1.jpg"
+import immagineSfondo2 from "../../img/immagine_sfondo2.png"
 import { 
   StyledNavLeft, StyledNavCenter, StyledNavRight, StyledNavDropdown, StyledNavDropdownItem, 
   StyledDropdownContainer, StyledSubMenuContainer, StyledNavLink, StyledNavLinkHome
@@ -17,8 +19,8 @@ import { StileActions } from '../../../actions/StileActions';
 export const NavbarApp = () => {
   const autenticazioneActions = new AutenticazioneActions();
   const stileActions = new StileActions()
-  const autenticazioneSliceReducer = useSelector((state) => state.autenticazioneSliceReducer.value);
-  const stileSliceReducer = useSelector((state) => state.stileSliceReducer.value);
+  const autenticazioneState = useSelector((state) => state.autenticazioneSliceReducer.value);
+  const stileState = useSelector((state) => state.stileSliceReducer.value);
   const [dropdownClienti, setDropdownClienti] = useState(false);
   const [dropdownProfessionisti, setDropdownProfessionisti] = useState(false);
   const [dropdownLavori, setDropdownLavori] = useState(false);
@@ -39,8 +41,8 @@ export const NavbarApp = () => {
   };  
   
   const applicaStileBody = () => {
-    if (stileSliceReducer.pathImg !== null) {
-      document.body.style.backgroundImage = `url(${stileSliceReducer.pathImg})`;
+    if (stileState.pathImg !== null) {
+      document.body.style.backgroundImage = `url(${stileState.pathImg})`;
       document.body.style.backgroundRepeat = 'no-repeat';
       document.body.style.backgroundSize = 'cover';
       document.body.style.backgroundAttachment = 'fixed';
@@ -52,9 +54,9 @@ export const NavbarApp = () => {
       document.documentElement.style.maxWidth = '100%';
       document.documentElement.style.maxHeight = '100%';
     } 
-    else if (stileSliceReducer.coloreRGB !== null) {
+    else if (stileState.coloreRGB !== null) {
       document.body.style.backgroundImage = 'none';
-      document.body.style.backgroundColor = stileSliceReducer.coloreRGB;
+      document.body.style.backgroundColor = stileState.coloreRGB;
   
       // Nasconde solo lo scorrimento orizzontale
       document.documentElement.style.overflowX = 'hidden';
@@ -68,13 +70,13 @@ export const NavbarApp = () => {
   
   useEffect(() => {
     applicaStileBody();
-  }, [stileSliceReducer]);
+  }, [stileState]);
 
   return (
     <>
       <Navbar expand="lg">
         <StyledNavLeft>
-          {(autenticazioneSliceReducer.isLogged === true) && (
+          {(autenticazioneState.isLogged === true) && (
             <>
               <StyledNavDropdown title="Clienti" show={dropdownClienti}
                 onMouseEnter={() => handleMouseEnter(setDropdownClienti)}
@@ -134,22 +136,22 @@ export const NavbarApp = () => {
                     {(dropdownSfondo === true) && (
                       <>
                         <StyledNavDropdownItem as={NavLink} to="#" 
-                          onClick={() => stileActions.cambioSfondo("immagine_1")}
+                          onClick={() => stileActions.cambioSfondo("img", immagineSfondo1)}
                         >
                           Immagine 1
                         </StyledNavDropdownItem>
                         <StyledNavDropdownItem as={NavLink} to="#" 
-                          onClick={() => stileActions.cambioSfondo("immagine_2")}
+                          onClick={() => stileActions.cambioSfondo("img", immagineSfondo2)}
                         >
                           Immagine 2
                         </StyledNavDropdownItem>
                         <StyledNavDropdownItem as={NavLink} to="#" 
-                          onClick={() => stileActions.cambioSfondo("sfondo_scuro")}
+                          onClick={() => stileActions.cambioSfondo("rgb", "#111111")}
                         >
                           Sfondo scuro
                         </StyledNavDropdownItem>
                         <StyledNavDropdownItem as={NavLink} to="#" 
-                          onClick={() => stileActions.cambioSfondo("sfondo_chiaro")}
+                          onClick={() => stileActions.cambioSfondo("rgb", "#8F8F8F")}
                         >
                           Sfondo chiaro
                         </StyledNavDropdownItem>
@@ -204,10 +206,10 @@ export const NavbarApp = () => {
             </StyledNavDropdown>
 
                
-            {(autenticazioneSliceReducer.isLogged === false) && (
+            {(autenticazioneState.isLogged === false) && (
               <StyledNavLink as={NavLink} to="/login">Login</StyledNavLink>
             )}
-            {(autenticazioneSliceReducer.isLogged === true) && (
+            {(autenticazioneState.isLogged === true) && (
               <>
                 <StyledNavLink as={NavLink} to="/salone">Salone</StyledNavLink>
                 <StyledNavLink as={NavLink} to="/profilo">Profilo</StyledNavLink>

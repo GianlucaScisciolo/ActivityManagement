@@ -1,9 +1,8 @@
-import store from "../store/redux/store";
+import store from "../store/store.js";
 
 export const dispatcher = (action) => {
   store.dispatch(action);
 };
-
 
 
 

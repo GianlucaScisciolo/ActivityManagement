@@ -9,13 +9,13 @@ import { OperazioniItems } from "../riutilizzabile/Operazioni";
 import { Items } from "../view/components/Items";
 
 const PaginaWeb = ({ componenti }) => {
-  const stileSliceReducer = componenti.stileSliceReducer;
+  const stileState = componenti.stileState;
 
-  const NuovoItemTag = (stileSliceReducer.vistaForm === "form") ? FormNuovoItem : (
-    (stileSliceReducer.vistaForm === "card") ? CardNuovoItem : RowNuovoItem
+  const NuovoItemTag = (stileState.vistaForm === "form") ? FormNuovoItem : (
+    (stileState.vistaForm === "card") ? CardNuovoItem : RowNuovoItem
   )
-  const RicercaItemsTag = (stileSliceReducer.vistaForm === "form") ? FormRicercaItems : (
-    (stileSliceReducer.vistaForm === "card") ? CardRicercaItems : RowRicercaItems
+  const RicercaItemsTag = (stileState.vistaForm === "form") ? FormRicercaItems : (
+    (stileState.vistaForm === "card") ? CardRicercaItems : RowRicercaItems
   )
 
   return (

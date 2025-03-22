@@ -28,10 +28,10 @@ const Login = () => {
   });
   const [aggiornamentoCompletato, setAggiornamentoCompletato] = useState(0);
   const navigate = useNavigate();
-  const stileSliceReducer = useSelector((state) => state.stileSliceReducer.value);
+  const stileState = useSelector((state) => state.stileSliceReducer.value);
 
-  const LoginTag = (stileSliceReducer.vistaForm === "form") ? FormLogin : (
-    (stileSliceReducer.vistaForm === "card") ? CardLogin : RowLogin
+  const LoginTag = (stileState.vistaForm === "form") ? FormLogin : (
+    (stileState.vistaForm === "card") ? CardLogin : RowLogin
   )
 
   return (

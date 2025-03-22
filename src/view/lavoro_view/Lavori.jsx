@@ -14,8 +14,8 @@ const Lavori = () => {
   const lavoroActions = new LavoroActions();
   const lavoroForms = new LavoroForms();
   const operazioniForms = new OperazioniForms();
-  const lavoroSliceReducer = useSelector((state) => state.lavoroSliceReducer.value);
-  const stileSliceReducer = useSelector((state) => state.stileSliceReducer.value);
+  const lavoroState = useSelector((state) => state.lavoroSliceReducer.value);
+  const stileState = useSelector((state) => state.stileSliceReducer.value);
   const [servizi, setServizi] = useState(-1);
   const [selectedTrashCount, setSelectedTrashCount] = useState(0);
   const [selectedPencilCount, setSelectedPencilCount] = useState(0);
@@ -83,7 +83,7 @@ const Lavori = () => {
       <PaginaWebRicercaItems 
         componenti={
           {
-            stileSliceReducer: stileSliceReducer, 
+            stileState: stileState, 
             lavoroActions: lavoroActions, 
             handleBlurItem: handleBlurItem, 
             campiRicercaItems: lavoroForms.getCampiRicercaLavori(
@@ -95,7 +95,7 @@ const Lavori = () => {
             indiciRicercaItems: lavoroForms.INDICI_RICERCA_LAVORI, 
             handleSearch: (e) => lavoroActions.ricercaLavori(e, datiRicerca), 
             tipoItem: "lavoro", 
-            items: lavoroSliceReducer.lavori, 
+            items: lavoroState.lavori, 
             setItems: null, 
             selectOperation: selectOperation, 
             campiItemEsistente: lavoroForms.getCampiLavoroEsistente, 
@@ -103,8 +103,8 @@ const Lavori = () => {
             servizi: servizi, 
             selectedIdsModifica: selectedIdsModifica, 
             selectedIdsEliminazione: selectedIdsEliminazione, 
-            handleEdit: (e) => lavoroActions.modificaLavori(e, lavoroSliceReducer, selectedIdsModifica, setSelectedIdsModifica), 
-            handleDelete: (e) => lavoroActions.eliminaLavori(e, selectedIdsEliminazione, setSelectedIdsEliminazione, lavoroSliceReducer)
+            handleEdit: (e) => lavoroActions.modificaLavori(e, lavoroState, selectedIdsModifica, setSelectedIdsModifica), 
+            handleDelete: (e) => lavoroActions.eliminaLavori(e, selectedIdsEliminazione, setSelectedIdsEliminazione, lavoroState)
           }
         }
       />

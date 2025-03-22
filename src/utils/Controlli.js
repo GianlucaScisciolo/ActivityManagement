@@ -1,3 +1,4 @@
+// Utils
 import { passwordIsCorrect, PEPPER_HEX } from "./Sicurezza";
 
 function getInt(numStr) {

@@ -14,8 +14,8 @@ const NuovaSpesa = () => {
   const spesaActions = new SpesaActions();
   const spesaForms = new SpesaForms();
   const operazioniForms = new OperazioniForms();
-  const spesaSliceReducer = useSelector((state) => state.spesaSliceReducer.value);
-  const stileSliceReducer = useSelector((state) => state.stileSliceReducer.value);
+  const spesaState = useSelector((state) => state.spesaSliceReducer.value);
+  const stileState = useSelector((state) => state.stileSliceReducer.value);
   const [selectedTrashCount, setSelectedTrashCount] = useState(0);
   const [selectedPencilCount, setSelectedPencilCount] = useState(0);
   const [selectedIdsEliminazione, setSelectedIdsEliminazione] = useState([]);
@@ -60,7 +60,7 @@ const NuovaSpesa = () => {
       <PaginaWebNewItem 
         componenti={
           {
-            stileSliceReducer: stileSliceReducer, 
+            stileState: stileState, 
             lavoroActions: null, 
             handleBlurItem: handleBlurItem, 
             campiNuovoItem: spesaForms.getCampiNuovaSpesa(
@@ -72,7 +72,7 @@ const NuovaSpesa = () => {
             indiciNuovoItem: spesaForms.INDICI_NUOVA_SPESA, 
             handleInsert: (e) => spesaActions.inserimentoSpesa(e, nuovaSpesa, setNuovaSpesa), 
             tipoItem: "spesa", 
-            items: spesaSliceReducer.nuoveSpese, 
+            items: spesaState.nuoveSpese, 
             setItems: null, 
             selectOperation: selectOperation, 
             campiItemEsistente: spesaForms.getCampiSpesaEsistente, 

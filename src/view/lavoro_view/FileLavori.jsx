@@ -16,7 +16,7 @@ const FileLavori = () => {
   const lavoroActions = new LavoroActions();
   const lavoroForms = new LavoroForms();
   const operazioniForms = new OperazioniForms();
-  const stileSliceReducer = useSelector((state) => state.stileSliceReducer.value);
+  const stileState = useSelector((state) => state.stileSliceReducer.value);
   const [lavori, setLavori] = useState(-1);
   const [tipoFile, setTipoFile] = useState("");
   const [datiRicerca, setDatiRicerca] = useState({
@@ -29,8 +29,8 @@ const FileLavori = () => {
     note: ""
   });
 
-  const FormFileTag = (stileSliceReducer.vistaForm === "form") ? FormFileItems : (
-    (stileSliceReducer.vistaform === "card") ? CardFileItems : RowFileItems
+  const FormFileTag = (stileState.vistaForm === "form") ? FormFileItems : (
+    (stileState.vistaform === "card") ? CardFileItems : RowFileItems
   );
   
   return (

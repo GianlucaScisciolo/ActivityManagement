@@ -1,39 +1,27 @@
+/************************************************** Dispatcher **************************************************/
 import { dispatcher } from "../dispatcher/Dispatcher";
-import { stileSliceActions } from "../store/redux/StileSlice";
-// import immagineSfondo1 from "../"//"../../img/immagine_sfondo1.jpg";
-// import immagineSfondo2 from '../../img/immagine_sfondo2.png';
-import immagineSfondo1 from "../view/img/immagine_sfondo1.jpg";
-import immagineSfondo2 from "../view/img/immagine_sfondo2.png";
+/************************************************** Slices Actions **************************************************/
+import { stileSliceActions } from "../store/slice/StileSlice";
 
 export class StileActions {
   constructor() {
 
   }
 
-  cambioSfondo(nomeSfondo) {
-    switch(nomeSfondo) {
-      case "immagine_1":
+  cambioSfondo(tipoSfondo, sfondo) {
+    switch(tipoSfondo) {
+      case "img":
         dispatcher(stileSliceActions.cambioImmagineSfondo({
-          pathImg: immagineSfondo1
+          pathImg: sfondo
         }));
         break;
-      case "immagine_2":
-        dispatcher(stileSliceActions.cambioImmagineSfondo({
-          pathImg: immagineSfondo2
-        }));
-        break;
-      case "sfondo_scuro":
+      case "rgb": 
         dispatcher(stileSliceActions.cambioColoreSfondo({
-          coloreRGB: "#111111"
-        }));
-        break;
-      case "sfondo_chiaro":
-        dispatcher(stileSliceActions.cambioColoreSfondo({
-          coloreRGB: "#8F8F8F"
+          coloreRGB: sfondo
         }));
         break;
       default:
-        alert("Errore, nome sfondo non trovato.");
+        alert("Errore, tipo sfondo non trovato.");
         break;
     }
   }

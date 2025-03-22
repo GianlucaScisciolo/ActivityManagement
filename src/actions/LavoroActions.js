@@ -1,7 +1,10 @@
-import { controlloLavoro } from "../utils/Controlli";
-import { lavoroSliceActions } from "../store/redux/LavoroSlice";
-import { generaFileLavoriPDF, generaFileLavoriExcel } from "../utils/File";
+/************************************************** Dispatcher **************************************************/
 import { dispatcher } from "../dispatcher/Dispatcher";
+/************************************************** Slices Actions **************************************************/
+import { lavoroSliceActions } from "../store/slice/LavoroSlice";
+/************************************************** Utils **************************************************/
+import { controlloLavoro } from "../utils/Controlli";
+import { generaFileLavoriPDF, generaFileLavoriExcel } from "../utils/File";
 
 export class LavoroActions {
   constructor() {
@@ -277,13 +280,6 @@ export class LavoroActions {
     }
   }
 
-  /*
-          dispatch(lavoroSliceActions.aggiornaLavoro({
-            id_lavoro: item.id,
-            nome_attributo: "totale",
-            nuovo_valore: totale,
-          }));
-  */
   aggiornaLavoro(id_lavoro, nome_attributo, nuovo_valore) {
     dispatcher(lavoroSliceActions.aggiornaLavoro({
       id_lavoro: id_lavoro, 

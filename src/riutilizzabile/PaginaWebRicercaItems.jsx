@@ -8,10 +8,10 @@ import { OperazioniItems } from "./Operazioni";
 import { Items } from "./Items";
 
 const PaginaWebRicercaItems = ({ componenti }) => {
-  const stileSliceReducer = componenti.stileSliceReducer;
+  const stileState = componenti.stileState;
 
-  const RicercaItemsTag = (stileSliceReducer.vistaForm === "form") ? FormRicercaItems : (
-    (stileSliceReducer.vistaForm === "card") ? CardRicercaItems : RowRicercaItems
+  const RicercaItemsTag = (stileState.vistaForm === "form") ? FormRicercaItems : (
+    (stileState.vistaForm === "card") ? CardRicercaItems : RowRicercaItems
   )
 
   return (

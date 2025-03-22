@@ -1,6 +1,9 @@
-import { controlloServizio } from "../utils/Controlli";
-import { servizioSliceActions } from "../store/redux/ServizioSlice";
+/************************************************** Dispatcher **************************************************/
 import { dispatcher } from "../dispatcher/Dispatcher";
+/************************************************** Slices Actions **************************************************/
+import { servizioSliceActions } from "../store/slice/ServizioSlice";
+/************************************************** Utils **************************************************/
+import { controlloServizio } from "../utils/Controlli";
 
 export class ServizioActions {
   constructor() {

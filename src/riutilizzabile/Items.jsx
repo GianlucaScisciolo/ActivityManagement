@@ -6,8 +6,8 @@ import { CardItemEsistente } from "./card_item/CardItem";
 import { RowItemEsistente } from "./row_item/RowItem";
 
 export const Items = ({ tipoItem, items, setItems, selectOperation, emptyIsConsidered, campi, indici, servizi, handleBlurItem, lavoroActions }) => {
-  const stileSliceReducer = useSelector((state) => state.stileSliceReducer.value);
-  const ItemEsistenteTag = stileSliceReducer.vistaItem === "card" ? CardItemEsistente : RowItemEsistente;
+  const stileState = useSelector((state) => state.stileSliceReducer.value);
+  const ItemEsistenteTag = stileState.vistaItem === "card" ? CardItemEsistente : RowItemEsistente;
 
   const OptionsServizi = (servizi, descrizione, sottoStringa, item) => {
     const optionStr = (servizio) => `${servizio.nome} - ${servizio.prezzo} €`;
@@ -67,7 +67,7 @@ export const Items = ({ tipoItem, items, setItems, selectOperation, emptyIsConsi
     };
 
     const classeWrapperCheckbox =
-      stileSliceReducer.vistaItem === "form" ? "checkbox-wrapper-form" : "checkbox-wrapper";
+      stileState.vistaItem === "form" ? "checkbox-wrapper-form" : "checkbox-wrapper";
 
     return (
       <>
@@ -148,7 +148,7 @@ export const Items = ({ tipoItem, items, setItems, selectOperation, emptyIsConsi
       )}
       {items.length > 0 && (
         <>
-          {stileSliceReducer.vistaItem === "card" ? (
+          {stileState.vistaItem === "card" ? (
             <div className="contenitore-3">
               <ItemElements />
             </div>

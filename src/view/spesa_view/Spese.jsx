@@ -14,8 +14,8 @@ const Spese = () => {
   const spesaActions = new SpesaActions();
   const spesaForms = new SpesaForms();
   const operazioniForms = new OperazioniForms();
-  const spesaSliceReducer = useSelector((state) => state.spesaSliceReducer.value);
-  const stileSliceReducer = useSelector((state) => state.stileSliceReducer.value);
+  const spesaState = useSelector((state) => state.spesaSliceReducer.value);
+  const stileState = useSelector((state) => state.stileSliceReducer.value);
   const [selectedTrashCount, setSelectedTrashCount] = useState(0);
   const [selectedPencilCount, setSelectedPencilCount] = useState(0);
   const [selectedIdsEliminazione, setSelectedIdsEliminazione] = useState([]);
@@ -56,7 +56,7 @@ const Spese = () => {
       <PaginaWebRicercaItems 
         componenti={ 
           {
-            stileSliceReducer: stileSliceReducer, 
+            stileState: stileState, 
             lavoroActions: null, 
             handleBlurItem: handleBlurItem, 
             campiRicercaItems: spesaForms.getCampiRicercaSpese(
@@ -68,7 +68,7 @@ const Spese = () => {
             indiciRicercaItems: spesaForms.INDICI_RICERCA_SPESE, 
             handleSearch: (e) => spesaActions.ricercaSpese(e, datiRicerca), 
             tipoItem: "spesa", 
-            items: spesaSliceReducer.spese, 
+            items: spesaState.spese, 
             setItems: null, 
             selectOperation: selectOperation, 
             campiItemEsistente: spesaForms.getCampiSpesaEsistente, 
@@ -76,8 +76,8 @@ const Spese = () => {
             servizi: null, 
             selectedIdsModifica: selectedIdsModifica, 
             selectedIdsEliminazione: selectedIdsEliminazione, 
-            handleEdit: (e) => spesaActions.modificaSpese(e, spesaSliceReducer, selectedIdsModifica, setSelectedIdsModifica),  
-            handleDelete: (e) => spesaActions.eliminaSpese(e, selectedIdsEliminazione, setSelectedIdsEliminazione, spesaSliceReducer)
+            handleEdit: (e) => spesaActions.modificaSpese(e, spesaState, selectedIdsModifica, setSelectedIdsModifica),  
+            handleDelete: (e) => spesaActions.eliminaSpese(e, selectedIdsEliminazione, setSelectedIdsEliminazione, spesaState)
           }
         }
       />

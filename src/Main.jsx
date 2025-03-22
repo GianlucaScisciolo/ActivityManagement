@@ -1,45 +1,46 @@
+/************************************************** React e Redux **************************************************/
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Provider, useSelector } from "react-redux";
 
-import store from "./store/redux/store.js";
+/************************************************** Store **************************************************/
+import store from "./store/store.js";
 
+/************************************************** View **************************************************/
 import App from "./view/App.jsx";
-
-import Salone from "./view/salone_view/Salone.jsx";
-
+// Autenticazione View
 import Login from "./view/autenticazione_view/Login.jsx";
 import Profilo from "./view/autenticazione_view/Profilo.jsx";
-
+// Salone View
+import Salone from "./view/salone_view/Salone.jsx";
+// Cliente View
 import NuovoCliente from "./view/cliente_view/NuovoCliente.jsx";
 import Clienti from "./view/cliente_view/Clienti.jsx";
-
+// Servizio View
 import NuovoServizio from "./view/servizio_view/NuovoServizio.jsx";
 import Servizi from "./view/servizio_view/Servizi.jsx";
-
+// Spesa View
 import NuovaSpesa from "./view/spesa_view/NuovaSpesa.jsx";
 import Spese from "./view/spesa_view/Spese.jsx";
 import FileSpese from "./view/spesa_view/FileSpese.jsx"
-
+// Lavoro View
 import NuovoLavoro from "./view/lavoro_view/NuovoLavoro.jsx";
 import Lavori from "./view/lavoro_view/Lavori.jsx";
 import FileLavori from "./view/lavoro_view/FileLavori.jsx";
 
-// console.log("Store:", store.getState());
-
 const Root = () => {
-  const autenticazioneSliceReducer = useSelector((state) => state.autenticazioneSliceReducer.value);
+  const autenticazioneState = useSelector((state) => state.autenticazioneSliceReducer.value);
 
   return (
     <BrowserRouter>
     
       <Routes>
         <Route path="/" element={<App />} />
-        {(autenticazioneSliceReducer.isLogged === false) && (
+        {(autenticazioneState.isLogged === false) && (
           <Route path="/login" element={<Login />} />
         )}
-        {(autenticazioneSliceReducer.isLogged === true) && (
+        {(autenticazioneState.isLogged === true) && (
           <>
             <Route path="/profilo" element={<Profilo />} />
             <Route path="/clienti" element={<Clienti />} />

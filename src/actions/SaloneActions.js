@@ -1,9 +1,7 @@
-/*
-import { controlloCliente } from "../utils/Controlli";
-import { clienteSliceActions } from "../store/redux/ClienteSlice";
-*/
-import { saloneSliceActions } from "../store/redux/SaloneSlice";
+/************************************************** Dispatcher **************************************************/
 import { dispatcher } from "../dispatcher/Dispatcher";
+/************************************************** Slices Actions **************************************************/
+import { saloneSliceActions } from "../store/slice/SaloneSlice";
 
 export class SaloneActions {
   constructor() {

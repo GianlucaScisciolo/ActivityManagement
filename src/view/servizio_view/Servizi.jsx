@@ -14,8 +14,8 @@ const Servizi = () => {
   const servizioActions = new ServizioActions();
   const servizioForms = new ServizioForms();
   const operazioniForms = new OperazioniForms();
-  const servizioSliceReducer = useSelector((state) => state.servizioSliceReducer.value);
-  const stileSliceReducer = useSelector((state) => state.stileSliceReducer.value);
+  const servizioState = useSelector((state) => state.servizioSliceReducer.value);
+  const stileState = useSelector((state) => state.stileSliceReducer.value);
   const [selectedTrashCount, setSelectedTrashCount] = useState(0);
   const [selectedPencilCount, setSelectedPencilCount] = useState(0);
   const [selectedIdsEliminazione, setSelectedIdsEliminazione] = useState([]);
@@ -50,14 +50,14 @@ const Servizi = () => {
       <PaginaWebRicercaItems 
         componenti={ 
           {
-            stileSliceReducer: stileSliceReducer, 
+            stileState: stileState, 
             lavoroActions: null, 
             handleBlurItem: handleBlurItem, 
             campiRicercaItems: servizioForms.getCampiRicercaServizi(datiRicerca, (e) => operazioniForms.handleInputChange(e, setDatiRicerca), null, null),
             indiciRicercaItems: servizioForms.INDICI_RICERCA_SERVIZI, 
             handleSearch: (e) => servizioActions.ricercaServizi(e, datiRicerca), 
             tipoItem: "servizio", 
-            items: servizioSliceReducer.servizi, 
+            items: servizioState.servizi, 
             setItems: null, 
             selectOperation: selectOperation, 
             campiItemEsistente: servizioForms.getCampiServizioEsistente, 
@@ -65,7 +65,7 @@ const Servizi = () => {
             servizi: null, 
             selectedIdsModifica: selectedIdsModifica, 
             selectedIdsEliminazione: selectedIdsEliminazione, 
-            handleEdit: (e) => servizioActions.modificaServizi(e, servizioSliceReducer, selectedIdsModifica, setSelectedIdsModifica), 
+            handleEdit: (e) => servizioActions.modificaServizi(e, servizioState, selectedIdsModifica, setSelectedIdsModifica), 
             handleDelete: (e) => servizioActions.eliminaServizi(e, selectedIdsEliminazione, setSelectedIdsEliminazione, serviziSession)
           }
         }

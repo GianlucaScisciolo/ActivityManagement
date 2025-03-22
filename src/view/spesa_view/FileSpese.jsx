@@ -16,7 +16,7 @@ const FileSpese = () => {
   const spesaActions = new SpesaActions();
   const spesaForms = new SpesaForms();
   const operazioniForms = new OperazioniForms();
-  const stileSliceReducer = useSelector((state) => state.stileSliceReducer.value);
+  const stileState = useSelector((state) => state.stileSliceReducer.value);
   const [spese, setSpese] = useState(-1);
   const [tipoFile, setTipoFile] = useState("");
   const [datiRicerca, setDatiRicerca] = useState({
@@ -30,8 +30,8 @@ const FileSpese = () => {
     note: "",
   });
   
-  const FormFileTag = (stileSliceReducer.vistaForm === "form") ? FormFileItems : (
-    (stileSliceReducer.vistaForm === "card") ? CardFileItems : RowFileItems
+  const FormFileTag = (stileState.vistaForm === "form") ? FormFileItems : (
+    (stileState.vistaForm === "card") ? CardFileItems : RowFileItems
   );
 
   return (

@@ -1,3 +1,4 @@
+/************************************************** React e Redux **************************************************/
 import { createSlice } from "@reduxjs/toolkit";
 
 const loadFromLocalStorage = () => {

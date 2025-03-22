@@ -14,11 +14,11 @@ const NuovoLavoro = () => {
   const lavoroActions = new LavoroActions();
   const lavoroForms = new LavoroForms();
   const operazioniForms = new OperazioniForms();
-  const stileSliceReducer = useSelector((state) => state.stileSliceReducer.value);
-  const lavoroSliceReducer = useSelector((state) => state.lavoroSliceReducer.value);
+  const lavoroState = useSelector((state) => state.lavoroSliceReducer.value);
+  const stileState = useSelector((state) => state.stileSliceReducer.value);
 
-  const classeFormWrapperCheckbox = (stileSliceReducer.vistaForm === "form") ? "checkbox-wrapper-form" : "checkbox-wrapper";
-  const classeItemWrapperCheckbox = (stileSliceReducer.vistaItem === "form") ? "checkbox-wrapper-form" : "checkbox-wrapper";
+  const classeFormWrapperCheckbox = (stileState.vistaForm === "form") ? "checkbox-wrapper-form" : "checkbox-wrapper";
+  const classeItemWrapperCheckbox = (stileState.vistaItem === "form") ? "checkbox-wrapper-form" : "checkbox-wrapper";
   
   const [clienti, setClienti] = useState(-1);
   const [servizi, setServizi] = useState(-1);
@@ -311,7 +311,7 @@ const NuovoLavoro = () => {
       <PaginaWebNewItem 
         componenti={
           {
-            stileSliceReducer: stileSliceReducer, 
+            stileState: stileState, 
             lavoroActions: lavoroActions, 
             handleBlurItem: handleBlurItem, 
             campiNuovoItem: lavoroForms.getCampiNuovoLavoro(
@@ -325,7 +325,7 @@ const NuovoLavoro = () => {
             indiciNuovoItem: lavoroForms.INDICI_NUOVO_LAVORO, 
             handleInsert: (e) => lavoroActions.inserimentoLavoro(e, servizi, clienti, nuovoLavoro, setNuovoLavoro), 
             tipoItem: "lavoro", 
-            items: lavoroSliceReducer.nuoviLavori, 
+            items: lavoroState.nuoviLavori, 
             setItems: null, 
             selectOperation: selectOperation, 
             campiItemEsistente: lavoroForms.getCampiLavoroEsistente, 

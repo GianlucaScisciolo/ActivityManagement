@@ -1,6 +1,9 @@
-import { controlloLogin, controlloProfilo } from "../utils/Controlli";
-import { autenticazioneSliceActions } from "../store/redux/AutenticazioneSlice";
+/************************************************** Dispatcher **************************************************/
 import { dispatcher } from "../dispatcher/Dispatcher";
+/************************************************** Slices Actions **************************************************/
+import { autenticazioneSliceActions } from "../store/slice/AutenticazioneSlice";
+/************************************************** Utils **************************************************/
+import { controlloLogin, controlloProfilo } from "../utils/Controlli";
 
 export class AutenticazioneActions {
   constructor() {

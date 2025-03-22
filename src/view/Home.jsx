@@ -35,7 +35,7 @@ const StyledSaveNotSelected = styled(Save)`
 
 const Home = () => {
   const saloneActions = new SaloneActions();
-  const autenticazioneSliceReducer = useSelector((state) => state.autenticazioneSliceReducer.value);
+  const autenticazioneState = useSelector((state) => state.autenticazioneSliceReducer.value);
   const [plusCliccato, setPlusCliccato] = useState(false);
   const AddWidgetsTag = plusCliccato ? StyledSaveNotSelected : StyledPlusNotSelected;
 
@@ -44,7 +44,7 @@ const Home = () => {
       <Header />
 
       <br /> <br /> <br />
-      {(autenticazioneSliceReducer.isLogged === true) && (
+      {(autenticazioneState.isLogged === true) && (
         <>
           <div style={{ display: "flex", justifyContent: "flex-end", marginRight: "200px" }}>
             <button

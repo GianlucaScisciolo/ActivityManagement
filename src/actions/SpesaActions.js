@@ -1,7 +1,10 @@
-import { controlloSpesa } from "../utils/Controlli";
-import { spesaSliceActions } from "../store/redux/SpesaSlice";
-import { generaFileSpesePDF, generaFileSpeseExcel } from "../utils/File";
+/************************************************** Dispatcher **************************************************/
 import { dispatcher } from "../dispatcher/Dispatcher";
+/************************************************** Slices Actions **************************************************/
+import { spesaSliceActions } from "../store/slice/SpesaSlice";
+/************************************************** Utils **************************************************/
+import { controlloSpesa } from "../utils/Controlli";
+import { generaFileSpesePDF, generaFileSpeseExcel } from "../utils/File";
 
 export class SpesaActions {
   constructor() {

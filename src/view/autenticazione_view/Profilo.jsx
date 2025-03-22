@@ -16,12 +16,12 @@ const Profilo = () => {
   const autenticazioneActions = new AutenticazioneActions();
   const autenticazioneForms = new AutenticazioneForms();
   const operazioniForms = new OperazioniForms();
-  const stileSliceReducer = useSelector((state) => state.stileSliceReducer.value);
-  const autenticazioneSliceReducer = useSelector((state) => state.autenticazioneSliceReducer.value);
+  const stileState = useSelector((state) => state.stileSliceReducer.value);
+  const autenticazioneState = useSelector((state) => state.autenticazioneSliceReducer.value);
   const [datiProfilo, setDatiProfilo] = useState({
-    username_attuale: autenticazioneSliceReducer.username, 
-    nuovo_username: autenticazioneSliceReducer.username, 
-    note: (autenticazioneSliceReducer.note) ? autenticazioneSliceReducer.note : "", 
+    username_attuale: autenticazioneState.username, 
+    nuovo_username: autenticazioneState.username, 
+    note: (autenticazioneState.note) ? autenticazioneState.note : "", 
     password_attuale: "",
     nuova_password: "", 
     conferma_nuova_password: "", 
@@ -32,8 +32,8 @@ const Profilo = () => {
     errore_conferma_nuova_password: "",   
   });
   
-  const ProfiloTag = (stileSliceReducer.vistaForm === "form") ? FormProfilo : (
-    (stileSliceReducer.vistaForm === "card") ? CardProfilo : RowProfilo
+  const ProfiloTag = (stileState.vistaForm === "form") ? FormProfilo : (
+    (stileState.vistaForm === "card") ? CardProfilo : RowProfilo
   );
 
   return (
@@ -45,7 +45,7 @@ const Profilo = () => {
       <ProfiloTag  
         campi={autenticazioneForms.getCampiProfilo(datiProfilo, (e) => operazioniForms.handleInputChange(e, setDatiProfilo), null, null)} 
         indici={autenticazioneForms.INDICI_PROFILO} 
-        eseguiModificaProfilo={(e) => autenticazioneActions.modificaProfilo(e, autenticazioneSliceReducer, datiProfilo, setDatiProfilo)} 
+        eseguiModificaProfilo={(e) => autenticazioneActions.modificaProfilo(e, autenticazioneState, datiProfilo, setDatiProfilo)} 
       />
     </>
   )
