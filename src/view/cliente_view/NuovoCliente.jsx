@@ -43,6 +43,11 @@ const NuovoCliente = () => {
       setSelectedPencilCount, setSelectedTrashCount
     );
   }
+
+  const handleBlurItem = (e, item) => {
+    const { name, value } = e.target;
+    clienteActions.aggiornaCliente(item.id, name, value);
+  };
   
   return (
     <>
@@ -55,6 +60,7 @@ const NuovoCliente = () => {
           {
             stileSliceReducer: stileSliceReducer, 
             lavoroActions: null, 
+            handleBlurItem: handleBlurItem, 
             campiNuovoItem: clienteForms.getCampiNuovoCliente(nuovoCliente, (e) => operazioniForms.handleInputChange(e, setNuovoCliente), null, null), 
             indiciNuovoItem: clienteForms.INDICI_NUOVO_CLIENTE, 
             handleInsert: (e) => clienteActions.inserimentoCliente(e, nuovoCliente, setNuovoCliente), 

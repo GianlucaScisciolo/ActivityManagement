@@ -293,6 +293,14 @@ const NuovoLavoro = () => {
   useEffect(() => {
     getAllServizi();
   }, []);
+  
+  const handleBlurItem = (e, item) => {
+    const { name, value } = e.target;
+    lavoroActions.aggiornaLavoro(item.id, name, value);
+    if(["giorno_lavoro"].includes(e.target.id)) {
+      e.target.type = (!e.target.value) ? "text" : "date";
+    }
+  };
 
   return (
     <>
@@ -305,6 +313,7 @@ const NuovoLavoro = () => {
           {
             stileSliceReducer: stileSliceReducer, 
             lavoroActions: lavoroActions, 
+            handleBlurItem: handleBlurItem, 
             campiNuovoItem: lavoroForms.getCampiNuovoLavoro(
               nuovoLavoro, 
               OptionsClienti({clienti}), 

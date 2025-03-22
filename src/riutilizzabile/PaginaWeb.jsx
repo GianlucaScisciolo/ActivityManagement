@@ -47,6 +47,7 @@ const PaginaWeb = ({ componenti }) => {
                 campi={value.campi}
                 indici={value.indici}
                 servizi={value.servizi}
+                handleBlurItem={value.handleBlurItem}
                 lavoroActions={value.lavoroActions} // DA VEDERE !!!!
               />
             )}                

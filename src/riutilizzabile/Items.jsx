@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import { CardItemEsistente } from "./card_item/CardItem";
 import { RowItemEsistente } from "./row_item/RowItem";
 
-export const Items = ({ tipoItem, items, setItems, selectOperation, emptyIsConsidered, campi, indici, servizi, lavoroActions }) => {
+export const Items = ({ tipoItem, items, setItems, selectOperation, emptyIsConsidered, campi, indici, servizi, handleBlurItem, lavoroActions }) => {
   const stileSliceReducer = useSelector((state) => state.stileSliceReducer.value);
   const ItemEsistenteTag = stileSliceReducer.vistaItem === "card" ? CardItemEsistente : RowItemEsistente;
 
@@ -133,6 +133,7 @@ export const Items = ({ tipoItem, items, setItems, selectOperation, emptyIsConsi
               items={items}
               setItems={setItems}
               tipoItem={tipoItem}
+              handleBlurItem={handleBlurItem}
             />
           );
         })}

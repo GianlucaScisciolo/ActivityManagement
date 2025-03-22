@@ -33,6 +33,7 @@ const PaginaWebRicercaItems = ({ componenti }) => {
         campi={componenti.campiItemEsistente}
         indici={componenti.indiciItemEsistente}
         servizi={componenti.servizi}
+        handleBlurItem={componenti.handleBlurItem}
         lavoroActions={componenti.lavoroActions} // DA VEDERE !!!!
       />
 

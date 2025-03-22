@@ -66,6 +66,14 @@ const Lavori = () => {
     getAllServizi();
   }, []);
 
+  const handleBlurItem = (e, item) => {
+    const { name, value } = e.target;
+    lavoroActions.aggiornaLavoro(item.id, name, value);
+    if(["giorno_lavoro"].includes(e.target.id)) {
+      e.target.type = (!e.target.value) ? "text" : "date";
+    }
+  };
+
   return (
     <>
       <Header />
@@ -77,6 +85,7 @@ const Lavori = () => {
           {
             stileSliceReducer: stileSliceReducer, 
             lavoroActions: lavoroActions, 
+            handleBlurItem: handleBlurItem, 
             campiRicercaItems: lavoroForms.getCampiRicercaLavori(
               datiRicerca, 
               (e) => operazioniForms.handleInputChange(e, setDatiRicerca), 

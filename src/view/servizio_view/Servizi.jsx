@@ -35,6 +35,11 @@ const Servizi = () => {
       setSelectedPencilCount, setSelectedTrashCount
     );
   }
+
+  const handleBlurItem = (e, item) => {
+    const { name, value } = e.target;
+    servizioActions.aggiornaServizio(item.id, name, value);
+  };
   
   return (
     <>
@@ -47,6 +52,7 @@ const Servizi = () => {
           {
             stileSliceReducer: stileSliceReducer, 
             lavoroActions: null, 
+            handleBlurItem: handleBlurItem, 
             campiRicercaItems: servizioForms.getCampiRicercaServizi(datiRicerca, (e) => operazioniForms.handleInputChange(e, setDatiRicerca), null, null),
             indiciRicercaItems: servizioForms.INDICI_RICERCA_SERVIZI, 
             handleSearch: (e) => servizioActions.ricercaServizi(e, datiRicerca), 

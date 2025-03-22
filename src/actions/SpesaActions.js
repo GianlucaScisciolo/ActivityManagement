@@ -253,6 +253,14 @@ export class SpesaActions {
     }
   };
 
+  aggiornaSpesa(id_spesa, nome_attributo, nuovo_valore) {
+    dispatcher(spesaSliceActions.aggiornaSpesa({
+      id_spesa: id_spesa,
+      nome_attributo: nome_attributo,
+      nuovo_valore: nuovo_valore,
+    }));
+  }
+
   async eliminaSpese(e, selectedIdsEliminazione, setSelectedIdsEliminazione, speseSession) {
     e.preventDefault();
     if (confirm("Sei sicuro di voler eliminare le spese?")) {

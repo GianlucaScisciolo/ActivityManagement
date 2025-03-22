@@ -39,6 +39,11 @@ const NuovoServizio = () => {
     );
   }
 
+  const handleBlurItem = (e, item) => {
+    const { name, value } = e.target;
+    servizioActions.aggiornaServizio(item.id, name, value);
+  };
+
   return (
     <>
       <Header />
@@ -50,6 +55,7 @@ const NuovoServizio = () => {
           {
             stileSliceReducer: stileSliceReducer, 
             lavoroActions: null, 
+            handleBlurItem: handleBlurItem, 
             campiNuovoItem: servizioForms.getCampiNuovoServizio(nuovoServizio, (e) => operazioniForms.handleInputChange(e, setNuovoServizio), null, null), 
             indiciNuovoItem: servizioForms.INDICI_NUOVO_SERVIZIO, 
             handleInsert: (e) => servizioActions.inserisciServizio(e, nuovoServizio, setNuovoServizio), 

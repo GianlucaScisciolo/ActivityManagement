@@ -196,6 +196,14 @@ export class ClienteActions {
     }
   }
 
+  aggiornaCliente(id_cliente, nome_attributo, nuovo_valore) {
+    dispatcher(clienteSliceActions.aggiornaCliente({
+      id_cliente: id_cliente,
+      nome_attributo: nome_attributo,
+      nuovo_valore: nuovo_valore,
+    }));
+  }
+
   async eliminaClienti(e, selectedIdsEliminazione, setSelectedIdsEliminazione, clientiSession) {
     e.preventDefault();
     if (confirm("Sei sicuro di voler eliminare i clienti?")) {

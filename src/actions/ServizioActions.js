@@ -195,6 +195,14 @@ export class ServizioActions {
     }
   }
 
+  aggiornaServizio(id_servizio, nome_attributo, nuovo_valore) {
+    dispatcher(servizioSliceActions.aggiornaServizio({
+      id_servizio: id_servizio,
+      nome_attributo: nome_attributo,
+      nuovo_valore: nuovo_valore,
+    }));
+  }
+
   async eliminaServizi(e, selectedIdsEliminazione, setSelectedIdsEliminazione, serviziSession) {
     e.preventDefault();
     if (confirm("Sei sicuro di voler eliminare i servizi?")) {

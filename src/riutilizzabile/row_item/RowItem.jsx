@@ -329,7 +329,7 @@ export function RowRicercaItems({campi, indici, handleSearch}) {
   );
 }
 
-export function RowItemEsistente({ item, campi, indici, selectOperation, tipoItem, dispatch }) {
+export function RowItemEsistente({ item, campi, indici, selectOperation, tipoItem, handleBlurItem }) {
   const NomeTagHeader = getTextAreaTag(campi.tipoSelezione, false);
   const [localValues, setLocalValues] = useState(() =>
     indici.reduce((acc, i) => ({ ...acc, [i]: campi.value[i] }), {})
@@ -403,43 +403,7 @@ export function RowItemEsistente({ item, campi, indici, selectOperation, tipoIte
       }));
     }
   };
-
   
-  const handleBlur = (e, item, index) => {
-    const { name, value, type } = e.target;
-
-    // Dispatch dell'azione solo quando l'elemento perde il focus
-    if (tipoItem === "cliente") {
-      dispatch(clienteActions.aggiornaCliente({
-        id_cliente: item.id,
-        nome_attributo: name,
-        nuovo_valore: value,
-      }));
-    } else if (tipoItem === "lavoro") {
-      dispatch(lavoroActions.aggiornaLavoro({
-        id_lavoro: item.id,
-        nome_attributo: name,
-        nuovo_valore: value,
-      }));
-    } else if (tipoItem === "spesa") {
-      dispatch(spesaActions.aggiornaSpesa({
-        id_spesa: item.id,
-        nome_attributo: name,
-        nuovo_valore: value,
-      }));
-    } else if (tipoItem === "servizio") {
-      dispatch(servizioActions.aggiornaServizio({
-        id_servizio: item.id,
-        nome_attributo: name,
-        nuovo_valore: value,
-      }));
-    }
-
-    if(["giorno_spesa", "giorno_lavoro"].includes(e.target.id)) {
-      e.target.type = (!e.target.value) ? "text" : "date";
-    }
-  };
-
   const handleClick = (e) => {
     if(["giorno_spesa", "giorno_lavoro"].includes(e.target.id)) {
       e.target.type = "date";
@@ -483,7 +447,7 @@ export function RowItemEsistente({ item, campi, indici, selectOperation, tipoIte
                   value={localValues[i]}
                   placeholder={campi.placeholder[i]}
                   onChange={(e) => handleChange(e, i)}
-                  onBlur={(e) => handleBlur(e, item, i)} 
+                  onBlur={(e) => handleBlurItem(e, item)} 
                   onClick={(e) => handleClick(e)}
                   readOnly={item.tipo_selezione !== 1}
                   onContextMenu={(e) => handleRightClick(e, campi.placeholder[i])}

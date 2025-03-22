@@ -39,6 +39,14 @@ const Spese = () => {
     );
   }
 
+  const handleBlurItem = (e, item) => {
+    const { name, value } = e.target;
+    spesaActions.aggiornaSpesa(item.id, name, value);
+    if(["giorno_spesa"].includes(e.target.id)) {
+      e.target.type = (!e.target.value) ? "text" : "date";
+    }
+  };
+
   return (
     <>
       <Header />
@@ -50,6 +58,7 @@ const Spese = () => {
           {
             stileSliceReducer: stileSliceReducer, 
             lavoroActions: null, 
+            handleBlurItem: handleBlurItem, 
             campiRicercaItems: spesaForms.getCampiRicercaSpese(
               datiRicerca, 
               (e) => operazioniForms.handleInputChange(e, setDatiRicerca), 

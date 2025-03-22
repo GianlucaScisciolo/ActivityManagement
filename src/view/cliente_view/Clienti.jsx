@@ -36,6 +36,11 @@ const Clienti = () => {
       setSelectedPencilCount, setSelectedTrashCount
     );
   }
+
+  const handleBlurItem = (e, item) => {
+    const { name, value } = e.target;
+    clienteActions.aggiornaCliente(item.id, name, value);
+  };
   
   return (
     <>
@@ -48,6 +53,7 @@ const Clienti = () => {
           {
             stileSliceReducer: stileSliceReducer, 
             lavoroActions: null, 
+            handleBlurItem: handleBlurItem, 
             campiRicercaItems: clienteForms.getCampiRicercaClienti(datiRicerca, (e) => operazioniForms.handleInputChange(e, setDatiRicerca), null, null),
             indiciRicercaItems: clienteForms.INDICI_RICERCA_CLIENTI, 
             handleSearch: (e) => clienteActions.ricercaClienti(e, datiRicerca), 
