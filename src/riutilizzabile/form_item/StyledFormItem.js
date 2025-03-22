@@ -1,3 +1,4 @@
+// React e Redux
 import styled from 'styled-components';
 import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';

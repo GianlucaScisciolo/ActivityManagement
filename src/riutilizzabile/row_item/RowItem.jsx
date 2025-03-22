@@ -1,4 +1,8 @@
+// React e Redux
 import React, { useState } from 'react';
+import { Trash2, Pencil } from 'lucide-react';
+import { faFilePdf, faFileExcel } from '@fortawesome/free-solid-svg-icons';
+// Riutilizzabile
 import { 
   StyledPencilNotSelected, StyledPencilSelected, grandezzaIcona, 
   StyledTrashNotSelected, StyledTrashSelected, 
@@ -14,12 +18,6 @@ import {
   StyledEyeClosedNotSelected, StyledEyeOpenNotSelected, 
   StyledEuroNotSelected 
 } from "./StyledRowItem";
-import { Trash2, Pencil } from 'lucide-react';
-import { faFilePdf, faFileExcel } from '@fortawesome/free-solid-svg-icons';
-import { clienteSliceActions } from "../../store/redux/ClienteSlice";
-import { servizioSliceActions } from '../../store/redux/ServizioSlice';
-import { spesaSliceActions } from '../../store/redux/SpesaSlice';
-import { lavoroSliceActions } from '../../store/redux/LavoroSlice';
 
 export function getSelectTag(tipoSelezione) {
   return (tipoSelezione !== 1 && tipoSelezione !== 2) ? StyledSelectBlock : (

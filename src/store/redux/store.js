@@ -1,8 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { sfondoSliceReducer } from "./SfondoSlice";
-import { itemSliceReducer } from "./ItemSlice";
-import { formSliceReducer } from "./FormSlice";
-import { widgetSliceReducer } from "./WidgetSlice";
+import { stileSliceReducer } from "./StileSlice";
+import { saloneSliceReducer } from "./SaloneSlice";
 import { autenticazioneSliceReducer } from "./AutenticazioneSlice";
 import { clienteSliceReducer } from "./ClienteSlice";
 import { servizioSliceReducer } from "./ServizioSlice";
@@ -11,10 +9,8 @@ import { spesaSliceReducer } from "./SpesaSlice";
 
 const store = configureStore({
   reducer: {
-    sfondoSliceReducer: sfondoSliceReducer,
-    itemSliceReducer: itemSliceReducer,
-    formSliceReducer: formSliceReducer,
-    widgetSliceReducer: widgetSliceReducer, 
+    stileSliceReducer: stileSliceReducer, 
+    saloneSliceReducer: saloneSliceReducer, 
     autenticazioneSliceReducer: autenticazioneSliceReducer,
     clienteSliceReducer: clienteSliceReducer, 
     servizioSliceReducer: servizioSliceReducer, 

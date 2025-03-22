@@ -1,6 +1,7 @@
-import styled from 'styled-components';
+// React e Redux
 import Nav from 'react-bootstrap/Nav';
 import NavDropdown from 'react-bootstrap/NavDropdown';
+import styled from 'styled-components';
 
 export const StyledNavLeft = styled(Nav)`
   background-color: transparent;

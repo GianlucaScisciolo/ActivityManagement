@@ -1,11 +1,14 @@
+// React e Redux
 import React, { useState } from 'react';
-import { ClienteForms } from "../../view/forms/ClienteForms.js";
-import { ClienteActions } from "../../actions/ClienteActions.js";
-import { OperazioniForms } from '../../view/forms/OperazioniForms.js';
-import PaginaWebRicercaItems from '../../riutilizzabile/PaginaWebRicercaItems.jsx';
-
 import { useSelector } from 'react-redux';
-
+// View
+import Header from "../components/Header.jsx";
+import { OperazioniForms } from '../forms/OperazioniForms.js';
+import { ClienteForms } from "../forms/ClienteForms.js";
+// Actions
+import { ClienteActions } from "../../actions/ClienteActions.js";
+// Riutilizzabile
+import PaginaWebRicercaItems from '../../riutilizzabile/PaginaWebRicercaItems.jsx';
 
 const Clienti = () => {
   const clienteActions = new ClienteActions();
@@ -35,6 +38,10 @@ const Clienti = () => {
   
   return (
     <>
+      <Header />
+      
+      <div className="main-content" />
+      
       <PaginaWebRicercaItems 
         componenti={
           {

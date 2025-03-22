@@ -1,29 +1,25 @@
+// React e Redux
 import React from "react";
-import { useSelector } from "react-redux";
-import Header from "../view/components/Header";
+// Riutilizzabile
 import { FormNuovoItem } from "./form_item/FormItem";
 import { FormRicercaItems } from "./form_item/FormItem";
 import { CardNuovoItem, CardRicercaItems } from "./card_item/CardItem";
 import { RowNuovoItem, RowRicercaItems } from "./row_item/RowItem";
+import { OperazioniItems } from "../riutilizzabile/Operazioni";
 import { Items } from "../view/components/Items";
-import { OperazioniItems } from "../view/components/Operazioni";
 
 const PaginaWeb = ({ componenti }) => {
-  const formSliceReducer = useSelector((state) => state.formSliceReducer.value);
+  const stileSliceReducer = componenti.stileSliceReducer;
 
-  const NuovoItemTag = (formSliceReducer.view === "form") ? FormNuovoItem : (
-    (formSliceReducer.view === "card") ? CardNuovoItem : RowNuovoItem
+  const NuovoItemTag = (stileSliceReducer.vistaForm === "form") ? FormNuovoItem : (
+    (stileSliceReducer.vistaForm === "card") ? CardNuovoItem : RowNuovoItem
   )
-  const RicercaItemsTag = (formSliceReducer.view === "form") ? FormRicercaItems : (
-    (formSliceReducer.view === "card") ? CardRicercaItems : RowRicercaItems
+  const RicercaItemsTag = (stileSliceReducer.vistaForm === "form") ? FormRicercaItems : (
+    (stileSliceReducer.vistaForm === "card") ? CardRicercaItems : RowRicercaItems
   )
 
   return (
     <>
-      <Header />
-
-      <div className="main-content" />
-
       {Object.entries(componenti).map(([key, value], index) => {
         return (
           <React.Fragment key={index}>

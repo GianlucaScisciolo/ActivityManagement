@@ -1,8 +1,13 @@
+// React e Redux
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
+// View
+import Header from "../components/Header.jsx";
+import { OperazioniForms } from '../forms/OperazioniForms.js';
+import { ClienteForms } from '../forms/ClienteForms.js';
+// Actions
 import { ClienteActions } from "../../actions/ClienteActions.js";
-import { ClienteForms } from '../../view/forms/ClienteForms.js';
-import { OperazioniForms } from '../../view/forms/OperazioniForms.js';
+// Riutilizzabile
 import PaginaWebNewItem from '../../riutilizzabile/PaginaWebNewItem.jsx';
 
 const NuovoCliente = () => {
@@ -40,6 +45,10 @@ const NuovoCliente = () => {
   
   return (
     <>
+      <Header />
+      
+      <div className="main-content" />
+      
       <PaginaWebNewItem 
         componenti={
           {

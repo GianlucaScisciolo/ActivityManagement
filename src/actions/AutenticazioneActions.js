@@ -41,6 +41,10 @@ export class AutenticazioneActions {
     }
   }
 
+  logout = () => {
+    dispatcher(autenticazioneSliceActions.eseguiLogout());
+  }
+
   async modificaProfilo(e, autenticazioneSession, datiProfilo, setDatiProfilo) {
     e.preventDefault();
     if (confirm("Sei sicuro di voler modificare il profilo?")) {

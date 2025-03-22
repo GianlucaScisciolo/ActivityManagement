@@ -1,11 +1,13 @@
+// React e Redux
 import React from "react";
-import NavbarSito from "./navbar_sito/NavbarSito";
+// View
+import { NavbarApp } from "./navbar/NavbarApp";
 
 function Header() {
   return (
     <>
       <div className="header-fixed">
-        <NavbarSito />
+        <NavbarApp />
       </div>
     </>
   )

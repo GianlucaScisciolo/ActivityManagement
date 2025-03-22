@@ -1,5 +1,9 @@
+// React e Redux
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Card, Table } from 'react-bootstrap';
+import { faFilePdf, faFileExcel } from '@fortawesome/free-solid-svg-icons';
+import { Trash2, Pencil } from 'lucide-react';
+// Riutilizzabile
 import { 
   StyledPencilNotSelected, StyledPencilSelected, grandezzaIcona, 
   StyledTrashNotSelected, StyledTrashSelected, 
@@ -15,12 +19,6 @@ import {
   StyledCard, StyledCardHeader, SlideContainer, 
   StyledSpanErrore, StyledEuroNotSelected
 } from './StyledCardItem';
-import { faFilePdf, faFileExcel } from '@fortawesome/free-solid-svg-icons';
-import { Trash2, Pencil } from 'lucide-react';
-import { clienteSliceActions } from "../../store/redux/ClienteSlice";
-import { servizioSliceActions } from '../../store/redux/ServizioSlice';
-import { spesaSliceActions } from '../../store/redux/SpesaSlice';
-import { lavoroSliceActions } from '../../store/redux/LavoroSlice';
 
 function getColor(value, j, tipo){
   // (i > 0) ? (

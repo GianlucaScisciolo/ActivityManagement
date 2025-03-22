@@ -1,28 +1,24 @@
+// React e Redux
 import React, { useEffect, useState } from 'react';
-import Navbar from 'react-bootstrap/Navbar';
+import { useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
+import Navbar from 'react-bootstrap/Navbar';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { House } from 'lucide-react';
-import { useSelector, useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import { autenticazioneSliceActions } from "../../../store/redux/AutenticazioneSlice";
-import { sfondoSliceActions } from "../../../store/redux/SfondoSlice";
-import { itemSliceActions } from "../../../store/redux/ItemSlice";
-import { formSliceActions } from "../../../store/redux/FormSlice";
-import immagineSfondo1 from "../../img/immagine_sfondo1.jpg";
-import immagineSfondo2 from '../../img/immagine_sfondo2.png';
+// View
 import { 
   StyledNavLeft, StyledNavCenter, StyledNavRight, StyledNavDropdown, StyledNavDropdownItem, 
   StyledDropdownContainer, StyledSubMenuContainer, StyledNavLink, StyledNavLinkHome
-} from './StyledNavbarSito';
+} from './StyledNavbarApp';
+// Actions
+import { AutenticazioneActions } from "../../../actions/AutenticazioneActions"
+import { StileActions } from '../../../actions/StileActions';
 
-const NavbarSito = () => {
+export const NavbarApp = () => {
+  const autenticazioneActions = new AutenticazioneActions();
+  const stileActions = new StileActions()
   const autenticazioneSliceReducer = useSelector((state) => state.autenticazioneSliceReducer.value);
-  const sfondoSliceReducer = useSelector((state) => state.sfondoSliceReducer.value);
-  
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-
+  const stileSliceReducer = useSelector((state) => state.stileSliceReducer.value);
   const [dropdownClienti, setDropdownClienti] = useState(false);
   const [dropdownProfessionisti, setDropdownProfessionisti] = useState(false);
   const [dropdownLavori, setDropdownLavori] = useState(false);
@@ -41,30 +37,26 @@ const NavbarSito = () => {
       setDropdown(false);
     // }, 500); // Aggiungi un ritardo di 300ms
   };  
-
-  const logout = () => {
-    dispatch(autenticazioneSliceActions.eseguiLogout());
-  }
-
+  
   const applicaStileBody = () => {
-    if (sfondoSliceReducer.pathImg !== null) {
-      document.body.style.backgroundImage = `url(${sfondoSliceReducer.pathImg})`;
+    if (stileSliceReducer.pathImg !== null) {
+      document.body.style.backgroundImage = `url(${stileSliceReducer.pathImg})`;
       document.body.style.backgroundRepeat = 'no-repeat';
       document.body.style.backgroundSize = 'cover';
       document.body.style.backgroundAttachment = 'fixed';
       document.body.style.backgroundPosition = 'center';
       document.body.style.height = '100vh';
   
-      // Nascondi solo lo scorrimento orizzontale
+      // Nasconde solo lo scorrimento orizzontale
       document.documentElement.style.overflowX = 'hidden';
       document.documentElement.style.maxWidth = '100%';
       document.documentElement.style.maxHeight = '100%';
     } 
-    else if (sfondoSliceReducer.coloreRGB !== null) {
+    else if (stileSliceReducer.coloreRGB !== null) {
       document.body.style.backgroundImage = 'none';
-      document.body.style.backgroundColor = sfondoSliceReducer.coloreRGB;
+      document.body.style.backgroundColor = stileSliceReducer.coloreRGB;
   
-      // Nascondi solo lo scorrimento orizzontale
+      // Nasconde solo lo scorrimento orizzontale
       document.documentElement.style.overflowX = 'hidden';
       document.documentElement.style.maxWidth = '100%';
       document.documentElement.style.maxHeight = '100%';
@@ -74,54 +66,9 @@ const NavbarSito = () => {
     }
   }
   
-  
-
   useEffect(() => {
     applicaStileBody();
-  }, [sfondoSliceReducer]);
-
-  // Thunk function
-  const cambioSfondo = (nomeSfondo) => (dispatch) => {
-    switch(nomeSfondo) {
-      case "immagine_1":
-        dispatch(sfondoActions.changeWithImg({
-          pathImg: immagineSfondo1
-        }));
-        break;
-      case "immagine_2":
-        dispatch(sfondoActions.changeWithImg({
-          pathImg: immagineSfondo2
-        }));
-        break;
-      case "sfondo_scuro":
-        dispatch(sfondoActions.changeWithColoreRGB({
-          coloreRGB: "#111111"
-        }));
-        break;
-      case "sfondo_chiaro":
-        dispatch(sfondoActions.changeWithColoreRGB({
-          coloreRGB: "#8F8F8F"
-        }));
-        break;
-      default:
-        alert("Errore, nome sfondo non trovato.");
-        break;
-    }
-  }
-
-    // Thunk function
-    const cambioView = (tipoElemento, tipoView) => (dispatch) => {
-      if(tipoElemento === "item") {
-        dispatch(itemActions.changeViewItem({
-          view: tipoView
-        }));
-      }
-      else if(tipoElemento === "form") {
-        dispatch(formActions.changeViewForm({
-          view: tipoView
-        }));
-      }
-    }
+  }, [stileSliceReducer]);
 
   return (
     <>
@@ -187,22 +134,22 @@ const NavbarSito = () => {
                     {(dropdownSfondo === true) && (
                       <>
                         <StyledNavDropdownItem as={NavLink} to="#" 
-                          onClick={() => dispatch(cambioSfondo("immagine_1"))}
+                          onClick={() => stileActions.cambioSfondo("immagine_1")}
                         >
                           Immagine 1
                         </StyledNavDropdownItem>
                         <StyledNavDropdownItem as={NavLink} to="#" 
-                          onClick={() => dispatch(cambioSfondo("immagine_2"))}
+                          onClick={() => stileActions.cambioSfondo("immagine_2")}
                         >
                           Immagine 2
                         </StyledNavDropdownItem>
                         <StyledNavDropdownItem as={NavLink} to="#" 
-                          onClick={() => dispatch(cambioSfondo("sfondo_scuro"))}
+                          onClick={() => stileActions.cambioSfondo("sfondo_scuro")}
                         >
                           Sfondo scuro
                         </StyledNavDropdownItem>
                         <StyledNavDropdownItem as={NavLink} to="#" 
-                          onClick={() => dispatch(cambioSfondo("sfondo_chiaro"))}
+                          onClick={() => stileActions.cambioSfondo("sfondo_chiaro")}
                         >
                           Sfondo chiaro
                         </StyledNavDropdownItem>
@@ -216,12 +163,12 @@ const NavbarSito = () => {
                     {(dropdownItem === true) && (
                       <>
                         <StyledNavDropdownItem as={NavLink} to="#" 
-                          onClick={() => dispatch(cambioView("item", "list"))}
+                          onClick={() => stileActions.cambioVista("item", "list")}
                         >
                           Riga
                         </StyledNavDropdownItem>
                         <StyledNavDropdownItem as={NavLink} to="#" 
-                          onClick={() => dispatch(cambioView("item", "card"))}
+                          onClick={() => stileActions.cambioVista("item", "card")}
                         >
                           Carta
                         </StyledNavDropdownItem>
@@ -235,17 +182,17 @@ const NavbarSito = () => {
                     {(dropdownForm === true) && (
                       <>
                         <StyledNavDropdownItem as={NavLink} to="#" 
-                          onClick={() => dispatch(cambioView("form", "form"))}
+                          onClick={() => stileActions.cambioVista("form", "form")}
                         >
                           Form
                         </StyledNavDropdownItem>
                         <StyledNavDropdownItem as={NavLink} to="#" 
-                          onClick={() => dispatch(cambioView("form", "row"))}
+                          onClick={() => stileActions.cambioVista("form", "row")}
                         >
                           Riga
                         </StyledNavDropdownItem>
                         <StyledNavDropdownItem as={NavLink} to="#" 
-                          onClick={() => dispatch(cambioView("form", "card"))}
+                          onClick={() => stileActions.cambioVista("form", "card")}
                         >
                           Carta
                         </StyledNavDropdownItem>
@@ -264,7 +211,7 @@ const NavbarSito = () => {
               <>
                 <StyledNavLink as={NavLink} to="/salone">Salone</StyledNavLink>
                 <StyledNavLink as={NavLink} to="/profilo">Profilo</StyledNavLink>
-                <StyledNavLink as={NavLink} to="/" onClick={logout}>Logout</StyledNavLink>
+                <StyledNavLink as={NavLink} to="/" onClick={autenticazioneActions.logout}>Logout</StyledNavLink>
               </>
             )}
           </>
@@ -274,4 +221,11 @@ const NavbarSito = () => {
   );
 }
 
-export default NavbarSito;
+
+
+
+
+
+
+
+

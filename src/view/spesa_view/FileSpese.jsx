@@ -1,18 +1,22 @@
+// React e Redux
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
+// View
 import Header from "../components/Header.jsx";
-import { OperazioniForms } from "../../view/forms/OperazioniForms.js";
+import { OperazioniForms } from "../forms/OperazioniForms.js";
+import { SpesaForms } from "../forms/SpesaForms.js"
+// Actions
+import { SpesaActions } from "../../actions/SpesaActions.js";
+// Riutilizzabile
 import { FormFileItems } from "../../riutilizzabile/form_item/FormItem.jsx";
 import { CardFileItems } from "../../riutilizzabile/card_item/CardItem.jsx";
 import { RowFileItems } from "../../riutilizzabile/row_item/RowItem.jsx";
-import { SpesaActions } from "../../actions/SpesaActions.js";
-import { SpesaForms } from "../../view/forms/SpesaForms.js"
 
 const FileSpese = () => {
   const spesaActions = new SpesaActions();
   const spesaForms = new SpesaForms();
   const operazioniForms = new OperazioniForms();
-  const formSliceReducer = useSelector((state) => state.formSliceReducer.value);
+  const stileSliceReducer = useSelector((state) => state.stileSliceReducer.value);
   const [spese, setSpese] = useState(-1);
   const [tipoFile, setTipoFile] = useState("");
   const [datiRicerca, setDatiRicerca] = useState({
@@ -26,8 +30,8 @@ const FileSpese = () => {
     note: "",
   });
   
-  const FormFileTag = (formSliceReducer.view === "form") ? FormFileItems : (
-    (formSliceReducer.view === "card") ? CardFileItems : RowFileItems
+  const FormFileTag = (stileSliceReducer.vistaForm === "form") ? FormFileItems : (
+    (stileSliceReducer.vistaForm === "card") ? CardFileItems : RowFileItems
   );
 
   return (

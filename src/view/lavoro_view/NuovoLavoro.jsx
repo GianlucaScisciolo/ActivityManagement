@@ -1,20 +1,24 @@
+// React e Redux
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
+// View
+import Header from "../components/Header.jsx";
 import { OperazioniForms } from "../../view/forms/OperazioniForms";
-import { LavoroActions } from "../../actions/LavoroActions";
 import { LavoroForms } from "../../view/forms/LavoroForms";
+// Actions
+import { LavoroActions } from "../../actions/LavoroActions";
+// Riutilizzabile
 import PaginaWebNewItem from "../../riutilizzabile/PaginaWebNewItem";
 
 const NuovoLavoro = () => {
   const lavoroActions = new LavoroActions();
   const lavoroForms = new LavoroForms();
   const operazioniForms = new OperazioniForms();
-  const formSliceReducer = useSelector((state) => state.formSliceReducer.value);
-  const itemSliceReducer = useSelector((state) => state.itemSliceReducer.value);
+  const stileSliceReducer = useSelector((state) => state.stileSliceReducer.value);
   const lavoroSliceReducer = useSelector((state) => state.lavoroSliceReducer.value);
 
-  const classeFormWrapperCheckbox = (formSliceReducer.view === "form") ? "checkbox-wrapper-form" : "checkbox-wrapper";
-  const classeItemWrapperCheckbox = (itemSliceReducer.view === "form") ? "checkbox-wrapper-form" : "checkbox-wrapper";
+  const classeFormWrapperCheckbox = (stileliceReducer.vistaForm === "form") ? "checkbox-wrapper-form" : "checkbox-wrapper";
+  const classeItemWrapperCheckbox = (stileSliceReducer.vistaItem === "form") ? "checkbox-wrapper-form" : "checkbox-wrapper";
   
   const [clienti, setClienti] = useState(-1);
   const [servizi, setServizi] = useState(-1);
@@ -292,6 +296,10 @@ const NuovoLavoro = () => {
 
   return (
     <>
+      <Header />
+
+      <div className="main-content" />
+      
       <PaginaWebNewItem 
         componenti={
           {

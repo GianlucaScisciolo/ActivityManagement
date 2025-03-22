@@ -1,13 +1,13 @@
+// React e Redux
 import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { CardItemEsistente } from "../../riutilizzabile/card_item/CardItem";
-import { RowItemEsistente } from "../../riutilizzabile/row_item/RowItem";
-import { lavoroSliceActions } from "../../store/redux/LavoroSlice";
+import { useSelector } from "react-redux";
+// Riutilizzabile
+import { CardItemEsistente } from "./card_item/CardItem";
+import { RowItemEsistente } from "./row_item/RowItem";
 
-export const Items = ({ tipoItem, items, setItems, selectOperation, emptyIsConsidered, campi, indici, servizi }) => {
-  const itemSliceReducer = useSelector((state) => state.itemSliceReducer.value);
-  const dispatch = useDispatch();
-  const ItemEsistenteTag = itemSliceReducer.view === "card" ? CardItemEsistente : RowItemEsistente;
+export const Items = ({ tipoItem, items, setItems, selectOperation, emptyIsConsidered, campi, indici, servizi, lavoroActions }) => {
+  const stileSliceReducer = useSelector((state) => state.stileSliceReducer.value);
+  const ItemEsistenteTag = stileSliceReducer.vistaItem === "card" ? CardItemEsistente : RowItemEsistente;
 
   const OptionsServizi = (servizi, descrizione, sottoStringa, item) => {
     const optionStr = (servizio) => `${servizio.nome} - ${servizio.prezzo} €`;
@@ -36,37 +36,28 @@ export const Items = ({ tipoItem, items, setItems, selectOperation, emptyIsConsi
         for (let s of item["serviziSelezionati"]) {
           totale += parseFloat(s.prezzo) || 0;
         }
-
-        dispatch(lavoroSliceActions.aggiornaLavoro({
-          id_lavoro: item.id,
-          nome_attributo: "totale",
-          nuovo_valore: totale,
-        }));
+        lavoroActions.aggiornaLavoro(item.id, "totale", totale);
       }
-    }, [item["serviziSelezionati"], item.id, dispatch]);
+    }, [item["serviziSelezionati"], item.id]);
 
     const handleCheckboxChange = (e, servizio) => {
       e.preventDefault();
 
       if (e.target.checked) {
-        dispatch(lavoroSliceActions.aggiornaLavoro({
-          id_lavoro: item.id,
-          nome_attributo: "serviziSelezionati",
-          nuovo_valore: [...item["serviziSelezionati"], servizio],
-        }));
+        lavoroActions.aggiornaLavoro(item.id, "serviziSelezionati", [...item["serviziSelezionati"], servizio]);
 
         const aggiornamentoNonSelezionati = serviziNonSelezionati.filter(
           (s) => optionStr(s) !== optionStr(servizio)
         );
         setServiziNonSelezionati(aggiornamentoNonSelezionati);
       } else {
-        dispatch(lavoroSliceActions.aggiornaLavoro({
-          id_lavoro: item.id,
-          nome_attributo: "serviziSelezionati",
-          nuovo_valore: item["serviziSelezionati"].filter(
+        lavoroActions.aggiornaLavoro(
+          item.id, 
+          "serviziSelezionati", 
+          item["serviziSelezionati"].filter(
             (s) => optionStr(s) !== optionStr(servizio)
-          ),
-        }));
+          )
+        );
 
         const aggiornamentoNonSelezionati = [...serviziNonSelezionati, servizio].filter(
           (v, i, a) => a.findIndex((t) => optionStr(t) === optionStr(v)) === i
@@ -76,7 +67,7 @@ export const Items = ({ tipoItem, items, setItems, selectOperation, emptyIsConsi
     };
 
     const classeWrapperCheckbox =
-      itemSliceReducer.view === "form" ? "checkbox-wrapper-form" : "checkbox-wrapper";
+      stileSliceReducer.vistaItem === "form" ? "checkbox-wrapper-form" : "checkbox-wrapper";
 
     return (
       <>
@@ -142,7 +133,6 @@ export const Items = ({ tipoItem, items, setItems, selectOperation, emptyIsConsi
               items={items}
               setItems={setItems}
               tipoItem={tipoItem}
-              dispatch={dispatch}
             />
           );
         })}
@@ -157,7 +147,7 @@ export const Items = ({ tipoItem, items, setItems, selectOperation, emptyIsConsi
       )}
       {items.length > 0 && (
         <>
-          {itemSliceReducer.view === "card" ? (
+          {stileSliceReducer.vistaItem === "card" ? (
             <div className="contenitore-3">
               <ItemElements />
             </div>

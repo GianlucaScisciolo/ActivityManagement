@@ -1,8 +1,13 @@
+// React e Redux
 import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
+// View
+import Header from "../components/Header.jsx";
 import { OperazioniForms } from "../../view/forms/OperazioniForms.js";
-import { LavoroActions } from "../../actions/LavoroActions.js";
 import { LavoroForms } from "../../view/forms/LavoroForms.js";
+// Actions
+import { LavoroActions } from "../../actions/LavoroActions.js";
+// Riutilizzabile
 import PaginaWebRicercaItems from "../../riutilizzabile/PaginaWebRicercaItems";
 
 const Lavori = () => {
@@ -10,7 +15,6 @@ const Lavori = () => {
   const lavoroForms = new LavoroForms();
   const operazioniForms = new OperazioniForms();
   const lavoroSliceReducer = useSelector((state) => state.lavoroSliceReducer.value);
-  const dispatch = useDispatch();
   const [servizi, setServizi] = useState(-1);
   const [selectedTrashCount, setSelectedTrashCount] = useState(0);
   const [selectedPencilCount, setSelectedPencilCount] = useState(0);
@@ -63,6 +67,10 @@ const Lavori = () => {
 
   return (
     <>
+      <Header />
+
+      <div className="main-content" />
+      
       <PaginaWebRicercaItems 
         componenti={
           {

@@ -1,25 +1,21 @@
+// React e Redux
 import React from "react";
-import { useSelector } from "react-redux";
+// Riutilizzabile
 import { FormNuovoItem } from "./form_item/FormItem";
 import { CardNuovoItem } from "./card_item/CardItem";
 import { RowNuovoItem } from "./row_item/RowItem";
-import Header from "../view/components/Header";
-import { Items } from "../view/components/Items"
-import { OperazioniItems } from "../view/components/Operazioni";
+import { OperazioniItems } from "./Operazioni";
+import { Items } from "./Items"
 
 const PaginaWebNewItem = ({ componenti }) => {
-  const formSliceReducer = useSelector((state) => state.formSliceReducer.value);
+  const stileSliceReducer = componenti.stileSliceReducer;
 
-  const NuovoItemTag = (formSliceReducer.view === "form") ? FormNuovoItem : (
-    (formSliceReducer.view === "card") ? CardNuovoItem : RowNuovoItem
+  const NuovoItemTag = (stileSliceReducer.vistaForm === "form") ? FormNuovoItem : (
+    (stileSliceReducer.vistaForm === "card") ? CardNuovoItem : RowNuovoItem
   )
 
   return (
     <>
-      <Header />
-
-      <div className="main-content" />
-
       <NuovoItemTag 
         campi={componenti.campiNuovoItem}  
         indici={componenti.indiciNuovoItem} 

@@ -277,6 +277,21 @@ export class LavoroActions {
     }
   }
 
+  /*
+          dispatch(lavoroSliceActions.aggiornaLavoro({
+            id_lavoro: item.id,
+            nome_attributo: "totale",
+            nuovo_valore: totale,
+          }));
+  */
+  aggiornaLavoro(id_lavoro, nome_attributo, nuovo_valore) {
+    dispatcher(lavoroSliceActions.aggiornaLavoro({
+      id_lavoro: id_lavoro, 
+      nome_attributo: nome_attributo, 
+      nuovo_valore: nuovo_valore
+    }))
+  }
+
   async eliminaLavori(e, selectedIdsEliminazione, setSelectedIdsEliminazione, lavoriSession) {
     e.preventDefault();
     if (confirm("Sei sicuro di voler eliminare i lavori?")) {

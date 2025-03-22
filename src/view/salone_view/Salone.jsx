@@ -1,7 +1,9 @@
+// React e Redux
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+// View
 import Header from "../components/Header";
-import DragAndDrop from "../DragAndDrop";
+import DragAndDrop from "../components/DragAndDrop";
+// Actions
 import { LavoroActions } from "../../actions/LavoroActions";
 import { SpesaActions } from "../../actions/SpesaActions";
 

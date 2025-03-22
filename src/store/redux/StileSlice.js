@@ -23,29 +23,51 @@ const initialState = loadFromLocalStorage() || {
   value: {
     pathImg: "../img/immagine_sfondo1.jpg",
     coloreRGB: null,
+    vistaItem: "row",
+    vistaForm: "form"
   },
 };
 
-const sfondoSlice = createSlice({
+const stileSlice = createSlice({
   name: "sfondo",
   initialState: initialState,
   reducers: {
-    changeWithImg: (state, action) => {
+    cambioImmagineSfondo: (state, action) => {
       state.value.pathImg = action.payload.pathImg;
       state.value.coloreRGB = null;
       saveToLocalStorage(state);
     },
-    changeWithColoreRGB: (state, action) => {
+    cambioColoreSfondo: (state, action) => {
       state.value.pathImg = null;
       state.value.coloreRGB = action.payload.coloreRGB;
+      saveToLocalStorage(state);
+    },
+    cambioVistaItem: (state, action) => {
+      state.value.vistaItem = action.payload.vistaItem;
+      saveToLocalStorage(state);
+    },
+    cambioVistaForm: (state, action) => {
+      state.value.vistaForm = action.payload.vistaForm;
       saveToLocalStorage(state);
     },
   },
 });
 
-export const sfondoSliceActions = {
-  changeWithImg: sfondoSlice.actions.changeWithImg,
-  changeWithColoreRGB: sfondoSlice.actions.changeWithColoreRGB,
+export const stileSliceActions = {
+  cambioImmagineSfondo: stileSlice.actions.cambioImmagineSfondo,
+  cambioColoreSfondo: stileSlice.actions.cambioColoreSfondo,
+  cambioVistaItem: stileSlice.actions.cambioVistaItem, 
+  cambioVistaForm: stileSlice.actions.cambioVistaForm
 };
 
-export const sfondoSliceReducer = sfondoSlice.reducer;
+export const stileSliceReducer = stileSlice.reducer;
+
+
+
+
+
+
+
+
+
+

@@ -1,5 +1,7 @@
+// React e Redux
 import React, { useState } from 'react';
 import { faFilePdf, faFileExcel } from '@fortawesome/free-solid-svg-icons';
+// Riutilizzabile
 import { 
   StyledListGroupItem, StyledRow, StyledCol, StyledSaveNotSelected, grandezzaIcona, 
   StyledSearchNotSelected, StyledArrowTopNotSelected, StyledArrowBottomNotSelected, 

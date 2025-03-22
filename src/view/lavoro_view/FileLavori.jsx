@@ -1,18 +1,22 @@
+// React e Redux
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
+// View
 import Header from "../components/Header";
-import { OperazioniForms } from "../../view/forms/OperazioniForms";
+import { OperazioniForms } from "../forms/OperazioniForms";
+import { LavoroForms } from "../../view/forms/LavoroForms";
+// Actions
+import { LavoroActions } from "../../actions/LavoroActions";
+// Riutilizzabile
 import { FormFileItems } from "../../riutilizzabile/form_item/FormItem";
 import { CardFileItems } from "../../riutilizzabile/card_item/CardItem";
 import { RowFileItems } from "../../riutilizzabile/row_item/RowItem";
-import { LavoroActions } from "../../actions/LavoroActions";
-import { LavoroForms } from "../../view/forms/LavoroForms";
 
 const FileLavori = () => {
   const lavoroActions = new LavoroActions();
   const lavoroForms = new LavoroForms();
   const operazioniForms = new OperazioniForms();
-  const formSliceReducer = useSelector((state) => state.formSliceReducer.value);
+  const stileSliceReducer = useSelector((state) => state.stileSliceReducer.value);
   const [lavori, setLavori] = useState(-1);
   const [tipoFile, setTipoFile] = useState("");
   const [datiRicerca, setDatiRicerca] = useState({
@@ -25,8 +29,8 @@ const FileLavori = () => {
     note: ""
   });
 
-  const FormFileTag = (formSliceReducer.view === "form") ? FormFileItems : (
-    (formSliceReducer.view === "card") ? CardFileItems : RowFileItems
+  const FormFileTag = (stileSliceReducer.vistaForm === "form") ? FormFileItems : (
+    (stileSliceReducer.vistaform === "card") ? CardFileItems : RowFileItems
   );
   
   return (

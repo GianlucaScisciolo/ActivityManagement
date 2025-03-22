@@ -1,14 +1,14 @@
+// React e Redux
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Header from "../components/Header";
-
-
-
-
-import { OperazioniForms } from '../../view/forms/OperazioniForms';
 import { useSelector } from 'react-redux';
-import { AutenticazioneActions } from "../../actions/AutenticazioneActions";
+// View
+import Header from "../components/Header";
+import { OperazioniForms } from '../forms/OperazioniForms';
 import { AutenticazioneForms } from "../../view/forms/AutenticazioneForms";
+// Actions
+import { AutenticazioneActions } from "../../actions/AutenticazioneActions";
+// Riutilizzabile
 import { FormLogin } from "../../riutilizzabile/form_item/FormItem";
 import { CardLogin } from '../../riutilizzabile/card_item/CardItem';
 import { RowLogin } from '../../riutilizzabile/row_item/RowItem';
@@ -28,10 +28,10 @@ const Login = () => {
   });
   const [aggiornamentoCompletato, setAggiornamentoCompletato] = useState(0);
   const navigate = useNavigate();
-  const formSliceReducer = useSelector((state) => state.formSliceReducer.value);
+  const stileSliceReducer = useSelector((state) => state.stileSliceReducer.value);
 
-  const LoginTag = (formSliceReducer.view === "form") ? FormLogin : (
-    (formSliceReducer.view === "card") ? CardLogin : RowLogin
+  const LoginTag = (stileSliceReducer.vistaForm === "form") ? FormLogin : (
+    (stileSliceReducer.vistaForm === "card") ? CardLogin : RowLogin
   )
 
   return (

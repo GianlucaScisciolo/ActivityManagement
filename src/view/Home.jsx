@@ -1,10 +1,13 @@
+// React e Redux
 import React, { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import styled from 'styled-components';
+import { useSelector } from 'react-redux';
 import { Plus, Save } from 'lucide-react';
+import styled from 'styled-components';
+// View
 import Header from "./components/Header";
-import { DragAndDropWidgetHomePage } from "./DragAndDrop";
-import { widgetSliceActions } from "../store/redux/WidgetSlice";
+import { DragAndDropWidgetHomePage } from "./components/DragAndDrop";
+// Actions
+import { SaloneActions } from '../actions/SaloneActions';
 
 const styledIconNotSelected = `
   color: #FFFFFF;
@@ -31,21 +34,8 @@ const StyledSaveNotSelected = styled(Save)`
 
 
 const Home = () => {
+  const saloneActions = new SaloneActions();
   const autenticazioneSliceReducer = useSelector((state) => state.autenticazioneSliceReducer.value);
-  
-  const dispatch = useDispatch();
-  const scegliWidgets = (e) => {
-    e.preventDefault();
-    // console.log(widgetsSession.lavori);
-    setPlusCliccato(!plusCliccato);
-    if(plusCliccato === true) {
-      dispatch(widgetActions.widgetView());
-    }
-    else if(plusCliccato === false) {
-      dispatch(widgetActions.widgetSelected());
-    }
-  }
-  
   const [plusCliccato, setPlusCliccato] = useState(false);
   const AddWidgetsTag = plusCliccato ? StyledSaveNotSelected : StyledPlusNotSelected;
 
@@ -67,7 +57,7 @@ const Home = () => {
                 borderRadius: "100%"
               }}
             >
-              <AddWidgetsTag className="right" onClick={(e) => scegliWidgets(e)} />
+              <AddWidgetsTag className="right" onClick={(e) => saloneActions.scegliWidgets(e, setPlusCliccato, plusCliccato)} />
             </button>
           </div>
 

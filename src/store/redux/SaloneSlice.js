@@ -104,7 +104,7 @@ const getColor = (tipoVisualizzazione) => {
   )
 }
 
-const widgetSlice = createSlice({
+const saloneSlice = createSlice({
   name: "widget",
   initialState: initialState,
   reducers: {
@@ -144,10 +144,19 @@ const widgetSlice = createSlice({
   },
 });
 
-export const widgetSliceActions = {
-  modificaWidget: widgetSlice.actions.modificaWidget,
-  widgetSelected: widgetSlice.actions.widgetSelected,
-  widgetView: widgetSlice.actions.widgetView,
+export const saloneSliceActions = {
+  modificaWidget: saloneSlice.actions.modificaWidget,
+  widgetSelected: saloneSlice.actions.widgetSelected,
+  widgetView: saloneSlice.actions.widgetView,
 };
 
-export const widgetSliceReducer = widgetSlice.reducer;
+export const saloneSliceReducer = saloneSlice.reducer;
+
+
+
+
+
+
+
+
+
