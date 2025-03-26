@@ -3,8 +3,8 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 // View
 import Header from "../components/Header";
-import { OperazioniForms } from "../../view/forms/OperazioniForms";
-import { AutenticazioneForms } from "../../view/forms/AutenticazioneForms";
+import { OperazioniForms } from "../forms/OperazioniForms";
+import { AutenticazioneForms } from "../forms/AutenticazioneForms";
 // Actions
 import { AutenticazioneActions } from "../../actions/AutenticazioneActions"
 // Riutilizzabile

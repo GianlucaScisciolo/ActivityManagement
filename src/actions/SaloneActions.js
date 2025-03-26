@@ -1,29 +1,25 @@
 /************************************************** Dispatcher **************************************************/
-import { dispatcher } from "../dispatcher/Dispatcher";
-/************************************************** Slices Actions **************************************************/
-import { saloneSliceActions } from "../store/slice/SaloneSlice";
+import { Dispatcher } from "../dispatcher/Dispatcher";
 
 export class SaloneActions {
+  dispatcher;
   constructor() {
-
+    this.dispatcher = new Dispatcher();
   }
 
   scegliWidgets(e, setPlusCliccato, plusCliccato) {
     e.preventDefault();
     setPlusCliccato(!plusCliccato);
     if(plusCliccato === true) {
-      dispatcher(saloneSliceActions.widgetView());
+      this.dispatcher.widgetView();
     }
     else if(plusCliccato === false) {
-      dispatcher(saloneSliceActions.widgetSelected());
+      this.dispatcher.widgetSelected();
     }
   }
 
   modificaWidget(nomeWidget, tipoVisualizzazione) {
-    dispatcher(saloneSliceActions.modificaWidget({
-      nomeWidget: nomeWidget,
-      tipoVisualizzazione: tipoVisualizzazione,
-    }));
+    this.dispatcher.modificaWidget(nomeWidget, tipoVisualizzazione);
   }
 }
 

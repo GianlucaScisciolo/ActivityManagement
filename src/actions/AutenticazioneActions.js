@@ -1,13 +1,13 @@
 /************************************************** Dispatcher **************************************************/
-import { dispatcher } from "../dispatcher/Dispatcher";
-/************************************************** Slices Actions **************************************************/
-import { autenticazioneSliceActions } from "../store/slice/AutenticazioneSlice";
+import { Dispatcher } from "../dispatcher/Dispatcher";
 /************************************************** Utils **************************************************/
 import { controlloLogin, controlloProfilo } from "../utils/Controlli";
 
 export class AutenticazioneActions {
-  constructor() {
+  dispatcher
 
+  constructor() {
+    this.dispatcher = new Dispatcher();
   }
 
   async login(e, datiLogin, setDatiLogin, navigate) {
@@ -33,11 +33,7 @@ export class AutenticazioneActions {
         return;
       }
 
-      dispatcher(autenticazioneSliceActions.eseguiLogin({
-        username: result.utente.username,
-        ruolo: result.utente.ruolo,
-        note: result.utente.note,
-      }));
+      this.dispatcher.eseguiLogin(result.utente.username, result.utente.ruolo, result.utente.note);
       navigate("/");
     } else {
       alert("Errore durante il login, riprova più tardi.");
@@ -45,7 +41,7 @@ export class AutenticazioneActions {
   }
 
   logout = () => {
-    dispatcher(autenticazioneSliceActions.eseguiLogout());
+    this.dispatcher.eseguiLogout();
   }
 
   async modificaProfilo(e, autenticazioneSession, datiProfilo, setDatiProfilo) {
@@ -80,11 +76,7 @@ export class AutenticazioneActions {
           body: JSON.stringify(datiProfilo),
         });
         if (profileResponse.status === 200) {
-          dispatcher(autenticazioneSliceActions.eseguiLogin({
-            username: datiProfilo.nuovo_username,
-            ruolo: autenticazioneSession.ruolo,
-            note: datiProfilo.note,
-          }));
+          this.dispatcher.eseguiLogin(datiProfilo.nuovo_username, autenticazioneSession.ruolo, datiProfilo.note)
           alert("Il profilo è stato modificato con successo.");
         } 
         else {

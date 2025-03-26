@@ -1,13 +1,12 @@
 /************************************************** Dispatcher **************************************************/
-import { dispatcher } from "../dispatcher/Dispatcher";
-/************************************************** Slices Actions **************************************************/
-import { servizioSliceActions } from "../store/slice/ServizioSlice";
+import { Dispatcher } from "../dispatcher/Dispatcher";
 /************************************************** Utils **************************************************/
 import { controlloServizio } from "../utils/Controlli";
 
 export class ServizioActions {
+  dispatcher;
   constructor() {
-
+    this.dispatcher = new Dispatcher();
   }
 
   async inserisciServizio(e, nuovoServizio, setNuovoServizio) {
@@ -27,9 +26,7 @@ export class ServizioActions {
         if(response.status === 200) {
           const result = await response.json();
           nuovoServizio.id = result.id;
-          dispatcher(servizioSliceActions.inserimentoServizio({
-            nuovoServizio: nuovoServizio
-          }));
+          this.dispatcher.inserimentoServizio(nuovoServizio);
           alert("L\'inserimento del servizio è andato a buon fine!!");
         }
         else if(response.status === 400) {
@@ -63,9 +60,7 @@ export class ServizioActions {
 
       if(response.status === 200) {
         const result = await response.json();
-        dispatcher(servizioSliceActions.aggiornaServizi({
-          servizi: result.items, 
-        }));
+        this.dispatcher.aggiornaServizi(result.items);
       }
       else {
         alert("Errore durante la ricerca dei servizi, riprova più tardi.");
@@ -83,18 +78,12 @@ export class ServizioActions {
   ) {
     if(icon === "trash") {
       if(selectedIdsEliminazione.includes(item.id)) {
-        dispatcher(servizioSliceActions.aggiornaTipoSelezione({
-          id_servizio: item.id, 
-          nuova_selezione: 0
-        }));
+        this.dispatcher.aggiornaTipoSelezioneServizio(item.id, 0);
         setSelectedIdsEliminazione(prevIds => prevIds.filter(itemId => itemId !== item.id));
         setSelectedTrashCount(prevCount => Math.max(prevCount - 1, 0));
       }
       else {
-        dispatcher(servizioSliceActions.aggiornaTipoSelezione({
-          id_servizio: item.id, 
-          nuova_selezione: 2
-        }));
+        this.aggiornaTipoSelezioneServizio(item.id, 2);
         setSelectedIdsEliminazione(prevIds => [...prevIds, item.id]);
         setSelectedTrashCount(prevCount => prevCount + 1);
         setSelectedIdsModifica(prevIdsModifica => prevIdsModifica.filter(itemId => itemId !== item.id));
@@ -103,21 +92,13 @@ export class ServizioActions {
     }
     else if(icon === "pencil") {
       if(selectedIdsModifica.includes(item.id)) {
-        dispatcher(servizioSliceActions.getServizioPrimaDellaModifica({
-          id_servizio: item.id,
-        }));
-        dispatcher(servizioSliceActions.aggiornaTipoSelezione({
-          id_servizio: item.id, 
-          nuova_selezione: 0
-        }));
+        this.dispatcher.getServizioPrimaDellaModifica(item.id);
+        this.dispatcher.aggiornaTipoSelezioneServizio(item.id, 0);
         setSelectedIdsModifica(prevIdsModifica => prevIdsModifica.filter(itemId => itemId !== item.id));
         setSelectedPencilCount(prevCount => Math.max(prevCount - 1, 0));
       }
       else {
-        dispatcher(servizioSliceActions.aggiornaTipoSelezione({
-          id_servizio: item.id, 
-          nuova_selezione: 1
-        }));
+        this.dispatcher.aggiornaTipoSelezioneServizio(item.id, 1);
         setSelectedIdsModifica(prevIdsModifica => [...prevIdsModifica, item.id]);
         setSelectedPencilCount(prevCount => prevCount + 1);
         setSelectedIdsEliminazione(prevIds => prevIds.filter(itemId => itemId !== item.id));
@@ -169,28 +150,20 @@ export class ServizioActions {
         }
         serviziAggiornati.push(servizioAggiornato);
       }
-      // setServizi(serviziAggiornati);
-      dispatcher(servizioSliceActions.aggiornaServizi({
-        servizi: serviziAggiornati, 
-      }));
+      this.dispatcher.aggiornaServizi(serviziAggiornati);
 
       for(let id of idServiziNonModificati) {
         console.log("\\"+id+"/");
-        dispatcher(servizioSliceActions.getServizioPrimaDellaModifica({
-          id_servizio: id
-        }));
+        this.dispatcher.getServizioPrimaDellaModifica(id);
       }
 
       for(let id of idServiziModificati) {
         console.log("\\"+id+"/");
-        dispatcher(servizioSliceActions.getServizioDopoLaModifica({
-          id_servizio: id
-        }));
+        this.dispatcher.getServizioDopoLaModifica(id);
       }
       
       setSelectedIdsModifica([]);
 
-      // alert("Risultati modifica:\n")
       alert(esitoModifica);
     }
     else {
@@ -199,11 +172,7 @@ export class ServizioActions {
   }
 
   aggiornaServizio(id_servizio, nome_attributo, nuovo_valore) {
-    dispatcher(servizioSliceActions.aggiornaServizio({
-      id_servizio: id_servizio,
-      nome_attributo: nome_attributo,
-      nuovo_valore: nuovo_valore,
-    }));
+    this.dispatcher.aggiornaServizio(id_servizio, nome_attributo, nuovo_valore);
   }
 
   async eliminaServizi(e, selectedIdsEliminazione, setSelectedIdsEliminazione, serviziSession) {
@@ -224,9 +193,7 @@ export class ServizioActions {
           body: JSON.stringify(dati),
         });
         if(response.status === 200) {          
-          dispatcher(servizioSliceActions.aggiornaServizi({
-            servizi: itemsRestanti, 
-          }))
+          this.dispatcher.aggiornaServizi(itemsRestanti);
           setSelectedIdsEliminazione([]);
           alert("Eliminazione completata con successo.");
         }

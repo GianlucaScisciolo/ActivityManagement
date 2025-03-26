@@ -1,24 +1,19 @@
 /************************************************** Dispatcher **************************************************/
-import { dispatcher } from "../dispatcher/Dispatcher";
-/************************************************** Slices Actions **************************************************/
-import { stileSliceActions } from "../store/slice/StileSlice";
+import { Dispatcher } from "../dispatcher/Dispatcher";
 
 export class StileActions {
+  dispatcher;
   constructor() {
-
+    this.dispatcher = new Dispatcher();
   }
 
   cambioSfondo(tipoSfondo, sfondo) {
     switch(tipoSfondo) {
       case "img":
-        dispatcher(stileSliceActions.cambioImmagineSfondo({
-          pathImg: sfondo
-        }));
+        this.dispatcher.cambioImmagineSfondo(sfondo);
         break;
       case "rgb": 
-        dispatcher(stileSliceActions.cambioColoreSfondo({
-          coloreRGB: sfondo
-        }));
+        this.dispatcher.cambioColoreSfondo(sfondo);
         break;
       default:
         alert("Errore, tipo sfondo non trovato.");
@@ -28,14 +23,10 @@ export class StileActions {
 
   cambioVista(tipoElemento, tipoView) {
     if(tipoElemento === "item") {
-      dispatcher(stileSliceActions.cambioVistaItem({
-        vistaItem: tipoView
-      }));
+      this.dispatcher.cambioVistaItem(tipoView);
     }
     else if(tipoElemento === "form") {
-      dispatcher(stileSliceActions.cambioVistaForm({
-        vistaForm: tipoView
-      }));
+      this.dispatcher.cambioVistaForm(tipoView);
     }
   }
 }

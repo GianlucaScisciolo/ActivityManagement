@@ -1,13 +1,12 @@
 /************************************************** Dispatcher **************************************************/
-import { dispatcher } from "../dispatcher/Dispatcher";
-/************************************************** Slices Actions **************************************************/
-import { clienteSliceActions } from "../store/slice/ClienteSlice";
+import { Dispatcher } from "../dispatcher/Dispatcher";
 /************************************************** Utils **************************************************/
 import { controlloCliente } from "../utils/Controlli";
 
 export class ClienteActions {
+  dispatcher;
   constructor() {
-
+    this.dispatcher = new Dispatcher();
   }
   
   async inserimentoCliente(e, nuovoCliente, setNuovoCliente) {
@@ -28,9 +27,7 @@ export class ClienteActions {
         if(response.status === 200) {
           const result = await response.json();
           nuovoCliente.id = result.id;
-          dispatcher(clienteSliceActions.inserimentoCliente({
-            nuovoCliente: nuovoCliente
-          }));
+          this.dispatcher.inserimentoCliente(nuovoCliente);
           alert("L\'inserimento del cliente è andato a buon fine!!");
         }
         else if(response.status === 400) {
@@ -64,9 +61,7 @@ export class ClienteActions {
 
       if(response.status === 200) {
         const result = await response.json();
-        dispatcher(clienteSliceActions.aggiornaClienti({
-          clienti: result.items, 
-        }));
+        this.dispatcher.aggiornaClienti(result.items);
       }
       else {
         alert("Errore durante la ricerca dei clienti, riprova più tardi.");
@@ -84,18 +79,12 @@ export class ClienteActions {
   ) {
     if(icon === "trash") {
       if(selectedIdsEliminazione.includes(item.id)) {
-        dispatcher(clienteSliceActions.aggiornaTipoSelezione({
-          id_cliente: item.id, 
-          nuova_selezione: 0
-        }));
+        this.dispatcher.aggiornaTipoSelezioneCliente(item.id, nuova_selezione);
         setSelectedIdsEliminazione(prevIds => prevIds.filter(itemId => itemId !== item.id));
         setSelectedTrashCount(prevCount => Math.max(prevCount - 1, 0));
       }
       else {
-        dispatcher(clienteSliceActions.aggiornaTipoSelezione({
-          id_cliente: item.id, 
-          nuova_selezione: 2
-        }));
+        this.dispatcher.aggiornaTipoSelezioneCliente(item.id, 2);
         setSelectedIdsEliminazione(prevIds => [...prevIds, item.id]);
         setSelectedTrashCount(prevCount => prevCount + 1);
         setSelectedIdsModifica(prevIdsModifica => prevIdsModifica.filter(itemId => itemId !== item.id));
@@ -104,21 +93,13 @@ export class ClienteActions {
     }
     else if(icon === "pencil") {
       if(selectedIdsModifica.includes(item.id)) {
-        dispatcher(clienteSliceActions.getClientePrimaDellaModifica({
-          id_cliente: item.id,
-        }));
-        dispatcher(clienteSliceActions.aggiornaTipoSelezione({
-          id_cliente: item.id, 
-          nuova_selezione: 0
-        }));
+        this.dispatcher.getClientePrimaDellaModifica(item.id);
+        this.dispatcher.aggiornaTipoSelezioneCliente(item.id, 0);
         setSelectedIdsModifica(prevIdsModifica => prevIdsModifica.filter(itemId => itemId !== item.id));
         setSelectedPencilCount(prevCount => Math.max(prevCount - 1, 0));
       }
       else {
-        dispatcher(clienteSliceActions.aggiornaTipoSelezione({
-          id_cliente: item.id, 
-          nuova_selezione: 1
-        }));
+        this.dispatcher.aggiornaTipoSelezioneCliente(item.id, 1);
         setSelectedIdsModifica(prevIdsModifica => [...prevIdsModifica, item.id]);
         setSelectedPencilCount(prevCount => prevCount + 1);
         setSelectedIdsEliminazione(prevIds => prevIds.filter(itemId => itemId !== item.id));
@@ -170,27 +151,20 @@ export class ClienteActions {
         }
         clientiAggiornati.push(clienteAggiornato);
       }
-      dispatcher(clienteSliceActions.aggiornaClienti({
-        clienti: clientiAggiornati, 
-      }));
+      this.dispatcher.aggiornaClienti(clientiAggiornati);
 
       for(let id of idClientiNonModificati) {
         console.log("\\"+id+"/");
-        dispatcher(clienteSliceActions.getClientePrimaDellaModifica({
-          id_cliente: id
-        }));
+        this.dispatcher.getClientePrimaDellaModifica(id);
       }
 
       for(let id of idClientiModificati) {
         console.log("\\"+id+"/");
-        dispatcher(clienteSliceActions.getClienteDopoLaModifica({
-          id_cliente: id
-        }));
+        this.dispatcher.getClienteDopoLaModifica(id);
       }
 
       setSelectedIdsModifica([]);
 
-      // alert("Risultati modifica:\n")
       alert(esitoModifica);
     }
     else {
@@ -199,11 +173,7 @@ export class ClienteActions {
   }
 
   aggiornaCliente(id_cliente, nome_attributo, nuovo_valore) {
-    dispatcher(clienteSliceActions.aggiornaCliente({
-      id_cliente: id_cliente,
-      nome_attributo: nome_attributo,
-      nuovo_valore: nuovo_valore,
-    }));
+    this.dispatcher.aggiornaCliente(id_cliente, nome_attributo, nuovo_valore);
   }
 
   async eliminaClienti(e, selectedIdsEliminazione, setSelectedIdsEliminazione, clientiSession) {
@@ -224,10 +194,7 @@ export class ClienteActions {
           body: JSON.stringify(dati),
         });
         if(response.status === 200) {          
-          // setClienti(itemsRestanti);
-          dispatcher(clienteSliceActions.aggiornaClienti({
-            clienti: itemsRestanti, 
-          }));
+          this.dispatcher.aggiornaClienti(itemsRestanti);
           setSelectedIdsEliminazione([]);
           alert("Eliminazione completata con successo.");
         }

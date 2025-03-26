@@ -10,9 +10,9 @@ import prenotazione from '../../view/img/img_widget/prenotazione.png';
 import salone from '../../view/img/img_widget/salone.png';
 import profilo from '../../view/img/img_widget/profilo.png';
 
-export const BC_NOT_SELECTED = "rgba(0, 0, 0, 0.5)";
-export const BC_SELECTED = "#0050EF";
-export const BC_VIEW = "rgba(0, 0, 0, 0.5)";
+const BC_NOT_SELECTED = "rgba(0, 0, 0, 0.5)";
+const BC_SELECTED = "#0050EF";
+const BC_VIEW = "rgba(0, 0, 0, 0.5)";
 
 const loadFromLocalStorage = () => {
   try {

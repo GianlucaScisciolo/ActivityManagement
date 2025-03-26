@@ -1,14 +1,13 @@
 /************************************************** Dispatcher **************************************************/
-import { dispatcher } from "../dispatcher/Dispatcher";
-/************************************************** Slices Actions **************************************************/
-import { spesaSliceActions } from "../store/slice/SpesaSlice";
+import { Dispatcher } from "../dispatcher/Dispatcher";
 /************************************************** Utils **************************************************/
 import { controlloSpesa } from "../utils/Controlli";
 import { generaFileSpesePDF, generaFileSpeseExcel } from "../utils/File";
 
 export class SpesaActions {
+  dispatcher;
   constructor() {
-
+    this.dispatcher = new Dispatcher();
   }
 
   async inserimentoSpesa(e, nuovaSpesa, setNuovaSpesa) {
@@ -29,9 +28,7 @@ export class SpesaActions {
         if(response.status === 200) {
           const result = await response.json();
           nuovaSpesa.id = result.id;
-          dispatcher(spesaSliceActions.inserimentoSpesa({
-            nuovaSpesa: nuovaSpesa 
-          }));
+          this.dispatcher.inserimentoSpesa(nuovaSpesa);
           alert("L\'inserimento della spesa è andato a buon fine!!");
         }
         else if(response.status === 400) {
@@ -65,9 +62,7 @@ export class SpesaActions {
 
       if(response.status === 200) {
         const result = await response.json();
-        dispatcher(spesaSliceActions.aggiornaSpese({
-          spese: result.items,
-        }));
+        this.dispatcher.aggiornaSpese(result.items);
       }
       else {
         alert("Errore durante la ricerca delle spese, riprova più tardi.");
@@ -141,18 +136,12 @@ export class SpesaActions {
   ) {
     if(icon === "trash") {
       if(selectedIdsEliminazione.includes(item.id)) {
-        dispatcher(spesaSliceActions.aggiornaTipoSelezione({
-          id_spesa: item.id, 
-          nuova_selezione: 0
-        }));
+        this.dispatcher.aggiornaTipoSelezioneSpesa(item.id, 0);
         setSelectedIdsEliminazione(prevIds => prevIds.filter(itemId => itemId !== item.id));
         setSelectedTrashCount(prevCount => Math.max(prevCount - 1, 0));
       }
       else {
-        dispatcher(spesaSliceActions.aggiornaTipoSelezione({
-          id_spesa: item.id, 
-          nuova_selezione: 2
-        }));
+        this.dispatcher.aggiornaTipoSelezioneSpesa(item.id, 2);
         setSelectedIdsEliminazione(prevIds => [...prevIds, item.id]);
         setSelectedTrashCount(prevCount => prevCount + 1);
         setSelectedIdsModifica(prevIdsModifica => prevIdsModifica.filter(itemId => itemId !== item.id));
@@ -161,21 +150,13 @@ export class SpesaActions {
     }
     else if(icon === "pencil") {
       if(selectedIdsModifica.includes(item.id)) {
-        dispatcher(spesaSliceActions.getSpesaPrimaDellaModifica({
-          id_spesa: item.id,
-        }));
-        dispatcher(spesaSliceActions.aggiornaTipoSelezione({
-          id_spesa: item.id, 
-          nuova_selezione: 0
-        }));
+        this.dispatcher.getSpesaPrimaDellaModifica(item.id);
+        this.dispatcher.aggiornaTipoSelezioneSpesa(item.id, 0);
         setSelectedIdsModifica(prevIdsModifica => prevIdsModifica.filter(itemId => itemId !== item.id));
         setSelectedPencilCount(prevCount => Math.max(prevCount - 1, 0));
       }
       else {
-        dispatcher(spesaSliceActions.aggiornaTipoSelezione({
-          id_spesa: item.id, 
-          nuova_selezione: 1
-        }));
+        this.dispatcher.aggiornaTipoSelezioneSpesa(item.id, 1);
         setSelectedIdsModifica(prevIdsModifica => [...prevIdsModifica, item.id]);
         setSelectedPencilCount(prevCount => prevCount + 1);
         setSelectedIdsEliminazione(prevIds => prevIds.filter(itemId => itemId !== item.id));
@@ -189,7 +170,6 @@ export class SpesaActions {
     if (confirm("Sei sicuro di voler modificare le spese?")) {
       let speseDaNonModificare = speseSession.spese.filter(spesa => !selectedIdsModifica.includes(spesa.id));
       let speseDaModificare = speseSession.spese.filter(spesa => selectedIdsModifica.includes(spesa.id)); 
-      // let copiaSpeseDaModificare = [...speseDaModificare];
       
       let idSpeseNonModificate = [];
       let idSpeseModificate = [];
@@ -228,27 +208,19 @@ export class SpesaActions {
         }
         speseAggiornate.push(spesaAggiornata);
       }
-      // setSpese(speseAggiornate);
-      dispatcher(spesaSliceActions.aggiornaSpese({
-        spese: speseAggiornate, 
-      }));
+      this.dispatcher.aggiornaSpese(speseAggiornate);
 
       for(let id of idSpeseNonModificate) {
         console.log("\\"+id+"/");
-        dispatcher(spesaSliceActions.getSpesaPrimaDellaModifica({
-          id_spesa: id
-        }));
+        this.dispatcher.getSpesaPrimaDellaModifica(id);
       }
       for(let id of idSpeseModificate) {
         console.log("\\"+id+"/");
-        dispatcher(spesaSliceActions.getSpesaDopoLaModifica({
-          id_spesa: id
-        }));
+        this.dispatcher.getSpesaDopoLaModifica(id);
       }
 
       setSelectedIdsModifica([]);
 
-      // alert("Risultati modifica:\n")
       alert(esitoModifica);
     }
     else {
@@ -257,11 +229,7 @@ export class SpesaActions {
   };
 
   aggiornaSpesa(id_spesa, nome_attributo, nuovo_valore) {
-    dispatcher(spesaSliceActions.aggiornaSpesa({
-      id_spesa: id_spesa,
-      nome_attributo: nome_attributo,
-      nuovo_valore: nuovo_valore,
-    }));
+    this.dispatcher.aggiornaSpesa(id_spesa, nome_attributo, nuovo_valore);
   }
 
   async eliminaSpese(e, selectedIdsEliminazione, setSelectedIdsEliminazione, speseSession) {
@@ -282,9 +250,7 @@ export class SpesaActions {
           body: JSON.stringify(dati),
         });
         if(response.status === 200) {          
-          dispatcher(spesaSliceActions.aggiornaSpese({
-            spese: itemsRestanti, 
-          }))
+          this.dispatcher.aggiornaSpese(itemsRestanti);
           setSelectedIdsEliminazione([]);
           alert("Eliminazione completata con successo.");
         }

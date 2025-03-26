@@ -1,14 +1,13 @@
 /************************************************** Dispatcher **************************************************/
-import { dispatcher } from "../dispatcher/Dispatcher";
-/************************************************** Slices Actions **************************************************/
-import { lavoroSliceActions } from "../store/slice/LavoroSlice";
+import { Dispatcher } from "../dispatcher/Dispatcher";
 /************************************************** Utils **************************************************/
 import { controlloLavoro } from "../utils/Controlli";
 import { generaFileLavoriPDF, generaFileLavoriExcel } from "../utils/File";
 
 export class LavoroActions {
+  dispatcher;
   constructor() {
-
+    this.dispatcher = new Dispatcher();
   }
   
   async inserimentoLavoro(e, servizi, clienti, nuovoLavoro, setNuovoLavoro) {
@@ -59,9 +58,7 @@ export class LavoroActions {
       if(response.status === 200) {
         const result = await response.json();
         nuovoLavoro.id = result.id;
-        dispatcher(lavoroSliceActions.inserimentoLavoro({
-          nuovoLavoro: nuovoLavoro 
-        }));
+        this.dispatcher.inserimentoLavoro(nuovoLavoro);
         alert("L\'inserimento del lavoro è andato a buon fine!!");
       }
       else if(response.status === 400) {
@@ -90,9 +87,7 @@ export class LavoroActions {
 
       if(response.status === 200) {
         const result = await response.json();
-        dispatcher(lavoroSliceActions.aggiornaLavori({
-          lavori: result.items,
-        }));
+        this.dispatcher.aggiornaLavori(result.items);
       }
       else {
         alert("Errore durante la ricerca dei lavori, riprova più tardi.");
@@ -166,18 +161,12 @@ export class LavoroActions {
   ) {
     if(icon === "trash") {
       if(selectedIdsEliminazione.includes(item.id)) {
-        dispatcher(lavoroSliceActions.aggiornaTipoSelezione({
-          id_lavoro: item.id, 
-          nuova_selezione: 0
-        }));
+        this.dispatcher.aggiornaTipoSelezioneLavoro(item.id, 0);
         setSelectedIdsEliminazione(prevIds => prevIds.filter(itemId => itemId !== item.id));
         setSelectedTrashCount(prevCount => Math.max(prevCount - 1, 0));
       }
       else {
-        dispatcher(lavoroSliceActions.aggiornaTipoSelezione({
-          id_lavoro: item.id, 
-          nuova_selezione: 2
-        }));
+        this.dispatcher.aggiornaTipoSelezioneLavoro(item.id, 2);
         setSelectedIdsEliminazione(prevIds => [...prevIds, item.id]);
         setSelectedTrashCount(prevCount => prevCount + 1);
         setSelectedIdsModifica(prevIdsModifica => prevIdsModifica.filter(itemId => itemId !== item.id));
@@ -186,21 +175,13 @@ export class LavoroActions {
     }
     else if(icon === "pencil") {
       if(selectedIdsModifica.includes(item.id)) {
-        dispatcher(lavoroSliceActions.getLavoroPrimaDellaModifica({
-          id_cliente: item.id,
-        }));
-        dispatcher(lavoroSliceActions.aggiornaTipoSelezione({
-          id_lavoro: item.id, 
-          nuova_selezione: 0
-        }));
+        this.dispatcher.getLavoroPrimaDellaModifica(item.id);
+        this.dispatcher(aggiornaTipoSelezioneLavoro(item.id, 0));
         setSelectedIdsModifica(prevIdsModifica => prevIdsModifica.filter(itemId => itemId !== item.id));
         setSelectedPencilCount(prevCount => Math.max(prevCount - 1, 0));
       }
       else {
-        dispatcher(lavoroSliceActions.aggiornaTipoSelezione({
-          id_lavoro: item.id, 
-          nuova_selezione: 1
-        }));
+        this.dispatcher.aggiornaTipoSelezioneLavoro(item.id, 1);
         setSelectedIdsModifica(prevIdsModifica => [...prevIdsModifica, item.id]);
         setSelectedPencilCount(prevCount => prevCount + 1);
         setSelectedIdsEliminazione(prevIds => prevIds.filter(itemId => itemId !== item.id));
@@ -253,22 +234,16 @@ export class LavoroActions {
         }
         lavoriAggiornati.push(lavoroAggiornato);
       }
-      dispatcher(lavoroSliceActions.aggiornaLavori({
-        lavori: lavoriAggiornati, 
-      }));
+      this.dispatcher.aggiornaLavori(lavoriAggiornati);
 
       for(let id of idLavoriNonModificati) {
         console.log("\\"+id+"/");
-        dispatcher(lavoroSliceActions.getLavoroPrimaDellaModifica({
-          id_lavoro: id
-        }));
+        this.dispatcher.getLavoroPrimaDellaModifica(id);
       }
 
       for(let id of idLavoriModificati) {
         console.log("\\"+id+"/");
-        dispatcher(lavoroSliceActions.getLavoroDopoLaModifica({
-          id_lavoro: id
-        }));
+        this.dispatcher.getLavoroDopoLaModifica(id);
       }
 
       setSelectedIdsModifica([]);
@@ -281,11 +256,7 @@ export class LavoroActions {
   }
 
   aggiornaLavoro(id_lavoro, nome_attributo, nuovo_valore) {
-    dispatcher(lavoroSliceActions.aggiornaLavoro({
-      id_lavoro: id_lavoro, 
-      nome_attributo: nome_attributo, 
-      nuovo_valore: nuovo_valore
-    }))
+    this.dispatcher.aggiornaLavoro(id_lavoro, nome_attributo, nuovo_valore);
   }
 
   async eliminaLavori(e, selectedIdsEliminazione, setSelectedIdsEliminazione, lavoriSession) {
@@ -306,9 +277,7 @@ export class LavoroActions {
           body: JSON.stringify(dati),
         });
         if(response.status === 200) {          
-          dispatcher(lavoroSliceActions.aggiornaLavori({
-            lavori: itemsRestanti,
-          }));
+          this.dispatcher.aggiornaLavori(itemsRestanti);
           setSelectedIdsEliminazione([]);
           alert("Eliminazione completata con successo.");
         }
