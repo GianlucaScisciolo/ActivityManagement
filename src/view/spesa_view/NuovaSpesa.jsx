@@ -81,7 +81,7 @@ const NuovaSpesa = () => {
             selectedIdsModifica: selectedIdsModifica, 
             selectedIdsEliminazione: selectedIdsEliminazione, 
             handleEdit: null, 
-            handleDelete: null
+            handleDelete: (e) => spesaActions.eliminaSpese(e, selectedIdsEliminazione, setSelectedIdsEliminazione, spesaState), 
           }
         }
       />

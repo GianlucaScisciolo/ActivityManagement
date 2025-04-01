@@ -74,9 +74,9 @@ const NuovoCliente = () => {
             selectedIdsModifica: selectedIdsModifica, 
             selectedIdsEliminazione: selectedIdsEliminazione, 
             //handleEdit: (e) => clienteAction.handleEdit(e, clienteState, selectedIdsModifica, setSelectedIdsModifica, dispatch), 
-            //handleDelete: (e) => clienteAction.handleDelete(e, selectedIdsEliminazione, setSelectedIdsEliminazione, clienteState, dispatch)
+            handleDelete: (e) => clienteActions.eliminaClienti(e, selectedIdsEliminazione, setSelectedIdsEliminazione, clienteState), 
             handleEdit: null, 
-            handleDelete: null
+            // handleDelete: null
           }
         }
       />

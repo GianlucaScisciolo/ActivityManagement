@@ -11,7 +11,8 @@ const spesaSlice = createSlice ({
   },
   reducers: {
     aggiornaSpese: (state, action) => {
-      state.value.spese = action.payload.spese 
+      state.value.spese = action.payload.spese, 
+      state.value.nuoveSpese = action.payload.nuoveSpese 
     },
     aggiornaTipoSelezione: (state, action) => {
       if(state.value.spese !== -1) {
@@ -22,7 +23,7 @@ const spesaSlice = createSlice ({
           }
         }
       }
-      if(state.value.nuoveSpese !== -1) {
+      if(state.value.nuoveSpese && state.value.nuoveSpese !== -1) {
         for(let i = 0; i < state.value.nuoveSpese.length; i++) {
           if(state.value.nuoveSpese[i].id === action.payload.id_spesa) {
             state.value.nuoveSpese[i].tipo_selezione = action.payload.nuova_selezione;
@@ -61,7 +62,7 @@ const spesaSlice = createSlice ({
           }
         }
       }
-      if(state.value.nuoveSpese !== -1) {
+      if(state.value.nuoveSpese && state.value.nuoveSpese !== -1) {
         for(let i = 0; i < state.value.nuoveSpese.length; i++) {
           if(state.value.nuoveSpese[i].id === action.payload.id_spesa) {
             state.value.nuoveSpese[i]["descrizione"] = state.value.nuoveSpese[i]["descrizione_attuale"];

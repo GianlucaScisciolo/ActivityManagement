@@ -69,7 +69,7 @@ const NuovoServizio = () => {
             selectedIdsModifica: selectedIdsModifica, 
             selectedIdsEliminazione: selectedIdsEliminazione, 
             handleEdit: null, 
-            handleDelete: null
+            handleDelete: (e) => servizioActions.eliminaServizi(e, selectedIdsEliminazione, setSelectedIdsEliminazione, servizioState), 
           }
         }
       />

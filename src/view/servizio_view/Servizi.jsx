@@ -66,7 +66,7 @@ const Servizi = () => {
             selectedIdsModifica: selectedIdsModifica, 
             selectedIdsEliminazione: selectedIdsEliminazione, 
             handleEdit: (e) => servizioActions.modificaServizi(e, servizioState, selectedIdsModifica, setSelectedIdsModifica), 
-            handleDelete: (e) => servizioActions.eliminaServizi(e, selectedIdsEliminazione, setSelectedIdsEliminazione, serviziSession)
+            handleDelete: (e) => servizioActions.eliminaServizi(e, selectedIdsEliminazione, setSelectedIdsEliminazione, servizioState)
           }
         }
       />

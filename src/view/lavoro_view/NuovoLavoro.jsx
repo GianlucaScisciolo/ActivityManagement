@@ -334,7 +334,7 @@ const NuovoLavoro = () => {
             selectedIdsModifica: selectedIdsModifica, 
             selectedIdsEliminazione: selectedIdsEliminazione, 
             handleEdit: null, 
-            handleDelete: null
+            handleDelete: (e) => lavoroActions.eliminaLavori(e, selectedIdsEliminazione, setSelectedIdsEliminazione, lavoroState)
           }
         }
       />

@@ -47,12 +47,6 @@ export class LavoroActions {
       if (controlloLavoro(nuovoLavoro, setNuovoLavoro) > 0) 
         return;
 
-  /*
-    state.value.nuoviLavori[i]["giorno"] = state.value.nuoviLavori[i]["giorno_attuale"]; 
-    state.value.nuoviLavori[i]["descrizione"] = state.value.nuoviLavori[i]["descrizione_attuale"];
-    state.value.nuoviLavori[i]["totale"] = state.value.nuoviLavori[i]["totale_attuale"]; 
-    state.value.nuoviLavori[i]["note"] = state.value.nuoviLavori[i]["note_attuale"]; 
-  */
       nuovoLavoro["giorno_attuale"] = nuovoLavoro["giorno"];
       nuovoLavoro["descrizione_attuale"] = nuovoLavoro["descrizione"];
       nuovoLavoro["totale_attuale"] = nuovoLavoro["totale"];
@@ -271,15 +265,19 @@ export class LavoroActions {
     this.dispatcher.aggiornaLavoro(id_lavoro, nome_attributo, nuovo_valore);
   }
 
-  async eliminaLavori(e, selectedIdsEliminazione, setSelectedIdsEliminazione, lavoriSession) {
+  async eliminaLavori(e, selectedIdsEliminazione, setSelectedIdsEliminazione, lavoroState) {
     e.preventDefault();
     if (confirm("Sei sicuro di voler eliminare i lavori?")) {
       const dati = {
         tipo_item: "lavoro", 
         ids: selectedIdsEliminazione
       }
-      const itemsDaEliminare = lavoriSession.lavori.filter(lavoro => dati.ids.includes(lavoro.id));
-      const itemsRestanti = lavoriSession.lavori.filter(lavoro => !dati.ids.includes(lavoro.id));
+      
+      const itemsAttualiDaEliminare = (lavoroState.lavori && lavoroState.lavori !== -1) ? lavoroState.lavori.filter(lavoro => dati.ids.includes(lavoro.id)) : -1;
+      const itemsAttualiRestanti = (lavoroState.lavori && lavoroState.lavori !== -1) ? lavoroState.lavori.filter(lavoro => !dati.ids.includes(lavoro.id)) : -1;
+      const nuoviItemsDaEliminare = (lavoroState.nuoviLavori && lavoroState.nuoviLavori !== -1) ? lavoroState.nuoviLavori.filter(lavoro => dati.ids.includes(lavoro.id)) : -1;
+      const nuoviItemsRestanti = (lavoroState.nuoviLavori && lavoroState.nuoviLavori !== -1) ? lavoroState.nuoviLavori.filter(lavoro => !dati.ids.includes(lavoro.id)) : -1;
+      
       try {
         const response = await fetch('/ELIMINA_ITEMS', {
           method: 'POST',
@@ -289,7 +287,7 @@ export class LavoroActions {
           body: JSON.stringify(dati),
         });
         if(response.status === 200) {          
-          this.dispatcher.aggiornaLavori(itemsRestanti);
+          this.dispatcher.aggiornaLavori(itemsAttualiRestanti, nuoviItemsRestanti);
           setSelectedIdsEliminazione([]);
           alert("Eliminazione completata con successo.");
         }

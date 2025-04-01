@@ -14,6 +14,10 @@ export class ServizioActions {
     if (confirm("Sei sicuro di voler salvare il servizio?")) {
       if (controlloServizio(nuovoServizio, setNuovoServizio) > 0) 
         return;
+
+      nuovoServizio["nome_attuale"] = nuovoServizio["nome"];
+      nuovoServizio["prezzo_attuale"] = nuovoServizio["prezzo"];
+      nuovoServizio["note_attuale"] = nuovoServizio["note"];
       
       try {
         const response = await fetch('/INSERISCI_ITEM', {
@@ -176,15 +180,19 @@ export class ServizioActions {
     this.dispatcher.aggiornaServizio(id_servizio, nome_attributo, nuovo_valore);
   }
 
-  async eliminaServizi(e, selectedIdsEliminazione, setSelectedIdsEliminazione, serviziSession) {
+  async eliminaServizi(e, selectedIdsEliminazione, setSelectedIdsEliminazione, servizioState) {
     e.preventDefault();
     if (confirm("Sei sicuro di voler eliminare i servizi?")) {
       const dati = {
         tipo_item: "servizio", 
         ids: selectedIdsEliminazione
       }
-      const itemsDaEliminare = serviziSession.servizi.filter(servizio => dati.ids.includes(servizio.id));
-      const itemsRestanti = serviziSession.servizi.filter(servizio => !dati.ids.includes(servizio.id));
+      
+      const itemsAttualiDaEliminare = (servizioState.servizi && servizioState.servizi !== -1) ? servizioState.servizi.filter(servizio => dati.ids.includes(servizio.id)) : -1;
+      const itemsAttualiRestanti = (servizioState.servizi && servizioState.servizi !== -1) ? servizioState.servizi.filter(servizio => !dati.ids.includes(servizio.id)) : -1;
+      const nuoviItemsDaEliminare = (servizioState.nuoviServizi && servizioState.nuoviServizi !== -1) ? servizioState.nuoviServizi.filter(servizio => dati.ids.includes(servizio.id)) : -1;
+      const nuoviItemsRestanti = (servizioState.nuoviServizi && servizioState.nuoviServizi !== -1) ? servizioState.nuoviServizi.filter(servizio => !dati.ids.includes(servizio.id)): -1;
+      
       try {
         const response = await fetch('/ELIMINA_ITEMS', {
           method: 'POST',
@@ -194,7 +202,7 @@ export class ServizioActions {
           body: JSON.stringify(dati),
         });
         if(response.status === 200) {          
-          this.dispatcher.aggiornaServizi(itemsRestanti);
+          this.dispatcher.aggiornaServizi(itemsAttualiRestanti, nuoviItemsRestanti);
           setSelectedIdsEliminazione([]);
           alert("Eliminazione completata con successo.");
         }

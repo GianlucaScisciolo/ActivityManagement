@@ -11,7 +11,8 @@ const lavoroSlice = createSlice ({
   },
   reducers: {
     aggiornaLavori: (state, action) => {
-      state.value.lavori = action.payload.lavori 
+      state.value.lavori = action.payload.lavori, 
+      state.value.nuoviLavori = action.payload.nuoviLavori 
     },
     aggiornaTipoSelezione: (state, action) => {
       if(state.value.lavori !== -1) {
@@ -22,7 +23,7 @@ const lavoroSlice = createSlice ({
           }
         }
       }
-      if(state.value.nuoviLavori !== -1) {
+      if(state.value.nuoviLavori && state.value.nuoviLavori !== -1) {
         for(let i = 0; i < state.value.nuoviLavori.length; i++) {
           if(state.value.nuoviLavori[i].id === action.payload.id_lavoro) {
             state.value.nuoviLavori[i].tipo_selezione = action.payload.nuova_selezione;
@@ -40,7 +41,7 @@ const lavoroSlice = createSlice ({
           }
         }
       }
-      if(state.value.nuoviLavori !== -1) {
+      if(state.value.nuoviLavori && state.value.nuoviLavori !== -1) {
         for(let i = 0; i < state.value.nuoviLavori.length; i++) {
           if(state.value.nuoviLavori[i].id === action.payload.id_lavoro) {
             state.value.nuoviLavori[i][action.payload.nome_attributo] = action.payload.nuovo_valore;
@@ -73,7 +74,7 @@ const lavoroSlice = createSlice ({
           }
         }
       }
-      if(state.value.nuoviLavori !== -1) {
+      if(state.value.nuoviLavori && state.value.nuoviLavori !== -1) {
         for(let i = 0; i < state.value.nuoviLavori.length; i++) {
           if(state.value.nuoviLavori[i].id === action.payload.id_lavoro) {
             state.value.nuoviLavori[i]["giorno"] = state.value.nuoviLavori[i]["giorno_attuale"]; 

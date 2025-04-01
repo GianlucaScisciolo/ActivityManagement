@@ -14,6 +14,11 @@ export class ClienteActions {
     if (confirm("Sei sicuro di voler salvare il cliente?")) {
       if (controlloCliente(nuovoCliente, setNuovoCliente) > 0) 
         return;
+
+      nuovoCliente["giorno_attuale"] = nuovoCliente["giorno"];
+      nuovoCliente["contatto_attuale"] = nuovoCliente["contatto"];
+      nuovoCliente["email_attuale"] = nuovoCliente["email"];
+      nuovoCliente["note_attuale"] = nuovoCliente["note"];
             
       try {
         const response = await fetch('/INSERISCI_ITEM', {
@@ -82,14 +87,16 @@ export class ClienteActions {
         this.dispatcher.aggiornaTipoSelezioneCliente(item.id, 0);
         setSelectedIdsEliminazione(prevIds => prevIds.filter(itemId => itemId !== item.id));
         setSelectedTrashCount(prevCount => Math.max(prevCount - 1, 0));
+        console.log("Tasto trash deselezionato!!!!");
       }
       else {
-        this.dispatcher.getClientePrimaDellaModifica(item.id);
+        this.dispatcher.getClientePrimaDellaModifica(item.id); //// PROBLEMA QUI !!!!
         this.dispatcher.aggiornaTipoSelezioneCliente(item.id, 2);
         setSelectedIdsEliminazione(prevIds => [...prevIds, item.id]);
         setSelectedTrashCount(prevCount => prevCount + 1);
         setSelectedIdsModifica(prevIdsModifica => prevIdsModifica.filter(itemId => itemId !== item.id));
         setSelectedPencilCount(prevCount => Math.max(prevCount - 1, 0));
+        console.log("Tasto trash selezionato!!!!");
       }
     }
     else if(icon === "pencil") {
@@ -177,15 +184,19 @@ export class ClienteActions {
     this.dispatcher.aggiornaCliente(id_cliente, nome_attributo, nuovo_valore);
   }
 
-  async eliminaClienti(e, selectedIdsEliminazione, setSelectedIdsEliminazione, clientiSession) {
+  async eliminaClienti(e, selectedIdsEliminazione, setSelectedIdsEliminazione, clienteState) {
     e.preventDefault();
     if (confirm("Sei sicuro di voler eliminare i clienti?")) {
       const dati = {
         tipo_item: "cliente", 
         ids: selectedIdsEliminazione
       }
-      const itemsDaEliminare = clientiSession.clienti.filter(cliente => dati.ids.includes(cliente.id));
-      const itemsRestanti = clientiSession.clienti.filter(cliente => !dati.ids.includes(cliente.id));
+
+      const itemsAttualiDaEliminare = (clienteState.clienti && clienteState.clienti !== -1) ? clienteState.clienti.filter(cliente => dati.ids.includes(cliente.id)) : -1;
+      const itemsAttualiRestanti = (clienteState.clienti && clienteState.clienti !== -1) ? clienteState.clienti.filter(cliente => !dati.ids.includes(cliente.id)) : -1;
+      const nuoviItemsDaEliminare = (clienteState.nuoviClienti && clienteState.nuoviClienti !== -1) ? clienteState.nuoviClienti.filter(cliente => dati.ids.includes(cliente.id)) : -1;
+      const nuoviItemsRestanti = (clienteState.nuoviClienti && clienteState.nuoviClienti !== -1) ? clienteState.nuoviClienti.filter(cliente => !dati.ids.includes(cliente.id)) : -1;
+
       try {
         const response = await fetch('/ELIMINA_ITEMS', {
           method: 'POST',
@@ -194,8 +205,8 @@ export class ClienteActions {
           },
           body: JSON.stringify(dati),
         });
-        if(response.status === 200) {          
-          this.dispatcher.aggiornaClienti(itemsRestanti);
+        if(response.status === 200) {
+          this.dispatcher.aggiornaClienti(itemsAttualiRestanti, nuoviItemsRestanti); ////////////////////
           setSelectedIdsEliminazione([]);
           alert("Eliminazione completata con successo.");
         }

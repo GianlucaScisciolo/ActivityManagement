@@ -11,7 +11,8 @@ const servizioSlice = createSlice ({
   },
   reducers: {
     aggiornaServizi: (state, action) => {
-      state.value.servizi = action.payload.servizi 
+      state.value.servizi = action.payload.servizi, 
+      state.value.nuoviServizi = action.payload.nuoviServizi 
     },
     aggiornaTipoSelezione: (state, action) => {
       if(state.value.servizi !== -1) {
@@ -22,7 +23,7 @@ const servizioSlice = createSlice ({
           }
         }
       }
-      if(state.value.nuoviServizi !== -1) {
+      if(state.value.nuoviServizi && state.value.nuoviServizi !== -1) {
         for(let i = 0; i < state.value.nuoviServizi.length; i++) {
           if(state.value.nuoviServizi[i].id === action.payload.id_servizio) {
             state.value.nuoviServizi[i].tipo_selezione = action.payload.nuova_selezione;
@@ -60,7 +61,7 @@ const servizioSlice = createSlice ({
           }
         }
       }
-      if(state.value.nuoviServizi !== -1) {
+      if(state.value.nuoviServizi && state.value.nuoviServizi !== -1) {
         for(let i = 0; i < state.value.nuoviServizi.length; i++) {
           if(state.value.nuoviServizi[i].id === action.payload.id_servizio) {
             state.value.nuoviServizi[i]["nome"] = state.value.nuoviServizi[i]["nome_attuale"];

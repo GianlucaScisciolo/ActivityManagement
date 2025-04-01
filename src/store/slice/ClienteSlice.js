@@ -11,7 +11,8 @@ const clienteSlice = createSlice ({
   },
   reducers: {
     aggiornaClienti: (state, action) => {
-      state.value.clienti = action.payload.clienti 
+      state.value.clienti = action.payload.clienti;
+      state.value.nuoviClienti = action.payload.nuoviClienti;
     },
     aggiornaTipoSelezione: (state, action) => {
       if(state.value.clienti !== -1) {
@@ -22,7 +23,7 @@ const clienteSlice = createSlice ({
           }
         }
       }
-      if(state.value.nuoviClienti !== -1) {
+      if(state.value.nuoviClienti && state.value.nuoviClienti !== -1) {
         for(let i = 0; i < state.value.nuoviClienti.length; i++) {
           if(state.value.nuoviClienti[i].id === action.payload.id_cliente) {
             state.value.nuoviClienti[i].tipo_selezione = action.payload.nuova_selezione;
@@ -60,7 +61,7 @@ const clienteSlice = createSlice ({
           }
         }
       }
-      if(state.value.nuoviClienti !== -1) {
+      if(state.value.nuoviClienti && state.value.nuoviClienti !== -1) {
         for(let i = 0; i < state.value.nuoviClienti.length; i++) {
           if(state.value.nuoviClienti[i].id === action.payload.id_cliente) {
             state.value.nuoviClienti[i]["contatto"] = state.value.nuoviClienti[i]["contatto_attuale"];

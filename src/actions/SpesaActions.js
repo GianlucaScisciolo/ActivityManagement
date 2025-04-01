@@ -15,6 +15,12 @@ export class SpesaActions {
     if (confirm("Sei sicuro di voler salvare la spesa?")) {
       if (controlloSpesa(nuovaSpesa, setNuovaSpesa) > 0) 
         return;
+
+      nuovaSpesa["nome_attuale"] = nuovaSpesa["nome"];
+      nuovaSpesa["descrizione_attuale"] = nuovaSpesa["descrizione"];
+      nuovaSpesa["totale_attuale"] = nuovaSpesa["totale"];
+      nuovaSpesa["giorno_attuale"] = nuovaSpesa["giorno"];
+      nuovaSpesa["note_attuale"] = nuovaSpesa["note"];
       
       try {
         const response = await fetch('/INSERISCI_ITEM', {
@@ -233,15 +239,19 @@ export class SpesaActions {
     this.dispatcher.aggiornaSpesa(id_spesa, nome_attributo, nuovo_valore);
   }
 
-  async eliminaSpese(e, selectedIdsEliminazione, setSelectedIdsEliminazione, speseSession) {
+  async eliminaSpese(e, selectedIdsEliminazione, setSelectedIdsEliminazione, spesaState) {
     e.preventDefault();
     if (confirm("Sei sicuro di voler eliminare le spese?")) {
       const dati = {
         tipo_item: "spesa", 
         ids: selectedIdsEliminazione
       }
-      const itemsDaEliminare = speseSession.spese.filter(spesa => dati.ids.includes(spesa.id));
-      const itemsRestanti = speseSession.spese.filter(spesa => !dati.ids.includes(spesa.id));
+
+      const itemsAttualiDaEliminare = (spesaState.spese && spesaState.spese !== -1) ? spesaState.spese.filter(spesa => dati.ids.includes(spesa.id)) : -1;
+      const itemsAttualiRestanti = (spesaState.spese && spesaState.spese !== -1) ? spesaState.spese.filter(spesa => !dati.ids.includes(spesa.id)) : -1;
+      const nuoviItemsDaEliminare = (spesaState.nuoveSpese && spesaState.nuoveSpese !== -1) ? spesaState.nuoveSpese.filter(spesa => dati.ids.includes(spesa.id)) : -1;
+      const nuoviItemsRestanti = (spesaState.nuoveSpese && spesaState.nuoveSpese !== -1) ? spesaState.nuoveSpese.filter(spesa => !dati.ids.includes(spesa.id)) : -1;
+      
       try {
         const response = await fetch('/ELIMINA_ITEMS', {
           method: 'POST',
@@ -251,7 +261,7 @@ export class SpesaActions {
           body: JSON.stringify(dati),
         });
         if(response.status === 200) {          
-          this.dispatcher.aggiornaSpese(itemsRestanti);
+          this.dispatcher.aggiornaSpese(itemsAttualiRestanti, nuoviItemsRestanti);
           setSelectedIdsEliminazione([]);
           alert("Eliminazione completata con successo.");
         }
