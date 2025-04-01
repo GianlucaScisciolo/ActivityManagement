@@ -14,7 +14,7 @@ export class ClienteActions {
     if (confirm("Sei sicuro di voler salvare il cliente?")) {
       if (controlloCliente(nuovoCliente, setNuovoCliente) > 0) 
         return;
-      
+            
       try {
         const response = await fetch('/INSERISCI_ITEM', {
           method: 'POST',
@@ -79,11 +79,12 @@ export class ClienteActions {
   ) {
     if(icon === "trash") {
       if(selectedIdsEliminazione.includes(item.id)) {
-        this.dispatcher.aggiornaTipoSelezioneCliente(item.id, nuova_selezione);
+        this.dispatcher.aggiornaTipoSelezioneCliente(item.id, 0);
         setSelectedIdsEliminazione(prevIds => prevIds.filter(itemId => itemId !== item.id));
         setSelectedTrashCount(prevCount => Math.max(prevCount - 1, 0));
       }
       else {
+        this.dispatcher.getClientePrimaDellaModifica(item.id);
         this.dispatcher.aggiornaTipoSelezioneCliente(item.id, 2);
         setSelectedIdsEliminazione(prevIds => [...prevIds, item.id]);
         setSelectedTrashCount(prevCount => prevCount + 1);

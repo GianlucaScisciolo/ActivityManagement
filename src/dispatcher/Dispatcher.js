@@ -115,9 +115,9 @@ export class Dispatcher {
       nuovo_valore: nuovo_valore
     }))
   }
-  getLavoroPrimaDellaModifica(id_cliente) {
+  getLavoroPrimaDellaModifica(id_lavoro) {
     store.dispatch(lavoroSliceActions.getLavoroPrimaDellaModifica({
-      id_cliente: id_cliente,
+      id_lavoro: id_lavoro,
     }))
   }
   getLavoroDopoLaModifica(id_lavoro) {

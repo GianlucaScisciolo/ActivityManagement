@@ -141,6 +141,7 @@ export class SpesaActions {
         setSelectedTrashCount(prevCount => Math.max(prevCount - 1, 0));
       }
       else {
+        this.dispatcher.getSpesaPrimaDellaModifica(item.id);
         this.dispatcher.aggiornaTipoSelezioneSpesa(item.id, 2);
         setSelectedIdsEliminazione(prevIds => [...prevIds, item.id]);
         setSelectedTrashCount(prevCount => prevCount + 1);

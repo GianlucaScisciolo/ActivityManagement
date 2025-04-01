@@ -46,6 +46,17 @@ export class LavoroActions {
       
       if (controlloLavoro(nuovoLavoro, setNuovoLavoro) > 0) 
         return;
+
+  /*
+    state.value.nuoviLavori[i]["giorno"] = state.value.nuoviLavori[i]["giorno_attuale"]; 
+    state.value.nuoviLavori[i]["descrizione"] = state.value.nuoviLavori[i]["descrizione_attuale"];
+    state.value.nuoviLavori[i]["totale"] = state.value.nuoviLavori[i]["totale_attuale"]; 
+    state.value.nuoviLavori[i]["note"] = state.value.nuoviLavori[i]["note_attuale"]; 
+  */
+      nuovoLavoro["giorno_attuale"] = nuovoLavoro["giorno"];
+      nuovoLavoro["descrizione_attuale"] = nuovoLavoro["descrizione"];
+      nuovoLavoro["totale_attuale"] = nuovoLavoro["totale"];
+      nuovoLavoro["note_attuale"] = nuovoLavoro["note"];
       
       const response = await fetch('/INSERISCI_ITEM', {
         method: 'POST',
@@ -166,6 +177,7 @@ export class LavoroActions {
         setSelectedTrashCount(prevCount => Math.max(prevCount - 1, 0));
       }
       else {
+        this.dispatcher.getLavoroPrimaDellaModifica(item.id);
         this.dispatcher.aggiornaTipoSelezioneLavoro(item.id, 2);
         setSelectedIdsEliminazione(prevIds => [...prevIds, item.id]);
         setSelectedTrashCount(prevCount => prevCount + 1);
@@ -176,7 +188,7 @@ export class LavoroActions {
     else if(icon === "pencil") {
       if(selectedIdsModifica.includes(item.id)) {
         this.dispatcher.getLavoroPrimaDellaModifica(item.id);
-        this.dispatcher(aggiornaTipoSelezioneLavoro(item.id, 0));
+        this.dispatcher.aggiornaTipoSelezioneLavoro(item.id, 0);
         setSelectedIdsModifica(prevIdsModifica => prevIdsModifica.filter(itemId => itemId !== item.id));
         setSelectedPencilCount(prevCount => Math.max(prevCount - 1, 0));
       }

@@ -83,7 +83,8 @@ export class ServizioActions {
         setSelectedTrashCount(prevCount => Math.max(prevCount - 1, 0));
       }
       else {
-        this.aggiornaTipoSelezioneServizio(item.id, 2);
+        this.dispatcher.getServizioPrimaDellaModifica(item.id);
+        this.dispatcher.aggiornaTipoSelezioneServizio(item.id, 2);
         setSelectedIdsEliminazione(prevIds => [...prevIds, item.id]);
         setSelectedTrashCount(prevCount => prevCount + 1);
         setSelectedIdsModifica(prevIdsModifica => prevIdsModifica.filter(itemId => itemId !== item.id));

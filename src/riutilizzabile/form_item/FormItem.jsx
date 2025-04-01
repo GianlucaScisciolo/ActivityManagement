@@ -292,7 +292,12 @@ export function FormLogin({campi, indici, eseguiLogin}) {
               <StyledLabel htmlFor={campi.name[i]}>{campi.label[i]}</StyledLabel>
               <StyledRow>
                 <NomeTag 
-                  style={(campi.name[i] === "password") ? {maxWidth:"90%"} : null}
+                  // style={{marginLeft:"-10%", marginRight:0, minWidth:"105%", (campi.name[i] !== "password") ? width:100% : null}}
+                  style={
+                    campi.name[i] !== "password"
+                      ? { marginLeft: "-10%", marginRight: 0, minWidth: "115%", width: "100%" }
+                      : { marginLeft: "-10%", marginRight: 0, minWidth: "105%" }
+                  }
                   rows={1}
                   name={campi.name[i]} 
                   id={campi.id[i]}
@@ -308,9 +313,7 @@ export function FormLogin({campi, indici, eseguiLogin}) {
                 {(campi.name[i] === "password") && (
                   <StyledEyeTag
                     style={{
-                      // border: "5px solid #000000",
-                      maxWidth: "10%",
-                      marginLeft: "-6px", 
+                      maxWidth: "5%",
                       marginTop: "13px"
                     }} 
                     size={grandezzaIcona} 
@@ -367,13 +370,16 @@ export function FormProfilo({campi, indici, eseguiModificaProfilo}) {
               campi.name[i] === "conferma_nuova_password" && confermaNuovaPasswordType === "password"
             ) ? StyledEyeClosedNotSelected : StyledEyeOpenNotSelected
           );
-          //(inputType === "password") ? StyledEyeClosedNotSelected : StyledEyeOpenNotSelected;
           return ( 
             <React.Fragment key={i}>
               <StyledLabel htmlFor={campi.name[i]}>{campi.label[i]}</StyledLabel>
               <StyledRow>
                 <NomeTag 
-                  style={(campi.name[i].includes("password")) ? {maxWidth:"90%"} : null}
+                  style={
+                    !campi.name[i].includes("password")
+                      ? { marginLeft: "-10%", marginRight: 0, minWidth: "115%", width: "100%" }
+                      : { marginLeft: "-10%", marginRight: 0, minWidth: "105%" }
+                  }
                   rows={1}
                   name={campi.name[i]}
                   id={campi.id[i]}
@@ -390,11 +396,9 @@ export function FormProfilo({campi, indici, eseguiModificaProfilo}) {
                   onBlur={campi.onBlur}
                 />
                 {(campi.name[i].includes("password")) && (
-                  <StyledEyeTag
+                  <StyledEyeTag 
                     style={{
-                      // border: "5px solid #000000",
-                      maxWidth: "10%",
-                      marginLeft: "-6px", 
+                      maxWidth: "5%",
                       marginTop: "13px"
                     }} 
                     size={grandezzaIcona} 

@@ -749,7 +749,9 @@ export function CardEntrateLavori({ entrateLavori }) {
                         fontWeight: (j === 0) ? "bold" : null,
                       }} 
                       key={j}
-                    >{parseFloat(value).toFixed(2)} {j > 0 ? "€" : ""}</td>
+                    >
+                      {(j > 0) ? parseFloat(value).toFixed(2) + " €" : value}
+                    </td>
                   ))}
                 </tr>
               )
@@ -764,7 +766,9 @@ export function CardEntrateLavori({ entrateLavori }) {
                     fontWeight: (j === 0) ? "bold" : null,
                   }}  
                   key={j}
-                >{parseFloat(value).toFixed(2)} {j > 0 ? "€" : ""}</td>
+                >
+                  {(j > 0) ? parseFloat(value).toFixed(2) + " €" : value}
+                </td>
               ))}
             </tr>
           </tbody>
@@ -821,7 +825,7 @@ export function CardUsciteSpese({ usciteSpese }) {
               <th style={{color: "#FFFFFF"}}>OTT</th>
               <th style={{color: "#FFFFFF"}}>NOV</th>
               <th style={{color: "#FFFFFF"}}>DIC</th>
-              <th style={{color: "#FFFFFF"}}>TOT ENTRATE</th>
+              <th style={{color: "#FFFFFF"}}>TOT USCITE</th>
             </tr>
           </thead>
           <tbody>
@@ -835,7 +839,9 @@ export function CardUsciteSpese({ usciteSpese }) {
                         fontWeight: (j === 0) ? "bold" : null,
                       }}  
                       key={j}
-                    >{parseFloat(-value).toFixed(2)} {j > 0 ? "€" : ""}</td>
+                    >
+                      {(j > 0) ? parseFloat(-value).toFixed(2) + " €" : value}
+                    </td>
                   ))}
                 </tr>
               )
@@ -850,7 +856,9 @@ export function CardUsciteSpese({ usciteSpese }) {
                     fontWeight: (j === 0) ? "bold" : null,
                   }}  
                   key={j}
-                >{parseFloat(-value).toFixed(2)} {j > 0 ? "€" : ""}</td>
+                >
+                  {(j > 0) ? parseFloat(-value).toFixed(2) + " €" : value}
+                </td>
               ))}
             </tr>
           </tbody>
@@ -907,7 +915,7 @@ export function CardRicavi({ entrateLavori, usciteSpese }) {
               <th style={{color: "#FFFFFF"}}>OTT</th>
               <th style={{color: "#FFFFFF"}}>NOV</th>
               <th style={{color: "#FFFFFF"}}>DIC</th>
-              <th style={{color: "#FFFFFF"}}>TOT ENTRATE</th>
+              <th style={{color: "#FFFFFF"}}>TOT RICAVI</th>
             </tr>
           </thead>
           <tbody>

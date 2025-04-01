@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 // View
 import Header from "../components/Header";
 import { OperazioniForms } from "../forms/OperazioniForms";
-import { LavoroForms } from "..forms/LavoroForms";
+import { LavoroForms } from "../forms/LavoroForms";
 // Actions
 import { LavoroActions } from "../../actions/LavoroActions";
 // Riutilizzabile
@@ -30,7 +30,7 @@ const FileLavori = () => {
   });
 
   const FormFileTag = (stileState.vistaForm === "form") ? FormFileItems : (
-    (stileState.vistaform === "card") ? CardFileItems : RowFileItems
+    (stileState.vistaForm === "card") ? CardFileItems : RowFileItems
   );
   
   return (

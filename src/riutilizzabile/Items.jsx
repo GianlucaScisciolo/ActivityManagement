@@ -50,7 +50,8 @@ export const Items = ({ tipoItem, items, setItems, selectOperation, emptyIsConsi
           (s) => optionStr(s) !== optionStr(servizio)
         );
         setServiziNonSelezionati(aggiornamentoNonSelezionati);
-      } else {
+      } 
+      else {
         lavoroActions.aggiornaLavoro(
           item.id, 
           "serviziSelezionati", 
@@ -73,44 +74,57 @@ export const Items = ({ tipoItem, items, setItems, selectOperation, emptyIsConsi
       <>
         {servizi !== -1 && (
           <>
-            <div>
-              Seleziona almeno 1 servizio:
-              <br />
-              {serviziNonSelezionati
-                .filter((servizio) =>
-                  optionStr(servizio).toLowerCase().includes(sottoStringa.toLowerCase())
-                )
-                .map((servizio, index) => (
-                  <div key={index} className={classeWrapperCheckbox}>
+            {(item.tipo_selezione === 1) && (
+              <div>
+                Seleziona almeno 1 servizio:
+                <br />
+                {serviziNonSelezionati
+                  .filter((servizio) =>
+                    optionStr(servizio).toLowerCase().includes(sottoStringa.toLowerCase())
+                  )
+                  .map((servizio, index) => (
+                    <div key={index} className={classeWrapperCheckbox}>
+                      <input
+                        type="checkbox"
+                        id={`servizio_non_sel_${index}`}
+                        name={`servizio_non_sel_${index}`}
+                        value={optionStr(servizio)}
+                        checked={false}
+                        onChange={(e) => handleCheckboxChange(e, servizio)}
+                        className="custom-checkbox"
+                      />
+                      <label htmlFor={`servizio_non_sel_${index}`}>{optionStr(servizio)}</label>
+                    </div>
+                  ))}
+              </div>
+            )}
+            {(item.tipo_selezione === 1) && (
+              <div>
+                {tipoItem === "lavoro" && item["serviziSelezionati"].map((servizio, index) => (
+                  <div key={index} className="checkbox-wrapper">
                     <input
                       type="checkbox"
-                      id={`servizio_non_sel_${index}`}
-                      name={`servizio_non_sel_${index}`}
+                      id={`servizio_sel_${index}`}
+                      name={`servizio_sel_${index}`}
                       value={optionStr(servizio)}
-                      checked={false}
+                      checked={true}
                       onChange={(e) => handleCheckboxChange(e, servizio)}
                       className="custom-checkbox"
                     />
-                    <label htmlFor={`servizio_non_sel_${index}`}>{optionStr(servizio)}</label>
+                    <label htmlFor={`servizio_sel_${index}`}>{optionStr(servizio)}</label>
                   </div>
                 ))}
-            </div>
-            <div>
-              {tipoItem === "lavoro" && item["serviziSelezionati"].map((servizio, index) => (
-                <div key={index} className="checkbox-wrapper">
-                  <input
-                    type="checkbox"
-                    id={`servizio_sel_${index}`}
-                    name={`servizio_sel_${index}`}
-                    value={optionStr(servizio)}
-                    checked={true}
-                    onChange={(e) => handleCheckboxChange(e, servizio)}
-                    className="custom-checkbox"
-                  />
-                  <label htmlFor={`servizio_sel_${index}`}>{optionStr(servizio)}</label>
-                </div>
-              ))}
-            </div>
+              </div>
+            )}
+            {(item.tipo_selezione !== 1) && (
+              <div>
+                <ul>
+                  {tipoItem === "lavoro" && item["serviziSelezionati"].map((servizio, index) => (
+                    <li key={index} style={{textAlign:"left", padding:"10px"}}>{optionStr(servizio)}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </>
         )}
       </>
