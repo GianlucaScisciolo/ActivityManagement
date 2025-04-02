@@ -20,30 +20,24 @@ export class ClienteActions {
       nuovoCliente["email_attuale"] = nuovoCliente["email"];
       nuovoCliente["note_attuale"] = nuovoCliente["note"];
             
-      try {
-        const response = await fetch('/INSERISCI_ITEM', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(nuovoCliente),
-        });
+      const response = await fetch('/INSERISCI_ITEM', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(nuovoCliente),
+      });
 
-        if(response.status === 200) {
-          const result = await response.json();
-          nuovoCliente.id = result.id;
-          this.dispatcher.inserimentoCliente(nuovoCliente);
-          alert("L\'inserimento del cliente è andato a buon fine!!");
-        }
-        else if(response.status === 400) {
-          alert("Errore: cliente gia\' presente.")
-        }
-        else {
-          alert("Errore durante il salvataggio del nuovo cliente, riprova più tardi.");
-        }
+      if(response.status === 200) {
+        const result = await response.json();
+        nuovoCliente.id = result.id;
+        this.dispatcher.inserimentoCliente(nuovoCliente);
+        alert("L\'inserimento del cliente è andato a buon fine!!");
       }
-      catch (error) {
-        console.error('Errore:', error);
+      else if(response.status === 400) {
+        alert("Errore: cliente gia\' presente.")
+      }
+      else {
         alert("Errore durante il salvataggio del nuovo cliente, riprova più tardi.");
       }
     }
@@ -55,25 +49,19 @@ export class ClienteActions {
   async ricercaClienti(e, datiRicerca) {
     e.preventDefault();
         
-    try {
-      const response = await fetch('/VISUALIZZA_ITEMS', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(datiRicerca),
-      });
+    const response = await fetch('/VISUALIZZA_ITEMS', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(datiRicerca),
+    });
 
-      if(response.status === 200) {
-        const result = await response.json();
-        this.dispatcher.aggiornaClienti(result.items);
-      }
-      else {
-        alert("Errore durante la ricerca dei clienti, riprova più tardi.");
-      }
+    if(response.status === 200) {
+      const result = await response.json();
+      this.dispatcher.aggiornaClienti(result.items);
     }
-    catch (error) {
-      console.error('Errore:', error);
+    else {
       alert("Errore durante la ricerca dei clienti, riprova più tardi.");
     }
   }
@@ -116,15 +104,15 @@ export class ClienteActions {
     }
   }
 
-  async modificaClienti(e, clientiSession, selectedIdsModifica, setSelectedIdsModifica) {
+  async modificaClienti(e, selectedIdsModifica, setSelectedIdsModifica, clienteState) {
     e.preventDefault();
     if (confirm("Sei sicuro di voler modificare i clienti?")) {
-      let clientiDaNonModificare = clientiSession.clienti.filter(cliente => !selectedIdsModifica.includes(cliente.id));
-      let clientiDaModificare = clientiSession.clienti.filter(cliente => selectedIdsModifica.includes(cliente.id)); 
-      
+      let clientiDaNonModificare = clienteState.clienti.filter(cliente => !selectedIdsModifica.includes(cliente.id));
+      let clientiDaModificare = clienteState.clienti.filter(cliente => selectedIdsModifica.includes(cliente.id));
       let idClientiNonModificati = [];
       let idClientiModificati = [];
       let esitoModifica = "Esito modifica:\n";
+            
       for(let i = 0; i < clientiDaModificare.length; i++) {
         const dati = {
           tipo_item: "cliente", 
@@ -152,8 +140,8 @@ export class ClienteActions {
       }
 
       let clientiAggiornati = [];
-      for (let i = 0; i < clientiSession.clienti.length; i++) {
-        let clienteAggiornato = { ...clientiSession.clienti[i] };
+      for (let i = 0; i < clienteState.clienti.length; i++) {
+        let clienteAggiornato = { ...clienteState.clienti[i] };
         if(clienteAggiornato.tipo_selezione === 1) {
           clienteAggiornato.tipo_selezione = 0;
         }
@@ -192,30 +180,22 @@ export class ClienteActions {
         ids: selectedIdsEliminazione
       }
 
-      const itemsAttualiDaEliminare = (clienteState.clienti && clienteState.clienti !== -1) ? clienteState.clienti.filter(cliente => dati.ids.includes(cliente.id)) : -1;
-      const itemsAttualiRestanti = (clienteState.clienti && clienteState.clienti !== -1) ? clienteState.clienti.filter(cliente => !dati.ids.includes(cliente.id)) : -1;
-      const nuoviItemsDaEliminare = (clienteState.nuoviClienti && clienteState.nuoviClienti !== -1) ? clienteState.nuoviClienti.filter(cliente => dati.ids.includes(cliente.id)) : -1;
-      const nuoviItemsRestanti = (clienteState.nuoviClienti && clienteState.nuoviClienti !== -1) ? clienteState.nuoviClienti.filter(cliente => !dati.ids.includes(cliente.id)) : -1;
-
-      try {
-        const response = await fetch('/ELIMINA_ITEMS', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(dati),
-        });
-        if(response.status === 200) {
-          this.dispatcher.aggiornaClienti(itemsAttualiRestanti, nuoviItemsRestanti); ////////////////////
-          setSelectedIdsEliminazione([]);
-          alert("Eliminazione completata con successo.");
-        }
-        else {
-          alert("Errore durante l\'eliminazione dei clienti, riprova più tardi.");
-        }
+      const itemsDaEliminare = (clienteState.clienti && clienteState.clienti !== -1) ? clienteState.clienti.filter(cliente => dati.ids.includes(cliente.id)) : -1;
+      const itemsRestanti = (clienteState.clienti && clienteState.clienti !== -1) ? clienteState.clienti.filter(cliente => !dati.ids.includes(cliente.id)) : -1;
+      
+      const response = await fetch('/ELIMINA_ITEMS', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(dati),
+      });
+      if(response.status === 200) {
+        this.dispatcher.aggiornaClienti(itemsRestanti);
+        setSelectedIdsEliminazione([]);
+        alert("Eliminazione completata con successo.");
       }
-      catch (error) {
-        console.error('Errore:', error);
+      else {
         alert("Errore durante l\'eliminazione dei clienti, riprova più tardi.");
       }
     }

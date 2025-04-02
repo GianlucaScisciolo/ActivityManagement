@@ -15,17 +15,13 @@ import Profilo from "./view/autenticazione_view/Profilo.jsx";
 // Salone View
 import Salone from "./view/salone_view/Salone.jsx";
 // Cliente View
-import NuovoCliente from "./view/cliente_view/NuovoCliente.jsx";
 import Clienti from "./view/cliente_view/Clienti.jsx";
 // Servizio View
-import NuovoServizio from "./view/servizio_view/NuovoServizio.jsx";
 import Servizi from "./view/servizio_view/Servizi.jsx";
 // Spesa View
-import NuovaSpesa from "./view/spesa_view/NuovaSpesa.jsx";
 import Spese from "./view/spesa_view/Spese.jsx";
 import FileSpese from "./view/spesa_view/FileSpese.jsx"
 // Lavoro View
-import NuovoLavoro from "./view/lavoro_view/NuovoLavoro.jsx";
 import Lavori from "./view/lavoro_view/Lavori.jsx";
 import FileLavori from "./view/lavoro_view/FileLavori.jsx";
 
@@ -44,13 +40,9 @@ const Root = () => {
           <>
             <Route path="/profilo" element={<Profilo />} />
             <Route path="/clienti" element={<Clienti />} />
-            <Route path="/nuovo-cliente" element={<NuovoCliente />} />
             <Route path="/servizi" element={<Servizi />} />
-            <Route path="/nuovo-servizio" element={<NuovoServizio />} />
             <Route path="/lavori" element={<Lavori />} />
-            <Route path="/nuovo-lavoro" element={<NuovoLavoro />} />
             <Route path="/file-lavori" element={<FileLavori />} />
-            <Route path="/nuova-spesa" element={<NuovaSpesa />} />
             <Route path="/spese" element={<Spese />} />
             <Route path="/file-spese" element={<FileSpese />} />
             <Route path="/salone" element={<Salone />} />

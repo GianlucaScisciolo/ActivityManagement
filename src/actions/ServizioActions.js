@@ -19,29 +19,23 @@ export class ServizioActions {
       nuovoServizio["prezzo_attuale"] = nuovoServizio["prezzo"];
       nuovoServizio["note_attuale"] = nuovoServizio["note"];
       
-      try {
-        const response = await fetch('/INSERISCI_ITEM', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(nuovoServizio),
-        });
-        if(response.status === 200) {
-          const result = await response.json();
-          nuovoServizio.id = result.id;
-          this.dispatcher.inserimentoServizio(nuovoServizio);
-          alert("L\'inserimento del servizio è andato a buon fine!!");
-        }
-        else if(response.status === 400) {
-          alert("Errore: servizio gia\' presente.")
-        }
-        else {
-          alert("Errore durante il salvataggio del nuovo servizio, riprova più tardi.");
-        }
-      } 
-      catch (error) {
-        console.error('Errore:', error);
+      const response = await fetch('/INSERISCI_ITEM', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(nuovoServizio),
+      });
+      if(response.status === 200) {
+        const result = await response.json();
+        nuovoServizio.id = result.id;
+        this.dispatcher.inserimentoServizio(nuovoServizio);
+        alert("L\'inserimento del servizio è andato a buon fine!!");
+      }
+      else if(response.status === 400) {
+        alert("Errore: servizio gia\' presente.")
+      }
+      else {
         alert("Errore durante il salvataggio del nuovo servizio, riprova più tardi.");
       }
     }
@@ -53,26 +47,20 @@ export class ServizioActions {
   async ricercaServizi(e, datiRicerca) {
     e.preventDefault();
         
-    try {
-      const response = await fetch('/VISUALIZZA_ITEMS', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(datiRicerca),
-      });
+    const response = await fetch('/VISUALIZZA_ITEMS', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(datiRicerca),
+    });
 
-      if(response.status === 200) {
-        const result = await response.json();
-        this.dispatcher.aggiornaServizi(result.items);
-      }
-      else {
-        alert("Errore durante la ricerca dei servizi, riprova più tardi.");
-      }
+    if(response.status === 200) {
+      const result = await response.json();
+      this.dispatcher.aggiornaServizi(result.items);
     }
-    catch (error) {
-      console.error('Errore:', error);
-      alert("Errore durante la ricerca dei clienti, riprova più tardi.");
+    else {
+      alert("Errore durante la ricerca dei servizi, riprova più tardi.");
     }
   }
 
@@ -188,30 +176,22 @@ export class ServizioActions {
         ids: selectedIdsEliminazione
       }
       
-      const itemsAttualiDaEliminare = (servizioState.servizi && servizioState.servizi !== -1) ? servizioState.servizi.filter(servizio => dati.ids.includes(servizio.id)) : -1;
-      const itemsAttualiRestanti = (servizioState.servizi && servizioState.servizi !== -1) ? servizioState.servizi.filter(servizio => !dati.ids.includes(servizio.id)) : -1;
-      const nuoviItemsDaEliminare = (servizioState.nuoviServizi && servizioState.nuoviServizi !== -1) ? servizioState.nuoviServizi.filter(servizio => dati.ids.includes(servizio.id)) : -1;
-      const nuoviItemsRestanti = (servizioState.nuoviServizi && servizioState.nuoviServizi !== -1) ? servizioState.nuoviServizi.filter(servizio => !dati.ids.includes(servizio.id)): -1;
+      const itemsDaEliminare = (servizioState.servizi && servizioState.servizi !== -1) ? servizioState.servizi.filter(servizio => dati.ids.includes(servizio.id)) : -1;
+      const itemsRestanti = (servizioState.servizi && servizioState.servizi !== -1) ? servizioState.servizi.filter(servizio => !dati.ids.includes(servizio.id)) : -1;
       
-      try {
-        const response = await fetch('/ELIMINA_ITEMS', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(dati),
-        });
-        if(response.status === 200) {          
-          this.dispatcher.aggiornaServizi(itemsAttualiRestanti, nuoviItemsRestanti);
-          setSelectedIdsEliminazione([]);
-          alert("Eliminazione completata con successo.");
-        }
-        else {
-          alert("Errore durante l\'eliminazione dei servizi, riprova più tardi.");
-        }
+      const response = await fetch('/ELIMINA_ITEMS', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(dati),
+      });
+      if(response.status === 200) {          
+        this.dispatcher.aggiornaServizi(itemsRestanti);
+        setSelectedIdsEliminazione([]);
+        alert("Eliminazione completata con successo.");
       }
-      catch (error) {
-        console.error('Errore:', error);
+      else {
         alert("Errore durante l\'eliminazione dei servizi, riprova più tardi.");
       }
     }

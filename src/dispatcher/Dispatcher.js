@@ -62,10 +62,9 @@ export class Dispatcher {
   }
 
   // Cliente
-  aggiornaClienti(clienti, nuoviClienti) {
+  aggiornaClienti(clienti) {
     store.dispatch(clienteSliceActions.aggiornaClienti({
       clienti: clienti, 
-      nuoviClienti: nuoviClienti
     }))
   }
   aggiornaTipoSelezioneCliente(id_cliente, nuova_selezione) {
@@ -98,10 +97,9 @@ export class Dispatcher {
   }
 
   // Lavoro
-  aggiornaLavori(lavori, nuoviLavori) {
+  aggiornaLavori(lavori) {
     store.dispatch(lavoroSliceActions.aggiornaLavori({
-      lavori: lavori, 
-      nuoviLavori: nuoviLavori
+      lavori: lavori,
     }))
   }
   aggiornaTipoSelezioneLavoro(id_lavoro, nuova_selezione) {
@@ -134,10 +132,9 @@ export class Dispatcher {
   }
 
   // Servizio
-  aggiornaServizi(servizi, nuoviServizi) {
+  aggiornaServizi(servizi) {
     store.dispatch(servizioSliceActions.aggiornaServizi({
       servizi: servizi, 
-      nuoviServizi: nuoviServizi
     }))
   }
   aggiornaTipoSelezioneServizio(id_servizio, nuova_selezione) {
@@ -173,7 +170,6 @@ export class Dispatcher {
   aggiornaSpese(spese, nuoveSpese) {
     store.dispatch(spesaSliceActions.aggiornaSpese({
       spese: spese,
-      nuoveSpese: nuoveSpese
     }))
   }
   aggiornaTipoSelezioneSpesa(id_spesa, nuova_selezione) {

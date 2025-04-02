@@ -80,26 +80,20 @@ export class LavoroActions {
 
   async ricercaLavori(e, datiRicerca) {
     e.preventDefault();
-        
-    try {
-      const response = await fetch('/VISUALIZZA_ITEMS', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(datiRicerca),
-      });
+    
+    const response = await fetch('/VISUALIZZA_ITEMS', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(datiRicerca),
+    });
 
-      if(response.status === 200) {
-        const result = await response.json();
-        this.dispatcher.aggiornaLavori(result.items);
-      }
-      else {
-        alert("Errore durante la ricerca dei lavori, riprova più tardi.");
-      }
+    if(response.status === 200) {
+      const result = await response.json();
+      this.dispatcher.aggiornaLavori(result.items);
     }
-    catch (error) {
-      console.error('Errore:', error);
+    else {
       alert("Errore durante la ricerca dei lavori, riprova più tardi.");
     }
   }
@@ -273,30 +267,22 @@ export class LavoroActions {
         ids: selectedIdsEliminazione
       }
       
-      const itemsAttualiDaEliminare = (lavoroState.lavori && lavoroState.lavori !== -1) ? lavoroState.lavori.filter(lavoro => dati.ids.includes(lavoro.id)) : -1;
-      const itemsAttualiRestanti = (lavoroState.lavori && lavoroState.lavori !== -1) ? lavoroState.lavori.filter(lavoro => !dati.ids.includes(lavoro.id)) : -1;
-      const nuoviItemsDaEliminare = (lavoroState.nuoviLavori && lavoroState.nuoviLavori !== -1) ? lavoroState.nuoviLavori.filter(lavoro => dati.ids.includes(lavoro.id)) : -1;
-      const nuoviItemsRestanti = (lavoroState.nuoviLavori && lavoroState.nuoviLavori !== -1) ? lavoroState.nuoviLavori.filter(lavoro => !dati.ids.includes(lavoro.id)) : -1;
+      const itemsDaEliminare = (lavoroState.lavori && lavoroState.lavori !== -1) ? lavoroState.lavori.filter(lavoro => dati.ids.includes(lavoro.id)) : -1;
+      const itemsRestanti = (lavoroState.lavori && lavoroState.lavori !== -1) ? lavoroState.lavori.filter(lavoro => !dati.ids.includes(lavoro.id)) : -1;
       
-      try {
-        const response = await fetch('/ELIMINA_ITEMS', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(dati),
-        });
-        if(response.status === 200) {          
-          this.dispatcher.aggiornaLavori(itemsAttualiRestanti, nuoviItemsRestanti);
-          setSelectedIdsEliminazione([]);
-          alert("Eliminazione completata con successo.");
-        }
-        else {
-          alert("Errore durante l\'eliminazione dei lavori, riprova più tardi.");
-        }
+      const response = await fetch('/ELIMINA_ITEMS', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(dati),
+      });
+      if(response.status === 200) {          
+        this.dispatcher.aggiornaLavori(itemsRestanti);
+        setSelectedIdsEliminazione([]);
+        alert("Eliminazione completata con successo.");
       }
-      catch (error) {
-        console.error('Errore:', error);
+      else {
         alert("Errore durante l\'eliminazione dei lavori, riprova più tardi.");
       }
     }

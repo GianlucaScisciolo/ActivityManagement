@@ -8,7 +8,7 @@ import { LavoroForms } from "../forms/LavoroForms.js";
 // Actions
 import { LavoroActions } from "../../actions/LavoroActions.js";
 // Riutilizzabile
-import PaginaWebRicercaItems from "../../riutilizzabile/PaginaWebRicercaItems";
+import SearchAndInsertPage from "../../riutilizzabile/SearchAndInsertPage.jsx";
 
 const Lavori = () => {
   const lavoroActions = new LavoroActions();
@@ -16,11 +16,34 @@ const Lavori = () => {
   const operazioniForms = new OperazioniForms();
   const lavoroState = useSelector((state) => state.lavoroSliceReducer.value);
   const stileState = useSelector((state) => state.stileSliceReducer.value);
+
+  const classeFormWrapperCheckbox = (stileState.vistaForm === "form") ? "checkbox-wrapper-form" : "checkbox-wrapper";
+  const classeItemWrapperCheckbox = (stileState.vistaItem === "form") ? "checkbox-wrapper-form" : "checkbox-wrapper";
+
+  const [clienti, setClienti] = useState(-1);
   const [servizi, setServizi] = useState(-1);
   const [selectedTrashCount, setSelectedTrashCount] = useState(0);
   const [selectedPencilCount, setSelectedPencilCount] = useState(0);
   const [selectedIdsEliminazione, setSelectedIdsEliminazione] = useState([]);
   const [selectedIdsModifica, setSelectedIdsModifica] = useState([]);
+
+  const [nuovoLavoro, setNuovoLavoro] = useState({
+    tipo_item: "lavoro", 
+    tipo_selezione: 0, 
+    id_cliente: 0, 
+    cliente: "", 
+    id_servizi: [], 
+    servizio: "", 
+    giorno: "",
+    descrizione: ", ",
+    totale: 0, 
+    note: "", 
+    errore_cliente: "", 
+    errore_servizi: "", 
+    errore_giorno: "", 
+    errore_note: "" 
+  });
+
   const [datiRicerca, setDatiRicerca] = useState({
     tipo_item: "lavoro", 
     nome_cliente: "", 
@@ -36,32 +59,235 @@ const Lavori = () => {
       icon, item, selectedIdsModifica, setSelectedIdsModifica, selectedIdsEliminazione, setSelectedIdsEliminazione, 
       setSelectedPencilCount, setSelectedTrashCount
     );
-  }
+  };
 
-  const getAllServizi = async () => {
-    try {
-      const response = await fetch('/OTTIENI_TUTTI_GLI_ITEMS', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({tipo_item: "servizio"}),
-      });
+  const OptionsClienti = ({ clienti }) => {
+    const [clientiSelezionati, setClientiSelezionati] = useState([]);
+    const [clientiNonSelezionati, setClientiNonSelezionati] = useState(Object.values(clienti));
 
-      if(response.status === 200) {
-        const result = await response.json();
-        setServizi(result.items);
-      }
-      else {
-        alert("Errore durante l\'ottenimento dei clienti per l\'inserimento di un nuovo lavoro, riprova più tardi.");
-      }
+    useEffect(() => {
+      setClientiNonSelezionati(Object.values(clienti));
+    }, [clienti]);
+    
+    const optionStr = (cliente) => {
+      return cliente.nome + " " + cliente.cognome +
+        ((cliente.contatto && cliente.contatto !== "Contatto non inserito.") ? (" - " + cliente.contatto) : "") + 
+        ((cliente.email && cliente.email !== "Email non inserita.") ? (" - " + cliente.email) : "")
     }
-    catch (error) {
-      console.error('Errore:', error);
+    
+    const sottoStringa = nuovoLavoro.cliente;
+
+    const handleCheckboxChange = (e, cliente) => {
+      if (e.target.checked) {
+        if (clientiSelezionati.length === 0) {
+          setClientiSelezionati([cliente]);
+          setClientiNonSelezionati(clientiNonSelezionati.filter(c => c.id !== cliente.id));
+          setNuovoLavoro(prevState => ({
+            ...prevState,
+            id_cliente: cliente.id
+          }));
+        } 
+        else {
+          // Sposta il cliente già presente in clientiSelezionati a clientiNonSelezionati
+          const clienteCorrente = clientiSelezionati[0];
+          setClientiNonSelezionati([
+            ...clientiNonSelezionati,
+            clienteCorrente
+          ].filter(c => c.id !== cliente.id));
+    
+          // Aggiorna il cliente selezionato
+          setClientiSelezionati([cliente]);
+          setNuovoLavoro(prevState => ({
+            ...prevState,
+            id_cliente: cliente.id
+          }));
+        }
+      } else {
+        // Deseleziona il cliente e reimposta lo stato
+        setClientiSelezionati([]);
+        setClientiNonSelezionati([...clientiNonSelezionati, cliente]);
+        setNuovoLavoro(prevState => ({
+          ...prevState,
+          id_cliente: 0
+        }));
+      }
+    };
+    
+
+    return (
+      <>
+        {(clienti !== -1) && (
+          <>
+            <div>
+              Seleziona solo 1 cliente:<br />
+              {clientiNonSelezionati.filter(cliente => 
+                optionStr(cliente).toLowerCase().includes(sottoStringa.toLowerCase())
+              ).map((cliente, index) => (
+                <div key={index} className={classeFormWrapperCheckbox + " clientiNonSelezionati"}>
+                  <input 
+                    type="checkbox" 
+                    id={"cliente_non_sel_" + index} 
+                    name={"cliente_non_sel_" + index} 
+                    value={cliente.id}
+                    checked={false}
+                    onChange={(e) => handleCheckboxChange(e, cliente)}
+                    className="custom-checkbox-rounded"
+                  />
+                  <label htmlFor={"cliente_non_sel_" + index}>
+                    {optionStr(cliente)}
+                  </label>
+                </div>                
+              ))}
+            </div>
+            <div>
+              {clientiSelezionati.map((cliente, index) => (
+                <div key={index} className={classeFormWrapperCheckbox + " clientiSelezionati"}>
+                  <input 
+                    type="checkbox" 
+                    id={"cliente_sel_" + index} 
+                    name={"cliente_sel_" + index} 
+                    value={cliente.id} 
+                    checked={true}
+                    onChange={(e) => handleCheckboxChange(e, cliente)}
+                    className="custom-checkbox-rounded"
+                  />
+                  <label htmlFor={"cliente_sel_" + index}>
+                    {optionStr(cliente)}
+                  </label>
+                </div>
+              ))}
+            </div>
+          </>
+        )}
+      </>
+    );
+  };
+
+  const OptionsServizi = ({ servizi }) => {
+    const [serviziSelezionati, setServiziSelezionati] = useState([]);
+    const [serviziNonSelezionati, setServiziNonSelezionati] = useState(Object.values(servizi));
+
+    useEffect(() => {
+      setServiziNonSelezionati(Object.values(servizi));
+    }, [servizi]);
+    
+    const optionStr = (servizio) => {
+      return servizio.nome + " - " + servizio.prezzo + " €";
+    }
+    
+    const sottoStringa = nuovoLavoro.servizio;
+
+    const handleCheckboxChange = (e, servizio) => {
+      if (e.target.checked) {
+        const updatedSelezionati = [...serviziSelezionati, servizio];
+        setServiziSelezionati(updatedSelezionati);
+        setServiziNonSelezionati(serviziNonSelezionati.filter(s => s.id !== servizio.id));
+        setNuovoLavoro(prevState => ({
+          ...prevState,
+          id_servizi: [...prevState.id_servizi, servizio.id]
+        }));
+      } 
+      else {
+        const updatedSelezionati = serviziSelezionati.filter(s => s.id !== servizio.id);
+        setServiziSelezionati(updatedSelezionati);
+        setServiziNonSelezionati([...serviziNonSelezionati, servizio]);
+        setNuovoLavoro(prevState => ({
+          ...prevState,
+          id_servizi: prevState.id_servizi.filter(id => id !== servizio.id)
+        }));
+      }
+    };
+
+    return (
+
+      <>
+        {(servizi !== -1) && (
+          <>
+            <div>
+              Seleziona almeno 1 servizio:<br />
+              {serviziNonSelezionati.filter(servizio => 
+                optionStr(servizio).toLowerCase().includes(sottoStringa.toLowerCase())
+              ).map((servizio, index) => (
+                <div key={index} className={classeFormWrapperCheckbox}>
+                  <input 
+                    type="checkbox" 
+                    id={"servizio_non_sel_" + index} 
+                    name={"servizio_non_sel_" + index} 
+                    value={servizio.id}
+                    checked={false}
+                    onChange={(e) => handleCheckboxChange(e, servizio)}
+                    className="custom-checkbox serviziNonSelezionati"
+                  />
+                  <label htmlFor={"servizio_non_sel_" + index}>
+                    {optionStr(servizio)}
+                  </label>
+                </div>                
+              ))}
+            </div>
+            <div>
+              {serviziSelezionati.map((servizio, index) => (
+                <div key={index} className={classeFormWrapperCheckbox}>
+                  <input 
+                    type="checkbox" 
+                    id={"servizio_sel_" + index} 
+                    name={"servizio_sel_" + index} 
+                    value={servizio.id} 
+                    checked={true}
+                    onChange={(e) => handleCheckboxChange(e, servizio)}
+                    className="custom-checkbox serviziSelezionati"
+                  />
+                  <label htmlFor={"servizio_sel_" + index}>
+                    {optionStr(servizio)}
+                  </label>
+                </div>
+              ))}
+            </div>
+          </>
+        )}
+      </>
+    );
+  };
+
+  const getAllClienti = async () => {
+    const response = await fetch('/OTTIENI_TUTTI_GLI_ITEMS', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({tipo_item: "cliente"}),
+    });
+
+    if(response.status === 200) {
+      const result = await response.json();
+      setClienti(result.items);
+    }
+    else {
       alert("Errore durante l\'ottenimento dei clienti per l\'inserimento di un nuovo lavoro, riprova più tardi.");
     }
   };
 
+  const getAllServizi = async () => {
+    const response = await fetch('/OTTIENI_TUTTI_GLI_ITEMS', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({tipo_item: "servizio"}),
+    });
+
+    if(response.status === 200) {
+      const result = await response.json();
+      setServizi(result.items);
+    }
+    else {
+      alert("Errore durante l\'ottenimento dei clienti per l\'inserimento di un nuovo lavoro, riprova più tardi.");
+    }
+  };
+
+  useEffect(() => {
+    getAllClienti();
+  }, []);
+  
   useEffect(() => {
     getAllServizi();
   }, []);
@@ -80,31 +306,48 @@ const Lavori = () => {
 
       <div className="main-content" />
       
-      <PaginaWebRicercaItems 
+      <SearchAndInsertPage 
         componenti={
           {
-            stileState: stileState, 
-            lavoroActions: lavoroActions, 
+            // Items
+            tipoItem: "lavoro", 
+            items: lavoroState.lavori, 
+            setItems: null, 
+            servizi: servizi,
+            // Stati 
+            stileState: stileState,
+            // Ations 
+            lavoroActions: lavoroActions,
+            // Handle operations 
             handleBlurItem: handleBlurItem, 
+            handleInsert: (e) => lavoroActions.inserimentoLavoro(e, servizi, clienti, nuovoLavoro, setNuovoLavoro), //////////
+            handleSearch: (e) => lavoroActions.ricercaLavori(e, datiRicerca), 
+            handleEdit: (e) => lavoroActions.modificaLavori(e, lavoroState, selectedIdsModifica, setSelectedIdsModifica), 
+            handleDelete: (e) => lavoroActions.eliminaLavori(e, selectedIdsEliminazione, setSelectedIdsEliminazione, lavoroState), 
+            // Campi
+            campiNuovoItem: lavoroForms.getCampiNuovoLavoro(
+              nuovoLavoro, 
+              OptionsClienti({clienti}), 
+              OptionsServizi({servizi}), 
+              (e) => operazioniForms.handleInputChange(e, setNuovoLavoro), 
+              (e) => operazioniForms.handleInputClick(e), 
+              (e) => operazioniForms.handleInputBlur(e) 
+            ), //////////
             campiRicercaItems: lavoroForms.getCampiRicercaLavori(
               datiRicerca, 
               (e) => operazioniForms.handleInputChange(e, setDatiRicerca), 
               (e) => operazioniForms.handleInputClick(e), 
               (e) => operazioniForms.handleInputBlur(e)  
             ), 
-            indiciRicercaItems: lavoroForms.INDICI_RICERCA_LAVORI, 
-            handleSearch: (e) => lavoroActions.ricercaLavori(e, datiRicerca), 
-            tipoItem: "lavoro", 
-            items: lavoroState.lavori, 
-            setItems: null, 
-            selectOperation: selectOperation, 
             campiItemEsistente: lavoroForms.getCampiLavoroEsistente, 
+            // Indici
+            indiciNuovoItem: lavoroForms.INDICI_NUOVO_LAVORO, 
+            indiciRicercaItems: lavoroForms.INDICI_RICERCA_LAVORI, 
             indiciItemEsistente: lavoroForms.INDICI_LAVORO_ESISTENTE, 
-            servizi: servizi, 
+            // Selects
+            selectOperation: selectOperation, 
             selectedIdsModifica: selectedIdsModifica, 
             selectedIdsEliminazione: selectedIdsEliminazione, 
-            handleEdit: (e) => lavoroActions.modificaLavori(e, lavoroState, selectedIdsModifica, setSelectedIdsModifica), 
-            handleDelete: (e) => lavoroActions.eliminaLavori(e, selectedIdsEliminazione, setSelectedIdsEliminazione, lavoroState)
           }
         }
       />

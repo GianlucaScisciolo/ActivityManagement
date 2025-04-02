@@ -22,30 +22,24 @@ export class SpesaActions {
       nuovaSpesa["giorno_attuale"] = nuovaSpesa["giorno"];
       nuovaSpesa["note_attuale"] = nuovaSpesa["note"];
       
-      try {
-        const response = await fetch('/INSERISCI_ITEM', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(nuovaSpesa),
-        });
+      const response = await fetch('/INSERISCI_ITEM', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(nuovaSpesa),
+      });
 
-        if(response.status === 200) {
-          const result = await response.json();
-          nuovaSpesa.id = result.id;
-          this.dispatcher.inserimentoSpesa(nuovaSpesa);
-          alert("L\'inserimento della spesa è andato a buon fine!!");
-        }
-        else if(response.status === 400) {
-          alert("Errore: spesa gia\' presente.")
-        }
-        else {
-          alert("Errore durante il salvataggio della nuova spesa, riprova più tardi.");
-        }
-      } 
-      catch (error) {
-        console.error('Errore:', error);
+      if(response.status === 200) {
+        const result = await response.json();
+        nuovaSpesa.id = result.id;
+        this.dispatcher.inserimentoSpesa(nuovaSpesa);
+        alert("L\'inserimento della spesa è andato a buon fine!!");
+      }
+      else if(response.status === 400) {
+        alert("Errore: spesa gia\' presente.")
+      }
+      else {
         alert("Errore durante il salvataggio della nuova spesa, riprova più tardi.");
       }
     }
@@ -247,11 +241,9 @@ export class SpesaActions {
         ids: selectedIdsEliminazione
       }
 
-      const itemsAttualiDaEliminare = (spesaState.spese && spesaState.spese !== -1) ? spesaState.spese.filter(spesa => dati.ids.includes(spesa.id)) : -1;
-      const itemsAttualiRestanti = (spesaState.spese && spesaState.spese !== -1) ? spesaState.spese.filter(spesa => !dati.ids.includes(spesa.id)) : -1;
-      const nuoviItemsDaEliminare = (spesaState.nuoveSpese && spesaState.nuoveSpese !== -1) ? spesaState.nuoveSpese.filter(spesa => dati.ids.includes(spesa.id)) : -1;
-      const nuoviItemsRestanti = (spesaState.nuoveSpese && spesaState.nuoveSpese !== -1) ? spesaState.nuoveSpese.filter(spesa => !dati.ids.includes(spesa.id)) : -1;
-      
+      const itemsDaEliminare = (spesaState.spese && spesaState.spese !== -1) ? spesaState.spese.filter(spesa => dati.ids.includes(spesa.id)) : -1;
+      const itemsRestanti = (spesaState.spese && spesaState.spese !== -1) ? spesaState.spese.filter(spesa => !dati.ids.includes(spesa.id)) : -1;
+            
       try {
         const response = await fetch('/ELIMINA_ITEMS', {
           method: 'POST',
@@ -261,7 +253,7 @@ export class SpesaActions {
           body: JSON.stringify(dati),
         });
         if(response.status === 200) {          
-          this.dispatcher.aggiornaSpese(itemsAttualiRestanti, nuoviItemsRestanti);
+          this.dispatcher.aggiornaSpese(itemsRestanti);
           setSelectedIdsEliminazione([]);
           alert("Eliminazione completata con successo.");
         }

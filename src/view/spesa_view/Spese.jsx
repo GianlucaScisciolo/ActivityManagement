@@ -8,7 +8,7 @@ import { SpesaForms } from "../forms/SpesaForms";
 // Actions
 import { SpesaActions } from "../../actions/SpesaActions";
 // Riutilizzabile
-import PaginaWebRicercaItems from "../../riutilizzabile/PaginaWebRicercaItems";
+import SearchAndInsertPage from "../../riutilizzabile/SearchAndInsertPage.jsx";
 
 const Spese = () => {
   const spesaActions = new SpesaActions();
@@ -16,10 +16,26 @@ const Spese = () => {
   const operazioniForms = new OperazioniForms();
   const spesaState = useSelector((state) => state.spesaSliceReducer.value);
   const stileState = useSelector((state) => state.stileSliceReducer.value);
+
   const [selectedTrashCount, setSelectedTrashCount] = useState(0);
   const [selectedPencilCount, setSelectedPencilCount] = useState(0);
   const [selectedIdsEliminazione, setSelectedIdsEliminazione] = useState([]);
   const [selectedIdsModifica, setSelectedIdsModifica] = useState([]);
+
+  const [nuovaSpesa, setNuovaSpesa] = useState({
+    tipo_item: "spesa", 
+    tipo_selezione: 0,
+    nome: "",
+    giorno: "",
+    descrizione: "",
+    totale: 0,
+    note: "", 
+    errore_nome: "",
+    errore_giorno: "",
+    errore_descrizione: "",
+    errore_totale: "",
+    errore_note: "",
+  });
   
   const [datiRicerca, setDatiRicerca] = useState({
     tipo_item: "spesa", 
@@ -53,31 +69,46 @@ const Spese = () => {
 
       <div className="main-content" />
 
-      <PaginaWebRicercaItems 
+      <SearchAndInsertPage 
         componenti={ 
           {
+            // Items
+            tipoItem: "spesa", 
+            items: spesaState.spese, 
+            setItems: null, 
+            servizi: null, 
+            // Stati
             stileState: stileState, 
+            // Actions
             lavoroActions: null, 
+            // Handle operations
             handleBlurItem: handleBlurItem, 
+            handleInsert: (e) => spesaActions.inserimentoSpesa(e, nuovaSpesa, setNuovaSpesa), 
+            handleSearch: (e) => spesaActions.ricercaSpese(e, datiRicerca), 
+            handleEdit: (e) => spesaActions.modificaSpese(e, spesaState, selectedIdsModifica, setSelectedIdsModifica),  
+            handleDelete: (e) => spesaActions.eliminaSpese(e, selectedIdsEliminazione, setSelectedIdsEliminazione, spesaState), 
+            // Campi
+            campiNuovoItem: spesaForms.getCampiNuovaSpesa(
+              nuovaSpesa, 
+              (e) => operazioniForms.handleInputChange(e, setNuovaSpesa), 
+              (e) => operazioniForms.handleInputClick(e), 
+              (e) => operazioniForms.handleInputBlur(e) 
+            ), 
             campiRicercaItems: spesaForms.getCampiRicercaSpese(
               datiRicerca, 
               (e) => operazioniForms.handleInputChange(e, setDatiRicerca), 
               (e) => operazioniForms.handleInputClick(e), 
               (e) => operazioniForms.handleInputBlur(e) 
             ),
-            indiciRicercaItems: spesaForms.INDICI_RICERCA_SPESE, 
-            handleSearch: (e) => spesaActions.ricercaSpese(e, datiRicerca), 
-            tipoItem: "spesa", 
-            items: spesaState.spese, 
-            setItems: null, 
-            selectOperation: selectOperation, 
             campiItemEsistente: spesaForms.getCampiSpesaEsistente, 
+            // Indici
+            indiciNuovoItem: spesaForms.INDICI_NUOVA_SPESA, 
+            indiciRicercaItems: spesaForms.INDICI_RICERCA_SPESE, 
             indiciItemEsistente: spesaForms.INDICI_SPESA_ESISTENTE, 
-            servizi: null, 
+            // Selects
+            selectOperation: selectOperation, 
             selectedIdsModifica: selectedIdsModifica, 
             selectedIdsEliminazione: selectedIdsEliminazione, 
-            handleEdit: (e) => spesaActions.modificaSpese(e, spesaState, selectedIdsModifica, setSelectedIdsModifica),  
-            handleDelete: (e) => spesaActions.eliminaSpese(e, selectedIdsEliminazione, setSelectedIdsEliminazione, spesaState)
           }
         }
       />

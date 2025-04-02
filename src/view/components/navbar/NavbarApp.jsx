@@ -82,32 +82,26 @@ export const NavbarApp = () => {
                 onMouseEnter={() => handleMouseEnter(setDropdownClienti)}
                 onMouseLeave={() => handleMouseLeave(setDropdownClienti)}
               >
-                <StyledNavDropdownItem as={NavLink} to="/nuovo-cliente">Nuovo cliente</StyledNavDropdownItem>
                 <StyledNavDropdownItem as={NavLink} to="/clienti">Clienti</StyledNavDropdownItem>
               </StyledNavDropdown>
               <StyledNavDropdown title="Servizi" show={dropdownProfessionisti}
                 onMouseEnter={() => handleMouseEnter(setDropdownProfessionisti)}
                 onMouseLeave={() => handleMouseLeave(setDropdownProfessionisti)}
               >
-                <StyledNavDropdownItem as={NavLink} to="/nuovo-servizio">Nuovo servizio</StyledNavDropdownItem>
                 <StyledNavDropdownItem as={NavLink} to="/servizi">Servizi</StyledNavDropdownItem>
               </StyledNavDropdown>
               <StyledNavDropdown title="Lavori" show={dropdownLavori}
                 onMouseEnter={() => handleMouseEnter(setDropdownLavori)}
                 onMouseLeave={() => handleMouseLeave(setDropdownLavori)}
               >
-                  <StyledNavDropdownItem as={NavLink} to="/nuovo-lavoro">Nuovo lavoro</StyledNavDropdownItem>
-                  <StyledNavDropdownItem as={NavLink} to="/lavori">Lavori</StyledNavDropdownItem>
-                  <StyledNavDropdownItem as={NavLink} to="/file-lavori">File lavori</StyledNavDropdownItem>
-                  {/* <StyledNavDropdownItem as={NavLink} to="https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ2GRuG5B0k6Qyo2DLBkT1-OOXXC1XO60HQkWAl3Txvc3z-PcBL0EYhfc62sAor46nbg-szeiADZ">Prenotazione</StyledNavDropdownItem> */}
-                  <StyledNavDropdownItem as="a" href="https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ2GRuG5B0k6Qyo2DLBkT1-OOXXC1XO60HQkWAl3Txvc3z-PcBL0EYhfc62sAor46nbg-szeiADZ" target="_blank" rel="noopener noreferrer">Prenotazione</StyledNavDropdownItem>
-
+                <StyledNavDropdownItem as={NavLink} to="/lavori">Lavori</StyledNavDropdownItem>
+                <StyledNavDropdownItem as={NavLink} to="/file-lavori">File lavori</StyledNavDropdownItem>
+                <StyledNavDropdownItem as="a" href="https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ2GRuG5B0k6Qyo2DLBkT1-OOXXC1XO60HQkWAl3Txvc3z-PcBL0EYhfc62sAor46nbg-szeiADZ" target="_blank" rel="noopener noreferrer">Prenotazione</StyledNavDropdownItem>
               </StyledNavDropdown>
               <StyledNavDropdown title="Spese" show={dropdownSpese}
                 onMouseEnter={() => handleMouseEnter(setDropdownSpese)}
                 onMouseLeave={() => handleMouseLeave(setDropdownSpese)}
               >
-                <StyledNavDropdownItem as={NavLink} to="/nuova-spesa">Nuova spesa</StyledNavDropdownItem>
                 <StyledNavDropdownItem as={NavLink} to="/spese">Spese</StyledNavDropdownItem>
                 <StyledNavDropdownItem as={NavLink} to="/file-spese">File spese</StyledNavDropdownItem>
               </StyledNavDropdown>

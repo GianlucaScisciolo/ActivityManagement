@@ -11,11 +11,10 @@ const spesaSlice = createSlice ({
   },
   reducers: {
     aggiornaSpese: (state, action) => {
-      state.value.spese = action.payload.spese, 
-      state.value.nuoveSpese = action.payload.nuoveSpese 
+      state.value.spese = action.payload.spese 
     },
     aggiornaTipoSelezione: (state, action) => {
-      if(state.value.spese !== -1) {
+      if(state.value.spese && state.value.spese !== -1) {
         for(let i = 0; i < state.value.spese.length; i++) {
           if(state.value.spese[i].id === action.payload.id_spesa) {
             state.value.spese[i].tipo_selezione = action.payload.nuova_selezione;
@@ -23,17 +22,9 @@ const spesaSlice = createSlice ({
           }
         }
       }
-      if(state.value.nuoveSpese && state.value.nuoveSpese !== -1) {
-        for(let i = 0; i < state.value.nuoveSpese.length; i++) {
-          if(state.value.nuoveSpese[i].id === action.payload.id_spesa) {
-            state.value.nuoveSpese[i].tipo_selezione = action.payload.nuova_selezione;
-            break;
-          }
-        }
-      }
     }, 
     aggiornaSpesa: (state, action) => {
-      if(state.value.spese !== -1) {
+      if(state.value.spese && state.value.spese !== -1) {
         for(let i = 0; i < state.value.spese.length; i++) {
           if(state.value.spese[i].id === action.payload.id_spesa) {
             state.value.spese[i][action.payload.nome_attributo] = action.payload.nuovo_valore;
@@ -41,17 +32,9 @@ const spesaSlice = createSlice ({
           }
         }
       }
-      if(state.value.nuoveSpese !== -1) {
-        for(let i = 0; i < state.value.nuoveSpese.length; i++) {
-          if(state.value.nuoveSpese[i].id === action.payload.id_spesa) {
-            state.value.nuoveSpese[i][action.payload.nome_attributo] = action.payload.nuovo_valore;
-            break;
-          }
-        }
-      }
     },
     getSpesaPrimaDellaModifica: (state, action) => {
-      if(state.value.spese !== -1) {
+      if(state.value.spese && state.value.spese !== -1) {
         for(let i = 0; i < state.value.spese.length; i++) {
           if(state.value.spese[i].id === action.payload.id_spesa) {
             state.value.spese[i]["descrizione"] = state.value.spese[i]["descrizione_attuale"];
@@ -62,20 +45,9 @@ const spesaSlice = createSlice ({
           }
         }
       }
-      if(state.value.nuoveSpese && state.value.nuoveSpese !== -1) {
-        for(let i = 0; i < state.value.nuoveSpese.length; i++) {
-          if(state.value.nuoveSpese[i].id === action.payload.id_spesa) {
-            state.value.nuoveSpese[i]["descrizione"] = state.value.nuoveSpese[i]["descrizione_attuale"];
-            state.value.nuoveSpese[i]["totale"] = state.value.nuoveSpese[i]["totale_attuale"]; 
-            state.value.nuoveSpese[i]["giorno"] = state.value.nuoveSpese[i]["giorno_attuale"]; 
-            state.value.nuoveSpese[i]["note"] = state.value.nuoveSpese[i]["note_attuale"]; 
-            break;
-          }
-        }
-      }
     },
     getSpesaDopoLaModifica: (state, action) => {
-      if(state.value.spese !== -1) {
+      if(state.value.spese && state.value.spese !== -1) {
         for(let i = 0; i < state.value.spese.length; i++) {
           if(state.value.spese[i].id === action.payload.id_spesa) {
             state.value.spese[i]["descrizione_attuale"] = state.value.spese[i]["descrizione"];
@@ -86,23 +58,12 @@ const spesaSlice = createSlice ({
           }
         }
       }
-      if(state.value.nuoveSpese !== -1) {
-        for(let i = 0; i < state.value.nuoveSpese.length; i++) {
-          if(state.value.nuoveSpese[i].id === action.payload.id_spesa) {
-            state.value.nuoveSpese[i]["descrizione_attuale"] = state.value.nuoveSpese[i]["descrizione"];
-            state.value.nuoveSpese[i]["totale_attuale"] = state.value.nuoveSpese[i]["totale"]; 
-            state.value.nuoveSpese[i]["giorno_attuale"] = state.value.nuoveSpese[i]["giorno"]; 
-            state.value.nuoveSpese[i]["note_attuale"] = state.value.nuoveSpese[i]["note"]; 
-            break;
-          }
-        }
-      }
     },
     inserimentoSpesa: (state, action) => {
-      if(state.value.nuoveSpese === -1) {
-        state.value.nuoveSpese = [];
+      if(state.value.spese === -1) {
+        state.value.spese = [];
       }
-      state.value.nuoveSpese.push(action.payload.nuovaSpesa);
+      state.value.spese.push(action.payload.nuovaSpesa);
     },
   },
 })
