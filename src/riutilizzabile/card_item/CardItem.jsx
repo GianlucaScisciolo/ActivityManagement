@@ -443,10 +443,6 @@ export function CardItemEsistente({ item, campi, indici, selectOperation, tipoIt
   );
 }
 
-
-
-
-
 export function CardFileItems({campi, indici, ottieniFileRangePDF, ottieniFileRangeExcel, eliminaItemsRange}) {
   let maxHeight = "2000px";
 

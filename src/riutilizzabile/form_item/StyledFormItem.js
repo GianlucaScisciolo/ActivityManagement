@@ -151,6 +151,15 @@ export const StyledSaveNotSelected = styled(Save)`
   ${styledIconNotSelectedBlue}
 `;
 
+export const StyledSaveNotSelected2 = styled(Save)`
+  ${styledIconNotSelected}
+`;
+
+export const StyledSaveSelected2 = styled(Save)`
+  ${styledIconNotSelected}
+  color: #0050EF;
+`;
+
 export const StyledEyeClosedNotSelected = styled(EyeClosed)`
   ${styledIconNotSelected}
   transition: 0.5s all ease-out;
@@ -164,6 +173,15 @@ export const StyledEyeOpenNotSelected = styled(Eye)`
 
 export const StyledSearchNotSelected = styled(Search)`
   ${styledIconNotSelectedBlue}
+`;
+
+export const StyledSearchNotSelected2 = styled(Search)`
+  ${styledIconNotSelected}
+`;
+
+export const StyledSearchSelected2 = styled(Search)`
+  ${styledIconNotSelected}
+  color: #0050EF;
 `;
 
 export const StyledEuroNotSelected = styled(Euro)`

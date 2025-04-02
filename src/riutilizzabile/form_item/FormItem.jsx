@@ -11,7 +11,8 @@ import {
   StyledForm, StyledHeader, SlideContainer, StyledSpanErrore, 
   StyledSelectBlock, StyledSelectModifica, StyledSelectElimina, 
   StyledEyeClosedNotSelected, StyledEyeOpenNotSelected, StyledEuroNotSelected, 
-  StyledFileIconNotSelected, StyledDownloadNotSelected, StyledTrashNotSelected 
+  StyledFileIconNotSelected, StyledDownloadNotSelected, StyledTrashNotSelected, 
+  StyledSearchNotSelected2, StyledSaveNotSelected2, StyledSearchSelected2, StyledSaveSelected2 
 } from "./StyledFormItem";
 
 export function getSelectTag(tipoSelezione) {
@@ -46,6 +47,44 @@ export const nascondiForm = (setIsVisible, setArrowUp) => {
   setTimeout(() => {
     setArrowUp(prev => !prev);
   }, 1000); 
+};
+
+export function OperazioniCambioTipoForm({ tipoForm, setTipoForm }) {
+  const cambioTipoForm = () => {
+    setTipoForm((tipoForm === "search") ? "insert" : "search");
+  }
+
+  return (
+    <StyledListGroupItem 
+      style={{ border: "5px solid #000000", backgroundColor: "#000000", paddingTop: "20px", paddingBottom: "20px" }} 
+    >
+      {(tipoForm === "search") ? (
+        <>
+          <StyledSearchSelected2 
+            size={grandezzaIcona} 
+            style={{ marginRight: "50px" }} 
+            onClick={cambioTipoForm} 
+          />
+          <StyledSaveNotSelected2 
+            size={grandezzaIcona} 
+            onClick={cambioTipoForm} 
+          />
+        </>
+      ) : (
+        <>
+          <StyledSearchNotSelected2  
+            size={grandezzaIcona} 
+            style={{ marginRight: "50px" }}  
+            onClick={cambioTipoForm} 
+          />
+          <StyledSaveSelected2 
+            size={grandezzaIcona} 
+            onClick={cambioTipoForm} 
+          />
+        </>
+      )}
+    </StyledListGroupItem>
+  );
 };
 
 export function OperazioniNuovoItem({eseguiSalvataggio}) {
@@ -136,17 +175,31 @@ export function OperazioniFileItems({ottieniFileRangePDF, ottieniFileRangeExcel,
   );
 };
 
-export function FormNuovoItem({campi, indici, eseguiSalvataggio}) {
+export function CambioTipoForm({tipoForm, setTipoForm}) {
   let maxHeight = "2000px";
 
   return (
     <StyledForm>
+      <OperazioniCambioTipoForm
+        tipoForm={tipoForm}
+        setTipoForm={setTipoForm}
+      />
+    </StyledForm>
+  );
+}
+
+export function FormNuovoItem({campi, indici, eseguiSalvataggio}) {
+  return (
+    <StyledForm>
       <StyledHeader>{campi["header"]}</StyledHeader>  
-      <SlideContainer style={{maxHeight: `${maxHeight}`}}>
+      <SlideContainer style={{
+        maxHeight: "2000px", 
+        overflowY: "auto" /* Aggiunto */
+      }}>
         {indici.map((i) => {
-          const NomeTag = (campi.type[i]) ? getInputTag(1, true) : (
-            getTextAreaTag(1, true)
-          );
+          const NomeTag = campi.type[i] 
+            ? getInputTag(1, true) 
+            : getTextAreaTag(1, true);
 
           return ( 
             <React.Fragment key={i}>
@@ -155,7 +208,9 @@ export function FormNuovoItem({campi, indici, eseguiSalvataggio}) {
                 <StyledRow>
                   <>
                     <NomeTag 
-                      style={(["prezzo", "totale"].includes(campi.name[i])) ? {marginLeft:"-10%", marginRight:0, minWidth:"105%"} : null}
+                      style={(["prezzo", "totale"].includes(campi.name[i])) 
+                        ? {marginLeft:"-10%", marginRight:0, minWidth:"105%"} 
+                        : null}
                       rows={1}
                       name={campi.name[i]}
                       id={campi.id[i]}
@@ -183,7 +238,9 @@ export function FormNuovoItem({campi, indici, eseguiSalvataggio}) {
               ) : (
                 <>
                   <NomeTag 
-                    style={(["prezzo", "totale"].includes(campi.name[i])) ? {marginLeft:"-10%", marginRight:0, minWidth:"105%"} : null}
+                    style={(["prezzo", "totale"].includes(campi.name[i])) 
+                      ? {marginLeft:"-10%", marginRight:0, minWidth:"105%"} 
+                      : null}
                     rows={1}
                     name={campi.name[i]}
                     id={campi.id[i]}
@@ -219,6 +276,7 @@ export function FormNuovoItem({campi, indici, eseguiSalvataggio}) {
   );
 }
 
+
 export function FormRicercaItems({campi, indici, handleSearch}) {
   const [isVisible, setIsVisible] = useState(true);
   const [arrowUp, setArrowUp] = useState(true);
@@ -229,7 +287,10 @@ export function FormRicercaItems({campi, indici, handleSearch}) {
   return (
     <StyledForm>
       <StyledHeader>{campi["header"]}</StyledHeader>
-      <SlideContainer style={{maxHeight: `${maxHeight}`}}>
+      <SlideContainer style={{
+        maxHeight: "2000px", 
+        overflowY: "auto" /* Aggiunto */
+      }}>
         {indici.map((i) => {
           // onClick={handleGiornoClick(setUltimoGiornoType)}
           // onBlur={handleGiornoBlur(setUltimoGiornoType, item, setItem)}
