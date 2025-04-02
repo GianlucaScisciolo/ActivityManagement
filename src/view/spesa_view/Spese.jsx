@@ -8,7 +8,7 @@ import { SpesaForms } from "../forms/SpesaForms";
 // Actions
 import { SpesaActions } from "../../actions/SpesaActions";
 // Riutilizzabile
-import SearchAndInsertPage from "../../riutilizzabile/SearchAndInsertPage.jsx";
+import FileSearchAndInsertPage from "../../riutilizzabile/FileSearchAndInsertPage.jsx";
 
 const Spese = () => {
   const spesaActions = new SpesaActions();
@@ -16,7 +16,9 @@ const Spese = () => {
   const operazioniForms = new OperazioniForms();
   const spesaState = useSelector((state) => state.spesaSliceReducer.value);
   const stileState = useSelector((state) => state.stileSliceReducer.value);
-
+  
+  const [spese, setSpese] = useState(-1);
+  const [tipoFile, setTipoFile] = useState("");
   const [selectedTrashCount, setSelectedTrashCount] = useState(0);
   const [selectedPencilCount, setSelectedPencilCount] = useState(0);
   const [selectedIdsEliminazione, setSelectedIdsEliminazione] = useState([]);
@@ -69,7 +71,7 @@ const Spese = () => {
 
       <div className="main-content" />
 
-      <SearchAndInsertPage 
+      <FileSearchAndInsertPage 
         componenti={ 
           {
             // Items
@@ -87,6 +89,9 @@ const Spese = () => {
             handleSearch: (e) => spesaActions.ricercaSpese(e, datiRicerca), 
             handleEdit: (e) => spesaActions.modificaSpese(e, spesaState, selectedIdsModifica, setSelectedIdsModifica),  
             handleDelete: (e) => spesaActions.eliminaSpese(e, selectedIdsEliminazione, setSelectedIdsEliminazione, spesaState), 
+            handleSearchRangeFilePDF: (e) => spesaActions.handleSearchSpeseRangeFile(e, "pdf", setTipoFile, datiRicerca, spese, setSpese),
+            handleSearchRangeFileExcel: (e) => spesaActions.handleSearchSpeseRangeFile(e, "excel", setTipoFile, datiRicerca, spese, setSpese),
+            handleDeleteRangeFile: (e) => spesaActions.handleDeleteSpeseRangeFile(e, datiRicerca),
             // Campi
             campiNuovoItem: spesaForms.getCampiNuovaSpesa(
               nuovaSpesa, 
@@ -101,10 +106,17 @@ const Spese = () => {
               (e) => operazioniForms.handleInputBlur(e) 
             ),
             campiItemEsistente: spesaForms.getCampiSpesaEsistente, 
+            campiFile: spesaForms.getCampiFile(
+              datiRicerca, 
+              (e) => operazioniForms.handleInputChange(e, setDatiRicerca), 
+              (e) => operazioniForms.handleInputClick(e), 
+              (e) => operazioniForms.handleInputBlur(e) 
+            ),
             // Indici
             indiciNuovoItem: spesaForms.INDICI_NUOVA_SPESA, 
             indiciRicercaItems: spesaForms.INDICI_RICERCA_SPESE, 
             indiciItemEsistente: spesaForms.INDICI_SPESA_ESISTENTE, 
+            indiciFile: spesaForms.INDICI_FILE, 
             // Selects
             selectOperation: selectOperation, 
             selectedIdsModifica: selectedIdsModifica, 

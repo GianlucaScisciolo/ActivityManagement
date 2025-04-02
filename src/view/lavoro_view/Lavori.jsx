@@ -8,7 +8,7 @@ import { LavoroForms } from "../forms/LavoroForms.js";
 // Actions
 import { LavoroActions } from "../../actions/LavoroActions.js";
 // Riutilizzabile
-import SearchAndInsertPage from "../../riutilizzabile/SearchAndInsertPage.jsx";
+import FileSearchAndInsertPage from "../../riutilizzabile/FileSearchAndInsertPage.jsx";
 
 const Lavori = () => {
   const lavoroActions = new LavoroActions();
@@ -19,6 +19,9 @@ const Lavori = () => {
 
   const classeFormWrapperCheckbox = (stileState.vistaForm === "form") ? "checkbox-wrapper-form" : "checkbox-wrapper";
   const classeItemWrapperCheckbox = (stileState.vistaItem === "form") ? "checkbox-wrapper-form" : "checkbox-wrapper";
+
+  const [lavori, setLavori] = useState(-1);
+  const [tipoFile, setTipoFile] = useState("");
 
   const [clienti, setClienti] = useState(-1);
   const [servizi, setServizi] = useState(-1);
@@ -306,7 +309,7 @@ const Lavori = () => {
 
       <div className="main-content" />
       
-      <SearchAndInsertPage 
+      <FileSearchAndInsertPage 
         componenti={
           {
             // Items
@@ -324,6 +327,9 @@ const Lavori = () => {
             handleSearch: (e) => lavoroActions.ricercaLavori(e, datiRicerca), 
             handleEdit: (e) => lavoroActions.modificaLavori(e, lavoroState, selectedIdsModifica, setSelectedIdsModifica), 
             handleDelete: (e) => lavoroActions.eliminaLavori(e, selectedIdsEliminazione, setSelectedIdsEliminazione, lavoroState), 
+            handleSearchRangeFilePDF: (e) => lavoroActions.handleSearchLavoriRangeFile(e, "pdf", setTipoFile, datiRicerca, lavori, setLavori), 
+            handleSearchRangeFileExcel: (e) => lavoroActions.handleSearchLavoriRangeFile(e, "excel", setTipoFile, datiRicerca, lavori, setLavori), 
+            handleDeleteRangeFile: (e) => lavoroActions.handleDeleteLavoriRangeFile(e, datiRicerca), 
             // Campi
             campiNuovoItem: lavoroForms.getCampiNuovoLavoro(
               nuovoLavoro, 
@@ -340,10 +346,17 @@ const Lavori = () => {
               (e) => operazioniForms.handleInputBlur(e)  
             ), 
             campiItemEsistente: lavoroForms.getCampiLavoroEsistente, 
+            campiFile: lavoroForms.getCampiFile(
+              datiRicerca, 
+              (e) => operazioniForms.handleInputChange(e, setDatiRicerca), 
+              (e) => operazioniForms.handleInputClick(e), 
+              (e) => operazioniForms.handleInputBlur(e) 
+            ), 
             // Indici
             indiciNuovoItem: lavoroForms.INDICI_NUOVO_LAVORO, 
             indiciRicercaItems: lavoroForms.INDICI_RICERCA_LAVORI, 
             indiciItemEsistente: lavoroForms.INDICI_LAVORO_ESISTENTE, 
+            indiciFile: lavoroForms.INDICI_FILE, 
             // Selects
             selectOperation: selectOperation, 
             selectedIdsModifica: selectedIdsModifica, 

@@ -12,7 +12,8 @@ import {
   StyledSelectBlock, StyledSelectModifica, StyledSelectElimina, 
   StyledEyeClosedNotSelected, StyledEyeOpenNotSelected, StyledEuroNotSelected, 
   StyledFileIconNotSelected, StyledDownloadNotSelected, StyledTrashNotSelected, 
-  StyledSearchNotSelected2, StyledSaveNotSelected2, StyledSearchSelected2, StyledSaveSelected2 
+  StyledSearchNotSelected2, StyledSaveNotSelected2, StyledSearchSelected2, StyledSaveSelected2, 
+  StyledFileIconNotSelected2, StyledFileIconSelected2
 } from "./StyledFormItem";
 
 export function getSelectTag(tipoSelezione) {
@@ -80,6 +81,76 @@ export function OperazioniCambioTipoForm({ tipoForm, setTipoForm }) {
           <StyledSaveSelected2 
             size={grandezzaIcona} 
             onClick={cambioTipoForm} 
+          />
+        </>
+      )}
+    </StyledListGroupItem>
+  );
+};
+
+export function OperazioniCambioTipoForm2({ tipoForm, setTipoForm }) {
+  const cambioTipoForm2 = (nuovoTipo) => {
+    setTipoForm(nuovoTipo);
+  }
+
+  return (
+    <StyledListGroupItem 
+      style={{ border: "5px solid #000000", backgroundColor: "#000000", paddingTop: "20px", paddingBottom: "20px" }} 
+    >
+      {(tipoForm === "insert") && (
+        <>
+          <StyledSearchNotSelected2  
+            size={grandezzaIcona} 
+            style={{ marginRight: "50px" }}  
+            onClick={() => cambioTipoForm2("search")} 
+          />
+          <StyledSaveSelected2 
+            size={grandezzaIcona} 
+            style={{ marginRight: "50px" }} 
+            onClick={() => cambioTipoForm2("insert")} 
+          />
+          <StyledFileIconNotSelected2 
+            icon={faFileExcel} 
+            size="2xl"
+            onClick={() => cambioTipoForm2("file")} 
+          />
+        </>
+      )}
+      {(tipoForm === "search") && (
+        <>
+          <StyledSearchSelected2 
+            size={grandezzaIcona} 
+            style={{ marginRight: "50px" }} 
+            onClick={() => cambioTipoForm2("search")} 
+          />
+          <StyledSaveNotSelected2 
+            size={grandezzaIcona} 
+            style={{ marginRight: "50px" }}
+            onClick={() => cambioTipoForm2("insert")} 
+          />
+          <StyledFileIconNotSelected2 
+            icon={faFileExcel} 
+            size="2xl" 
+            onClick={() => cambioTipoForm2("file")} 
+          />
+        </>
+      )}
+      {(tipoForm === "file") && (
+        <>
+          <StyledSearchNotSelected2  
+            size={grandezzaIcona} 
+            style={{ marginRight: "50px" }}  
+            onClick={() => cambioTipoForm2("search")} 
+          />
+          <StyledSaveNotSelected2 
+            size={grandezzaIcona} 
+            style={{ marginRight: "50px" }}
+            onClick={() => cambioTipoForm2("insert")} 
+          />
+          <StyledFileIconSelected2 
+            icon={faFileExcel} 
+            size="2xl"
+            onClick={() => cambioTipoForm2("file")} 
           />
         </>
       )}
@@ -181,6 +252,19 @@ export function CambioTipoForm({tipoForm, setTipoForm}) {
   return (
     <StyledForm>
       <OperazioniCambioTipoForm
+        tipoForm={tipoForm}
+        setTipoForm={setTipoForm}
+      />
+    </StyledForm>
+  );
+}
+
+export function CambioTipoForm2({tipoForm, setTipoForm}) {
+  let maxHeight = "2000px";
+
+  return (
+    <StyledForm>
+      <OperazioniCambioTipoForm2
         tipoForm={tipoForm}
         setTipoForm={setTipoForm}
       />

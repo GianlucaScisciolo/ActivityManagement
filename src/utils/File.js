@@ -134,7 +134,7 @@ export const generaFileSpeseExcel = async (spese) => {
     });
   } 
   else {
-    lavoriSheet.addRow(['Nessuna spesa trovata.']);
+    speseSheet.addRow(['Nessuna spesa trovata.']);
   }
 
   // Genero il file Excel come blob

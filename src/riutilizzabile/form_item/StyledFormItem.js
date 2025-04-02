@@ -205,6 +205,15 @@ export const StyledFileIconNotSelected = styled(FontAwesomeIcon)`
   color: #FFFFFF;
 `;
 
+export const StyledFileIconNotSelected2 = styled(FontAwesomeIcon)`
+  ${styledIconNotSelected}
+`;
+
+export const StyledFileIconSelected2 = styled(FontAwesomeIcon)`
+  ${styledIconNotSelected}
+  color: #0050EF;
+`;
+
 export const StyledDownloadNotSelected = styled(Download)`
   ${styledIconNotSelectedBlue}
 `;
