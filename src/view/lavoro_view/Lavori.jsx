@@ -50,8 +50,7 @@ const Lavori = () => {
 
   const [datiRicerca, setDatiRicerca] = useState({
     tipo_item: "lavoro", 
-    nome_cliente: "", 
-    cognome_cliente: "", 
+    cliente: "", 
     primo_giorno: "",
     ultimo_giorno: "",
     descrizione: "",   

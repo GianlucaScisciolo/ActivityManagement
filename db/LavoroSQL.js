@@ -1,6 +1,6 @@
 export class LavoroSQL {
   SQL_INSERIMENTO_LAVORO = ` 
-    INSERT INTO lavoro (id_cliente, giorno, descrizione, totale, note) 
+    INSERT INTO lavoro (cliente, giorno, descrizione, totale, note) 
     VALUES (?, ?, ?, ?, ?); 
   `;
 
@@ -78,40 +78,27 @@ export class LavoroSQL {
   }
 
   sql_selezione_lavori(params) {
+    console.log(params);
     let sql = `
       SELECT 
         0 AS tipo_selezione, 
-        l.id AS id, 
-        l.id_cliente AS id_cliente, 
-        CONCAT ( 
-          c.nome, ' ', c.cognome, 
-          CASE 
-            WHEN c.contatto IS NOT NULL AND c.contatto != "Contatto non inserito." 
-            THEN CONCAT(" - ", c.contatto) 
-            ELSE "" 
-          END, 
-          CASE 
-            WHEN c.email IS NOT NULL AND c.email != "Email non inserita." 
-            THEN CONCAT(" - ", c.email) 
-            ELSE "" 
-          END 
-        ) AS cliente, 
-        DATE_FORMAT(l.giorno, "%Y-%m-%d") AS giorno, 
-        DATE_FORMAT(l.giorno, "%Y-%m-%d") AS giorno_attuale, 
-        l.descrizione AS descrizione, 
-        l.descrizione AS descrizione_attuale, 
-        l.totale AS totale, 
-        l.totale AS totale_attuale, 
-        l.note AS note, 
-        l.note AS note_attuale 
+        id AS id, 
+        cliente AS cliente, 
+        DATE_FORMAT(giorno, "%Y-%m-%d") AS giorno, 
+        DATE_FORMAT(giorno, "%Y-%m-%d") AS giorno_attuale, 
+        descrizione AS descrizione, 
+        descrizione AS descrizione_attuale, 
+        totale AS totale, 
+        totale AS totale_attuale, 
+        note AS note, 
+        note AS note_attuale 
       FROM 
-        lavoro l 
-        LEFT JOIN cliente c ON l.id_cliente = c.id 
+        lavoro  
       WHERE 
-        c.nome LIKE ? AND c.cognome LIKE ? AND (l.giorno BETWEEN ? AND ?) AND l.descrizione LIKE ? 
+        cliente LIKE ? AND (giorno BETWEEN ? AND ?) AND descrizione LIKE ? 
     `;
     
-    sql += (!params.note) ? " AND (l.note LIKE ? OR l.note IS NULL); " : " AND l.note LIKE ?; "; 
+    sql += (!params.note) ? " AND (note LIKE ? OR note IS NULL); " : " AND note LIKE ?; "; 
   
     return sql;
   }
@@ -127,9 +114,9 @@ export class LavoroSQL {
     `);
   }
   
-  params_inserimento_lavoro(params) {   
+  params_inserimento_lavoro(params) { 
     return [
-      `${params.id_cliente}`, 
+      `${params.cliente}`, 
       `${params.giorno}`, 
       `${params.descrizione}`, 
       `${params.totale}`, 
@@ -171,9 +158,9 @@ export class LavoroSQL {
   }
 
   params_selezione_lavori(params_in) {
+    console.log(params_in);
     let params_out = [
-      `%${params_in.nome_cliente}%`, 
-      `%${params_in.cognome_cliente}%`, 
+      `%${params_in.cliente}%`, 
       `${(params_in.primo_giorno) ? params_in.primo_giorno : "1111-01-01"}`, 
       `${(params_in.ultimo_giorno) ? params_in.ultimo_giorno : "9999-12-31"}`, 
       `%${params_in.descrizione}%` 

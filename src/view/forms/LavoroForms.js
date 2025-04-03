@@ -5,7 +5,7 @@ import { controlloLavoro } from "../../utils/Controlli";
 
 export class LavoroForms {
   INDICI_NUOVO_LAVORO = [0, 1, 2, 3];
-  INDICI_RICERCA_LAVORI = [0, 1, 2, 3, 4, 5];
+  INDICI_RICERCA_LAVORI = [0, 1, 2, 3, 4];
   INDICI_LAVORO_ESISTENTE = [0, 1, 2, 3, 4];
   INDICI_FILE = [0, 1]; 
 
@@ -35,14 +35,14 @@ export class LavoroForms {
   getCampiRicercaLavori(item, handleOnChange, handleOnClick, handleOnBlur) {
     return {
       header: "Ricerca lavori", 
-      label: ["Nome cliente", "Cognome cliente", "Primo giorno", "Ultimo giorno", "Descrizione", "Note"], 
-      type: [null, null, "text", "text", null, null], 
-      step: [null, null, null, null, null, null], 
-      min: [null, null, null, null, null, null], 
-      name: ["nome_cliente", "cognome_cliente", "primo_giorno", "ultimo_giorno", "descrizione", "note"], 
-      id: ["ricerca_nome_cliente_lavoro", "ricerca_cognome_cliente_lavoro", "ricerca_primo_giorno_lavoro", "ricerca_ultimo_giorno_lavoro", "ricerca_descrizione_lavoro", "ricerca_note_lavoro"], 
-      value: [item.nome_cliente, item.cognome_cliente, item.primo_giorno, item.ultimo_giorno, item.descrizione, item.note], 
-      placeholder: ["Nome cliente", "Cognome cliente", "Primo giorno", "Ultimo giorno", "Descrizione", "Note"], 
+      label: ["Cliente", "Primo giorno", "Ultimo giorno", "Descrizione", "Note"], 
+      type: [null, "text", "text", null, null], 
+      step: [null, null, null, null, null], 
+      min: [null, null, null, null, null], 
+      name: ["cliente", "primo_giorno", "ultimo_giorno", "descrizione", "note"], 
+      id: ["ricerca_cliente_lavoro", "ricerca_primo_giorno_lavoro", "ricerca_ultimo_giorno_lavoro", "ricerca_descrizione_lavoro", "ricerca_note_lavoro"], 
+      value: [item.cliente, item.primo_giorno, item.ultimo_giorno, item.descrizione, item.note], 
+      placeholder: ["Cliente", "Primo giorno", "Ultimo giorno", "Descrizione", "Note"], 
       onChange: handleOnChange, 
       onClick: handleOnClick, 
       onBlur: handleOnBlur
