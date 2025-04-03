@@ -154,7 +154,7 @@ export const Items = ({ tipoItem, items, setItems, selectOperation, emptyIsConsi
       </>
     );
   };
-
+  
   return (
     <>
       {items.length <= 0 && emptyIsConsidered && (

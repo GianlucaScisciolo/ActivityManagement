@@ -44,6 +44,12 @@ export class Dispatcher {
   widgetView() {
     store.dispatch(saloneSliceActions.widgetView())
   }
+  azzeraListe() {
+    store.dispatch(clienteSliceActions.aggiornaClienti([]));
+    store.dispatch(servizioSliceActions.aggiornaServizi([]));
+    store.dispatch(lavoroSliceActions.aggiornaLavori([]));
+    store.dispatch(spesaSliceActions.aggiornaSpese([]));
+  }
   
   // Autenticazione
   eseguiLogin(username, ruolo, note) {

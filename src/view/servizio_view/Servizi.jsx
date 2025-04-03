@@ -1,5 +1,5 @@
 // React e Redux
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 // View
 import Header from "../components/Header.jsx";
@@ -7,6 +7,7 @@ import { OperazioniForms } from "../forms/OperazioniForms";
 import { ServizioForms } from "../forms/ServizioForms";
 // Actions
 import { ServizioActions } from "../../actions/ServizioActions";
+import { SaloneActions } from "../../actions/SaloneActions.js";
 // Riutilizzabile
 import SearchAndInsertPage from "../../riutilizzabile/SearchAndInsertPage.jsx";
 
@@ -52,6 +53,11 @@ const Servizi = () => {
     const { name, value } = e.target;
     servizioActions.aggiornaServizio(item.id, name, value);
   };
+
+  useEffect(() => {
+    const saloneActions = new SaloneActions();
+    saloneActions.azzeraListe();
+  }, []);
   
   return (
     <>
@@ -64,7 +70,7 @@ const Servizi = () => {
           {
             // Items
             tipoItem: "servizio", 
-            items: servizioState.servizi, 
+            items: (servizioState.servizi) ? servizioState.servizi : [], 
             setItems: null, 
             servizi: null, 
             // Stati

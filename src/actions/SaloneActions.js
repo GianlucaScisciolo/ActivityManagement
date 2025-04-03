@@ -7,6 +7,10 @@ export class SaloneActions {
     this.dispatcher = new Dispatcher();
   }
 
+  azzeraListe() {
+    this.dispatcher.azzeraListe();
+  }
+
   scegliWidgets(e, setPlusCliccato, plusCliccato) {
     e.preventDefault();
     setPlusCliccato(!plusCliccato);

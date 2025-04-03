@@ -5,8 +5,7 @@ const lavoroSlice = createSlice ({
   name: "lavoro",
   initialState: {
     value: {
-      lavori: -1, 
-      nuoviLavori: -1,
+      lavori: [], 
     } 
   },
   reducers: {

@@ -5,8 +5,7 @@ const servizioSlice = createSlice ({
   name: "servizio",
   initialState: {
     value: {
-      servizi: -1, 
-      nuoviServizi: -1,
+      servizi: [], 
     } 
   },
   reducers: {

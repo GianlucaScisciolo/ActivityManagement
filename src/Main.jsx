@@ -28,7 +28,6 @@ const Root = () => {
 
   return (
     <BrowserRouter>
-    
       <Routes>
         <Route path="/" element={<App />} />
         {(autenticazioneState.isLogged === false) && (

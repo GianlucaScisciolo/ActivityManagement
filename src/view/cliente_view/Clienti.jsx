@@ -1,5 +1,5 @@
 // React e Redux
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 // View
 import Header from "../components/Header.jsx";
@@ -7,6 +7,7 @@ import { OperazioniForms } from '../forms/OperazioniForms.js';
 import { ClienteForms } from '../forms/ClienteForms.js';
 // Actions
 import { ClienteActions } from "../../actions/ClienteActions.js";
+import { SaloneActions } from "../../actions/SaloneActions.js"
 // Riutilizzabile
 import SearchAndInsertPage from '../../riutilizzabile/SearchAndInsertPage.jsx';
 
@@ -57,6 +58,11 @@ const Clienti = () => {
     const { name, value } = e.target;
     clienteActions.aggiornaCliente(item.id, name, value);
   };
+
+  useEffect(() => {
+    const saloneActions = new SaloneActions();
+    saloneActions.azzeraListe();
+  }, []);
   
   return (
     <>
@@ -69,7 +75,7 @@ const Clienti = () => {
           {
             // Items
             tipoItem: "cliente",
-            items: clienteState.clienti, 
+            items: (clienteState.clienti) ? clienteState.clienti : [], 
             setItems: null, 
             servizi: null, 
             // Stati

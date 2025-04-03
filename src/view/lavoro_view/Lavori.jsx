@@ -7,6 +7,7 @@ import { OperazioniForms } from "../forms/OperazioniForms.js";
 import { LavoroForms } from "../forms/LavoroForms.js";
 // Actions
 import { LavoroActions } from "../../actions/LavoroActions.js";
+import { SaloneActions } from "../../actions/SaloneActions.js";
 // Riutilizzabile
 import FileSearchAndInsertPage from "../../riutilizzabile/FileSearchAndInsertPage.jsx";
 
@@ -287,6 +288,14 @@ const Lavori = () => {
     }
   };
 
+  const handleBlurItem = (e, item) => {
+    const { name, value } = e.target;
+    lavoroActions.aggiornaLavoro(item.id, name, value);
+    if(["giorno_lavoro"].includes(e.target.id)) {
+      e.target.type = (!e.target.value) ? "text" : "date";
+    }
+  };
+
   useEffect(() => {
     getAllClienti();
   }, []);
@@ -295,13 +304,10 @@ const Lavori = () => {
     getAllServizi();
   }, []);
 
-  const handleBlurItem = (e, item) => {
-    const { name, value } = e.target;
-    lavoroActions.aggiornaLavoro(item.id, name, value);
-    if(["giorno_lavoro"].includes(e.target.id)) {
-      e.target.type = (!e.target.value) ? "text" : "date";
-    }
-  };
+  useEffect(() => {
+    const saloneActions = new SaloneActions();
+    saloneActions.azzeraListe();
+  }, []);
 
   return (
     <>
@@ -314,7 +320,7 @@ const Lavori = () => {
           {
             // Items
             tipoItem: "lavoro", 
-            items: lavoroState.lavori, 
+            items: (lavoroState.lavori) ? lavoroState.lavori : [], 
             setItems: null, 
             servizi: servizi,
             // Stati 

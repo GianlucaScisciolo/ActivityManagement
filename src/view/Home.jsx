@@ -1,5 +1,5 @@
 // React e Redux
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Plus, Save } from 'lucide-react';
 import styled from 'styled-components';

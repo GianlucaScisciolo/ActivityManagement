@@ -5,8 +5,7 @@ const spesaSlice = createSlice ({
   name: "spesa",
   initialState: {
     value: {
-      spese: -1, 
-      nuoveSpese: -1,
+      spese: [], 
     } 
   },
   reducers: {

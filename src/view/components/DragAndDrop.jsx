@@ -132,11 +132,6 @@ const onClickWidget = (e, widget, navigate) => {
 const WidgetTag = ({ widget, handleDragStart, handleDragEnd }) => {
   const navigate = useNavigate();
 
-  // const onClickWidget = (e, widget, navigate) => {
-  //   e.stopPropagation(); // Evita conflitti di eventi
-  //   navigate(`/widget/${widget.id}`);
-  // };
-
   return (
     <div 
       draggable

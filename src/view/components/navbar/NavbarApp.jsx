@@ -67,6 +67,10 @@ export const NavbarApp = () => {
       alert("Errore.");
     }
   }
+
+  const handleContextMenu = (event) => {
+    event.preventDefault(); // Impedisce il menu contestuale
+  };
   
   useEffect(() => {
     applicaStileBody();
@@ -78,22 +82,23 @@ export const NavbarApp = () => {
         <StyledNavLeft>
           {(autenticazioneState.isLogged === true) && (
             <>
-              <StyledNavLink as={NavLink} to="/clienti">Clienti</StyledNavLink>
-              <StyledNavLink as={NavLink} to="/servizi">Servizi</StyledNavLink>
+              <StyledNavLink as={NavLink} to="/clienti" onContextMenu={handleContextMenu}>Clienti</StyledNavLink>
+              <StyledNavLink as={NavLink} to="/servizi" onContextMenu={handleContextMenu}>Servizi</StyledNavLink>
               <StyledNavDropdown title="Lavori" show={dropdownLavori}
                 onMouseEnter={() => handleMouseEnter(setDropdownLavori)}
                 onMouseLeave={() => handleMouseLeave(setDropdownLavori)}
+                onContextMenu={handleContextMenu}
               >
                 <StyledNavDropdownItem as={NavLink} to="/lavori">Lavori</StyledNavDropdownItem>
                 <StyledNavDropdownItem as="a" href="https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ2GRuG5B0k6Qyo2DLBkT1-OOXXC1XO60HQkWAl3Txvc3z-PcBL0EYhfc62sAor46nbg-szeiADZ" target="_blank" rel="noopener noreferrer">Prenotazione</StyledNavDropdownItem>
               </StyledNavDropdown>
-              <StyledNavLink as={NavLink} to="/spese">Spese</StyledNavLink>
+              <StyledNavLink as={NavLink} to="/spese" onContextMenu={handleContextMenu}>Spese</StyledNavLink>
             </>
           )}
         </StyledNavLeft>  
 
         <StyledNavCenter>
-          <StyledNavLinkHome as={NavLink} to="/">
+          <StyledNavLinkHome as={NavLink} to="/" onContextMenu={handleContextMenu}>
             <House id='walletCards' size={40} />
           </StyledNavLinkHome>
         </StyledNavCenter>
@@ -103,6 +108,7 @@ export const NavbarApp = () => {
             <StyledNavDropdown title="Stile" show={dropdownStile}
               onMouseEnter={() => setDropdownStile(true)}
               onMouseLeave={() => setDropdownStile(false)}
+              onContextMenu={handleContextMenu}
             >
               <StyledDropdownContainer>
                 <StyledSubMenuContainer>
@@ -184,13 +190,13 @@ export const NavbarApp = () => {
 
                
             {(autenticazioneState.isLogged === false) && (
-              <StyledNavLink as={NavLink} to="/login">Login</StyledNavLink>
+              <StyledNavLink as={NavLink} to="/login" onContextMenu={handleContextMenu}>Login</StyledNavLink>
             )}
             {(autenticazioneState.isLogged === true) && (
               <>
-                <StyledNavLink as={NavLink} to="/salone">Salone</StyledNavLink>
-                <StyledNavLink as={NavLink} to="/profilo">Profilo</StyledNavLink>
-                <StyledNavLink as={NavLink} to="/" onClick={autenticazioneActions.logout}>Logout</StyledNavLink>
+                <StyledNavLink as={NavLink} to="/salone" onContextMenu={handleContextMenu}>Salone</StyledNavLink>
+                <StyledNavLink as={NavLink} to="/profilo" onContextMenu={handleContextMenu}>Profilo</StyledNavLink>
+                <StyledNavLink as={NavLink} to="/" onClick={autenticazioneActions.logout} onContextMenu={handleContextMenu}>Logout</StyledNavLink>
               </>
             )}
           </>

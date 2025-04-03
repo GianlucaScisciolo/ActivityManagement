@@ -1,5 +1,5 @@
 // React e Redux
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 // View
 import Header from "../components/Header.jsx";
@@ -7,6 +7,7 @@ import { OperazioniForms } from "../forms/OperazioniForms";
 import { SpesaForms } from "../forms/SpesaForms";
 // Actions
 import { SpesaActions } from "../../actions/SpesaActions";
+import { SaloneActions } from "../../actions/SaloneActions.js";
 // Riutilizzabile
 import FileSearchAndInsertPage from "../../riutilizzabile/FileSearchAndInsertPage.jsx";
 
@@ -65,6 +66,11 @@ const Spese = () => {
     }
   };
 
+  useEffect(() => {
+    const saloneActions = new SaloneActions();
+    saloneActions.azzeraListe();
+  }, []);
+
   return (
     <>
       <Header />
@@ -76,7 +82,7 @@ const Spese = () => {
           {
             // Items
             tipoItem: "spesa", 
-            items: spesaState.spese, 
+            items: (spesaState.spese) ? spesaState.spese : [],  
             setItems: null, 
             servizi: null, 
             // Stati
