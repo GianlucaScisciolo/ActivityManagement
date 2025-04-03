@@ -1,6 +1,6 @@
 // React e Redux
 import React, { useState } from 'react';
-import { faFilePdf, faFileExcel } from '@fortawesome/free-solid-svg-icons';
+import { faFilePdf, faFileExcel, faFile } from '@fortawesome/free-solid-svg-icons';
 // Riutilizzabile
 import { 
   StyledListGroupItem, StyledRow, StyledCol, StyledSaveNotSelected, grandezzaIcona, 
@@ -110,7 +110,7 @@ export function OperazioniCambioTipoForm2({ tipoForm, setTipoForm }) {
             onClick={() => cambioTipoForm2("insert")} 
           />
           <StyledFileIconNotSelected2 
-            icon={faFileExcel} 
+            icon={faFile} 
             size="2xl"
             onClick={() => cambioTipoForm2("file")} 
           />
@@ -129,7 +129,7 @@ export function OperazioniCambioTipoForm2({ tipoForm, setTipoForm }) {
             onClick={() => cambioTipoForm2("insert")} 
           />
           <StyledFileIconNotSelected2 
-            icon={faFileExcel} 
+            icon={faFile} 
             size="2xl" 
             onClick={() => cambioTipoForm2("file")} 
           />
@@ -148,7 +148,7 @@ export function OperazioniCambioTipoForm2({ tipoForm, setTipoForm }) {
             onClick={() => cambioTipoForm2("insert")} 
           />
           <StyledFileIconSelected2 
-            icon={faFileExcel} 
+            icon={faFile} 
             size="2xl"
             onClick={() => cambioTipoForm2("file")} 
           />

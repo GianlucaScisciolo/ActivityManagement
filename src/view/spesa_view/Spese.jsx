@@ -82,7 +82,7 @@ const Spese = () => {
           {
             // Items
             tipoItem: "spesa", 
-            items: (spesaState.spese) ? spesaState.spese : [],  
+            items: spesaState.spese,  
             setItems: null, 
             servizi: null, 
             // Stati

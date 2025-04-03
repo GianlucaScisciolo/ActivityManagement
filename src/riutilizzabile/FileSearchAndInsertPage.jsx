@@ -82,6 +82,7 @@ const FileSearchAndInsertPage = ({ componenti }) => {
             servizi={componenti.servizi}
             handleBlurItem={componenti.handleBlurItem}
             lavoroActions={componenti.lavoroActions} // DA VEDERE !!!!
+            tipoForm={tipoForm}
           />
 
           <br /> <br /> <br /> <br />

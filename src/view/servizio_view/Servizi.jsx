@@ -70,7 +70,7 @@ const Servizi = () => {
           {
             // Items
             tipoItem: "servizio", 
-            items: (servizioState.servizi) ? servizioState.servizi : [], 
+            items: servizioState.servizi, 
             setItems: null, 
             servizi: null, 
             // Stati

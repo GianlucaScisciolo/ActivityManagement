@@ -320,7 +320,7 @@ const Lavori = () => {
           {
             // Items
             tipoItem: "lavoro", 
-            items: (lavoroState.lavori) ? lavoroState.lavori : [], 
+            items: lavoroState.lavori, 
             setItems: null, 
             servizi: servizi,
             // Stati 

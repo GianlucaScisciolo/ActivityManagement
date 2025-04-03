@@ -5,9 +5,10 @@ import { useSelector } from "react-redux";
 import { CardItemEsistente } from "./card_item/CardItem";
 import { RowItemEsistente } from "./row_item/RowItem";
 
-export const Items = ({ tipoItem, items, setItems, selectOperation, emptyIsConsidered, campi, indici, servizi, handleBlurItem, lavoroActions }) => {
+export const Items = ({ tipoItem, items, setItems, selectOperation, emptyIsConsidered, campi, indici, servizi, handleBlurItem, lavoroActions, tipoForm }) => {
   const stileState = useSelector((state) => state.stileSliceReducer.value);
   const ItemEsistenteTag = stileState.vistaItem === "card" ? CardItemEsistente : RowItemEsistente;
+  const [ricercaEseguita, setRicercaEseguita] = useState(false);
 
   const OptionsServizi = (servizi, descrizione, sottoStringa, item) => {
     const optionStr = (servizio) => `${servizio.nome} - ${servizio.prezzo} €`;
@@ -156,9 +157,9 @@ export const Items = ({ tipoItem, items, setItems, selectOperation, emptyIsConsi
   };
   
   return (
-    <>
-      {items.length <= 0 && emptyIsConsidered && (
-        <div className="contenitore-1">Nessun {tipoItem} trovato!!</div>
+    <>       
+      {tipoForm === "search" && items.length === 0 && (
+        <div className="contenitore-1">Nessun elemento trovato.</div>
       )}
       {items.length > 0 && (
         <>
@@ -170,7 +171,7 @@ export const Items = ({ tipoItem, items, setItems, selectOperation, emptyIsConsi
             <ItemElements />
           )}
         </>
-      )}
+      )} 
     </>
   );
 };

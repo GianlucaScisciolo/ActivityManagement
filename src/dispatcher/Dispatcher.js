@@ -45,10 +45,10 @@ export class Dispatcher {
     store.dispatch(saloneSliceActions.widgetView())
   }
   azzeraListe() {
-    store.dispatch(clienteSliceActions.aggiornaClienti([]));
-    store.dispatch(servizioSliceActions.aggiornaServizi([]));
-    store.dispatch(lavoroSliceActions.aggiornaLavori([]));
-    store.dispatch(spesaSliceActions.aggiornaSpese([]));
+    this.aggiornaClienti(-1);
+    this.aggiornaServizi(-1);
+    this.aggiornaLavori(-1);
+    this.aggiornaSpese(-1);
   }
   
   // Autenticazione

@@ -12,13 +12,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export const grandezzaIcona = 50;
 
-// export const Container = styled.div`
-//   display: flex;
-//   flex-wrap: wrap;
-//   gap: 10px; /* Regola lo spazio tra le card */
-// `;
-
-
 export const StyledCard = styled(Card)`
   width: 18rem;
   background-color: transparent;

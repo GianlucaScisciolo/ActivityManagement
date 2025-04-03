@@ -75,7 +75,7 @@ const Clienti = () => {
           {
             // Items
             tipoItem: "cliente",
-            items: (clienteState.clienti) ? clienteState.clienti : [], 
+            items: clienteState.clienti, 
             setItems: null, 
             servizi: null, 
             // Stati
