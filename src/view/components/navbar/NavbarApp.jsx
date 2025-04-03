@@ -78,18 +78,8 @@ export const NavbarApp = () => {
         <StyledNavLeft>
           {(autenticazioneState.isLogged === true) && (
             <>
-              <StyledNavDropdown title="Clienti" show={dropdownClienti}
-                onMouseEnter={() => handleMouseEnter(setDropdownClienti)}
-                onMouseLeave={() => handleMouseLeave(setDropdownClienti)}
-              >
-                <StyledNavDropdownItem as={NavLink} to="/clienti">Clienti</StyledNavDropdownItem>
-              </StyledNavDropdown>
-              <StyledNavDropdown title="Servizi" show={dropdownProfessionisti}
-                onMouseEnter={() => handleMouseEnter(setDropdownProfessionisti)}
-                onMouseLeave={() => handleMouseLeave(setDropdownProfessionisti)}
-              >
-                <StyledNavDropdownItem as={NavLink} to="/servizi">Servizi</StyledNavDropdownItem>
-              </StyledNavDropdown>
+              <StyledNavLink as={NavLink} to="/clienti">Clienti</StyledNavLink>
+              <StyledNavLink as={NavLink} to="/servizi">Servizi</StyledNavLink>
               <StyledNavDropdown title="Lavori" show={dropdownLavori}
                 onMouseEnter={() => handleMouseEnter(setDropdownLavori)}
                 onMouseLeave={() => handleMouseLeave(setDropdownLavori)}
@@ -97,12 +87,7 @@ export const NavbarApp = () => {
                 <StyledNavDropdownItem as={NavLink} to="/lavori">Lavori</StyledNavDropdownItem>
                 <StyledNavDropdownItem as="a" href="https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ2GRuG5B0k6Qyo2DLBkT1-OOXXC1XO60HQkWAl3Txvc3z-PcBL0EYhfc62sAor46nbg-szeiADZ" target="_blank" rel="noopener noreferrer">Prenotazione</StyledNavDropdownItem>
               </StyledNavDropdown>
-              <StyledNavDropdown title="Spese" show={dropdownSpese}
-                onMouseEnter={() => handleMouseEnter(setDropdownSpese)}
-                onMouseLeave={() => handleMouseLeave(setDropdownSpese)}
-              >
-                <StyledNavDropdownItem as={NavLink} to="/spese">Spese</StyledNavDropdownItem>
-              </StyledNavDropdown>
+              <StyledNavLink as={NavLink} to="/spese">Spese</StyledNavLink>
             </>
           )}
         </StyledNavLeft>  

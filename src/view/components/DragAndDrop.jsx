@@ -98,6 +98,7 @@ export default DragAndDrop;
 const onClickWidget = (e, widget, navigate) => {
   const saloneActions = new SaloneActions();
   e.preventDefault();
+  e.stopPropagation();
   if(widget.tipoVisualizzazione !== 2) {
     saloneActions.modificaWidget(
       widget.nome, 
@@ -105,34 +106,24 @@ const onClickWidget = (e, widget, navigate) => {
     );
   }
   else {
-    if(widget.nome === "nuovo_cliente") 
-      navigate("/nuovo-cliente");
-    else if(widget.nome === "clienti") 
+    // Cliente
+    if(widget.nome === "clienti") 
       navigate("/clienti");
-
-    else if(widget.nome === "nuovo_servizio") 
-      navigate("/nuovo-servizio");
+    // Servizio
     else if(widget.nome === "servizi") 
       navigate("/servizi");
-    
-    else if(widget.nome === "nuovo_lavoro") 
-      navigate("/nuovo-lavoro");
+    // Lavoro
     else if(widget.nome === "lavori") 
       navigate("/lavori");
-    else if(widget.nome === "file_lavori") 
-      navigate("/file-lavori");
     else if(widget.nome === "prenotazione") 
       window.open("https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ2GRuG5B0k6Qyo2DLBkT1-OOXXC1XO60HQkWAl3Txvc3z-PcBL0EYhfc62sAor46nbg-szeiADZ", "_blank");
-    
-    else if(widget.nome === "nuovo_servizio") 
-      navigate("/nuovo-servizio");
-    else if(widget.nome === "servizi") 
-      navigate("/servizi");
-    else if(widget.nome === "file_servizi") 
-      navigate("/file-servizi");
-    
+    // Spesa
+    else if(widget.nome === "spese") 
+      navigate("/spese");
+    // Salone   
     else if(widget.nome === "salone") 
       navigate("/salone");
+    // Profilo
     else if(widget.nome === "profilo") 
       navigate("/profilo");
   }
@@ -140,18 +131,24 @@ const onClickWidget = (e, widget, navigate) => {
 
 const WidgetTag = ({ widget, handleDragStart, handleDragEnd }) => {
   const navigate = useNavigate();
+
+  // const onClickWidget = (e, widget, navigate) => {
+  //   e.stopPropagation(); // Evita conflitti di eventi
+  //   navigate(`/widget/${widget.id}`);
+  // };
+
   return (
     <div 
       draggable
       onDragStart={(e) => handleDragStart(e, widget.id)}
       onDragEnd={handleDragEnd}
       style={{
-        width: '310px', // Larghezza fissa delle celle
-        height: '410px', // Altezza fissa delle celle
+        width: '310px',
+        height: '410px',
         position: 'absolute',
         left: widget.x,
         top: widget.y,
-        cursor: 'pointer'
+        cursor: 'grab',
       }}
     >
       <CardWidget 
@@ -163,7 +160,7 @@ const WidgetTag = ({ widget, handleDragStart, handleDragEnd }) => {
       /> 
     </div>
   );
-}
+};
 
 export const DragAndDropWidgetHomePage = ({plusCliccato}) => {
   const saloneState = useSelector((state) => state.saloneSliceReducer.value);
@@ -209,40 +206,32 @@ export const DragAndDropWidgetHomePage = ({plusCliccato}) => {
       }}
     >
       {(plusCliccato === true) ? (<>
-        <WidgetTag widget={saloneState.nuovo_cliente} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
+        { /** Cliente **/}
         <WidgetTag widget={saloneState.clienti} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
-        
-        <WidgetTag widget={saloneState.nuovo_servizio} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
+        { /** Servizio **/}
         <WidgetTag widget={saloneState.servizi} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
-        
-        <WidgetTag widget={saloneState.nuovo_lavoro} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
+        { /** Lavoro **/}
         <WidgetTag widget={saloneState.lavori} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
-        <WidgetTag widget={saloneState.file_lavori} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
         <WidgetTag widget={saloneState.prenotazione} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
-        
-        <WidgetTag widget={saloneState.nuova_spesa} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
+        { /** Spesa **/}
         <WidgetTag widget={saloneState.spese} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
-        <WidgetTag widget={saloneState.file_spese} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
-        
+        { /** Salone **/}
         <WidgetTag widget={saloneState.salone} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
+        { /** Profilo **/}
         <WidgetTag widget={saloneState.profilo} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
       </>) : (<>
-        {(saloneState.nuovo_cliente.tipoVisualizzazione !== 0) && (<WidgetTag widget={saloneState.nuovo_cliente} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
+        { /** Cliente **/}
         {(saloneState.clienti.tipoVisualizzazione !== 0) && (<WidgetTag widget={saloneState.clienti} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
-        
-        {(saloneState.nuovo_servizio.tipoVisualizzazione !== 0) && (<WidgetTag widget={saloneState.nuovo_servizio} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
+        { /** Servizio **/}
         {(saloneState.servizi.tipoVisualizzazione !== 0) && (<WidgetTag widget={saloneState.servizi} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
-        
-        {(saloneState.nuovo_lavoro.tipoVisualizzazione !== 0) && (<WidgetTag widget={saloneState.nuovo_lavoro} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
+        { /** Lavoro **/}
         {(saloneState.lavori.tipoVisualizzazione !== 0) && (<WidgetTag widget={saloneState.lavori} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
-        {(saloneState.file_lavori.tipoVisualizzazione !== 0) && (<WidgetTag widget={saloneState.file_lavori} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
         {(saloneState.prenotazione.tipoVisualizzazione !== 0) && (<WidgetTag widget={saloneState.prenotazione} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
-        
-        {(saloneState.nuova_spesa.tipoVisualizzazione !== 0) && (<WidgetTag widget={saloneState.nuova_spesa} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
+        { /** Spesa **/}
         {(saloneState.spese.tipoVisualizzazione !== 0) && (<WidgetTag widget={saloneState.spese} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
-        {(saloneState.file_spese.tipoVisualizzazione !== 0) && (<WidgetTag widget={saloneState.file_spese} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
-                
+        { /** Salone **/}
         {(saloneState.salone.tipoVisualizzazione !== 0) && (<WidgetTag widget={saloneState.salone} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
+        { /** Profilo **/}
         {(saloneState.profilo.tipoVisualizzazione !== 0) && (<WidgetTag widget={saloneState.profilo} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
       </>)}
     </div>
