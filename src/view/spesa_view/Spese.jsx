@@ -66,6 +66,19 @@ const Spese = () => {
     }
   };
 
+  const getTotaleSpese = () => {
+    let totaleSpese = 0;
+    if(spesaState.spese && spesaState.spese.length > 0) {
+      for(let spesa of spesaState.spese) {
+        totaleSpese += parseFloat(spesa.totale);
+      }
+      return "Totale: " + totaleSpese + " €";
+    }
+    else {
+      return "";
+    }
+  }
+
   useEffect(() => {
     const saloneActions = new SaloneActions();
     saloneActions.azzeraListe();
@@ -127,6 +140,9 @@ const Spese = () => {
             selectOperation: selectOperation, 
             selectedIdsModifica: selectedIdsModifica, 
             selectedIdsEliminazione: selectedIdsEliminazione, 
+            // Informazioni
+            visualizzazioneInformazioni: true,
+            totaleItems: getTotaleSpese(),
           }
         }
       />

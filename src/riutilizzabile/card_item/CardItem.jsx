@@ -648,41 +648,6 @@ export function CardProfilo({campi, indici, eseguiModificaProfilo}) {
   );
 }
 
-// export function CardWidget({nome, img, id, onClickWidget, backgroundColor}) {  
-//   return (
-//     <Card 
-//       style={{ 
-//         width: "300px", 
-//         height: "400px", 
-//         backgroundColor: backgroundColor, 
-//         borderRadius: "50px", 
-//       }}
-//       onClick={(e) => onClickWidget(e, id)}
-//     >
-//       <center>
-//         <Card.Img 
-//           style={{ 
-//             width: "220px", 
-//             height: "220px", 
-//             borderRadius: "20px",
-//             marginTop: "50px",
-//             marginBottom: "10px", 
-//           }} 
-//           variant="top" 
-//           src={img} 
-//         />
-//       </center>
-//       <Card.Body>
-//         <center>
-//           <Card.Title
-//             style={{color:"#FFFFFF"}}
-//           >{nome}</Card.Title>
-//         </center>
-//       </Card.Body>
-//     </Card>
-//   );
-// }
-
 export function CardWidget({nome, img, id, onClickWidget, backgroundColor}) {  
   return (
     <Card 
@@ -722,7 +687,6 @@ export function CardWidget({nome, img, id, onClickWidget, backgroundColor}) {
     </Card>
   );
 }
-
 
 export function CardEntrateLavori({ entrateLavori }) {
   return (
@@ -1005,3 +969,32 @@ export function CardRicavi({ entrateLavori, usciteSpese }) {
     </Card>
   );
 }
+
+export function CardInformazioni({ totaleItems }) {
+  return (
+    <StyledCard>
+      <StyledCardHeader>Informazioni</StyledCardHeader>
+      <SlideContainer>
+        {totaleItems && (
+          <StyledInputBlock 
+            rows={1} 
+            name="totale_items" 
+            id="totale_items" 
+            type="text" 
+            value={totaleItems ? totaleItems : "Errore!!"} 
+            readOnly 
+          />
+        )}
+      </SlideContainer>
+    </StyledCard>
+  );
+}
+
+
+
+
+
+
+
+
+

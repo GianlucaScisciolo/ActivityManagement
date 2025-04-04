@@ -295,6 +295,19 @@ const Lavori = () => {
     }
   };
 
+  const getTotaleLavori = () => {
+    let totaleLavori = 0;
+    if(lavoroState.lavori && lavoroState.lavori.length > 0) {
+      for(let lavoro of lavoroState.lavori) {
+        totaleLavori += parseFloat(lavoro.totale);
+      }
+      return "Totale: " + totaleLavori + " €";
+    }
+    else {
+      return "";
+    }
+  }
+
   useEffect(() => {
     getAllClienti();
   }, []);
@@ -366,6 +379,9 @@ const Lavori = () => {
             selectOperation: selectOperation, 
             selectedIdsModifica: selectedIdsModifica, 
             selectedIdsEliminazione: selectedIdsEliminazione, 
+            // Informazioni 
+            visualizzazioneInformazioni: true,
+            totaleItems: getTotaleLavori(),
           }
         }
       />

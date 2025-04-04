@@ -2,7 +2,7 @@
 import React, {useState} from "react";
 // Riutilizzabile
 import { CambioTipoForm2, FormNuovoItem, FormRicercaItems, FormFileItems } from "./form_item/FormItem";
-import { CardNuovoItem, CardRicercaItems, CardFileItems } from "./card_item/CardItem";
+import { CardNuovoItem, CardRicercaItems, CardFileItems, CardInformazioni } from "./card_item/CardItem";
 import { RowNuovoItem, RowRicercaItems, RowFileItems } from "./row_item/RowItem";
 import { OperazioniItems } from "./Operazioni";
 import { Items } from "./Items"
@@ -86,6 +86,19 @@ const FileSearchAndInsertPage = ({ componenti }) => {
           />
 
           <br /> <br /> <br /> <br />
+
+          {componenti.visualizzazioneInformazioni === true && componenti.items.length > 0 && (
+            <>
+              <center>
+                <CardInformazioni 
+                  totaleItems={componenti.totaleItems}
+                  // totaleItems={"totale: 10.00 €"}
+                />
+              </center>
+
+              <br /> <br /> <br /> <br />
+            </>
+          )}
 
           <OperazioniItems 
             selectedIdsModifica={componenti.selectedIdsModifica}
