@@ -1,6 +1,19 @@
 /************************************************** React e Redux **************************************************/
 import { createSlice } from "@reduxjs/toolkit";
 
+const scomponiStringa = (stringa) => {
+  const indiceUltimaX = stringa.lastIndexOf(" x ");
+  const nome = stringa.substring(0, indiceUltimaX).trim();
+  let [quantita, prezzo] = stringa.substring(indiceUltimaX + 3).trim().split(" - ");
+  prezzo = prezzo.substring(0, prezzo.length - 2);
+  
+  return {
+    nome,
+    quantita: parseInt(quantita, 10),
+    prezzo: prezzo / quantita,
+  };
+};
+
 const lavoroSlice = createSlice ({
   name: "lavoro",
   initialState: {
@@ -40,17 +53,7 @@ const lavoroSlice = createSlice ({
             state.value.lavori[i]["descrizione"] = state.value.lavori[i]["descrizione_attuale"];
             state.value.lavori[i]["totale"] = state.value.lavori[i]["totale_attuale"]; 
             state.value.lavori[i]["note"] = state.value.lavori[i]["note_attuale"]; 
-
-            let serviziSelezionati = state.value.lavori[i]["descrizione_attuale"].split(',').map(item => item.trim()).filter(item => item !== "");
-            for(let i = 0; i < serviziSelezionati.length; i++) {
-              serviziSelezionati[i] = serviziSelezionati[i].split('-').map(item => item.trim()).filter(item => item !== "");
-              serviziSelezionati[i] = {
-                nome: serviziSelezionati[i][0], 
-                prezzo: serviziSelezionati[i][1].substring(0, serviziSelezionati[i][1].length-2)
-              };
-            }
-            state.value.lavori[i]["serviziSelezionati"] = serviziSelezionati;
-            
+            state.value.lavori[i]["servizi"] = state.value.lavori[i]["servizi_attuale"];
             break;
           }
         }
@@ -64,6 +67,7 @@ const lavoroSlice = createSlice ({
             state.value.lavori[i]["descrizione_attuale"] = state.value.lavori[i]["descrizione"];
             state.value.lavori[i]["totale_attuale"] = state.value.lavori[i]["totale"]; 
             state.value.lavori[i]["note_attuale"] = state.value.lavori[i]["note"]; 
+            state.value.lavori[i]["servizi_attuale"] = state.value.lavori[i]["servizi"];
             break;
           }
         }

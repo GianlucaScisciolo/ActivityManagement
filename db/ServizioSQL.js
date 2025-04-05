@@ -6,7 +6,10 @@ export class ServizioSQL {
 
   SQL_SELEZIONE_TUTTI_I_SERVIZI = `
     SELECT 
-      id, nome, prezzo 
+      id, 
+      nome, 
+      prezzo, 
+      0 AS quantita 
     FROM 
       servizio; 
   `;

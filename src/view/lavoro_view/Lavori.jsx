@@ -1,6 +1,8 @@
 // React e Redux
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
+import Row from 'react-bootstrap/esm/Row';
+import Col from 'react-bootstrap/esm/Col';
 // View
 import Header from "../components/Header.jsx";
 import { OperazioniForms } from "../forms/OperazioniForms.js";
@@ -166,83 +168,57 @@ const Lavori = () => {
     );
   };
 
-  const OptionsServizi = ({ servizi }) => {
-    const [serviziSelezionati, setServiziSelezionati] = useState([]);
-    const [serviziNonSelezionati, setServiziNonSelezionati] = useState(Object.values(servizi));
+  const aggiornaServizio = (id, parametro, nuovoValore) => {
+    setServizi((prevServizi) =>
+      prevServizi.map((servizio) =>
+        servizio.id === id
+          ? { ...servizio, [parametro]: nuovoValore }
+          : servizio
+      )
+    );
+  };
 
-    useEffect(() => {
-      setServiziNonSelezionati(Object.values(servizi));
-    }, [servizi]);
-    
+  const OptionsServizi = ({ servizi }) => {
     const optionStr = (servizio) => {
       return servizio.nome + " - " + servizio.prezzo + " €";
     }
     
     const sottoStringa = nuovoLavoro.servizio;
 
-    const handleCheckboxChange = (e, servizio) => {
-      if (e.target.checked) {
-        const updatedSelezionati = [...serviziSelezionati, servizio];
-        setServiziSelezionati(updatedSelezionati);
-        setServiziNonSelezionati(serviziNonSelezionati.filter(s => s.id !== servizio.id));
-        setNuovoLavoro(prevState => ({
-          ...prevState,
-          id_servizi: [...prevState.id_servizi, servizio.id]
-        }));
-      } 
-      else {
-        const updatedSelezionati = serviziSelezionati.filter(s => s.id !== servizio.id);
-        setServiziSelezionati(updatedSelezionati);
-        setServiziNonSelezionati([...serviziNonSelezionati, servizio]);
-        setNuovoLavoro(prevState => ({
-          ...prevState,
-          id_servizi: prevState.id_servizi.filter(id => id !== servizio.id)
-        }));
-      }
-    };
-
     return (
-
       <>
         {(servizi !== -1) && (
           <>
             <div>
               Seleziona almeno 1 servizio:<br />
-              {serviziNonSelezionati.filter(servizio => 
+              {servizi.filter(servizio => 
                 optionStr(servizio).toLowerCase().includes(sottoStringa.toLowerCase())
               ).map((servizio, index) => (
-                <div key={index} className={classeFormWrapperCheckbox}>
-                  <input 
-                    type="checkbox" 
-                    id={"servizio_non_sel_" + index} 
-                    name={"servizio_non_sel_" + index} 
-                    value={servizio.id}
-                    checked={false}
-                    onChange={(e) => handleCheckboxChange(e, servizio)}
-                    className="custom-checkbox serviziNonSelezionati"
-                  />
-                  <label htmlFor={"servizio_non_sel_" + index}>
-                    {optionStr(servizio)}
-                  </label>
-                </div>                
-              ))}
-            </div>
-            <div>
-              {serviziSelezionati.map((servizio, index) => (
-                <div key={index} className={classeFormWrapperCheckbox}>
-                  <input 
-                    type="checkbox" 
-                    id={"servizio_sel_" + index} 
-                    name={"servizio_sel_" + index} 
-                    value={servizio.id} 
-                    checked={true}
-                    onChange={(e) => handleCheckboxChange(e, servizio)}
-                    className="custom-checkbox serviziSelezionati"
-                  />
-                  <label htmlFor={"servizio_sel_" + index}>
-                    {optionStr(servizio)}
-                  </label>
-                </div>
+                <Row key={index} style={{padding: "10px"}}>
+                  <Col>
+                    <label htmlFor={"servizio_" + index}>
+                      {optionStr(servizio)}
+                    </label>
+                  </Col>
+                  <Col>
+                    <input 
+                      style={{width: "90px", padding:"5px 10px"}}
+                      rows={1}
+                      name={"servizio_" + index} 
+                      id={"servizio_" + index} 
+                      type="number" 
+                      step={1}
+                      value={servizio.quantita}
+                      placeholder={"quantita_servizio_" + index}
+                      onChange={(e) => {
+                        const { value } = e.target;
+                        if(servizio.quantita + value >= 0) {
+                          aggiornaServizio(servizio.id, "quantita", value);
+                        } 
+                      }}
+                    />
+                  </Col>
+                </Row>                
               ))}
             </div>
           </>
@@ -281,6 +257,7 @@ const Lavori = () => {
     if(response.status === 200) {
       const result = await response.json();
       setServizi(result.items);
+      // console.log(result.items);
     }
     else {
       alert("Errore durante l\'ottenimento dei clienti per l\'inserimento di un nuovo lavoro, riprova più tardi.");

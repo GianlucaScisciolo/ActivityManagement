@@ -43,7 +43,7 @@ export class OperazioniForms {
     }
     else if ([
       "nuovo_prezzo_servizio", "nuovo_totale_spesa" 
-    ].includes(id)) {
+    ].includes(id) || id.startsWith("quantita_servizio_")) {
       const isDecimal = !isNaN(value) && Number(value) === parseFloat(value);
       if (!isDecimal || value < 0) {
         modificabile = false;

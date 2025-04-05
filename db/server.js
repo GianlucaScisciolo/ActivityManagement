@@ -95,6 +95,23 @@ const getResults = async (sql, params, res) => {
   }
 }
 
+const scomponiStringa = (stringa) => {
+  const indiceUltimaX = stringa.lastIndexOf(" x ");
+  const nome = stringa.substring(0, indiceUltimaX).trim();
+  let [quantita, prezzo] = stringa.substring(indiceUltimaX + 3).trim().split(" - ");
+  prezzo = prezzo.substring(0, prezzo.length - 2);
+  
+  return {
+    nome,
+    quantita: parseInt(quantita, 10),
+    prezzo: prezzo / quantita,
+  };
+};
+
+const optionStr = (servizio) => {
+  return `${servizio.nome} - ${servizio.prezzo} €`;
+};
+
 /*************************************************** Autenticazione **************************************************/
 
 app.post("/LOGIN", async (req, res) => {
@@ -205,17 +222,28 @@ app.post("/VISUALIZZA_ITEMS", async(req, res) => {
 
   try {
     const result = await executeQuery(sql, params);
+    
     if(req.body.tipo_item === "lavoro") {
+      const servizi = await executeQuery(servizioSQL.SQL_SELEZIONE_TUTTI_I_SERVIZI, servizioSQL.params_selezione_tutti_i_servizi());
       for(let i = 0; i < result.length; i++) {
-        const serviziSelezionatiAttuali = result[i].descrizione.split(',').map(item => item.trim()).filter(item => item !== "");
-        for(let i = 0; i < serviziSelezionatiAttuali.length; i++) {
-          serviziSelezionatiAttuali[i] = serviziSelezionatiAttuali[i].split('-').map(item => item.trim()).filter(item => item !== "");
-          serviziSelezionatiAttuali[i] = {
-            nome: serviziSelezionatiAttuali[i][0], 
-            prezzo: serviziSelezionatiAttuali[i][1].substring(0, serviziSelezionatiAttuali[i][1].length-2)
-          };
+        let serviziLavoro = result[i]["descrizione"].substring(0, result[i]["descrizione"].length - 2).split(",");
+        for(let i = 0; i < serviziLavoro.length; i++) {
+          serviziLavoro[i] = scomponiStringa(serviziLavoro[i]);
         }
-        result[i]["serviziSelezionati"] = serviziSelezionatiAttuali;
+        for(let servizio of servizi) {
+          let isPresent = false;
+          for(let servizioLavoro of serviziLavoro) {
+            if(optionStr(servizio) === optionStr(servizioLavoro)) {
+              isPresent = true;
+              break;
+            }
+          }
+          if(isPresent === false) {
+            serviziLavoro.push(servizio);
+          }
+        }
+        result[i]["servizi"] = serviziLavoro;
+        result[i]["servizi_attuale"] = serviziLavoro;
       }
     }
     return res.status(200).json({ items: result });

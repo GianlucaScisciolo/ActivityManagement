@@ -14,36 +14,26 @@ export class LavoroActions {
     e.preventDefault();
     if (confirm("Sei sicuro di voler salvare il lavoro?")) {
       let descrizione = "";
+      nuovoLavoro.totale = 0;
       for(let servizio of servizi) {
-        if(nuovoLavoro.id_servizi.includes(servizio.id)) {
-          nuovoLavoro.totale += servizio.prezzo;
-          descrizione += servizio.nome + " - " + servizio.prezzo + " €, "
+        if(servizio.quantita > 0) {
+          nuovoLavoro.totale += servizio.prezzo * servizio.quantita
+          descrizione += (servizio.nome) + " x " + (servizio.quantita) + " - " + (servizio.prezzo * servizio.quantita) + " €, "
         }
       }
       for(let cliente of clienti) {
         console.log(cliente.id + " === " + nuovoLavoro.id_cliente);
         if (parseInt(cliente.id) === parseInt(nuovoLavoro.id_cliente)) {
           console.log("Cliente trovato!!");
-          nuovoLavoro["cliente"] = cliente.nome + " " + cliente.cognome +
-            ((cliente.contatto && cliente.contatto !== "Contatto non inserito.") ? (" - " + cliente.contatto) : "") + 
-            ((cliente.email && cliente.email !== "Email non inserita.") ? (" - " + cliente.email) : "");
+          nuovoLavoro["cliente"] = cliente.nome + " " + cliente.cognome 
+            + ((cliente.contatto && cliente.contatto !== "Contatto non inserito.") ? (" - " + cliente.contatto) : "") 
+            + ((cliente.email && cliente.email !== "Email non inserita.") ? (" - " + cliente.email) : "");
           break;
         }
       }
       nuovoLavoro["descrizione"] = descrizione;
+      nuovoLavoro["servizi"] = servizi;
       /**/
-      const serviziSelezionatiAttuali = descrizione.split(',').map(item => item.trim()).filter(item => item !== "");
-      for(let i = 0; i < serviziSelezionatiAttuali.length; i++) {
-        serviziSelezionatiAttuali[i] = serviziSelezionatiAttuali[i].split('-').map(item => item.trim()).filter(item => item !== "");
-        serviziSelezionatiAttuali[i] = {
-          nome: serviziSelezionatiAttuali[i][0], 
-          prezzo: serviziSelezionatiAttuali[i][1].substring(0, serviziSelezionatiAttuali[i][1].length-2)
-        };
-      }
-      nuovoLavoro["serviziSelezionati"] = serviziSelezionatiAttuali;
-      
-      /**/
-      
       if (controlloLavoro(nuovoLavoro, setNuovoLavoro) > 0) 
         return;
 
@@ -51,6 +41,7 @@ export class LavoroActions {
       nuovoLavoro["descrizione_attuale"] = nuovoLavoro["descrizione"];
       nuovoLavoro["totale_attuale"] = nuovoLavoro["totale"];
       nuovoLavoro["note_attuale"] = nuovoLavoro["note"];
+      nuovoLavoro["servizi_attuale"] = nuovoLavoro["servizi"];
       
       const response = await fetch('/INSERISCI_ITEM', {
         method: 'POST',
@@ -242,7 +233,6 @@ export class LavoroActions {
       }
 
       for(let id of idLavoriModificati) {
-        console.log("\\"+id+"/");
         this.dispatcher.getLavoroDopoLaModifica(id);
       }
 

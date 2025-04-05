@@ -6,7 +6,7 @@ import { controlloLavoro } from "../../utils/Controlli";
 export class LavoroForms {
   INDICI_NUOVO_LAVORO = [0, 1, 2, 3];
   INDICI_RICERCA_LAVORI = [0, 1, 2, 3, 4];
-  INDICI_LAVORO_ESISTENTE = [0, 1, 2, 3, 4];
+  INDICI_LAVORO_ESISTENTE = [0, 1, 2, 3];
   INDICI_FILE = [0, 1]; 
 
   constructor() {
@@ -65,16 +65,16 @@ export class LavoroForms {
     return {
       header: "Lavoro", 
       tipoSelezione: item.tipo_selezione,  
-      type: [null, null, "text", "date", null],
-      step: [null, null, null, null, null], 
-      min: [null, null, null, null, null],
-      name: ["cliente", "servizio", "totale", "giorno", "note"], 
-      id: ["cliente_lavoro", "servizio_lavoro", "totale_lavoro", "giorno_lavoro", "note_lavoro"], 
-      value: [item.cliente, item.servizio, parseFloat(item.totale).toFixed(2), item.giorno, item.note], 
-      placeholder: ["Cliente", "Servizio", "Totale", "Giorno", "Note"], 
-      errore: [errori.errore_cliente, errori.errore_totale, null, errori.errore_giorno, errori.errore_note], 
-      valoreModificabile: [false, true, false, true, true], 
-      options: [null, servizi, null, null, null],
+      type: [null, null, "date", null],
+      step: [null, null, null, null], 
+      min: [null, null, null, null],
+      name: ["cliente", "servizio", "giorno", "note"], 
+      id: ["cliente_lavoro", "servizio_lavoro", "giorno_lavoro", "note_lavoro"], 
+      value: [item.cliente, item.servizio, item.giorno, item.note], 
+      placeholder: ["Cliente", "Servizio", "Giorno", "Note"], 
+      errore: [errori.errore_cliente, errori.errore_totale, errori.errore_giorno, errori.errore_note], 
+      valoreModificabile: [false, true, true, true], 
+      options: [null, servizi, null, null],
       onChange: handleOnChange, 
       onClick: handleOnClick, 
       onBlur: handleOnBlur
