@@ -123,9 +123,11 @@ export class LavoroActions {
     }
   }
 
-  async handleSearchEntrateLavori(setEntrateLavori) {
+  async handleSearchEntrateLavori(setEntrateLavori, datiRicerca) {
     const dati = {
-      tipo_item: "lavoro" 
+      tipo_item: "lavoro", 
+      primo_anno: datiRicerca.primo_anno, 
+      ultimo_anno: datiRicerca.ultimo_anno
     };
     
     const response = await fetch('/VISUALIZZA_ENTRATE_ITEMS', {

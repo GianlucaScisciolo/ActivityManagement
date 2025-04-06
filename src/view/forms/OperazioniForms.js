@@ -5,8 +5,12 @@ export class OperazioniForms {
     console.log(id);
   
     let modificabile = true;
-  
     if([
+      "primo_anno", "ultimo_anno" 
+    ].includes(id)) {
+      modificabile = true;
+    }
+    else if([
       "nuovo_nome_cliente", "nuovo_cognome_cliente" 
     ].includes(id)) {
       if(value.length > 30) {

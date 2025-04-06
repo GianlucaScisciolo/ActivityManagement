@@ -6,6 +6,7 @@ const spesaSlice = createSlice ({
   initialState: {
     value: {
       spese: [], 
+      usciteSpese: [], 
     } 
   },
   reducers: {
@@ -64,6 +65,9 @@ const spesaSlice = createSlice ({
       }
       state.value.spese.push(action.payload.nuovaSpesa);
     },
+    aggiornaUsciteSpese: (state, action) => {
+      state.value.usciteSpese = action.payload.usciteSpese
+    }
   },
 })
 
@@ -74,6 +78,7 @@ export const spesaSliceActions = {
   getSpesaPrimaDellaModifica: spesaSlice.actions.getSpesaPrimaDellaModifica,
   getSpesaDopoLaModifica: spesaSlice.actions.getSpesaDopoLaModifica,
   inserimentoSpesa: spesaSlice.actions.inserimentoSpesa,
+  aggiornaUsciteSpese: spesaSlice.actions.aggiornaUsciteSpese, 
 };
 
 export const spesaSliceReducer = spesaSlice.reducer;

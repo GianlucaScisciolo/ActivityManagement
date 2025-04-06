@@ -268,6 +268,8 @@ app.post("/VISUALIZZA_ENTRATE_ITEMS", async(req, res) => {
 
   try {
     const result = await executeQuery(sql, params);
+    // const result = await executeQuery(sql, [primoAnno, ultimoAnno]);
+
     return res.status(200).json({ items: result });
   } 
   catch (err) {

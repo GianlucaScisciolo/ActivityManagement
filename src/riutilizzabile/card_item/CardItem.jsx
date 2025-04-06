@@ -740,7 +740,7 @@ export function CardEntrateLavori({ entrateLavori }) {
           </thead>
           <tbody>
             {entrateLavori.map((lavoro, i) => (
-              (i > 0) && (
+              (i > 1) && (
                 <tr key={i}>
                   {Object.values(lavoro).map((value, j) => (
                     <td 
@@ -830,7 +830,7 @@ export function CardUsciteSpese({ usciteSpese }) {
           </thead>
           <tbody>
             {usciteSpese.map((spesa, i) => (
-              (i > 0) && (
+              (i > 1) && (
                 <tr key={i}>
                   {Object.values(spesa).map((value, j) => (
                     <td
@@ -920,14 +920,16 @@ export function CardRicavi({ entrateLavori, usciteSpese }) {
           </thead>
           <tbody>
             {entrateLavori.map((entrata, i) => (
-              i > 0 && (
+              i > 1 && (
                 <tr key={i}>
                   <td                  
                     style={{
                       fontWeight: "bold",
                     }} 
                   >{entrata.Anno}</td>
-                  <td style={{color:getColor(entrata.gen - usciteSpese[i].gen, 1)}}>{parseFloat(entrata.gen - usciteSpese[i].gen).toFixed(2)} €</td>
+                  {usciteSpese[i] && (
+                    <>
+                  <td style={{color:getColor(entrata.gen - usciteSpese[i].gen)}}>{parseFloat(entrata.gen - usciteSpese[i].gen).toFixed(2)} €</td>
                   <td style={{color:getColor(entrata.feb - usciteSpese[i].feb)}}>{parseFloat(entrata.feb - usciteSpese[i].feb).toFixed(2)} €</td>
                   <td style={{color:getColor(entrata.mar - usciteSpese[i].mar)}}>{parseFloat(entrata.mar - usciteSpese[i].mar).toFixed(2)} €</td>
                   <td style={{color:getColor(entrata.apr - usciteSpese[i].apr)}}>{parseFloat(entrata.apr - usciteSpese[i].apr).toFixed(2)} €</td>
@@ -940,6 +942,8 @@ export function CardRicavi({ entrateLavori, usciteSpese }) {
                   <td style={{color:getColor(entrata.nov - usciteSpese[i].nov)}}>{parseFloat(entrata.nov - usciteSpese[i].nov).toFixed(2)} €</td>
                   <td style={{color:getColor(entrata.dic - usciteSpese[i].dic)}}>{parseFloat(entrata.dic - usciteSpese[i].dic).toFixed(2)} €</td>
                   <td style={{color:getColor(entrata.totale_anno - usciteSpese[i].totale_anno)}}>{parseFloat(entrata.totale_anno - usciteSpese[i].totale_anno).toFixed(2)} €</td>
+                </>
+                )}
                 </tr>
               )
             ))}

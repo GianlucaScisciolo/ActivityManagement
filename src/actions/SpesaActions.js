@@ -108,9 +108,11 @@ export class SpesaActions {
     }
   }
 
-  async handleSearchUsciteSpese(setUsciteSpese) {
+  async handleSearchUsciteSpese(setUsciteSpese, datiRicerca) {
     const dati = {
-      tipo_item: "spesa" 
+      tipo_item: "spesa", 
+      primo_anno: datiRicerca.primo_anno, 
+      ultimo_anno: datiRicerca.ultimo_anno
     };
     
     const response = await fetch('/VISUALIZZA_USCITE_ITEMS', {

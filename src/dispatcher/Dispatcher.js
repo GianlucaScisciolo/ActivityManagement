@@ -50,6 +50,14 @@ export class Dispatcher {
     this.aggiornaLavori(-1);
     this.aggiornaSpese(-1);
   }
+  ricercaEntrateUsciteRicavi(datiRicerca) {
+    // console.log("_______________");
+    // console.log(datiRicerca);
+    // console.log("_______________");
+    // Da fare
+    this.ricercaEntrateLavori(datiRicerca);
+    this.ricercaUsciteSpese(datiRicerca);
+  }
   
   // Autenticazione
   eseguiLogin(username, ruolo, note) {
@@ -136,6 +144,11 @@ export class Dispatcher {
       nuovoLavoro: nuovoLavoro 
     }))
   }
+  aggiornaEntrateLavori(entrateLavori) {
+    store.dispatch(lavoroSliceActions.aggiornaEntrateLavori({
+      entrateLavori: entrateLavori
+    }));
+  }
 
   // Servizio
   aggiornaServizi(servizi) {
@@ -205,6 +218,11 @@ export class Dispatcher {
     store.dispatch(spesaSliceActions.inserimentoSpesa({
       nuovaSpesa: nuovaSpesa 
     }))
+  }
+  aggiornaUsciteSpese(usciteSpese) {
+    store.dispatch(spesaSliceActions.aggiornaUsciteSpese({
+      usciteSpese: usciteSpese
+    }));
   }
 };
 

@@ -6,13 +6,13 @@ export class SpesaSQL {
   `;
 
   SQL_SELEZIONE_USCITE_SPESE = `
-    -- Creazione di una tabella temporanea con tutti i mesi degli ultimi 5 anni 
+    -- Creazione di una tabella temporanea con tutti i mesi degli ultimi 5 anni  
     WITH RECURSIVE DateRange AS ( 
-      SELECT DATE_FORMAT(CURDATE() - INTERVAL 4 YEAR, '%Y-01-01') AS giorno 
+      SELECT DATE_FORMAT(CONCAT(?, '-01-01'), '%Y-%m-%d') AS giorno 
       UNION ALL 
       SELECT DATE_ADD(giorno, INTERVAL 1 MONTH) 
       FROM DateRange 
-      WHERE giorno < CURDATE() - INTERVAL 1 MONTH 
+      WHERE giorno < LAST_DAY(DATE_FORMAT(CONCAT(?, '-12-01'), '%Y-%m-%d')) 
     ) 
     SELECT 
       YEAR(DateRange.giorno) AS Anno, 
@@ -139,7 +139,10 @@ export class SpesaSQL {
   }
 
   params_selezione_uscite_spese(params) {
-    return [];
+    return [
+      (params.primo_anno) ? params.primo_anno : 0, 
+      (params.ultimo_anno) ? params.ultimo_anno : 9999,
+    ];
   }
 
   params_modifica_spesa(params) {
