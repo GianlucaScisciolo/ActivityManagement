@@ -4,6 +4,11 @@ export class ServizioSQL {
     VALUES (?, ?, ?); 
   `;
 
+  SQL_INSERIMENTO_ENTRATE_SERVIZIO = `
+    INSER INTO entrate_servizio (servizio, prezzo, anno) 
+    VALUE (?, ?, ?); 
+  `;
+
   SQL_SELEZIONE_TUTTI_I_SERVIZI = `
     SELECT 
       id, 

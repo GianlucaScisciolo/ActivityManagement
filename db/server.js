@@ -7,6 +7,7 @@ import { LavoroSQL } from './LavoroSQL.js';
 import { ServizioSQL } from './ServizioSQL.js'
 import { SpesaSQL } from './SpesaSQL.js';
 import { AutenticazioneSQL } from './AutenticazioneSQL.js';
+import { CollegamentoSQL } from './CollegamentoSQL.js';
 
 const app = express();
 
@@ -155,8 +156,11 @@ app.post("/INSERISCI_ITEM", async(req, res) => {
   const lavoroSQL = new LavoroSQL();
   const servizioSQL = new ServizioSQL();
   const spesaSQL = new SpesaSQL();
+  const collegamentoSQL = new CollegamentoSQL();
   let sql = "";
   let params = [];
+  let sql_inserimento_collegamento = "";
+  let params_inserimento_collegamento = [];
   switch(req.body.tipo_item) {
     case "cliente":
       sql = clienteSQL.SQL_INSERIMENTO_CLIENTE;
@@ -180,11 +184,30 @@ app.post("/INSERISCI_ITEM", async(req, res) => {
   }
 
   try {
+    await beginTransaction();
     const result = await executeQuery(sql, params);
     const insertedId = result.insertId; // ottengo l'id inserito
-    return res.status(200).json({ id: insertedId });
+    const collegamenti = [];
+    if(req.body.tipo_item === "lavoro") {
+      for(let servizio of req.body.servizi) {
+        if(servizio.quantita > 0) {
+          let params_collegamento = {
+            id_lavoro: insertedId, 
+            id_servizio: servizio.id, 
+            quantita: servizio.quantita
+          }
+          sql_inserimento_collegamento = collegamentoSQL.SQL_INSERIMENTO_COLLEGAMENTO;
+          params_inserimento_collegamento = collegamentoSQL.params_inserimento_collegamento(params_collegamento);
+          await executeQuery(sql_inserimento_collegamento, params_inserimento_collegamento);
+          collegamenti.push(params_collegamento);
+        }
+      }
+    }  
+    await commitTransaction();
+    return res.status(200).json({ id: insertedId, collegamenti: collegamenti });
   } 
   catch (err) {
+    await rollbackTransaction();
     if (err.code === 'ER_DUP_ENTRY') {
       return res.status(400).json();
     }
@@ -197,6 +220,8 @@ app.post("/VISUALIZZA_ITEMS", async(req, res) => {
   const lavoroSQL = new LavoroSQL();
   const servizioSQL = new ServizioSQL();
   const spesaSQL = new SpesaSQL();
+  const collegamentoSQL = new CollegamentoSQL();
+  
   let sql = "";
   let params = [];
   switch(req.body.tipo_item) {
@@ -221,34 +246,26 @@ app.post("/VISUALIZZA_ITEMS", async(req, res) => {
   }
 
   try {
+    await beginTransaction();
+
     const result = await executeQuery(sql, params);
-    
     if(req.body.tipo_item === "lavoro") {
       const servizi = await executeQuery(servizioSQL.SQL_SELEZIONE_TUTTI_I_SERVIZI, servizioSQL.params_selezione_tutti_i_servizi());
       for(let i = 0; i < result.length; i++) {
-        let serviziLavoro = result[i]["descrizione"].substring(0, result[i]["descrizione"].length - 2).split(",");
-        for(let i = 0; i < serviziLavoro.length; i++) {
-          serviziLavoro[i] = scomponiStringa(serviziLavoro[i]);
+        let params = {
+          id_lavoro: result[i].id
         }
-        for(let servizio of servizi) {
-          let isPresent = false;
-          for(let servizioLavoro of serviziLavoro) {
-            if(optionStr(servizio) === optionStr(servizioLavoro)) {
-              isPresent = true;
-              break;
-            }
-          }
-          if(isPresent === false) {
-            serviziLavoro.push(servizio);
-          }
-        }
-        result[i]["servizi"] = serviziLavoro;
-        result[i]["servizi_attuale"] = serviziLavoro;
+        result[i]["collegamenti"] = await executeQuery(collegamentoSQL.SQL_SELEZIONE_COLLEGAMENTI_LAVORO, collegamentoSQL.params_selezione_collegamenti_lavoro(params))
+        result[i]["collegamenti_attuale"] = result[i]["collegamenti"];
+        result[i]["servizi"] = servizi;
       }
     }
+    
+    await commitTransaction();
     return res.status(200).json({ items: result });
   } 
   catch (err) {
+    await rollbackTransaction();
     return res.status(500).json();
   }
 });
@@ -392,6 +409,7 @@ app.post("/MODIFICA_ITEM", async(req, res) => {
   const lavoroSQL = new LavoroSQL();
   const servizioSQL = new ServizioSQL();
   const spesaSQL = new SpesaSQL();
+  const collegamentoSQL = new CollegamentoSQL();
   let sql = "";
   let params = [];
   switch(req.body.tipo_item) {
@@ -400,8 +418,8 @@ app.post("/MODIFICA_ITEM", async(req, res) => {
       params = clienteSQL.params_modifica_cliente(req.body.item);
       break;
     case "servizio":
-      sql = servizioSQL.SQL_MODIFICA_SERVIZIO;
-      params = servizioSQL.params_modifica_servizio(req.body.item);
+      sql = servizioSQL.SQL_INSERIMENTO_SERVIZIO;
+      params = servizioSQL.params_inserimento_servizio(req.body.item);
       break;
     case "lavoro":
       console.log(req.body);
@@ -417,18 +435,31 @@ app.post("/MODIFICA_ITEM", async(req, res) => {
   }
 
   try {
+    await beginTransaction();
+    if(req.body.tipo_item === "lavoro") {
+      let params = {
+        id_lavoro: req.body.item.id
+      };
+      await executeQuery(collegamentoSQL.SQL_ELIMINAZIONE_COLLEGAMENTI_LAVORO, collegamentoSQL.params_eliminazione_collegamenti_lavoro(params));
+      for(let collegamento of req.body.item.collegamenti) {
+        if(collegamento.quantita > 0) {
+          await executeQuery(collegamentoSQL.SQL_INSERIMENTO_COLLEGAMENTO, collegamentoSQL.params_inserimento_collegamento(collegamento));        
+        }
+      }
+    }
+
     await executeQuery(sql, params);
+
+    await commitTransaction();
     return res.status(200).json();
   } 
   catch (err) {
+    await rollbackTransaction();
     if (err.code === 'ER_DUP_ENTRY') {
-      return res.status(400).json();
+      return (req.body.tipo_item === "servizio") ? res.status(200).json() : res.status(400).json();
     }
     return res.status(500).json();
   }
-
-  // await beginTransaction();
-  // await commitTransaction();
 });
 
 

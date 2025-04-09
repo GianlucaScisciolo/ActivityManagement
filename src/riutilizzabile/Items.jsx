@@ -23,43 +23,70 @@ const optionStr = (servizio) => {
   return `${servizio.nome} - ${servizio.prezzo} €`;
 };
 
-const aggiornaServizio = (item, lavoroActions, serviziLavoro, index, nuovoValore, setServiziLavoro) => {
-  const nuoviServizi = [...serviziLavoro]; // Copia array
-  nuoviServizi[index] = { ...nuoviServizi[index], quantita: parseInt(nuovoValore, 10) }; // Aggiorna la quantità
-  if(item.tipo_selezione === 1) {
-    let isModificabile = true;
-    for(let nuovoServizio of nuoviServizi) {
-      if(nuovoServizio.quantita < 0) {
-        isModificabile = false;
-        break;
+const getTotale = (collegamenti, servizi) => {
+  let totale = 0;
+  for(let collegamento of collegamenti) {
+    for(let servizio of servizi) {
+      if(collegamento.id_servizio === servizio.id) {
+        totale += servizio.prezzo * collegamento.quantita;
       }
     }
-    if(isModificabile === true) {
-      lavoroActions.aggiornaLavoro(item.id, "servizi", nuoviServizi);
-      lavoroActions.aggiornaLavoro(item.id, "totale", getTotale(nuoviServizi));
-    }
-  }
-};
-
-const getTotale = (serviziLavoro) => {
-  let totale = 0;
-  for (let servizio of serviziLavoro) {
-    totale += servizio.prezzo * servizio.quantita;
   }
   return totale;
 }
 
-const OptionsServizi = ({ item, lavoroActions, serviziLavoro, sottoStringa, setServiziLavoro }) => {
+const getQuantita = (servizio, item) => {
+  for(let collegamento of item["collegamenti"]) {
+    if(servizio.id === collegamento.id_servizio) {
+      return collegamento.quantita;
+    }
+  }
+  return 0;
+}
+
+const aggiornaCollegamento = (servizi, item, lavoroActions, index, nuovoValore, setServiziLavoro) => {
+  if(item.tipo_selezione === 1) {
+    let isAggiornato = false;
+    if(nuovoValore >= 0) {
+      let nuoviCollegamenti = [];
+      for(let collegamento of item["collegamenti"]) {
+        if(collegamento["id_servizio"] === servizi[index]["id"]) {
+          nuoviCollegamenti.push({
+            id_servizio: collegamento["id_servizio"], 
+            id_lavoro: collegamento["id_lavoro"], 
+            quantita: nuovoValore
+          });
+          isAggiornato = true;
+        }
+        else {
+          nuoviCollegamenti.push(collegamento);
+        }
+      }
+      if(isAggiornato === false) {
+        nuoviCollegamenti.push({
+          id_servizio: servizi[index]["id"], 
+          id_lavoro: nuoviCollegamenti[0]["id_lavoro"], 
+          quantita: nuovoValore
+        })
+      }
+      lavoroActions.aggiornaLavoro(item.id, "collegamenti", nuoviCollegamenti);
+      lavoroActions.aggiornaLavoro(item.id, "totale", getTotale(nuoviCollegamenti, servizi));
+    }
+  }
+};
+
+const OptionsServizi = ({ servizi, item, lavoroActions, sottoStringa, setServiziLavoro }) => {
   return (
     <>
-      {serviziLavoro.length > 0 && (
+      {servizi && servizi.length > 0 && (
         <div>
           Seleziona almeno 1 servizio:<br />
-          {serviziLavoro
+          {servizi
             .filter((servizio) =>
               optionStr(servizio).toLowerCase().includes(sottoStringa.toLowerCase())
             )
             .map((servizio, index) => (
+              
               <Row key={index} style={{ padding: "10px" }}>
                 <Col>
                   <label htmlFor={`servizio_${index}`}>{optionStr(servizio)}</label>
@@ -68,10 +95,10 @@ const OptionsServizi = ({ item, lavoroActions, serviziLavoro, sottoStringa, setS
                   <input
                     style={{ width: "90px", padding: "5px 10px" }}
                     type="number"
-                    value={servizio.quantita}
+                    value={getQuantita(servizio, item)}
                     placeholder={`quantita_servizio_${index}`}
                     onChange={(e) =>
-                      aggiornaServizio(item, lavoroActions, serviziLavoro, index, e.target.value, setServiziLavoro)
+                      aggiornaCollegamento(servizi, item, lavoroActions, index, e.target.value, setServiziLavoro)
                     }
                   />
                 </Col>
@@ -79,8 +106,8 @@ const OptionsServizi = ({ item, lavoroActions, serviziLavoro, sottoStringa, setS
             ))}
         </div>
       )}
-      {serviziLavoro && (
-        <div>Totale: {parseFloat(getTotale(serviziLavoro)).toFixed(2)} €</div>
+      {item["collegamenti"] && servizi && (
+        <div>Totale: {parseFloat(getTotale(item["collegamenti"], servizi)).toFixed(2)} €</div> 
       )}
     </>
   );
@@ -90,135 +117,12 @@ export const Items = ({ tipoItem, items, setItems, selectOperation, emptyIsConsi
   const stileState = useSelector((state) => state.stileSliceReducer.value);
   const ItemEsistenteTag = stileState.vistaItem === "card" ? CardItemEsistente : RowItemEsistente;
   
-  /*
   if (tipoItem === "lavoro") {
-    const [serviziLavoroState, setServiziLavoroState] = useState({});
-    
-    const handleServiziLavoroChange = (item, itemIndex, nuoviServizi, totale) => {
-      if(item.tipo_selezione === 1) {
-        let isModificabile = true;
-        for(let nuovoServizio of nuoviServizi) {
-          if(nuovoServizio.quantita < 0) {
-            isModificabile = false;
-            break;
-          }
-        }
-        if(isModificabile === true) {
-          setServiziLavoroState((prevState) => ({
-            ...prevState,
-            [itemIndex]: nuoviServizi,
-          }));
-          lavoroActions.aggiornaLavoro(item.id, "servizi", nuoviServizi);
-          lavoroActions.aggiornaLavoro(item.id, "totale", getTotale(nuoviServizi));
-        }
-      }
-    };
-
-    const calcolaServiziLavoro = (descrizione, servizi) => {
-      
-      let serviziLavoro = descrizione.substring(0, descrizione.length - 2).split(",");
-      serviziLavoro = serviziLavoro.map(scomponiStringa);
-
-      servizi.forEach((servizio) => {
-        if (!serviziLavoro.some((servizioLavoro) => optionStr(servizio) === optionStr(servizioLavoro))) {
-          serviziLavoro.push(servizio);
-        }
-      });
-
-      return serviziLavoro;
-    };
-
     const ItemElements = () => {
       return (
         <>
           {items.map((item, index) => {
-            const descrizione = item.descrizione;
             const sottoStringa = item.servizio || "";
-            const serviziLavoro = (tipoItem === "lavoro") ? serviziLavoroState[index] || calcolaServiziLavoro(descrizione, servizi) : null;
-            const totale = getTotale(serviziLavoro);
-            
-            return (
-              <ItemEsistenteTag
-                key={index}
-                item={item}
-                campi={campi((tipoItem === "lavoro") ? (
-                  <OptionsServizi
-                    serviziLavoro={serviziLavoro}
-                    sottoStringa={sottoStringa}
-                    setServiziLavoro={(nuoviServizi) =>
-                      handleServiziLavoroChange(item, index, nuoviServizi, totale)
-                    }
-                  />) : (null),
-                  item,
-                  null,
-                  null,
-                  null
-                )}
-                indici={indici}
-                selectOperation={selectOperation}
-                items={items}
-                setItems={setItems}
-                tipoItem={tipoItem}
-                handleBlurItem={handleBlurItem}
-              />
-            );
-          })}
-        </>
-      );
-    };
-
-    return (
-      <>
-        {tipoForm === "search" && items.length === 0 && (
-          <div className="contenitore-1">Nessun elemento trovato.</div>
-        )}
-        {items.length > 0 && (
-          <>
-            {stileState.vistaItem === "card" ? (
-              <div className="contenitore-3">
-                <ItemElements />
-              </div>
-            ) : (
-              <ItemElements />
-            )}
-          </>
-        )}
-      </>
-    );
-  }
-  */
-  
-  if (tipoItem === "lavoro") {
-    
-    // const handleServiziLavoroChange = (item, itemIndex, nuoviServizi, totale) => {
-    //   if(item.tipo_selezione === 1) {
-    //     let isModificabile = true;
-    //     for(let nuovoServizio of nuoviServizi) {
-    //       if(nuovoServizio.quantita < 0) {
-    //         isModificabile = false;
-    //         break;
-    //       }
-    //     }
-    //     if(isModificabile === true) {
-    //       setServiziLavoroState((prevState) => ({
-    //         ...prevState,
-    //         [itemIndex]: nuoviServizi,
-    //       }));
-    //       lavoroActions.aggiornaLavoro(item.id, "servizi", nuoviServizi);
-    //       lavoroActions.aggiornaLavoro(item.id, "totale", getTotale(nuoviServizi));
-    //     }
-    //   }
-    // };
-
-    const ItemElements = () => {
-      return (
-        <>
-          {items.map((item, index) => {
-            // const descrizione = item.descrizione;
-            const sottoStringa = item.servizio || "";
-            // const serviziLavoro = serviziLavoroState[index] || calcolaServiziLavoro(descrizione, servizi);
-            // const totale = getTotale(serviziLavoro);
-            // lavoroActions.aggiornaLavoro(item.id, "servizi", calcolaServiziLavoro(item["servizi"], servizi));
             
             return (
               <ItemEsistenteTag
@@ -226,9 +130,10 @@ export const Items = ({ tipoItem, items, setItems, selectOperation, emptyIsConsi
                 item={item}
                 campi={campi(
                   <OptionsServizi
+                    servizi={servizi}
                     item={item}
                     lavoroActions={lavoroActions}
-                    serviziLavoro={item["servizi"]}
+                    // serviziLavoro={servizi}
                     sottoStringa={sottoStringa}
                     setServiziLavoro={/*(nuoviServizi) =>
                       handleServiziLavoroChange(item, index, nuoviServizi, totale)

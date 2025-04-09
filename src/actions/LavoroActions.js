@@ -54,6 +54,8 @@ export class LavoroActions {
       if(response.status === 200) {
         const result = await response.json();
         nuovoLavoro.id = result.id;
+        nuovoLavoro["collegamenti"] = result.collegamenti;
+        nuovoLavoro["collegamenti_attuale"] = nuovoLavoro["collegamenti"];
         this.dispatcher.inserimentoLavoro(nuovoLavoro);
         alert("L\'inserimento del lavoro è andato a buon fine!!");
       }
@@ -183,7 +185,7 @@ export class LavoroActions {
     }
   }
 
-  async modificaLavori(e, lavoriSession, selectedIdsModifica, setSelectedIdsModifica) {
+  async modificaLavori(e, servizi, lavoriSession, selectedIdsModifica, setSelectedIdsModifica) {
     e.preventDefault();
 
     if (confirm("Sei sicuro di voler modificare i lavori?")) {
@@ -196,6 +198,7 @@ export class LavoroActions {
       for(let i = 0; i < lavoriDaModificare.length; i++) {
         const dati = {
           tipo_item: "lavoro", 
+          servizi: servizi, 
           item: lavoriDaModificare[i] 
         }
         const response = await fetch('/MODIFICA_ITEM', {

@@ -55,6 +55,7 @@ const lavoroSlice = createSlice ({
             state.value.lavori[i]["totale"] = state.value.lavori[i]["totale_attuale"]; 
             state.value.lavori[i]["note"] = state.value.lavori[i]["note_attuale"]; 
             state.value.lavori[i]["servizi"] = state.value.lavori[i]["servizi_attuale"];
+            state.value.lavori[i]["collegamenti"] = state.value.lavori[i]["collegamenti_attuale"];
             break;
           }
         }
@@ -69,6 +70,7 @@ const lavoroSlice = createSlice ({
             state.value.lavori[i]["totale_attuale"] = state.value.lavori[i]["totale"]; 
             state.value.lavori[i]["note_attuale"] = state.value.lavori[i]["note"]; 
             state.value.lavori[i]["servizi_attuale"] = state.value.lavori[i]["servizi"];
+            state.value.lavori[i]["collegamenti_attuale"] = state.value.lavori[i]["collegamenti"];
             break;
           }
         }

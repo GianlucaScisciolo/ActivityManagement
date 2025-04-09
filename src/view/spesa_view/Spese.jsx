@@ -72,7 +72,7 @@ const Spese = () => {
       for(let spesa of spesaState.spese) {
         totaleSpese += parseFloat(spesa.totale);
       }
-      return "Totale: " + totaleSpese + " €";
+      return "Totale: " + parseFloat(totaleSpese).toFixed(2) + " €";
     }
     else {
       return "";

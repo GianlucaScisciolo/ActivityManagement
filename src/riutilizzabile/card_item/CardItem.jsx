@@ -778,6 +778,101 @@ export function CardEntrateLavori({ entrateLavori }) {
   );
 }
 
+export function CardEntrateServizi({ entrateServizi }) {
+  return (
+    <Card
+      style={{
+        display: 'inline-block',  // Cambiato da 'auto' a 'inline-block'
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        borderRadius: '50px',
+        // padding: '10px',
+        paddingLeft: "50px", 
+        paddingRight: "50px",
+        paddingBottom: "50px",
+        overflowX: 'auto',
+      }}
+    >
+      <Card.Body>
+        <center>
+          <Card.Title style={{ color: '#FFFFFF' }}>Entrate servizi</Card.Title>
+        </center>
+      </Card.Body>
+      <center>
+        <Table
+          striped
+          bordered
+          hover
+          variant='dark'
+          style={{
+            borderRadius: '50px',
+            marginTop: '0',
+            marginBottom: '10px',
+            textAlign: 'center',
+          }}
+        >
+          <thead>
+            <tr>
+              <th colSpan={14}>ANNO = ????</th>
+            </tr>
+            <tr>
+              <th style={{color: "#FFFFFF"}}>SERVIZIO</th>
+              <th style={{color: "#FFFFFF"}}>GEN</th>
+              <th style={{color: "#FFFFFF"}}>FEB</th>
+              <th style={{color: "#FFFFFF"}}>MAR</th>
+              <th style={{color: "#FFFFFF"}}>APR</th>
+              <th style={{color: "#FFFFFF"}}>MAG</th>
+              <th style={{color: "#FFFFFF"}}>GIU</th>
+              <th style={{color: "#FFFFFF"}}>LUG</th>
+              <th style={{color: "#FFFFFF"}}>AGO</th>
+              <th style={{color: "#FFFFFF"}}>SET</th>
+              <th style={{color: "#FFFFFF"}}>OTT</th>
+              <th style={{color: "#FFFFFF"}}>NOV</th>
+              <th style={{color: "#FFFFFF"}}>DIC</th>
+              <th style={{color: "#FFFFFF"}}>TOT ENTRATE</th>
+            </tr>
+          </thead>
+          <tbody>
+            {/* {entrateServizi.map((lavoro, i) => (
+              (i > 1) && (
+                <tr key={i}>
+                  {Object.values(lavoro).map((value, j) => (
+                    <td 
+                      style={{
+                        color: getColor(value, j, "entrata"),
+                        fontWeight: (j === 0) ? "bold" : null,
+                      }} 
+                      key={j}
+                    >
+                      {(j > 0) ? parseFloat(value).toFixed(2) + " €" : value}
+                    </td>
+                  ))}
+                </tr>
+              )
+            ))} */}
+            <tr>Prova 1 !!!!</tr>
+          </tbody>
+          <tbody>
+            <tr>Prova 2 !!!!</tr>
+            {/* <tr>
+              {Object.values(entrateServizi[0]).map((value, j) => (
+                <td
+                  style={{
+                    color: getColor(value, j, "entrata"),
+                    fontWeight: (j === 0) ? "bold" : null,
+                  }}  
+                  key={j}
+                >
+                  {(j > 0) ? parseFloat(value).toFixed(2) + " €" : value}
+                </td>
+              ))}
+            </tr> */}
+          </tbody>
+        </Table>
+      </center>
+    </Card>
+  );
+}
+
 export function CardUsciteSpese({ usciteSpese }) {
   return (
     <Card

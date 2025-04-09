@@ -12,7 +12,7 @@ export class LavoroSQL {
   `;
 
   SQL_SELEZIONE_ENTRATE_LAVORI = ` 
-    -- Creazione di una tabella temporanea con tutti i mesi degli ultimi 5 anni 
+    -- Creazione di una tabella temporanea con tutti i mesi degli anni di interesse
     WITH RECURSIVE DateRange AS ( 
         SELECT DATE_FORMAT(CONCAT(?, '-01-01'), '%Y-%m-%d') AS giorno 
         UNION ALL 
@@ -136,6 +136,7 @@ export class LavoroSQL {
     let descrizione = "";
     for(let servizio of params["servizi"]) {
       descrizione += servizio.nome + " x " + servizio.quantita + " - " + (servizio.prezzo * servizio.quantita) + " €, "
+      console.log("<<"+servizio.id+">>");
     } 
    
     return [

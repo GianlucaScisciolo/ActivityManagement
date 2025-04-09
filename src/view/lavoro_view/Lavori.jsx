@@ -278,7 +278,7 @@ const Lavori = () => {
       for(let lavoro of lavoroState.lavori) {
         totaleLavori += parseFloat(lavoro.totale);
       }
-      return "Totale: " + totaleLavori + " €";
+      return "Totale: " + parseFloat(totaleLavori).toFixed(2) + " €";
     }
     else {
       return "";
@@ -320,7 +320,7 @@ const Lavori = () => {
             handleBlurItem: handleBlurItem, 
             handleInsert: (e) => lavoroActions.inserimentoLavoro(e, servizi, clienti, nuovoLavoro, setNuovoLavoro), //////////
             handleSearch: (e) => lavoroActions.ricercaLavori(e, datiRicerca), 
-            handleEdit: (e) => lavoroActions.modificaLavori(e, lavoroState, selectedIdsModifica, setSelectedIdsModifica), 
+            handleEdit: (e) => lavoroActions.modificaLavori(e, servizi, lavoroState, selectedIdsModifica, setSelectedIdsModifica), 
             handleDelete: (e) => lavoroActions.eliminaLavori(e, selectedIdsEliminazione, setSelectedIdsEliminazione, lavoroState), 
             handleSearchRangeFilePDF: (e) => lavoroActions.handleSearchLavoriRangeFile(e, "pdf", setTipoFile, datiRicerca, lavori, setLavori), 
             handleSearchRangeFileExcel: (e) => lavoroActions.handleSearchLavoriRangeFile(e, "excel", setTipoFile, datiRicerca, lavori, setLavori), 

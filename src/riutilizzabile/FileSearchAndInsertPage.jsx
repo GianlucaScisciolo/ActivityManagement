@@ -92,7 +92,6 @@ const FileSearchAndInsertPage = ({ componenti }) => {
               <center>
                 <CardInformazioni 
                   totaleItems={componenti.totaleItems}
-                  // totaleItems={"totale: 10.00 €"}
                 />
               </center>
 

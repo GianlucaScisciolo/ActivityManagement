@@ -10,7 +10,7 @@ import { LavoroActions } from "../../actions/LavoroActions";
 import { SpesaActions } from "../../actions/SpesaActions";
 import { SaloneActions } from '../../actions/SaloneActions';
 
-import { CardEntrateLavori, CardUsciteSpese, CardRicavi } from '../../riutilizzabile/card_item/CardItem';
+import { CardEntrateLavori, CardEntrateServizi, CardUsciteSpese, CardRicavi } from '../../riutilizzabile/card_item/CardItem';
 import { OperazioniForms } from '../forms/OperazioniForms';
 
 const Salone = () => {
@@ -56,11 +56,9 @@ const Salone = () => {
   return (
     <>
       <Header />
+      
       <div className="main-content" />
       
-      {/* {(initialPositions.length > 0) && (
-        <DragAndDrop initialPositions={initialPositions} />
-      )} */}
       <center>
         <Row>
           <Col>
@@ -108,7 +106,10 @@ const Salone = () => {
           {((entrateLavori.length > 0 && entrateLavori !== -1) && (usciteSpese.length > 0 && usciteSpese !== -1)) ? (
             <Col><CardRicavi entrateLavori={entrateLavori} usciteSpese={usciteSpese} /></Col>
           ) : (<Col></Col>)}
-          <Col></Col>
+          {/* {((entrateLavori.length > 0 && entrateLavori !== -1) && (usciteSpese.length > 0 && usciteSpese !== -1)) ? (
+            <Col><CardRicavi entrateLavori={entrateLavori} usciteSpese={usciteSpese} /></Col>
+          ) : (<Col></Col>)} */}
+          <Col><CardEntrateServizi entrateServizi={null} /></Col>
         </Row>
       </center>
 
