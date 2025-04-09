@@ -272,6 +272,7 @@ app.post("/VISUALIZZA_ITEMS", async(req, res) => {
 
 app.post("/VISUALIZZA_ENTRATE_ITEMS", async(req, res) => {
   const lavoroSQL = new LavoroSQL();
+  const servizioSQL = new ServizioSQL();
   let sql = "";
   let params = [];
   switch(req.body.tipo_item) {
@@ -279,7 +280,12 @@ app.post("/VISUALIZZA_ENTRATE_ITEMS", async(req, res) => {
       sql = lavoroSQL.SQL_SELEZIONE_ENTRATE_LAVORI;
       params = lavoroSQL.params_selezione_entrate_lavori(req.body);
       break;
+    case "servizio":
+      sql = servizioSQL.SQL_SELEZIONE_ENTRATE_SERVIZI;
+      params = servizioSQL.params_selezione_entrate_servizi(req.body);
+      break;
     default:
+      console.log("Tipo item non valido.");
       return res.status(500).json();
   }
 
@@ -290,6 +296,7 @@ app.post("/VISUALIZZA_ENTRATE_ITEMS", async(req, res) => {
     return res.status(200).json({ items: result });
   } 
   catch (err) {
+    console.log(err);
     return res.status(500).json();
   }
 });

@@ -778,7 +778,25 @@ export function CardEntrateLavori({ entrateLavori }) {
   );
 }
 
+const getTotaleEntrateAnno = (entrata) => {
+  return (
+      entrata.totale_gennaio   + entrata.totale_febbraio + entrata.totale_marzo    + entrata.totale_aprile 
+    + entrata.totale_maggio    + entrata.totale_giugno   + entrata.totale_luglio   + entrata.totale_agosto 
+    + entrata.totale_settembre + entrata.totale_ottobre  + entrata.totale_novembre + entrata.totale_dicembre
+  ); 
+}
+
+const getQuantitaEntrateAnno = (entrata) => {
+  return (
+      parseInt(entrata.quantita_gennaio) + parseInt(entrata.quantita_febbraio) + parseInt(entrata.quantita_marzo) 
+    + parseInt(entrata.quantita_aprile)  + parseInt(entrata.quantita_maggio)   + parseInt(entrata.quantita_giugno) 
+    + parseInt(entrata.quantita_luglio)  + parseInt(entrata.quantita_agosto)   + parseInt(entrata.quantita_settembre) 
+    + parseInt(entrata.quantita_ottobre)  + parseInt(entrata.quantita_novembre)   + parseInt(entrata.quantita_dicembre) 
+  ); 
+}
+
 export function CardEntrateServizi({ entrateServizi }) {
+  const [annoTmp, setAnnoTmp] = useState(0);
   return (
     <Card
       style={{
@@ -810,62 +828,77 @@ export function CardEntrateServizi({ entrateServizi }) {
             textAlign: 'center',
           }}
         >
-          <thead>
-            <tr>
-              <th colSpan={14}>ANNO = ????</th>
-            </tr>
-            <tr>
-              <th style={{color: "#FFFFFF"}}>SERVIZIO</th>
-              <th style={{color: "#FFFFFF"}}>GEN</th>
-              <th style={{color: "#FFFFFF"}}>FEB</th>
-              <th style={{color: "#FFFFFF"}}>MAR</th>
-              <th style={{color: "#FFFFFF"}}>APR</th>
-              <th style={{color: "#FFFFFF"}}>MAG</th>
-              <th style={{color: "#FFFFFF"}}>GIU</th>
-              <th style={{color: "#FFFFFF"}}>LUG</th>
-              <th style={{color: "#FFFFFF"}}>AGO</th>
-              <th style={{color: "#FFFFFF"}}>SET</th>
-              <th style={{color: "#FFFFFF"}}>OTT</th>
-              <th style={{color: "#FFFFFF"}}>NOV</th>
-              <th style={{color: "#FFFFFF"}}>DIC</th>
-              <th style={{color: "#FFFFFF"}}>TOT ENTRATE</th>
-            </tr>
-          </thead>
+          <thead></thead>
           <tbody>
-            {/* {entrateServizi.map((lavoro, i) => (
-              (i > 1) && (
-                <tr key={i}>
-                  {Object.values(lavoro).map((value, j) => (
-                    <td 
-                      style={{
-                        color: getColor(value, j, "entrata"),
-                        fontWeight: (j === 0) ? "bold" : null,
-                      }} 
-                      key={j}
-                    >
-                      {(j > 0) ? parseFloat(value).toFixed(2) + " €" : value}
-                    </td>
-                  ))}
+            {entrateServizi.map((entrata, i) => (
+              <React.Fragment key={i}>
+                {(i === 0 || entrateServizi[i].anno !== entrateServizi[i-1].anno) && (
+                  <>
+                    <tr><th colSpan={14}>ANNO = {entrata.anno}</th></tr>
+                    <tr>
+                      <th style={{color: "#FFFFFF"}}>SERVIZIO</th>
+                      <th style={{color: "#FFFFFF"}}>GEN</th>
+                      <th style={{color: "#FFFFFF"}}>FEB</th>
+                      <th style={{color: "#FFFFFF"}}>MAR</th>
+                      <th style={{color: "#FFFFFF"}}>APR</th>
+                      <th style={{color: "#FFFFFF"}}>MAG</th>
+                      <th style={{color: "#FFFFFF"}}>GIU</th>
+                      <th style={{color: "#FFFFFF"}}>LUG</th>
+                      <th style={{color: "#FFFFFF"}}>AGO</th>
+                      <th style={{color: "#FFFFFF"}}>SET</th>
+                      <th style={{color: "#FFFFFF"}}>OTT</th>
+                      <th style={{color: "#FFFFFF"}}>NOV</th>
+                      <th style={{color: "#FFFFFF"}}>DIC</th>
+                      <th style={{color: "#FFFFFF"}}>TOT ENTRATE</th>
+                    </tr>
+                  </>
+                )}
+                <tr>                
+                  <td style={{ color: "#FFFFFF", fontWeight: "bold", }}>
+                    {entrata.nome_servizio}
+                  </td>
+                  <td style={{ color: getColor(entrata.totale_gennaio, 1, "entrata"), fontWeight: "bold", }}>
+                    x {entrata.quantita_gennaio} = {parseFloat(entrata.totale_gennaio).toFixed(2) + " €"}
+                  </td>
+                  <td style={{ color: getColor(entrata.totale_febbraio, 1, "entrata"), fontWeight: "bold", }}>
+                    x {entrata.quantita_febbraio} = {parseFloat(entrata.totale_febbraio).toFixed(2) + " €"}
+                  </td>
+                  <td style={{ color: getColor(entrata.totale_marzo, 1, "entrata"), fontWeight: "bold", }}>
+                    x {entrata.quantita_marzo} = {parseFloat(entrata.totale_marzo).toFixed(2) + " €"}
+                  </td>
+                  <td style={{ color: getColor(entrata.totale_aprile, 1, "entrata"), fontWeight: "bold", }}>
+                    x {entrata.quantita_aprile} = {parseFloat(entrata.totale_aprile).toFixed(2) + " €"}
+                  </td>
+                  <td style={{ color: getColor(entrata.totale_maggio, 1, "entrata"), fontWeight: "bold", }}>
+                    x {entrata.quantita_maggio} = {parseFloat(entrata.totale_maggio).toFixed(2) + " €"}
+                  </td>
+                  <td style={{ color: getColor(entrata.totale_giugno, 1, "entrata"), fontWeight: "bold", }}>
+                    x {entrata.quantita_giugno} = {parseFloat(entrata.totale_giugno).toFixed(2) + " €"}
+                  </td>
+                  <td style={{ color: getColor(entrata.totale_luglio, 1, "entrata"), fontWeight: "bold", }}>
+                    x {entrata.quantita_luglio} = {parseFloat(entrata.totale_luglio).toFixed(2) + " €"}
+                  </td>
+                  <td style={{ color: getColor(entrata.totale_agosto, 1, "entrata"), fontWeight: "bold", }}>
+                    x {entrata.quantita_agosto} = {parseFloat(entrata.totale_agosto).toFixed(2) + " €"}
+                  </td>
+                  <td style={{ color: getColor(entrata.totale_settembre, 1, "entrata"), fontWeight: "bold", }}>
+                    x {entrata.quantita_settembre} = {parseFloat(entrata.totale_settembre).toFixed(2) + " €"}
+                  </td>
+                  <td style={{ color: getColor(entrata.totale_ottobre, 1, "entrata"), fontWeight: "bold", }}>
+                    x {entrata.quantita_ottobre} = {parseFloat(entrata.totale_ottobre).toFixed(2) + " €"}
+                  </td>
+                  <td style={{ color: getColor(entrata.totale_novembre, 1, "entrata"), fontWeight: "bold", }}>
+                    x {entrata.quantita_novembre} = {parseFloat(entrata.totale_novembre).toFixed(2) + " €"}
+                  </td>
+                  <td style={{ color: getColor(entrata.totale_dicembre, 1, "entrata"), fontWeight: "bold", }}>
+                    x {entrata.quantita_dicembre} = {parseFloat(entrata.totale_dicembre).toFixed(2) + " €"}
+                  </td>
+                  <td style={{ color: getColor(getTotaleEntrateAnno(entrata), 1, "entrata"), fontWeight: "bold", }}>
+                    x {getQuantitaEntrateAnno(entrata)} = {parseFloat(getTotaleEntrateAnno(entrata)).toFixed(2) + " €"}
+                  </td>
                 </tr>
-              )
-            ))} */}
-            <tr>Prova 1 !!!!</tr>
-          </tbody>
-          <tbody>
-            <tr>Prova 2 !!!!</tr>
-            {/* <tr>
-              {Object.values(entrateServizi[0]).map((value, j) => (
-                <td
-                  style={{
-                    color: getColor(value, j, "entrata"),
-                    fontWeight: (j === 0) ? "bold" : null,
-                  }}  
-                  key={j}
-                >
-                  {(j > 0) ? parseFloat(value).toFixed(2) + " €" : value}
-                </td>
-              ))}
-            </tr> */}
+              </React.Fragment>
+            ))}
           </tbody>
         </Table>
       </center>

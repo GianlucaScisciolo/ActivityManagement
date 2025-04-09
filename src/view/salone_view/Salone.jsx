@@ -9,6 +9,7 @@ import DragAndDrop from "../components/DragAndDrop";
 import { LavoroActions } from "../../actions/LavoroActions";
 import { SpesaActions } from "../../actions/SpesaActions";
 import { SaloneActions } from '../../actions/SaloneActions';
+import { ServizioActions } from "../../actions/ServizioActions";
 
 import { CardEntrateLavori, CardEntrateServizi, CardUsciteSpese, CardRicavi } from '../../riutilizzabile/card_item/CardItem';
 import { OperazioniForms } from '../forms/OperazioniForms';
@@ -17,8 +18,10 @@ const Salone = () => {
   const lavoroActions = new LavoroActions();
   const spesaActions = new SpesaActions();
   const saloneActions = new SaloneActions();
+  const servizioActions = new ServizioActions();
   const [entrateLavori, setEntrateLavori] = useState(-1);
   const [usciteSpese, setUsciteSpese] = useState(-1);
+  const [entrateServizi, setEntrateServizi] = useState(-1);
   const [aggiornamento, setAggiornamento] = useState(0);
   const [initialPositions, setInitialPositions] = useState([]);
   const operazioniForms = new OperazioniForms();
@@ -39,19 +42,24 @@ const Salone = () => {
   }, [aggiornamento2]);
 
   useEffect(() => {
-    if(entrateLavori.length > 0)
+    if(entrateLavori.length > 0) {
       spesaActions.handleSearchUsciteSpese(setUsciteSpese, datiRicerca);
+      servizioActions.handleSearchEntrateServizi(setEntrateServizi, datiRicerca);
+      // console.log(entrateServizi); 
+    }
   }, [entrateLavori]);
 
-  useEffect(() => {
-    if(entrateLavori.length > 0 && usciteSpese.length > 0) {
-      setInitialPositions([
-        { id: '1', tipo: "CardEntrateLavori", entrateLavori: entrateLavori, x: 100, y: 100 }, 
-        { id: '2', tipo: "CardUsciteSpese", usciteSpese: usciteSpese, x: 2000, y: 100 }, 
-        { id: '3', tipo: "CardRicavi", entrateLavori: entrateLavori, usciteSpese: usciteSpese, x: 100, y: 1000 }
-      ]);
-    }
-  }, [usciteSpese]);
+  // useEffect(() => {
+  //   if(entrateLavori.length > 0 && usciteSpese.length > 0) {
+  //     // setInitialPositions([
+  //     //   { id: '1', tipo: "CardEntrateLavori", entrateLavori: entrateLavori, x: 100, y: 100 }, 
+  //     //   { id: '2', tipo: "CardUsciteSpese", usciteSpese: usciteSpese, x: 2000, y: 100 }, 
+  //     //   { id: '3', tipo: "CardRicavi", entrateLavori: entrateLavori, usciteSpese: usciteSpese, x: 100, y: 1000 }
+  //     // ]);
+  //     // servizioActions.handleSearchEntrateServizi(setEntrateServizi, datiRicerca);
+  //     // console.log(entrateServizi); 
+  //   }
+  // }, [usciteSpese]);
 
   return (
     <>
@@ -106,10 +114,9 @@ const Salone = () => {
           {((entrateLavori.length > 0 && entrateLavori !== -1) && (usciteSpese.length > 0 && usciteSpese !== -1)) ? (
             <Col><CardRicavi entrateLavori={entrateLavori} usciteSpese={usciteSpese} /></Col>
           ) : (<Col></Col>)}
-          {/* {((entrateLavori.length > 0 && entrateLavori !== -1) && (usciteSpese.length > 0 && usciteSpese !== -1)) ? (
-            <Col><CardRicavi entrateLavori={entrateLavori} usciteSpese={usciteSpese} /></Col>
-          ) : (<Col></Col>)} */}
-          <Col><CardEntrateServizi entrateServizi={null} /></Col>
+          {(entrateServizi.length > 0 && entrateServizi !== -1) ? (
+            <Col><Col><CardEntrateServizi entrateServizi={entrateServizi} /></Col></Col>
+          ) : (<Col></Col>)}
         </Row>
       </center>
 

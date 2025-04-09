@@ -199,6 +199,30 @@ export class ServizioActions {
       alert("Eliminazione annullata.");
     }
   }
+
+  async handleSearchEntrateServizi(setEntrateServizi, datiRicerca) {
+    const dati = {
+      tipo_item: "servizio", 
+      primo_anno: datiRicerca.primo_anno, 
+      ultimo_anno: datiRicerca.ultimo_anno
+    };
+    
+    const response = await fetch('/VISUALIZZA_ENTRATE_ITEMS', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(dati), 
+    });
+    
+    if(response.status === 200) {
+      const result = await response.json();
+      setEntrateServizi(result.items);
+    }
+    else {
+      alert("Errore durante la ricerca delle entrate dei servizi, riprova più tardi.");
+    }
+  };
 }
 
 
