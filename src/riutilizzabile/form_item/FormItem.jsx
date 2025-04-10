@@ -201,6 +201,18 @@ export function OperazioniCercaItems({ setIsVisible, arrowUp, setArrowUp, handle
   );
 };
 
+export function OperazioniRicercaEntrateUscite({ eseguiRicerca }) {
+  return (
+    <StyledListGroupItem style={{ border: "5px solid #000000", backgroundColor: "#000000", paddingTop: "3%" }}>
+      <StyledSearchNotSelected 
+        className="ricercaEntrateUsciteButton" 
+        size={grandezzaIcona} 
+        onClick={eseguiRicerca} 
+      />
+    </StyledListGroupItem>
+  );
+};
+
 export function OperazioniLogin({eseguiLogin}) {
   return (
     <StyledListGroupItem style={{ border: "5px solid #000000", backgroundColor: "#000000", paddingTop: "3%", paddingBottom: "3%" }}>
@@ -614,7 +626,44 @@ export function FormFileItems({campi, indici, ottieniFileRangePDF, ottieniFileRa
   );
 }
 
-
+export function FormEntrateUscite({datiRicerca, setDatiRicerca, handleInputChange, eseguiRicerca}) {
+  let maxHeight = "2000px";
+  return (
+    <StyledForm>
+      <StyledHeader>Ricerca entrate e uscite</StyledHeader>
+      <SlideContainer style={{maxHeight: `${maxHeight}`}}>
+        <StyledLabel htmlFor="primo_anno">Primo anno</StyledLabel>
+        <StyledInputModifica
+          rows={1}
+          name="primo_anno"
+          id="primo_anno"
+          type="number"
+          step={1}
+          value={datiRicerca.primo_anno}
+          placeholder="Primo anno"
+          onChange={(e) => handleInputChange(e, setDatiRicerca)}
+        />
+        <StyledLabel htmlFor="ultimo_anno">Ultimo anno</StyledLabel>
+        <StyledSelectModifica 
+          name="ultimo_anno" 
+          id="ultimo_anno"
+          value={datiRicerca.ultimo_anno}
+          onChange={(e) => handleInputChange(e, setDatiRicerca)}
+        >
+          <option value={parseInt(datiRicerca.primo_anno)+1}>{parseInt(datiRicerca.primo_anno)+1}</option>
+          <option value={parseInt(datiRicerca.primo_anno)+2}>{parseInt(datiRicerca.primo_anno)+2}</option>
+          <option value={parseInt(datiRicerca.primo_anno)+3}>{parseInt(datiRicerca.primo_anno)+3}</option>
+          <option value={parseInt(datiRicerca.primo_anno)+4}>{parseInt(datiRicerca.primo_anno)+4}</option>
+          <option value={parseInt(datiRicerca.primo_anno)+5}>{parseInt(datiRicerca.primo_anno)+5}</option>
+        </StyledSelectModifica>
+        <br /> <br />
+      </SlideContainer>
+      <OperazioniRicercaEntrateUscite 
+        eseguiRicerca={(e) => eseguiRicerca(e)}  
+      />
+    </StyledForm>
+  )
+}
 
 
 

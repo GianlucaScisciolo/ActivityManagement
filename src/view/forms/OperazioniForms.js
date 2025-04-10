@@ -6,7 +6,17 @@ export class OperazioniForms {
   
     let modificabile = true;
     if([
-      "primo_anno", "ultimo_anno" 
+      "primo_anno" 
+    ].includes(id)) {
+      setItem(prevState => ({
+        ...prevState, 
+        primo_anno: value, 
+        ultimo_anno: parseInt(value) + 1
+      }));
+      modificabile = false;
+    }
+    else if([
+      "ultimo_anno" 
     ].includes(id)) {
       modificabile = true;
     }

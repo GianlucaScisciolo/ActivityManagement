@@ -123,6 +123,7 @@ export class ServizioActions {
         });
         if(response.status === 200) {           
           esitoModifica += "Servizio numero " + (i+1) + ": modifica avvenuta con successo.\n";
+          // this.dispatcher.inserimentoServizio(serviziDaModificare[i]); /////////////////////////////////
           idServiziModificati.push(serviziDaModificare[i].id);
         }
         else if(response.status === 400) {
@@ -170,7 +171,7 @@ export class ServizioActions {
 
   async eliminaServizi(e, selectedIdsEliminazione, setSelectedIdsEliminazione, servizioState) {
     e.preventDefault();
-    if (confirm("Sei sicuro di voler eliminare i servizi?")) {
+    if (confirm("Sei sicuro di voler eliminare i servizi? Tutti i lavori presenti attualmente nel database verranno modificati eliminando i servizi che vogliamo eliminare.")) {
       const dati = {
         tipo_item: "servizio", 
         ids: selectedIdsEliminazione

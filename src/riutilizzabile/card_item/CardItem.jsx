@@ -28,6 +28,11 @@ function getColor(value, j, tipo){
   )
 }
 
+const handleRightClick = (e, placeholder) => {
+  e.preventDefault();
+  alert(placeholder);
+}
+
 function onChangeVisibilityPassword(e, type) {
   e.preventDefault();
   console.log(type);
@@ -120,6 +125,18 @@ export function OperazioniCercaItems({ setIsVisible, arrowUp, setArrowUp, handle
           onClick={() => nascondiForm(setIsVisible, setArrowUp)} 
         />
       )}
+    </StyledListGroupItem>
+  );
+};
+
+export function OperazioniRicercaEntrateUscite({ eseguiRicerca }) {
+  return (
+    <StyledListGroupItem style={{ border: "5px solid #000000", backgroundColor: "#000000", paddingTop: "3%" }}>
+      <StyledSearchNotSelected 
+        className="ricercaEntrateUsciteButton" 
+        size={grandezzaIcona} 
+        onClick={eseguiRicerca} 
+      />
     </StyledListGroupItem>
   );
 };
@@ -577,11 +594,6 @@ export function CardProfilo({campi, indici, eseguiModificaProfilo}) {
       setConfermaNuovaPasswordType(confermaNuovaPasswordType === 'text' ? 'password' : 'text');
     } 
   };
-
-  const handleRightClick = (e, placeholder) => {
-    e.preventDefault();
-    alert(placeholder);
-  }
 
   return (
     <center>
@@ -1122,6 +1134,43 @@ export function CardInformazioni({ totaleItems }) {
   );
 }
 
+export function CardEntrateUscite({datiRicerca, setDatiRicerca, handleInputChange, eseguiRicerca}) {
+  let maxHeight = "2000px";
+  return (
+    <StyledCard>
+      <StyledCardHeader>Ricerca entrate e uscite</StyledCardHeader>
+      <SlideContainer style={{maxHeight: `${maxHeight}`}}>
+        <StyledInputModifica
+          rows={1}
+          name="primo_anno"
+          id="primo_anno"
+          type="number"
+          step={1}
+          value={datiRicerca.primo_anno}
+          placeholder="Primo anno"
+          onChange={(e) => handleInputChange(e, setDatiRicerca)}
+          onContextMenu={(e) => handleRightClick(e, "Primo anno")}
+        />
+        <StyledSelectModifica 
+          name="ultimo_anno" 
+          id="ultimo_anno"
+          value={datiRicerca.ultimo_anno}
+          onChange={(e) => handleInputChange(e, setDatiRicerca)}
+          onContextMenu={(e) => handleRightClick(e, "Ultimo anno")}
+        >
+          <option value={parseInt(datiRicerca.primo_anno)+1}>{parseInt(datiRicerca.primo_anno)+1}</option>
+          <option value={parseInt(datiRicerca.primo_anno)+2}>{parseInt(datiRicerca.primo_anno)+2}</option>
+          <option value={parseInt(datiRicerca.primo_anno)+3}>{parseInt(datiRicerca.primo_anno)+3}</option>
+          <option value={parseInt(datiRicerca.primo_anno)+4}>{parseInt(datiRicerca.primo_anno)+4}</option>
+          <option value={parseInt(datiRicerca.primo_anno)+5}>{parseInt(datiRicerca.primo_anno)+5}</option>
+        </StyledSelectModifica>
+      </SlideContainer>
+      <OperazioniRicercaEntrateUscite 
+        eseguiRicerca={(e) => eseguiRicerca(e)}  
+      />
+    </StyledCard>
+  )
+}
 
 
 

@@ -1,5 +1,6 @@
 // React e Redux
 import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import Row from 'react-bootstrap/esm/Row';
 import Col from 'react-bootstrap/esm/Col';
 // View
@@ -11,10 +12,13 @@ import { SpesaActions } from "../../actions/SpesaActions";
 import { SaloneActions } from '../../actions/SaloneActions';
 import { ServizioActions } from "../../actions/ServizioActions";
 
-import { CardEntrateLavori, CardEntrateServizi, CardUsciteSpese, CardRicavi } from '../../riutilizzabile/card_item/CardItem';
+import { CardEntrateLavori, CardEntrateServizi, CardUsciteSpese, CardRicavi, CardEntrateUscite } from '../../riutilizzabile/card_item/CardItem';
 import { OperazioniForms } from '../forms/OperazioniForms';
+import { FormEntrateUscite } from '../../riutilizzabile/form_item/FormItem';
+import { RowEntrateUscite } from "../../riutilizzabile/row_item/RowItem";
 
 const Salone = () => {
+  const stileState = useSelector((state) => state.stileSliceReducer.value);
   const lavoroActions = new LavoroActions();
   const spesaActions = new SpesaActions();
   const saloneActions = new SaloneActions();
@@ -28,78 +32,71 @@ const Salone = () => {
   const [aggiornamento2, setAggiornamento2] = useState(false);
 
   const [datiRicerca, setDatiRicerca] = useState({
-    primo_anno: 2021, 
-    ultimo_anno: 2025
-  })
+    primo_anno: (new Date()).getFullYear() - 5, 
+    ultimo_anno: (new Date()).getFullYear()
+  });
 
   const eseguiRicerca = (e) => {
     e.preventDefault();
-    setAggiornamento2(!aggiornamento2);
-  }
-  
-  useEffect(() => {
+    // setAggiornamento2(!aggiornamento2);
+    setEntrateLavori([]);
+    setEntrateServizi([]);
+    setUsciteSpese([]);
     lavoroActions.handleSearchEntrateLavori(setEntrateLavori, datiRicerca);
-  }, [aggiornamento2]);
+  };
+  
+  // useEffect(() => {
+  //   setEntrateLavori([]);
+  //   setEntrateServizi([]);
+  //   setUsciteSpese([]);
+  //   lavoroActions.handleSearchEntrateLavori(setEntrateLavori, datiRicerca);
+  // }, [aggiornamento2]);
 
   useEffect(() => {
     if(entrateLavori.length > 0) {
       spesaActions.handleSearchUsciteSpese(setUsciteSpese, datiRicerca);
-      servizioActions.handleSearchEntrateServizi(setEntrateServizi, datiRicerca);
-      // console.log(entrateServizi); 
+      servizioActions.handleSearchEntrateServizi(setEntrateServizi, datiRicerca); 
     }
   }, [entrateLavori]);
-
-  // useEffect(() => {
-  //   if(entrateLavori.length > 0 && usciteSpese.length > 0) {
-  //     // setInitialPositions([
-  //     //   { id: '1', tipo: "CardEntrateLavori", entrateLavori: entrateLavori, x: 100, y: 100 }, 
-  //     //   { id: '2', tipo: "CardUsciteSpese", usciteSpese: usciteSpese, x: 2000, y: 100 }, 
-  //     //   { id: '3', tipo: "CardRicavi", entrateLavori: entrateLavori, usciteSpese: usciteSpese, x: 100, y: 1000 }
-  //     // ]);
-  //     // servizioActions.handleSearchEntrateServizi(setEntrateServizi, datiRicerca);
-  //     // console.log(entrateServizi); 
-  //   }
-  // }, [usciteSpese]);
 
   return (
     <>
       <Header />
       
       <div className="main-content" />
+      <button>{datiRicerca.primo_anno}</button>
+      <button>{datiRicerca.ultimo_anno}</button>
+      {(stileState.vistaForm === "form") && (
+        <FormEntrateUscite 
+          datiRicerca={datiRicerca}
+          setDatiRicerca={setDatiRicerca}
+          handleInputChange={operazioniForms.handleInputChange}
+          eseguiRicerca={eseguiRicerca}
+        />
+      )}
+      {(stileState.vistaForm === "card") && (
+        <center>
+          <CardEntrateUscite 
+            datiRicerca={datiRicerca}
+            setDatiRicerca={setDatiRicerca}
+            handleInputChange={operazioniForms.handleInputChange}
+            eseguiRicerca={eseguiRicerca}
+          />
+        </center>
+      )}
+      {(stileState.vistaForm === "row") && (
+        <center>
+          <RowEntrateUscite 
+            datiRicerca={datiRicerca}
+            setDatiRicerca={setDatiRicerca}
+            handleInputChange={operazioniForms.handleInputChange}
+            eseguiRicerca={eseguiRicerca}
+          />
+        </center>
+      )}
       
-      <center>
-        <Row>
-          <Col>
-            <input 
-              // style={{backgroundColor:"transparent", border: "0px solid transparent", color:"#FFFFFF", textAlign:"center"}} 
-              name="primo_anno"
-              type='number' 
-              value={datiRicerca.primo_anno}
-              placeholder="Primo anno" 
-              id="primo_anno"
-              onChange={(e) => operazioniForms.handleInputChange(e, setDatiRicerca)}
-            /> 
-          </Col>
-          <Col>
-            <input 
-              // style={{backgroundColor:"transparent", border: "0px solid transparent", color:"#FFFFFF", textAlign:"center"}} 
-              name="ultimo_anno"
-              type='number' 
-              value={datiRicerca.ultimo_anno}
-              placeholder="Ultimo anno"
-              id="ultimo_anno"
-              onChange={(e) => operazioniForms.handleInputChange(e, setDatiRicerca)}
-            />
-          </Col>
-          <Col> 
-            <button 
-              // style={{backgroundColor:"transparent", border: "0px solid transparent", color:"#FFFFFF", textAlign:"center"}}
-              onClick={(e) => eseguiRicerca(e)}
-            >Ricerca</button>
-          </Col>
-        </Row> 
-      </center>
       <br /> <br /> <br /> <br />
+      
       <center>
         <Row>
           {(entrateLavori.length > 0 && entrateLavori !== -1) ? (
@@ -111,11 +108,11 @@ const Salone = () => {
         </Row>
         <br /> <br /> <br /> <br />
         <Row>
-          {((entrateLavori.length > 0 && entrateLavori !== -1) && (usciteSpese.length > 0 && usciteSpese !== -1)) ? (
-            <Col><CardRicavi entrateLavori={entrateLavori} usciteSpese={usciteSpese} /></Col>
-          ) : (<Col></Col>)}
           {(entrateServizi.length > 0 && entrateServizi !== -1) ? (
             <Col><Col><CardEntrateServizi entrateServizi={entrateServizi} /></Col></Col>
+          ) : (<Col></Col>)}
+          {((entrateLavori.length > 0 && entrateLavori !== -1) && (usciteSpese.length > 0 && usciteSpese !== -1)) ? (
+            <Col><CardRicavi entrateLavori={entrateLavori} usciteSpese={usciteSpese} /></Col>
           ) : (<Col></Col>)}
         </Row>
       </center>

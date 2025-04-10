@@ -19,6 +19,11 @@ import {
   StyledEuroNotSelected 
 } from "./StyledRowItem";
 
+const handleRightClick = (e, placeholder) => {
+  e.preventDefault();
+  alert(placeholder);
+}
+
 export function getSelectTag(tipoSelezione) {
   return (tipoSelezione !== 1 && tipoSelezione !== 2) ? StyledSelectBlock : (
     (tipoSelezione === 1) ? StyledSelectModifica : StyledSelectElimina
@@ -125,6 +130,20 @@ export function OperazioniCercaItems({ visibilita, setVisibilita, arrowUp, setAr
             onClick={() => mostraForm(visibilita, setVisibilita, setArrowUp)} 
           />
         )}
+      </div>
+    </StyledColOperazioni>
+  );
+};
+
+export function OperazioniRicercaEntrateUscite({ eseguiRicerca }) {
+  return (
+    <StyledColOperazioni>
+      <div style={{width: "100%"}}>
+        <StyledSearchNotSelected 
+          className="ricercaEntrateUsciteButton" 
+          size={grandezzaIcona} 
+          onClick={eseguiRicerca} 
+        />
       </div>
     </StyledColOperazioni>
   );
@@ -330,7 +349,7 @@ export function RowRicercaItems({campi, indici, handleSearch}) {
 }
 
 export function RowItemEsistente({ item, campi, indici, selectOperation, tipoItem, handleBlurItem }) {
-  const NomeTagHeader = getTextAreaTag(campi.tipoSelezione, false);
+  const NomeTagHeader = getInputTag(campi.tipoSelezione, false);
   const [localValues, setLocalValues] = useState(() =>
     indici.reduce((acc, i) => ({ ...acc, [i]: campi.value[i] }), {})
   ); // Gestione dello stato locale
@@ -596,11 +615,6 @@ export function RowProfilo({campi, indici, eseguiModificaProfilo}) {
     } 
   };
 
-  const handleRightClick = (e, placeholder) => {
-    e.preventDefault();
-    alert(placeholder);
-  }
-
   return (
     <StyledRow>
       <OperazioniModificaProfilo eseguiModificaProfilo={eseguiModificaProfilo} />
@@ -659,6 +673,60 @@ export function RowProfilo({campi, indici, eseguiModificaProfilo}) {
         );
       })}
     </StyledRow>
+  );
+}
+
+export function RowEntrateUscite({datiRicerca, setDatiRicerca, handleInputChange, eseguiRicerca}) {
+  let maxHeight = "2000px";
+  return (
+    <StyledRow>
+      <OperazioniRicercaEntrateUscite eseguiRicerca={(e) => eseguiRicerca(e)} />
+      <StyledCol>
+        <div style={{width: "100%"}}>
+          <StyledRow>
+            <StyledInputBlock
+              rows={1}
+              name="header"
+              value="Ricerca entrate e uscite"
+              placeholder="Ricerca entrate e uscite"
+              readOnly
+            />
+          </StyledRow>
+        </div>
+      </StyledCol>
+      <StyledCol>
+        <div style={{width: "100%"}}>
+          <StyledInputModifica
+            rows={1}
+            name="primo_anno"
+            id="primo_anno"
+            type="number"
+            step={1}
+            value={datiRicerca.primo_anno}
+            placeholder="Primo anno"
+            onChange={(e) => handleInputChange(e, setDatiRicerca)}
+            onContextMenu={(e) => handleRightClick(e, "Primo anno")}
+          />
+        </div>
+      </StyledCol>
+      <StyledCol>
+        <div style={{width: "100%"}}>
+          <StyledSelectModifica 
+            name="ultimo_anno" 
+            id="ultimo_anno"
+            onContextMenu={(e) => handleRightClick(e, "Ultimo anno")}
+            value={datiRicerca.ultimo_anno}
+            onChange={(e) => handleInputChange(e, setDatiRicerca)}
+          >
+            <option value={parseInt(datiRicerca.primo_anno)+1}>{parseInt(datiRicerca.primo_anno)+1}</option>
+            <option value={parseInt(datiRicerca.primo_anno)+2}>{parseInt(datiRicerca.primo_anno)+2}</option>
+            <option value={parseInt(datiRicerca.primo_anno)+3}>{parseInt(datiRicerca.primo_anno)+3}</option>
+            <option value={parseInt(datiRicerca.primo_anno)+4}>{parseInt(datiRicerca.primo_anno)+4}</option>
+            <option value={parseInt(datiRicerca.primo_anno)+5}>{parseInt(datiRicerca.primo_anno)+5}</option>
+          </StyledSelectModifica>
+        </div>
+      </StyledCol>
+    </StyledRow> 
   );
 }
 
