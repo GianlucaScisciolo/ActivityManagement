@@ -1,77 +1,72 @@
 // React e Redux
 // import jsPDF from 'jspdf';
 // import autoTable from 'jspdf-autotable';
+import { PDFDocument, StandardFonts } from 'pdf-lib';
 import ExcelJS from 'exceljs';
 import { saveAs } from 'file-saver';
 // Utils
 import { formatoDate } from './Tempo';
 
-export const generaFileLavoriPDF = (lavori) => {
-  // const doc = new jsPDF();
+export const generaFileLavoriPDF = async (lavori) => {
+  const pdfDoc = await PDFDocument.create();
+  const page = pdfDoc.addPage([600, 800]);
+  const timesRomanFont = await pdfDoc.embedFont(StandardFonts.TimesRoman);
 
-  // // Aggiungo il titolo
-  // doc.setFontSize(18);
-  // doc.text('Lavori', 14, 22);
-  // doc.setFontSize(11);
-  // doc.setTextColor(100);
+  let y = 750;
+  page.drawText('Lavori', { x: 50, y, size: 18, font: timesRomanFont });
+  y -= 30;
 
-  // // Aggiungo la tabella dei lavori
-  // if (lavori.length > 0) {
-  //   const lavoriColumns = ["Cliente", "Giorno", "Descrizione", "Totale", "Note"];
-  //   const lavoriRows = lavori.map(lavoro => [
-  //     lavoro.cliente, 
-  //     lavoro.giorno, 
-  //     lavoro.descrizione.substring(0, lavoro.descrizione.length-2),
-  //     lavoro.totale + " €",
-  //     lavoro.note 
-  //   ]);
-  //   autoTable(doc, {
-  //     head: [lavoriColumns],
-  //     body: lavoriRows,
-  //     startY: 26,
-  //   });
-  // } 
-  // else {
-  //   doc.text('Nessun lavoro trovato.', 14, 30);
-  // }
+  if (lavori.length > 0) {
+    lavori.forEach((lavoro) => {
+      const text = `${lavoro.cliente} | ${lavoro.giorno} | ${lavoro.descrizione} | ${lavoro.totale} € | ${lavoro.note}`;
+      page.drawText(text, { x: 50, y, size: 12, font: timesRomanFont });
+      y -= 20;
+    });
+  } else {
+    page.drawText('Nessun lavoro trovato.', { x: 50, y, size: 12, font: timesRomanFont });
+  }
 
-  // // Salvo il PDF
-  // doc.save('lavori.pdf');
-  return null;
+  const pdfBytes = await pdfDoc.save();
+  
+  // Creiamo un blob e forziamo il download
+  const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = 'lavori.pdf';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
 };
 
-export const generaFileSpesePDF = (spese) => {
-  // const doc = new jsPDF();
+export const generaFileSpesePDF = async (spese) => {
+  const pdfDoc = await PDFDocument.create();
+  const page = pdfDoc.addPage([600, 800]);
+  const timesRomanFont = await pdfDoc.embedFont(StandardFonts.TimesRoman);
 
-  // // Aggiungo il titolo
-  // doc.setFontSize(18);
-  // doc.text('Spese', 14, 22);
-  // doc.setFontSize(11);
-  // doc.setTextColor(100);
+  let y = 750;
+  page.drawText('Spese', { x: 50, y, size: 18, font: timesRomanFont });
+  y -= 30;
 
-  // // Aggiungo la tabella delle spese
-  // if (spese.length > 0) {
-  //   const speseColumns = ["Nome", "Giorno", "Descrizione", "Totale", "Note"];
-  //   const speseRows = spese.map(spesa => [
-  //     spesa.nome, 
-  //     formatoDate(spesa.giorno, "GG-MM-AAAA"), 
-  //     spesa.descrizione, 
-  //     spesa.totale + " €", 
-  //     spesa.note 
-  //   ]);
-  //   autoTable(doc, {
-  //     head: [speseColumns],
-  //     body: speseRows, 
-  //     startY: 26, 
-  //   });
-  // } 
-  // else {
-  //   doc.text('Nessuna spesa trovata.', 14, 30);
-  // }
-
-  // // Salvo il PDF
-  // doc.save('spese.pdf');
-  return null;
+  if (spese.length > 0) {
+    spese.forEach((spesa) => {
+      const text = `${spesa.nome} | ${spesa.giorno} | ${spesa.descrizione} | ${spesa.totale} € | ${spesa.note}`;
+      page.drawText(text, { x: 50, y, size: 12, font: timesRomanFont });
+      y -= 20;
+    });
+  } else {
+    page.drawText('Nessuna spesa trovata.', { x: 50, y, size: 12, font: timesRomanFont });
+  }
+  
+  const pdfBytes = await pdfDoc.save();
+  
+  // Creiamo un blob e forziamo il download
+  const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = 'spese.pdf';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
 };
 
 export const generaFileLavoriExcel = async (lavori) => {
