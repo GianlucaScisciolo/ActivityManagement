@@ -103,7 +103,7 @@ export class OperazioniForms {
     }
   };
 
-  handleInputClick = (e) => {
+  handleInputClick = (e, setItem) => {
     if([
       "nuovo_giorno_lavoro", "ricerca_primo_giorno_lavoro", "ricerca_ultimo_giorno_lavoro", 
       "file_primo_giorno_lavoro", "file_ultimo_giorno_lavoro", 
@@ -112,9 +112,18 @@ export class OperazioniForms {
     ].includes(e.target.id)) {
       e.target.type = "date";
     }
+    if([
+      "ricerca_prezzo_min_servizio", "ricerca_prezzo_max_servizio", "nuovo_prezzo_servizio", 
+      "ricerca_totale_min_spesa", "ricerca_totale_max_spesa", "nuovo_totale_spesa"
+    ].includes(e.target.id)) {
+      setItem(prevState => ({
+        ...prevState, 
+        [e.target.name]: e.target.value.substr(0, e.target.value.length - 2)
+      }));
+    }
   }
 
-  handleInputBlur = (e) => {
+  handleInputBlur = (e, setItem) => {
     if([
       "nuovo_giorno_lavoro", "ricerca_primo_giorno_lavoro", "ricerca_ultimo_giorno_lavoro", 
       "file_primo_giorno_lavoro", "file_ultimo_giorno_lavoro", 
@@ -122,6 +131,14 @@ export class OperazioniForms {
       "file_primo_giorno_spesa", "file_ultimo_giorno_spesa" 
     ].includes(e.target.id)) {
       e.target.type = (!e.target.value) ? "text" : "date";
+    }
+    if([
+      "ricerca_prezzo_min_servizio", "ricerca_prezzo_max_servizio", "nuovo_prezzo_servizio", 
+      "ricerca_totale_min_spesa", "ricerca_totale_max_spesa", "nuovo_totale_spesa"].includes(e.target.id)) {
+      setItem(prevState => ({
+        ...prevState, 
+        [e.target.name]: e.target.value + " €"
+      }));
     }
   }
 }

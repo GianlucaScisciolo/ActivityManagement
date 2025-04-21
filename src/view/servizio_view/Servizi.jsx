@@ -27,7 +27,7 @@ const Servizi = () => {
     tipo_item: "servizio", 
     tipo_selezione: 0,
     nome: "",
-    prezzo: "0.50",
+    prezzo: "",
     note: "", 
     errore_nome: "", 
     errore_prezzo: "", 
@@ -81,11 +81,21 @@ const Servizi = () => {
             handleBlurItem: handleBlurItem, 
             handleInsert: (e) => servizioActions.inserisciServizio(e, nuovoServizio, setNuovoServizio), 
             handleSearch: (e) => servizioActions.ricercaServizi(e, datiRicerca), 
-            handleEdit: (e) => servizioActions.modificaServizi(e, servizioState, selectedIdsModifica, setSelectedIdsModifica), 
+            handleEdit:   (e) => servizioActions.modificaServizi(e, servizioState, selectedIdsModifica, setSelectedIdsModifica), 
             handleDelete: (e) => servizioActions.eliminaServizi(e, selectedIdsEliminazione, setSelectedIdsEliminazione, servizioState), 
             // Campi
-            campiNuovoItem: servizioForms.getCampiNuovoServizio(nuovoServizio, (e) => operazioniForms.handleInputChange(e, setNuovoServizio), null, null), 
-            campiRicercaItems: servizioForms.getCampiRicercaServizi(datiRicerca, (e) => operazioniForms.handleInputChange(e, setDatiRicerca), null, null),
+            campiNuovoItem: servizioForms.getCampiNuovoServizio(
+              nuovoServizio, 
+              (e) => operazioniForms.handleInputChange(e, setNuovoServizio), 
+              (e) => operazioniForms.handleInputClick(e, setNuovoServizio), 
+              (e) => operazioniForms.handleInputBlur(e, setNuovoServizio)
+            ), 
+            campiRicercaItems: servizioForms.getCampiRicercaServizi(
+              datiRicerca, 
+              (e) => operazioniForms.handleInputChange(e, setDatiRicerca), 
+              (e) => operazioniForms.handleInputClick(e, setDatiRicerca), 
+              (e) => operazioniForms.handleInputBlur(e, setDatiRicerca)
+            ),
             campiItemEsistente: servizioForms.getCampiServizioEsistente, 
             // Indici
             indiciNuovoItem: servizioForms.INDICI_NUOVO_SERVIZIO, 

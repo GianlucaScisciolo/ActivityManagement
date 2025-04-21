@@ -31,7 +31,7 @@ const Spese = () => {
     nome: "",
     giorno: "",
     descrizione: "",
-    totale: 0,
+    totale: "",
     note: "", 
     errore_nome: "",
     errore_giorno: "",
@@ -106,7 +106,7 @@ const Spese = () => {
             handleBlurItem: handleBlurItem, 
             handleInsert: (e) => spesaActions.inserimentoSpesa(e, nuovaSpesa, setNuovaSpesa), 
             handleSearch: (e) => spesaActions.ricercaSpese(e, datiRicerca), 
-            handleEdit: (e) => spesaActions.modificaSpese(e, spesaState, selectedIdsModifica, setSelectedIdsModifica),  
+            handleEdit:   (e) => spesaActions.modificaSpese(e, spesaState, selectedIdsModifica, setSelectedIdsModifica),  
             handleDelete: (e) => spesaActions.eliminaSpese(e, selectedIdsEliminazione, setSelectedIdsEliminazione, spesaState), 
             handleSearchRangeFilePDF: (e) => spesaActions.handleSearchSpeseRangeFile(e, "pdf", setTipoFile, datiRicerca, spese, setSpese),
             handleSearchRangeFileExcel: (e) => spesaActions.handleSearchSpeseRangeFile(e, "excel", setTipoFile, datiRicerca, spese, setSpese),
@@ -115,14 +115,14 @@ const Spese = () => {
             campiNuovoItem: spesaForms.getCampiNuovaSpesa(
               nuovaSpesa, 
               (e) => operazioniForms.handleInputChange(e, setNuovaSpesa), 
-              (e) => operazioniForms.handleInputClick(e), 
-              (e) => operazioniForms.handleInputBlur(e) 
+              (e) => operazioniForms.handleInputClick(e, setNuovaSpesa), 
+              (e) => operazioniForms.handleInputBlur(e, setNuovaSpesa) 
             ), 
             campiRicercaItems: spesaForms.getCampiRicercaSpese(
               datiRicerca, 
               (e) => operazioniForms.handleInputChange(e, setDatiRicerca), 
-              (e) => operazioniForms.handleInputClick(e), 
-              (e) => operazioniForms.handleInputBlur(e) 
+              (e) => operazioniForms.handleInputClick(e, setDatiRicerca), 
+              (e) => operazioniForms.handleInputBlur(e, setDatiRicerca) 
             ),
             campiItemEsistente: spesaForms.getCampiSpesaEsistente, 
             campiFile: spesaForms.getCampiFile(

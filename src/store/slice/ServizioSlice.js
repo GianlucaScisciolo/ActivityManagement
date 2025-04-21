@@ -39,6 +39,7 @@ const servizioSlice = createSlice ({
             state.value.servizi[i]["nome"] = state.value.servizi[i]["nome_attuale"];
             state.value.servizi[i]["prezzo"] = state.value.servizi[i]["prezzo_attuale"]; 
             state.value.servizi[i]["note"] = state.value.servizi[i]["note_attuale"]; 
+            state.value.servizi[i]["in_uso"] = state.value.servizi[i]["in_uso_attuale"]; 
             break;
           }
         }
@@ -51,6 +52,7 @@ const servizioSlice = createSlice ({
             state.value.servizi[i]["nome_attuale"] = state.value.servizi[i]["nome"];
             state.value.servizi[i]["prezzo_attuale"] = state.value.servizi[i]["prezzo"]; 
             state.value.servizi[i]["note_attuale"] = state.value.servizi[i]["note"]; 
+            state.value.servizi[i]["in_uso_attuale"] = state.value.servizi[i]["in_uso"];
             break;
           }
         }

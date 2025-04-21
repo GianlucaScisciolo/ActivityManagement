@@ -80,30 +80,31 @@ const OptionsServizi = ({ servizi, item, lavoroActions, sottoStringa, setServizi
     <>
       {servizi && servizi.length > 0 && (
         <div>
-          Seleziona almeno 1 servizio:<br />
-          {servizi
-            .filter((servizio) =>
-              optionStr(servizio).toLowerCase().includes(sottoStringa.toLowerCase())
-            )
-            .map((servizio, index) => (
-              
-              <Row key={index} style={{ padding: "10px" }}>
-                <Col>
-                  <label htmlFor={`servizio_${index}`}>{optionStr(servizio)}</label>
-                </Col>
-                <Col>
-                  <input
-                    style={{ width: "90px", padding: "5px 10px" }}
-                    type="number"
-                    value={getQuantita(servizio, item)}
-                    placeholder={`quantita_servizio_${index}`}
-                    onChange={(e) =>
-                      aggiornaCollegamento(servizi, item, lavoroActions, index, e.target.value, setServiziLavoro)
-                    }
-                  />
-                </Col>
-              </Row>
-            ))}
+          {servizi.filter((servizio) => optionStr(servizio).toLowerCase().includes(sottoStringa.toLowerCase())).map((servizio, index) => {
+            const quantita = getQuantita(servizio, item);
+            if( (servizio.in_uso === 1) || (servizio.in_uso === 0 && quantita > 0) ) {
+              return (
+                <React.Fragment key={index}>
+                  <Row key={index} style={{ padding: "10px" }}>
+                    <Col>
+                      <label htmlFor={`servizio_${index}`}>{optionStr(servizio)}</label>
+                    </Col>
+                    <Col>
+                      <input
+                        style={{ width: "90px", padding: "5px 10px" }}
+                        type="number"
+                        value={quantita}
+                        placeholder={`quantita_servizio_${index}`}
+                        onChange={(e) =>
+                          aggiornaCollegamento(servizi, item, lavoroActions, index, e.target.value, setServiziLavoro)
+                        }
+                      />
+                    </Col>
+                  </Row>
+                </React.Fragment>
+              )
+            }
+          })}
         </div>
       )}
       {item["collegamenti"] && servizi && (

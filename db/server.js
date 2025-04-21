@@ -168,6 +168,7 @@ app.post("/INSERISCI_ITEM", async(req, res) => {
       break;
     case "servizio":
       sql = servizioSQL.SQL_INSERIMENTO_SERVIZIO;
+      req.body["prezzo"] = req.body.prezzo.substr(0, req.body.prezzo.length - 2);
       params = servizioSQL.params_inserimento_servizio(req.body);
       break;
     case "lavoro":
@@ -194,7 +195,8 @@ app.post("/INSERISCI_ITEM", async(req, res) => {
           let params_collegamento = {
             id_lavoro: insertedId, 
             id_servizio: servizio.id, 
-            quantita: servizio.quantita
+            quantita: servizio.quantita, 
+            prezzo: servizio.prezzo 
           }
           sql_inserimento_collegamento = collegamentoSQL.SQL_INSERIMENTO_COLLEGAMENTO;
           params_inserimento_collegamento = collegamentoSQL.params_inserimento_collegamento(params_collegamento);
@@ -207,6 +209,7 @@ app.post("/INSERISCI_ITEM", async(req, res) => {
     return res.status(200).json({ id: insertedId, collegamenti: collegamenti });
   } 
   catch (err) {
+    console.log(err);
     await rollbackTransaction();
     if (err.code === 'ER_DUP_ENTRY') {
       return res.status(400).json();
@@ -265,6 +268,7 @@ app.post("/VISUALIZZA_ITEMS", async(req, res) => {
     return res.status(200).json({ items: result });
   } 
   catch (err) {
+    console.log(err);
     await rollbackTransaction();
     return res.status(500).json();
   }
@@ -426,8 +430,15 @@ app.post("/MODIFICA_ITEM", async(req, res) => {
       params = clienteSQL.params_modifica_cliente(req.body.item);
       break;
     case "servizio":
-      sql = servizioSQL.SQL_INSERIMENTO_SERVIZIO;
-      params = servizioSQL.params_inserimento_servizio(req.body.item);
+      req.body.item["in_uso"] = (req.body.item.in_uso.toLowerCase() === "si");
+      if(req.body.item.prezzo_attuale === req.body.item.prezzo) {
+        sql = servizioSQL.SQL_MODIFICA_SERVIZIO;
+        params = servizioSQL.params_modifica_servizio(req.body.item);
+      }
+      else {
+        sql = servizioSQL.SQL_INSERIMENTO_SERVIZIO;
+        params = servizioSQL.params_inserimento_servizio(req.body.item);
+      }
       break;
     case "lavoro":
       console.log(req.body);
@@ -456,12 +467,25 @@ app.post("/MODIFICA_ITEM", async(req, res) => {
       }
     }
 
-    await executeQuery(sql, params);
-
-    await commitTransaction();
-    return res.status(200).json();
+    let insertedId = 0;
+    if(req.body.tipo_item === "servizio") {
+      const result = await executeQuery(sql, params);
+      insertedId = result.insertId; // ottengo l'id inserito
+      await commitTransaction();
+    }
+    else {
+      await executeQuery(sql, params);
+      await commitTransaction();
+    }
+    if(req.body.tipo_item === "servizio" && req.body.item.prezzo_attuale !== req.body.item.prezzo) {
+      return res.status(200).json({ id: insertedId });
+    }
+    else {
+      return res.status(200).json();
+    }
   } 
   catch (err) {
+    console.log(err);
     await rollbackTransaction();
     if (err.code === 'ER_DUP_ENTRY') {
       return (req.body.tipo_item === "servizio") ? res.status(200).json() : res.status(400).json();

@@ -227,10 +227,9 @@ export const controlloLavoro = (dati, settersErrori) => {
   // controllo sui servizi
   if(parseFloat(dati.totale) <= 0) {
     numErrori += 1; 
-    messaggioErrore = "Selezionare almeno un servizio.";
+    messaggioErrore = "Selezionare almeno un\'unita\' di un servizio.";
   }
   setErrore(settersErrori, "errore_servizi", messaggioErrore);
-  setErrore(settersErrori, "errore_totale", messaggioErrore);
 
   // controllo sul giorno
   messaggioErrore = "";

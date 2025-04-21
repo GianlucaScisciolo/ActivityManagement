@@ -6,7 +6,7 @@ import { controlloServizio } from "../../utils/Controlli";
 export class ServizioForms {
   INDICI_NUOVO_SERVIZIO = [0, 1, 2];
   INDICI_RICERCA_SERVIZI = [0, 1, 2, 3];
-  INDICI_SERVIZIO_ESISTENTE = [0, 1, 2];
+  INDICI_SERVIZIO_ESISTENTE = [0, 1, 2, 3];
 
   constructor() {
 
@@ -16,9 +16,9 @@ export class ServizioForms {
     return {
       header: "Nuovo servizio", 
       label: ["Nome*", "Prezzo*", "Note"],  
-      type: [null, "number", null], 
-      step: [null, "0.50", null], 
-      min: [null, "0.50", null], 
+      type: [null, "text", null], 
+      step: [null, null, null], 
+      min: [null, null, null], 
       name: ["nome", "prezzo", "note"], 
       id: ["nuovo_nome_servizio", "nuovo_prezzo_servizio", "nuove_note_servizio"], 
       value: [item.nome, item.prezzo, item.note], 
@@ -40,7 +40,12 @@ export class ServizioForms {
       min: [null, null, null, null], 
       name: ["nome", "prezzo_min", "prezzo_max", "note"], 
       id: ["ricerca_nome_servizio", "ricerca_prezzo_min_servizio", "ricerca_prezzo_max_servizio", "ricerca_note_servizio"], 
-      value: [item.nome, item.prezzo_min, item.prezzo_max, item.note], 
+      value: [
+        item.nome, 
+        item.prezzo_min,  
+        item.prezzo_max, 
+        item.note
+      ], 
       placeholder: ["Nome", "Prezzo minimo", "Prezzo massimo", "Note"], 
       onChange: handleOnChange, 
       onClick: handleOnClick, 
@@ -52,7 +57,8 @@ export class ServizioForms {
     const [errori, setErrori] = useState({
       errore_nome: "", 
       errore_prezzo: "", 
-      errore_note: "" 
+      errore_note: "", 
+      errore_in_uso: ""
     }); 
   
     useEffect(() => {
@@ -62,16 +68,16 @@ export class ServizioForms {
     return {
       header: "Servizio", 
       tipoSelezione: item.tipo_selezione,  
-      type: [null, "number", null], 
-      step: [null, "0.50", null], 
-      min: [null, "0.50", null], 
-      name: ["nome", "prezzo", "note"], 
-      id: ["nome_servizio", "prezzo_servizio", "note_servizio"], 
-      value: [item.nome, parseFloat(item.prezzo).toFixed(2), item.note], 
-      placeholder: ["Nome", "Prezzo", "Note"], 
-      errore: [errori.errore_nome, errori.errore_prezzo, errori.errore_note], 
-      valoreModificabile: [true, true, true], 
-      options: [null, null, null], 
+      type: [null, "text", null, "text"], 
+      step: [null, null, null, null], 
+      min: [null, null, null, null], 
+      name: ["nome", "prezzo", "note", "in_uso"], 
+      id: ["nome_servizio", "prezzo_servizio", "note_servizio", "in_uso_servizio"], 
+      value: [item.nome, parseFloat(item.prezzo).toFixed(2) + " €", item.note, item.in_uso], 
+      placeholder: ["Nome", "Prezzo", "Note", "In uso"], 
+      errore: [errori.errore_nome, errori.errore_prezzo, errori.errore_note, errori.errore_in_uso], 
+      valoreModificabile: [true, true, true, true], 
+      options: [null, null, null, null], 
       onChange: handleOnChange, 
       onClick: handleOnClick, 
       onBlur: handleOnBlur

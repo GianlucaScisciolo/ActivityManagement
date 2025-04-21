@@ -18,6 +18,8 @@ export class ServizioActions {
       nuovoServizio["nome_attuale"] = nuovoServizio["nome"];
       nuovoServizio["prezzo_attuale"] = nuovoServizio["prezzo"];
       nuovoServizio["note_attuale"] = nuovoServizio["note"];
+      nuovoServizio["in_uso"] = true;
+      nuovoServizio["in_uso_attuale"] = nuovoServizio["in_uso"];
       
       const response = await fetch('/INSERISCI_ITEM', {
         method: 'POST',
@@ -29,6 +31,8 @@ export class ServizioActions {
       if(response.status === 200) {
         const result = await response.json();
         nuovoServizio.id = result.id;
+        nuovoServizio["in_uso"] = "Si";
+        nuovoServizio["in_uso_attuale"] = "Si";
         this.dispatcher.inserimentoServizio(nuovoServizio);
         alert("L\'inserimento del servizio è andato a buon fine!!");
       }
@@ -123,7 +127,12 @@ export class ServizioActions {
         });
         if(response.status === 200) {           
           esitoModifica += "Servizio numero " + (i+1) + ": modifica avvenuta con successo.\n";
-          // this.dispatcher.inserimentoServizio(serviziDaModificare[i]); /////////////////////////////////
+          if(serviziDaModificare[i].prezzo !== serviziDaModificare[i].prezzo_attuale) {
+            const result = await response.json();
+            let nuovoServizio = { ...serviziDaModificare[i] };
+            nuovoServizio["id"] = result.id;
+            this.dispatcher.inserimentoServizio(nuovoServizio);
+          } // ----> NON MI CONVINCE !!!!
           idServiziModificati.push(serviziDaModificare[i].id);
         }
         else if(response.status === 400) {

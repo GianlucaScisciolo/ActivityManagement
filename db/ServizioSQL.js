@@ -1,7 +1,7 @@
 export class ServizioSQL {
   SQL_INSERIMENTO_SERVIZIO = ` 
-    INSERT INTO servizio (nome, prezzo, note) 
-    VALUES (?, ?, ?); 
+    INSERT INTO servizio (nome, prezzo, note, in_uso) 
+    VALUES (?, ?, ?, ?); 
   `;
 
   SQL_INSERIMENTO_ENTRATE_SERVIZIO = `
@@ -14,29 +14,15 @@ export class ServizioSQL {
       id, 
       nome, 
       prezzo, 
+      in_uso, 
       0 AS quantita 
     FROM 
       servizio; 
   `;
-
-  // SQL_SELEZIONE_ENTRATE_SERVIZI = ` 
-  //   SELECT 
-  //     YEAR(l.giorno) AS anno, 
-  //     s.nome AS nome_servizio, 
-  //     SUM(c.quantita) AS somma_quantita_servizio, 
-  //     SUM(c.quantita) * s.prezzo AS totale_servizio 
-  //   FROM lavoro AS l 
-  //   LEFT JOIN collegamento AS c ON l.id = c.id_lavoro 
-  //   LEFT JOIN servizio AS s ON c.id_servizio = s.id 
-  //   WHERE YEAR(l.giorno) BETWEEN ? AND ? 
-  //   GROUP BY anno, nome_servizio, s.prezzo 
-  //   ORDER BY anno ASC; 
-    
-  // `;
   
   SQL_SELEZIONE_ENTRATE_SERVIZI = `
     SELECT 
-      s.nome AS nome_servizio, 
+      CONCAT(s.nome, " x ", s.prezzo) AS servizio, 
       YEAR(l.giorno) AS anno, 
       SUM(CASE WHEN MONTH(l.giorno) = 1 THEN COALESCE(c.quantita, 0) ELSE 0 END) AS quantita_gennaio, 
       SUM(CASE WHEN MONTH(l.giorno) = 1 THEN COALESCE(c.quantita, 0) * s.prezzo ELSE 0 END) AS totale_gennaio, 
@@ -66,8 +52,8 @@ export class ServizioSQL {
     LEFT JOIN collegamento AS c ON l.id = c.id_lavoro 
     LEFT JOIN servizio AS s ON c.id_servizio = s.id 
     WHERE YEAR(l.giorno) BETWEEN ? AND ? 
-    GROUP BY anno, nome_servizio 
-    ORDER BY anno DESC, nome_servizio ASC; 
+    GROUP BY anno, s.id 
+    ORDER BY anno DESC, servizio ASC; 
   `;
 
 
@@ -93,7 +79,15 @@ export class ServizioSQL {
         prezzo, 
         prezzo AS prezzo_attuale, 
         note, 
-        note AS note_attuale,  
+        note AS note_attuale, 
+        CASE 
+          WHEN in_uso = 1 THEN "Si" 
+          ELSE "No" 
+        END AS in_uso, 
+        CASE 
+          WHEN in_uso = 1 THEN "Si" 
+          ELSE "No" 
+        END AS in_uso_attuale, 
         0 AS tipo_selezione 
       FROM 
         servizio 
@@ -118,10 +112,12 @@ export class ServizioSQL {
   }
   
   params_inserimento_servizio(params) {
+    console.log(params);
     return [
       `${params.nome}`, 
       `${params.prezzo}`, 
       `${params.note}`, 
+      params.in_uso 
     ];
   }
 

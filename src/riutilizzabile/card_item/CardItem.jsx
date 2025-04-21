@@ -228,31 +228,18 @@ export function CardNuovoItem({campi, indici, eseguiSalvataggio}) {
               <React.Fragment key={i}>
                 <StyledRow>
                   <NomeTag 
-                    style={(["prezzo", "totale"].includes(campi.name[i])) ? {maxWidth:"80%"} : null}
                     rows={1}
                     name={campi.name[i]}
                     id={campi.id[i]}
                     type={campi.type[i]}
                     step={campi.step[i]}
-                    value={campi.value[i]}
+                    value={(campi.value[i] !== " €") ? campi.value[i] : ""}
                     placeholder={campi.placeholder[i]}
                     onChange={campi.onChange}
                     onClick={campi.onClick}
                     onBlur={campi.onBlur}
                     onContextMenu={(e) => handleRightClick(e, campi.placeholder[i])}
                   />
-                  {(["prezzo", "totale"].includes(campi.name[i])) && (
-                    <StyledEuroNotSelected
-                      style={{
-                        // border: "5px solid #000000",
-                        maxWidth: "20%",
-                        marginLeft: "-6px", 
-                        marginTop: "13px"
-                      }} 
-                      size={grandezzaIcona} 
-                      onClick={null} 
-                    />
-                  )}
                   {campi.options[i]}
                 </StyledRow>
                 {(campi.errore[i] !== "") && (<StyledSpanErrore>{campi.errore[i]}</StyledSpanErrore>)}
@@ -293,30 +280,17 @@ export function CardRicercaItems({campi, indici, handleSearch}) {
               <React.Fragment key={i}>
                 <StyledRow>
                   <NomeTag 
-                    style={(["prezzo_min", "prezzo_max", "totale_min", "totale_max"].includes(campi.name[i])) ? {maxWidth:"80%"} : null}
                     rows={1}
                     name={campi.name[i]}
                     id={campi.id[i]}
                     type={campi.value[i]}
-                    value={campi.value[i]}
+                    value={(campi.value[i] !== " €") ? campi.value[i] : ""}
                     placeholder={campi.placeholder[i]}
                     onChange={campi.onChange}
                     onClick={campi.onClick}
                     onBlur={campi.onBlur}
                     onContextMenu={(e) => handleRightClick(e, campi.placeholder[i])}
                   />
-                  {(["prezzo_min", "prezzo_max", "totale_min", "totale_max"].includes(campi.name[i])) && (
-                    <StyledEuroNotSelected
-                      style={{
-                        // border: "5px solid #000000",
-                        maxWidth: "20%",
-                        marginLeft: "-6px", 
-                        marginTop: "13px"
-                      }} 
-                      size={grandezzaIcona} 
-                      onClick={null} 
-                    />
-                  )}
                 </StyledRow>
               </React.Fragment>
             );
@@ -376,7 +350,7 @@ export function CardItemEsistente({ item, campi, indici, selectOperation, tipoIt
       "prezzo_servizio", "totale_spesa" 
     ].includes(id)) {
       // console.log("|" + value + "|");
-      const isDecimal = !isNaN(value) && Number(value) === parseFloat(value);
+      const isDecimal = !isNaN(value.substr(0, value)) && Number(value) === parseFloat(value);
       if (!isDecimal || value < 0) {
         modificabile = false;
       }
@@ -412,6 +386,9 @@ export function CardItemEsistente({ item, campi, indici, selectOperation, tipoIt
     if(["giorno_spesa", "giorno_lavoro"].includes(e.target.id)) {
       e.target.type = "date";
     }
+    else if(["prezzo_servizio", "totale_spesa"].includes(e.target.id)) {
+      e.target.value = e.target.value.substr(0, e.target.value.length-2);
+    }
   }
 
   return (
@@ -429,7 +406,6 @@ export function CardItemEsistente({ item, campi, indici, selectOperation, tipoIt
                 <NomeTag
                   ref={(el) => (inputRefs.current[i] = el)} // Assegna il riferimento
                   rows={1}
-                  style={["prezzo", "totale"].includes(campi.name[i]) ? { maxWidth: "80%" } : null}
                   name={campi.name[i]}
                   id={campi.id[i]}
                   type={campi.type[i]}
@@ -442,12 +418,6 @@ export function CardItemEsistente({ item, campi, indici, selectOperation, tipoIt
                   readOnly={item.tipo_selezione !== 1}
                   onContextMenu={(e) => handleRightClick(e, campi.placeholder[i])}
                 />
-                {(["prezzo", "totale"].includes(campi.name[i])) && (
-                  <StyledEuroNotSelected
-                    style={{ maxWidth: "20%", marginLeft: "-6px", marginTop: "10px" }}
-                    size={grandezzaIcona}
-                  />
-                )}
                 {campi.options[i]}
               </StyledRow>
               {(campi.errore[i]) && (<StyledSpanErrore>{campi.errore[i]}</StyledSpanErrore>)}
@@ -867,7 +837,7 @@ export function CardEntrateServizi({ entrateServizi }) {
                 )}
                 <tr>                
                   <td style={{ color: "#FFFFFF", fontWeight: "bold", }}>
-                    {entrata.nome_servizio}
+                    {entrata.servizio}
                   </td>
                   <td style={{ color: getColor(entrata.totale_gennaio, 1, "entrata"), fontWeight: "bold", }}>
                     x {entrata.quantita_gennaio} = {parseFloat(entrata.totale_gennaio).toFixed(2) + " €"}
