@@ -6,6 +6,7 @@ import ExcelJS from 'exceljs';
 import { saveAs } from 'file-saver';
 // Utils
 import { formatoDate } from './Tempo';
+import { rgb } from 'pdf-lib';
 
 export const generaFileLavoriPDF = async (lavori) => {
   const pdfDoc = await PDFDocument.create();
@@ -13,22 +14,101 @@ export const generaFileLavoriPDF = async (lavori) => {
   const timesRomanFont = await pdfDoc.embedFont(StandardFonts.TimesRoman);
 
   let y = 750;
-  page.drawText('Lavori', { x: 50, y, size: 18, font: timesRomanFont });
-  y -= 30;
+  const startX = 50;
 
+  // Funzione per avvolgere il testo
+  const wrapText = (text, maxWidth) => {
+    const words = text.split(' ');
+    let lines = [];
+    let line = '';
+
+    words.forEach((word) => {
+      const potentialLine = line.length === 0 ? word : line + ' ' + word;
+      if (potentialLine.length <= maxWidth) {
+        line = potentialLine;
+      } else {
+        lines.push(line);
+        line = word;
+      }
+    });
+    if (line) {
+      lines.push(line);
+    }
+    return lines;
+  };
+
+  // Colore per intestazioni
+  const headerColor = rgb(0.8, 0.8, 1); // Celeste
+
+  // Disegna sfondo per intestazioni
+  page.drawRectangle({
+    x: startX,
+    y: y - 20,
+    width: 500,
+    height: 20,
+    color: headerColor,
+  });
+
+  // Intestazione della tabella
+  const headers = ['Cliente', 'Giorno', 'Descrizione', 'Totale (€)', 'Note'];
+  headers.forEach((header, index) => {
+    page.drawText(header, {
+      x: startX + index * 100,
+      y: y - 15,
+      size: 12,
+      font: timesRomanFont,
+      color: rgb(0, 0, 0), // Testo nero
+    });
+  });
+  y -= 40;
+
+  // Colori alternati per le righe
+  const rowColor1 = rgb(1, 1, 1); // Bianco
+  const rowColor2 = rgb(0.9, 0.9, 0.9); // Grigio chiaro
+
+  // Contenuto della tabella
   if (lavori.length > 0) {
-    lavori.forEach((lavoro) => {
-      const text = `${lavoro.cliente} | ${lavoro.giorno} | ${lavoro.descrizione} | ${lavoro.totale} € | ${lavoro.note}`;
-      page.drawText(text, { x: 50, y, size: 12, font: timesRomanFont });
-      y -= 20;
+    lavori.forEach((lavoro, rowIndex) => {
+      const rowColor = rowIndex % 2 === 0 ? rowColor1 : rowColor2;
+
+      // Disegna sfondo della riga
+      page.drawRectangle({
+        x: startX,
+        y: y - 20,
+        width: 500,
+        height: 20,
+        color: rowColor,
+      });
+
+      // Testo della riga con avvolgimento
+      const values = [
+        lavoro.cliente,
+        lavoro.giorno,
+        lavoro.descrizione,
+        lavoro.totale,
+        lavoro.note,
+      ];
+      values.forEach((value, index) => {
+        const lines = wrapText(String(value), 15); // Limite di caratteri per colonna
+        lines.forEach((line, lineIndex) => {
+          page.drawText(line, {
+            x: startX + index * 100,
+            y: y - 15 - (lineIndex * 12), // Spazio tra righe avvolte
+            size: 12,
+            font: timesRomanFont,
+            color: rgb(0, 0, 0), // Testo nero
+          });
+        });
+      });
+      y -= 20 + (wrapText(values.join(''), 15).length * 12); // Adatta altezza
     });
   } else {
-    page.drawText('Nessun lavoro trovato.', { x: 50, y, size: 12, font: timesRomanFont });
+    page.drawText('Nessun lavoro trovato.', { x: startX, y, size: 12, font: timesRomanFont });
   }
 
   const pdfBytes = await pdfDoc.save();
-  
-  // Creiamo un blob e forziamo il download
+
+  // Creazione del blob e download del file
   const blob = new Blob([pdfBytes], { type: 'application/pdf' });
   const link = document.createElement('a');
   link.href = URL.createObjectURL(blob);
@@ -44,22 +124,101 @@ export const generaFileSpesePDF = async (spese) => {
   const timesRomanFont = await pdfDoc.embedFont(StandardFonts.TimesRoman);
 
   let y = 750;
-  page.drawText('Spese', { x: 50, y, size: 18, font: timesRomanFont });
-  y -= 30;
+  const startX = 50;
 
+  // Funzione per avvolgere il testo
+  const wrapText = (text, maxWidth) => {
+    const words = text.split(' ');
+    let lines = [];
+    let line = '';
+
+    words.forEach((word) => {
+      const potentialLine = line.length === 0 ? word : line + ' ' + word;
+      if (potentialLine.length <= maxWidth) {
+        line = potentialLine;
+      } else {
+        lines.push(line);
+        line = word;
+      }
+    });
+    if (line) {
+      lines.push(line);
+    }
+    return lines;
+  };
+
+  // Colore per intestazioni
+  const headerColor = rgb(0.8, 0.8, 1); // Celeste
+
+  // Disegna sfondo per intestazioni
+  page.drawRectangle({
+    x: startX,
+    y: y - 20,
+    width: 500,
+    height: 20,
+    color: headerColor,
+  });
+
+  // Intestazione della tabella
+  const headers = ['Nome', 'Giorno', 'Descrizione', 'Totale (€)', 'Note'];
+  headers.forEach((header, index) => {
+    page.drawText(header, {
+      x: startX + index * 100,
+      y: y - 15,
+      size: 12,
+      font: timesRomanFont,
+      color: rgb(0, 0, 0), // Testo nero
+    });
+  });
+  y -= 40;
+
+  // Colori alternati per le righe
+  const rowColor1 = rgb(1, 1, 1); // Bianco
+  const rowColor2 = rgb(0.9, 0.9, 0.9); // Grigio chiaro
+
+  // Contenuto della tabella
   if (spese.length > 0) {
-    spese.forEach((spesa) => {
-      const text = `${spesa.nome} | ${spesa.giorno} | ${spesa.descrizione} | ${spesa.totale} € | ${spesa.note}`;
-      page.drawText(text, { x: 50, y, size: 12, font: timesRomanFont });
-      y -= 20;
+    spese.forEach((spesa, rowIndex) => {
+      const rowColor = rowIndex % 2 === 0 ? rowColor1 : rowColor2;
+
+      // Disegna sfondo della riga
+      page.drawRectangle({
+        x: startX,
+        y: y - 20,
+        width: 500,
+        height: 20,
+        color: rowColor,
+      });
+
+      // Testo della riga con avvolgimento
+      const values = [
+        spesa.nome,
+        spesa.giorno,
+        spesa.descrizione,
+        spesa.totale,
+        spesa.note,
+      ];
+      values.forEach((value, index) => {
+        const lines = wrapText(String(value), 15); // Limite di caratteri per colonna
+        lines.forEach((line, lineIndex) => {
+          page.drawText(line, {
+            x: startX + index * 100,
+            y: y - 15 - (lineIndex * 12), // Spazio tra righe avvolte
+            size: 12,
+            font: timesRomanFont,
+            color: rgb(0, 0, 0), // Testo nero
+          });
+        });
+      });
+      y -= 20 + (wrapText(values.join(''), 15).length * 12); // Adatta altezza
     });
   } else {
-    page.drawText('Nessuna spesa trovata.', { x: 50, y, size: 12, font: timesRomanFont });
+    page.drawText('Nessuna spesa trovata.', { x: startX, y, size: 12, font: timesRomanFont });
   }
-  
+
   const pdfBytes = await pdfDoc.save();
-  
-  // Creiamo un blob e forziamo il download
+
+  // Creazione del blob e download del file
   const blob = new Blob([pdfBytes], { type: 'application/pdf' });
   const link = document.createElement('a');
   link.href = URL.createObjectURL(blob);
@@ -68,6 +227,8 @@ export const generaFileSpesePDF = async (spese) => {
   link.click();
   document.body.removeChild(link);
 };
+
+
 
 export const generaFileLavoriExcel = async (lavori) => {
   const workbook = new ExcelJS.Workbook();

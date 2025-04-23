@@ -177,6 +177,7 @@ app.post("/INSERISCI_ITEM", async(req, res) => {
       break;
     case "spesa":
       sql = spesaSQL.SQL_INSERIMENTO_SPESA;
+      req.body["totale"] = req.body.totale.substr(0, req.body.totale.length - 2);
       params = spesaSQL.params_inserimento_spesa(req.body);
       break;
     default:
