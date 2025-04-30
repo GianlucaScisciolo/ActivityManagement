@@ -6,11 +6,13 @@ export class CollegamentoSQL {
 
   SQL_SELEZIONE_COLLEGAMENTI_LAVORO = `
     SELECT 
-      id_lavoro, 
-      id_servizio, 
-      quantita 
-    FROM 
-      collegamento 
+      c.id_lavoro AS id_lavoro, 
+      c.id_servizio AS id_servizio, 
+      c.quantita AS quantita, 
+      s.nome AS nome_servizio, 
+      s.prezzo AS prezzo_servizio 
+    FROM collegamento AS c 
+    LEFT JOIN servizio AS s ON c.id_servizio = s.id 
     WHERE 
       id_lavoro = ?; 
   `;

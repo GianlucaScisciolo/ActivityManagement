@@ -51,7 +51,6 @@ const lavoroSlice = createSlice ({
         for(let i = 0; i < state.value.lavori.length; i++) {
           if(state.value.lavori[i].id === action.payload.id_lavoro) {
             state.value.lavori[i]["giorno"] = state.value.lavori[i]["giorno_attuale"]; 
-            state.value.lavori[i]["descrizione"] = state.value.lavori[i]["descrizione_attuale"];
             state.value.lavori[i]["totale"] = state.value.lavori[i]["totale_attuale"]; 
             state.value.lavori[i]["note"] = state.value.lavori[i]["note_attuale"]; 
             state.value.lavori[i]["servizi"] = state.value.lavori[i]["servizi_attuale"];
@@ -66,7 +65,6 @@ const lavoroSlice = createSlice ({
         for(let i = 0; i < state.value.lavori.length; i++) {
           if(state.value.lavori[i].id === action.payload.id_lavoro) {
             state.value.lavori[i]["giorno_attuale"] = state.value.lavori[i]["giorno"]; 
-            state.value.lavori[i]["descrizione_attuale"] = state.value.lavori[i]["descrizione"];
             state.value.lavori[i]["totale_attuale"] = state.value.lavori[i]["totale"]; 
             state.value.lavori[i]["note_attuale"] = state.value.lavori[i]["note"]; 
             state.value.lavori[i]["servizi_attuale"] = state.value.lavori[i]["servizi"];

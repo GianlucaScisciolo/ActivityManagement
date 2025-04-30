@@ -54,12 +54,12 @@ export class ClienteForms {
       errore_email: "", 
       errore_note: ""
     });
-  
+
     useEffect(() => {
       controlloCliente(item, setErrori);
     }, [item]);
-  
-  
+
+
     return {
       header: "Cliente", 
       tipoSelezione: item.tipo_selezione,  

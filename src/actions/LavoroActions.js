@@ -13,12 +13,10 @@ export class LavoroActions {
   async inserimentoLavoro(e, servizi, clienti, nuovoLavoro, setNuovoLavoro) {
     e.preventDefault();
     if (confirm("Sei sicuro di voler salvare il lavoro?")) {
-      let descrizione = "";
       nuovoLavoro.totale = 0;
       for(let servizio of servizi) {
         if(servizio.quantita > 0) {
           nuovoLavoro.totale += servizio.prezzo * servizio.quantita
-          descrizione += (servizio.nome) + " x " + (servizio.quantita) + " - " + (servizio.prezzo * servizio.quantita) + " €, "
         }
       }
       for(let cliente of clienti) {
@@ -31,14 +29,12 @@ export class LavoroActions {
           break;
         }
       }
-      nuovoLavoro["descrizione"] = descrizione;
       nuovoLavoro["servizi"] = servizi;
       /**/
       if (controlloLavoro(nuovoLavoro, setNuovoLavoro) > 0) 
         return;
 
       nuovoLavoro["giorno_attuale"] = nuovoLavoro["giorno"];
-      nuovoLavoro["descrizione_attuale"] = nuovoLavoro["descrizione"];
       nuovoLavoro["totale_attuale"] = nuovoLavoro["totale"];
       nuovoLavoro["note_attuale"] = nuovoLavoro["note"];
       nuovoLavoro["servizi_attuale"] = nuovoLavoro["servizi"];

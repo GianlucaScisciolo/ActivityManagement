@@ -61,7 +61,7 @@ export class ServizioSQL {
     UPDATE 
       servizio 
     SET 
-      nome = ?, prezzo = ?, note = ? 
+      nome = ?, prezzo = ?, note = ?, in_uso = ?  
     WHERE 
       id = ?; 
   `;
@@ -92,10 +92,20 @@ export class ServizioSQL {
       FROM 
         servizio 
       WHERE 
-        nome LIKE ? AND (prezzo BETWEEN ? AND ?) 
+        nome LIKE ? AND (prezzo BETWEEN ? AND ?)  
     `;
   
-    sql += (!params.note) ? " AND (note LIKE ? OR note IS NULL); " : " AND note LIKE ?; ";
+    sql += (!params.note) ? " AND (note LIKE ? OR note IS NULL) " : " AND note LIKE ? ";
+    if(params.in_uso.toLowerCase() === "s" || params.in_uso.toLowerCase() === "si") {
+      sql += " AND in_uso = 1; ";
+    }
+    else if(params.in_uso.toLowerCase() === "n" || params.in_uso.toLowerCase() === "no") {
+      sql += " AND in_uso = 0; ";
+    }
+    else if(params.in_uso) {
+      sql += " AND in_uso = -1; ";
+    }
+    
   
     return sql;
   };
@@ -131,6 +141,7 @@ export class ServizioSQL {
       `${params.nome}`, 
       `${params.prezzo}`, 
       `${params.note}`, 
+      params.in_uso, 
       `${params.id}` 
     ];
   }

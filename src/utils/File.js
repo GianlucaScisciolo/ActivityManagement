@@ -8,7 +8,16 @@ import { saveAs } from 'file-saver';
 import { formatoDate } from './Tempo';
 import { rgb } from 'pdf-lib';
 
+const getDescrizione = (lavoro) => {
+  let descrizione = "";
+  for(let collegamento of lavoro.collegamenti) {
+    descrizione += collegamento["nome_servizio"] + ": " + collegamento["prezzo_servizio"] + " € x " + collegamento["quantita"] + ", ";
+  }
+  return descrizione.substring(0, descrizione.length-2) + ".";
+};
+
 export const generaFileLavoriPDF = async (lavori) => {
+
   const pdfDoc = await PDFDocument.create();
   const page = pdfDoc.addPage([600, 800]);
   const timesRomanFont = await pdfDoc.embedFont(StandardFonts.TimesRoman);
@@ -84,8 +93,8 @@ export const generaFileLavoriPDF = async (lavori) => {
       const values = [
         lavoro.cliente,
         lavoro.giorno,
-        lavoro.descrizione,
-        lavoro.totale,
+        getDescrizione(lavoro),
+        lavoro.totale + " €",
         lavoro.note,
       ];
       values.forEach((value, index) => {
@@ -228,8 +237,6 @@ export const generaFileSpesePDF = async (spese) => {
   document.body.removeChild(link);
 };
 
-
-
 export const generaFileLavoriExcel = async (lavori) => {
   const workbook = new ExcelJS.Workbook();
   const lavoriSheet = workbook.addWorksheet('Lavori');
@@ -247,7 +254,7 @@ export const generaFileLavoriExcel = async (lavori) => {
       lavoriSheet.addRow({
         cliente: lavoro.cliente, 
         giorno: lavoro.giorno, 
-        descrizione: lavoro.descrizione.substring(0, lavoro.descrizione.length-2),
+        descrizione: getDescrizione(lavoro),
         totale: lavoro.totale + " €",
         note: lavoro.note
       });

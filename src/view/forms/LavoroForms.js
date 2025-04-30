@@ -35,14 +35,14 @@ export class LavoroForms {
   getCampiRicercaLavori(item, handleOnChange, handleOnClick, handleOnBlur) {
     return {
       header: "Ricerca lavori", 
-      label: ["Cliente", "Primo giorno", "Ultimo giorno", "Descrizione", "Note"], 
-      type: [null, "text", "text", null, null], 
-      step: [null, null, null, null, null], 
-      min: [null, null, null, null, null], 
-      name: ["cliente", "primo_giorno", "ultimo_giorno", "descrizione", "note"], 
-      id: ["ricerca_cliente_lavoro", "ricerca_primo_giorno_lavoro", "ricerca_ultimo_giorno_lavoro", "ricerca_descrizione_lavoro", "ricerca_note_lavoro"], 
-      value: [item.cliente, item.primo_giorno, item.ultimo_giorno, item.descrizione, item.note], 
-      placeholder: ["Cliente", "Primo giorno", "Ultimo giorno", "Descrizione", "Note"], 
+      label: ["Cliente", "Primo giorno", "Ultimo giorno", "Note"], 
+      type: [null, "text", "text", null], 
+      step: [null, null, null, null], 
+      min: [null, null, null, null], 
+      name: ["cliente", "primo_giorno", "ultimo_giorno", "note"], 
+      id: ["ricerca_cliente_lavoro", "ricerca_primo_giorno_lavoro", "ricerca_ultimo_giorno_lavoro", "ricerca_note_lavoro"], 
+      value: [item.cliente, item.primo_giorno, item.ultimo_giorno, item.note], 
+      placeholder: ["Cliente", "Primo giorno", "Ultimo giorno", "Note"], 
       onChange: handleOnChange, 
       onClick: handleOnClick, 
       onBlur: handleOnBlur

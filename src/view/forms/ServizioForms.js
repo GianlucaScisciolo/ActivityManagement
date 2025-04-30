@@ -5,7 +5,7 @@ import { controlloServizio } from "../../utils/Controlli";
 
 export class ServizioForms {
   INDICI_NUOVO_SERVIZIO = [0, 1, 2];
-  INDICI_RICERCA_SERVIZI = [0, 1, 2, 3];
+  INDICI_RICERCA_SERVIZI = [0, 1, 2, 3, 4];
   INDICI_SERVIZIO_ESISTENTE = [0, 1, 2, 3];
 
   constructor() {
@@ -34,19 +34,14 @@ export class ServizioForms {
   getCampiRicercaServizi(item, handleOnChange, handleOnClick, handleOnBlur) {
     return {
       header: "Ricerca servizi", 
-      label: ["Nome", "Prezzo minimo", "Prezzo massimo", "Note"], 
-      type: [null, "text", "text", null], 
-      step: [null, null, null, null], 
-      min: [null, null, null, null], 
-      name: ["nome", "prezzo_min", "prezzo_max", "note"], 
-      id: ["ricerca_nome_servizio", "ricerca_prezzo_min_servizio", "ricerca_prezzo_max_servizio", "ricerca_note_servizio"], 
-      value: [
-        item.nome, 
-        item.prezzo_min,  
-        item.prezzo_max, 
-        item.note
-      ], 
-      placeholder: ["Nome", "Prezzo minimo", "Prezzo massimo", "Note"], 
+      label: ["Nome", "Prezzo minimo", "Prezzo massimo", "Note", "In uso"], 
+      type: [null, "text", "text", null, "text"], 
+      step: [null, null, null, null, null], 
+      min: [null, null, null, null, null], 
+      name: ["nome", "prezzo_min", "prezzo_max", "note", "in_uso"], 
+      id: ["ricerca_nome_servizio", "ricerca_prezzo_min_servizio", "ricerca_prezzo_max_servizio", "ricerca_note_servizio", "ricerca_in_uso_servizio"], 
+      value: [item.nome, item.prezzo_min, item.prezzo_max, item.note, item.in_uso], 
+      placeholder: ["Nome", "Prezzo minimo", "Prezzo massimo", "Note", "In uso"], 
       onChange: handleOnChange, 
       onClick: handleOnClick, 
       onBlur: handleOnBlur

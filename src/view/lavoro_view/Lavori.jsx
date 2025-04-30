@@ -41,7 +41,6 @@ const Lavori = () => {
     id_servizi: [], 
     servizio: "", 
     giorno: "",
-    descrizione: ", ",
     totale: 0, 
     note: "", 
     errore_cliente: "", 
@@ -55,7 +54,6 @@ const Lavori = () => {
     cliente: "", 
     primo_giorno: "",
     ultimo_giorno: "",
-    descrizione: "",   
     note: ""
   });
 

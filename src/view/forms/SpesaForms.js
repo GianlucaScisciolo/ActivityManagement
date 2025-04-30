@@ -69,7 +69,7 @@ export class SpesaForms {
       step: [null, null, "0.50", null, null], 
       min: [null, null, "0.50", null, null], 
       name: ["nome", "descrizione", "totale", "giorno", "note"], 
-      id: ["nome-spesa", "descrizione_spesa", "totale_spesa", "giorno_spesa", "note_spesa"], 
+      id: ["nome_spesa", "descrizione_spesa", "totale_spesa", "giorno_spesa", "note_spesa"], 
       value: [item.nome, item.descrizione, parseFloat(item.totale).toFixed(2), item.giorno, item.note], 
       placeholder: ["Nome*", "Descrizione", "Totale*", "Giorno*", "Note"], 
       errore: [errori.errore_nome, errori.errore_descrizione, errori.errore_totale, errori.errore_giorno, errori.errore_note], 

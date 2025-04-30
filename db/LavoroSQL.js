@@ -1,7 +1,7 @@
 export class LavoroSQL {
   SQL_INSERIMENTO_LAVORO = ` 
-    INSERT INTO lavoro (cliente, giorno, descrizione, totale, note) 
-    VALUES (?, ?, ?, ?, ?); 
+    INSERT INTO lavoro (cliente, giorno, totale, note) 
+    VALUES (?, ?, ?, ?); 
   `;
 
   SQL_ELIMINAZIONE_LAVORI_RANGE_GIORNI = ` 
@@ -68,7 +68,7 @@ export class LavoroSQL {
     UPDATE 
       lavoro 
     SET 
-      giorno = ?, descrizione = ?, totale = ?, note = ? 
+      giorno = ?, totale = ?, note = ? 
     WHERE 
       id = ?; 
   `;
@@ -86,8 +86,6 @@ export class LavoroSQL {
         cliente AS cliente, 
         DATE_FORMAT(giorno, "%Y-%m-%d") AS giorno, 
         DATE_FORMAT(giorno, "%Y-%m-%d") AS giorno_attuale, 
-        descrizione AS descrizione, 
-        descrizione AS descrizione_attuale, 
         totale AS totale, 
         totale AS totale_attuale, 
         note AS note, 
@@ -95,7 +93,7 @@ export class LavoroSQL {
       FROM 
         lavoro  
       WHERE 
-        cliente LIKE ? AND (giorno BETWEEN ? AND ?) AND descrizione LIKE ? 
+        cliente LIKE ? AND (giorno BETWEEN ? AND ?)  
     `;
     
     sql += (!params.note) ? " AND (note LIKE ? OR note IS NULL); " : " AND note LIKE ?; "; 
@@ -118,7 +116,6 @@ export class LavoroSQL {
     return [
       `${params.cliente}`, 
       `${params.giorno}`, 
-      `${params.descrizione}`, 
       `${params.totale}`, 
       `${params.note}`
     ];
@@ -133,15 +130,8 @@ export class LavoroSQL {
 
   params_modifica_lavoro(params) {
     
-    let descrizione = "";
-    for(let servizio of params["servizi"]) {
-      descrizione += servizio.nome + " x " + servizio.quantita + " - " + (servizio.prezzo * servizio.quantita) + " €, "
-      console.log("<<"+servizio.id+">>");
-    } 
-   
     return [
       `${params.giorno}`, 
-      `${descrizione}`, 
       `${params.totale}`, 
       `${params.note}`, 
       `${params.id}`, 
@@ -154,8 +144,7 @@ export class LavoroSQL {
     let params_out = [
       `%${params_in.cliente}%`, 
       `${(params_in.primo_giorno) ? params_in.primo_giorno : "1111-01-01"}`, 
-      `${(params_in.ultimo_giorno) ? params_in.ultimo_giorno : "9999-12-31"}`, 
-      `%${params_in.descrizione}%` 
+      `${(params_in.ultimo_giorno) ? params_in.ultimo_giorno : "9999-12-31"}`  
     ];
     params_out.push((!params_in.note) ? '%' : `%${params_in.note}%`);
     return params_out;

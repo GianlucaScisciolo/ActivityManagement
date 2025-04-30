@@ -1,0 +1,1 @@
+./unit_test/view/forms/AutenticazioneForms.test.js

@@ -39,7 +39,8 @@ const Servizi = () => {
     nome: "", 
     prezzo_min: "",
     prezzo_max: "",  
-    note: ""
+    note: "", 
+    in_uso: ""
   });
 
   const selectOperation = (icon, item) => {
