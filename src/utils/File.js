@@ -1,6 +1,4 @@
 // React e Redux
-// import jsPDF from 'jspdf';
-// import autoTable from 'jspdf-autotable';
 import { PDFDocument, StandardFonts } from 'pdf-lib';
 import ExcelJS from 'exceljs';
 import { saveAs } from 'file-saver';

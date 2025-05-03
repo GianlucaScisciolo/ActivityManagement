@@ -51,10 +51,6 @@ export class Dispatcher {
     this.aggiornaSpese(-1);
   }
   ricercaEntrateUsciteRicavi(datiRicerca) {
-    // console.log("_______________");
-    // console.log(datiRicerca);
-    // console.log("_______________");
-    // Da fare
     this.ricercaEntrateLavori(datiRicerca);
     this.ricercaUsciteSpese(datiRicerca);
   }

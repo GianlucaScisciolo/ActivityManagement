@@ -1,13 +1,6 @@
 // Utils
 import { passwordIsCorrect, PEPPER_HEX } from "./Sicurezza";
 
-function getInt(numStr) {
-  if(numStr === "00" || numStr === "07" || numStr === "08" || numStr === "09") {
-    return parseInt(numStr.substring(1));
-  }
-  return parseInt(numStr);
-}
-
 const isEmpty = (value) => {
   // return ((value === null) || (value === "") || (value !== null && value.split(' ').join('') === ""));
   return !value;
@@ -218,7 +211,7 @@ export const controlloLavoro = (dati, settersErrori) => {
     
   // controllo sul cliente
   messaggioErrore = "";
-  if (dati.id_cliente === 0) {
+  if (dati.id_cliente <= 0) {
     numErrori += 1; 
     messaggioErrore = "Selezionare un cliente.";
   }
