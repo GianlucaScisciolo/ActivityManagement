@@ -155,6 +155,10 @@ export class SpesaSQL {
     ];
   }
 
+  params_eliminazione_spese() {
+    return [];
+  }  
+
   params_eliminazione_spese_range_giorni(params) {
     return [
       `${(params.primo_giorno) ? params.primo_giorno : "1111-01-01"}`, 

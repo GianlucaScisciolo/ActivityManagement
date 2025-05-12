@@ -157,7 +157,6 @@ export class LavoroSQL {
     ];
   }
   
-
   params_eliminazione_lavori() {
     return [];
   }  

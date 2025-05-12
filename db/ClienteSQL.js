@@ -68,14 +68,7 @@ export class ClienteSQL {
       `${params.note}` 
     ];
   }
-  /*
-      `${req.body.nome}`, 
-    `${req.body.cognome}`, 
-    `${(req.body.contatto) ? req.body.contatto : "Contatto non inserito."}`, 
-    `${(req.body.email) ? req.body.email : "Email non inserita."}`, 
-    `${req.body.note}`
-  */
-
+  
   params_selezione_tutti_i_clienti() {
     return [];
   }

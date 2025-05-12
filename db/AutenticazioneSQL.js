@@ -13,7 +13,7 @@ export class AutenticazioneSQL {
   constructor() {
     
   }
-// SQL_MODIFICA_UTENTE(req.body.nuova_password)
+  
   sql_modifica_utente(params) {
     return (`
       UPDATE 

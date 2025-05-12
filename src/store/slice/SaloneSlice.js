@@ -124,7 +124,7 @@ const saloneSlice = createSlice({
 export const saloneSliceActions = {
   modificaWidget: saloneSlice.actions.modificaWidget,
   widgetSelected: saloneSlice.actions.widgetSelected,
-  widgetView: saloneSlice.actions.widgetView,
+  widgetView: saloneSlice.actions.widgetView
 };
 
 export const saloneSliceReducer = saloneSlice.reducer;

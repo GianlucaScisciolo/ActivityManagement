@@ -16,7 +16,7 @@ export class StileActions {
         this.dispatcher.cambioColoreSfondo(sfondo);
         break;
       default:
-        alert("Errore, tipo sfondo non trovato.");
+        alert("Errore, tipo sfondo non valido.");
         break;
     }
   }
@@ -27,6 +27,9 @@ export class StileActions {
     }
     else if(tipoElemento === "form") {
       this.dispatcher.cambioVistaForm(tipoView);
+    }
+    else {
+      alert("Errore, tipo elemento non valido.");
     }
   }
 }

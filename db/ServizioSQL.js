@@ -3,12 +3,7 @@ export class ServizioSQL {
     INSERT INTO servizio (nome, prezzo, note, in_uso) 
     VALUES (?, ?, ?, ?); 
   `;
-
-  SQL_INSERIMENTO_ENTRATE_SERVIZIO = `
-    INSER INTO entrate_servizio (servizio, prezzo, anno) 
-    VALUE (?, ?, ?); 
-  `;
-
+  
   SQL_SELEZIONE_TUTTI_I_SERVIZI = `
     SELECT 
       id, 
