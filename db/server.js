@@ -85,33 +85,33 @@ const rollbackTransaction = (connection = db) => {
   });
 };
 
-const getResults = async (sql, params, res) => {
-  try {
-    const data = await executeQuery(sql, params);
-    return res.json(data);
-  } 
-  catch (err) {
-    console.error('Errore durante l\'esecuzione della query: ', err);
-    return res.json(err);
-  }
-}
+// const getResults = async (sql, params, res) => {
+//   try {
+//     const data = await executeQuery(sql, params);
+//     return res.json(data);
+//   } 
+//   catch (err) {
+//     console.error('Errore durante l\'esecuzione della query: ', err);
+//     return res.json(err);
+//   }
+// }
 
-const scomponiStringa = (stringa) => {
-  const indiceUltimaX = stringa.lastIndexOf(" x ");
-  const nome = stringa.substring(0, indiceUltimaX).trim();
-  let [quantita, prezzo] = stringa.substring(indiceUltimaX + 3).trim().split(" - ");
-  prezzo = prezzo.substring(0, prezzo.length - 2);
+// const scomponiStringa = (stringa) => {
+//   const indiceUltimaX = stringa.lastIndexOf(" x ");
+//   const nome = stringa.substring(0, indiceUltimaX).trim();
+//   let [quantita, prezzo] = stringa.substring(indiceUltimaX + 3).trim().split(" - ");
+//   prezzo = prezzo.substring(0, prezzo.length - 2);
   
-  return {
-    nome,
-    quantita: parseInt(quantita, 10),
-    prezzo: prezzo / quantita,
-  };
-};
+//   return {
+//     nome,
+//     quantita: parseInt(quantita, 10),
+//     prezzo: prezzo / quantita,
+//   };
+// };
 
-const optionStr = (servizio) => {
-  return `${servizio.nome} - ${servizio.prezzo} €`;
-};
+// const optionStr = (servizio) => {
+//   return `${servizio.nome} - ${servizio.prezzo} €`;
+// };
 
 /*************************************************** Autenticazione **************************************************/
 
@@ -168,7 +168,7 @@ app.post("/INSERISCI_ITEM", async(req, res) => {
       break;
     case "servizio":
       sql = servizioSQL.SQL_INSERIMENTO_SERVIZIO;
-      req.body["prezzo"] = req.body.prezzo.substr(0, req.body.prezzo.length - 2);
+      req.body["prezzo"] = req.body["prezzo"].substring(0, req.body["prezzo"].indexOf('€')).trim();
       params = servizioSQL.params_inserimento_servizio(req.body);
       break;
     case "lavoro":
@@ -177,7 +177,7 @@ app.post("/INSERISCI_ITEM", async(req, res) => {
       break;
     case "spesa":
       sql = spesaSQL.SQL_INSERIMENTO_SPESA;
-      req.body["totale"] = req.body.totale.substr(0, req.body.totale.length - 2);
+      req.body["totale"] = req.body["totale"].substring(0, req.body["totale"].indexOf('€')).trim();
       params = spesaSQL.params_inserimento_spesa(req.body);
       break;
     default:

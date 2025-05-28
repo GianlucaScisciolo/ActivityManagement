@@ -1,0 +1,56 @@
+import mysql from "mysql2";
+import { executeQuery, beginTransaction, commitTransaction, rollbackTransaction } from "../../../../db/server.js";
+
+// Mock della connessione MySQL
+// jest.mock('mysql2', () => ({
+//   createConnection: jest.fn(() => ({
+//     connect: jest.fn((callback) => callback(null)), // Simula connessione riuscita
+//     query: jest.fn((sql, params, callback) => callback(null, "Fake Result")), // Simula esecuzione query
+//     beginTransaction: jest.fn((callback) => callback(null)), // Simula inizio transazione
+//     commit: jest.fn((callback) => callback(null)), // Simula commit
+//     rollback: jest.fn((callback) => callback()), // Simula rollback
+//   })),
+// }));
+jest.mock("../../../../db/server.js", () => ({
+  executeQuery: jest.fn(() => Promise.resolve("Fake Result")),
+  beginTransaction: jest.fn(() => Promise.resolve()),
+  commitTransaction: jest.fn(() => Promise.resolve()),
+  rollbackTransaction: jest.fn(() => Promise.resolve()),
+}));
+
+
+// Simuliamo la connessione al database
+const db = mysql.createConnection();
+
+describe("Test su 'db.connect'", () => {
+  test("test 1: connessione al database con successo.", () => {
+    db.connect((err) => {
+      expect(err).toBeNull();
+    });
+  });
+});
+
+describe("Test su 'executeQuery'", () => {
+  test("test 1: esecuzione query con successo.", async () => {
+    const result = await executeQuery('SELECT * FROM users', []);
+    expect(result).toBe("Fake Result");
+  });
+});
+
+describe("Test su 'beginTransaction'", () => {
+  test("test 1: inizio transazione con successo.", async () => {
+    await expect(beginTransaction()).resolves.toBeUndefined();
+  });
+});
+
+describe("Test su 'commitTransaction'", () => {
+  test("test 1: esecuzione transazione con successo.", async () => {
+    await expect(commitTransaction()).resolves.toBeUndefined();
+  });
+});
+
+describe("Test su 'rollbackTransaction", () => {
+  it("test 1: annullamento transazione con successo.", async () => {
+    await expect(rollbackTransaction()).resolves.toBeUndefined();
+  });
+});

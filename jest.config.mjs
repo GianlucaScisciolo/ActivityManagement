@@ -7,6 +7,7 @@ export default {
   transform: {
     '^.+\\.jsx?$': 'babel-jest',
     '^.+\\.tsx?$': 'babel-jest',
+    "^.+\\.(js|jsx|mjs|ts|tsx)$": "babel-jest",
   },
   transformIgnorePatterns: [
     '<rootDir>/node_modules/',
@@ -22,4 +23,9 @@ export default {
     '!src/**/*.d.ts',
   ],
   coverageDirectory: '<rootDir>/coverage',
+  testEnvironment: "jsdom", 
+  transform: {}, 
+  moduleNameMapper: {
+    "\\.(css|scss|sass)$": "<rootDir>/src/test/mocks/styleMock.js"
+  }
 };
