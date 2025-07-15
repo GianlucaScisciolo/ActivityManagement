@@ -111,11 +111,12 @@ export function OperazioniCercaItems({ visibilita, setVisibilita, arrowUp, setAr
     <StyledColOperazioni>
       <div style={{width: "100%"}}>
         <StyledSearchNotSelected 
-          className="left ricercaItemsButton" 
+          className="center ricercaItemsButton" 
           size={grandezzaIcona} 
           // style={{ marginRight: "50%" }} 
           onClick={handleSearch} 
         />
+        {/*
         {arrowUp && (
           <StyledArrowLeftNotSelected 
             className="right nascondiFormButton"
@@ -130,6 +131,7 @@ export function OperazioniCercaItems({ visibilita, setVisibilita, arrowUp, setAr
             onClick={() => mostraForm(visibilita, setVisibilita, setArrowUp)} 
           />
         )}
+        */}
       </div>
     </StyledColOperazioni>
   );

@@ -88,7 +88,7 @@ export function nascondiForm(setIsVisible, setArrowUp) {
 
 export function OperazioniNuovoItem({eseguiSalvataggio}) {
   return (
-    <StyledListGroupItem style={{border: "5px solid #000000", backgroundColor:"#000000", paddingTop: "3%"}}>
+    <StyledListGroupItem style={{ border: "5px solid #000000", backgroundColor:"#000000" }}>
       <StyledRow>
         <StyledCol>
           <StyledSaveNotSelected 
@@ -104,13 +104,16 @@ export function OperazioniNuovoItem({eseguiSalvataggio}) {
 
 export function OperazioniCercaItems({ setIsVisible, arrowUp, setArrowUp, handleSearch }) {
   return (
-    <StyledListGroupItem style={{ border: "5px solid #000000", backgroundColor: "#000000", paddingTop: "3%" }}>
+    <StyledListGroupItem style={{ border: "5px solid #000000", backgroundColor: "#000000" }}>
       <StyledSearchNotSelected 
         className="ricercaItemsButton" 
         size={grandezzaIcona} 
-        style={{ marginRight: "50%" }} 
+        style={{ 
+          /* marginRight: "0%" 50% */ 
+        }}
         onClick={handleSearch} 
       />
+      {/*
       {arrowUp && (
         <StyledArrowTopNotSelected 
           className="nascondiFormButton" 
@@ -125,6 +128,7 @@ export function OperazioniCercaItems({ setIsVisible, arrowUp, setArrowUp, handle
           onClick={() => nascondiForm(setIsVisible, setArrowUp)} 
         />
       )}
+      */}
     </StyledListGroupItem>
   );
 };
@@ -146,7 +150,7 @@ export function OperazioniItemEsistente ({ selectOperation, item }) {
   let PencilTag = getPencilTag(item.tipo_selezione);
 
   return (
-    <StyledListGroupItem style={{ border: "5px solid #000000", backgroundColor: "#000000", paddingTop: "3%" }}>
+    <StyledListGroupItem style={{ border: "5px solid #000000", backgroundColor: "#000000" }}>
       <PencilTag 
         className="modificaItemButton" 
         size={grandezzaIcona} 
@@ -301,7 +305,9 @@ export function CardRicercaItems({campi, indici, handleSearch}) {
           arrowUp={arrowUp}
           setArrowUp={setArrowUp}
           handleSearch={handleSearch}
-        />
+          />
+          {/*
+         */}
       </StyledCard>
     </center>
   );

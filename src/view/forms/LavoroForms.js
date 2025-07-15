@@ -5,7 +5,7 @@ import { controlloLavoro } from "../../utils/Controlli";
 
 export class LavoroForms {
   INDICI_NUOVO_LAVORO = [0, 1, 2, 3];
-  INDICI_RICERCA_LAVORI = [0, 1, 2, 3, 4];
+  INDICI_RICERCA_LAVORI = [0, 1, 2, 3];
   INDICI_LAVORO_ESISTENTE = [0, 1, 2, 3];
   INDICI_FILE = [0, 1]; 
 

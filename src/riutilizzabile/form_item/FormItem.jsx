@@ -160,7 +160,7 @@ export function OperazioniCambioTipoForm2({ tipoForm, setTipoForm }) {
 
 export function OperazioniNuovoItem({eseguiSalvataggio}) {
   return (
-    <StyledListGroupItem style={{border: "5px solid #000000", backgroundColor:"#000000", paddingTop: "3%"}}>
+    <StyledListGroupItem style={{border: "5px solid #000000", backgroundColor:"#000000", paddingTop: "2%", paddingBottom: "2%" }}>
       <StyledRow>
         <StyledCol>
           <StyledSaveNotSelected 
@@ -176,13 +176,14 @@ export function OperazioniNuovoItem({eseguiSalvataggio}) {
 
 export function OperazioniCercaItems({ setIsVisible, arrowUp, setArrowUp, handleSearch }) {
   return (
-    <StyledListGroupItem style={{ border: "5px solid #000000", backgroundColor: "#000000", paddingTop: "3%" }}>
+    <StyledListGroupItem style={{ border: "5px solid #000000", backgroundColor: "#000000", paddingTop: "2%", paddingBottom: "2%" }}>
       <StyledSearchNotSelected 
         className="ricercaItemsButton" 
         size={grandezzaIcona} 
-        style={{ marginRight: "50%" }} 
+        //style={{ marginRight: "50%" }} 
         onClick={handleSearch} 
       />
+      {/*
       {arrowUp && (
         <StyledArrowTopNotSelected 
           className="nascondiFormButton" 
@@ -197,6 +198,7 @@ export function OperazioniCercaItems({ setIsVisible, arrowUp, setArrowUp, handle
           onClick={() => nascondiForm(setIsVisible, setArrowUp)} 
         />
       )}
+      */}
     </StyledListGroupItem>
   );
 };

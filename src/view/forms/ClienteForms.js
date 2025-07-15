@@ -34,7 +34,7 @@ export class ClienteForms {
   getCampiRicercaClienti(item, handleOnChange, handleOnClick, handleOnBlur) {
     return {
       header: "Ricerca clienti", 
-      label: ["Nome", "Cognome", "Contatto", "email", "Note"], 
+      label: ["Nome", "Cognome", "Contatto", "Email", "Note"], 
       type: [null, null, "text", "text", null],  
       step: [null, null, null, null, null], 
       min: [null, null, null, null, null], 
