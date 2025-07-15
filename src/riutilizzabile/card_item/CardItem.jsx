@@ -135,7 +135,7 @@ export function OperazioniCercaItems({ setIsVisible, arrowUp, setArrowUp, handle
 
 export function OperazioniRicercaEntrateUscite({ eseguiRicerca }) {
   return (
-    <StyledListGroupItem style={{ border: "5px solid #000000", backgroundColor: "#000000", paddingTop: "3%" }}>
+    <StyledListGroupItem style={{ border: "5px solid #000000", backgroundColor: "#000000" }}>
       <StyledSearchNotSelected 
         className="ricercaEntrateUsciteButton" 
         size={grandezzaIcona} 
@@ -201,7 +201,7 @@ export function OperazioniLogin({eseguiLogin}) {
 
 export function OperazioniModificaProfilo({eseguiModificaProfilo}) {
   return (
-    <StyledListGroupItem style={{ border: "5px solid #000000", backgroundColor: "#000000", paddingTop: "3%", paddingBottom: "3%" }}>
+    <StyledListGroupItem style={{ border: "5px solid #000000", backgroundColor: "#000000" }}>
       <StyledPencilNotSelected2 
         className="modificaProfiloButton"
         size={grandezzaIcona} 

@@ -77,9 +77,14 @@ export class SpesaActions {
   async handleSearchSpeseRangeFile(e, tipoFile, setTipoFile, datiRicerca, spese, setSpese) {
     e.preventDefault();
 
-    if (confirm("Sei sicuro di voler ottenere il file?")) {
-      setTipoFile(tipoFile);
-      
+    if (!confirm("Sei sicuro di voler ottenere il file?")) {
+      alert("Operazione annullata.");
+      return;
+    }
+    
+    setTipoFile(tipoFile);
+
+    try {
       const response = await fetch('/VISUALIZZA_ITEMS', {
         method: 'POST',
         headers: {
@@ -88,23 +93,32 @@ export class SpesaActions {
         body: JSON.stringify(datiRicerca),
       });
 
-      if(response.status === 200) {
-        const result = await response.json();
-        setSpese(result.items);
+      if(!response.ok) {
+        // Handle errors more robustly
+        const errorData = await response.json();
+        let errorMessage = "Errore durante il recupero dei dati.";
+        if (errorData && errorData.message) {
+          errorMessage = errorData.message;
+        }
+        console.error("Errore nella richiesta:", errorMessage, response.status);
+        // Consider displaying an error message to the user
+        alert(errorMessage);
+        return; // Stop further execution if there's an error
+      }
 
-        if(tipoFile === "pdf") {
-          generaFileSpesePDF(spese);
-        }
-        else if(tipoFile === "excel") {
-          generaFileSpeseExcel(spese);
-        }
+      const result = await response.json();
+      setSpese(result.items);
+
+      if (tipoFile === "pdf") {
+        generaFileSpesePDF(result.items); // spese
       }
       else {
-        alert("Errore durante la ricerca delle spese, riprova più tardi.");
+        generaFileSpeseExcel(result.items); // spese
       }
     }
-    else {
-      alert("Operazione annullata.");
+    catch (error) {
+      console.error("Errore nella richiesta:", error);
+      alert("Errore sconosciuto durante il recupero dei dati. Verificare la connessione.");
     }
   }
 

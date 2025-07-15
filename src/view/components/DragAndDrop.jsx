@@ -122,7 +122,7 @@ const onClickWidget = (e, widget, navigate) => {
       navigate("/spese");
     // Salone   
     else if(widget.nome === "salone") 
-      navigate("/salone");
+      navigate("/analisi");
     // Profilo
     else if(widget.nome === "profilo") 
       navigate("/profilo");
@@ -147,7 +147,7 @@ const WidgetTag = ({ widget, handleDragStart, handleDragEnd }) => {
       }}
     >
       <CardWidget 
-        nome={widget.nome} 
+        nome={widget.nome === "salone" ? "Analisi" :  widget.nome.charAt(0).toUpperCase() + widget.nome.slice(1)} 
         img={widget.img} 
         backgroundColor={widget.backgroundColor} 
         id={widget.id} 

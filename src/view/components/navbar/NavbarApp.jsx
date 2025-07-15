@@ -6,8 +6,11 @@ import Navbar from 'react-bootstrap/Navbar';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { House } from 'lucide-react';
 // View
-import immagineSfondo1 from "../../img/immagine_sfondo1.jpg"
-import immagineSfondo2 from "../../img/immagine_sfondo2.png"
+//import immagineSfondo1 from "../../img/immagine_sfondo1.jpg"
+//import immagineSfondo2 from "../../img/immagine_sfondo2.png"
+import negozio from "../../img/negozio.jpg";
+import scrivania from "../../img/scrivania.jpg";
+import legno from "../../img/legno.jpg";
 import { 
   StyledNavLeft, StyledNavCenter, StyledNavRight, StyledNavDropdown, StyledNavDropdownItem, 
   StyledDropdownContainer, StyledSubMenuContainer, StyledNavLink, StyledNavLinkHome
@@ -119,14 +122,19 @@ export const NavbarApp = () => {
                     {(dropdownSfondo === true) && (
                       <>
                         <StyledNavDropdownItem as={NavLink} to="#" 
-                          onClick={() => stileActions.cambioSfondo("img", immagineSfondo1)}
+                          onClick={() => stileActions.cambioSfondo("img", negozio)}
                         >
-                          Immagine 1
+                          Negozio
                         </StyledNavDropdownItem>
                         <StyledNavDropdownItem as={NavLink} to="#" 
-                          onClick={() => stileActions.cambioSfondo("img", immagineSfondo2)}
+                          onClick={() => stileActions.cambioSfondo("img", scrivania)}
                         >
-                          Immagine 2
+                          Scrivania
+                        </StyledNavDropdownItem>
+                        <StyledNavDropdownItem as={NavLink} to="#" 
+                          onClick={() => stileActions.cambioSfondo("img", legno)}
+                        >
+                          Legno
                         </StyledNavDropdownItem>
                         <StyledNavDropdownItem as={NavLink} to="#" 
                           onClick={() => stileActions.cambioSfondo("rgb", "#111111")}
@@ -194,7 +202,7 @@ export const NavbarApp = () => {
             )}
             {(autenticazioneState.isLogged === true) && (
               <>
-                <StyledNavLink as={NavLink} to="/salone" onContextMenu={handleContextMenu}>Salone</StyledNavLink>
+                <StyledNavLink as={NavLink} to="/analisi" onContextMenu={handleContextMenu}>Analisi</StyledNavLink>
                 <StyledNavLink as={NavLink} to="/profilo" onContextMenu={handleContextMenu}>Profilo</StyledNavLink>
                 <StyledNavLink as={NavLink} to="/" onClick={autenticazioneActions.logout} onContextMenu={handleContextMenu}>Logout</StyledNavLink>
               </>

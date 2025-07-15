@@ -64,8 +64,7 @@ const Salone = () => {
       <Header />
       
       <div className="main-content" />
-      <button>{datiRicerca.primo_anno}</button>
-      <button>{datiRicerca.ultimo_anno}</button>
+      
       {(stileState.vistaForm === "form") && (
         <FormEntrateUscite 
           datiRicerca={datiRicerca}

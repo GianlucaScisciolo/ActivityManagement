@@ -86,13 +86,18 @@ export class LavoroActions {
       alert("Errore durante la ricerca dei lavori, riprova più tardi.");
     }
   }
-
+  
   async handleSearchLavoriRangeFile(e, tipoFile, setTipoFile, datiRicerca, lavori, setLavori) {
     e.preventDefault();
 
-    if (confirm("Sei sicuro di voler ottenere il file?")) {
-      setTipoFile(tipoFile);
-      
+    if (!confirm("Sei sicuro di voler ottenere il file?")) {
+      alert("Operazione annullata.");
+      return;
+    }
+
+    setTipoFile(tipoFile);
+
+    try {
       const response = await fetch('/VISUALIZZA_ITEMS', {
         method: 'POST',
         headers: {
@@ -101,23 +106,32 @@ export class LavoroActions {
         body: JSON.stringify(datiRicerca),
       });
 
-      if(response.status === 200) {
-        const result = await response.json();
-        setLavori(result.items);
+      if (!response.ok) {
+        // Handle errors more robustly
+        const errorData = await response.json();
+        let errorMessage = "Errore durante il recupero dei dati.";
+        if (errorData && errorData.message) {
+          errorMessage = errorData.message;
+        }
+        console.error("Errore nella richiesta:", errorMessage, response.status);
+        // Consider displaying an error message to the user
+        alert(errorMessage);
+        return; // Stop further execution if there's an error
+      }
 
-        if(tipoFile === "pdf") {
-          generaFileLavoriPDF(lavori);
-        }
-        else if(tipoFile === "excel") {
-          generaFileLavoriExcel(lavori);
-        }
+      const result = await response.json();
+      setLavori(result.items);
+
+      if (tipoFile === "pdf") {
+        generaFileLavoriPDF(result.items);
       }
       else {
-        alert("Errore durante la ricerca dei lavori, riprova più tardi.");
+        generaFileLavoriExcel(result.items);
       }
-    }
-    else {
-      alert("Operazione annullata.");
+    } 
+    catch (error) {
+      console.error("Errore nella richiesta:", error);
+      alert("Errore sconosciuto durante il recupero dei dati. Verificare la connessione.");
     }
   }
 

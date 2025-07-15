@@ -47,7 +47,7 @@ const FileSearchAndInsertPage = ({ componenti }) => {
       {(tipoForm === "search") && (
         <>
           <RicercaItemsTag 
-            campi={componenti.campiRicercaItems} 
+            campi={componenti.campiRicercaItems}
             indici={componenti.indiciRicercaItems}
             handleSearch={componenti.handleSearch}
           />
