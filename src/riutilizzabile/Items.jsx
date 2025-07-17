@@ -126,7 +126,7 @@ export const Items = ({ tipoItem, items, setItems, selectOperation, emptyIsConsi
             const sottoStringa = item.servizio || "";
             
             return (
-              <ItemEsistenteTag
+              <ItemEsistenteTag 
                 key={index}
                 item={item}
                 campi={campi(

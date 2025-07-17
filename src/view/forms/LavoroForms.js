@@ -2,12 +2,15 @@
 import { useEffect, useState } from "react";
 // Utils
 import { controlloLavoro } from "../../utils/Controlli";
+import { useSelector } from 'react-redux';
 
 export class LavoroForms {
   INDICI_NUOVO_LAVORO = [0, 1, 2, 3];
   INDICI_RICERCA_LAVORI = [0, 1, 2, 3];
   INDICI_LAVORO_ESISTENTE = [0, 1, 2, 3];
   INDICI_FILE = [0, 1]; 
+  saloneState = useSelector((state) => state.saloneSliceReducer.value);
+  lingua = this.saloneState.lingua;
 
   constructor() {
 
@@ -15,15 +18,25 @@ export class LavoroForms {
 
   getCampiNuovoLavoro(item, clienti, servizi, handleOnChange, handleOnClick, handleOnBlur) {
     return {
-      header: "Nuovo lavoro", 
-      label: ["Cliente*", "Servizio*", "Giorno*", "Note"],  
+      header: this.lingua === "italiano" ? "Nuovo lavoro" : "New job", 
+      label: [
+        this.lingua === "italiano" ? "Cliente*" : "Client*", 
+        this.lingua === "italiano" ? "Servizio*" : "Service*", 
+        this.lingua === "italiano" ? "Giorno*" : "Day*", 
+        this.lingua === "italiano" ? "Note" : "Notes",
+      ],  
       type: [null, null, "text", null], 
       step: [null, null, null, null], 
       min: [null, null, null, null], 
       name: ["cliente", "servizio", "giorno", "note"], 
       id: ["nuovo_cliente_lavoro", "nuovo_servizio_lavoro", "nuovo_giorno_lavoro", "nuove_note_lavoro"], 
       value: [item.cliente, item.servizio, item.giorno, item.note], 
-      placeholder: ["Cliente*", "Servizio*", "Giorno*", "Note"],
+      placeholder: [
+        this.lingua === "italiano" ? "Cliente*" : "Client*", 
+        this.lingua === "italiano" ? "Servizio*" : "Service*", 
+        this.lingua === "italiano" ? "Giorno*" : "Day*", 
+        this.lingua === "italiano" ? "Note" : "Notes",
+      ],
       errore: [item.errore_cliente, item.errore_servizi, item.errore_giorno, item.errore_note], 
       options: [clienti, servizi, null, null], 
       onChange: handleOnChange, 
@@ -34,15 +47,25 @@ export class LavoroForms {
   
   getCampiRicercaLavori(item, handleOnChange, handleOnClick, handleOnBlur) {
     return {
-      header: "Ricerca lavori", 
-      label: ["Cliente", "Primo giorno", "Ultimo giorno", "Note"], 
+      header: this.lingua === "italiano" ? "Ricerca lavori" : "Jobs research", 
+      label: [
+        this.lingua === "italiano" ? "Cliente" : "Client", 
+        this.lingua === "italiano" ? "Primo giorno" : "First day",
+        this.lingua === "italiano" ? "Ultimo giorno" : "Last day", 
+        this.lingua === "italiano" ? "Note" : "Notes",
+      ], 
       type: [null, "text", "text", null], 
       step: [null, null, null, null], 
       min: [null, null, null, null], 
       name: ["cliente", "primo_giorno", "ultimo_giorno", "note"], 
       id: ["ricerca_cliente_lavoro", "ricerca_primo_giorno_lavoro", "ricerca_ultimo_giorno_lavoro", "ricerca_note_lavoro"], 
       value: [item.cliente, item.primo_giorno, item.ultimo_giorno, item.note], 
-      placeholder: ["Cliente", "Primo giorno", "Ultimo giorno", "Note"], 
+      placeholder: [
+        this.lingua === "italiano" ? "Cliente" : "Client", 
+        this.lingua === "italiano" ? "Primo giorno" : "First day",
+        this.lingua === "italiano" ? "Ultimo giorno" : "Last day", 
+        this.lingua === "italiano" ? "Note" : "Notes",
+      ], 
       onChange: handleOnChange, 
       onClick: handleOnClick, 
       onBlur: handleOnBlur
@@ -50,6 +73,9 @@ export class LavoroForms {
   };
 
   getCampiLavoroEsistente(servizi, item, handleOnChange, handleOnClick, handleOnBlur) {
+    const saloneState = useSelector((state) => state.saloneSliceReducer.value);
+    const lingua = saloneState.lingua;
+
     const [errori, setErrori] = useState({
       errore_cliente: "", 
       errore_servizi: "", 
@@ -59,11 +85,11 @@ export class LavoroForms {
     }); 
     
     useEffect(() => {
-      controlloLavoro(item, setErrori);
+      controlloLavoro(item, setErrori, lingua);
     }, [item]);
     
     return {
-      header: "Lavoro", 
+      header: lingua === "italiano" ? "Lavoro" : "Job", 
       tipoSelezione: item.tipo_selezione,  
       type: [null, null, "date", null],
       step: [null, null, null, null], 
@@ -71,7 +97,12 @@ export class LavoroForms {
       name: ["cliente", "servizio", "giorno", "note"], 
       id: ["cliente_lavoro", "servizio_lavoro", "giorno_lavoro", "note_lavoro"], 
       value: [item.cliente, item.servizio, item.giorno, item.note], 
-      placeholder: ["Cliente", "Servizio", "Giorno", "Note"], 
+      placeholder: [
+        lingua === "italiano" ? "Cliente*" : "Client*", 
+        lingua === "italiano" ? "Servizio*" : "Service*", 
+        lingua === "italiano" ? "Giorno*" : "Day*", 
+        lingua === "italiano" ? "Note" : "Notes",
+      ], 
       errore: [errori.errore_cliente, errori.errore_totale, errori.errore_giorno, errori.errore_note], 
       valoreModificabile: [false, true, true, true], 
       options: [null, servizi, null, null],
@@ -83,15 +114,21 @@ export class LavoroForms {
 
   getCampiFile(item, handleOnChange, handleOnClick, handleOnBlur) {
     return {
-      header: "File lavori", 
-      label: ["Primo giorno", "Ultimo giorno"], 
+      header: this.lingua === "italiano" ? "File lavori" : "Jobs file",  
+      label: [
+        this.lingua === "italiano" ? "Primo giorno" : "First day",
+        this.lingua === "italiano" ? "Ultimo giorno" : "Last day",
+      ], 
       type: ["text", "text"], 
       step: [null, null], 
       min: [null, null], 
       name: ["primo_giorno", "ultimo_giorno"], 
       id: ["file_primo_giorno_lavoro", "file_ultimo_giorno_lavoro"], 
       value: [item.primo_giorno, item.ultimo_giorno], 
-      placeholder: ["Primo giorno", "Ultimo giorno"], 
+      placeholder: [
+        this.lingua === "italiano" ? "Primo giorno" : "First day",
+        this.lingua === "italiano" ? "Ultimo giorno" : "Last day",
+      ],  
       onChange: handleOnChange, 
       onClick: handleOnClick, 
       onBlur: handleOnBlur

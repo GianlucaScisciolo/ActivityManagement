@@ -11,6 +11,8 @@ import { House } from 'lucide-react';
 import negozio from "../../img/negozio.jpg";
 import scrivania from "../../img/scrivania.jpg";
 import legno from "../../img/legno.jpg";
+import italiano from "../../img/img_icons/italiano.png";
+import inglese from "../../img/img_icons/inglese.png";
 import { 
   StyledNavLeft, StyledNavCenter, StyledNavRight, StyledNavDropdown, StyledNavDropdownItem, 
   StyledDropdownContainer, StyledSubMenuContainer, StyledNavLink, StyledNavLinkHome
@@ -18,11 +20,14 @@ import {
 // Actions
 import { AutenticazioneActions } from "../../../actions/AutenticazioneActions"
 import { StileActions } from '../../../actions/StileActions';
+import { SaloneActions } from '../../../actions/SaloneActions';
 
 export const NavbarApp = () => {
   const autenticazioneActions = new AutenticazioneActions();
+  const saloneActions = new SaloneActions();
   const stileActions = new StileActions()
   const autenticazioneState = useSelector((state) => state.autenticazioneSliceReducer.value);
+  const saloneState = useSelector((state) => state.saloneSliceReducer.value);
   const stileState = useSelector((state) => state.stileSliceReducer.value);
   const [dropdownClienti, setDropdownClienti] = useState(false);
   const [dropdownProfessionisti, setDropdownProfessionisti] = useState(false);
@@ -67,7 +72,7 @@ export const NavbarApp = () => {
       document.documentElement.style.maxHeight = '100%';
     } 
     else {
-      alert("Errore.");
+      alert(saloneState.lingua === "italiano" ? "Errore." : "Error.");
     }
   }
 
@@ -85,17 +90,21 @@ export const NavbarApp = () => {
         <StyledNavLeft>
           {(autenticazioneState.isLogged === true) && (
             <>
-              <StyledNavLink as={NavLink} to="/clienti" onContextMenu={handleContextMenu}>Clienti</StyledNavLink>
-              <StyledNavLink as={NavLink} to="/servizi" onContextMenu={handleContextMenu}>Servizi</StyledNavLink>
+              <StyledNavLink as={NavLink} to="/clienti" onContextMenu={handleContextMenu}>{saloneState.lingua === "italiano" ? "Clienti" : "Clients"}</StyledNavLink>
+              <StyledNavLink as={NavLink} to="/servizi" onContextMenu={handleContextMenu}>{saloneState.lingua === "italiano" ? "Servizi" : "Services"}</StyledNavLink>
+              {/*
               <StyledNavDropdown title="Lavori" show={dropdownLavori}
                 onMouseEnter={() => handleMouseEnter(setDropdownLavori)}
                 onMouseLeave={() => handleMouseLeave(setDropdownLavori)}
                 onContextMenu={handleContextMenu}
               >
-                <StyledNavDropdownItem as={NavLink} to="/lavori">Lavori</StyledNavDropdownItem>
+              */}
+                <StyledNavLink as={NavLink} to="/lavori" onContextMenu={handleContextMenu}>{saloneState.lingua === "italiano" ? "Lavori" : "Jobs"}</StyledNavLink>
+              {/*
                 <StyledNavDropdownItem as="a" href="https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ2GRuG5B0k6Qyo2DLBkT1-OOXXC1XO60HQkWAl3Txvc3z-PcBL0EYhfc62sAor46nbg-szeiADZ" target="_blank" rel="noopener noreferrer">Prenotazione</StyledNavDropdownItem>
               </StyledNavDropdown>
-              <StyledNavLink as={NavLink} to="/spese" onContextMenu={handleContextMenu}>Spese</StyledNavLink>
+              */}
+              <StyledNavLink as={NavLink} to="/spese" onContextMenu={handleContextMenu}>{saloneState.lingua === "italiano" ? "Spese" : "Expenses"}</StyledNavLink>
             </>
           )}
         </StyledNavLeft>  
@@ -108,14 +117,14 @@ export const NavbarApp = () => {
 
         <StyledNavRight>
           <>
-            <StyledNavDropdown title="Stile" show={dropdownStile}
+            <StyledNavDropdown title={saloneState.lingua === "italiano" ? "Stile" : "Style"} show={dropdownStile}
               onMouseEnter={() => setDropdownStile(true)}
               onMouseLeave={() => setDropdownStile(false)}
               onContextMenu={handleContextMenu}
             >
               <StyledDropdownContainer>
                 <StyledSubMenuContainer>
-                  <StyledNavDropdown title="Sfondo" show={dropdownSfondo}
+                  <StyledNavDropdown title={saloneState.lingua === "italiano" ? "Sfondo" : "Background"} show={dropdownSfondo}
                     onMouseEnter={() => setDropdownSfondo(true)}
                     onMouseLeave={() => setDropdownSfondo(false)}
                   >
@@ -124,32 +133,32 @@ export const NavbarApp = () => {
                         <StyledNavDropdownItem as={NavLink} to="#" 
                           onClick={() => stileActions.cambioSfondo("img", negozio)}
                         >
-                          Negozio
+                          {saloneState.lingua === "italiano" ? "Negozio" : "Store"}
                         </StyledNavDropdownItem>
                         <StyledNavDropdownItem as={NavLink} to="#" 
                           onClick={() => stileActions.cambioSfondo("img", scrivania)}
                         >
-                          Scrivania
+                          {saloneState.lingua === "italiano" ? "Scrivania" : "Desk"}
                         </StyledNavDropdownItem>
                         <StyledNavDropdownItem as={NavLink} to="#" 
                           onClick={() => stileActions.cambioSfondo("img", legno)}
                         >
-                          Legno
+                          {saloneState.lingua === "italiano" ? "Legno" : "Wood"}
                         </StyledNavDropdownItem>
                         <StyledNavDropdownItem as={NavLink} to="#" 
                           onClick={() => stileActions.cambioSfondo("rgb", "#111111")}
                         >
-                          Sfondo scuro
+                          {saloneState.lingua === "italiano" ? "Sfondo scuro" : "Dark background"}
                         </StyledNavDropdownItem>
                         <StyledNavDropdownItem as={NavLink} to="#" 
                           onClick={() => stileActions.cambioSfondo("rgb", "#8F8F8F")}
                         >
-                          Sfondo chiaro
+                          {saloneState.lingua === "italiano" ? "Sfondo chiaro" : "Light background"}
                         </StyledNavDropdownItem>
                       </>
                     )}
                   </StyledNavDropdown>
-                  <StyledNavDropdown title="Item" show={dropdownItem}
+                  <StyledNavDropdown title={saloneState.lingua === "italiano" ? "Elemento" : "Item"} show={dropdownItem}
                     onMouseEnter={() => setDropdownItem(true)}
                     onMouseLeave={() => setDropdownItem(false)}
                   >
@@ -158,12 +167,12 @@ export const NavbarApp = () => {
                         <StyledNavDropdownItem as={NavLink} to="#" 
                           onClick={() => stileActions.cambioVista("item", "list")}
                         >
-                          Riga
+                          {saloneState.lingua === "italiano" ? "Riga" : "Row"}
                         </StyledNavDropdownItem>
                         <StyledNavDropdownItem as={NavLink} to="#" 
                           onClick={() => stileActions.cambioVista("item", "card")}
                         >
-                          Carta
+                          {saloneState.lingua === "italiano" ? "Carta" : "Card"}
                         </StyledNavDropdownItem>
                       </>
                     )}
@@ -182,12 +191,12 @@ export const NavbarApp = () => {
                         <StyledNavDropdownItem as={NavLink} to="#" 
                           onClick={() => stileActions.cambioVista("form", "row")}
                         >
-                          Riga
+                          {saloneState.lingua === "italiano" ? "Riga" : "Row"}
                         </StyledNavDropdownItem>
                         <StyledNavDropdownItem as={NavLink} to="#" 
                           onClick={() => stileActions.cambioVista("form", "card")}
                         >
-                          Carta
+                          {saloneState.lingua === "italiano" ? "Carta" : "Card"}
                         </StyledNavDropdownItem>
                       </>
                     )}
@@ -202,11 +211,18 @@ export const NavbarApp = () => {
             )}
             {(autenticazioneState.isLogged === true) && (
               <>
-                <StyledNavLink as={NavLink} to="/analisi" onContextMenu={handleContextMenu}>Analisi</StyledNavLink>
-                <StyledNavLink as={NavLink} to="/profilo" onContextMenu={handleContextMenu}>Profilo</StyledNavLink>
+                <StyledNavLink as={NavLink} to="/analisi" onContextMenu={handleContextMenu}>{saloneState.lingua === "italiano" ? "Analisi" : "Analyses"}</StyledNavLink>
+                <StyledNavLink as={NavLink} to="/profilo" onContextMenu={handleContextMenu}>{saloneState.lingua === "italiano" ? "Profilo" : "Profile"}</StyledNavLink>
                 <StyledNavLink as={NavLink} to="/" onClick={autenticazioneActions.logout} onContextMenu={handleContextMenu}>Logout</StyledNavLink>
               </>
             )}
+            <StyledNavLink as={NavLink} to="#" onClick={(e) => saloneActions.modificaLingua(e)} onContextMenu={handleContextMenu}>
+              {(saloneState.lingua === "italiano") ? (
+                <img src={italiano} style={{width:"50px", height:"auto"}} alt="Italian" />
+              ) : (
+                <img src={inglese} style={{width:"50px", height:"auto"}} alt="Italian" />
+              )}
+            </StyledNavLink>
           </>
         </StyledNavRight>  
       </Navbar>

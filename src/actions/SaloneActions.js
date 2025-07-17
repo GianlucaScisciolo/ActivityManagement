@@ -30,6 +30,11 @@ export class SaloneActions {
   modificaWidget(nomeWidget, tipoVisualizzazione) {
     this.dispatcher.modificaWidget(nomeWidget, tipoVisualizzazione);
   }
+
+  modificaLingua(e) {
+    e.preventDefault();
+    this.dispatcher.modificaLingua();
+  }
 }
 
 

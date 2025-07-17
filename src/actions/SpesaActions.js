@@ -1,3 +1,4 @@
+import { useSelector } from 'react-redux';
 /************************************************** Dispatcher **************************************************/
 import { Dispatcher } from "../dispatcher/Dispatcher";
 /************************************************** Utils **************************************************/
@@ -6,14 +7,17 @@ import { generaFileSpesePDF, generaFileSpeseExcel } from "../utils/File";
 
 export class SpesaActions {
   dispatcher;
+  saloneState = useSelector((state) => state.saloneSliceReducer.value);
+  lingua = this.saloneState.lingua;
+
   constructor() {
     this.dispatcher = new Dispatcher();
   }
 
   async inserimentoSpesa(e, nuovaSpesa, setNuovaSpesa) {
     e.preventDefault();
-    if (confirm("Sei sicuro di voler salvare la spesa?")) {
-      if (controlloSpesa(nuovaSpesa, setNuovaSpesa) > 0) 
+    if (confirm(this.lingua === "italiano" ? "Sei sicuro di voler salvare la spesa?" : "Are you sure you want to save the expense?")) {
+      if (controlloSpesa(nuovaSpesa, setNuovaSpesa, this.lingua) > 0) 
         return;
 
       nuovaSpesa["nome_attuale"] = nuovaSpesa["nome"];
@@ -34,17 +38,17 @@ export class SpesaActions {
         const result = await response.json();
         nuovaSpesa.id = result.id;
         this.dispatcher.inserimentoSpesa(nuovaSpesa);
-        alert("L\'inserimento della spesa è andato a buon fine!!");
+        alert(this.lingua === "italiano" ? "L\'inserimento della spesa è andato a buon fine." : "Expense entry was successful.");
       }
       else if(response.status === 400) {
-        alert("Errore: spesa gia\' presente.")
+        alert(this.lingua === "italiano" ? "Errore: spesa gia\' presente." : "Error: expense already present.")
       }
       else {
-        alert("Errore durante il salvataggio della nuova spesa, riprova più tardi.");
+        alert(this.lingua === "italiano" ? "Errore durante il salvataggio della nuova spesa, riprova più tardi." : "Error while saving new expense, try again later.");
       }
     }
     else {
-      alert("Salvataggio annullato.");
+      alert(this.lingua === "italiano" ? "Salvataggio annullato." : "Saving Cancelled.");
     }
   };
 
@@ -65,20 +69,20 @@ export class SpesaActions {
         this.dispatcher.aggiornaSpese(result.items);
       }
       else {
-        alert("Errore durante la ricerca delle spese, riprova più tardi.");
+        alert(this.lingua === "italiano" ? "Errore durante la ricerca delle spese, riprova più tardi." : "Error while searching expenses, please try again later.");
       }
     }
     catch (error) {
       console.error('Errore:', error);
-      alert("Errore durante la ricerca delle spese, riprova più tardi.");
+      alert(this.lingua === "italiano" ? "Errore durante la ricerca delle spese, riprova più tardi." : "Error while searching expenses, please try again later.");
     }
   }
   
   async handleSearchSpeseRangeFile(e, tipoFile, setTipoFile, datiRicerca, spese, setSpese) {
     e.preventDefault();
 
-    if (!confirm("Sei sicuro di voler ottenere il file?")) {
-      alert("Operazione annullata.");
+    if (!confirm(this.lingua === "italiano" ? "Sei sicuro di voler ottenere il file?" : "Are you sure you want to get the file?")) {
+      alert(this.lingua === "italiano" ? "Operazione annullata." : "Operation canceled.");
       return;
     }
     
@@ -96,7 +100,7 @@ export class SpesaActions {
       if(!response.ok) {
         // Handle errors more robustly
         const errorData = await response.json();
-        let errorMessage = "Errore durante il recupero dei dati.";
+        let errorMessage = this.lingua === "italiano" ? "Errore durante il recupero dei dati." : "Error during data recovery.";
         if (errorData && errorData.message) {
           errorMessage = errorData.message;
         }
@@ -118,7 +122,7 @@ export class SpesaActions {
     }
     catch (error) {
       console.error("Errore nella richiesta:", error);
-      alert("Errore sconosciuto durante il recupero dei dati. Verificare la connessione.");
+      alert(this.lingua === "italiano" ? "Errore sconosciuto durante il recupero dei dati. Verificare la connessione." : "Unknown error during data recovery. Check the connection.");
     }
   }
 
@@ -142,7 +146,7 @@ export class SpesaActions {
       setUsciteSpese(result.items);
     }
     else {
-      alert("Errore durante la ricerca delle uscite delle spese, riprova più tardi.");
+      alert(this.lingua === "italiano" ? "Errore durante la ricerca delle uscite delle spese, riprova più tardi." : "Error while searching for expenses outputs, try again later.");
     }
   };
 
@@ -184,13 +188,13 @@ export class SpesaActions {
 
   async modificaSpese(e, speseSession, selectedIdsModifica, setSelectedIdsModifica) {
     e.preventDefault();
-    if (confirm("Sei sicuro di voler modificare le spese?")) {
+    if (confirm(this.lingua === "italiano" ? "Sei sicuro di voler modificare le spese?" : "Are you sure you want to edit the expenses?")) {
       let speseDaNonModificare = speseSession.spese.filter(spesa => !selectedIdsModifica.includes(spesa.id));
       let speseDaModificare = speseSession.spese.filter(spesa => selectedIdsModifica.includes(spesa.id)); 
       
       let idSpeseNonModificate = [];
       let idSpeseModificate = [];
-      let esitoModifica = "Esito modifica:\n";
+      let esitoModifica = this.lingua === "italiano" ? "Esito modifica:\n" : "Modification outcome:\n";
       for(let i = 0; i < speseDaModificare.length; i++) {
         const dati = {
           tipo_item: "spesa", 
@@ -204,15 +208,15 @@ export class SpesaActions {
           body: JSON.stringify(dati),
         });
         if(response.status === 200) {           
-          esitoModifica += "Spesa numero " + (i+1) + ": modifica avvenuta con successo.\n";
+          esitoModifica += this.lingua === "italiano" ? "Spesa numero " + (i+1) + ": modifica avvenuta con successo.\n" : "Expense number " + (i+1) + ": successful modification.\n";
           idSpeseModificate.push(speseDaModificare[i].id);
         }
         else if(response.status === 400) {
-          esitoModifica += "Spesa numero " + (i+1) + ": errore durante la modifica: spesa gia\' presente.\n";
+          esitoModifica += this.lingua === "italiano" ? "Spesa numero " + (i+1) + ": errore durante la modifica: spesa gia\' presente.\n" : "Expense number " + (i+1) + ": Error while editing: expense already present.\n";
           idSpeseNonModificate.push(speseDaModificare[i].id);
         }
         else {
-          esitoModifica += "Spesa numero " + (i+1) + ": errore durante la modifica.\n";
+          esitoModifica += this.lingua === "italiano" ? "Spesa numero " + (i+1) + ": errore durante la modifica.\n" : "Expense number " + (i+1) + ": error while editing.\n";
           idSpeseNonModificate.push(speseDaModificare[i].id);
         }
       }
@@ -238,10 +242,10 @@ export class SpesaActions {
 
       setSelectedIdsModifica([]);
 
-      alert(esitoModifica);
+      alert(esitoModifica); //////////
     }
     else {
-      alert("Salvataggio annullato.");
+      alert(this.lingua === "italiano" ? "Salvataggio annullato." : "Saving Cancelled.");
     }
   };
 
@@ -251,7 +255,7 @@ export class SpesaActions {
 
   async eliminaSpese(e, selectedIdsEliminazione, setSelectedIdsEliminazione, spesaState) {
     e.preventDefault();
-    if (confirm("Sei sicuro di voler eliminare le spese?")) {
+    if (confirm(this.lingua === "italiano" ? "Sei sicuro di voler eliminare le spese?" : "Are you sure you want to eliminate expenses?")) {
       const dati = {
         tipo_item: "spesa", 
         ids: selectedIdsEliminazione
@@ -271,25 +275,25 @@ export class SpesaActions {
         if(response.status === 200) {          
           this.dispatcher.aggiornaSpese(itemsRestanti);
           setSelectedIdsEliminazione([]);
-          alert("Eliminazione completata con successo.");
+          alert(this.lingua === "italiano" ? "Eliminazione completata con successo." : "Elimination completed successfully.");
         }
         else {
-          alert("Errore durante l\'eliminazione delle spese, riprova più tardi.");
+          alert(this.lingua === "italiano" ? "Errore durante l\'eliminazione delle spese, riprova più tardi." : "Error while deleting expenses, try again later.");
         }
       }
       catch (error) {
         console.error('Errore:', error);
-        alert("Errore durante l\'eliminazione delle spese, riprova più tardi.");
+        alert(this.lingua === "italiano" ? "Errore durante l\'eliminazione delle spese, riprova più tardi." : "Error while deleting expenses, try again later.");
       }
     }
     else {
-      alert("Eliminazione annullata.");
+      alert(this.lingua === "italiano" ? "Eliminazione annullata." : "Elimination cancelled.");
     }
   }
 
   async handleDeleteSpeseRangeFile(e, datiRicerca) {
     e.preventDefault();
-    if (confirm("Sei sicuro di voler eliminare le spese?")) {
+    if (confirm(this.lingua === "italiano" ? "Sei sicuro di voler eliminare le spese?" : "Are you sure you want to eliminate expenses?")) {
       const dati = {
         tipo_item: "spesa", 
         "primo_giorno": datiRicerca.primo_giorno, 
@@ -304,14 +308,14 @@ export class SpesaActions {
         body: JSON.stringify(dati),
       });
       if(response.status === 200) {
-        alert("Eliminazione completata con successo.");
+        alert(this.lingua === "italiano" ? "Eliminazione completata con successo." : "Elimination completed successfully.");
       }
       else {
-        alert("Errore durante l\'eliminazione delle spese, riprova più tardi."); 
+        alert(this.lingua === "italiano" ? "Errore durante l\'eliminazione delle spese, riprova più tardi." : "Error while deleting expenses, try again later."); 
       }
     }
     else {
-      alert("Eliminazione annullata.");
+      alert(this.lingua === "italiano" ? "Eliminazione annullata." : "Elimination cancelled.");
     }
   }
 }

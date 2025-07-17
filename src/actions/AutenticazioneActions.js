@@ -1,3 +1,4 @@
+import { useSelector } from 'react-redux';
 /************************************************** Dispatcher **************************************************/
 import { Dispatcher } from "../dispatcher/Dispatcher";
 /************************************************** Utils **************************************************/
@@ -5,6 +6,8 @@ import { controlloLogin, controlloProfilo } from "../utils/Controlli";
 
 export class AutenticazioneActions {
   dispatcher
+  saloneState = useSelector((state) => state.saloneSliceReducer.value);
+  lingua = this.saloneState.lingua;
 
   constructor() {
     this.dispatcher = new Dispatcher();
@@ -29,14 +32,14 @@ export class AutenticazioneActions {
         datiLogin["salt_hex_db"] = result.utente.salt_hex;
       }
 
-      if (controlloLogin(datiLogin, setDatiLogin) > 0) {
+      if (controlloLogin(datiLogin, setDatiLogin, this.lingua) > 0) {
         return;
       }
 
       this.dispatcher.eseguiLogin(result.utente.username, result.utente.ruolo, result.utente.note);
       navigate("/");
     } else {
-      alert("Errore durante il login, riprova più tardi.");
+      alert(this.lingua === "italiano" ? "Errore durante il login, riprova più tardi." : "Error while logging in, please try again later.");
     }
   }
 
@@ -46,7 +49,7 @@ export class AutenticazioneActions {
 
   async modificaProfilo(e, autenticazioneSession, datiProfilo, setDatiProfilo) {
     e.preventDefault();
-    if (confirm("Sei sicuro di voler modificare il profilo?")) {
+    if (confirm(this.lingua === "italiano" ? "Sei sicuro di voler modificare il profilo?" : "Are you sure you want to edit your profile?")) {
       const datiLogin = {
         username: autenticazioneSession.username,
         password: ""
@@ -65,7 +68,7 @@ export class AutenticazioneActions {
           datiProfilo["password_db"] = result.utente.password;
           datiProfilo["salt_hex_db"] = result.utente.salt_hex;
         }
-        if (controlloProfilo(datiProfilo, setDatiProfilo) > 0) {
+        if (controlloProfilo(datiProfilo, setDatiProfilo, this.lingua) > 0) {
           return;
         }
         const profileResponse = await fetch('/MODIFICA_PROFILO', {
@@ -77,18 +80,18 @@ export class AutenticazioneActions {
         });
         if (profileResponse.status === 200) {
           this.dispatcher.eseguiLogin(datiProfilo.nuovo_username, autenticazioneSession.ruolo, datiProfilo.note)
-          alert("Il profilo è stato modificato con successo.");
+          alert(this.lingua === "italiano" ? "Il profilo è stato modificato con successo." : "The profile was successfully modified.");
         } 
         else {
-          alert("Errore durante la modifica del profilo, riprova più tardi.");
+          alert(this.lingua === "italiano" ? "Errore durante la modifica del profilo, riprova più tardi." : "Error while editing profile, please try again later.");
         }
       } 
       else {
-        alert("Errore durante la modifica del profilo, riprova più tardi.");
+        alert(this.lingua === "italiano" ? "Errore durante la modifica del profilo, riprova più tardi.": "Error while editing profile, please try again later.");
       }
     }
     else {
-      alert("Modifica annullata.");
+      alert(this.lingua === "italiano" ? "Modifica annullata." : "Modification cancelled.");
     }
   }
 }

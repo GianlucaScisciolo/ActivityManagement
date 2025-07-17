@@ -37,8 +37,9 @@ const saveToLocalStorage = (state) => {
 
 const initialState = loadFromLocalStorage() || {
   value: {
+    lingua: "italiano", 
     clienti: {
-      id: 1, tipo:"CardWidget", tipoVisualizzazione: 0,  nome: "clienti", titolo: "Clienti", 
+      id: 1, tipo:"CardWidget", tipoVisualizzazione: 0, nome: "clienti", titolo: "Clienti", 
       img: clienti, backgroundColor: BC_NOT_SELECTED, x: 100, y: 100
     }, 
     servizi: {
@@ -87,6 +88,18 @@ const saloneSlice = createSlice({
   name: "widget",
   initialState: initialState,
   reducers: {
+    modificaLingua: (state) => {
+      state.value.lingua = state.value.lingua === "italiano" ? "inglese" : "italiano";
+      [state.value.clienti.nome, state.value.clienti.titolo] = state.value.lingua === "italiano" ? ["clienti", "Clienti"]: ["clients", "Clients"];
+      [state.value.servizi.nome, state.value.servizi.titolo] = state.value.lingua === "italiano" ? ["servizi", "Servizi"]: ["services", "Services"];
+      [state.value.lavori.nome, state.value.lavori.titolo] = state.value.lingua === "italiano" ? ["lavori", "Lavori"]: ["jobs", "Jobs"];
+      [state.value.prenotazione.nome, state.value.prenotazione.titolo] = state.value.lingua === "italiano" ? ["prenotazione", "Prenotazione"]: ["prenotation", "Prenotation"];
+      [state.value.spese.nome, state.value.spese.titolo] = state.value.lingua === "italiano" ? ["spese", "Spese"]: ["expenses", "Expenses"];
+      [state.value.salone.nome, state.value.salone.titolo] = state.value.lingua === "italiano" ? ["analisi", "Analisi"]: ["analyses", "Analyses"];
+      [state.value.profilo.nome, state.value.profilo.titolo] = state.value.lingua === "italiano" ? ["profilo", "Profilo"]: ["profile", "Profile"];
+
+      saveToLocalStorage(state);
+    },
     modificaWidget: (state, action) => {
       // console.log(action.payload.nomeWidget);
       state.value[action.payload.nomeWidget].tipoVisualizzazione = action.payload.tipoVisualizzazione;
@@ -122,6 +135,7 @@ const saloneSlice = createSlice({
 });
 
 export const saloneSliceActions = {
+  modificaLingua: saloneSlice.actions.modificaLingua,
   modificaWidget: saloneSlice.actions.modificaWidget,
   widgetSelected: saloneSlice.actions.widgetSelected,
   widgetView: saloneSlice.actions.widgetView

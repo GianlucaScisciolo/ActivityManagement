@@ -13,11 +13,12 @@ import { CardProfilo } from "../../riutilizzabile/card_item/CardItem";
 import { RowProfilo } from "../../riutilizzabile/row_item/RowItem";
 
 const Profilo = () => {
+  const stileState = useSelector((state) => state.stileSliceReducer.value);
+  const autenticazioneState = useSelector((state) => state.autenticazioneSliceReducer.value);
+  const saloneState = useSelector((state) => state.saloneSliceReducer.value);
   const autenticazioneActions = new AutenticazioneActions();
   const autenticazioneForms = new AutenticazioneForms();
   const operazioniForms = new OperazioniForms();
-  const stileState = useSelector((state) => state.stileSliceReducer.value);
-  const autenticazioneState = useSelector((state) => state.autenticazioneSliceReducer.value);
   const [datiProfilo, setDatiProfilo] = useState({
     username_attuale: autenticazioneState.username, 
     nuovo_username: autenticazioneState.username, 

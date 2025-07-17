@@ -32,6 +32,9 @@ export class Dispatcher {
   }
 
   // Salone
+  modificaLingua() {
+    store.dispatch(saloneSliceActions.modificaLingua())
+  }
   modificaWidget(nomeWidget, tipoVisualizzazione) {
     store.dispatch(saloneSliceActions.modificaWidget({
       nomeWidget: nomeWidget,

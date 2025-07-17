@@ -12,11 +12,12 @@ import { SaloneActions } from "../../actions/SaloneActions.js"
 import SearchAndInsertPage from '../../riutilizzabile/SearchAndInsertPage.jsx';
 
 const Clienti = () => {
+  const clienteState = useSelector((state) => state.clienteSliceReducer.value);
+  const stileState = useSelector((state) => state.stileSliceReducer.value);
+  const saloneState = useSelector((state) => state.saloneSliceReducer.value);
   const clienteActions = new ClienteActions();
   const clienteForms = new ClienteForms();
   const operazioniForms = new OperazioniForms();
-  const clienteState = useSelector((state) => state.clienteSliceReducer.value);
-  const stileState = useSelector((state) => state.stileSliceReducer.value);
 
   const [selectedTrashCount, setSelectedTrashCount] = useState(0);
   const [selectedPencilCount, setSelectedPencilCount] = useState(0);

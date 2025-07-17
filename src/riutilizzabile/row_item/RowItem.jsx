@@ -1,4 +1,5 @@
 // React e Redux
+import { useSelector } from 'react-redux';
 import React, { useState } from 'react';
 import { Trash2, Pencil } from 'lucide-react';
 import { faFilePdf, faFileExcel } from '@fortawesome/free-solid-svg-icons';
@@ -679,6 +680,8 @@ export function RowProfilo({campi, indici, eseguiModificaProfilo}) {
 }
 
 export function RowEntrateUscite({datiRicerca, setDatiRicerca, handleInputChange, eseguiRicerca}) {
+  const saloneState = useSelector((state) => state.saloneSliceReducer.value);
+  const lingua = saloneState.lingua;
   let maxHeight = "2000px";
   return (
     <StyledRow>
@@ -689,8 +692,8 @@ export function RowEntrateUscite({datiRicerca, setDatiRicerca, handleInputChange
             <StyledInputBlock
               rows={1}
               name="header"
-              value="Ricerca entrate e uscite"
-              placeholder="Ricerca entrate e uscite"
+              value={lingua === "italiano" ? "Ricerca entrate e uscite" : "Searching for inputs and outputs"}
+              placeholder={lingua === "italiano" ? "Ricerca entrate e uscite" : "Searching for inputs and outputs"}
               readOnly
             />
           </StyledRow>

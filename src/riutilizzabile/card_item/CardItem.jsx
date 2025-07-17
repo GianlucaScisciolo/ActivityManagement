@@ -1,4 +1,5 @@
 // React e Redux
+import { useSelector } from 'react-redux';
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Card, Table } from 'react-bootstrap';
 import { faFilePdf, faFileExcel } from '@fortawesome/free-solid-svg-icons';
@@ -677,6 +678,8 @@ export function CardWidget({nome, img, id, onClickWidget, backgroundColor}) {
 }
 
 export function CardEntrateLavori({ entrateLavori }) {
+  const saloneState = useSelector((state) => state.saloneSliceReducer.value);
+  const lingua = saloneState.lingua;
   return (
     <Card
       style={{
@@ -692,7 +695,7 @@ export function CardEntrateLavori({ entrateLavori }) {
     >
       <Card.Body>
         <center>
-          <Card.Title style={{ color: '#FFFFFF' }}>Entrate lavori</Card.Title>
+          <Card.Title style={{ color: '#FFFFFF' }}>{lingua === "italiano" ? "Entrate lavori" : "Revenue jobs"}</Card.Title>
         </center>
       </Card.Body>
       <center>
@@ -710,20 +713,20 @@ export function CardEntrateLavori({ entrateLavori }) {
         >
           <thead>
             <tr>
-              <th style={{color: "#FFFFFF"}}>ANNO</th>
-              <th style={{color: "#FFFFFF"}}>GEN</th>
+              <th style={{color: "#FFFFFF"}}>{lingua === "italiano" ? "ANNO" : "YEAR"}</th>
+              <th style={{color: "#FFFFFF"}}>{lingua === "italiano" ? "GEN" : "JAN"}</th>
               <th style={{color: "#FFFFFF"}}>FEB</th>
               <th style={{color: "#FFFFFF"}}>MAR</th>
               <th style={{color: "#FFFFFF"}}>APR</th>
-              <th style={{color: "#FFFFFF"}}>MAG</th>
-              <th style={{color: "#FFFFFF"}}>GIU</th>
-              <th style={{color: "#FFFFFF"}}>LUG</th>
-              <th style={{color: "#FFFFFF"}}>AGO</th>
-              <th style={{color: "#FFFFFF"}}>SET</th>
-              <th style={{color: "#FFFFFF"}}>OTT</th>
+              <th style={{color: "#FFFFFF"}}>{lingua === "italiano" ? "MAG" : "MAY"}</th>
+              <th style={{color: "#FFFFFF"}}>{lingua === "italiano" ? "GIU" : "JUN"}</th>
+              <th style={{color: "#FFFFFF"}}>{lingua === "italiano" ? "LUG" : "JUL"}</th>
+              <th style={{color: "#FFFFFF"}}>{lingua === "italiano" ? "AGO" : "AUG"}</th>
+              <th style={{color: "#FFFFFF"}}>{lingua === "italiano" ? "SET" : "SEP"}</th>
+              <th style={{color: "#FFFFFF"}}>{lingua === "italiano" ? "OTT" : "OCT"}</th>
               <th style={{color: "#FFFFFF"}}>NOV</th>
-              <th style={{color: "#FFFFFF"}}>DIC</th>
-              <th style={{color: "#FFFFFF"}}>TOT ENTRATE</th>
+              <th style={{color: "#FFFFFF"}}>{lingua === "italiano" ? "DIC" : "DEC"}</th>
+              <th style={{color: "#FFFFFF"}}>{lingua === "italiano" ? "TOT ENTRATE" : "TOT REVENUE"}</th>
             </tr>
           </thead>
           <tbody>
@@ -784,6 +787,8 @@ const getQuantitaEntrateAnno = (entrata) => {
 }
 
 export function CardEntrateServizi({ entrateServizi }) {
+  const saloneState = useSelector((state) => state.saloneSliceReducer.value);
+  const lingua = saloneState.lingua;
   const [annoTmp, setAnnoTmp] = useState(0);
   return (
     <Card
@@ -800,7 +805,7 @@ export function CardEntrateServizi({ entrateServizi }) {
     >
       <Card.Body>
         <center>
-          <Card.Title style={{ color: '#FFFFFF' }}>Entrate servizi</Card.Title>
+          <Card.Title style={{ color: '#FFFFFF' }}>{lingua === "italiano" ? "Entrate servizi" : "Revenue services"}</Card.Title>
         </center>
       </Card.Body>
       <center>
@@ -822,22 +827,22 @@ export function CardEntrateServizi({ entrateServizi }) {
               <React.Fragment key={i}>
                 {(i === 0 || entrateServizi[i].anno !== entrateServizi[i-1].anno) && (
                   <>
-                    <tr><th colSpan={14}>ANNO = {entrata.anno}</th></tr>
+                    <tr><th colSpan={14}>{lingua==="italiano" ? "ANNO" : "YEAR"} = {entrata.anno}</th></tr>
                     <tr>
                       <th style={{color: "#FFFFFF"}}>SERVIZIO</th>
-                      <th style={{color: "#FFFFFF"}}>GEN</th>
+                      <th style={{color: "#FFFFFF"}}>{lingua === "italiano" ? "GEN" : "JAN"}</th>
                       <th style={{color: "#FFFFFF"}}>FEB</th>
                       <th style={{color: "#FFFFFF"}}>MAR</th>
                       <th style={{color: "#FFFFFF"}}>APR</th>
-                      <th style={{color: "#FFFFFF"}}>MAG</th>
-                      <th style={{color: "#FFFFFF"}}>GIU</th>
-                      <th style={{color: "#FFFFFF"}}>LUG</th>
-                      <th style={{color: "#FFFFFF"}}>AGO</th>
-                      <th style={{color: "#FFFFFF"}}>SET</th>
-                      <th style={{color: "#FFFFFF"}}>OTT</th>
+                      <th style={{color: "#FFFFFF"}}>{lingua === "italiano" ? "MAG" : "MAY"}</th>
+                      <th style={{color: "#FFFFFF"}}>{lingua === "italiano" ? "GIU" : "JUN"}</th>
+                      <th style={{color: "#FFFFFF"}}>{lingua === "italiano" ? "LUG" : "JUL"}</th>
+                      <th style={{color: "#FFFFFF"}}>{lingua === "italiano" ? "AGO" : "AUG"}</th>
+                      <th style={{color: "#FFFFFF"}}>{lingua === "italiano" ? "SET" : "SEP"}</th>
+                      <th style={{color: "#FFFFFF"}}>{lingua === "italiano" ? "OTT" : "OCT"}</th>
                       <th style={{color: "#FFFFFF"}}>NOV</th>
-                      <th style={{color: "#FFFFFF"}}>DIC</th>
-                      <th style={{color: "#FFFFFF"}}>TOT ENTRATE</th>
+                      <th style={{color: "#FFFFFF"}}>{lingua === "italiano" ? "DIC" : "DEC"}</th>
+                      <th style={{color: "#FFFFFF"}}>{lingua === "italiano" ? "TOT ENTRATE" : "TOT REVENUE"}</th>
                     </tr>
                   </>
                 )}
@@ -895,6 +900,8 @@ export function CardEntrateServizi({ entrateServizi }) {
 }
 
 export function CardUsciteSpese({ usciteSpese }) {
+  const saloneState = useSelector((state) => state.saloneSliceReducer.value);
+  const lingua = saloneState.lingua;
   return (
     <Card
       style={{
@@ -910,7 +917,7 @@ export function CardUsciteSpese({ usciteSpese }) {
     >
       <Card.Body>
         <center>
-          <Card.Title style={{ color: '#FFFFFF' }}>Uscite spese</Card.Title>
+          <Card.Title style={{ color: '#FFFFFF' }}>{lingua === "italiano" ? "Uscite spese" : "Exit expenses"}</Card.Title>
         </center>
       </Card.Body>
       <center>
@@ -928,20 +935,20 @@ export function CardUsciteSpese({ usciteSpese }) {
         >
           <thead>
             <tr>
-              <th style={{color: "#FFFFFF"}}>ANNO</th>
-              <th style={{color: "#FFFFFF"}}>GEN</th>
+              <th style={{color: "#FFFFFF"}}>{lingua === "italiano" ? "ANNO" : "YEAR"}</th>
+              <th style={{color: "#FFFFFF"}}>{lingua === "italiano" ? "GEN" : "JAN"}</th>
               <th style={{color: "#FFFFFF"}}>FEB</th>
               <th style={{color: "#FFFFFF"}}>MAR</th>
               <th style={{color: "#FFFFFF"}}>APR</th>
-              <th style={{color: "#FFFFFF"}}>MAG</th>
-              <th style={{color: "#FFFFFF"}}>GIU</th>
-              <th style={{color: "#FFFFFF"}}>LUG</th>
-              <th style={{color: "#FFFFFF"}}>AGO</th>
-              <th style={{color: "#FFFFFF"}}>SET</th>
-              <th style={{color: "#FFFFFF"}}>OTT</th>
+              <th style={{color: "#FFFFFF"}}>{lingua === "italiano" ? "MAG" : "MAY"}</th>
+              <th style={{color: "#FFFFFF"}}>{lingua === "italiano" ? "GIU" : "JUN"}</th>
+              <th style={{color: "#FFFFFF"}}>{lingua === "italiano" ? "LUG" : "JUL"}</th>
+              <th style={{color: "#FFFFFF"}}>{lingua === "italiano" ? "AGO" : "AUG"}</th>
+              <th style={{color: "#FFFFFF"}}>{lingua === "italiano" ? "SET" : "SEP"}</th>
+              <th style={{color: "#FFFFFF"}}>{lingua === "italiano" ? "OTT" : "OCT"}</th>
               <th style={{color: "#FFFFFF"}}>NOV</th>
-              <th style={{color: "#FFFFFF"}}>DIC</th>
-              <th style={{color: "#FFFFFF"}}>TOT USCITE</th>
+              <th style={{color: "#FFFFFF"}}>{lingua === "italiano" ? "DIC" : "DEC"}</th>
+              <th style={{color: "#FFFFFF"}}>{lingua === "italiano" ? "TOT USCITE" : "TOT EXIT"}</th>
             </tr>
           </thead>
           <tbody>
@@ -985,6 +992,8 @@ export function CardUsciteSpese({ usciteSpese }) {
 }
 
 export function CardRicavi({ entrateLavori, usciteSpese }) {
+  const saloneState = useSelector((state) => state.saloneSliceReducer.value);
+  const lingua = saloneState.lingua;
   return (
     <Card
       style={{
@@ -1000,7 +1009,7 @@ export function CardRicavi({ entrateLavori, usciteSpese }) {
     >
       <Card.Body>
         <center>
-          <Card.Title style={{ color: '#FFFFFF' }}>Ricavi</Card.Title>
+          <Card.Title style={{ color: '#FFFFFF' }}>{lingua === "italiano" ? "Ricavi" : "Revenues"}</Card.Title>
         </center>
       </Card.Body>
       <center>
@@ -1018,20 +1027,20 @@ export function CardRicavi({ entrateLavori, usciteSpese }) {
         >
           <thead>
             <tr>
-              <th style={{color: "#FFFFFF"}}>ANNO</th>
-              <th style={{color: "#FFFFFF"}}>GEN</th>
+              <th style={{color: "#FFFFFF"}}>{lingua === "italiano" ? "ANNO" : "YEAR"}</th>
+              <th style={{color: "#FFFFFF"}}>{lingua === "italiano" ? "GEN" : "JAN"}</th>
               <th style={{color: "#FFFFFF"}}>FEB</th>
               <th style={{color: "#FFFFFF"}}>MAR</th>
               <th style={{color: "#FFFFFF"}}>APR</th>
-              <th style={{color: "#FFFFFF"}}>MAG</th>
-              <th style={{color: "#FFFFFF"}}>GIU</th>
-              <th style={{color: "#FFFFFF"}}>LUG</th>
-              <th style={{color: "#FFFFFF"}}>AGO</th>
-              <th style={{color: "#FFFFFF"}}>SET</th>
-              <th style={{color: "#FFFFFF"}}>OTT</th>
+              <th style={{color: "#FFFFFF"}}>{lingua === "italiano" ? "MAG" : "MAY"}</th>
+              <th style={{color: "#FFFFFF"}}>{lingua === "italiano" ? "GIU" : "JUN"}</th>
+              <th style={{color: "#FFFFFF"}}>{lingua === "italiano" ? "LUG" : "JUL"}</th>
+              <th style={{color: "#FFFFFF"}}>{lingua === "italiano" ? "AGO" : "AUG"}</th>
+              <th style={{color: "#FFFFFF"}}>{lingua === "italiano" ? "SET" : "SEP"}</th>
+              <th style={{color: "#FFFFFF"}}>{lingua === "italiano" ? "OTT" : "OCT"}</th>
               <th style={{color: "#FFFFFF"}}>NOV</th>
-              <th style={{color: "#FFFFFF"}}>DIC</th>
-              <th style={{color: "#FFFFFF"}}>TOT RICAVI</th>
+              <th style={{color: "#FFFFFF"}}>{lingua === "italiano" ? "DIC" : "DEC"}</th>
+              <th style={{color: "#FFFFFF"}}>{lingua === "italiano" ? "TOT RICAVI" : "TOT EARNINGS"}</th>
             </tr>
           </thead>
           <tbody>
@@ -1111,10 +1120,12 @@ export function CardInformazioni({ totaleItems }) {
 }
 
 export function CardEntrateUscite({datiRicerca, setDatiRicerca, handleInputChange, eseguiRicerca}) {
+  const saloneState = useSelector((state) => state.saloneSliceReducer.value);
+  const lingua = saloneState.lingua;
   let maxHeight = "2000px";
   return (
     <StyledCard>
-      <StyledCardHeader>Ricerca entrate e uscite</StyledCardHeader>
+      <StyledCardHeader>{lingua === "italiano" ? "Ricerca entrate e uscite" : "Searching for inputs and outputs"}</StyledCardHeader>
       <SlideContainer style={{maxHeight: `${maxHeight}`}}>
         <StyledInputModifica
           rows={1}

@@ -107,25 +107,20 @@ const onClickWidget = (e, widget, navigate) => {
   }
   else {
     // Cliente
-    if(widget.nome === "clienti") 
-      navigate("/clienti");
-    // Servizio
-    else if(widget.nome === "servizi") 
-      navigate("/servizi");
-    // Lavoro
-    else if(widget.nome === "lavori") 
-      navigate("/lavori");
-    else if(widget.nome === "prenotazione") 
+    const widgetNames = [
+      "clienti", "clients", 
+      "servizi", "services", 
+      "lavori", "jobs", 
+      "spese", "expenses", 
+      "analisi", "analyses", 
+      "profilo", "profile"
+    ]
+    if(widgetNames.includes(widget.nome)) {
+      navigate("/" + widget.nome);
+    }
+    else if(widget.nome === "prenotazione") {
       window.open("https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ2GRuG5B0k6Qyo2DLBkT1-OOXXC1XO60HQkWAl3Txvc3z-PcBL0EYhfc62sAor46nbg-szeiADZ", "_blank");
-    // Spesa
-    else if(widget.nome === "spese") 
-      navigate("/spese");
-    // Salone   
-    else if(widget.nome === "salone") 
-      navigate("/analisi");
-    // Profilo
-    else if(widget.nome === "profilo") 
-      navigate("/profilo");
+    }
   }
 }
 

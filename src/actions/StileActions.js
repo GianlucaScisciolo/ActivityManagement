@@ -1,8 +1,12 @@
+import { useSelector } from 'react-redux';
 /************************************************** Dispatcher **************************************************/
 import { Dispatcher } from "../dispatcher/Dispatcher";
 
 export class StileActions {
   dispatcher;
+  saloneState = useSelector((state) => state.saloneSliceReducer.value);
+  lingua = this.saloneState.lingua;
+
   constructor() {
     this.dispatcher = new Dispatcher();
   }
@@ -16,7 +20,7 @@ export class StileActions {
         this.dispatcher.cambioColoreSfondo(sfondo);
         break;
       default:
-        alert("Errore, tipo sfondo non valido.");
+        alert(this.lingua === "italiano" ? "Errore, tipo sfondo non valido." : "Error, invalid background type.");
         break;
     }
   }
@@ -29,7 +33,7 @@ export class StileActions {
       this.dispatcher.cambioVistaForm(tipoView);
     }
     else {
-      alert("Errore, tipo elemento non valido.");
+      alert(this.lingua === "italiano" ? "Errore, tipo elemento non valido." : "Error, invalid element type.");
     }
   }
 }

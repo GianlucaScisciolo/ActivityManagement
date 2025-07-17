@@ -19,6 +19,7 @@ const Lavori = () => {
   const operazioniForms = new OperazioniForms();
   const lavoroState = useSelector((state) => state.lavoroSliceReducer.value);
   const stileState = useSelector((state) => state.stileSliceReducer.value);
+  const saloneState = useSelector((state) => state.saloneSliceReducer.value);
 
   const classeFormWrapperCheckbox = (stileState.vistaForm === "form") ? "checkbox-wrapper-form" : "checkbox-wrapper";
   const classeItemWrapperCheckbox = (stileState.vistaItem === "form") ? "checkbox-wrapper-form" : "checkbox-wrapper";
@@ -242,7 +243,7 @@ const Lavori = () => {
       setClienti(result.items);
     }
     else {
-      alert("Errore durante l\'ottenimento dei clienti per l\'inserimento di un nuovo lavoro, riprova più tardi.");
+      alert(saloneState.lingua === "italiano" ? "Errore durante l\'ottenimento dei clienti per l\'inserimento di un nuovo lavoro, riprova più tardi." : "Error while obtaining clients for new job entry, try again later.");
     }
   };
 
@@ -261,7 +262,7 @@ const Lavori = () => {
       // console.log(result.items);
     }
     else {
-      alert("Errore durante l\'ottenimento dei clienti per l\'inserimento di un nuovo lavoro, riprova più tardi.");
+      alert(saloneState.lingua === "italiano" ? "Errore durante l\'ottenimento dei clienti per l\'inserimento di un nuovo lavoro, riprova più tardi." : "Error while obtaining clients for new job entry, try again later.");
     }
   };
 

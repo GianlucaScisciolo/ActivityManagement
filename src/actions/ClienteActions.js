@@ -1,9 +1,13 @@
+import { useSelector } from 'react-redux';
 /************************************************** Dispatcher **************************************************/
 import { Dispatcher } from "../dispatcher/Dispatcher";
 /************************************************** Utils **************************************************/
 import { controlloCliente } from "../utils/Controlli";
 
 export class ClienteActions {
+  saloneState = useSelector((state) => state.saloneSliceReducer.value);
+  lingua = this.saloneState.lingua;
+
   dispatcher;
   constructor() {
     this.dispatcher = new Dispatcher();
@@ -11,8 +15,8 @@ export class ClienteActions {
   
   async inserimentoCliente(e, nuovoCliente, setNuovoCliente) {
     e.preventDefault();
-    if (confirm("Sei sicuro di voler salvare il cliente?")) {
-      if (controlloCliente(nuovoCliente, setNuovoCliente) > 0) 
+    if (confirm(this.lingua === "italiano" ? "Sei sicuro di voler salvare il cliente?" : "Are you sure you want to save the client?")) {
+      if (controlloCliente(nuovoCliente, setNuovoCliente, this.lingua) > 0) 
         return;
 
       nuovoCliente["giorno_attuale"] = nuovoCliente["giorno"];
@@ -32,17 +36,17 @@ export class ClienteActions {
         const result = await response.json();
         nuovoCliente.id = result.id;
         this.dispatcher.inserimentoCliente(nuovoCliente);
-        alert("L\'inserimento del cliente è andato a buon fine!!");
+        alert(this.lingua === "italiano" ? "L\'inserimento del cliente è andato a buon fine." : "Client input was successful.");
       }
       else if(response.status === 400) {
-        alert("Errore: cliente gia\' presente.")
+        alert(this.lingua === "italiano" ? "Errore: cliente gia\' presente." : "Error: client already present.")
       }
       else {
-        alert("Errore durante il salvataggio del nuovo cliente, riprova più tardi.");
+        alert(this.lingua === "italiano" ? "Errore durante il salvataggio del nuovo cliente, riprova più tardi." : "Error while saving new client, please try again later.");
       }
     }
     else {
-      alert("Salvataggio annullato.");
+      alert(this.lingua === "italiano" ? "Salvataggio annullato." : "Saving Cancelled.");
     }
   }
 
@@ -62,7 +66,7 @@ export class ClienteActions {
       this.dispatcher.aggiornaClienti(result.items);
     }
     else {
-      alert("Errore durante la ricerca dei clienti, riprova più tardi.");
+      alert(this.lingua === "italiano" ? "Errore durante la ricerca dei clienti, riprova più tardi." : "Error while customer search, please try again later.");
     }
   }
 
@@ -106,12 +110,12 @@ export class ClienteActions {
 
   async modificaClienti(e, selectedIdsModifica, setSelectedIdsModifica, clienteState) {
     e.preventDefault();
-    if (confirm("Sei sicuro di voler modificare i clienti?")) {
+    if (confirm(this.lingua === "italiano" ? "Sei sicuro di voler modificare i clienti?" : "Are you sure you want to edit the clients?")) {
       let clientiDaNonModificare = clienteState.clienti.filter(cliente => !selectedIdsModifica.includes(cliente.id));
       let clientiDaModificare = clienteState.clienti.filter(cliente => selectedIdsModifica.includes(cliente.id));
       let idClientiNonModificati = [];
       let idClientiModificati = [];
-      let esitoModifica = "Esito modifica:\n";
+      let esitoModifica = this.lingua === "italiano" ? "Esito modifica:\n" : "Modification outcome:\n";
             
       for(let i = 0; i < clientiDaModificare.length; i++) {
         const dati = {
@@ -126,15 +130,15 @@ export class ClienteActions {
           body: JSON.stringify(dati),
         });
         if(response.status === 200) {           
-          esitoModifica += "Cliente numero " + (i+1) + ": modifica avvenuta con successo.\n";
+          esitoModifica += this.lingua === "italiano" ? "Cliente numero " + (i+1) + ": modifica avvenuta con successo.\n" : "Client number " + (i+1) + ": successful modification.\n";
           idClientiModificati.push(clientiDaModificare[i].id);
         }
         else if(response.status === 400) {
-          esitoModifica += "Cliente numero " + (i+1) + ": errore durante la modifica: cliente gia\' presente.\n";
+          esitoModifica += this.lingua === "italiano" ? "Cliente numero " + (i+1) + ": errore durante la modifica: cliente gia\' presente.\n" : "Client number " + (i+1) + ": error while editing: client already present.\n";
           idClientiNonModificati.push(clientiDaModificare[i].id);
         }
         else {
-          esitoModifica += "Cliente numero " + (i+1) + ": errore durante la modifica.\n";
+          esitoModifica += this.lingua === "italiano" ? "Cliente numero " + (i+1) + ": errore durante la modifica.\n" : "Client number " + (i+1) + ": error while editing.\n";
           idClientiNonModificati.push(clientiDaModificare[i].id);
         }
       }
@@ -164,7 +168,7 @@ export class ClienteActions {
       alert(esitoModifica);
     }
     else {
-      alert("Salvataggio annullato.");
+      alert(this.lingua === "italiano" ? "Salvataggio annullato." : "Saving cancelled.");
     }
   }
 
@@ -174,7 +178,7 @@ export class ClienteActions {
 
   async eliminaClienti(e, selectedIdsEliminazione, setSelectedIdsEliminazione, clienteState) {
     e.preventDefault();
-    if (confirm("Sei sicuro di voler eliminare i clienti?")) {
+    if (confirm(this.lingua === "italiano" ? "Sei sicuro di voler eliminare i clienti?" : "Are you sure you want to eliminate clients?")) {
       const dati = {
         tipo_item: "cliente", 
         ids: selectedIdsEliminazione
@@ -193,14 +197,14 @@ export class ClienteActions {
       if(response.status === 200) {
         this.dispatcher.aggiornaClienti(itemsRestanti);
         setSelectedIdsEliminazione([]);
-        alert("Eliminazione completata con successo.");
+        alert(this.lingua === "italiano" ? "Eliminazione completata con successo." : "Elimination completed successfully.");
       }
       else {
-        alert("Errore durante l\'eliminazione dei clienti, riprova più tardi.");
+        alert(this.lingua === "italiano" ? "Errore durante l\'eliminazione dei clienti, riprova più tardi." : "Error while deleting clients, try again later.");
       }
     }
     else {
-      alert("Eliminazione annullata.");
+      alert(this.lingua === "italiano" ? "Eliminazione annullata." : "Elimination cancelled.");
     }
   }
 }

@@ -1,4 +1,5 @@
 // React e Redux
+import { useSelector } from 'react-redux';
 import React, { useState } from 'react';
 import { faFilePdf, faFileExcel, faFile } from '@fortawesome/free-solid-svg-icons';
 // Riutilizzabile
@@ -629,12 +630,14 @@ export function FormFileItems({campi, indici, ottieniFileRangePDF, ottieniFileRa
 }
 
 export function FormEntrateUscite({datiRicerca, setDatiRicerca, handleInputChange, eseguiRicerca}) {
+  const saloneState = useSelector((state) => state.saloneSliceReducer.value);
+  const lingua = saloneState.lingua;
   let maxHeight = "2000px";
   return (
     <StyledForm>
-      <StyledHeader>Ricerca entrate e uscite</StyledHeader>
+      <StyledHeader>{lingua === "italiano" ? "Ricerca entrate e uscite" : "Searching for inputs and outputs"}</StyledHeader>
       <SlideContainer style={{maxHeight: `${maxHeight}`}}>
-        <StyledLabel htmlFor="primo_anno">Primo anno</StyledLabel>
+        <StyledLabel htmlFor="primo_anno">{lingua === "italiano" ? "Primo anno" : "First year"}</StyledLabel>
         <StyledInputModifica
           rows={1}
           name="primo_anno"
@@ -642,10 +645,10 @@ export function FormEntrateUscite({datiRicerca, setDatiRicerca, handleInputChang
           type="number"
           step={1}
           value={datiRicerca.primo_anno}
-          placeholder="Primo anno"
+          placeholder={lingua === "italiano" ? "Primo anno" : "First year"}
           onChange={(e) => handleInputChange(e, setDatiRicerca)}
         />
-        <StyledLabel htmlFor="ultimo_anno">Ultimo anno</StyledLabel>
+        <StyledLabel htmlFor="ultimo_anno">{lingua === "italiano" ? "Ultimo anno" : "Last year"}</StyledLabel>
         <StyledSelectModifica 
           name="ultimo_anno" 
           id="ultimo_anno"

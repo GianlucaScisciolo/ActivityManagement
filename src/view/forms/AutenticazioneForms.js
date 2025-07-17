@@ -1,9 +1,13 @@
+import { useSelector } from 'react-redux';
+
 export class AutenticazioneForms {
   INDICI_LOGIN = [0, 1];
   INDICI_PROFILO = [0, 1, 2, 3, 4];
+  saloneState = useSelector((state) => state.saloneSliceReducer.value);
+  lingua = this.saloneState.lingua;
 
   constructor() {
-
+    
   }
 
   getCampiLogin(item, handleOnChange, handleOnClick, handleOnBlur) {
@@ -27,15 +31,27 @@ export class AutenticazioneForms {
 
   getCampiProfilo(item, handleOnChange, handleOnClick, handleOnBlur) {
     return {
-      header: "Profilo", 
-      label: ["Nuovo username*", "Note", "Password attuale*", "Nuova password", "Conferma nuova password"],  
+      header: this.lingua === "italiano" ? "Profilo" : "Profile", 
+      label: [
+        this.lingua === "italiano" ? "Nuovo username*" : "New username*",
+        this.lingua === "italiano" ? "Note" : "Notes",
+        this.lingua === "italiano" ? "Password attuale*" : "Current password*",
+        this.lingua === "italiano" ? "Nuova password" : "New password",
+        this.lingua === "italiano" ? "Conferma nuova password" : "Confirm new password",
+      ],
       type: [null, null, "password", "password", "password"],
       step: [null, null, null, null, null],  
       min: [null, null, null, null, null], 
       name: ["nuovo_username", "note", "password_attuale", "nuova_password", "conferma_nuova_password"], 
       id: ["nuovo_username_profilo", "note_profilo", "password_attuale_profilo", "nuova_password_profilo", "conferma_nuova_password_profilo"], 
       value: [item.nuovo_username, item.note, item.password_attuale, item.nuova_password, item.conferma_nuova_password], 
-      placeholder: ["Nuovo username*", "Note", "Password attuale*", "Nuova password", "Conferma nuova password"],
+      placeholder: [
+        this.lingua === "italiano" ? "Nuovo username*" : "New username", 
+        this.lingua === "italiano" ? "Note" : "Notes", 
+        this.lingua === "italiano" ? "Password attuale*" : "Current password*", 
+        this.lingua === "italiano" ? "Nuova password" : "New password", 
+        this.lingua === "italiano" ? "Conferma nuova password" : "Confirm new password",
+      ],
       errore: [item.errore_nuovo_username, item.errore_note, item.errore_password_attuale, item.errore_nuova_password, item.errore_conferma_nuova_password], 
       options: [null, null, null, null, null], 
       onChange: handleOnChange, 

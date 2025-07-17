@@ -8,6 +8,7 @@ import { ServizioSQL } from './ServizioSQL.js'
 import { SpesaSQL } from './SpesaSQL.js';
 import { AutenticazioneSQL } from './AutenticazioneSQL.js';
 import { CollegamentoSQL } from './CollegamentoSQL.js';
+import { useSelector } from 'react-redux';
 
 const app = express();
 
@@ -26,6 +27,9 @@ app.listen(8081, () => {
 app.listen(3000, () => {
   console.log('Server in esecuzione sulla porta 3000');
 });
+
+const saloneState = useSelector((state) => state.saloneSliceReducer.value);
+const lingua = this.saloneState.lingua;
 
 /************************************************** Database **************************************************/
 
@@ -181,7 +185,7 @@ app.post("/INSERISCI_ITEM", async(req, res) => {
       params = spesaSQL.params_inserimento_spesa(req.body);
       break;
     default:
-      alert("Errore, riprova piu\' tardi.");
+      alert(lingua === "italiano" ? "Errore, riprova piu\' tardi." : "Error, please try again later.");
       return;
   }
 
