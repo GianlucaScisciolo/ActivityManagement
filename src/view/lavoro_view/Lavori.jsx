@@ -285,6 +285,9 @@ const Lavori = () => {
     else {
       return "";
     }
+          /*
+    return "Totale: " + 32.80.toFixed(2) + " €";
+    */
   }
 
   useEffect(() => {

@@ -65,7 +65,7 @@ const Home = () => {
           <DragAndDropWidgetHomePage plusCliccato={plusCliccato} />
         </>
       )}
-      {/*
+      
       <button onClick={
         (e) => {
           let salt_hex = generateRandomString(32);
@@ -74,7 +74,7 @@ const Home = () => {
           console.log("PASSWORD CRIPTATA: " + password_criptata);
         }
       }>Password criptata</button>
-      */}
+      
     </>
   );
 }

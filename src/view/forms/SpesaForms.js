@@ -20,7 +20,7 @@ export class SpesaForms {
     return {
       header: this.lingua === "italiano" ? "Nuova spesa" : "New expense", 
       label: [
-        this.lingua === "italiano" ? "Nome*" : "Name*", "Nome*", 
+        this.lingua === "italiano" ? "Nome*" : "Name*",  
         this.lingua === "italiano" ? "Descrizione" : "Description", 
         this.lingua === "italiano" ? "Totale*" : "Total*", 
         this.lingua === "italiano" ? "Giorno*" : "Day*", 
@@ -33,7 +33,7 @@ export class SpesaForms {
       id: ["nuovo_nome_spesa", "nuova_descrizione_spesa", "nuovo_totale_spesa", "nuovo_giorno_spesa", "nuove_note_spesa"], 
       value: [item.nome, item.descrizione, item.totale, item.giorno, item.note], 
       placeholder: [
-        this.lingua === "italiano" ? "Nome*" : "Name*", "Nome*", 
+        this.lingua === "italiano" ? "Nome*" : "Name*", 
         this.lingua === "italiano" ? "Descrizione" : "Description", 
         this.lingua === "italiano" ? "Totale*" : "Total*", 
         this.lingua === "italiano" ? "Giorno*" : "Day*", 
@@ -106,11 +106,11 @@ export class SpesaForms {
       id: ["nome_spesa", "descrizione_spesa", "totale_spesa", "giorno_spesa", "note_spesa"], 
       value: [item.nome, item.descrizione, parseFloat(item.totale).toFixed(2), item.giorno, item.note], 
       placeholder: [
-        this.lingua === "italiano" ? "Nome*" : "Name*", 
-        this.lingua === "italiano" ? "Descrizione" : "Description", 
-        this.lingua === "italiano" ? "Totale*" : "Total*", 
-        this.lingua === "italiano" ? "Giorno*" : "Day*", 
-        this.lingua === "italiano" ? "Note" : "Notes"
+        lingua === "italiano" ? "Nome*" : "Name*", 
+        lingua === "italiano" ? "Descrizione" : "Description", 
+        lingua === "italiano" ? "Totale*" : "Total*", 
+        lingua === "italiano" ? "Giorno*" : "Day*", 
+        lingua === "italiano" ? "Note" : "Notes"
       ], 
       errore: [errori.errore_nome, errori.errore_descrizione, errori.errore_totale, errori.errore_giorno, errori.errore_note], 
       valoreModificabile: [false, true, true, true, true], 

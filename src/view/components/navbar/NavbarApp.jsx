@@ -8,9 +8,12 @@ import { House } from 'lucide-react';
 // View
 //import immagineSfondo1 from "../../img/immagine_sfondo1.jpg"
 //import immagineSfondo2 from "../../img/immagine_sfondo2.png"
-import negozio from "../../img/negozio.jpg";
-import scrivania from "../../img/scrivania.jpg";
-import legno from "../../img/legno.jpg";
+import negozio from "../../img/sfondi/negozio.jpg";
+import scrivania from "../../img/sfondi/scrivania.jpg";
+import legno from "../../img/sfondi/legno.jpg";
+import mongolfiera from "../../img/sfondi/mongolfiera.jpg";
+import montagne from "../../img/sfondi/montagne.jpg";
+import salone from "../../img/sfondi/salone_barbiere.jpg";
 import italiano from "../../img/img_icons/italiano.png";
 import inglese from "../../img/img_icons/inglese.png";
 import { 
@@ -131,10 +134,28 @@ export const NavbarApp = () => {
                     {(dropdownSfondo === true) && (
                       <>
                         <StyledNavDropdownItem as={NavLink} to="#" 
+                          onClick={() => stileActions.cambioSfondo("img", montagne)}
+                        >
+                          {saloneState.lingua === "italiano" ? "Montagne" : "Mountains"}
+                        </StyledNavDropdownItem>
+                        <StyledNavDropdownItem as={NavLink} to="#" 
+                          onClick={() => stileActions.cambioSfondo("img", mongolfiera)}
+                        >
+                          {saloneState.lingua === "italiano" ? "Mongolfiera" : "Hot Air Balloon"}
+                        </StyledNavDropdownItem>
+                        <StyledNavDropdownItem as={NavLink} to="#" 
                           onClick={() => stileActions.cambioSfondo("img", negozio)}
                         >
                           {saloneState.lingua === "italiano" ? "Negozio" : "Store"}
                         </StyledNavDropdownItem>
+                        <StyledNavDropdownItem as={NavLink} to="#" 
+                          onClick={() => stileActions.cambioSfondo("img", salone)}
+                        >
+                          {saloneState.lingua === "italiano" ? "Salone" : "Salon"}
+                        </StyledNavDropdownItem>
+
+                        
+
                         <StyledNavDropdownItem as={NavLink} to="#" 
                           onClick={() => stileActions.cambioSfondo("img", scrivania)}
                         >
@@ -145,6 +166,8 @@ export const NavbarApp = () => {
                         >
                           {saloneState.lingua === "italiano" ? "Legno" : "Wood"}
                         </StyledNavDropdownItem>
+
+
                         <StyledNavDropdownItem as={NavLink} to="#" 
                           onClick={() => stileActions.cambioSfondo("rgb", "#111111")}
                         >

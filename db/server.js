@@ -28,9 +28,6 @@ app.listen(3000, () => {
   console.log('Server in esecuzione sulla porta 3000');
 });
 
-const saloneState = useSelector((state) => state.saloneSliceReducer.value);
-const lingua = this.saloneState.lingua;
-
 /************************************************** Database **************************************************/
 
 const db = mysql.createConnection({
@@ -88,34 +85,6 @@ const rollbackTransaction = (connection = db) => {
     });
   });
 };
-
-// const getResults = async (sql, params, res) => {
-//   try {
-//     const data = await executeQuery(sql, params);
-//     return res.json(data);
-//   } 
-//   catch (err) {
-//     console.error('Errore durante l\'esecuzione della query: ', err);
-//     return res.json(err);
-//   }
-// }
-
-// const scomponiStringa = (stringa) => {
-//   const indiceUltimaX = stringa.lastIndexOf(" x ");
-//   const nome = stringa.substring(0, indiceUltimaX).trim();
-//   let [quantita, prezzo] = stringa.substring(indiceUltimaX + 3).trim().split(" - ");
-//   prezzo = prezzo.substring(0, prezzo.length - 2);
-  
-//   return {
-//     nome,
-//     quantita: parseInt(quantita, 10),
-//     prezzo: prezzo / quantita,
-//   };
-// };
-
-// const optionStr = (servizio) => {
-//   return `${servizio.nome} - ${servizio.prezzo} €`;
-// };
 
 /*************************************************** Autenticazione **************************************************/
 
@@ -185,7 +154,7 @@ app.post("/INSERISCI_ITEM", async(req, res) => {
       params = spesaSQL.params_inserimento_spesa(req.body);
       break;
     default:
-      alert(lingua === "italiano" ? "Errore, riprova piu\' tardi." : "Error, please try again later.");
+      alert("Errore, riprova piu\' tardi (Error, please try again later.)");
       return;
   }
 
