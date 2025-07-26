@@ -127,10 +127,10 @@ export class LavoroActions {
       setLavori(result.items);
 
       if (tipoFile === "pdf") {
-        generaFileLavoriPDF(result.items);
+        generaFileLavoriPDF(result.items, this.lingua);
       }
       else {
-        generaFileLavoriExcel(result.items);
+        generaFileLavoriExcel(result.items, this.lingua);
       }
     } 
     catch (error) {

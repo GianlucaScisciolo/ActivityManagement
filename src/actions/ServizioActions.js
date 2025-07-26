@@ -184,7 +184,7 @@ export class ServizioActions {
 
   async eliminaServizi(e, selectedIdsEliminazione, setSelectedIdsEliminazione, servizioState) {
     e.preventDefault();
-    if (confirm(this.lingua === "italiano" ? "Sei sicuro di voler eliminare i servizi? Tutti i lavori presenti attualmente nel database verranno modificati eliminando i servizi selezionati." : "Sei sicuro di voler eliminare i servizi? Tutti i lavori presenti attualmente nel database verranno modificati eliminando i servizi selezionati.")) {
+    if (confirm(this.lingua === "italiano" ? "Sei sicuro di voler eliminare i servizi? Tutti i lavori presenti attualmente nel database verranno modificati eliminando i servizi selezionati." : "Are you sure you want to delete the services? All jobs currently in the database will be modified by deleting the selected services.")) {
       const dati = {
         tipo_item: "servizio", 
         ids: selectedIdsEliminazione

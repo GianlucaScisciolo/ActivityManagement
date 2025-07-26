@@ -14,7 +14,7 @@ const getDescrizione = (lavoro) => {
   return descrizione.substring(0, descrizione.length-2) + ".";
 };
 
-export const generaFileLavoriPDF = async (lavori) => {
+export const generaFileLavoriPDF = async (lavori, lingua) => {
 
   const pdfDoc = await PDFDocument.create();
   const page = pdfDoc.addPage([600, 800]);
@@ -57,7 +57,11 @@ export const generaFileLavoriPDF = async (lavori) => {
   });
 
   // Intestazione della tabella
-  const headers = ['Cliente', 'Giorno', 'Descrizione', 'Totale (€)', 'Note'];
+  const headers = lingua === "italiano" ? ( 
+    ['Cliente', 'Giorno', 'Descrizione', 'Totale (€)', 'Note']
+  ) : (
+    ['Client', 'Day', 'Description', 'Total (€)', 'Notes']
+  );
   headers.forEach((header, index) => {
     page.drawText(header, {
       x: startX + index * 100,
@@ -125,7 +129,7 @@ export const generaFileLavoriPDF = async (lavori) => {
   document.body.removeChild(link);
 };
 
-export const generaFileSpesePDF = async (spese) => {
+export const generaFileSpesePDF = async (spese, lingua) => {
   const pdfDoc = await PDFDocument.create();
   const page = pdfDoc.addPage([600, 800]);
   const timesRomanFont = await pdfDoc.embedFont(StandardFonts.TimesRoman);
@@ -167,7 +171,9 @@ export const generaFileSpesePDF = async (spese) => {
   });
 
   // Intestazione della tabella
-  const headers = ['Nome', 'Giorno', 'Descrizione', 'Totale (€)', 'Note'];
+  const headers = lingua === "italiano" ? (
+    ['Nome', 'Giorno', 'Descrizione', 'Totale (€)', 'Note']
+  ) : (['Name', 'Day', 'Description', 'Total (€)', 'Notes']);
   headers.forEach((header, index) => {
     page.drawText(header, {
       x: startX + index * 100,
@@ -235,18 +241,18 @@ export const generaFileSpesePDF = async (spese) => {
   document.body.removeChild(link);
 };
 
-export const generaFileLavoriExcel = async (lavori) => {
+export const generaFileLavoriExcel = async (lavori, lingua) => {
   const workbook = new ExcelJS.Workbook();
   const lavoriSheet = workbook.addWorksheet('Lavori');
 
   // Aggiungo i dati al foglio lavoriSheet
   if (lavori.length > 0) {
     lavoriSheet.columns = [
-      { header: 'Cliente', key: 'cliente', width: 20 },  
-      { header: 'Giorno', key: 'giorno', width: 20 }, 
-      { header: 'Descrizione', key: 'descrizione', width: 30 }, 
-      { header: 'Totale', key: 'totale', width: 10 }, 
-      { header: 'Note', key: 'note', width: 30 }
+      { header: (lingua === "italiano" ? "Cliente" : "Client"), key: 'cliente', width: 20 },  
+      { header: (lingua === "italiano" ? "Giorno" : "Day"), key: 'giorno', width: 20 }, 
+      { header: (lingua === "italiano" ? "Descrizione" : "Description"), key: 'descrizione', width: 30 }, 
+      { header: (lingua === "italiano" ? "Totale" : "Total"), key: 'totale', width: 10 }, 
+      { header: (lingua === "italiano" ? "Note" : "Notes"), key: 'note', width: 30 }
     ];
     lavori.forEach(lavoro => {
       lavoriSheet.addRow({
@@ -271,18 +277,18 @@ export const generaFileLavoriExcel = async (lavori) => {
   console.log('File Excel generato con successo.');
 };
 
-export const generaFileSpeseExcel = async (spese) => {
+export const generaFileSpeseExcel = async (spese, lingua) => {
   const workbook = new ExcelJS.Workbook();
   const speseSheet = workbook.addWorksheet('Spese');
 
   // Aggiungo i dati al foglio speseSheet
   if (spese.length > 0) {
     speseSheet.columns = [
-      { header: 'Nome', key: 'nome', width: 20 },  
-      { header: 'Giorno', key: 'giorno', width: 20 }, 
-      { header: 'Descrizione', key: 'descrizione', width: 30 }, 
-      { header: 'Totale', key: 'totale', width: 10 }, 
-      { header: 'Note', key: 'note', width: 30 }
+      { header: (lingua === "italiano" ? "Nome" : "Name"), key: 'nome', width: 20 },  
+      { header: (lingua === "italiano" ? "Giorno" : "Day"), key: 'giorno', width: 20 }, 
+      { header: (lingua === "italiano" ? "Descrizione" : "Description"), key: 'descrizione', width: 30 }, 
+      { header: (lingua === "italiano" ? "Totale" : "Total"), key: 'totale', width: 10 }, 
+      { header: (lingua === "italiano" ? "Note" : "Notes"), key: 'note', width: 30 }
     ];
     spese.forEach(spesa => {
       speseSheet.addRow({

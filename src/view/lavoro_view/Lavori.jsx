@@ -280,7 +280,7 @@ const Lavori = () => {
       for(let lavoro of lavoroState.lavori) {
         totaleLavori += parseFloat(lavoro.totale);
       }
-      return "Totale: " + parseFloat(totaleLavori).toFixed(2) + " €";
+      return "Total: " + parseFloat(totaleLavori).toFixed(2) + " €";
     }
     else {
       return "";

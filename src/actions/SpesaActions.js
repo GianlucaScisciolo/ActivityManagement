@@ -114,10 +114,10 @@ export class SpesaActions {
       setSpese(result.items);
 
       if (tipoFile === "pdf") {
-        generaFileSpesePDF(result.items); // spese
+        generaFileSpesePDF(result.items, this.lingua); // spese
       }
       else {
-        generaFileSpeseExcel(result.items); // spese
+        generaFileSpeseExcel(result.items, this.lingua); // spese
       }
     }
     catch (error) {

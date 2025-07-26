@@ -108,7 +108,7 @@ const OptionsServizi = ({ servizi, item, lavoroActions, sottoStringa, setServizi
         </div>
       )}
       {item["collegamenti"] && servizi && (
-        <div>Totale: {parseFloat(getTotale(item["collegamenti"], servizi)).toFixed(2)} €</div> 
+        <div>Total: {parseFloat(getTotale(item["collegamenti"], servizi)).toFixed(2)} €</div> 
       )}
     </>
   );

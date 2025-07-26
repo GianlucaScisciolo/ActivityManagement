@@ -829,7 +829,7 @@ export function CardEntrateServizi({ entrateServizi }) {
                   <>
                     <tr><th colSpan={14}>{lingua==="italiano" ? "ANNO" : "YEAR"} = {entrata.anno}</th></tr>
                     <tr>
-                      <th style={{color: "#FFFFFF"}}>SERVIZIO</th>
+                      <th style={{color: "#FFFFFF"}}>{lingua === "italiano" ? "SERVIZIO" : "SERVICE"}</th>
                       <th style={{color: "#FFFFFF"}}>{lingua === "italiano" ? "GEN" : "JAN"}</th>
                       <th style={{color: "#FFFFFF"}}>FEB</th>
                       <th style={{color: "#FFFFFF"}}>MAR</th>
@@ -1102,7 +1102,7 @@ export function CardRicavi({ entrateLavori, usciteSpese }) {
 export function CardInformazioni({ totaleItems }) {
   return (
     <StyledCard>
-      <StyledCardHeader>Informazioni</StyledCardHeader>
+      <StyledCardHeader>Informations</StyledCardHeader>
       <SlideContainer>
         {totaleItems && (
           <StyledInputBlock 
