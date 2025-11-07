@@ -16,6 +16,7 @@ import montagne from "../../img/sfondi/montagne.jpg";
 import salone from "../../img/sfondi/salone_barbiere.jpg";
 import italiano from "../../img/img_icons/italiano.png";
 import inglese from "../../img/img_icons/inglese.png";
+import logo from "../../img/Logo.png";
 import { 
   StyledNavLeft, StyledNavCenter, StyledNavRight, StyledNavDropdown, StyledNavDropdownItem, 
   StyledDropdownContainer, StyledSubMenuContainer, StyledNavLink, StyledNavLinkHome
@@ -91,7 +92,7 @@ export const NavbarApp = () => {
     <>
       <Navbar expand="lg">
         <StyledNavLeft>
-          {(autenticazioneState.isLogged === true) && (
+          {(autenticazioneState.isLogged === true) ? (
             <>
               <StyledNavLink as={NavLink} to="/clienti" onContextMenu={handleContextMenu}>{saloneState.lingua === "italiano" ? "Clienti" : "Clients"}</StyledNavLink>
               <StyledNavLink as={NavLink} to="/servizi" onContextMenu={handleContextMenu}>{saloneState.lingua === "italiano" ? "Servizi" : "Services"}</StyledNavLink>
@@ -108,13 +109,24 @@ export const NavbarApp = () => {
               </StyledNavDropdown>
               */}
               <StyledNavLink as={NavLink} to="/spese" onContextMenu={handleContextMenu}>{saloneState.lingua === "italiano" ? "Spese" : "Expenses"}</StyledNavLink>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              &nbsp;&nbsp;
+            </>
+          ) : (
+            <>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             </>
           )}
         </StyledNavLeft>  
 
         <StyledNavCenter>
           <StyledNavLinkHome as={NavLink} to="/" onContextMenu={handleContextMenu}>
-            <House id='walletCards' size={40} />
+            {/* <House id='walletCards' size={40} /> */}
+            <img src={logo} alt="Logo" style={{width:"70px"}}  />
           </StyledNavLinkHome>
         </StyledNavCenter>
 

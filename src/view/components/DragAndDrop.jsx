@@ -202,7 +202,9 @@ export const DragAndDropWidgetHomePage = ({plusCliccato}) => {
         <WidgetTag widget={saloneState.servizi} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
         { /** Lavoro **/}
         <WidgetTag widget={saloneState.lavori} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
+        {/*
         <WidgetTag widget={saloneState.prenotazione} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
+        */}
         { /** Spesa **/}
         <WidgetTag widget={saloneState.spese} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
         { /** Salone **/}
@@ -216,7 +218,9 @@ export const DragAndDropWidgetHomePage = ({plusCliccato}) => {
         {(saloneState.servizi.tipoVisualizzazione !== 0) && (<WidgetTag widget={saloneState.servizi} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
         { /** Lavoro **/}
         {(saloneState.lavori.tipoVisualizzazione !== 0) && (<WidgetTag widget={saloneState.lavori} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
+        {/*
         {(saloneState.prenotazione.tipoVisualizzazione !== 0) && (<WidgetTag widget={saloneState.prenotazione} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
+        */}
         { /** Spesa **/}
         {(saloneState.spese.tipoVisualizzazione !== 0) && (<WidgetTag widget={saloneState.spese} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
         { /** Salone **/}
