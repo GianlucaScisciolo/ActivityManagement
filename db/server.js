@@ -34,7 +34,7 @@ const db = mysql.createConnection({
   host: "localhost",
   user: "user_db",
   password: "password_db",
-  database: "name_db"
+  database: "activity_management"
 })
 
 db.connect(err => {
