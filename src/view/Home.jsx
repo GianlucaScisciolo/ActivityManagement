@@ -65,17 +65,6 @@ const Home = () => {
           <DragAndDropWidgetHomePage plusCliccato={plusCliccato} />
         </>
       )}
-      
-      {/*
-      <button onClick={
-        (e) => {
-          let salt_hex = generateRandomString(32);
-          let password_criptata = encryptPassword("PassWord10!!", salt_hex, PEPPER_HEX)
-          console.log("SALT_HEX: " + salt_hex);
-          console.log("PASSWORD CRIPTATA: " + password_criptata);
-        }
-      }>Password criptata</button>
-      */}
     </>
   );
 }
