@@ -17,9 +17,9 @@ Lo scopo del sistema è fornire un software in grado di gestire un'attività (sa
 		- Selenium Script.
 ## Installazione e configurazione WebApp "ActivityManagement"
 1. Clonare la repository con il seguente comando con 1 dei seguenti modi: 
-	1. `git clone https://github.com/GianlucaScisciolo/ActivityManagement.git`
+	1. `git clone https://github.com/GianlucaScisciolo/ActivityManagement.git`.
 	2. utilizzando la web URL su GitHub (<> Code --> Local --> HTTPS --> copia).
-2. Installare le dipendenze con il seguente comando: `npm install` oppure: `npm i`
+2. Installare le dipendenze con il seguente comando: `npm install` oppure: `npm i`.
 3. Installare la dipendenza **express** con il seguente comando: `npm install express`.
 4. Modificare il seguente codice presente nel file **/db/server.js**:
 ```js
