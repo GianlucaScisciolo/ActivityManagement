@@ -310,6 +310,17 @@ export const StyledSpanErrore =  styled.span`
   padding: 10px;
 `;
 
+const StyledComponents = {
+  StyledPencilNotSelected, StyledPencilSelected, grandezzaIcona, StyledTrashNotSelected, StyledTrashSelected, 
+  StyledColOperazioni, StyledSaveNotSelected, StyledSearchNotSelected, StyledArrowLeftNotSelected, StyledArrowRightNotSelected, 
+  StyledFileIconNotSelected, StyledDownloadNotSelected, StyledTrashNotSelected2, StyledLoginNotSelected, StyledPencilNotSelectedModificaProfilo, 
+  StyledInputBlock, StyledInputModifica, StyledInputElimina, StyledTextAreaBlock, StyledTextAreaModifica, 
+  StyledTextAreaElimina, StyledRow, StyledCol, StyledSpanErrore, StyledSelectBlock, 
+  StyledSelectModifica, StyledSelectElimina, StyledEyeClosedNotSelected, StyledEyeOpenNotSelected, StyledEuroNotSelected 
+};
+
+export default StyledComponents;
+
 
 
 

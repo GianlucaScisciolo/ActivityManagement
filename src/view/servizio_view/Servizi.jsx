@@ -59,6 +59,19 @@ const Servizi = () => {
     const saloneActions = new SaloneActions();
     saloneActions.azzeraListe();
   }, []);
+
+  const campiNuovoServizio = servizioForms.getCampiNuovoServizio(
+    nuovoServizio, 
+    (e) => operazioniForms.handleInputChange(e, setNuovoServizio), 
+    (e) => operazioniForms.handleInputClick(e, setNuovoServizio), 
+    (e) => operazioniForms.handleInputBlur(e, setNuovoServizio)
+  );
+  const campiRicercaServizi = servizioForms.getCampiRicercaServizi(
+    datiRicerca, 
+    (e) => operazioniForms.handleInputChange(e, setDatiRicerca), 
+    (e) => operazioniForms.handleInputClick(e, setDatiRicerca), 
+    (e) => operazioniForms.handleInputBlur(e, setDatiRicerca)
+  );
   
   return (
     <>
@@ -85,23 +98,12 @@ const Servizi = () => {
             handleEdit:   (e) => servizioActions.modificaServizi(e, servizioState, selectedIdsModifica, setSelectedIdsModifica), 
             handleDelete: (e) => servizioActions.eliminaServizi(e, selectedIdsEliminazione, setSelectedIdsEliminazione, servizioState), 
             // Campi
-            campiNuovoItem: servizioForms.getCampiNuovoServizio(
-              nuovoServizio, 
-              (e) => operazioniForms.handleInputChange(e, setNuovoServizio), 
-              (e) => operazioniForms.handleInputClick(e, setNuovoServizio), 
-              (e) => operazioniForms.handleInputBlur(e, setNuovoServizio)
-            ), 
-            campiRicercaItems: servizioForms.getCampiRicercaServizi(
-              datiRicerca, 
-              (e) => operazioniForms.handleInputChange(e, setDatiRicerca), 
-              (e) => operazioniForms.handleInputClick(e, setDatiRicerca), 
-              (e) => operazioniForms.handleInputBlur(e, setDatiRicerca)
-            ),
+            campiNuovoItem: campiNuovoServizio, 
+            campiRicercaItems: campiRicercaServizi,
             campiItemEsistente: servizioForms.getCampiServizioEsistente, 
             // Indici
-            indiciNuovoItem: servizioForms.INDICI_NUOVO_SERVIZIO, 
-            indiciRicercaItems: servizioForms.INDICI_RICERCA_SERVIZI, 
-            indiciItemEsistente: servizioForms.INDICI_SERVIZIO_ESISTENTE, 
+            indiciNuovoItem: [...Array(campiNuovoServizio.label.length).keys()], 
+            indiciRicercaItems: [...Array(campiRicercaServizi.label.length).keys()], 
             // Selects
             selectOperation: selectOperation, 
             selectedIdsModifica: selectedIdsModifica, 

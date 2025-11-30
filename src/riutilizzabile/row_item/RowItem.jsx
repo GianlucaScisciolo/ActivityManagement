@@ -4,227 +4,13 @@ import React, { useState } from 'react';
 import { Trash2, Pencil } from 'lucide-react';
 import { faFilePdf, faFileExcel } from '@fortawesome/free-solid-svg-icons';
 // Riutilizzabile
-import { 
-  StyledPencilNotSelected, StyledPencilSelected, grandezzaIcona, 
-  StyledTrashNotSelected, StyledTrashSelected, 
-  StyledColOperazioni, StyledSaveNotSelected, 
-  StyledSearchNotSelected, StyledArrowLeftNotSelected, StyledArrowRightNotSelected, 
-  StyledFileIconNotSelected, StyledDownloadNotSelected, StyledTrashNotSelected2, 
-  StyledLoginNotSelected, 
-  StyledPencilNotSelectedModificaProfilo, 
-  StyledInputBlock, StyledInputModifica, StyledInputElimina, 
-  StyledTextAreaBlock, StyledTextAreaModifica, StyledTextAreaElimina, 
-  StyledRow, StyledCol, StyledSpanErrore, 
-  StyledSelectBlock, StyledSelectModifica, StyledSelectElimina, 
-  StyledEyeClosedNotSelected, StyledEyeOpenNotSelected, 
-  StyledEuroNotSelected 
-} from "./StyledRowItem";
-
-const handleRightClick = (e, placeholder) => {
-  e.preventDefault();
-  alert(placeholder);
-}
-
-export function getSelectTag(tipoSelezione) {
-  return (tipoSelezione !== 1 && tipoSelezione !== 2) ? StyledSelectBlock : (
-    (tipoSelezione === 1) ? StyledSelectModifica : StyledSelectElimina
-  );
-}; 
-
-export function getInputTag(tipoSelezione, isModificabile) {
-  return (isModificabile) ? (
-    (tipoSelezione !== 1 && tipoSelezione !== 2) ? StyledInputBlock : (
-      (tipoSelezione === 1) ? StyledInputModifica : StyledInputElimina
-    )
-  ) : (
-    (tipoSelezione !== 2) ? StyledInputBlock : StyledInputElimina
-  );
-};
-
-export function getTextAreaTag(tipoSelezione, isModificabile) {
-  return (isModificabile) ? (
-    (tipoSelezione !== 1 && tipoSelezione !== 2) ? StyledTextAreaBlock : (
-      (tipoSelezione === 1) ? StyledTextAreaModifica : StyledTextAreaElimina
-    )
-  ) : (
-    (tipoSelezione !== 2) ? StyledTextAreaBlock : StyledTextAreaElimina
-  );
-};
-
-const nascondiForm = (visibilita, setVisibilita, setArrowUp) => {
-  const steps = visibilita.length;
-  for (let i = 1; i <= steps; i++) {
-    setTimeout(() => {
-      setVisibilita(prevState => {
-        const newState = [...prevState];
-        newState[steps - i] = false;
-        return newState;
-      });
-    }, i * 250);
-  }
-  setTimeout(() => {
-    setArrowUp(prev => !prev);
-  }, steps * 250);
-};
-
-const mostraForm = (visibilita, setVisibilita, setArrowUp) => {
-  const steps = visibilita.length;
-  for (let i = 1; i <= steps; i++) {
-    setTimeout(() => {
-      setVisibilita(prevState => {
-        const newState = [...prevState];
-        newState[i - 1] = true;
-        return newState;
-      });
-    }, i * 250);
-  }
-  setTimeout(() => {
-    setArrowUp(prev => !prev);
-  }, steps * 250);
-};
-
-function getPencilTag(tipoSelezione) {
-  return (tipoSelezione === 0 || tipoSelezione === 2) ? StyledPencilNotSelected : (
-    (tipoSelezione === 1) ? StyledPencilSelected : Pencil
-  );
-}
-
-function getTrashTag(tipoSelezione) {
-  return (tipoSelezione === 0 || tipoSelezione === 1) ? StyledTrashNotSelected : (
-    (tipoSelezione === 2) ? StyledTrashSelected : Trash2
-  );
-}
-
-export function OperazioniNuovoItem({eseguiSalvataggio}) {
-  return (
-    <StyledColOperazioni>
-        <StyledSaveNotSelected 
-          className="center salvaItemButton" 
-          size={grandezzaIcona} 
-          onClick={eseguiSalvataggio} 
-        />
-    </StyledColOperazioni>
-  )
-}
-
-export function OperazioniCercaItems({ visibilita, setVisibilita, arrowUp, setArrowUp, handleSearch }) {
-  return (
-    <StyledColOperazioni>
-      <div style={{width: "100%"}}>
-        <StyledSearchNotSelected 
-          className="center ricercaItemsButton" 
-          size={grandezzaIcona} 
-          // style={{ marginRight: "50%" }} 
-          onClick={handleSearch} 
-        />
-        {/*
-        {arrowUp && (
-          <StyledArrowLeftNotSelected 
-            className="right nascondiFormButton"
-            size={grandezzaIcona} 
-            onClick={() => nascondiForm(visibilita, setVisibilita, setArrowUp)} 
-          />
-        )}
-        {!arrowUp && (
-          <StyledArrowRightNotSelected 
-            className="right mostraFormButton" 
-            size={grandezzaIcona} 
-            onClick={() => mostraForm(visibilita, setVisibilita, setArrowUp)} 
-          />
-        )}
-        */}
-      </div>
-    </StyledColOperazioni>
-  );
-};
-
-export function OperazioniRicercaEntrateUscite({ eseguiRicerca }) {
-  return (
-    <StyledColOperazioni>
-      <div style={{width: "100%"}}>
-        <StyledSearchNotSelected 
-          className="ricercaEntrateUsciteButton" 
-          size={grandezzaIcona} 
-          onClick={eseguiRicerca} 
-        />
-      </div>
-    </StyledColOperazioni>
-  );
-};
-
-export function OperazioniItemEsistente ({ selectOperation, item }) {
-  let TrashTag = getTrashTag(item.tipo_selezione);
-  let PencilTag = getPencilTag(item.tipo_selezione);
-  return (
-    <StyledColOperazioni>
-      <div style={{width: "100%"}}>
-        <PencilTag 
-          className="left modificaItemButton"
-          size={grandezzaIcona} 
-          onClick={() => selectOperation("pencil", item)} 
-          style={{ marginRight: "50%" }} 
-        />
-        <TrashTag 
-          className="rigth eliminaItemButton" 
-          size={grandezzaIcona} 
-          onClick={() => selectOperation("trash", item)} 
-        />
-      </div>
-    </StyledColOperazioni>
-  )
-}
-
-export function OperazioniFileItems({ottieniFileRangePDF, ottieniFileRangeExcel, eliminaItemsRange}) {
-  return (
-    <>
-      <StyledColOperazioni>
-        <div style={{width: "100%"}}>
-          <StyledFileIconNotSelected icon={faFilePdf} className="left" style={{ marginRight: "50%" }} size="2xl" />
-          <StyledDownloadNotSelected size={grandezzaIcona} className="rigth" onClick={ottieniFileRangePDF} />
-        </div>
-      </StyledColOperazioni>
-      <StyledColOperazioni>
-        <div style={{width: "100%"}}>
-          <StyledFileIconNotSelected icon={faFileExcel} className="left" style={{ marginRight: "50%" }} size="2xl" />
-          <StyledDownloadNotSelected size={grandezzaIcona} className="rigth" onClick={ottieniFileRangeExcel} />
-        </div>
-      </StyledColOperazioni>
-      <StyledColOperazioni>
-        <div style={{width: "100%"}}>
-          <StyledTrashNotSelected2 size={grandezzaIcona} className="center" onClick={eliminaItemsRange} />
-        </div>
-      </StyledColOperazioni>
-    </>
-  );
-};
-
-export function OperazioniLogin({eseguiLogin}) {
-  return (
-    <StyledColOperazioni>
-      <StyledLoginNotSelected 
-        className="center loginButton" 
-        size={grandezzaIcona} 
-        onClick={eseguiLogin} 
-      />
-    </StyledColOperazioni>
-  );
-};
-
-export function OperazioniModificaProfilo({eseguiModificaProfilo}) {
-  return (
-    <StyledColOperazioni>
-      <StyledPencilNotSelectedModificaProfilo 
-        className="center modificaProfiloButton" 
-        size={grandezzaIcona} 
-        onClick={eseguiModificaProfilo} 
-      />
-    </StyledColOperazioni>
-  );
-};
+import StyledComponents from './StyledRowItem';
+import { OperazioniNuovoItem, OperazioniCercaItems, OperazioniRicercaEntrateUscite, OperazioniLogin, OperazioniModificaProfilo, OperazioniFileItems, OperazioniItemEsistente } from '../Operazioni';
+import { getPencilTag, getTrashTag, getSelectTag, getInputTag, getTextAreaTag } from '../Tags';
 
 export function RowNuovoItem({campi, indici, eseguiSalvataggio}) {
-  let InputTag = getInputTag(1, true);
-  let TextAreaTag = getTextAreaTag(1, true);
+  let InputTag = getInputTag(1, true, StyledComponents);
+  let TextAreaTag = getTextAreaTag(1, true, StyledComponents);
 
   const handleRightClick = (e, placeholder) => {
     e.preventDefault();
@@ -232,20 +18,20 @@ export function RowNuovoItem({campi, indici, eseguiSalvataggio}) {
   }
 
   return (
-    <StyledRow>
-      <OperazioniNuovoItem eseguiSalvataggio={eseguiSalvataggio} />
+    <StyledComponents.StyledRow>
+      <OperazioniNuovoItem eseguiSalvataggio={eseguiSalvataggio} vistaItem={"row"} StyledComponents={StyledComponents} />
       {indici.map((i) => {
         // onClick={handleGiornoClick(setUltimoGiornoType)}
         // onBlur={handleGiornoBlur(setUltimoGiornoType, item, setItem)}
         // onChange={(e) => handleInputChange(e, setItem)}
-        const NomeTag = (campi.type[i]) ? getInputTag(1, true) : (
-          getTextAreaTag(1, true)
+        const NomeTag = (campi.type[i]) ? getInputTag(1, true, StyledComponents) : (
+          getTextAreaTag(1, true, StyledComponents)
         );
         return ( 
           <React.Fragment key={i}>
-            <StyledCol>
+            <StyledComponents.StyledCol>
               <div style={{width: "100%"}}>
-                <StyledRow>
+                <StyledComponents.StyledRow>
                   <NomeTag 
                     rows={1}
                     style={(["prezzo", "totale"].includes(campi.name[i])) ? {maxWidth:"90%"} : null}
@@ -261,34 +47,34 @@ export function RowNuovoItem({campi, indici, eseguiSalvataggio}) {
                     onContextMenu={(e) => handleRightClick(e, campi.placeholder[i])}
                   />
                   {(["prezzo", "totale"].includes(campi.name[i])) && (
-                    <StyledEuroNotSelected
+                    <StyledComponents.StyledEuroNotSelected
                       style={{
                         // border: "5px solid #000000",
                         maxWidth: "10%",
                         marginLeft: "-6px", 
                         // marginTop: "13px"
                       }} 
-                      size={grandezzaIcona} 
+                      size={StyledComponents.grandezzaIcona} 
                       onClick={null} 
                     />
                   )}
                   {campi.options[i]}
-                </StyledRow>
-                {(campi.errore[i] !== "") && (<StyledSpanErrore>{campi.errore[i]}</StyledSpanErrore>)}
+                </StyledComponents.StyledRow>
+                {(campi.errore[i] !== "") && (<StyledComponents.StyledSpanErrore>{campi.errore[i]}</StyledComponents.StyledSpanErrore>)}
               </div>
-            </StyledCol>
+            </StyledComponents.StyledCol>
           </React.Fragment>
         );
       })}
-    </StyledRow>
+    </StyledComponents.StyledRow>
   );
 }
 
 export function RowRicercaItems({campi, indici, handleSearch}) {
   let [visibilita, setVisibilita] = useState([true, true, true, true, true, true, true, true]);
   const [arrowUp, setArrowUp] = useState(true);
-  let InputTag = getInputTag(1, true);
-  let TextAreaTag = getTextAreaTag(1, true);
+  let InputTag = getInputTag(1, true, StyledComponents);
+  let TextAreaTag = getTextAreaTag(1, true, StyledComponents);
 
   const handleRightClick = (e, placeholder) => {
     e.preventDefault();
@@ -296,23 +82,25 @@ export function RowRicercaItems({campi, indici, handleSearch}) {
   }
 
   return (
-    <StyledRow>
+    <StyledComponents.StyledRow>
       <OperazioniCercaItems 
         visibilita={visibilita} 
         setVisibilita={setVisibilita} 
         arrowUp={arrowUp} 
         setArrowUp={setArrowUp} 
         handleSearch={handleSearch}
+        vistaItem={"row"}
+        StyledComponents={StyledComponents}
       />
       {indici.map((i) => {
-        const NomeTag = (campi.type[i]) ? getInputTag(1, true) : (
-          getTextAreaTag(1, true)
+        const NomeTag = (campi.type[i]) ? getInputTag(1, true, StyledComponents) : (
+          getTextAreaTag(1, true, StyledComponents)
         );
         return ( 
           <React.Fragment key={i}>
-            <StyledCol>
+            <StyledComponents.StyledCol>
               <div style={{width: "100%"}}>
-                <StyledRow>
+                <StyledComponents.StyledRow>
                   {(visibilita[i]) && (
                     <>
                       <NomeTag 
@@ -330,29 +118,29 @@ export function RowRicercaItems({campi, indici, handleSearch}) {
                         onContextMenu={(e) => handleRightClick(e, campi.placeholder[i])}
                       />
                       {(["prezzo_min", "prezzo_max", "totale_min", "totale_max"].includes(campi.name[i])) && (
-                        <StyledEuroNotSelected
+                        <StyledComponents.StyledEuroNotSelected
                           style={{
                             maxWidth: "20%",
                             marginLeft: "-6px", 
                           }} 
-                          size={grandezzaIcona} 
+                          size={StyledComponents.grandezzaIcona} 
                           onClick={null} 
                         />
                       )}
                     </>
                   )}
-                </StyledRow>
+                </StyledComponents.StyledRow>
               </div>
-            </StyledCol>
+            </StyledComponents.StyledCol>
           </React.Fragment>
         );
       })} 
-    </StyledRow>
+    </StyledComponents.StyledRow>
   );
 }
 
 export function RowItemEsistente({ item, campi, indici, selectOperation, tipoItem, handleBlurItem }) {
-  const NomeTagHeader = getInputTag(campi.tipoSelezione, false);
+  const NomeTagHeader = getInputTag(campi.tipoSelezione, false, StyledComponents);
   const [localValues, setLocalValues] = useState(() =>
     indici.reduce((acc, i) => ({ ...acc, [i]: campi.value[i] }), {})
   ); // Gestione dello stato locale
@@ -433,12 +221,12 @@ export function RowItemEsistente({ item, campi, indici, selectOperation, tipoIte
   }
 
   return (
-    <StyledRow>
-      <OperazioniItemEsistente selectOperation={selectOperation} item={item} />
+    <StyledComponents.StyledRow>
+      <OperazioniItemEsistente selectOperation={selectOperation} item={item} vistaItem={"row"} StyledComponents={StyledComponents} />
       
-      <StyledCol>
+      <StyledComponents.StyledCol>
         <div style={{width: "100%"}}>
-          <StyledRow>
+          <StyledComponents.StyledRow>
             <NomeTagHeader
               rows={1}
               name="header"
@@ -446,19 +234,19 @@ export function RowItemEsistente({ item, campi, indici, selectOperation, tipoIte
               placeholder={campi.header}
               readOnly
             />
-          </StyledRow>
+          </StyledComponents.StyledRow>
         </div>
-      </StyledCol>
+      </StyledComponents.StyledCol>
       
       {indici.map((i) => {
-        const NomeTag = (campi.type[i]) ? getInputTag(campi.tipoSelezione, campi.valoreModificabile[i]) : (
-          getTextAreaTag(campi.tipoSelezione, campi.valoreModificabile[i])
+        const NomeTag = (campi.type[i]) ? getInputTag(campi.tipoSelezione, campi.valoreModificabile[i], StyledComponents) : (
+          getTextAreaTag(campi.tipoSelezione, campi.valoreModificabile[i], StyledComponents)
         );
         return ( 
           <React.Fragment key={i}>
-            <StyledCol>
+            <StyledComponents.StyledCol>
             <div style={{width: "100%"}}>
-              <StyledRow>
+              <StyledComponents.StyledRow>
                 <NomeTag 
                   style={["prezzo", "totale"].includes(campi.name[i]) ? {maxWidth:"80%"} : null}
                   rows={1}
@@ -475,20 +263,20 @@ export function RowItemEsistente({ item, campi, indici, selectOperation, tipoIte
                   onContextMenu={(e) => handleRightClick(e, campi.placeholder[i])}
                 />
                 {(["prezzo", "totale"].includes(campi.name[i])) && (
-                  <StyledEuroNotSelected
+                  <StyledComponents.StyledEuroNotSelected
                     style={{ maxWidth: "20%", marginLeft: "-6px" }} 
-                    size={grandezzaIcona} 
+                    size={StyledComponents.grandezzaIcona} 
                   />
                 )}
                 {campi.options[i]}
-              </StyledRow>
-              {(campi.errore[i]) && (<StyledSpanErrore>{campi.errore[i]}</StyledSpanErrore>)}
+              </StyledComponents.StyledRow>
+              {(campi.errore[i]) && (<StyledComponents.StyledSpanErrore>{campi.errore[i]}</StyledComponents.StyledSpanErrore>)}
             </div>
-            </StyledCol>
+            </StyledComponents.StyledCol>
           </React.Fragment>
         );
       })}
-    </StyledRow>
+    </StyledComponents.StyledRow>
   )
 }
 
@@ -499,21 +287,23 @@ export function RowFileItems({campi, indici, ottieniFileRangePDF, ottieniFileRan
   }
 
   return (
-    <StyledRow>
+    <StyledComponents.StyledRow>
       <OperazioniFileItems 
         ottieniFileRangePDF={ottieniFileRangePDF} 
         ottieniFileRangeExcel={ottieniFileRangeExcel} 
-        eliminaItemsRange={eliminaItemsRange} 
+        eliminaItemsRange={eliminaItemsRange}
+        vistaItem={"row"} 
+        StyledComponents={StyledComponents}
       />
       {indici.map((i) => {
-        const NomeTag = (campi.type[i]) ? getInputTag(1, true) : (
-          getTextAreaTag(1, true)
+        const NomeTag = (campi.type[i]) ? getInputTag(1, true, StyledComponents) : (
+          getTextAreaTag(1, true, StyledComponents)
         );
         return ( 
           <React.Fragment key={i}>
-            <StyledCol>
+            <StyledComponents.StyledCol>
               <div style={{width: "100%"}}>
-                <StyledRow>
+                <StyledComponents.StyledRow>
                   <NomeTag 
                     rows={1}
                     name={campi.name[i]}
@@ -527,13 +317,13 @@ export function RowFileItems({campi, indici, ottieniFileRangePDF, ottieniFileRan
                     onBlur={campi.onBlur}
                     onContextMenu={(e) => handleRightClick(e, campi.placeholder[i])}
                   />
-                </StyledRow>
+                </StyledComponents.StyledRow>
               </div>
-            </StyledCol>
+            </StyledComponents.StyledCol>
           </React.Fragment>
         );
       })}
-    </StyledRow>
+    </StyledComponents.StyledRow>
   )
 }
 
@@ -551,18 +341,18 @@ export function RowLogin({campi, indici, eseguiLogin}) {
   }
 
   return (
-    <StyledRow>
-      <OperazioniLogin eseguiLogin={eseguiLogin} />
+    <StyledComponents.StyledRow>
+      <OperazioniLogin eseguiLogin={eseguiLogin} vistaItem={"row"} StyledComponents={StyledComponents} />
       {indici.map((i) => {
-        const NomeTag = (campi.type[i]) ? getInputTag(1, true) : (
-          getTextAreaTag(1, true)
+        const NomeTag = (campi.type[i]) ? getInputTag(1, true, StyledComponents) : (
+          getTextAreaTag(1, true, StyledComponents)
         );
-        const StyledEyeTag = (inputType === "password") ? StyledEyeClosedNotSelected : StyledEyeOpenNotSelected;
+        const StyledEyeTag = (inputType === "password") ? StyledComponents.StyledEyeClosedNotSelected : StyledComponents.StyledEyeOpenNotSelected;
         return ( 
           <React.Fragment key={i}>
-            <StyledCol>
+            <StyledComponents.StyledCol>
               <div style={{width: "100%"}}>
-                <StyledRow>
+                <StyledComponents.StyledRow>
                   <NomeTag 
                     style={(campi.name[i] === "password") ? {maxWidth:"80%"} : null}
                     rows={1}
@@ -584,19 +374,19 @@ export function RowLogin({campi, indici, eseguiLogin}) {
                         maxWidth: "20%",
                         marginLeft: "-6px", 
                       }} 
-                      size={grandezzaIcona} 
+                      size={StyledComponents.grandezzaIcona} 
                       onClick={onChangeVisibilityPassword} 
                     />
                   )}
-                </StyledRow>
+                </StyledComponents.StyledRow>
                 {campi.options[i]}
-                {(campi.errore[i]) && (<StyledSpanErrore>{campi.errore[i]}</StyledSpanErrore>)}
+                {(campi.errore[i]) && (<StyledComponents.StyledSpanErrore>{campi.errore[i]}</StyledComponents.StyledSpanErrore>)}
               </div>
-            </StyledCol>
+            </StyledComponents.StyledCol>
           </React.Fragment>
         );
       })}
-    </StyledRow>
+    </StyledComponents.StyledRow>
   );
 }
 
@@ -619,25 +409,25 @@ export function RowProfilo({campi, indici, eseguiModificaProfilo}) {
   };
 
   return (
-    <StyledRow>
-      <OperazioniModificaProfilo eseguiModificaProfilo={eseguiModificaProfilo} />
+    <StyledComponents.StyledRow>
+      <OperazioniModificaProfilo eseguiModificaProfilo={eseguiModificaProfilo} vistaItem={"row"} StyledComponents={StyledComponents} />
       {indici.map((i) => {
-        const NomeTag = (campi.type[i]) ? getInputTag(1, true) : (
-          getTextAreaTag(1, true)
+        const NomeTag = (campi.type[i]) ? getInputTag(1, true, StyledComponents) : (
+          getTextAreaTag(1, true, StyledComponents)
         );
         const StyledEyeTag = (
           (
             campi.name[i] === "password_attuale" && passwordAttualeType === "password" || 
             campi.name[i] === "nuova_password" && nuovaPasswordType === "password" || 
             campi.name[i] === "conferma_nuova_password" && confermaNuovaPasswordType === "password"
-          ) ? StyledEyeClosedNotSelected : StyledEyeOpenNotSelected
+          ) ? StyledComponents.StyledEyeClosedNotSelected : StyledComponents.StyledEyeOpenNotSelected
         );
 
         return ( 
           <React.Fragment key={i}>
-            <StyledCol>
+            <StyledComponents.StyledCol>
               <div style={{width: "100%"}}>
-                <StyledRow>
+                <StyledComponents.StyledRow>
                   <NomeTag 
                     style={(campi.name[i].includes("password")) ? {maxWidth:"80%"} : null}
                     rows={1}
@@ -663,19 +453,19 @@ export function RowProfilo({campi, indici, eseguiModificaProfilo}) {
                         maxWidth: "20%",
                         marginLeft: "-6px", 
                       }} 
-                      size={grandezzaIcona} 
+                      size={StyledComponents.grandezzaIcona} 
                       onClick={(e) => onChangeVisibilityPassword(e, campi.name[i])} 
                     />
                   )}
-                </StyledRow>
+                </StyledComponents.StyledRow>
                 {campi.options[i]}
-                {(campi.errore[i]) && (<StyledSpanErrore>{campi.errore[i]}</StyledSpanErrore>)}
+                {(campi.errore[i]) && (<StyledComponents.StyledSpanErrore>{campi.errore[i]}</StyledComponents.StyledSpanErrore>)}
               </div>
-            </StyledCol>
+            </StyledComponents.StyledCol>
           </React.Fragment>
         );
       })}
-    </StyledRow>
+    </StyledComponents.StyledRow>
   );
 }
 
@@ -684,24 +474,24 @@ export function RowEntrateUscite({datiRicerca, setDatiRicerca, handleInputChange
   const lingua = saloneState.lingua;
   let maxHeight = "2000px";
   return (
-    <StyledRow>
-      <OperazioniRicercaEntrateUscite eseguiRicerca={(e) => eseguiRicerca(e)} />
-      <StyledCol>
+    <StyledComponents.StyledRow>
+      <OperazioniRicercaEntrateUscite eseguiRicerca={(e) => eseguiRicerca(e)} vistaItem={"row"} StyledComponents={StyledComponents} />
+      <StyledComponents.StyledCol>
         <div style={{width: "100%"}}>
-          <StyledRow>
-            <StyledInputBlock
+          <StyledComponents.StyledRow>
+            <StyledComponents.StyledInputBlock
               rows={1}
               name="header"
               value={lingua === "italiano" ? "Ricerca entrate e uscite" : "Searching for inputs and outputs"}
               placeholder={lingua === "italiano" ? "Ricerca entrate e uscite" : "Searching for inputs and outputs"}
               readOnly
             />
-          </StyledRow>
+          </StyledComponents.StyledRow>
         </div>
-      </StyledCol>
-      <StyledCol>
+      </StyledComponents.StyledCol>
+      <StyledComponents.StyledCol>
         <div style={{width: "100%"}}>
-          <StyledInputModifica
+          <StyledComponents.StyledInputModifica
             rows={1}
             name="primo_anno"
             id="primo_anno"
@@ -713,10 +503,10 @@ export function RowEntrateUscite({datiRicerca, setDatiRicerca, handleInputChange
             onContextMenu={(e) => handleRightClick(e, "Primo anno")}
           />
         </div>
-      </StyledCol>
-      <StyledCol>
+      </StyledComponents.StyledCol>
+      <StyledComponents.StyledCol>
         <div style={{width: "100%"}}>
-          <StyledSelectModifica 
+          <StyledComponents.StyledSelectModifica 
             name="ultimo_anno" 
             id="ultimo_anno"
             onContextMenu={(e) => handleRightClick(e, "Ultimo anno")}
@@ -728,13 +518,12 @@ export function RowEntrateUscite({datiRicerca, setDatiRicerca, handleInputChange
             <option value={parseInt(datiRicerca.primo_anno)+3}>{parseInt(datiRicerca.primo_anno)+3}</option>
             <option value={parseInt(datiRicerca.primo_anno)+4}>{parseInt(datiRicerca.primo_anno)+4}</option>
             <option value={parseInt(datiRicerca.primo_anno)+5}>{parseInt(datiRicerca.primo_anno)+5}</option>
-          </StyledSelectModifica>
+          </StyledComponents.StyledSelectModifica>
         </div>
-      </StyledCol>
-    </StyledRow> 
+      </StyledComponents.StyledCol>
+    </StyledComponents.StyledRow> 
   );
 }
-
 
 
 

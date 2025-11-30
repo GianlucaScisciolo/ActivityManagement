@@ -12,7 +12,7 @@ import { SpesaActions } from "../../actions/SpesaActions";
 import { SaloneActions } from '../../actions/SaloneActions';
 import { ServizioActions } from "../../actions/ServizioActions";
 
-import { CardEntrateLavori, CardEntrateServizi, CardUsciteSpese, CardRicavi, CardEntrateUscite } from '../../riutilizzabile/card_item/CardItem';
+import { CardEntrateItems, CardEntrateItemsByName, CardUsciteItems, CardRicavi, CardEntrateUscite } from '../../riutilizzabile/card_item/CardItem';
 import { OperazioniForms } from '../forms/OperazioniForms';
 import { FormEntrateUscite } from '../../riutilizzabile/form_item/FormItem';
 import { RowEntrateUscite } from "../../riutilizzabile/row_item/RowItem";
@@ -99,19 +99,19 @@ const Salone = () => {
       <center>
         <Row>
           {(entrateLavori.length > 0 && entrateLavori !== -1) ? (
-            <Col><CardEntrateLavori entrateLavori={entrateLavori} /></Col>
+            <Col><CardEntrateItems entrateItems={entrateLavori} etichettaIta="Entrate lavori" etichettaEng="Revenue jobs" /></Col>
           ) : (<Col></Col>)}
           {(usciteSpese.length > 0 && usciteSpese !== -1) ? (
-            <Col><CardUsciteSpese usciteSpese={usciteSpese} /></Col>
+            <Col><CardUsciteItems usciteItems={usciteSpese} etichettaIta="Uscite spese" etichettaEng="Exit expenses" /></Col>
           ) : (<Col></Col>)}
         </Row>
         <br /> <br /> <br /> <br />
         <Row>
           {(entrateServizi.length > 0 && entrateServizi !== -1) ? (
-            <Col><Col><CardEntrateServizi entrateServizi={entrateServizi} /></Col></Col>
+            <Col><Col><CardEntrateItemsByName entrateItems={entrateServizi} tipoItemIta="SERVIZIO" tipoItemEng="SERVICE" etichettaIta="Entrate servizi" etichettaEng="Revenue services" /></Col></Col>
           ) : (<Col></Col>)}
           {((entrateLavori.length > 0 && entrateLavori !== -1) && (usciteSpese.length > 0 && usciteSpese !== -1)) ? (
-            <Col><CardRicavi entrateLavori={entrateLavori} usciteSpese={usciteSpese} /></Col>
+            <Col><CardRicavi entrate={entrateLavori} uscite={usciteSpese} /></Col>
           ) : (<Col></Col>)}
         </Row>
       </center>

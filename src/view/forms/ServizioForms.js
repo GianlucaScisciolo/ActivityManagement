@@ -5,9 +5,6 @@ import { controlloServizio } from "../../utils/Controlli";
 import { useSelector } from 'react-redux';
 
 export class ServizioForms {
-  INDICI_NUOVO_SERVIZIO = [0, 1, 2];
-  INDICI_RICERCA_SERVIZI = [0, 1, 2, 3, 4];
-  INDICI_SERVIZIO_ESISTENTE = [0, 1, 2, 3];
   saloneState = useSelector((state) => state.saloneSliceReducer.value);
   lingua = this.saloneState.lingua;
 
@@ -88,6 +85,7 @@ export class ServizioForms {
   
     return {
       header: lingua === "italiano" ? "Servizio" : "Service", 
+      label: [null, null, null, null], 
       tipoSelezione: item.tipo_selezione,  
       type: [null, "text", null, "text"], 
       step: [null, null, null, null], 

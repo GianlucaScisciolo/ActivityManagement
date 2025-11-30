@@ -5,10 +5,6 @@ import { controlloLavoro } from "../../utils/Controlli";
 import { useSelector } from 'react-redux';
 
 export class LavoroForms {
-  INDICI_NUOVO_LAVORO = [0, 1, 2, 3];
-  INDICI_RICERCA_LAVORI = [0, 1, 2, 3];
-  INDICI_LAVORO_ESISTENTE = [0, 1, 2, 3];
-  INDICI_FILE = [0, 1]; 
   saloneState = useSelector((state) => state.saloneSliceReducer.value);
   lingua = this.saloneState.lingua;
 
@@ -90,6 +86,7 @@ export class LavoroForms {
     
     return {
       header: lingua === "italiano" ? "Lavoro" : "Job", 
+      label: [null, null, null, null], 
       tipoSelezione: item.tipo_selezione,  
       type: [null, null, "date", null],
       step: [null, null, null, null], 

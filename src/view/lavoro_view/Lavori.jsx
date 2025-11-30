@@ -302,6 +302,26 @@ const Lavori = () => {
     const saloneActions = new SaloneActions();
     saloneActions.azzeraListe();
   }, []);
+  const campiNuovoLavoro = lavoroForms.getCampiNuovoLavoro(
+    nuovoLavoro, 
+    OptionsClienti({clienti}), 
+    OptionsServizi({servizi}), 
+    (e) => operazioniForms.handleInputChange(e, setNuovoLavoro), 
+    (e) => operazioniForms.handleInputClick(e), 
+    (e) => operazioniForms.handleInputBlur(e) 
+  );
+  const campiRicercaLavori = lavoroForms.getCampiRicercaLavori(
+    datiRicerca, 
+    (e) => operazioniForms.handleInputChange(e, setDatiRicerca), 
+    (e) => operazioniForms.handleInputClick(e), 
+    (e) => operazioniForms.handleInputBlur(e)  
+  );
+  const campiFile = lavoroForms.getCampiFile(
+    datiRicerca, 
+    (e) => operazioniForms.handleInputChange(e, setDatiRicerca), 
+    (e) => operazioniForms.handleInputClick(e), 
+    (e) => operazioniForms.handleInputBlur(e) 
+  );
 
   return (
     <>
@@ -331,32 +351,14 @@ const Lavori = () => {
             handleSearchRangeFileExcel: (e) => lavoroActions.handleSearchLavoriRangeFile(e, "excel", setTipoFile, datiRicerca, lavori, setLavori), 
             handleDeleteRangeFile: (e) => lavoroActions.handleDeleteLavoriRangeFile(e, datiRicerca), 
             // Campi
-            campiNuovoItem: lavoroForms.getCampiNuovoLavoro(
-              nuovoLavoro, 
-              OptionsClienti({clienti}), 
-              OptionsServizi({servizi}), 
-              (e) => operazioniForms.handleInputChange(e, setNuovoLavoro), 
-              (e) => operazioniForms.handleInputClick(e), 
-              (e) => operazioniForms.handleInputBlur(e) 
-            ), //////////
-            campiRicercaItems: lavoroForms.getCampiRicercaLavori(
-              datiRicerca, 
-              (e) => operazioniForms.handleInputChange(e, setDatiRicerca), 
-              (e) => operazioniForms.handleInputClick(e), 
-              (e) => operazioniForms.handleInputBlur(e)  
-            ), 
+            campiNuovoItem: campiNuovoLavoro,
+            campiRicercaItems: campiRicercaLavori, 
             campiItemEsistente: lavoroForms.getCampiLavoroEsistente, 
-            campiFile: lavoroForms.getCampiFile(
-              datiRicerca, 
-              (e) => operazioniForms.handleInputChange(e, setDatiRicerca), 
-              (e) => operazioniForms.handleInputClick(e), 
-              (e) => operazioniForms.handleInputBlur(e) 
-            ), 
+            campiFile: campiFile, 
             // Indici
-            indiciNuovoItem: lavoroForms.INDICI_NUOVO_LAVORO, 
-            indiciRicercaItems: lavoroForms.INDICI_RICERCA_LAVORI, 
-            indiciItemEsistente: lavoroForms.INDICI_LAVORO_ESISTENTE, 
-            indiciFile: lavoroForms.INDICI_FILE, 
+            indiciNuovoItem: [...Array(campiNuovoLavoro.label.length).keys()], 
+            indiciRicercaItems: [...Array(campiRicercaLavori.label.length).keys()], 
+            indiciFile: [...Array(campiFile.label.length).keys()], 
             // Selects
             selectOperation: selectOperation, 
             selectedIdsModifica: selectedIdsModifica, 

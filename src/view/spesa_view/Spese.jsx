@@ -84,6 +84,25 @@ const Spese = () => {
     saloneActions.azzeraListe();
   }, []);
 
+  const campiNuovaSpesa = spesaForms.getCampiNuovaSpesa(
+    nuovaSpesa, 
+    (e) => operazioniForms.handleInputChange(e, setNuovaSpesa), 
+    (e) => operazioniForms.handleInputClick(e, setNuovaSpesa), 
+    (e) => operazioniForms.handleInputBlur(e, setNuovaSpesa) 
+  );
+  const campiRicercaSpese = spesaForms.getCampiRicercaSpese(
+    datiRicerca, 
+    (e) => operazioniForms.handleInputChange(e, setDatiRicerca), 
+    (e) => operazioniForms.handleInputClick(e, setDatiRicerca), 
+    (e) => operazioniForms.handleInputBlur(e, setDatiRicerca) 
+  );
+  const campiFile = spesaForms.getCampiFile(
+    datiRicerca, 
+    (e) => operazioniForms.handleInputChange(e, setDatiRicerca), 
+    (e) => operazioniForms.handleInputClick(e), 
+    (e) => operazioniForms.handleInputBlur(e) 
+  );
+
   return (
     <>
       <Header />
@@ -112,30 +131,14 @@ const Spese = () => {
             handleSearchRangeFileExcel: (e) => spesaActions.handleSearchSpeseRangeFile(e, "excel", setTipoFile, datiRicerca, spese, setSpese),
             handleDeleteRangeFile: (e) => spesaActions.handleDeleteSpeseRangeFile(e, datiRicerca),
             // Campi
-            campiNuovoItem: spesaForms.getCampiNuovaSpesa(
-              nuovaSpesa, 
-              (e) => operazioniForms.handleInputChange(e, setNuovaSpesa), 
-              (e) => operazioniForms.handleInputClick(e, setNuovaSpesa), 
-              (e) => operazioniForms.handleInputBlur(e, setNuovaSpesa) 
-            ), 
-            campiRicercaItems: spesaForms.getCampiRicercaSpese(
-              datiRicerca, 
-              (e) => operazioniForms.handleInputChange(e, setDatiRicerca), 
-              (e) => operazioniForms.handleInputClick(e, setDatiRicerca), 
-              (e) => operazioniForms.handleInputBlur(e, setDatiRicerca) 
-            ),
+            campiNuovoItem: campiNuovaSpesa, 
+            campiRicercaItems: campiRicercaSpese,
             campiItemEsistente: spesaForms.getCampiSpesaEsistente, 
-            campiFile: spesaForms.getCampiFile(
-              datiRicerca, 
-              (e) => operazioniForms.handleInputChange(e, setDatiRicerca), 
-              (e) => operazioniForms.handleInputClick(e), 
-              (e) => operazioniForms.handleInputBlur(e) 
-            ),
+            campiFile: campiFile,
             // Indici
-            indiciNuovoItem: spesaForms.INDICI_NUOVA_SPESA, 
-            indiciRicercaItems: spesaForms.INDICI_RICERCA_SPESE, 
-            indiciItemEsistente: spesaForms.INDICI_SPESA_ESISTENTE, 
-            indiciFile: spesaForms.INDICI_FILE, 
+            indiciNuovoItem: [...Array(campiNuovaSpesa.label.length).keys()], 
+            indiciRicercaItems: [...Array(campiRicercaSpese.label.length).keys()], 
+            indiciFile: [...Array(campiFile.label.length).keys()], 
             // Selects
             selectOperation: selectOperation, 
             selectedIdsModifica: selectedIdsModifica, 

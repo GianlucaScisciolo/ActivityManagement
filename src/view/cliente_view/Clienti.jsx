@@ -64,6 +64,8 @@ const Clienti = () => {
     const saloneActions = new SaloneActions();
     saloneActions.azzeraListe();
   }, []);
+  const campiNuovoCliente = clienteForms.getCampiNuovoCliente(nuovoCliente, (e) => operazioniForms.handleInputChange(e, setNuovoCliente), null, null)
+  const campiRicercaClienti = clienteForms.getCampiRicercaClienti(datiRicerca, (e) => operazioniForms.handleInputChange(e, setDatiRicerca), null, null)
   
   return (
     <>
@@ -90,13 +92,12 @@ const Clienti = () => {
             handleEdit: (e) => clienteActions.modificaClienti(e, selectedIdsModifica, setSelectedIdsModifica, clienteState),
             handleDelete: (e) => clienteActions.eliminaClienti(e, selectedIdsEliminazione, setSelectedIdsEliminazione, clienteState),             
             // Campi
-            campiNuovoItem: clienteForms.getCampiNuovoCliente(nuovoCliente, (e) => operazioniForms.handleInputChange(e, setNuovoCliente), null, null), 
-            campiRicercaItems: clienteForms.getCampiRicercaClienti(datiRicerca, (e) => operazioniForms.handleInputChange(e, setDatiRicerca), null, null),
+            campiNuovoItem: campiNuovoCliente, 
+            campiRicercaItems: campiRicercaClienti,
             campiItemEsistente: clienteForms.getCampiClienteEsistente, 
             // Indici
-            indiciNuovoItem: clienteForms.INDICI_NUOVO_CLIENTE, 
-            indiciRicercaItems: clienteForms.INDICI_RICERCA_CLIENTI, 
-            indiciItemEsistente: clienteForms.INDICI_CLIENTE_ESISTENTE, 
+            indiciNuovoItem: [...Array(campiNuovoCliente.label.length).keys()], 
+            indiciRicercaItems: [...Array(campiRicercaClienti.label.length).keys()], 
             // Selects
             selectOperation: selectOperation, 
             selectedIdsModifica: selectedIdsModifica, 

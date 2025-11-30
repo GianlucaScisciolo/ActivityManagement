@@ -1,3 +1,18 @@
+# Ignora i file con credenziali e i file di configurazione con credenziali
+.env
+config.env
+secrets.txt
+*.key
+*.pem
+
+# Ignora file di sistema o IDE
+.DS_Store
+*.log
+
+# Ignora cartelle di build o cache
+/dist
+/node_modules
+
 # Logs
 logs
 *.log
@@ -9,6 +24,7 @@ lerna-debug.log*
 dist
 dist-ssr
 *.local
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

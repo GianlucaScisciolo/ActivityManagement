@@ -1,8 +1,6 @@
 import { useSelector } from 'react-redux';
 
 export class AutenticazioneForms {
-  INDICI_LOGIN = [0, 1];
-  INDICI_PROFILO = [0, 1, 2, 3, 4];
   saloneState = useSelector((state) => state.saloneSliceReducer.value);
   lingua = this.saloneState.lingua;
 

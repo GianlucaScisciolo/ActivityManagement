@@ -5,10 +5,6 @@ import { controlloSpesa } from "../../utils/Controlli";
 import { useSelector } from 'react-redux';
 
 export class SpesaForms {
-  INDICI_NUOVA_SPESA = [0, 1, 2, 3, 4];
-  INDICI_RICERCA_SPESE = [0, 1, 2, 3, 4, 5, 6];
-  INDICI_SPESA_ESISTENTE = [0, 1, 2, 3, 4]; 
-  INDICI_FILE = [0, 1];
   saloneState = useSelector((state) => state.saloneSliceReducer.value);
   lingua = this.saloneState.lingua;
 
@@ -98,6 +94,7 @@ export class SpesaForms {
   
     return {
       header: lingua === "italiano" ? "Spesa" : "Expense", 
+      label: [null, null, null, null, null], 
       tipoSelezione: item.tipo_selezione,  
       type: [null, null, "number", "date", null], 
       step: [null, null, "0.50", null, null], 

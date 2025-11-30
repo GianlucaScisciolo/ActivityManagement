@@ -317,3 +317,25 @@ export const StyledPencilNotSelected = styled(Pencil)`
     color: #0050EF;
   }
 `;
+
+const StyledComponents = {
+  StyledListGroupItem, StyledRow, StyledCol, StyledSaveNotSelected, grandezzaIcona, 
+  StyledSearchNotSelected, StyledArrowTopNotSelected, StyledArrowBottomNotSelected, StyledLoginNotSelected, StyledPencilNotSelected, 
+  StyledLabel, StyledInputBlock, StyledInputModifica, StyledInputElimina, StyledTextAreaBlock, 
+  StyledTextAreaModifica, StyledTextAreaElimina, StyledForm, StyledHeader, SlideContainer, 
+  StyledSpanErrore, StyledSelectBlock, StyledSelectModifica, StyledSelectElimina, StyledEyeClosedNotSelected, 
+  StyledEyeOpenNotSelected, StyledEuroNotSelected, StyledFileIconNotSelected, StyledDownloadNotSelected, StyledTrashNotSelected, 
+  StyledSearchNotSelected2, StyledSaveNotSelected2, StyledSearchSelected2, StyledSaveSelected2, StyledFileIconNotSelected2, 
+  StyledFileIconSelected2
+};
+
+export default StyledComponents;
+
+
+
+
+
+
+
+
+

@@ -284,7 +284,17 @@ export const StyledSpanErrore =  styled.span`
   padding: 10px;
 `;
 
+const StyledComponents = {
+  StyledPencilNotSelected, StyledPencilSelected, grandezzaIcona, StyledTrashNotSelected, StyledTrashSelected, 
+  StyledListGroupItem, StyledRow, StyledCol, StyledSaveNotSelected, StyledEyeOpenNotSelected, 
+  StyledEyeClosedNotSelected, StyledSearchNotSelected, StyledArrowTopNotSelected, StyledArrowBottomNotSelected, StyledFileIconNotSelected, 
+  StyledDownloadNotSelected, StyledTrashNotSelected2, StyledLoginNotSelected, StyledPencilNotSelected2, StyledSelectBlock, 
+  StyledSelectModifica, StyledSelectElimina, StyledInputBlock, StyledInputModifica, StyledInputElimina, 
+  StyledTextAreaBlock, StyledTextAreaModifica, StyledTextAreaElimina, StyledCard, StyledCardHeader, 
+  SlideContainer, StyledSpanErrore, StyledEuroNotSelected
+};
 
+export default StyledComponents;
 
 
 

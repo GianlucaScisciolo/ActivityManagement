@@ -36,6 +36,7 @@ const Profilo = () => {
   const ProfiloTag = (stileState.vistaForm === "form") ? FormProfilo : (
     (stileState.vistaForm === "card") ? CardProfilo : RowProfilo
   );
+  const campiProfilo = autenticazioneForms.getCampiProfilo(datiProfilo, (e) => operazioniForms.handleInputChange(e, setDatiProfilo), null, null);
 
   return (
     <>
@@ -44,8 +45,8 @@ const Profilo = () => {
       <div className="main-content"></div>
 
       <ProfiloTag  
-        campi={autenticazioneForms.getCampiProfilo(datiProfilo, (e) => operazioniForms.handleInputChange(e, setDatiProfilo), null, null)} 
-        indici={autenticazioneForms.INDICI_PROFILO} 
+        campi={campiProfilo} 
+        indici={[...Array(campiProfilo.label.length).keys()]} 
         eseguiModificaProfilo={(e) => autenticazioneActions.modificaProfilo(e, autenticazioneState, datiProfilo, setDatiProfilo)} 
       />
     </>

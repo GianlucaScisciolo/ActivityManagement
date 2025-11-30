@@ -17,7 +17,7 @@ export class ServizioSQL {
   
   SQL_SELEZIONE_ENTRATE_SERVIZI = `
     SELECT 
-      CONCAT(s.nome, " x ", s.prezzo) AS servizio, 
+      CONCAT(s.nome, " x ", s.prezzo) AS nome, 
       YEAR(l.giorno) AS anno, 
       SUM(CASE WHEN MONTH(l.giorno) = 1 THEN COALESCE(c.quantita, 0) ELSE 0 END) AS quantita_gennaio, 
       SUM(CASE WHEN MONTH(l.giorno) = 1 THEN COALESCE(c.quantita, 0) * s.prezzo ELSE 0 END) AS totale_gennaio, 
@@ -48,7 +48,7 @@ export class ServizioSQL {
     LEFT JOIN servizio AS s ON c.id_servizio = s.id 
     WHERE YEAR(l.giorno) BETWEEN ? AND ? 
     GROUP BY anno, s.id 
-    ORDER BY anno DESC, servizio ASC; 
+    ORDER BY anno DESC, nome ASC; 
   `;
 
 

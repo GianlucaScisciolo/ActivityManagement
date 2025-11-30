@@ -25,6 +25,8 @@ const optionStr = (servizio) => {
 
 const getTotale = (collegamenti, servizi) => {
   let totale = 0;
+  collegamenti = (collegamenti != -1 && collegamenti) ? collegamenti : []; 
+  servizi = (servizi != -1 && servizi) ? servizi : []; 
   for(let collegamento of collegamenti) {
     for(let servizio of servizi) {
       if(collegamento.id_servizio === servizio.id) {
@@ -114,7 +116,7 @@ const OptionsServizi = ({ servizi, item, lavoroActions, sottoStringa, setServizi
   );
 };
 
-export const Items = ({ tipoItem, items, setItems, selectOperation, emptyIsConsidered, campi, indici, servizi, handleBlurItem, lavoroActions, tipoForm }) => {
+export const Items = ({ tipoItem, items, setItems, selectOperation, emptyIsConsidered, campi, servizi, handleBlurItem, lavoroActions, tipoForm }) => {
   const stileState = useSelector((state) => state.stileSliceReducer.value);
   const ItemEsistenteTag = stileState.vistaItem === "card" ? CardItemEsistente : RowItemEsistente;
   
@@ -134,23 +136,20 @@ export const Items = ({ tipoItem, items, setItems, selectOperation, emptyIsConsi
                     servizi={servizi}
                     item={item}
                     lavoroActions={lavoroActions}
-                    // serviziLavoro={servizi}
                     sottoStringa={sottoStringa}
-                    setServiziLavoro={/*(nuoviServizi) =>
-                      handleServiziLavoroChange(item, index, nuoviServizi, totale)
-                    */null}
+                    setServiziLavoro={null}
                   />, 
                   item,
                   null,
                   null,
                   null
                 )}
-                indici={indici}
                 selectOperation={selectOperation}
                 items={items}
                 setItems={setItems}
                 tipoItem={tipoItem}
                 handleBlurItem={handleBlurItem}
+                indici={[0,1,2,3]}
               />
             );
           })}
@@ -183,19 +182,17 @@ export const Items = ({ tipoItem, items, setItems, selectOperation, emptyIsConsi
         <>
           {items.map((item, index) => {
             return(
-              <>
-                <ItemEsistenteTag
-                  key={index}
-                  item={item}
-                  campi={campi(null, item, null, null, null)}
-                  indici={indici}
-                  selectOperation={selectOperation}
-                  items={items}
-                  setItems={setItems}
-                  tipoItem={tipoItem}
-                  handleBlurItem={handleBlurItem}
-                />
-              </>
+              <ItemEsistenteTag
+                key={index}
+                item={item}
+                campi={campi(null, item, null, null, null)}
+                indici={[...Array(campi(null, item, null, null, null).label.length).keys()]}
+                selectOperation={selectOperation}
+                items={items}
+                setItems={setItems}
+                tipoItem={tipoItem}
+                handleBlurItem={handleBlurItem}
+              />
             );
           })}
         </>

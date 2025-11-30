@@ -2,215 +2,12 @@
 import { useSelector } from 'react-redux';
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Card, Table } from 'react-bootstrap';
-import { faFilePdf, faFileExcel } from '@fortawesome/free-solid-svg-icons';
-import { Trash2, Pencil } from 'lucide-react';
 // Riutilizzabile
-import { 
-  StyledPencilNotSelected, StyledPencilSelected, grandezzaIcona, 
-  StyledTrashNotSelected, StyledTrashSelected, 
-  StyledListGroupItem, StyledRow, StyledCol, StyledSaveNotSelected, 
-  StyledEyeOpenNotSelected, StyledEyeClosedNotSelected,
-  StyledSearchNotSelected, StyledArrowTopNotSelected, StyledArrowBottomNotSelected, 
-  StyledFileIconNotSelected, StyledDownloadNotSelected, StyledTrashNotSelected2, 
-  StyledLoginNotSelected, 
-  StyledPencilNotSelected2, 
-  StyledSelectBlock, StyledSelectModifica, StyledSelectElimina, 
-  StyledInputBlock, StyledInputModifica, StyledInputElimina, 
-  StyledTextAreaBlock, StyledTextAreaModifica, StyledTextAreaElimina, 
-  StyledCard, StyledCardHeader, SlideContainer, 
-  StyledSpanErrore, StyledEuroNotSelected
-} from './StyledCardItem';
-
-function getColor(value, j, tipo){
-  // (i > 0) ? (
-  //                       value < 0 ? "#FF0000" : (value > 0 ? "#00FF00" : "#FFFFFF")) : "#0000FF"
-  return (j === 0) ? ("#FFFFFF") : (
-    (value < 0) ? "#FF0000" : (value > 0 ? "#00FF00" : "#FFFFFF")
-  )
-}
-
-const handleRightClick = (e, placeholder) => {
-  e.preventDefault();
-  alert(placeholder);
-}
-
-function onChangeVisibilityPassword(e, type) {
-  e.preventDefault();
-  console.log(type);
-  type = (type === "text") ? "password" : "text";
-  console.log(type);
-}
-
-function getPencilTag(tipoSelezione) {
-  return (tipoSelezione === 0 || tipoSelezione === 2) ? StyledPencilNotSelected : (
-    (tipoSelezione === 1) ? StyledPencilSelected : Pencil
-  );
-};
-
-function getTrashTag(tipoSelezione) {
-  // console.log(tipoSelezione);
-  return (tipoSelezione === 0 || tipoSelezione === 1) ? StyledTrashNotSelected : (
-    (tipoSelezione === 2) ? StyledTrashSelected : Trash2
-  );
-};
-
-export function getSelectTag(tipoSelezione) {
-  return (tipoSelezione !== 1 && tipoSelezione !== 2) ? StyledSelectBlock : (
-    (tipoSelezione === 1) ? StyledSelectModifica : StyledSelectElimina
-  );
-}; 
-
-export function getInputTag(tipoSelezione, isModificabile) {
-  return (isModificabile) ? (
-    (tipoSelezione !== 1 && tipoSelezione !== 2) ? StyledInputBlock : (
-      (tipoSelezione === 1) ? StyledInputModifica : StyledInputElimina
-    )
-  ) : (
-    (tipoSelezione !== 2) ? StyledInputBlock : StyledInputElimina
-  );
-};
-
-export function getTextAreaTag(tipoSelezione, isModificabile) {
-  return (isModificabile) ? (
-    (tipoSelezione !== 1 && tipoSelezione !== 2) ? StyledTextAreaBlock : (
-      (tipoSelezione === 1) ? StyledTextAreaModifica : StyledTextAreaElimina
-    )
-  ) : (
-    (tipoSelezione !== 2) ? StyledTextAreaBlock : StyledTextAreaElimina
-  );
-};
-
-export function nascondiForm(setIsVisible, setArrowUp) {
-  setIsVisible(prev => !prev);
-  setTimeout(() => {
-    setArrowUp(prev => !prev);
-  }, 450); 
-};
-
-export function OperazioniNuovoItem({eseguiSalvataggio}) {
-  return (
-    <StyledListGroupItem style={{ border: "5px solid #000000", backgroundColor:"#000000" }}>
-      <StyledRow>
-        <StyledCol>
-          <StyledSaveNotSelected 
-            className="salvaItemButton" 
-            size={grandezzaIcona} 
-            onClick={eseguiSalvataggio} 
-          />
-        </StyledCol>
-      </StyledRow>
-    </StyledListGroupItem>
-  )
-}
-
-export function OperazioniCercaItems({ setIsVisible, arrowUp, setArrowUp, handleSearch }) {
-  return (
-    <StyledListGroupItem style={{ border: "5px solid #000000", backgroundColor: "#000000" }}>
-      <StyledSearchNotSelected 
-        className="ricercaItemsButton" 
-        size={grandezzaIcona} 
-        style={{ 
-          /* marginRight: "0%" 50% */ 
-        }}
-        onClick={handleSearch} 
-      />
-      {/*
-      {arrowUp && (
-        <StyledArrowTopNotSelected 
-          className="nascondiFormButton" 
-          size={grandezzaIcona} 
-          onClick={() => nascondiForm(setIsVisible, setArrowUp)} 
-        />
-      )}
-      {!arrowUp && (
-        <StyledArrowBottomNotSelected 
-          className="mostraFormButton" 
-          size={grandezzaIcona} 
-          onClick={() => nascondiForm(setIsVisible, setArrowUp)} 
-        />
-      )}
-      */}
-    </StyledListGroupItem>
-  );
-};
-
-export function OperazioniRicercaEntrateUscite({ eseguiRicerca }) {
-  return (
-    <StyledListGroupItem style={{ border: "5px solid #000000", backgroundColor: "#000000" }}>
-      <StyledSearchNotSelected 
-        className="ricercaEntrateUsciteButton" 
-        size={grandezzaIcona} 
-        onClick={eseguiRicerca} 
-      />
-    </StyledListGroupItem>
-  );
-};
-
-export function OperazioniItemEsistente ({ selectOperation, item }) {
-  let TrashTag = getTrashTag(item.tipo_selezione);
-  let PencilTag = getPencilTag(item.tipo_selezione);
-
-  return (
-    <StyledListGroupItem style={{ border: "5px solid #000000", backgroundColor: "#000000" }}>
-      <PencilTag 
-        className="modificaItemButton" 
-        size={grandezzaIcona} 
-        onClick={() => selectOperation("pencil", item)} 
-        style={{ marginRight: "50%" }} 
-      />
-      <TrashTag 
-        className="eliminaItemButton" 
-        size={grandezzaIcona} 
-        onClick={() => selectOperation("trash", item)} 
-      />
-    </StyledListGroupItem>
-  )
-}
-
-export function OperazioniFileItems({ottieniFileRangePDF, ottieniFileRangeExcel, eliminaItemsRange}) {
-  return (
-    <StyledListGroupItem style={{ border: "5px solid #000000", backgroundColor: "#000000", paddingTop: "3%" }}>
-      <div>
-        <StyledFileIconNotSelected icon={faFilePdf} size="2xl" style={{ marginRight: "50%" }} />
-        <StyledFileIconNotSelected icon={faFileExcel} size="2xl" />
-      </div>
-      <br />
-      <div>
-        <StyledDownloadNotSelected size={grandezzaIcona} style={{ marginRight: "50%" }} onClick={ottieniFileRangePDF} />
-        <StyledDownloadNotSelected size={grandezzaIcona} onClick={ottieniFileRangeExcel} />
-      </div>
-      <br />
-      <div>
-        <StyledTrashNotSelected size={grandezzaIcona} onClick={eliminaItemsRange} />
-      </div>
-      <br />
-    </StyledListGroupItem>
-  );
-};
-
-export function OperazioniLogin({eseguiLogin}) {
-  return (
-    <StyledListGroupItem style={{ border: "5px solid #000000", backgroundColor: "#000000", paddingTop: "3%", paddingBottom: "3%" }}>
-      <StyledLoginNotSelected 
-        className="loginButton" 
-        size={grandezzaIcona} 
-        onClick={eseguiLogin} 
-      />
-    </StyledListGroupItem>
-  );
-};
-
-export function OperazioniModificaProfilo({eseguiModificaProfilo}) {
-  return (
-    <StyledListGroupItem style={{ border: "5px solid #000000", backgroundColor: "#000000" }}>
-      <StyledPencilNotSelected2 
-        className="modificaProfiloButton"
-        size={grandezzaIcona} 
-        onClick={eseguiModificaProfilo} 
-      />
-    </StyledListGroupItem>
-  );
-};
+import StyledComponents from './StyledCardItem';
+import { OperazioniNuovoItem, OperazioniCercaItems, OperazioniRicercaEntrateUscite, OperazioniLogin, OperazioniModificaProfilo, OperazioniFileItems, OperazioniItemEsistente } from '../Operazioni';
+import { getPencilTag, getTrashTag, getSelectTag, getInputTag, getTextAreaTag } from '../Tags';
+import { getColor } from '../../utils/Colori';
+import { getTotaleEntrateAnno, getQuantitaEntrateAnno } from '../../utils/Calcoli';
 
 export function CardNuovoItem({campi, indici, eseguiSalvataggio}) {
   let maxHeight = "2000px";
@@ -222,16 +19,16 @@ export function CardNuovoItem({campi, indici, eseguiSalvataggio}) {
   
   return (
     <center>
-      <StyledCard>
-        <StyledCardHeader>{campi["header"]}</StyledCardHeader>
-        <SlideContainer style={{maxHeight: `${maxHeight}`}}>
+      <StyledComponents.StyledCard>
+        <StyledComponents.StyledCardHeader>{campi["header"]}</StyledComponents.StyledCardHeader>
+        <StyledComponents.SlideContainer style={{maxHeight: `${maxHeight}`}}>
           {indici.map((i) => {
-            const NomeTag = (campi.type[i]) ? getInputTag(1, true) : (
-              getTextAreaTag(1, true)
+            const NomeTag = (campi.type[i]) ? getInputTag(1, true, StyledComponents) : (
+              getTextAreaTag(1, true, StyledComponents)
             );
             return ( 
               <React.Fragment key={i}>
-                <StyledRow>
+                <StyledComponents.StyledRow>
                   <NomeTag 
                     rows={1}
                     name={campi.name[i]}
@@ -246,16 +43,18 @@ export function CardNuovoItem({campi, indici, eseguiSalvataggio}) {
                     onContextMenu={(e) => handleRightClick(e, campi.placeholder[i])}
                   />
                   {campi.options[i]}
-                </StyledRow>
-                {(campi.errore[i] !== "") && (<StyledSpanErrore>{campi.errore[i]}</StyledSpanErrore>)}
+                </StyledComponents.StyledRow>
+                {(campi.errore[i] !== "") && (<StyledComponents.StyledSpanErrore>{campi.errore[i]}</StyledComponents.StyledSpanErrore>)}
               </React.Fragment>
             );
           })}
-        </SlideContainer>
+        </StyledComponents.SlideContainer>
         <OperazioniNuovoItem 
           eseguiSalvataggio={eseguiSalvataggio} 
+          vistaItem={"card"}
+          StyledComponents={StyledComponents}
         />
-      </StyledCard>
+      </StyledComponents.StyledCard>
     </center>
   );
 }
@@ -264,8 +63,8 @@ export function CardRicercaItems({campi, indici, handleSearch}) {
   const [isVisible, setIsVisible] = useState(true);
   const [arrowUp, setArrowUp] = useState(true);
   let maxHeight = (isVisible) ? "2000px" : "0px";
-  let InputTag = getInputTag(1, true);
-  let TextAreaTag = getTextAreaTag(1, true);
+  let InputTag = getInputTag(1, true, StyledComponents);
+  let TextAreaTag = getTextAreaTag(1, true, StyledComponents);
 
   const handleRightClick = (e, placeholder) => {
     e.preventDefault();
@@ -274,16 +73,16 @@ export function CardRicercaItems({campi, indici, handleSearch}) {
 
   return (
     <center>
-      <StyledCard>
-        <StyledCardHeader>{campi["header"]}</StyledCardHeader>
-        <SlideContainer style={{maxHeight: `${maxHeight}`}}>
+      <StyledComponents.StyledCard>
+        <StyledComponents.StyledCardHeader>{campi["header"]}</StyledComponents.StyledCardHeader>
+        <StyledComponents.SlideContainer style={{maxHeight: `${maxHeight}`}}>
           {indici.map((i) => {
-            const NomeTag = (campi.type[i]) ? getInputTag(1, true) : (
-              getTextAreaTag(1, true)
+            const NomeTag = (campi.type[i]) ? getInputTag(1, true, StyledComponents) : (
+              getTextAreaTag(1, true, StyledComponents)
             );
             return ( 
               <React.Fragment key={i}>
-                <StyledRow>
+                <StyledComponents.StyledRow>
                   <NomeTag 
                     rows={1}
                     name={campi.name[i]}
@@ -296,26 +95,27 @@ export function CardRicercaItems({campi, indici, handleSearch}) {
                     onBlur={campi.onBlur}
                     onContextMenu={(e) => handleRightClick(e, campi.placeholder[i])}
                   />
-                </StyledRow>
+                </StyledComponents.StyledRow>
               </React.Fragment>
             );
           })}
-        </SlideContainer>
+        </StyledComponents.SlideContainer>
         <OperazioniCercaItems
           setIsVisible={setIsVisible}
           arrowUp={arrowUp}
           setArrowUp={setArrowUp}
-          handleSearch={handleSearch}
-          />
-          {/*
-         */}
-      </StyledCard>
+          handleSearch={handleSearch} 
+          vistaItem={"card"}
+          StyledComponents={StyledComponents}
+        />
+      </StyledComponents.StyledCard>
     </center>
   );
 }
 
 export function CardItemEsistente({ item, campi, indici, selectOperation, tipoItem, handleBlurItem }) {
   const inputRefs = useRef([]); // Array di riferimenti per ogni input
+  console.log("INDICI = " + indici);
   const [localValues, setLocalValues] = useState(() =>
     indici.reduce((acc, i) => ({ ...acc, [i]: campi.value[i] }), {})
   ); // Gestione dello stato locale
@@ -399,17 +199,17 @@ export function CardItemEsistente({ item, campi, indici, selectOperation, tipoIt
   }
 
   return (
-    <StyledCard>
-      <StyledCardHeader>{campi["header"]}</StyledCardHeader>
-      <SlideContainer>
+    <StyledComponents.StyledCard>
+      <StyledComponents.StyledCardHeader>{campi["header"]}</StyledComponents.StyledCardHeader>
+      <StyledComponents.SlideContainer>
         {indici.map((i) => {
           const NomeTag = campi.type[i]
-            ? getInputTag(campi.tipoSelezione, campi.valoreModificabile[i])
-            : getTextAreaTag(campi.tipoSelezione, campi.valoreModificabile[i]);
+            ? getInputTag(campi.tipoSelezione, campi.valoreModificabile[i], StyledComponents)
+            : getTextAreaTag(campi.tipoSelezione, campi.valoreModificabile[i], StyledComponents);
 
           return (
             <React.Fragment key={`input-${i}`}>
-              <StyledRow>
+              <StyledComponents.StyledRow>
                 <NomeTag
                   ref={(el) => (inputRefs.current[i] = el)} // Assegna il riferimento
                   rows={1}
@@ -426,14 +226,14 @@ export function CardItemEsistente({ item, campi, indici, selectOperation, tipoIt
                   onContextMenu={(e) => handleRightClick(e, campi.placeholder[i])}
                 />
                 {campi.options[i]}
-              </StyledRow>
-              {(campi.errore[i]) && (<StyledSpanErrore>{campi.errore[i]}</StyledSpanErrore>)}
+              </StyledComponents.StyledRow>
+              {(campi.errore[i]) && (<StyledComponents.StyledSpanErrore>{campi.errore[i]}</StyledComponents.StyledSpanErrore>)}
             </React.Fragment>
           );
         })}
-      </SlideContainer>
-      <OperazioniItemEsistente selectOperation={selectOperation} item={item} />
-    </StyledCard>
+      </StyledComponents.SlideContainer>
+      <OperazioniItemEsistente selectOperation={selectOperation} item={item} vistaItem={"card"} StyledComponents={StyledComponents} />
+    </StyledComponents.StyledCard>
   );
 }
 
@@ -447,12 +247,12 @@ export function CardFileItems({campi, indici, ottieniFileRangePDF, ottieniFileRa
   
   return (
     <center>
-      <StyledCard>
-        <StyledCardHeader>{campi["header"]}</StyledCardHeader>
-        <SlideContainer style={{maxHeight: `${maxHeight}`}}>
+      <StyledComponents.StyledCard>
+        <StyledComponents.StyledCardHeader>{campi["header"]}</StyledComponents.StyledCardHeader>
+        <StyledComponents.SlideContainer style={{maxHeight: `${maxHeight}`}}>
           {indici.map((i) => {
-            const NomeTag = (campi.type[i]) ? getInputTag(1, true) : (
-              getTextAreaTag(1, true)
+            const NomeTag = (campi.type[i]) ? getInputTag(1, true, StyledComponents) : (
+              getTextAreaTag(1, true, StyledComponents)
             );
             return ( 
               <React.Fragment key={i}>
@@ -473,13 +273,15 @@ export function CardFileItems({campi, indici, ottieniFileRangePDF, ottieniFileRa
               </React.Fragment>
             );
           })}
-        </SlideContainer>
+        </StyledComponents.SlideContainer>
         <OperazioniFileItems 
           ottieniFileRangePDF={ottieniFileRangePDF} 
           ottieniFileRangeExcel={ottieniFileRangeExcel} 
           eliminaItemsRange={eliminaItemsRange} 
+          vistaItem={"card"}
+          StyledComponents={StyledComponents}
         />
-      </StyledCard>
+      </StyledComponents.StyledCard>
     </center>
   );
 }
@@ -500,17 +302,17 @@ export function CardLogin({campi, indici, eseguiLogin}) {
   
   return (
     <center>
-      <StyledCard>
-        <StyledCardHeader>{campi["header"]}</StyledCardHeader>
-        <SlideContainer style={{maxHeight: `${maxHeight}`}}>
+      <StyledComponents.StyledCard>
+        <StyledComponents.StyledCardHeader>{campi["header"]}</StyledComponents.StyledCardHeader>
+        <StyledComponents.SlideContainer style={{maxHeight: `${maxHeight}`}}>
           {indici.map((i) => {
-            const NomeTag = (campi.type[i]) ? getInputTag(1, true) : (
-              getTextAreaTag(1, true)
+            const NomeTag = (campi.type[i]) ? getInputTag(1, true, StyledComponents) : (
+              getTextAreaTag(1, true, StyledComponents)
             );
-            const StyledEyeTag = (inputType === "password") ? StyledEyeClosedNotSelected : StyledEyeOpenNotSelected;
+            const StyledEyeTag = (inputType === "password") ? StyledComponents.StyledEyeClosedNotSelected : StyledComponents.StyledEyeOpenNotSelected;
             return ( 
               <React.Fragment key={i}>
-                <StyledRow>
+                <StyledComponents.StyledRow>
                   <NomeTag 
                     style={(campi.name[i] === "password") ? {maxWidth:"80%"} : null}
                     rows={1}
@@ -534,21 +336,23 @@ export function CardLogin({campi, indici, eseguiLogin}) {
                         marginLeft: "-6px", 
                         marginTop: "13px"
                       }} 
-                      size={grandezzaIcona} 
+                      size={StyledComponents.grandezzaIcona} 
                       onClick={onChangeVisibilityPassword} 
                     />
                   )}
-                </StyledRow>
+                </StyledComponents.StyledRow>
                 {campi.options[i]}
-                {(campi.errore[i]) && (<StyledSpanErrore>{campi.errore[i]}</StyledSpanErrore>)}
+                {(campi.errore[i]) && (<StyledComponents.StyledSpanErrore>{campi.errore[i]}</StyledComponents.StyledSpanErrore>)}
               </React.Fragment>
             );
           })}
-        </SlideContainer>
+        </StyledComponents.SlideContainer>
         <OperazioniLogin
           eseguiLogin={eseguiLogin} 
+          vistaItem={"card"}
+          StyledComponents={StyledComponents}
         />
-      </StyledCard>
+      </StyledComponents.StyledCard>
     </center>
   );
 }
@@ -574,23 +378,23 @@ export function CardProfilo({campi, indici, eseguiModificaProfilo}) {
 
   return (
     <center>
-      <StyledCard>
-        <StyledCardHeader>{campi["header"]}</StyledCardHeader>  
-        <SlideContainer style={{maxHeight: `${maxHeight}`}}>
+      <StyledComponents.StyledCard>
+        <StyledComponents.StyledCardHeader>{campi["header"]}</StyledComponents.StyledCardHeader>  
+        <StyledComponents.SlideContainer style={{maxHeight: `${maxHeight}`}}>
           {indici.map((i) => {
-            const NomeTag = (campi.type[i]) ? getInputTag(1, true) : (
-              getTextAreaTag(1, true)
+            const NomeTag = (campi.type[i]) ? getInputTag(1, true, StyledComponents) : (
+              getTextAreaTag(1, true, StyledComponents)
             );
             const StyledEyeTag = (
               (
                 campi.name[i] === "password_attuale" && passwordAttualeType === "password" || 
                 campi.name[i] === "nuova_password" && nuovaPasswordType === "password" || 
                 campi.name[i] === "conferma_nuova_password" && confermaNuovaPasswordType === "password"
-              ) ? StyledEyeClosedNotSelected : StyledEyeOpenNotSelected
+              ) ? StyledComponents.StyledEyeClosedNotSelected : StyledComponents.StyledEyeOpenNotSelected
             );
             return ( 
               <React.Fragment key={i}>
-                <StyledRow>
+                <StyledComponents.StyledRow>
                   <NomeTag 
                     style={(campi.name[i].includes("password")) ? {maxWidth:"80%"} : null}
                     rows={1}
@@ -617,22 +421,24 @@ export function CardProfilo({campi, indici, eseguiModificaProfilo}) {
                         marginLeft: "-6px", 
                         marginTop: "13px"
                       }} 
-                      size={grandezzaIcona} 
+                      size={StyledComponents.grandezzaIcona} 
                       onClick={(e) => onChangeVisibilityPassword(e, campi.name[i])} 
                     />
                   )}
-                </StyledRow>
+                </StyledComponents.StyledRow>
                 {campi.options[i]}
 
-                {(campi.errore[i]) && (<StyledSpanErrore>{campi.errore[i]}</StyledSpanErrore>)}
+                {(campi.errore[i]) && (<StyledComponents.StyledSpanErrore>{campi.errore[i]}</StyledComponents.StyledSpanErrore>)}
               </React.Fragment>
             );
           })}
-        </SlideContainer>
+        </StyledComponents.SlideContainer>
         <OperazioniModificaProfilo 
           eseguiModificaProfilo={eseguiModificaProfilo}
+          vistaItem={"card"}
+          StyledComponents={StyledComponents}
         />
-      </StyledCard>
+      </StyledComponents.StyledCard>
     </center>
   );
 }
@@ -677,7 +483,7 @@ export function CardWidget({nome, img, id, onClickWidget, backgroundColor}) {
   );
 }
 
-export function CardEntrateLavori({ entrateLavori }) {
+export function CardEntrateItems({ entrateItems, etichettaIta, etichettaEng }) {
   const saloneState = useSelector((state) => state.saloneSliceReducer.value);
   const lingua = saloneState.lingua;
   return (
@@ -695,7 +501,7 @@ export function CardEntrateLavori({ entrateLavori }) {
     >
       <Card.Body>
         <center>
-          <Card.Title style={{ color: '#FFFFFF' }}>{lingua === "italiano" ? "Entrate lavori" : "Revenue jobs"}</Card.Title>
+          <Card.Title style={{ color: '#FFFFFF' }}>{lingua === "italiano" ? etichettaIta : etichettaEng}</Card.Title>
         </center>
       </Card.Body>
       <center>
@@ -730,10 +536,10 @@ export function CardEntrateLavori({ entrateLavori }) {
             </tr>
           </thead>
           <tbody>
-            {entrateLavori.map((lavoro, i) => (
+            {entrateItems.map((item, i) => (
               (i > 1) && (
                 <tr key={i}>
-                  {Object.values(lavoro).map((value, j) => (
+                  {Object.values(item).map((value, j) => (
                     <td 
                       style={{
                         color: getColor(value, j, "entrata"),
@@ -750,7 +556,7 @@ export function CardEntrateLavori({ entrateLavori }) {
           </tbody>
           <tbody>
             <tr>
-              {Object.values(entrateLavori[0]).map((value, j) => (
+              {Object.values(entrateItems[0]).map((value, j) => (
                 <td
                   style={{
                     color: getColor(value, j, "entrata"),
@@ -769,24 +575,7 @@ export function CardEntrateLavori({ entrateLavori }) {
   );
 }
 
-const getTotaleEntrateAnno = (entrata) => {
-  return (
-      entrata.totale_gennaio   + entrata.totale_febbraio + entrata.totale_marzo    + entrata.totale_aprile 
-    + entrata.totale_maggio    + entrata.totale_giugno   + entrata.totale_luglio   + entrata.totale_agosto 
-    + entrata.totale_settembre + entrata.totale_ottobre  + entrata.totale_novembre + entrata.totale_dicembre
-  ); 
-}
-
-const getQuantitaEntrateAnno = (entrata) => {
-  return (
-      parseInt(entrata.quantita_gennaio) + parseInt(entrata.quantita_febbraio) + parseInt(entrata.quantita_marzo) 
-    + parseInt(entrata.quantita_aprile)  + parseInt(entrata.quantita_maggio)   + parseInt(entrata.quantita_giugno) 
-    + parseInt(entrata.quantita_luglio)  + parseInt(entrata.quantita_agosto)   + parseInt(entrata.quantita_settembre) 
-    + parseInt(entrata.quantita_ottobre)  + parseInt(entrata.quantita_novembre)   + parseInt(entrata.quantita_dicembre) 
-  ); 
-}
-
-export function CardEntrateServizi({ entrateServizi }) {
+export function CardEntrateItemsByName({ entrateItems, tipoItemIta, tipoItemEng, etichettaIta, etichettaEng }) {
   const saloneState = useSelector((state) => state.saloneSliceReducer.value);
   const lingua = saloneState.lingua;
   const [annoTmp, setAnnoTmp] = useState(0);
@@ -805,7 +594,7 @@ export function CardEntrateServizi({ entrateServizi }) {
     >
       <Card.Body>
         <center>
-          <Card.Title style={{ color: '#FFFFFF' }}>{lingua === "italiano" ? "Entrate servizi" : "Revenue services"}</Card.Title>
+          <Card.Title style={{ color: '#FFFFFF' }}>{lingua === "italiano" ? etichettaIta : etichettaEng}</Card.Title>
         </center>
       </Card.Body>
       <center>
@@ -823,13 +612,13 @@ export function CardEntrateServizi({ entrateServizi }) {
         >
           <thead></thead>
           <tbody>
-            {entrateServizi.map((entrata, i) => (
+            {entrateItems.map((entrata, i) => (
               <React.Fragment key={i}>
-                {(i === 0 || entrateServizi[i].anno !== entrateServizi[i-1].anno) && (
+                {(i === 0 || entrateItems[i].anno !== entrateItems[i-1].anno) && (
                   <>
                     <tr><th colSpan={14}>{lingua==="italiano" ? "ANNO" : "YEAR"} = {entrata.anno}</th></tr>
                     <tr>
-                      <th style={{color: "#FFFFFF"}}>{lingua === "italiano" ? "SERVIZIO" : "SERVICE"}</th>
+                      <th style={{color: "#FFFFFF"}}>{lingua === "italiano" ? tipoItemIta : tipoItemEng}</th>
                       <th style={{color: "#FFFFFF"}}>{lingua === "italiano" ? "GEN" : "JAN"}</th>
                       <th style={{color: "#FFFFFF"}}>FEB</th>
                       <th style={{color: "#FFFFFF"}}>MAR</th>
@@ -848,7 +637,7 @@ export function CardEntrateServizi({ entrateServizi }) {
                 )}
                 <tr>                
                   <td style={{ color: "#FFFFFF", fontWeight: "bold", }}>
-                    {entrata.servizio}
+                    {entrata.nome}
                   </td>
                   <td style={{ color: getColor(entrata.totale_gennaio, 1, "entrata"), fontWeight: "bold", }}>
                     x {entrata.quantita_gennaio} = {parseFloat(entrata.totale_gennaio).toFixed(2) + " €"}
@@ -899,7 +688,7 @@ export function CardEntrateServizi({ entrateServizi }) {
   );
 }
 
-export function CardUsciteSpese({ usciteSpese }) {
+export function CardUsciteItems({ usciteItems, etichettaIta, etichettaEng }) {
   const saloneState = useSelector((state) => state.saloneSliceReducer.value);
   const lingua = saloneState.lingua;
   return (
@@ -917,7 +706,7 @@ export function CardUsciteSpese({ usciteSpese }) {
     >
       <Card.Body>
         <center>
-          <Card.Title style={{ color: '#FFFFFF' }}>{lingua === "italiano" ? "Uscite spese" : "Exit expenses"}</Card.Title>
+          <Card.Title style={{ color: '#FFFFFF' }}>{lingua === "italiano" ? etichettaIta : etichettaEng}</Card.Title>
         </center>
       </Card.Body>
       <center>
@@ -952,7 +741,7 @@ export function CardUsciteSpese({ usciteSpese }) {
             </tr>
           </thead>
           <tbody>
-            {usciteSpese.map((spesa, i) => (
+            {usciteItems.map((spesa, i) => (
               (i > 1) && (
                 <tr key={i}>
                   {Object.values(spesa).map((value, j) => (
@@ -972,7 +761,7 @@ export function CardUsciteSpese({ usciteSpese }) {
           </tbody>
           <tbody>
             <tr>
-              {Object.values(usciteSpese[0]).map((value, j) => (
+              {Object.values(usciteItems[0]).map((value, j) => (
                 <td
                   style={{
                     color: getColor(-value, j, "uscita"),
@@ -991,7 +780,7 @@ export function CardUsciteSpese({ usciteSpese }) {
   );
 }
 
-export function CardRicavi({ entrateLavori, usciteSpese }) {
+export function CardRicavi({ entrate, uscite }) {
   const saloneState = useSelector((state) => state.saloneSliceReducer.value);
   const lingua = saloneState.lingua;
   return (
@@ -1044,7 +833,7 @@ export function CardRicavi({ entrateLavori, usciteSpese }) {
             </tr>
           </thead>
           <tbody>
-            {entrateLavori.map((entrata, i) => (
+            {entrate.map((entrata, i) => (
               i > 1 && (
                 <tr key={i}>
                   <td                  
@@ -1052,21 +841,21 @@ export function CardRicavi({ entrateLavori, usciteSpese }) {
                       fontWeight: "bold",
                     }} 
                   >{entrata.Anno}</td>
-                  {usciteSpese[i] && (
+                  {uscite[i] && (
                     <>
-                  <td style={{color:getColor(entrata.gen - usciteSpese[i].gen)}}>{parseFloat(entrata.gen - usciteSpese[i].gen).toFixed(2)} €</td>
-                  <td style={{color:getColor(entrata.feb - usciteSpese[i].feb)}}>{parseFloat(entrata.feb - usciteSpese[i].feb).toFixed(2)} €</td>
-                  <td style={{color:getColor(entrata.mar - usciteSpese[i].mar)}}>{parseFloat(entrata.mar - usciteSpese[i].mar).toFixed(2)} €</td>
-                  <td style={{color:getColor(entrata.apr - usciteSpese[i].apr)}}>{parseFloat(entrata.apr - usciteSpese[i].apr).toFixed(2)} €</td>
-                  <td style={{color:getColor(entrata.mag - usciteSpese[i].mag)}}>{parseFloat(entrata.mag - usciteSpese[i].mag).toFixed(2)} €</td>
-                  <td style={{color:getColor(entrata.giu - usciteSpese[i].giu)}}>{parseFloat(entrata.giu - usciteSpese[i].giu).toFixed(2)} €</td>
-                  <td style={{color:getColor(entrata.lug - usciteSpese[i].lug)}}>{parseFloat(entrata.lug - usciteSpese[i].lug).toFixed(2)} €</td>
-                  <td style={{color:getColor(entrata.ago - usciteSpese[i].ago)}}>{parseFloat(entrata.ago - usciteSpese[i].ago).toFixed(2)} €</td>
-                  <td style={{color:getColor(entrata.set - usciteSpese[i].set)}}>{parseFloat(entrata.set - usciteSpese[i].set).toFixed(2)} €</td>
-                  <td style={{color:getColor(entrata.ott - usciteSpese[i].ott)}}>{parseFloat(entrata.ott - usciteSpese[i].ott).toFixed(2)} €</td>
-                  <td style={{color:getColor(entrata.nov - usciteSpese[i].nov)}}>{parseFloat(entrata.nov - usciteSpese[i].nov).toFixed(2)} €</td>
-                  <td style={{color:getColor(entrata.dic - usciteSpese[i].dic)}}>{parseFloat(entrata.dic - usciteSpese[i].dic).toFixed(2)} €</td>
-                  <td style={{color:getColor(entrata.totale_anno - usciteSpese[i].totale_anno)}}>{parseFloat(entrata.totale_anno - usciteSpese[i].totale_anno).toFixed(2)} €</td>
+                  <td style={{color:getColor(entrata.gen - uscite[i].gen)}}>{parseFloat(entrata.gen - uscite[i].gen).toFixed(2)} €</td>
+                  <td style={{color:getColor(entrata.feb - uscite[i].feb)}}>{parseFloat(entrata.feb - uscite[i].feb).toFixed(2)} €</td>
+                  <td style={{color:getColor(entrata.mar - uscite[i].mar)}}>{parseFloat(entrata.mar - uscite[i].mar).toFixed(2)} €</td>
+                  <td style={{color:getColor(entrata.apr - uscite[i].apr)}}>{parseFloat(entrata.apr - uscite[i].apr).toFixed(2)} €</td>
+                  <td style={{color:getColor(entrata.mag - uscite[i].mag)}}>{parseFloat(entrata.mag - uscite[i].mag).toFixed(2)} €</td>
+                  <td style={{color:getColor(entrata.giu - uscite[i].giu)}}>{parseFloat(entrata.giu - uscite[i].giu).toFixed(2)} €</td>
+                  <td style={{color:getColor(entrata.lug - uscite[i].lug)}}>{parseFloat(entrata.lug - uscite[i].lug).toFixed(2)} €</td>
+                  <td style={{color:getColor(entrata.ago - uscite[i].ago)}}>{parseFloat(entrata.ago - uscite[i].ago).toFixed(2)} €</td>
+                  <td style={{color:getColor(entrata.set - uscite[i].set)}}>{parseFloat(entrata.set - uscite[i].set).toFixed(2)} €</td>
+                  <td style={{color:getColor(entrata.ott - uscite[i].ott)}}>{parseFloat(entrata.ott - uscite[i].ott).toFixed(2)} €</td>
+                  <td style={{color:getColor(entrata.nov - uscite[i].nov)}}>{parseFloat(entrata.nov - uscite[i].nov).toFixed(2)} €</td>
+                  <td style={{color:getColor(entrata.dic - uscite[i].dic)}}>{parseFloat(entrata.dic - uscite[i].dic).toFixed(2)} €</td>
+                  <td style={{color:getColor(entrata.totale_anno - uscite[i].totale_anno)}}>{parseFloat(entrata.totale_anno - uscite[i].totale_anno).toFixed(2)} €</td>
                 </>
                 )}
                 </tr>
@@ -1077,20 +866,20 @@ export function CardRicavi({ entrateLavori, usciteSpese }) {
                 style={{
                   fontWeight: "bold",
                 }} 
-              >{entrateLavori[0].Anno}</td>
-              <td style={{color:getColor(entrateLavori[0].gen - usciteSpese[0].gen, 1)}}>{parseFloat(entrateLavori[0].gen - usciteSpese[0].gen).toFixed(2)} €</td>
-              <td style={{color:getColor(entrateLavori[0].feb - usciteSpese[0].feb)}}>{parseFloat(entrateLavori[0].feb - usciteSpese[0].feb).toFixed(2)} €</td>
-              <td style={{color:getColor(entrateLavori[0].mar - usciteSpese[0].mar)}}>{parseFloat(entrateLavori[0].mar - usciteSpese[0].mar).toFixed(2)} €</td>
-              <td style={{color:getColor(entrateLavori[0].apr - usciteSpese[0].apr)}}>{parseFloat(entrateLavori[0].apr - usciteSpese[0].apr).toFixed(2)} €</td>
-              <td style={{color:getColor(entrateLavori[0].mag - usciteSpese[0].mag)}}>{parseFloat(entrateLavori[0].mag - usciteSpese[0].mag).toFixed(2)} €</td>
-              <td style={{color:getColor(entrateLavori[0].giu - usciteSpese[0].giu)}}>{parseFloat(entrateLavori[0].giu - usciteSpese[0].giu).toFixed(2)} €</td>
-              <td style={{color:getColor(entrateLavori[0].lug - usciteSpese[0].lug)}}>{parseFloat(entrateLavori[0].lug - usciteSpese[0].lug).toFixed(2)} €</td>
-              <td style={{color:getColor(entrateLavori[0].ago - usciteSpese[0].ago)}}>{parseFloat(entrateLavori[0].ago - usciteSpese[0].ago).toFixed(2)} €</td>
-              <td style={{color:getColor(entrateLavori[0].set - usciteSpese[0].set)}}>{parseFloat(entrateLavori[0].set - usciteSpese[0].set).toFixed(2)} €</td>
-              <td style={{color:getColor(entrateLavori[0].ott - usciteSpese[0].ott)}}>{parseFloat(entrateLavori[0].ott - usciteSpese[0].ott).toFixed(2)} €</td>
-              <td style={{color:getColor(entrateLavori[0].nov - usciteSpese[0].nov)}}>{parseFloat(entrateLavori[0].nov - usciteSpese[0].nov).toFixed(2)} €</td>
-              <td style={{color:getColor(entrateLavori[0].dic - usciteSpese[0].dic)}}>{parseFloat(entrateLavori[0].dic - usciteSpese[0].dic).toFixed(2)} €</td>
-              <td style={{color:getColor(entrateLavori[0].totale_anno - usciteSpese[0].totale_anno)}}>{parseFloat(entrateLavori[0].totale_anno - usciteSpese[0].totale_anno).toFixed(2)} €</td>
+              >{entrate[0].Anno}</td>
+              <td style={{color:getColor(entrate[0].gen - uscite[0].gen, 1)}}>{parseFloat(entrate[0].gen - uscite[0].gen).toFixed(2)} €</td>
+              <td style={{color:getColor(entrate[0].feb - uscite[0].feb)}}>{parseFloat(entrate[0].feb - uscite[0].feb).toFixed(2)} €</td>
+              <td style={{color:getColor(entrate[0].mar - uscite[0].mar)}}>{parseFloat(entrate[0].mar - uscite[0].mar).toFixed(2)} €</td>
+              <td style={{color:getColor(entrate[0].apr - uscite[0].apr)}}>{parseFloat(entrate[0].apr - uscite[0].apr).toFixed(2)} €</td>
+              <td style={{color:getColor(entrate[0].mag - uscite[0].mag)}}>{parseFloat(entrate[0].mag - uscite[0].mag).toFixed(2)} €</td>
+              <td style={{color:getColor(entrate[0].giu - uscite[0].giu)}}>{parseFloat(entrate[0].giu - uscite[0].giu).toFixed(2)} €</td>
+              <td style={{color:getColor(entrate[0].lug - uscite[0].lug)}}>{parseFloat(entrate[0].lug - uscite[0].lug).toFixed(2)} €</td>
+              <td style={{color:getColor(entrate[0].ago - uscite[0].ago)}}>{parseFloat(entrate[0].ago - uscite[0].ago).toFixed(2)} €</td>
+              <td style={{color:getColor(entrate[0].set - uscite[0].set)}}>{parseFloat(entrate[0].set - uscite[0].set).toFixed(2)} €</td>
+              <td style={{color:getColor(entrate[0].ott - uscite[0].ott)}}>{parseFloat(entrate[0].ott - uscite[0].ott).toFixed(2)} €</td>
+              <td style={{color:getColor(entrate[0].nov - uscite[0].nov)}}>{parseFloat(entrate[0].nov - uscite[0].nov).toFixed(2)} €</td>
+              <td style={{color:getColor(entrate[0].dic - uscite[0].dic)}}>{parseFloat(entrate[0].dic - uscite[0].dic).toFixed(2)} €</td>
+              <td style={{color:getColor(entrate[0].totale_anno - uscite[0].totale_anno)}}>{parseFloat(entrate[0].totale_anno - uscite[0].totale_anno).toFixed(2)} €</td>
             </tr>
           </tbody>
         </Table>
@@ -1101,11 +890,11 @@ export function CardRicavi({ entrateLavori, usciteSpese }) {
 
 export function CardInformazioni({ totaleItems }) {
   return (
-    <StyledCard>
-      <StyledCardHeader>Informations</StyledCardHeader>
-      <SlideContainer>
+    <StyledComponents.StyledCard>
+      <StyledComponents.StyledCardHeader>Informations</StyledComponents.StyledCardHeader>
+      <StyledComponents.SlideContainer>
         {totaleItems && (
-          <StyledInputBlock 
+          <StyledComponents.StyledInputBlock 
             rows={1} 
             name="totale_items" 
             id="totale_items" 
@@ -1114,8 +903,8 @@ export function CardInformazioni({ totaleItems }) {
             readOnly 
           />
         )}
-      </SlideContainer>
-    </StyledCard>
+      </StyledComponents.SlideContainer>
+    </StyledComponents.StyledCard>
   );
 }
 
@@ -1124,10 +913,10 @@ export function CardEntrateUscite({datiRicerca, setDatiRicerca, handleInputChang
   const lingua = saloneState.lingua;
   let maxHeight = "2000px";
   return (
-    <StyledCard>
-      <StyledCardHeader>{lingua === "italiano" ? "Ricerca entrate e uscite" : "Searching for inputs and outputs"}</StyledCardHeader>
-      <SlideContainer style={{maxHeight: `${maxHeight}`}}>
-        <StyledInputModifica
+    <StyledComponents.StyledCard>
+      <StyledComponents.StyledCardHeader>{lingua === "italiano" ? "Ricerca entrate e uscite" : "Searching for inputs and outputs"}</StyledComponents.StyledCardHeader>
+      <StyledComponents.SlideContainer style={{maxHeight: `${maxHeight}`}}>
+        <StyledComponents.StyledInputModifica
           rows={1}
           name="primo_anno"
           id="primo_anno"
@@ -1138,7 +927,7 @@ export function CardEntrateUscite({datiRicerca, setDatiRicerca, handleInputChang
           onChange={(e) => handleInputChange(e, setDatiRicerca)}
           onContextMenu={(e) => handleRightClick(e, "Primo anno")}
         />
-        <StyledSelectModifica 
+        <StyledComponents.StyledSelectModifica 
           name="ultimo_anno" 
           id="ultimo_anno"
           value={datiRicerca.ultimo_anno}
@@ -1150,12 +939,14 @@ export function CardEntrateUscite({datiRicerca, setDatiRicerca, handleInputChang
           <option value={parseInt(datiRicerca.primo_anno)+3}>{parseInt(datiRicerca.primo_anno)+3}</option>
           <option value={parseInt(datiRicerca.primo_anno)+4}>{parseInt(datiRicerca.primo_anno)+4}</option>
           <option value={parseInt(datiRicerca.primo_anno)+5}>{parseInt(datiRicerca.primo_anno)+5}</option>
-        </StyledSelectModifica>
-      </SlideContainer>
+        </StyledComponents.StyledSelectModifica>
+      </StyledComponents.SlideContainer>
       <OperazioniRicercaEntrateUscite 
-        eseguiRicerca={(e) => eseguiRicerca(e)}  
+        eseguiRicerca={(e) => eseguiRicerca(e)} 
+        vistaItem={"card"}
+        StyledComponents={StyledComponents}
       />
-    </StyledCard>
+    </StyledComponents.StyledCard>
   )
 }
 

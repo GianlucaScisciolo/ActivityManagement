@@ -6,8 +6,7 @@ import clienti from "../../view/img/img_widget/clienti.png";
 import servizi from '../../view/img/img_widget/servizi.png';
 import lavori from '../../view/img/img_widget/lavori.png';
 import spese from '../../view/img/img_widget/spese.png';
-import prenotazione from '../../view/img/img_widget/prenotazione.png';
-import salone from '../../view/img/img_widget/salone.png';
+import analisi from '../../view/img/img_widget/analisi.png';
 import profilo from '../../view/img/img_widget/profilo.png';
 
 const BC_NOT_SELECTED = "rgba(0, 0, 0, 0.5)";
@@ -50,22 +49,18 @@ const initialState = loadFromLocalStorage() || {
       id: 3, tipo:"CardWidget", tipoVisualizzazione: 0,  nome: "lavori", titolo: "Lavori", 
       img: lavori, backgroundColor: BC_NOT_SELECTED, x: 800, y: 100
     }, 
-    prenotazione: {
-      id: 4, tipo:"CardWidget", tipoVisualizzazione: 0,  nome: "prenotazione", titolo: "Prenotazione", 
-      img: prenotazione, backgroundColor: BC_NOT_SELECTED, x: 1150, y: 100
-    },  
     spese: {
-      id: 5, tipo:"CardWidget", tipoVisualizzazione: 0,  nome: "spese", titolo: "Spese", 
-      img: spese, backgroundColor: BC_NOT_SELECTED, x: 1500, y: 100
-    }, 
-    salone: {
-      id: 6, tipo:"CardWidget",  tipoVisualizzazione: 0, nome: "salone", titolo: "Salone", 
-      img: salone, backgroundColor: BC_NOT_SELECTED, x: 1850, y: 100 
+      id: 4, tipo:"CardWidget", tipoVisualizzazione: 0,  nome: "spese", titolo: "Spese", 
+      img: spese, backgroundColor: BC_NOT_SELECTED, x: 1150, y: 100
+    },  
+    analisi: {
+      id: 5, tipo:"CardWidget", tipoVisualizzazione: 0,  nome: "analisi", titolo: "Analisi", 
+      img: analisi, backgroundColor: BC_NOT_SELECTED, x: 1500, y: 100
     }, 
     profilo: {
-      id: 7, tipo:"CardWidget",  tipoVisualizzazione: 0, nome: "profilo", titolo: "Profilo", 
-      img: profilo, backgroundColor: BC_NOT_SELECTED, x: 2200, y: 100//600 
-    }, 
+      id: 6, tipo:"CardWidget",  tipoVisualizzazione: 0, nome: "profilo", titolo: "Profilo", 
+      img: profilo, backgroundColor: BC_NOT_SELECTED, x: 1850, y: 100 
+    },  
   },
 };
 
@@ -93,9 +88,8 @@ const saloneSlice = createSlice({
       [state.value.clienti.nome, state.value.clienti.titolo] = state.value.lingua === "italiano" ? ["clienti", "Clienti"]: ["clients", "Clients"];
       [state.value.servizi.nome, state.value.servizi.titolo] = state.value.lingua === "italiano" ? ["servizi", "Servizi"]: ["services", "Services"];
       [state.value.lavori.nome, state.value.lavori.titolo] = state.value.lingua === "italiano" ? ["lavori", "Lavori"]: ["jobs", "Jobs"];
-      [state.value.prenotazione.nome, state.value.prenotazione.titolo] = state.value.lingua === "italiano" ? ["prenotazione", "Prenotazione"]: ["prenotation", "Prenotation"];
       [state.value.spese.nome, state.value.spese.titolo] = state.value.lingua === "italiano" ? ["spese", "Spese"]: ["expenses", "Expenses"];
-      [state.value.salone.nome, state.value.salone.titolo] = state.value.lingua === "italiano" ? ["analisi", "Analisi"]: ["analyses", "Analyses"];
+      [state.value.analisi.nome, state.value.analisi.titolo] = state.value.lingua === "italiano" ? ["analisi", "Analisi"]: ["analyses", "Analyses"];
       [state.value.profilo.nome, state.value.profilo.titolo] = state.value.lingua === "italiano" ? ["profilo", "Profilo"]: ["profile", "Profile"];
 
       saveToLocalStorage(state);
@@ -110,7 +104,7 @@ const saloneSlice = createSlice({
     widgetSelected: (state) => {
       // console.log("visualizzazioneWidget");
       const nomi = [
-        "clienti", "servizi", "lavori", "prenotazione", "spese", "salone", "profilo"
+        "clienti", "servizi", "lavori", "spese", "analisi", "profilo"
       ];
 
       for(let nome of nomi) {
@@ -122,7 +116,7 @@ const saloneSlice = createSlice({
     widgetView: (state) => {
       // console.log("visualizzazioneWidget");
       const nomi = [
-        "clienti", "servizi", "lavori", "prenotazione", "spese", "salone", "profilo"
+        "clienti", "servizi", "lavori", "spese", "analisi", "profilo"
       ];
 
       for(let nome of nomi) {

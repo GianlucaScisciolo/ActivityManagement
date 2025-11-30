@@ -32,9 +32,9 @@ app.listen(3000, () => {
 
 const db = mysql.createConnection({
   host: "localhost",
-  user: "root",
-  password: "utente",
-  database: "philia_test"
+  user: "user_db",
+  password: "password_db",
+  database: "name_db"
 })
 
 db.connect(err => {

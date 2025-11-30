@@ -6,6 +6,7 @@ import { CardNuovoItem, CardRicercaItems } from "./card_item/CardItem";
 import { RowNuovoItem, RowRicercaItems } from "./row_item/RowItem";
 import { OperazioniItems } from "./Operazioni";
 import { Items } from "./Items"
+import StyledComponents from "./form_item/StyledFormItem";
 
 const SearchAndInsertPage = ({ componenti }) => {
   const stileState = componenti.stileState;
@@ -24,6 +25,7 @@ const SearchAndInsertPage = ({ componenti }) => {
       <CambioTipoForm 
         tipoForm={tipoForm}
         setTipoForm={setTipoForm}
+        StyledComponents={StyledComponents}
       />
 
       <br /> <br /> <br /> <br />
@@ -59,7 +61,6 @@ const SearchAndInsertPage = ({ componenti }) => {
         selectOperation={componenti.selectOperation}
         emptyIsConsidered={true} 
         campi={componenti.campiItemEsistente}
-        indici={componenti.indiciItemEsistente}
         servizi={componenti.servizi}
         handleBlurItem={componenti.handleBlurItem}
         lavoroActions={componenti.lavoroActions} // DA VEDERE !!!!

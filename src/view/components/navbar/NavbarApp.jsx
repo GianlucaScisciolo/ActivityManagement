@@ -96,18 +96,7 @@ export const NavbarApp = () => {
             <>
               <StyledNavLink as={NavLink} to="/clienti" onContextMenu={handleContextMenu}>{saloneState.lingua === "italiano" ? "Clienti" : "Clients"}</StyledNavLink>
               <StyledNavLink as={NavLink} to="/servizi" onContextMenu={handleContextMenu}>{saloneState.lingua === "italiano" ? "Servizi" : "Services"}</StyledNavLink>
-              {/*
-              <StyledNavDropdown title="Lavori" show={dropdownLavori}
-                onMouseEnter={() => handleMouseEnter(setDropdownLavori)}
-                onMouseLeave={() => handleMouseLeave(setDropdownLavori)}
-                onContextMenu={handleContextMenu}
-              >
-              */}
-                <StyledNavLink as={NavLink} to="/lavori" onContextMenu={handleContextMenu}>{saloneState.lingua === "italiano" ? "Lavori" : "Jobs"}</StyledNavLink>
-              {/*
-                <StyledNavDropdownItem as="a" href="https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ2GRuG5B0k6Qyo2DLBkT1-OOXXC1XO60HQkWAl3Txvc3z-PcBL0EYhfc62sAor46nbg-szeiADZ" target="_blank" rel="noopener noreferrer">Prenotazione</StyledNavDropdownItem>
-              </StyledNavDropdown>
-              */}
+              <StyledNavLink as={NavLink} to="/lavori" onContextMenu={handleContextMenu}>{saloneState.lingua === "italiano" ? "Lavori" : "Jobs"}</StyledNavLink>
               <StyledNavLink as={NavLink} to="/spese" onContextMenu={handleContextMenu}>{saloneState.lingua === "italiano" ? "Spese" : "Expenses"}</StyledNavLink>
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
               &nbsp;&nbsp;

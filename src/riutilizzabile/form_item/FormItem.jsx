@@ -3,308 +3,60 @@ import { useSelector } from 'react-redux';
 import React, { useState } from 'react';
 import { faFilePdf, faFileExcel, faFile } from '@fortawesome/free-solid-svg-icons';
 // Riutilizzabile
+import StyledComponents from './StyledFormItem';
 import { 
-  StyledListGroupItem, StyledRow, StyledCol, StyledSaveNotSelected, grandezzaIcona, 
-  StyledSearchNotSelected, StyledArrowTopNotSelected, StyledArrowBottomNotSelected, 
-  StyledLoginNotSelected, StyledPencilNotSelected, StyledLabel, 
-  StyledInputBlock, StyledInputModifica, StyledInputElimina, 
-  StyledTextAreaBlock, StyledTextAreaModifica, StyledTextAreaElimina, 
-  StyledForm, StyledHeader, SlideContainer, StyledSpanErrore, 
-  StyledSelectBlock, StyledSelectModifica, StyledSelectElimina, 
-  StyledEyeClosedNotSelected, StyledEyeOpenNotSelected, StyledEuroNotSelected, 
-  StyledFileIconNotSelected, StyledDownloadNotSelected, StyledTrashNotSelected, 
-  StyledSearchNotSelected2, StyledSaveNotSelected2, StyledSearchSelected2, StyledSaveSelected2, 
-  StyledFileIconNotSelected2, StyledFileIconSelected2
-} from "./StyledFormItem";
+  OperazioniNuovoItem, OperazioniCercaItems, OperazioniRicercaEntrateUscite, OperazioniLogin, 
+  OperazioniModificaProfilo, OperazioniFileItems, OperazioniItemEsistente, 
+  OperazioniCambioTipoForm, OperazioniCambioTipoForm2 
+} from '../Operazioni';
+import { getPencilTag, getTrashTag, getSelectTag, getInputTag, getTextAreaTag } from '../Tags';
 
-export function getSelectTag(tipoSelezione) {
-  return (tipoSelezione !== 1 && tipoSelezione !== 2) ? StyledSelectBlock : (
-    (tipoSelezione === 1) ? StyledSelectModifica : StyledSelectElimina
-  );
-}; 
-
-export function getInputTag(tipoSelezione, isModificabile) {
-  return (isModificabile) ? (
-    (tipoSelezione !== 1 && tipoSelezione !== 2) ? StyledInputBlock : (
-      (tipoSelezione === 1) ? StyledInputModifica : StyledInputElimina
-    )
-  ) : (
-    (tipoSelezione !== 2) ? StyledInputBlock : StyledInputElimina
-  );
-};
-
-export function getTextAreaTag(tipoSelezione, isModificabile) {
-  return (isModificabile) ? (
-    (tipoSelezione !== 1 && tipoSelezione !== 2) ? StyledTextAreaBlock : (
-      (tipoSelezione === 1) ? StyledTextAreaModifica : StyledTextAreaElimina
-    )
-  ) : (
-    (tipoSelezione !== 2) ? StyledTextAreaBlock : StyledTextAreaElimina
-  );
-};
-
-export const nascondiForm = (setIsVisible, setArrowUp) => {
-  setIsVisible(prev => !prev);
-  
-  setTimeout(() => {
-    setArrowUp(prev => !prev);
-  }, 1000); 
-};
-
-export function OperazioniCambioTipoForm({ tipoForm, setTipoForm }) {
-  const cambioTipoForm = () => {
-    setTipoForm((tipoForm === "search") ? "insert" : "search");
-  }
-
-  return (
-    <StyledListGroupItem 
-      style={{ border: "5px solid #000000", backgroundColor: "#000000", paddingTop: "20px", paddingBottom: "20px" }} 
-    >
-      {(tipoForm === "search") ? (
-        <>
-          <StyledSearchSelected2 
-            size={grandezzaIcona} 
-            style={{ marginRight: "50px" }} 
-            onClick={cambioTipoForm} 
-          />
-          <StyledSaveNotSelected2 
-            size={grandezzaIcona} 
-            onClick={cambioTipoForm} 
-          />
-        </>
-      ) : (
-        <>
-          <StyledSearchNotSelected2  
-            size={grandezzaIcona} 
-            style={{ marginRight: "50px" }}  
-            onClick={cambioTipoForm} 
-          />
-          <StyledSaveSelected2 
-            size={grandezzaIcona} 
-            onClick={cambioTipoForm} 
-          />
-        </>
-      )}
-    </StyledListGroupItem>
-  );
-};
-
-export function OperazioniCambioTipoForm2({ tipoForm, setTipoForm }) {
-  const cambioTipoForm2 = (nuovoTipo) => {
-    setTipoForm(nuovoTipo);
-  }
-
-  return (
-    <StyledListGroupItem 
-      style={{ border: "5px solid #000000", backgroundColor: "#000000", paddingTop: "20px", paddingBottom: "20px" }} 
-    >
-      {(tipoForm === "insert") && (
-        <>
-          <StyledSearchNotSelected2  
-            size={grandezzaIcona} 
-            style={{ marginRight: "50px" }}  
-            onClick={() => cambioTipoForm2("search")} 
-          />
-          <StyledSaveSelected2 
-            size={grandezzaIcona} 
-            style={{ marginRight: "50px" }} 
-            onClick={() => cambioTipoForm2("insert")} 
-          />
-          <StyledFileIconNotSelected2 
-            icon={faFile} 
-            size="2xl"
-            onClick={() => cambioTipoForm2("file")} 
-          />
-        </>
-      )}
-      {(tipoForm === "search") && (
-        <>
-          <StyledSearchSelected2 
-            size={grandezzaIcona} 
-            style={{ marginRight: "50px" }} 
-            onClick={() => cambioTipoForm2("search")} 
-          />
-          <StyledSaveNotSelected2 
-            size={grandezzaIcona} 
-            style={{ marginRight: "50px" }}
-            onClick={() => cambioTipoForm2("insert")} 
-          />
-          <StyledFileIconNotSelected2 
-            icon={faFile} 
-            size="2xl" 
-            onClick={() => cambioTipoForm2("file")} 
-          />
-        </>
-      )}
-      {(tipoForm === "file") && (
-        <>
-          <StyledSearchNotSelected2  
-            size={grandezzaIcona} 
-            style={{ marginRight: "50px" }}  
-            onClick={() => cambioTipoForm2("search")} 
-          />
-          <StyledSaveNotSelected2 
-            size={grandezzaIcona} 
-            style={{ marginRight: "50px" }}
-            onClick={() => cambioTipoForm2("insert")} 
-          />
-          <StyledFileIconSelected2 
-            icon={faFile} 
-            size="2xl"
-            onClick={() => cambioTipoForm2("file")} 
-          />
-        </>
-      )}
-    </StyledListGroupItem>
-  );
-};
-
-export function OperazioniNuovoItem({eseguiSalvataggio}) {
-  return (
-    <StyledListGroupItem style={{border: "5px solid #000000", backgroundColor:"#000000", paddingTop: "2%", paddingBottom: "2%" }}>
-      <StyledRow>
-        <StyledCol>
-          <StyledSaveNotSelected 
-            className="salvaItemButton" 
-            size={grandezzaIcona} 
-            onClick={eseguiSalvataggio} 
-          />
-        </StyledCol>
-      </StyledRow>
-    </StyledListGroupItem>
-  )
-}
-
-export function OperazioniCercaItems({ setIsVisible, arrowUp, setArrowUp, handleSearch }) {
-  return (
-    <StyledListGroupItem style={{ border: "5px solid #000000", backgroundColor: "#000000", paddingTop: "2%", paddingBottom: "2%" }}>
-      <StyledSearchNotSelected 
-        className="ricercaItemsButton" 
-        size={grandezzaIcona} 
-        //style={{ marginRight: "50%" }} 
-        onClick={handleSearch} 
-      />
-      {/*
-      {arrowUp && (
-        <StyledArrowTopNotSelected 
-          className="nascondiFormButton" 
-          size={grandezzaIcona} 
-          onClick={() => nascondiForm(setIsVisible, setArrowUp)} 
-        />
-      )}
-      {!arrowUp && (
-        <StyledArrowBottomNotSelected 
-          className="mostraFormButton"
-          size={grandezzaIcona} 
-          onClick={() => nascondiForm(setIsVisible, setArrowUp)} 
-        />
-      )}
-      */}
-    </StyledListGroupItem>
-  );
-};
-
-export function OperazioniRicercaEntrateUscite({ eseguiRicerca }) {
-  return (
-    <StyledListGroupItem style={{ border: "5px solid #000000", backgroundColor: "#000000", paddingTop: "2%", paddingBottom: "2%" }}>
-      <StyledSearchNotSelected 
-        className="ricercaEntrateUsciteButton" 
-        size={grandezzaIcona} 
-        onClick={eseguiRicerca} 
-      />
-    </StyledListGroupItem>
-  );
-};
-
-export function OperazioniLogin({eseguiLogin}) {
-  return (
-    <StyledListGroupItem style={{ border: "5px solid #000000", backgroundColor: "#000000", paddingTop: "3%", paddingBottom: "3%" }}>
-      <StyledLoginNotSelected 
-        className="loginButton" 
-        size={grandezzaIcona} 
-        onClick={eseguiLogin} 
-      />
-    </StyledListGroupItem>
-  );
-};
-
-export function OperazioniModificaProfilo({eseguiModificaProfilo}) {
-  return (
-    <StyledListGroupItem style={{ border: "5px solid #000000", backgroundColor: "#000000", paddingTop: "2%", paddingBottom: "2%" }}>
-      <StyledPencilNotSelected 
-        className="modificaProfiloButton"
-        size={grandezzaIcona} 
-        onClick={eseguiModificaProfilo} 
-      />
-    </StyledListGroupItem>
-  );
-};
-
-export function OperazioniFileItems({ottieniFileRangePDF, ottieniFileRangeExcel, eliminaItemsRange}) {
-  return (
-    <StyledListGroupItem style={{ border: "5px solid #000000", backgroundColor: "#000000", paddingTop: "3%" }}>
-      <div>
-        <StyledFileIconNotSelected icon={faFilePdf} size="2xl" style={{ marginRight: "50%" }} />
-        <StyledFileIconNotSelected icon={faFileExcel} size="2xl" />
-      </div>
-      <br />
-      <div>
-        <StyledDownloadNotSelected size={grandezzaIcona} style={{ marginRight: "50%" }} onClick={ottieniFileRangePDF} />
-        <StyledDownloadNotSelected size={grandezzaIcona} onClick={ottieniFileRangeExcel} />
-      </div>
-      <br />
-      <div>
-        <StyledTrashNotSelected size={grandezzaIcona} onClick={eliminaItemsRange} />
-      </div>
-      <br />
-    </StyledListGroupItem>
-  );
-};
-
-export function CambioTipoForm({tipoForm, setTipoForm}) {
+export function CambioTipoForm({tipoForm, setTipoForm, StyledComponents}) {
   let maxHeight = "2000px";
 
   return (
-    <StyledForm>
+    <StyledComponents.StyledForm>
       <OperazioniCambioTipoForm
         tipoForm={tipoForm}
         setTipoForm={setTipoForm}
+        StyledComponents={StyledComponents}
       />
-    </StyledForm>
+    </StyledComponents.StyledForm>
   );
 }
 
-export function CambioTipoForm2({tipoForm, setTipoForm}) {
+export function CambioTipoForm2({tipoForm, setTipoForm, StyledComponents}) {
   let maxHeight = "2000px";
 
   return (
-    <StyledForm>
+    <StyledComponents.StyledForm>
       <OperazioniCambioTipoForm2
         tipoForm={tipoForm}
         setTipoForm={setTipoForm}
+        StyledComponents={StyledComponents}
       />
-    </StyledForm>
+    </StyledComponents.StyledForm>
   );
 }
 
 export function FormNuovoItem({campi, indici, eseguiSalvataggio}) {
   return (
-    <StyledForm>
-      <StyledHeader>{campi["header"]}</StyledHeader>  
-      <SlideContainer style={{
+    <StyledComponents.StyledForm>
+      <StyledComponents.StyledHeader>{campi["header"]}</StyledComponents.StyledHeader>  
+      <StyledComponents.SlideContainer style={{
         maxHeight: "2000px", 
-        overflowY: "auto" /* Aggiunto */
+        overflowY: "auto" 
       }}>
         {indici.map((i) => {
           const NomeTag = campi.type[i] 
-            ? getInputTag(1, true) 
-            : getTextAreaTag(1, true);
+            ? getInputTag(1, true, StyledComponents) 
+            : getTextAreaTag(1, true, StyledComponents);
 
           return ( 
             <React.Fragment key={i}>
-              <StyledLabel htmlFor={campi.name[i]}>{campi.label[i]}</StyledLabel>
+              <StyledComponents.StyledLabel htmlFor={campi.name[i]}>{campi.label[i]}</StyledComponents.StyledLabel>
               {(campi.name[i] === "prezzo") ? (
-                <StyledRow>
+                <StyledComponents.StyledRow>
                   <>
                     <NomeTag 
                       style={(["prezzo", "totale"].includes(campi.name[i])) 
@@ -322,18 +74,18 @@ export function FormNuovoItem({campi, indici, eseguiSalvataggio}) {
                       onBlur={campi.onBlur}
                     />
                     {(["prezzo", "totale"].includes(campi.name[i])) && (
-                      <StyledEuroNotSelected
+                      <StyledComponents.StyledEuroNotSelected
                         style={{
                           maxWidth: "5%",
                           marginTop: "13px"
                         }} 
-                        size={grandezzaIcona} 
+                        size={StyledComponents.grandezzaIcona} 
                         onClick={null} 
                       />
                     )}
                     {campi.options[i]}
                   </>
-                </StyledRow>
+                </StyledComponents.StyledRow>
               ) : (
                 <>
                   <NomeTag 
@@ -352,54 +104,53 @@ export function FormNuovoItem({campi, indici, eseguiSalvataggio}) {
                     onBlur={campi.onBlur}
                   />
                   {(["prezzo", "totale"].includes(campi.name[i])) && (
-                    <StyledEuroNotSelected
+                    <StyledComponents.StyledEuroNotSelected
                       style={{
                         maxWidth: "5%",
                         marginTop: "13px"
                       }} 
-                      size={grandezzaIcona} 
+                      size={StyledComponents.grandezzaIcona} 
                       onClick={null} 
                     />
                   )}
                   {campi.options[i]}
                 </>
               )}
-              {(campi.errore[i] !== "") && (<StyledSpanErrore>{campi.errore[i]}</StyledSpanErrore>)}
+              {(campi.errore[i] !== "") && (<StyledComponents.StyledSpanErrore>{campi.errore[i]}</StyledComponents.StyledSpanErrore>)}
             </React.Fragment>
           );
         })}
         <br /> <br />
-      </SlideContainer>
-      <OperazioniNuovoItem eseguiSalvataggio={eseguiSalvataggio} />
-    </StyledForm>
+      </StyledComponents.SlideContainer>
+      <OperazioniNuovoItem eseguiSalvataggio={eseguiSalvataggio} vistaItem={"form"} StyledComponents={StyledComponents} />
+    </StyledComponents.StyledForm>
   );
 }
-
 
 export function FormRicercaItems({campi, indici, handleSearch}) {
   const [isVisible, setIsVisible] = useState(true);
   const [arrowUp, setArrowUp] = useState(true);
   let maxHeight = (isVisible) ? "2000px" : "0px";
-  let InputTag = getInputTag(1, true);
-  let TextAreaTag = getTextAreaTag(1, true);
+  let InputTag = getInputTag(1, true, StyledComponents);
+  let TextAreaTag = getTextAreaTag(1, true, StyledComponents);
 
   return (
-    <StyledForm>
-      <StyledHeader>{campi["header"]}</StyledHeader>
-      <SlideContainer style={{
+    <StyledComponents.StyledForm>
+      <StyledComponents.StyledHeader>{campi["header"]}</StyledComponents.StyledHeader>
+      <StyledComponents.SlideContainer style={{
         maxHeight: "2000px", 
-        overflowY: "auto" /* Aggiunto */
+        overflowY: "auto"
       }}>
         {indici.map((i) => {
           // onClick={handleGiornoClick(setUltimoGiornoType)}
           // onBlur={handleGiornoBlur(setUltimoGiornoType, item, setItem)}
           // onChange={(e) => handleInputChange(e, setItem)}
-          const NomeTag = (campi.type[i]) ? getInputTag(1, true) : (
-            getTextAreaTag(1, true)
+          const NomeTag = (campi.type[i]) ? getInputTag(1, true, StyledComponents) : (
+            getTextAreaTag(1, true, StyledComponents)
           );
           return ( 
             <React.Fragment key={i}>
-              <StyledLabel htmlFor={campi.name[i]}>{campi.label[i]}</StyledLabel>
+              <StyledComponents.StyledLabel htmlFor={campi.name[i]}>{campi.label[i]}</StyledComponents.StyledLabel>
               <NomeTag 
                 key={i}
                 rows={1}
@@ -417,15 +168,17 @@ export function FormRicercaItems({campi, indici, handleSearch}) {
           );
         })}
         <br /> <br />
-      </SlideContainer>
+      </StyledComponents.SlideContainer>
       <OperazioniCercaItems
         setIsVisible={setIsVisible}
         arrowUp={arrowUp}
         setArrowUp={setArrowUp}
         // eseguiRicerca={eseguiRicerca}
         handleSearch={handleSearch}
+        vistaItem={"form"}
+        StyledComponents={StyledComponents}
       />
-    </StyledForm>
+    </StyledComponents.StyledForm>
   );
 }
 
@@ -439,18 +192,18 @@ export function FormLogin({campi, indici, eseguiLogin}) {
   };
 
   return (
-    <StyledForm>
-      <StyledHeader>{campi["header"]}</StyledHeader>  
-      <SlideContainer style={{maxHeight: `${maxHeight}`}}>
+    <StyledComponents.StyledForm>
+      <StyledComponents.StyledHeader>{campi["header"]}</StyledComponents.StyledHeader>  
+      <StyledComponents.SlideContainer style={{maxHeight: `${maxHeight}`}}>
         {indici.map((i) => {
-          const NomeTag = (campi.type[i]) ? getInputTag(1, true) : (
-            getTextAreaTag(1, true)
+          const NomeTag = (campi.type[i]) ? getInputTag(1, true, StyledComponents) : (
+            getTextAreaTag(1, true, StyledComponents)
           );
-          const StyledEyeTag = (inputType === "password") ? StyledEyeClosedNotSelected : StyledEyeOpenNotSelected;
+          const StyledEyeTag = (inputType === "password") ? StyledComponents.StyledEyeClosedNotSelected : StyledComponents.StyledEyeOpenNotSelected;
           return ( 
             <React.Fragment key={i}>
-              <StyledLabel htmlFor={campi.name[i]}>{campi.label[i]}</StyledLabel>
-              <StyledRow>
+              <StyledComponents.StyledLabel htmlFor={campi.name[i]}>{campi.label[i]}</StyledComponents.StyledLabel>
+              <StyledComponents.StyledRow>
                 <NomeTag 
                   // style={{marginLeft:"-10%", marginRight:0, minWidth:"105%", (campi.name[i] !== "password") ? width:100% : null}}
                   style={
@@ -476,23 +229,25 @@ export function FormLogin({campi, indici, eseguiLogin}) {
                       maxWidth: "5%",
                       marginTop: "13px"
                     }} 
-                    size={grandezzaIcona} 
+                    size={StyledComponents.grandezzaIcona} 
                     onClick={onChangeVisibilityPassword} 
                   />
                 )}
-              </StyledRow>
+              </StyledComponents.StyledRow>
               {campi.options[i]}
 
-              {(campi.errore[i]) && (<StyledSpanErrore>{campi.errore[i]}</StyledSpanErrore>)}
+              {(campi.errore[i]) && (<StyledComponents.StyledSpanErrore>{campi.errore[i]}</StyledComponents.StyledSpanErrore>)}
             </React.Fragment>
           );
         })}
         <br /> <br />
-      </SlideContainer>
+      </StyledComponents.SlideContainer>
       <OperazioniLogin 
         eseguiLogin={eseguiLogin}
+        vistaItem={"form"}
+        StyledComponents={StyledComponents}
       />
-    </StyledForm>
+    </StyledComponents.StyledForm>
   );
 }
 
@@ -516,24 +271,24 @@ export function FormProfilo({campi, indici, eseguiModificaProfilo}) {
   };
 
   return (
-    <StyledForm>
-      <StyledHeader>{campi["header"]}</StyledHeader>  
-      <SlideContainer style={{maxHeight: `${maxHeight}`}}>
+    <StyledComponents.StyledForm>
+      <StyledComponents.StyledHeader>{campi["header"]}</StyledComponents.StyledHeader>  
+      <StyledComponents.SlideContainer style={{maxHeight: `${maxHeight}`}}>
         {indici.map((i) => {
-          const NomeTag = (campi.type[i]) ? getInputTag(1, true) : (
-            getTextAreaTag(1, true)
+          const NomeTag = (campi.type[i]) ? getInputTag(1, true, StyledComponents) : (
+            getTextAreaTag(1, true, StyledComponents)
           );
           const StyledEyeTag = (
             (
               campi.name[i] === "password_attuale" && passwordAttualeType === "password" || 
               campi.name[i] === "nuova_password" && nuovaPasswordType === "password" || 
               campi.name[i] === "conferma_nuova_password" && confermaNuovaPasswordType === "password"
-            ) ? StyledEyeClosedNotSelected : StyledEyeOpenNotSelected
+            ) ? StyledComponents.StyledEyeClosedNotSelected : StyledComponents.StyledEyeOpenNotSelected
           );
           return ( 
             <React.Fragment key={i}>
-              <StyledLabel htmlFor={campi.name[i]}>{campi.label[i]}</StyledLabel>
-              <StyledRow>
+              <StyledComponents.StyledLabel htmlFor={campi.name[i]}>{campi.label[i]}</StyledComponents.StyledLabel>
+              <StyledComponents.StyledRow>
                 <NomeTag 
                   style={
                     !campi.name[i].includes("password")
@@ -561,23 +316,25 @@ export function FormProfilo({campi, indici, eseguiModificaProfilo}) {
                       maxWidth: "5%",
                       marginTop: "13px"
                     }} 
-                    size={grandezzaIcona} 
+                    size={StyledComponents.grandezzaIcona} 
                     onClick={(e) => onChangeVisibilityPassword(e, campi.name[i])} 
                   />
                 )}
-              </StyledRow>
+              </StyledComponents.StyledRow>
               {campi.options[i]}
 
-              {(campi.errore[i]) && (<StyledSpanErrore>{campi.errore[i]}</StyledSpanErrore>)}
+              {(campi.errore[i]) && (<StyledComponents.StyledSpanErrore>{campi.errore[i]}</StyledComponents.StyledSpanErrore>)}
             </React.Fragment>
           );
         })}
         <br /> <br />
-      </SlideContainer>
+      </StyledComponents.SlideContainer>
       <OperazioniModificaProfilo 
         eseguiModificaProfilo={eseguiModificaProfilo}
+        vistaItem={"form"}
+        StyledComponents={StyledComponents}
       />
-    </StyledForm>
+    </StyledComponents.StyledForm>
   );
 }
 
@@ -585,23 +342,23 @@ export function FormFileItems({campi, indici, ottieniFileRangePDF, ottieniFileRa
   const [isVisible, setIsVisible] = useState(true);
   const [arrowUp, setArrowUp] = useState(true);
   let maxHeight = (isVisible) ? "2000px" : "0px";
-  let InputTag = getInputTag(1, true);
-  let TextAreaTag = getTextAreaTag(1, true);
+  let InputTag = getInputTag(1, true, StyledComponents);
+  let TextAreaTag = getTextAreaTag(1, true, StyledComponents);
 
   return (
-    <StyledForm>
-      <StyledHeader>{campi["header"]}</StyledHeader>
-      <SlideContainer style={{maxHeight: `${maxHeight}`}}>
+    <StyledComponents.StyledForm>
+      <StyledComponents.StyledHeader>{campi["header"]}</StyledComponents.StyledHeader>
+      <StyledComponents.SlideContainer style={{maxHeight: `${maxHeight}`}}>
         {indici.map((i) => {
           // onClick={handleGiornoClick(setUltimoGiornoType)}
           // onBlur={handleGiornoBlur(setUltimoGiornoType, item, setItem)}
           // onChange={(e) => handleInputChange(e, setItem)}
-          const NomeTag = (campi.type[i]) ? getInputTag(1, true) : (
-            getTextAreaTag(1, true)
+          const NomeTag = (campi.type[i]) ? getInputTag(1, true, StyledComponents) : (
+            getTextAreaTag(1, true, StyledComponents)
           );
           return ( 
             <React.Fragment key={i}>
-              <StyledLabel htmlFor={campi.name[i]}>{campi.label[i]}</StyledLabel>
+              <StyledComponents.StyledLabel htmlFor={campi.name[i]}>{campi.label[i]}</StyledComponents.StyledLabel>
               <NomeTag 
                 key={i}
                 rows={1}
@@ -619,13 +376,15 @@ export function FormFileItems({campi, indici, ottieniFileRangePDF, ottieniFileRa
           );
         })}
         <br /> <br />
-      </SlideContainer>
+      </StyledComponents.SlideContainer>
       <OperazioniFileItems 
         ottieniFileRangePDF={ottieniFileRangePDF} 
         ottieniFileRangeExcel={ottieniFileRangeExcel} 
         eliminaItemsRange={eliminaItemsRange} 
+        vistaItem={"form"}
+        StyledComponents={StyledComponents}
       />
-    </StyledForm>
+    </StyledComponents.StyledForm>
   );
 }
 
@@ -634,11 +393,11 @@ export function FormEntrateUscite({datiRicerca, setDatiRicerca, handleInputChang
   const lingua = saloneState.lingua;
   let maxHeight = "2000px";
   return (
-    <StyledForm>
-      <StyledHeader>{lingua === "italiano" ? "Ricerca entrate e uscite" : "Searching for inputs and outputs"}</StyledHeader>
-      <SlideContainer style={{maxHeight: `${maxHeight}`}}>
-        <StyledLabel htmlFor="primo_anno">{lingua === "italiano" ? "Primo anno" : "First year"}</StyledLabel>
-        <StyledInputModifica
+    <StyledComponents.StyledForm>
+      <StyledComponents.StyledHeader>{lingua === "italiano" ? "Ricerca entrate e uscite" : "Searching for inputs and outputs"}</StyledComponents.StyledHeader>
+      <StyledComponents.SlideContainer style={{maxHeight: `${maxHeight}`}}>
+        <StyledComponents.StyledLabel htmlFor="primo_anno">{lingua === "italiano" ? "Primo anno" : "First year"}</StyledComponents.StyledLabel>
+        <StyledComponents.StyledInputModifica
           rows={1}
           name="primo_anno"
           id="primo_anno"
@@ -648,8 +407,8 @@ export function FormEntrateUscite({datiRicerca, setDatiRicerca, handleInputChang
           placeholder={lingua === "italiano" ? "Primo anno" : "First year"}
           onChange={(e) => handleInputChange(e, setDatiRicerca)}
         />
-        <StyledLabel htmlFor="ultimo_anno">{lingua === "italiano" ? "Ultimo anno" : "Last year"}</StyledLabel>
-        <StyledSelectModifica 
+        <StyledComponents.StyledLabel htmlFor="ultimo_anno">{lingua === "italiano" ? "Ultimo anno" : "Last year"}</StyledComponents.StyledLabel>
+        <StyledComponents.StyledSelectModifica 
           name="ultimo_anno" 
           id="ultimo_anno"
           value={datiRicerca.ultimo_anno}
@@ -660,13 +419,15 @@ export function FormEntrateUscite({datiRicerca, setDatiRicerca, handleInputChang
           <option value={parseInt(datiRicerca.primo_anno)+3}>{parseInt(datiRicerca.primo_anno)+3}</option>
           <option value={parseInt(datiRicerca.primo_anno)+4}>{parseInt(datiRicerca.primo_anno)+4}</option>
           <option value={parseInt(datiRicerca.primo_anno)+5}>{parseInt(datiRicerca.primo_anno)+5}</option>
-        </StyledSelectModifica>
+        </StyledComponents.StyledSelectModifica>
         <br /> <br />
-      </SlideContainer>
+      </StyledComponents.SlideContainer>
       <OperazioniRicercaEntrateUscite 
         eseguiRicerca={(e) => eseguiRicerca(e)}  
+        vistaItem={"form"}
+        StyledComponents={StyledComponents}
       />
-    </StyledForm>
+    </StyledComponents.StyledForm>
   )
 }
 

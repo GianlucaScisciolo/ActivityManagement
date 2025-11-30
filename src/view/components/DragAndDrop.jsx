@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 // Actions
 import { SaloneActions } from '../../actions/SaloneActions';
 // Riutilizzabile
-import { CardWidget, CardEntrateLavori, CardUsciteSpese, CardRicavi } from "../../riutilizzabile/card_item/CardItem";
+import { CardWidget, CardEntrateItems, CardUsciteItems, CardRicavi } from "../../riutilizzabile/card_item/CardItem";
 
 const DragAndDrop = ({ initialPositions, onClickWidget }) => {
   const [dragging, setDragging] = useState(false);
@@ -77,14 +77,14 @@ const DragAndDrop = ({ initialPositions, onClickWidget }) => {
                 <CardWidget nome={pos.nome} img={pos.img} backgroundColor={pos.backgroundColor} id={pos.id} onClickWidget={onClickWidget} />
               )
             )}
-            {(pos.tipo === "CardEntrateLavori") && (
-              <CardEntrateLavori entrateLavori={pos.entrateLavori} />
+            {(pos.tipo === "CardEntrateItems") && (
+              <CardEntrateItems entrateItems={pos.entrateLavori} etichettaIta="Entrate lavori" etichettaEng="Revenue jobs" />
             )}
             {(pos.tipo === "CardUsciteSpese") && (
-              <CardUsciteSpese usciteSpese={pos.usciteSpese} />
+              <CardUsciteItems usciteItems={pos.usciteSpese} etichettaIta="Uscite spese" etichettaEng="Exit expenses" />
             )}
             {(pos.tipo === "CardRicavi") && (
-              <CardRicavi entrateLavori={pos.entrateLavori} usciteSpese={pos.usciteSpese} />
+              <CardRicavi entrate={pos.entrateLavori} uscite={pos.usciteSpese} />
             )}
           </div>
         ))}
@@ -118,9 +118,6 @@ const onClickWidget = (e, widget, navigate) => {
     if(widgetNames.includes(widget.nome)) {
       navigate("/" + widget.nome);
     }
-    else if(widget.nome === "prenotazione") {
-      window.open("https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ2GRuG5B0k6Qyo2DLBkT1-OOXXC1XO60HQkWAl3Txvc3z-PcBL0EYhfc62sAor46nbg-szeiADZ", "_blank");
-    }
   }
 }
 
@@ -142,7 +139,7 @@ const WidgetTag = ({ widget, handleDragStart, handleDragEnd }) => {
       }}
     >
       <CardWidget 
-        nome={widget.nome === "salone" ? "Analisi" :  widget.nome.charAt(0).toUpperCase() + widget.nome.slice(1)} 
+        nome={widget.nome === "analisi" ? "Analisi" :  widget.nome.charAt(0).toUpperCase() + widget.nome.slice(1)} 
         img={widget.img} 
         backgroundColor={widget.backgroundColor} 
         id={widget.id} 
@@ -202,13 +199,10 @@ export const DragAndDropWidgetHomePage = ({plusCliccato}) => {
         <WidgetTag widget={saloneState.servizi} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
         { /** Lavoro **/}
         <WidgetTag widget={saloneState.lavori} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
-        {/*
-        <WidgetTag widget={saloneState.prenotazione} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
-        */}
         { /** Spesa **/}
         <WidgetTag widget={saloneState.spese} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
-        { /** Salone **/}
-        <WidgetTag widget={saloneState.salone} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
+        { /** analisi **/}
+        <WidgetTag widget={saloneState.analisi} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
         { /** Profilo **/}
         <WidgetTag widget={saloneState.profilo} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
       </>) : (<>
@@ -218,13 +212,10 @@ export const DragAndDropWidgetHomePage = ({plusCliccato}) => {
         {(saloneState.servizi.tipoVisualizzazione !== 0) && (<WidgetTag widget={saloneState.servizi} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
         { /** Lavoro **/}
         {(saloneState.lavori.tipoVisualizzazione !== 0) && (<WidgetTag widget={saloneState.lavori} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
-        {/*
-        {(saloneState.prenotazione.tipoVisualizzazione !== 0) && (<WidgetTag widget={saloneState.prenotazione} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
-        */}
         { /** Spesa **/}
         {(saloneState.spese.tipoVisualizzazione !== 0) && (<WidgetTag widget={saloneState.spese} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
-        { /** Salone **/}
-        {(saloneState.salone.tipoVisualizzazione !== 0) && (<WidgetTag widget={saloneState.salone} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
+        { /** Analisi **/}
+        {(saloneState.analisi.tipoVisualizzazione !== 0) && (<WidgetTag widget={saloneState.analisi} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
         { /** Profilo **/}
         {(saloneState.profilo.tipoVisualizzazione !== 0) && (<WidgetTag widget={saloneState.profilo} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
       </>)}
