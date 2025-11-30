@@ -11,7 +11,7 @@ Lo scopo del sistema è fornire un software in grado di gestire un'attività (sa
 		- CSS3.
 		- React.js (JavaScript).
 		- React Redux.
-		- React Bootstrap
+		- React Bootstrap.
 	- Testing:
 		- Jest.
 		- Selenium Script.
