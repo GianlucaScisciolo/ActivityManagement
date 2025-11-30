@@ -1,6 +1,6 @@
-# Applicazione web Philia
+# Applicazione web ActivityManagement
 ## Descrizione
-Applicazione web per la gestione del salone Philia.
+Applicazione web per la gestione dei negozi.
 
 ## Tecnologie utilizzate
 - Uso di React + Vite e NodeJS.

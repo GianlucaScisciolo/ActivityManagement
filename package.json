@@ -1,7 +1,7 @@
 {
-  "name": "philia",
+  "name": "activity_management",
   "version": "1.0.0",
-  "description": "Applicazione web per la gestione del salone Philia",
+  "description": "Applicazione web per la gestione dei negozi.",
   "main": "index.html",
   "type": "module",
   "scripts": {
