@@ -1,4 +1,4 @@
-/************************************************** Dispatcher **************************************************/
+// Dispatcher
 import { Dispatcher } from "../dispatcher/Dispatcher";
 
 export class SaloneActions {

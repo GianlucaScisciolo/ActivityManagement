@@ -1,5 +1,5 @@
 // React e Redux
-import React, { useState } from "react";
+import { useState } from "react";
 import { useSelector } from "react-redux";
 // View
 import Header from "../components/Header";

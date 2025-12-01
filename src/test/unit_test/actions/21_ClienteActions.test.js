@@ -1,9 +1,8 @@
 import { ClienteActions } from "../../../actions/ClienteActions.js";
 import { Dispatcher } from "../../../dispatcher/Dispatcher.js";
 
-jest.mock("../../../dispatcher/Dispatcher.js"); // Simula il Dispatcher
+jest.mock("../../../dispatcher/Dispatcher.js"); 
 
-// Mock di fetch
 global.fetch = jest.fn((url, options) => {
   if (url === '/INSERISCI_ITEM' && options.method === 'POST') {
     return Promise.resolve({
@@ -20,8 +19,8 @@ global.fetch = jest.fn((url, options) => {
   return Promise.resolve({ status: 400 });
 });
 
-global.confirm = jest.fn(() => true); // Mock di confirm
-global.alert = jest.fn(() => true); // Mock di confirm
+global.confirm = jest.fn(() => true); 
+global.alert = jest.fn(() => true); 
 
 describe("Tests sull'inizializzazione del dispatcher", () => {
   let clienteActions;

@@ -21,7 +21,6 @@ test("Verifica che il form Login venga renderizzato correttamente.", () => {
     </Provider>
   );
 
-  // Verifica che gli elementi principali siano presenti
   expect(screen.getByText("Invia")).toBeInTheDocument();
 });
 
@@ -34,13 +33,9 @@ test("Simula la compilazione e sottomissione del form", () => {
     </Provider>
   );
 
-  // Trova l'input e inserisci un valore
   const inputUsername = screen.getByPlaceholderText("Inserisci il tuo nome utente");
   fireEvent.change(inputUsername, { target: { value: "Gianluca" } });
 
-  // Trova il pulsante e cliccalo
   const button = screen.getByText("Invia");
   fireEvent.click(button);
-
-  // Puoi aggiungere un controllo per verificare che una funzione venga chiamata
 });

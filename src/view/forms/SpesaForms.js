@@ -1,8 +1,8 @@
 // React e Redux
 import { useState, useEffect } from "react";
+import { useSelector } from 'react-redux';
 // Utils
 import { controlloSpesa } from "../../utils/Controlli";
-import { useSelector } from 'react-redux';
 
 export class SpesaForms {
   saloneState = useSelector((state) => state.saloneSliceReducer.value);

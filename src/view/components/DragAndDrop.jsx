@@ -1,5 +1,5 @@
 // React e Redux
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 // Actions
@@ -12,8 +12,8 @@ const DragAndDrop = ({ initialPositions, onClickWidget }) => {
   const [positions, setPositions] = useState(initialPositions);
   const [offset, setOffset] = useState({ x: 0, y: 0 });
   const [draggedElement, setDraggedElement] = useState(null);
-  const gridSize = 310; // Definisci la larghezza delle celle della griglia
-  const gridHeight = 410; // Definisci l'altezza delle celle della griglia
+  const gridSize = 310; 
+  const gridHeight = 410; 
   const saloneState = useSelector((state) => state.saloneSliceReducer.value);
 
   const handleDragStart = (e, id) => {
@@ -24,14 +24,13 @@ const DragAndDrop = ({ initialPositions, onClickWidget }) => {
       y: e.clientY - rect.top,
     });
     e.dataTransfer.setData('text/plain', id);
-    // Aggiungi la classe "dragging" all'elemento trascinato
     e.target.classList.add('dragging');
     setDraggedElement(e.target);
   };
 
   const handleDragEnd = (e) => {
     setDragging(false);
-    // Rimuovi la classe "dragging" dall'elemento trascinato
+    // Rimuove la classe "dragging" dall'elemento trascinato
     if (draggedElement) {
       draggedElement.classList.remove('dragging');
     }
@@ -106,7 +105,6 @@ const onClickWidget = (e, widget, navigate) => {
     );
   }
   else {
-    // Cliente
     const widgetNames = [
       "clienti", "clients", 
       "servizi", "services", 

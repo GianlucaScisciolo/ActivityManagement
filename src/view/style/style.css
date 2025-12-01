@@ -1,19 +1,15 @@
 * {
-  /* font-size: 25px; */
   font-size: 25px;
-  /* font-weight: bold; */
 }
 
-/* Assicurati di aggiungere un margine superiore sufficiente */
 .main-content {
-  margin-top: 200px; /* Regola l'altezza secondo l'altezza della tua navbar */
+  margin-top: 200px; 
 }
 
 .spanErrore {
   color: #500000;
   text-align: center;
   margin-bottom: 5%;
-  /* font-size: 25px; */
   background-color: #000000;
   border-radius: 40px;
 }
@@ -55,8 +51,7 @@
 .contenitore-3 {
   display: flex;
   flex-wrap: wrap;
-  gap: 100px; /* regola lo spazio tra gli elementi figli */
-  /* border: 5px solid #000000; */
+  gap: 100px;
   overflow: hidden;
   border-radius: 40px;
   margin-left: 3%;
@@ -70,8 +65,7 @@
 .contenitore-4 {
   display: flex;
   flex-wrap: wrap;
-  gap: 100px; /* regola lo spazio tra gli elementi figli */
-  /* border: 5px solid #000000; */
+  gap: 100px; 
   overflow: hidden;
   margin-left: 3%;
   margin-right: 3%;
@@ -120,7 +114,7 @@
 .checkbox-wrapper, .checkbox-wrapper-form {
   display: flex;
   align-items: center;
-  margin-bottom: 10px; /* Spaziatura tra i checkbox */
+  margin-bottom: 10px; 
 }
 
 .checkbox-wrapper {
@@ -134,15 +128,14 @@
 .custom-checkbox, .custom-checkbox-rounded {
   color: #000000;
   font-size: 100px;
-  width: 30px;  /* Larghezza della casella di selezione */
-  height: 30px; /* Altezza della casella di selezione */
-  margin-right: 20px; /* Spaziatura tra la casella di selezione e il label */
+  width: 30px;  
+  height: 30px; 
+  margin-right: 20px; 
   background-color: #FFFFFF;
-  /* border: 2px solid #0050EF; */
   cursor: pointer;
   
   &:checked {
-    background-color: #0050EF; /* Colore di sfondo quando è selezionata */
+    background-color: #0050EF; 
   }
 }
 
@@ -152,32 +145,27 @@
   border-radius: 100%; /* Rende la checkbox rotonda */
 }
 
-/**********/
-
-/* styles.css */
 .dragging {
   opacity: 0.5;
   border: 2px dashed #000;
 }
 
 .dragging-clone {
-  display: block; /* Rendi il clone visibile */
+  display: block;
   position: absolute;
-  pointer-events: none; /* Impedisce interazioni con il clone */
+  pointer-events: none;
   opacity: 0.5;
 }
-
-/**********/
 
 .right {
   float: right;
 }
 
 .center {
-  width: 50%; /* Puoi regolare la larghezza in base alle tue esigenze */
+  width: 50%; 
   margin: 0 auto;
-  float: none; /* Annulla eventuali flottanti */
-  text-align: center; /* Centro il testo all'interno del nav */
+  float: none; 
+  text-align: center; 
 }
 
 .left {

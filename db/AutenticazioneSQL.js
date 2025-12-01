@@ -34,7 +34,6 @@ export class AutenticazioneSQL {
   }
 
   params_modifica_utente(params_in) {
-    // console.log(params_in);
     const params_out = [
       `${params_in.nuovo_username}`, 
       `${params_in.note}` 
@@ -48,7 +47,6 @@ export class AutenticazioneSQL {
     params_out.push(`${params_in.username_attuale}`);
     const password_attuale = encryptPassword(params_in.password_attuale, params_in.salt_hex_db, PEPPER_HEX)
     params_out.push(`${password_attuale}`); 
-    // console.log(params_out);
     return params_out
   }
 }

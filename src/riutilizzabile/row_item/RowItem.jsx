@@ -1,12 +1,10 @@
 // React e Redux
 import { useSelector } from 'react-redux';
 import React, { useState } from 'react';
-import { Trash2, Pencil } from 'lucide-react';
-import { faFilePdf, faFileExcel } from '@fortawesome/free-solid-svg-icons';
 // Riutilizzabile
 import StyledComponents from './StyledRowItem';
 import { OperazioniNuovoItem, OperazioniCercaItems, OperazioniRicercaEntrateUscite, OperazioniLogin, OperazioniModificaProfilo, OperazioniFileItems, OperazioniItemEsistente } from '../Operazioni';
-import { getPencilTag, getTrashTag, getSelectTag, getInputTag, getTextAreaTag } from '../Tags';
+import { getInputTag, getTextAreaTag } from '../Tags';
 
 export function RowNuovoItem({campi, indici, eseguiSalvataggio}) {
   let InputTag = getInputTag(1, true, StyledComponents);
@@ -21,9 +19,6 @@ export function RowNuovoItem({campi, indici, eseguiSalvataggio}) {
     <StyledComponents.StyledRow>
       <OperazioniNuovoItem eseguiSalvataggio={eseguiSalvataggio} vistaItem={"row"} StyledComponents={StyledComponents} />
       {indici.map((i) => {
-        // onClick={handleGiornoClick(setUltimoGiornoType)}
-        // onBlur={handleGiornoBlur(setUltimoGiornoType, item, setItem)}
-        // onChange={(e) => handleInputChange(e, setItem)}
         const NomeTag = (campi.type[i]) ? getInputTag(1, true, StyledComponents) : (
           getTextAreaTag(1, true, StyledComponents)
         );
@@ -49,10 +44,8 @@ export function RowNuovoItem({campi, indici, eseguiSalvataggio}) {
                   {(["prezzo", "totale"].includes(campi.name[i])) && (
                     <StyledComponents.StyledEuroNotSelected
                       style={{
-                        // border: "5px solid #000000",
                         maxWidth: "10%",
                         marginLeft: "-6px", 
-                        // marginTop: "13px"
                       }} 
                       size={StyledComponents.grandezzaIcona} 
                       onClick={null} 
@@ -153,7 +146,6 @@ export function RowItemEsistente({ item, campi, indici, selectOperation, tipoIte
   const handleChange = (e, index) => {
     e.preventDefault();
     const { name, value, id } = e.target;
-    console.log(id);
   
     let modificabile = true;
   
@@ -181,7 +173,6 @@ export function RowItemEsistente({ item, campi, indici, selectOperation, tipoIte
     else if ([
       "prezzo_servizio", "totale_spesa" 
     ].includes(id)) {
-      // console.log("|" + value + "|");
       const isDecimal = !isNaN(value) && Number(value) === parseFloat(value);
       if (!isDecimal || value < 0) {
         modificabile = false;
@@ -205,7 +196,7 @@ export function RowItemEsistente({ item, campi, indici, selectOperation, tipoIte
       }
     }
     
-    // Aggiorno solo lo stato locale
+    // Aggiorna solo lo stato locale
     if(modificabile === true) {
       setLocalValues((prevValues) => ({
         ...prevValues,
@@ -449,7 +440,6 @@ export function RowProfilo({campi, indici, eseguiModificaProfilo}) {
                   {(campi.name[i].includes("password")) && (
                     <StyledEyeTag
                       style={{
-                        // border: "5px solid #000000",
                         maxWidth: "20%",
                         marginLeft: "-6px", 
                       }} 

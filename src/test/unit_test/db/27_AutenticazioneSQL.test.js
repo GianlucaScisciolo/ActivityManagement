@@ -1,7 +1,7 @@
 import { AutenticazioneSQL } from "../../../../db/AutenticazioneSQL.js";
 import { encryptPassword, generateRandomString, PEPPER_HEX } from "../../../utils/Sicurezza.js";
 
-// Mock delle funzioni per evitare risultati casuali nei test
+
 jest.mock("../../../utils/Sicurezza.js", () => ({
   encryptPassword: jest.fn((password, salt, pepper) => `hashed_${password}_${salt}_${pepper}`),
   generateRandomString: jest.fn(() => "mocked_salt"),

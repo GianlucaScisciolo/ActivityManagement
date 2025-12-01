@@ -1,5 +1,5 @@
-// React e Redux
-import React, {useState} from "react";
+// React
+import {useState} from "react";
 // Riutilizzabile
 import { CambioTipoForm2, FormNuovoItem, FormRicercaItems, FormFileItems } from "./form_item/FormItem";
 import { CardNuovoItem, CardRicercaItems, CardFileItems, CardInformazioni } from "./card_item/CardItem";
@@ -82,7 +82,7 @@ const FileSearchAndInsertPage = ({ componenti }) => {
             campi={componenti.campiItemEsistente}
             servizi={componenti.servizi}
             handleBlurItem={componenti.handleBlurItem}
-            lavoroActions={componenti.lavoroActions} // DA VEDERE !!!!
+            lavoroActions={componenti.lavoroActions}
             tipoForm={tipoForm}
           />
 

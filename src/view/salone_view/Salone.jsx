@@ -38,20 +38,12 @@ const Salone = () => {
 
   const eseguiRicerca = (e) => {
     e.preventDefault();
-    // setAggiornamento2(!aggiornamento2);
     setEntrateLavori([]);
     setEntrateServizi([]);
     setUsciteSpese([]);
     lavoroActions.handleSearchEntrateLavori(setEntrateLavori, datiRicerca);
   };
   
-  // useEffect(() => {
-  //   setEntrateLavori([]);
-  //   setEntrateServizi([]);
-  //   setUsciteSpese([]);
-  //   lavoroActions.handleSearchEntrateLavori(setEntrateLavori, datiRicerca);
-  // }, [aggiornamento2]);
-
   useEffect(() => {
     if(entrateLavori.length > 0) {
       spesaActions.handleSearchUsciteSpese(setUsciteSpese, datiRicerca);

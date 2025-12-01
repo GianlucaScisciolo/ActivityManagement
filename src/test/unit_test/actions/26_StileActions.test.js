@@ -3,8 +3,8 @@ import { Dispatcher } from "../../../dispatcher/Dispatcher.js";
 jest.mock("../../../dispatcher/Dispatcher.js");
 jest.mock("../../../utils/Controlli.js");
 
-global.confirm = jest.fn(() => true); // Mock di confirm
-global.alert = jest.fn(() => true); // Mock di confirm
+global.confirm = jest.fn(() => true); 
+global.alert = jest.fn(() => true); 
 
 describe("Test su 'cambioSfondo'", () => {
   let stileActions;

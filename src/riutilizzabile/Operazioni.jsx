@@ -1,11 +1,12 @@
-// React e Redux
-// import React, { useState } from 'react';
+// React
 import Row from "react-bootstrap/esm/Row";
 import Col from "react-bootstrap/esm/Col";
-import { faFilePdf, faFileExcel, faFile } from '@fortawesome/free-solid-svg-icons';
+// Riutilizzabile
 import { 
   getPencilTag, getTrashTag, getSelectTag, getInputTag, getTextAreaTag
 } from "./Tags";
+// Icone
+import { faFilePdf, faFileExcel, faFile } from '@fortawesome/free-solid-svg-icons';
 
 export function OperazioniNuovoItem({eseguiSalvataggio, vistaItem, StyledComponents}) {
   return (

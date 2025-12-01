@@ -4,8 +4,8 @@ import { controlloLavoro } from "../../../utils/Controlli.js";
 jest.mock("../../../dispatcher/Dispatcher.js");
 jest.mock("../../../utils/Controlli.js");
 
-global.confirm = jest.fn(() => true); // Mock di confirm
-global.alert = jest.fn(() => true); // Mock di confirm
+global.confirm = jest.fn(() => true); 
+global.alert = jest.fn(() => true); 
 
 describe("Test su 'inserimentoLavoro'", () => {
   let lavoroActions;
@@ -32,7 +32,7 @@ describe("Test su 'inserimentoLavoro'", () => {
 
     await lavoroActions.inserimentoLavoro({ preventDefault: jest.fn() }, servizi, clienti, nuovoLavoro, setNuovoLavoro);
 
-    expect(nuovoLavoro.totale).toBe(250); // 100x2 + 50x1
+    expect(nuovoLavoro.totale).toBe(250);
     expect(nuovoLavoro.servizi.length).toBe(servizi.length);
     expect(global.fetch).toHaveBeenCalledWith("/INSERISCI_ITEM", expect.any(Object));
     
@@ -96,11 +96,11 @@ describe("Test su 'ricercaLavori'", () => {
   test("test 2: errore", async () => {
     global.fetch = jest.fn(() =>
       Promise.resolve({
-        status: 500, // Simulazione errore
+        status: 500, 
       })
     );
 
-    global.alert = jest.fn(); // Mock della funzione alert
+    global.alert = jest.fn(); 
 
     await lavoroActions.ricercaLavori({ preventDefault: jest.fn() }, {});
 

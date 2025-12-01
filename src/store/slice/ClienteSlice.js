@@ -1,4 +1,4 @@
-/************************************************** React e Redux **************************************************/
+// React e Redux 
 import { createSlice } from "@reduxjs/toolkit";
 
 const clienteSlice = createSlice ({

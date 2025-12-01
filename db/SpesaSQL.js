@@ -1,5 +1,4 @@
 export class SpesaSQL {
-  //SQL_INSERIMENTO_SPESA, SQL_SELEZIONE_SPESE, SQL_ELIMINA_SPESE, SQL_ELIMINA_SPESE_RANGE_GIORNI, SQL_MODIFICA_SPESA
   SQL_INSERIMENTO_SPESA = ` 
     INSERT INTO spesa (nome, giorno, descrizione, totale, note) 
     VALUES (?, ?, ?, ?, ?); 

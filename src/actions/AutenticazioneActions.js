@@ -1,7 +1,8 @@
+// React e Redux
 import { useSelector } from 'react-redux';
-/************************************************** Dispatcher **************************************************/
+// Dispatcher
 import { Dispatcher } from "../dispatcher/Dispatcher";
-/************************************************** Utils **************************************************/
+// Utils
 import { controlloLogin, controlloProfilo } from "../utils/Controlli";
 
 export class AutenticazioneActions {

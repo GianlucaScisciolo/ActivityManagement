@@ -78,7 +78,6 @@ export class LavoroSQL {
   }
 
   sql_selezione_lavori(params) {
-    console.log(params);
     let sql = `
       SELECT 
         0 AS tipo_selezione, 
@@ -140,7 +139,6 @@ export class LavoroSQL {
   }
 
   params_selezione_lavori(params_in) {
-    console.log(params_in);
     let params_out = [
       `%${params_in.cliente}%`, 
       `${(params_in.primo_giorno) ? params_in.primo_giorno : "1111-01-01"}`, 

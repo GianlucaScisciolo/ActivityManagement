@@ -1,10 +1,9 @@
 // React e Redux
-import { PDFDocument, StandardFonts } from 'pdf-lib';
+import { PDFDocument, StandardFonts, rgb } from 'pdf-lib';
 import ExcelJS from 'exceljs';
 import { saveAs } from 'file-saver';
 // Utils
 import { formatoDate } from './Tempo';
-import { rgb } from 'pdf-lib';
 
 const getDescrizione = (lavoro) => {
   let descrizione = "";
@@ -245,7 +244,7 @@ export const generaFileLavoriExcel = async (lavori, lingua) => {
   const workbook = new ExcelJS.Workbook();
   const lavoriSheet = workbook.addWorksheet('Lavori');
 
-  // Aggiungo i dati al foglio lavoriSheet
+  // Aggiunge i dati al foglio lavoriSheet
   if (lavori.length > 0) {
     lavoriSheet.columns = [
       { header: (lingua === "italiano" ? "Cliente" : "Client"), key: 'cliente', width: 20 },  
@@ -268,11 +267,11 @@ export const generaFileLavoriExcel = async (lavori, lingua) => {
     lavoriSheet.addRow(['Nessun lavoro trovato.']);
   }
 
-  // Genero il file Excel come blob
+  // Genera il file Excel come blob
   const buffer = await workbook.xlsx.writeBuffer();
   const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
 
-  // Salvo il file usando FileSaver.js
+  // Salva il file usando FileSaver.js
   saveAs(blob, 'lavori.xlsx');
   console.log('File Excel generato con successo.');
 };
@@ -281,7 +280,7 @@ export const generaFileSpeseExcel = async (spese, lingua) => {
   const workbook = new ExcelJS.Workbook();
   const speseSheet = workbook.addWorksheet('Spese');
 
-  // Aggiungo i dati al foglio speseSheet
+  // Aggiunge i dati al foglio speseSheet
   if (spese.length > 0) {
     speseSheet.columns = [
       { header: (lingua === "italiano" ? "Nome" : "Name"), key: 'nome', width: 20 },  
@@ -304,11 +303,11 @@ export const generaFileSpeseExcel = async (spese, lingua) => {
     speseSheet.addRow(['Nessuna spesa trovata.']);
   }
 
-  // Genero il file Excel come blob
+  // Genera il file Excel come blob
   const buffer = await workbook.xlsx.writeBuffer();
   const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
 
-  // Salvo il file usando FileSaver.js
+  // Salva il file usando FileSaver.js
   saveAs(blob, 'spese.xlsx');
   console.log('File Excel generato con successo.');
 };

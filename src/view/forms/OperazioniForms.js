@@ -2,7 +2,6 @@ export class OperazioniForms {
   handleInputChange = (e, setItem) => {
     e.preventDefault();
     const { name, value, id } = e.target;
-    console.log(id);
   
     let modificabile = true;
     if(["primo_anno"].includes(id)) {

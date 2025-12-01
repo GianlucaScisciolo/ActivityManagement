@@ -55,7 +55,7 @@ describe("saloneSlice reducer", () => {
         }, 
         profilo: {
           id: 7, tipo:"CardWidget",  tipoVisualizzazione: 1, nome: "profilo", titolo: "Profilo", 
-          img: "profilo.png", backgroundColor: BC_SELECTED, x: 2200, y: 100//600 
+          img: "profilo.png", backgroundColor: BC_SELECTED, x: 2200, y: 100
         }, 
       },
     };
@@ -100,7 +100,7 @@ describe("saloneSlice reducer", () => {
 
     expect(newState.value.profilo).toEqual({
       id: 7, tipo:"CardWidget",  tipoVisualizzazione: 1, nome: "profilo", titolo: "Profilo", 
-      img: "profilo.png", backgroundColor: BC_SELECTED, x: 2200, y: 100//600 
+      img: "profilo.png", backgroundColor: BC_SELECTED, x: 2200, y: 100
     });
   });
 
@@ -140,7 +140,7 @@ describe("saloneSlice reducer", () => {
 
     expect(newState.value.profilo).toEqual({
       id: 7, tipo:"CardWidget",  tipoVisualizzazione: 1, nome: "profilo", titolo: "Profilo", 
-      img: "profilo.png", backgroundColor: BC_SELECTED, x: 2200, y: 100//600 
+      img: "profilo.png", backgroundColor: BC_SELECTED, x: 2200, y: 100
     });
   });
 
@@ -180,7 +180,7 @@ describe("saloneSlice reducer", () => {
 
     expect(newState.value.profilo).toEqual({
       id: 7, tipo:"CardWidget",  tipoVisualizzazione: 2, nome: "profilo", titolo: "Profilo", 
-      img: "profilo.png", backgroundColor: BC_VIEW, x: 2200, y: 100//600 
+      img: "profilo.png", backgroundColor: BC_VIEW, x: 2200, y: 100
     });
   });
 });

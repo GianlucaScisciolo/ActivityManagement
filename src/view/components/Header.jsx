@@ -1,5 +1,3 @@
-// React e Redux
-import React from "react";
 // View
 import { NavbarApp } from "./navbar/NavbarApp";
 

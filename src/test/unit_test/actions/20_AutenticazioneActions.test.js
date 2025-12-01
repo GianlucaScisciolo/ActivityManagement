@@ -68,11 +68,11 @@ describe("Test su 'modificaProfilo'", () => {
       if (url === '/MODIFICA_PROFILO') {
         return Promise.resolve({ status: 200 });
       }
-      return Promise.resolve({ status: 500 }); // Mocka un errore generico per evitare undefined
+      return Promise.resolve({ status: 500 }); 
     });
 
     global.confirm = jest.fn(() => true);
-    global.alert = jest.fn(); // Mock di alert() per evitare errori in Node.js
+    global.alert = jest.fn(); 
   });
 
   test("modificaProfilo aggiorna il profilo e chiama eseguiLogin", async () => {

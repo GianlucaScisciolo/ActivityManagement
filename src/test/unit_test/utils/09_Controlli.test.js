@@ -4,7 +4,7 @@ describe('Test per la funzione controlloCliente', () => {
   let mockSettersErrori;
 
   beforeEach(() => {
-    mockSettersErrori = jest.fn(); // Crea un mock per la funzione `settersErrori`
+    mockSettersErrori = jest.fn();
   });
 
   it('dovrebbe restituire 0 errori', () => {
@@ -36,7 +36,7 @@ describe('Test per la funzione controlloServizio', () => {
   let mockSettersErrori;
 
   beforeEach(() => {
-    mockSettersErrori = jest.fn(); // Crea un mock per la funzione `settersErrori`
+    mockSettersErrori = jest.fn(); 
   });
 
   it('dovrebbe restituire 0 errori', () => {
@@ -64,7 +64,7 @@ describe('Test per la funzione controlloSpesa', () => {
   let mockSettersErrori;
 
   beforeEach(() => {
-    mockSettersErrori = jest.fn(); // Crea un mock per la funzione `settersErrori`
+    mockSettersErrori = jest.fn(); 
   });
 
   it('dovrebbe restituire 0 errori', () => {
@@ -96,7 +96,7 @@ describe('Test per la funzione controlloLavoro', () => {
   let mockSettersErrori;
 
   beforeEach(() => {
-    mockSettersErrori = jest.fn(); // Crea un mock per la funzione `settersErrori`
+    mockSettersErrori = jest.fn(); 
   });
 
   it('dovrebbe restituire 0 errori', () => {
@@ -126,7 +126,7 @@ describe('Test per la funzione controlloLogin', () => {
   let mockSettersErrori;
 
   beforeEach(() => {
-    mockSettersErrori = jest.fn(); // Crea un mock per la funzione `settersErrori`
+    mockSettersErrori = jest.fn(); 
   });
 
   it('dovrebbe restituire 0 errori', () => {
@@ -155,7 +155,7 @@ describe('Test per la funzione controlloProfilo', () => {
   let mockSettersErrori;
 
   beforeEach(() => {
-    mockSettersErrori = jest.fn(); // Crea un mock per la funzione `settersErrori`
+    mockSettersErrori = jest.fn(); 
   });
 
   it('dovrebbe restituire 0 errori', () => {

@@ -1,7 +1,8 @@
+// React e Redux
 import { useSelector } from 'react-redux';
-/************************************************** Dispatcher **************************************************/
+// Dispatcher 
 import { Dispatcher } from "../dispatcher/Dispatcher";
-/************************************************** Utils **************************************************/
+// Utils
 import { controlloSpesa } from "../utils/Controlli";
 import { generaFileSpesePDF, generaFileSpeseExcel } from "../utils/File";
 
@@ -98,26 +99,24 @@ export class SpesaActions {
       });
 
       if(!response.ok) {
-        // Handle errors more robustly
         const errorData = await response.json();
         let errorMessage = this.lingua === "italiano" ? "Errore durante il recupero dei dati." : "Error during data recovery.";
         if (errorData && errorData.message) {
           errorMessage = errorData.message;
         }
         console.error("Errore nella richiesta:", errorMessage, response.status);
-        // Consider displaying an error message to the user
         alert(errorMessage);
-        return; // Stop further execution if there's an error
+        return;
       }
 
       const result = await response.json();
       setSpese(result.items);
 
       if (tipoFile === "pdf") {
-        generaFileSpesePDF(result.items, this.lingua); // spese
+        generaFileSpesePDF(result.items, this.lingua);
       }
       else {
-        generaFileSpeseExcel(result.items, this.lingua); // spese
+        generaFileSpeseExcel(result.items, this.lingua);
       }
     }
     catch (error) {
@@ -232,17 +231,15 @@ export class SpesaActions {
       this.dispatcher.aggiornaSpese(speseAggiornate);
 
       for(let id of idSpeseNonModificate) {
-        console.log("\\"+id+"/");
         this.dispatcher.getSpesaPrimaDellaModifica(id);
       }
       for(let id of idSpeseModificate) {
-        console.log("\\"+id+"/");
         this.dispatcher.getSpesaDopoLaModifica(id);
       }
 
       setSelectedIdsModifica([]);
 
-      alert(esitoModifica); //////////
+      alert(esitoModifica);
     }
     else {
       alert(this.lingua === "italiano" ? "Salvataggio annullato." : "Saving Cancelled.");

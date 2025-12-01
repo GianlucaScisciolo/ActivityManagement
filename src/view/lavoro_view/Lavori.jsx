@@ -259,7 +259,6 @@ const Lavori = () => {
     if(response.status === 200) {
       const result = await response.json();
       setServizi(result.items);
-      // console.log(result.items);
     }
     else {
       alert(saloneState.lingua === "italiano" ? "Errore durante l\'ottenimento dei clienti per l\'inserimento di un nuovo lavoro, riprova più tardi." : "Error while obtaining clients for new job entry, try again later.");
@@ -285,9 +284,6 @@ const Lavori = () => {
     else {
       return "";
     }
-          /*
-    return "Totale: " + 32.80.toFixed(2) + " €";
-    */
   }
 
   useEffect(() => {
@@ -343,7 +339,7 @@ const Lavori = () => {
             lavoroActions: lavoroActions,
             // Handle operations 
             handleBlurItem: handleBlurItem, 
-            handleInsert: (e) => lavoroActions.inserimentoLavoro(e, servizi, clienti, nuovoLavoro, setNuovoLavoro), //////////
+            handleInsert: (e) => lavoroActions.inserimentoLavoro(e, servizi, clienti, nuovoLavoro, setNuovoLavoro), 
             handleSearch: (e) => lavoroActions.ricercaLavori(e, datiRicerca), 
             handleEdit: (e) => lavoroActions.modificaLavori(e, servizi, lavoroState, selectedIdsModifica, setSelectedIdsModifica), 
             handleDelete: (e) => lavoroActions.eliminaLavori(e, selectedIdsEliminazione, setSelectedIdsEliminazione, lavoroState), 

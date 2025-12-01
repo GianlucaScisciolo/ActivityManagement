@@ -1,5 +1,6 @@
-// React e Redux
+// node_modules
 import styled from 'styled-components';
+// React e Redux
 import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Row from 'react-bootstrap/esm/Row';
@@ -39,7 +40,6 @@ export const StyledListGroupItem = styled(ListGroup.Item)`
 `;
 
 export const SlideContainer = styled.div`
-  /* max-height: ${(props) => ((props.$isvisible === "true") ? '2000px' : '0px')};  */
   overflow: hidden;
   transition: max-height 1.5s ease-out;
 `;
@@ -268,17 +268,9 @@ export const BottoneRossoSelezionato =  styled(StyledButton)`
   }
 `;
 
-// export const StyledSelect =  styled.select`
-//   cursor: pointer;
-//   border: 5px solid #000000;
-//   color: #FFFFFF;
-//   text-align: center;
-// `;
-
 export const StyledSelect = styled.select`
   width: 100%;
   min-height: 70px;
-  /* border-radius: 40px; */
   background-color: #0050EF;
   border: 5px solid #000000;
   color: #FFFFFF;
@@ -306,7 +298,6 @@ export const StyledOption =  styled.option`
 
 export const StyledSpanErrore =  styled.span`
   color: #FF0000;
-  /* background-color: #000000; */
   padding: 10px;
 `;
 

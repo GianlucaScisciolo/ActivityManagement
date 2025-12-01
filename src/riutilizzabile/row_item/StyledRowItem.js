@@ -1,5 +1,6 @@
-// React e Redux
+// node_modules
 import styled from 'styled-components';
+// React
 import Row from 'react-bootstrap/esm/Row';
 import Col from 'react-bootstrap/esm/Col';
 import { 
@@ -12,7 +13,7 @@ export const grandezzaIcona = 50;
 
 export const StyledRow = styled(Row)`
   display: flex;
-  align-items: stretch; /* Allinea tutte le colonne in altezza */
+  align-items: stretch; 
   justify-content: space-between;
   flex-wrap: wrap;
   padding-left: 3%;
@@ -20,10 +21,9 @@ export const StyledRow = styled(Row)`
 `;
 
 export const StyledCol = styled(Col)`
-  /* background-color: gray; */
   flex: 1;
   display: flex;
-  flex-direction: column; /* Per organizzare il contenuto verticalmente */
+  flex-direction: column; /* Organizza il contenuto verticalmente */
   align-items: flex-start; /* Allinea gli elementi al bordo sinistro (se necessario) */
   justify-content: flex-start; /* Allinea gli elementi in alto */
   text-align: center;
@@ -37,8 +37,6 @@ export const StyledCol = styled(Col)`
 
 
 export const StyledColAnimato = styled(StyledCol)`
-  /* color: #FFFFFF; */
-  /* transition: max-height 1s ease-out; */
   max-height: ${(props) => (props.isVisible ? '1000px' : '0')}; 
   overflow: hidden;
   transition: max-height 1s ease-out;
@@ -71,7 +69,7 @@ export const StyledColRed = styled(StyledCol)`
 
 export const SlideContainer = styled.div`
   display: flex;
-  flex-direction: row-reverse;  // Aggiungi questa riga
+  flex-direction: row-reverse;
 `;
 
 
@@ -86,7 +84,7 @@ const StyledTextAreaInputAndColButtons = `
   outline: none;
   background-color: transparent;
   color: inherit;
-  padding: 0; /* Aggiungi un padding se necessario */
+  padding: 0; 
   margin: 0;
   text-align: center; /* Centro orizzontale del testo */
   overflow: hidden; /* Nasconde l'overflow */
@@ -305,7 +303,6 @@ export const StyledOption =  styled.option`
 
 export const StyledSpanErrore =  styled.span`
   color: #FF0000;
-  /* background-color: #000000; */
   border-radius: 40px;
   padding: 10px;
 `;

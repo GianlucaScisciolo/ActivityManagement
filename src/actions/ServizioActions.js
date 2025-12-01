@@ -1,7 +1,8 @@
+// React e Redux
 import { useSelector } from 'react-redux';
-/************************************************** Dispatcher **************************************************/
+// Dispatcher
 import { Dispatcher } from "../dispatcher/Dispatcher";
-/************************************************** Utils **************************************************/
+// Utils
 import { controlloServizio } from "../utils/Controlli";
 
 export class ServizioActions {
@@ -136,7 +137,7 @@ export class ServizioActions {
             let nuovoServizio = { ...serviziDaModificare[i] };
             nuovoServizio["id"] = result.id;
             this.dispatcher.inserimentoServizio(nuovoServizio);
-          } // ----> NON MI CONVINCE !!!!
+          }
           idServiziModificati.push(serviziDaModificare[i].id);
         }
         else if(response.status === 400) {
@@ -160,12 +161,10 @@ export class ServizioActions {
       this.dispatcher.aggiornaServizi(serviziAggiornati);
 
       for(let id of idServiziNonModificati) {
-        console.log("\\"+id+"/");
         this.dispatcher.getServizioPrimaDellaModifica(id);
       }
 
       for(let id of idServiziModificati) {
-        console.log("\\"+id+"/");
         this.dispatcher.getServizioDopoLaModifica(id);
       }
       

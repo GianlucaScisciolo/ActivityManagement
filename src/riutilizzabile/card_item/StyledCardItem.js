@@ -1,4 +1,4 @@
-// React e Redux
+// React
 import styled from 'styled-components';
 import Row from 'react-bootstrap/esm/Row';
 import Col from 'react-bootstrap/esm/Col';
@@ -26,8 +26,6 @@ export const StyledCard = styled(Card)`
 export const StyledRow = styled(Row)`
   display: flex;
   flex-wrap: wrap;
-  /* padding-left: 3%; */
-  /* padding-right: 3%; */
 `;
 
 export const StyledCol = styled(Col)`
@@ -43,7 +41,6 @@ export const StyledCol = styled(Col)`
   height: auto;
   min-height: 50px;
   min-width: 300px;
-  /* max-width: 300px; */
 `;
 
 export const StyledCardHeader = styled(Card.Header)`
@@ -61,7 +58,6 @@ export const StyledListGroupItem = styled(ListGroup.Item)`
 `;
 
 export const SlideContainer = styled.div`
-  /* max-height: ${(props) => (props.isVisible ? '1000px' : '0')};  */
   overflow: hidden;
   transition: max-height 2s ease-out;
   background-color: #111111;
@@ -125,7 +121,7 @@ export const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100%; // oppure specifica l'altezza desiderata
+  height: 100%;
   padding-top:10px;
 `;
 
@@ -251,7 +247,6 @@ export const StyledTrashNotSelected2 = styled(Trash2)`
 export const StyledSelect = styled.select`
   width: 100%;
   min-height: 70px;
-  /* border-radius: 40px; */
   background-color: #0050EF;
   border: 5px solid #000000;
   color: #FFFFFF;
@@ -280,7 +275,6 @@ export const StyledOption =  styled.option`
 
 export const StyledSpanErrore =  styled.span`
   color: #FFFFFF;
-  /* background-color: #000000; */
   padding: 10px;
 `;
 

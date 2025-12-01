@@ -3,8 +3,8 @@ import { Dispatcher } from "../../../dispatcher/Dispatcher.js";
 jest.mock("../../../dispatcher/Dispatcher.js");
 jest.mock("../../../utils/Controlli.js");
 
-global.confirm = jest.fn(() => true); // Mock di confirm
-global.alert = jest.fn(() => true); // Mock di confirm
+global.confirm = jest.fn(() => true); 
+global.alert = jest.fn(() => true); 
 
 describe("Test su 'inserimentoServizio'", () => {
   let servizioActions;
@@ -90,7 +90,7 @@ describe("Test su 'ricercaServizi'", () => {
 
     global.fetch = jest.fn(() =>
       Promise.resolve({
-        status: 500, // Simulazione errore
+        status: 500, 
       })
     );
 

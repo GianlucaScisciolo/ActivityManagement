@@ -1,4 +1,3 @@
-// Dispatcher.test.js
 import { Dispatcher } from "../../../dispatcher/Dispatcher.js"; 
 import store from "../../../store/store.js"; 
 import { stileSliceActions } from "../../../store/slice/StileSlice.js";
@@ -84,27 +83,6 @@ describe("Dispatcher", () => {
       saloneSliceActions.widgetView()
     );
   });
-
-  // test("test su 'azzeraListe'.", () => {
-  //   dispatcher.azzeraListe();
-
-  //   expect(store.dispatch).toHaveBeenCalledWith(
-  //     saloneSliceActions.azzeraListe()
-  //   );
-  // });
-
-  // test("test su 'ricercaEntrateUsciteRicavi'.", () => {
-  //   const datiRicerca = {
-  //     dato_1: "Dato 1",
-  //     dato_2: 10.24
-  //   };
-    
-  //   dispatcher.ricercaEntrateUsciteRicavi(datiRicerca);
-
-  //   expect(store.dispatch).toHaveBeenCalledWith(
-  //     saloneSliceActions.ricercaEntrateUsciteRicavi({datiRicerca})
-  //   );
-  // });
 
   /* Autenticazione */
 

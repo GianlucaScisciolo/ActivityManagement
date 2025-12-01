@@ -1,5 +1,6 @@
+// React e Redux
 import { useSelector } from 'react-redux';
-/************************************************** Dispatcher **************************************************/
+// Dispatcher
 import { Dispatcher } from "../dispatcher/Dispatcher";
 
 export class StileActions {

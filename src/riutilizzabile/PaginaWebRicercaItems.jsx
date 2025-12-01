@@ -1,5 +1,3 @@
-// React e Redux
-import React from "react";
 // Riutilizzabile
 import { FormRicercaItems } from "./form_item/FormItem";
 import { CardRicercaItems } from "./card_item/CardItem";
@@ -34,7 +32,7 @@ const PaginaWebRicercaItems = ({ componenti }) => {
         indici={componenti.indiciItemEsistente}
         servizi={componenti.servizi}
         handleBlurItem={componenti.handleBlurItem}
-        lavoroActions={componenti.lavoroActions} // DA VEDERE !!!!
+        lavoroActions={componenti.lavoroActions}
       />
 
       <br /> <br /> <br /> <br />

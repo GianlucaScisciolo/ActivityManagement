@@ -1,8 +1,8 @@
 // React e Redux
 import { useState, useEffect } from "react";
+import { useSelector } from 'react-redux';
 // Utils
 import { controlloServizio } from "../../utils/Controlli";
-import { useSelector } from 'react-redux';
 
 export class ServizioForms {
   saloneState = useSelector((state) => state.saloneSliceReducer.value);

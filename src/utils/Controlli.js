@@ -1,8 +1,7 @@
 // Utils
-import { passwordIsCorrect, PEPPER_HEX } from "./Sicurezza";
+import { passwordIsCorrect } from "./Sicurezza";
 
 const isEmpty = (value) => {
-  // return ((value === null) || (value === "") || (value !== null && value.split(' ').join('') === ""));
   return !value;
 }
 
@@ -68,16 +67,6 @@ export const controlloCliente = (dati, settersErrori, lingua) => {
     setErrore(settersErrori, "errore_email", messaggioErrore);
   }
   else {
-    /*
-    if(!isEmpty(dati.contatto) && !matchRegex(dati.contatto, "^3[0-9]{9}$") && !matchRegex(dati.contatto, "^0\\d{9,10}$")) {
-      numErrori += 1;
-      messaggioErrore = "Contatto non valido. Inserire un numero di cellulare o un numero di telefono valido:\n";
-      messaggioErrore += "- numero di cellulare valido: 3XXXXXXXXX\n";
-      messaggioErrore += "- numero di telefono valido: 0XXXXXXXXX oppure 0XXXXXXXXXX\n";
-      messaggioErrore += "X è un numero tra 0 e 9 estremi inclusi.";
-      setErrore(settersErrori, "errore_contatto", messaggioErrore);
-    }
-    */
     messaggioErrore = "";
     if(!isEmpty(dati.email) && !matchRegex(dati.email, "^([a-z\\d\\._-]+)@([a-z\\d-]+)\\.([a-z]{2,8})(\\.[a-z]{2,8})?$")) {
       numErrori += 1;
@@ -86,7 +75,6 @@ export const controlloCliente = (dati, settersErrori, lingua) => {
     }
   }
   
-  // console.log(dati);
   // controllo sulle note
   messaggioErrore = "";
   if(!isInRange(dati.note.length, 0, 200)) {

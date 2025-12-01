@@ -1,11 +1,12 @@
 // React e Redux
 import { useSelector } from 'react-redux';
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useRef } from 'react';
 import { Card, Table } from 'react-bootstrap';
 // Riutilizzabile
 import StyledComponents from './StyledCardItem';
 import { OperazioniNuovoItem, OperazioniCercaItems, OperazioniRicercaEntrateUscite, OperazioniLogin, OperazioniModificaProfilo, OperazioniFileItems, OperazioniItemEsistente } from '../Operazioni';
-import { getPencilTag, getTrashTag, getSelectTag, getInputTag, getTextAreaTag } from '../Tags';
+import { getInputTag, getTextAreaTag } from '../Tags';
+// Utils
 import { getColor } from '../../utils/Colori';
 import { getTotaleEntrateAnno, getQuantitaEntrateAnno } from '../../utils/Calcoli';
 
@@ -115,7 +116,6 @@ export function CardRicercaItems({campi, indici, handleSearch}) {
 
 export function CardItemEsistente({ item, campi, indici, selectOperation, tipoItem, handleBlurItem }) {
   const inputRefs = useRef([]); // Array di riferimenti per ogni input
-  console.log("INDICI = " + indici);
   const [localValues, setLocalValues] = useState(() =>
     indici.reduce((acc, i) => ({ ...acc, [i]: campi.value[i] }), {})
   ); // Gestione dello stato locale
@@ -128,7 +128,6 @@ export function CardItemEsistente({ item, campi, indici, selectOperation, tipoIt
   const handleChange = (e, index) => {
     e.preventDefault();
     const { name, value, id } = e.target;
-    console.log(id);
   
     let modificabile = true;
   
@@ -156,7 +155,6 @@ export function CardItemEsistente({ item, campi, indici, selectOperation, tipoIt
     else if ([
       "prezzo_servizio", "totale_spesa" 
     ].includes(id)) {
-      // console.log("|" + value + "|");
       const isDecimal = !isNaN(value.substr(0, value)) && Number(value) === parseFloat(value);
       if (!isDecimal || value < 0) {
         modificabile = false;
@@ -180,7 +178,7 @@ export function CardItemEsistente({ item, campi, indici, selectOperation, tipoIt
       }
     }
     
-    // Aggiorno solo lo stato locale
+    // Aggiorna solo lo stato locale
     if(modificabile === true) {
       setLocalValues((prevValues) => ({
         ...prevValues,
@@ -331,7 +329,6 @@ export function CardLogin({campi, indici, eseguiLogin}) {
                   {(campi.name[i] === "password") && (
                     <StyledEyeTag
                       style={{
-                        // border: "5px solid #000000",
                         maxWidth: "20%",
                         marginLeft: "-6px", 
                         marginTop: "13px"
@@ -416,7 +413,6 @@ export function CardProfilo({campi, indici, eseguiModificaProfilo}) {
                   {(campi.name[i].includes("password")) && (
                     <StyledEyeTag
                       style={{
-                        // border: "5px solid #000000",
                         maxWidth: "20%",
                         marginLeft: "-6px", 
                         marginTop: "13px"
@@ -457,10 +453,9 @@ export function CardWidget({nome, img, id, onClickWidget, backgroundColor}) {
         justifyContent: "center",
       }}
       onClick={(e) => {
-        // e.stopPropagation(); // Prevenire interferenze
         onClickWidget(e, id);
       }}
-      draggable={false} // Assicurati che il Card non sia draggable
+      draggable={false}
     >
       <Card.Img 
         style={{ 
@@ -489,10 +484,9 @@ export function CardEntrateItems({ entrateItems, etichettaIta, etichettaEng }) {
   return (
     <Card
       style={{
-        display: 'inline-block',  // Cambiato da 'auto' a 'inline-block'
+        display: 'inline-block',
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
         borderRadius: '50px',
-        // padding: '10px',
         paddingLeft: "50px", 
         paddingRight: "50px",
         paddingBottom: "50px",
@@ -582,10 +576,9 @@ export function CardEntrateItemsByName({ entrateItems, tipoItemIta, tipoItemEng,
   return (
     <Card
       style={{
-        display: 'inline-block',  // Cambiato da 'auto' a 'inline-block'
+        display: 'inline-block',
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
         borderRadius: '50px',
-        // padding: '10px',
         paddingLeft: "50px", 
         paddingRight: "50px",
         paddingBottom: "50px",
@@ -694,10 +687,9 @@ export function CardUsciteItems({ usciteItems, etichettaIta, etichettaEng }) {
   return (
     <Card
       style={{
-        display: 'inline-block',  // Cambiato da 'auto' a 'inline-block'
+        display: 'inline-block',
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
         borderRadius: '50px',
-        // padding: '10px',
         paddingLeft: "50px", 
         paddingRight: "50px",
         paddingBottom: "50px",
@@ -786,10 +778,9 @@ export function CardRicavi({ entrate, uscite }) {
   return (
     <Card
       style={{
-        display: 'inline-block',  // Cambiato da 'auto' a 'inline-block'
+        display: 'inline-block',
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
         borderRadius: '50px',
-        // padding: '10px',
         paddingLeft: "50px", 
         paddingRight: "50px",
         paddingBottom: "50px",

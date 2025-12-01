@@ -5,7 +5,6 @@ export function getPencilTag(tipoSelezione, StyledComponents) {
 };
 
 export function getTrashTag(tipoSelezione, StyledComponents) {
-  // console.log(tipoSelezione);
   return (tipoSelezione === 0 || tipoSelezione === 1) ? StyledComponents.StyledTrashNotSelected : (
     (tipoSelezione === 2) ? StyledComponents.StyledTrashSelected : Trash2
   );

@@ -1,7 +1,8 @@
+// React e Redux
 import { useSelector } from 'react-redux';
-/************************************************** Dispatcher **************************************************/
+// Dispatcher
 import { Dispatcher } from "../dispatcher/Dispatcher";
-/************************************************** Utils **************************************************/
+// Utils
 import { controlloCliente } from "../utils/Controlli";
 
 export class ClienteActions {
@@ -79,16 +80,14 @@ export class ClienteActions {
         this.dispatcher.aggiornaTipoSelezioneCliente(item.id, 0);
         setSelectedIdsEliminazione(prevIds => prevIds.filter(itemId => itemId !== item.id));
         setSelectedTrashCount(prevCount => Math.max(prevCount - 1, 0));
-        console.log("Tasto trash deselezionato!!!!");
       }
       else {
-        this.dispatcher.getClientePrimaDellaModifica(item.id); //// PROBLEMA QUI !!!!
+        this.dispatcher.getClientePrimaDellaModifica(item.id);
         this.dispatcher.aggiornaTipoSelezioneCliente(item.id, 2);
         setSelectedIdsEliminazione(prevIds => [...prevIds, item.id]);
         setSelectedTrashCount(prevCount => prevCount + 1);
         setSelectedIdsModifica(prevIdsModifica => prevIdsModifica.filter(itemId => itemId !== item.id));
         setSelectedPencilCount(prevCount => Math.max(prevCount - 1, 0));
-        console.log("Tasto trash selezionato!!!!");
       }
     }
     else if(icon === "pencil") {
@@ -154,12 +153,10 @@ export class ClienteActions {
       this.dispatcher.aggiornaClienti(clientiAggiornati);
 
       for(let id of idClientiNonModificati) {
-        console.log("\\"+id+"/");
         this.dispatcher.getClientePrimaDellaModifica(id);
       }
 
       for(let id of idClientiModificati) {
-        console.log("\\"+id+"/");
         this.dispatcher.getClienteDopoLaModifica(id);
       }
 

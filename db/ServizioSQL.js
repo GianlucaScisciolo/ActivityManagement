@@ -117,7 +117,6 @@ export class ServizioSQL {
   }
   
   params_inserimento_servizio(params) {
-    console.log(params);
     return [
       `${params.nome}`, 
       `${params.prezzo}`, 
@@ -131,7 +130,6 @@ export class ServizioSQL {
   }
 
   params_modifica_servizio(params) {
-    // const params = [];
     return [
       `${params.nome}`, 
       `${params.prezzo}`, 

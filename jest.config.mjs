@@ -12,7 +12,6 @@ export default {
   transformIgnorePatterns: [
     '<rootDir>/node_modules/',
   ],
-  // testEnvironment: 'jest-environment-jsdom',
   testEnvironment: 'jest-environment-node',
   setupFilesAfterEnv: [
     '<rootDir>/jest.setup.js',

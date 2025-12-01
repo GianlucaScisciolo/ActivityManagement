@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+// React e Redux
+import React from "react";
 import { useSelector } from "react-redux";
 import Row from 'react-bootstrap/esm/Row';
 import Col from 'react-bootstrap/esm/Col';

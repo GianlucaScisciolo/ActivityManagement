@@ -1,4 +1,4 @@
-// React e Redux
+// React
 import React from "react";
 // Riutilizzabile
 import { FormNuovoItem } from "./form_item/FormItem";
@@ -48,7 +48,7 @@ const PaginaWeb = ({ componenti }) => {
                 indici={value.indici}
                 servizi={value.servizi}
                 handleBlurItem={value.handleBlurItem}
-                lavoroActions={value.lavoroActions} // DA VEDERE !!!!
+                lavoroActions={value.lavoroActions} 
               />
             )}                
             {(key === "operazioni_items") && (

@@ -1,4 +1,4 @@
-// React e Redux
+// node_modules
 import CryptoJS from 'crypto-js';
 
 // Costante PEPPER_HEX

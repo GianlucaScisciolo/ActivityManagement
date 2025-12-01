@@ -1,6 +1,6 @@
-/************************************************** Store **************************************************/
+// Store
 import store from "../store/store.js";
-/************************************************** Slices Actions **************************************************/
+// Slices Actions 
 import { stileSliceActions } from "../store/slice/StileSlice.js";
 import { saloneSliceActions } from "../store/slice/SaloneSlice.js";
 import { autenticazioneSliceActions } from "../store/slice/AutenticazioneSlice.js";

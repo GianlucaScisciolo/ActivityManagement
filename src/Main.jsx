@@ -1,13 +1,13 @@
-/************************************************** React e Redux **************************************************/
+// React e Redux
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Provider, useSelector } from "react-redux";
 
-/************************************************** Store **************************************************/
+// Store
 import store from "./store/store.js";
 
-/************************************************** View **************************************************/
+// View
 import App from "./view/App.jsx";
 // Autenticazione View
 import Login from "./view/autenticazione_view/Login.jsx";

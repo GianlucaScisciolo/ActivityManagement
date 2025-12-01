@@ -3,8 +3,8 @@ import { Dispatcher } from "../../../dispatcher/Dispatcher.js";
 jest.mock("../../../dispatcher/Dispatcher.js");
 jest.mock("../../../utils/Controlli.js");
 
-global.confirm = jest.fn(() => true); // Mock di confirm
-global.alert = jest.fn(() => true); // Mock di confirm
+global.confirm = jest.fn(() => true); 
+global.alert = jest.fn(() => true); 
 
 describe("Test su 'azzeraListe'", () => {
   let saloneActions;
@@ -55,13 +55,11 @@ describe("Test su 'scegliWidgets'", () => {
 
   test("test 1: plusCliccato === true", async () => {
     await saloneActions.scegliWidgets({ preventDefault: jest.fn() }, jest.fn(), false);
-    // expect(saloneActions.dispatcher.widgetView).toHaveBeenCalled();
     expect(saloneActions.dispatcher.widgetSelected).toHaveBeenCalled();
   });
 
   test("test 2: plusCliccato === false", async () => {
     await saloneActions.scegliWidgets({ preventDefault: jest.fn() }, jest.fn(), true);
-    // expect(saloneActions.dispatcher.widgetSelected).toHaveBeenCalled();
     expect(saloneActions.dispatcher.widgetView).toHaveBeenCalled();
   });
 });

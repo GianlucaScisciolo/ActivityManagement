@@ -142,9 +142,6 @@ export function FormRicercaItems({campi, indici, handleSearch}) {
         overflowY: "auto"
       }}>
         {indici.map((i) => {
-          // onClick={handleGiornoClick(setUltimoGiornoType)}
-          // onBlur={handleGiornoBlur(setUltimoGiornoType, item, setItem)}
-          // onChange={(e) => handleInputChange(e, setItem)}
           const NomeTag = (campi.type[i]) ? getInputTag(1, true, StyledComponents) : (
             getTextAreaTag(1, true, StyledComponents)
           );
@@ -173,7 +170,6 @@ export function FormRicercaItems({campi, indici, handleSearch}) {
         setIsVisible={setIsVisible}
         arrowUp={arrowUp}
         setArrowUp={setArrowUp}
-        // eseguiRicerca={eseguiRicerca}
         handleSearch={handleSearch}
         vistaItem={"form"}
         StyledComponents={StyledComponents}
@@ -205,7 +201,6 @@ export function FormLogin({campi, indici, eseguiLogin}) {
               <StyledComponents.StyledLabel htmlFor={campi.name[i]}>{campi.label[i]}</StyledComponents.StyledLabel>
               <StyledComponents.StyledRow>
                 <NomeTag 
-                  // style={{marginLeft:"-10%", marginRight:0, minWidth:"105%", (campi.name[i] !== "password") ? width:100% : null}}
                   style={
                     campi.name[i] !== "password"
                       ? { marginLeft: "-10%", marginRight: 0, minWidth: "115%", width: "100%" }
@@ -350,9 +345,6 @@ export function FormFileItems({campi, indici, ottieniFileRangePDF, ottieniFileRa
       <StyledComponents.StyledHeader>{campi["header"]}</StyledComponents.StyledHeader>
       <StyledComponents.SlideContainer style={{maxHeight: `${maxHeight}`}}>
         {indici.map((i) => {
-          // onClick={handleGiornoClick(setUltimoGiornoType)}
-          // onBlur={handleGiornoBlur(setUltimoGiornoType, item, setItem)}
-          // onChange={(e) => handleInputChange(e, setItem)}
           const NomeTag = (campi.type[i]) ? getInputTag(1, true, StyledComponents) : (
             getTextAreaTag(1, true, StyledComponents)
           );

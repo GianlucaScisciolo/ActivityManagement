@@ -1,14 +1,14 @@
+// node_modules
+import styled from 'styled-components';
 // React e Redux
-import React, { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Plus, Save } from 'lucide-react';
-import styled from 'styled-components';
 // View
 import Header from "./components/Header";
 import { DragAndDropWidgetHomePage } from "./components/DragAndDrop";
 // Actions
 import { SaloneActions } from '../actions/SaloneActions';
-import { generateRandomString, encryptPassword, passwordIsCorrect, PEPPER_HEX } from '../utils/Sicurezza';
 
 const styledIconNotSelected = `
   color: #FFFFFF;

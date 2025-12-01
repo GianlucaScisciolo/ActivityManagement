@@ -9,7 +9,6 @@ beforeAll(() => {
   };
 });
 
-// Import dello store (deve avvenire dopo il mock)
 import store from "../../../store/store.js";
 
 describe('Test sullo store', () => {
@@ -25,12 +24,4 @@ describe('Test sullo store', () => {
     expect(state).toHaveProperty('lavoroSliceReducer');
     expect(state).toHaveProperty('spesaSliceReducer');
   });
-
-  // it('dovrebbe chiamare localStorage.getItem', () => {
-  //   // Simula un'azione sullo store (se necessaria per il tuo test)
-  //   store.dispatch({ type: 'TEST_ACTION' });
-
-  //   // Verifica che localStorage.getItem sia stato chiamato
-  //   expect(localStorage.getItem).toHaveBeenCalled();
-  // });
 });

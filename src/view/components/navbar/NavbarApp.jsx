@@ -1,13 +1,11 @@
+// Bootstrap
+import 'bootstrap/dist/css/bootstrap.min.css';
 // React e Redux
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import Navbar from 'react-bootstrap/Navbar';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import { House } from 'lucide-react';
 // View
-//import immagineSfondo1 from "../../img/immagine_sfondo1.jpg"
-//import immagineSfondo2 from "../../img/immagine_sfondo2.png"
 import negozio from "../../img/sfondi/negozio.jpg";
 import scrivania from "../../img/sfondi/scrivania.jpg";
 import legno from "../../img/sfondi/legno.jpg";
@@ -47,9 +45,7 @@ export const NavbarApp = () => {
   };
   
   const handleMouseLeave = (setDropdown) => {
-    // setTimeout(() => {
-      setDropdown(false);
-    // }, 500); // Aggiungi un ritardo di 300ms
+    setDropdown(false);
   };  
   
   const applicaStileBody = () => {
@@ -114,7 +110,6 @@ export const NavbarApp = () => {
 
         <StyledNavCenter>
           <StyledNavLinkHome as={NavLink} to="/" onContextMenu={handleContextMenu}>
-            {/* <House id='walletCards' size={40} /> */}
             <img src={logo} alt="Logo" style={{width:"70px"}}  />
           </StyledNavLinkHome>
         </StyledNavCenter>

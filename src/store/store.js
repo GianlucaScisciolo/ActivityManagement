@@ -1,6 +1,6 @@
-/************************************************** React e Redux **************************************************/
+// React e Redux
 import { configureStore } from "@reduxjs/toolkit";
-/************************************************** Slices Reducers **************************************************/
+// Slices Reducers
 import { stileSliceReducer } from "./slice/StileSlice";
 import { saloneSliceReducer } from "./slice/SaloneSlice";
 import { autenticazioneSliceReducer } from "./slice/AutenticazioneSlice";

@@ -1,7 +1,8 @@
+// React e Redux
 import { useSelector } from 'react-redux';
-/************************************************** Dispatcher **************************************************/
+// Dispatcher
 import { Dispatcher } from "../dispatcher/Dispatcher";
-/************************************************** Utils **************************************************/
+// Utils
 import { controlloLavoro } from "../utils/Controlli";
 import { generaFileLavoriPDF, generaFileLavoriExcel } from "../utils/File";
 
@@ -24,9 +25,7 @@ export class LavoroActions {
         }
       }
       for(let cliente of clienti) {
-        console.log(cliente.id + " === " + nuovoLavoro.id_cliente);
         if (parseInt(cliente.id) === parseInt(nuovoLavoro.id_cliente)) {
-          console.log("Cliente trovato!!");
           nuovoLavoro["cliente"] = cliente.nome + " " + cliente.cognome 
             + ((cliente.contatto && cliente.contatto !== "Contatto non inserito.") ? (" - " + cliente.contatto) : "") 
             + ((cliente.email && cliente.email !== "Email non inserita.") ? (" - " + cliente.email) : "");
@@ -34,7 +33,7 @@ export class LavoroActions {
         }
       }
       nuovoLavoro["servizi"] = servizi;
-      /**/
+      
       if (controlloLavoro(nuovoLavoro, setNuovoLavoro, this.lingua) > 0) 
         return;
 
@@ -111,16 +110,14 @@ export class LavoroActions {
       });
 
       if (!response.ok) {
-        // Handle errors more robustly
         const errorData = await response.json();
         let errorMessage = this.lingua === "italiano" ? "Errore durante il recupero dei dati." : "Error while data recovery.";
         if (errorData && errorData.message) {
           errorMessage = errorData.message;
         }
         console.error(this.lingua === "italiano" ? "Errore nella richiesta:" : "Error in request", errorMessage, response.status);
-        // Consider displaying an error message to the user
         alert(errorMessage);
-        return; // Stop further execution if there's an error
+        return;
       }
 
       const result = await response.json();
@@ -247,7 +244,6 @@ export class LavoroActions {
       this.dispatcher.aggiornaLavori(lavoriAggiornati);
 
       for(let id of idLavoriNonModificati) {
-        console.log("\\"+id+"/");
         this.dispatcher.getLavoroPrimaDellaModifica(id);
       }
 

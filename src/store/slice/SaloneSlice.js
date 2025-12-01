@@ -1,7 +1,7 @@
-/************************************************** React e Redux **************************************************/
+// React e Redux
 import { createSlice } from "@reduxjs/toolkit";
 
-// Da vedere !!!!
+// Da rivedere
 import clienti from "../../view/img/img_widget/clienti.png";
 import servizi from '../../view/img/img_widget/servizi.png';
 import lavori from '../../view/img/img_widget/lavori.png';
@@ -95,14 +95,11 @@ const saloneSlice = createSlice({
       saveToLocalStorage(state);
     },
     modificaWidget: (state, action) => {
-      // console.log(action.payload.nomeWidget);
       state.value[action.payload.nomeWidget].tipoVisualizzazione = action.payload.tipoVisualizzazione;
       state.value[action.payload.nomeWidget].backgroundColor = getColor(action.payload.tipoVisualizzazione);
       saveToLocalStorage(state);
-      console.log(state.value[action.payload.nomeWidget].tipoVisualizzazione);
     },
     widgetSelected: (state) => {
-      // console.log("visualizzazioneWidget");
       const nomi = [
         "clienti", "servizi", "lavori", "spese", "analisi", "profilo"
       ];
@@ -114,7 +111,6 @@ const saloneSlice = createSlice({
       saveToLocalStorage(state);
     },
     widgetView: (state) => {
-      // console.log("visualizzazioneWidget");
       const nomi = [
         "clienti", "servizi", "lavori", "spese", "analisi", "profilo"
       ];
