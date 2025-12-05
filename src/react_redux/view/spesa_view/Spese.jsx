@@ -7,7 +7,7 @@ import { OperazioniForms } from "../forms/OperazioniForms";
 import { SpesaForms } from "../forms/SpesaForms";
 // Actions
 import { SpesaActions } from "../../actions/SpesaActions";
-import { SaloneActions } from "../../actions/SaloneActions.js";
+import { AttivitaActions } from "../../actions/AttivitaActions.js";
 // Riutilizzabile
 import FileSearchAndInsertPage from "../../../riutilizzabile/FileSearchAndInsertPage.jsx";
 
@@ -80,8 +80,8 @@ const Spese = () => {
   }
 
   useEffect(() => {
-    const saloneActions = new SaloneActions();
-    saloneActions.azzeraListe();
+    const attivitaActions = new AttivitaActions();
+    attivitaActions.azzeraListe();
   }, []);
 
   const campiNuovaSpesa = spesaForms.getCampiNuovaSpesa(

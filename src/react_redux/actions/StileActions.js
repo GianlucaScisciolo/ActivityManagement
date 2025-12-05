@@ -5,8 +5,8 @@ import { Dispatcher } from "../dispatcher/Dispatcher";
 
 export class StileActions {
   dispatcher;
-  saloneState = useSelector((state) => state.salone.value);
-  lingua = this.saloneState.lingua;
+  attivitaState = useSelector((state) => state.attivita.value);
+  lingua = this.attivitaState.lingua;
 
   constructor() {
     this.dispatcher = new Dispatcher();

@@ -1,6 +1,6 @@
 # WebApp "ActivityManagement"
 ## Scopo del sistema
-Lo scopo del sistema è fornire un software in grado di gestire un'attività (salone barbiere, negozio vestiti, pizzeria, etc.).
+Lo scopo del sistema è fornire un software in grado di gestire un'attività (attivita barbiere, negozio vestiti, pizzeria, etc.).
 ## Prerequisiti
 - Tecnologie utilizzate
 	- Lato Back-End:

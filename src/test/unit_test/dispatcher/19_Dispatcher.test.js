@@ -1,7 +1,7 @@
 import { Dispatcher } from "../../../dispatcher/Dispatcher.js"; 
 import store from "../../../store/store.js"; 
 import { stileSliceActions } from "../../../store/slice/StileSlice.js";
-import { saloneSliceActions } from "../../../store/slice/SaloneSlice.js";
+import { attivitaSliceActions } from "../../../store/slice/AttivitaSlice.js";
 import { autenticazioneSliceActions } from "../../../store/slice/AutenticazioneSlice.js";
 import { clienteSliceActions } from "../../../store/slice/ClienteSlice.js";
 import { lavoroSliceActions } from "../../../store/slice/LavoroSlice.js";
@@ -56,7 +56,7 @@ describe("Dispatcher", () => {
     );
   });
 
-  /* Salone */
+  /* Attivita */
 
   test("test su 'modificaWidget'.", () => {
     const nomeWidget = "clienti";
@@ -64,7 +64,7 @@ describe("Dispatcher", () => {
     dispatcher.modificaWidget(nomeWidget, tipoVisualizzazione);
 
     expect(store.dispatch).toHaveBeenCalledWith(
-      saloneSliceActions.modificaWidget({nomeWidget, tipoVisualizzazione})
+      attivitaSliceActions.modificaWidget({nomeWidget, tipoVisualizzazione})
     );
   });
 
@@ -72,7 +72,7 @@ describe("Dispatcher", () => {
     dispatcher.widgetSelected();
 
     expect(store.dispatch).toHaveBeenCalledWith(
-      saloneSliceActions.widgetSelected()
+      attivitaSliceActions.widgetSelected()
     );
   });
 
@@ -80,7 +80,7 @@ describe("Dispatcher", () => {
     dispatcher.widgetView();
 
     expect(store.dispatch).toHaveBeenCalledWith(
-      saloneSliceActions.widgetView()
+      attivitaSliceActions.widgetView()
     );
   });
 

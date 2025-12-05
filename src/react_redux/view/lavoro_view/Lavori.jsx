@@ -9,7 +9,7 @@ import { OperazioniForms } from "../forms/OperazioniForms.js";
 import { LavoroForms } from "../forms/LavoroForms.js";
 // Actions
 import { LavoroActions } from "../../actions/LavoroActions.js";
-import { SaloneActions } from "../../actions/SaloneActions.js";
+import { AttivitaActions } from "../../actions/AttivitaActions.js";
 // Riutilizzabile
 import FileSearchAndInsertPage from "../../../riutilizzabile/FileSearchAndInsertPage.jsx";
 
@@ -19,7 +19,7 @@ const Lavori = () => {
   const operazioniForms = new OperazioniForms();
   const lavoroState = useSelector((state) => state.lavoro.value);
   const stileState = useSelector((state) => state.stile.value);
-  const saloneState = useSelector((state) => state.salone.value);
+  const attivitaState = useSelector((state) => state.attivita.value);
 
   const classeFormWrapperCheckbox = (stileState.vistaForm === "form") ? "checkbox-wrapper-form" : "checkbox-wrapper";
   const classeItemWrapperCheckbox = (stileState.vistaItem === "form") ? "checkbox-wrapper-form" : "checkbox-wrapper";
@@ -243,7 +243,7 @@ const Lavori = () => {
       setClienti(result.items);
     }
     else {
-      alert(saloneState.lingua === "italiano" ? "Errore durante l\'ottenimento dei clienti per l\'inserimento di un nuovo lavoro, riprova più tardi." : "Error while obtaining clients for new job entry, try again later.");
+      alert(attivitaState.lingua === "italiano" ? "Errore durante l\'ottenimento dei clienti per l\'inserimento di un nuovo lavoro, riprova più tardi." : "Error while obtaining clients for new job entry, try again later.");
     }
   };
 
@@ -261,7 +261,7 @@ const Lavori = () => {
       setServizi(result.items);
     }
     else {
-      alert(saloneState.lingua === "italiano" ? "Errore durante l\'ottenimento dei clienti per l\'inserimento di un nuovo lavoro, riprova più tardi." : "Error while obtaining clients for new job entry, try again later.");
+      alert(attivitaState.lingua === "italiano" ? "Errore durante l\'ottenimento dei clienti per l\'inserimento di un nuovo lavoro, riprova più tardi." : "Error while obtaining clients for new job entry, try again later.");
     }
   };
 
@@ -295,8 +295,8 @@ const Lavori = () => {
   }, []);
 
   useEffect(() => {
-    const saloneActions = new SaloneActions();
-    saloneActions.azzeraListe();
+    const attivitaActions = new AttivitaActions();
+    attivitaActions.azzeraListe();
   }, []);
   const campiNuovoLavoro = lavoroForms.getCampiNuovoLavoro(
     nuovoLavoro, 

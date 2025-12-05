@@ -17,7 +17,7 @@ describe('Test sullo store', () => {
 
     // Verifica che ogni reducer sia definito nello stato
     expect(state).toHaveProperty('stileSliceReducer');
-    expect(state).toHaveProperty('saloneSliceReducer');
+    expect(state).toHaveProperty('attivitaSliceReducer');
     expect(state).toHaveProperty('autenticazioneSliceReducer');
     expect(state).toHaveProperty('clienteSliceReducer');
     expect(state).toHaveProperty('servizioSliceReducer');

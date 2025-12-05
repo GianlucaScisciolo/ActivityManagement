@@ -5,8 +5,8 @@ import { useSelector } from 'react-redux';
 import { controlloSpesa } from "../../../utils/Controlli";
 
 export class SpesaForms {
-  saloneState = useSelector((state) => state.salone.value);
-  lingua = this.saloneState.lingua;
+  attivitaState = useSelector((state) => state.attivita.value);
+  lingua = this.attivitaState.lingua;
 
   constructor() {
 
@@ -77,8 +77,8 @@ export class SpesaForms {
   };
 
   getCampiSpesaEsistente(nullo, item, handleOnChange, handleOnClick, handleOnBlur) {
-    const saloneState = useSelector((state) => state.salone.value);
-    const lingua = saloneState.lingua;
+    const attivitaState = useSelector((state) => state.attivita.value);
+    const lingua = attivitaState.lingua;
 
     const [errori, setErrori] = useState({
       errore_nome: "", 

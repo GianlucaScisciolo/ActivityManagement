@@ -6,8 +6,8 @@ import { Dispatcher } from "../dispatcher/Dispatcher";
 import { controlloCliente } from "../../utils/Controlli";
 
 export class ClienteActions {
-  saloneState = useSelector((state) => state.salone.value);
-  lingua = this.saloneState.lingua;
+  attivitaState = useSelector((state) => state.attivita.value);
+  lingua = this.attivitaState.lingua;
 
   dispatcher;
   constructor() {

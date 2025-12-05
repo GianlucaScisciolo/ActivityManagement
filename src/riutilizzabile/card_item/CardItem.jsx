@@ -479,8 +479,8 @@ export function CardWidget({nome, img, id, onClickWidget, backgroundColor}) {
 }
 
 export function CardEntrateItems({ entrateItems, etichettaIta, etichettaEng }) {
-  const saloneState = useSelector((state) => state.salone.value);
-  const lingua = saloneState.lingua;
+  const attivitaState = useSelector((state) => state.attivita.value);
+  const lingua = attivitaState.lingua;
   return (
     <Card
       style={{
@@ -570,8 +570,8 @@ export function CardEntrateItems({ entrateItems, etichettaIta, etichettaEng }) {
 }
 
 export function CardEntrateItemsByName({ entrateItems, tipoItemIta, tipoItemEng, etichettaIta, etichettaEng }) {
-  const saloneState = useSelector((state) => state.salone.value);
-  const lingua = saloneState.lingua;
+  const attivitaState = useSelector((state) => state.attivita.value);
+  const lingua = attivitaState.lingua;
   const [annoTmp, setAnnoTmp] = useState(0);
   return (
     <Card
@@ -682,8 +682,8 @@ export function CardEntrateItemsByName({ entrateItems, tipoItemIta, tipoItemEng,
 }
 
 export function CardUsciteItems({ usciteItems, etichettaIta, etichettaEng }) {
-  const saloneState = useSelector((state) => state.salone.value);
-  const lingua = saloneState.lingua;
+  const attivitaState = useSelector((state) => state.attivita.value);
+  const lingua = attivitaState.lingua;
   return (
     <Card
       style={{
@@ -773,8 +773,8 @@ export function CardUsciteItems({ usciteItems, etichettaIta, etichettaEng }) {
 }
 
 export function CardRicavi({ entrate, uscite }) {
-  const saloneState = useSelector((state) => state.salone.value);
-  const lingua = saloneState.lingua;
+  const attivitaState = useSelector((state) => state.attivita.value);
+  const lingua = attivitaState.lingua;
   return (
     <Card
       style={{
@@ -900,8 +900,8 @@ export function CardInformazioni({ totaleItems }) {
 }
 
 export function CardEntrateUscite({datiRicerca, setDatiRicerca, handleInputChange, eseguiRicerca}) {
-  const saloneState = useSelector((state) => state.salone.value);
-  const lingua = saloneState.lingua;
+  const attivitaState = useSelector((state) => state.attivita.value);
+  const lingua = attivitaState.lingua;
   let maxHeight = "2000px";
   return (
     <StyledComponents.StyledCard>

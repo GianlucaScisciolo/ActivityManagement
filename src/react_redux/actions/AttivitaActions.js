@@ -1,7 +1,7 @@
 // Dispatcher
 import { Dispatcher } from "../dispatcher/Dispatcher";
 
-export class SaloneActions {
+export class AttivitaActions {
   dispatcher;
   constructor() {
     this.dispatcher = new Dispatcher();

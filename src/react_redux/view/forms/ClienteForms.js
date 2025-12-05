@@ -5,8 +5,8 @@ import { useState, useEffect } from "react";
 import { controlloCliente } from "../../../utils/Controlli";
 
 export class ClienteForms {
-  saloneState = useSelector((state) => state.salone.value);
-  lingua = this.saloneState.lingua;
+  attivitaState = useSelector((state) => state.attivita.value);
+  lingua = this.attivitaState.lingua;
 
   constructor() {
     
@@ -73,8 +73,8 @@ export class ClienteForms {
   };
 
   getCampiClienteEsistente(servizi, item, handleOnChange, handleOnClick, handleOnBlur) {
-    const saloneState = useSelector((state) => state.salone.value);
-    const lingua = saloneState.lingua;
+    const attivitaState = useSelector((state) => state.attivita.value);
+    const lingua = attivitaState.lingua;
     const [errori, setErrori] = useState({
       errore_contatto: "", 
       errore_email: "", 

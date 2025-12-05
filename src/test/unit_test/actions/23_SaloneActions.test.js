@@ -1,4 +1,4 @@
-import { SaloneActions } from "../../../actions/SaloneActions.js";
+import { AttivitaActions } from "../../../actions/AttivitaActions.js";
 import { Dispatcher } from "../../../dispatcher/Dispatcher.js";
 jest.mock("../../../dispatcher/Dispatcher.js");
 jest.mock("../../../utils/Controlli.js");
@@ -7,77 +7,77 @@ global.confirm = jest.fn(() => true);
 global.alert = jest.fn(() => true); 
 
 describe("Test su 'azzeraListe'", () => {
-  let saloneActions;
+  let attivitaActions;
   let mockDispatcher;
 
   beforeEach(() => {
     mockDispatcher = new Dispatcher();
-    saloneActions = new SaloneActions();
-    saloneActions.dispatcher = mockDispatcher;
+    attivitaActions = new AttivitaActions();
+    attivitaActions.dispatcher = mockDispatcher;
   });
 
   test("test 1.", async () => {
-    saloneActions.azzeraListe();
+    attivitaActions.azzeraListe();
 
-    expect(saloneActions.dispatcher.azzeraListe).toHaveBeenCalled();
+    expect(attivitaActions.dispatcher.azzeraListe).toHaveBeenCalled();
   });
 });
 
 describe("Test su 'ricercaEntrateUsciteRicavi'", () => {
-  let saloneActions;
+  let attivitaActions;
   let mockDispatcher;
 
   beforeEach(() => {
     mockDispatcher = new Dispatcher();
     mockDispatcher.ricercaEntrateUsciteRicavi = jest.fn();
-    saloneActions = new SaloneActions();
-    saloneActions.dispatcher = mockDispatcher;
+    attivitaActions = new AttivitaActions();
+    attivitaActions.dispatcher = mockDispatcher;
   });
 
   test("test 1: ricerca effettuata con successo", async () => {
     const datiRicerca = { query: "test" };
-    await saloneActions.ricercaEntrateUsciteRicavi({ preventDefault: jest.fn() }, datiRicerca);
+    await attivitaActions.ricercaEntrateUsciteRicavi({ preventDefault: jest.fn() }, datiRicerca);
     expect(mockDispatcher.ricercaEntrateUsciteRicavi).toHaveBeenCalledWith(datiRicerca);
   });
 });
 
 describe("Test su 'scegliWidgets'", () => {
-  let saloneActions;
+  let attivitaActions;
   let mockDispatcher;
 
   beforeEach(() => {
     mockDispatcher = new Dispatcher();
     mockDispatcher.widgetView = jest.fn();
     mockDispatcher.widgetSelected = jest.fn();
-    saloneActions = new SaloneActions();
-    saloneActions.dispatcher = mockDispatcher;
+    attivitaActions = new AttivitaActions();
+    attivitaActions.dispatcher = mockDispatcher;
   });
 
   test("test 1: plusCliccato === true", async () => {
-    await saloneActions.scegliWidgets({ preventDefault: jest.fn() }, jest.fn(), false);
-    expect(saloneActions.dispatcher.widgetSelected).toHaveBeenCalled();
+    await attivitaActions.scegliWidgets({ preventDefault: jest.fn() }, jest.fn(), false);
+    expect(attivitaActions.dispatcher.widgetSelected).toHaveBeenCalled();
   });
 
   test("test 2: plusCliccato === false", async () => {
-    await saloneActions.scegliWidgets({ preventDefault: jest.fn() }, jest.fn(), true);
-    expect(saloneActions.dispatcher.widgetView).toHaveBeenCalled();
+    await attivitaActions.scegliWidgets({ preventDefault: jest.fn() }, jest.fn(), true);
+    expect(attivitaActions.dispatcher.widgetView).toHaveBeenCalled();
   });
 });
 
 describe("Test su 'modificaWidget'", () => {
-  let saloneActions;
+  let attivitaActions;
   let mockDispatcher;
 
   beforeEach(() => {
     mockDispatcher = new Dispatcher();
     mockDispatcher.modificaWidget = jest.fn();
-    saloneActions = new SaloneActions();
-    saloneActions.dispatcher = mockDispatcher;
+    attivitaActions = new AttivitaActions();
+    attivitaActions.dispatcher = mockDispatcher;
   });
 
   test("test 1: modificaWidget eseguita con successo.", async () => {
-    await saloneActions.modificaWidget("Test nome widget", 1);
-    expect(saloneActions.dispatcher.modificaWidget).toHaveBeenCalledWith("Test nome widget", 1);
+    await attivitaActions.modificaWidget("Test nome widget", 1);
+    expect(attivitaActions.dispatcher.modificaWidget).toHaveBeenCalledWith("Test nome widget", 1);
   });
 });
 

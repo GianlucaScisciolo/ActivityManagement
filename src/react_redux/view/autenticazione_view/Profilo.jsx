@@ -15,7 +15,7 @@ import { RowProfilo } from "../../../riutilizzabile/row_item/RowItem";
 const Profilo = () => {
   const stileState = useSelector((state) => state.stile.value);
   const autenticazioneState = useSelector((state) => state.autenticazione.value);
-  const saloneState = useSelector((state) => state.salone.value);
+  const attivitaState = useSelector((state) => state.attivita.value);
   const autenticazioneActions = new AutenticazioneActions();
   const autenticazioneForms = new AutenticazioneForms();
   const operazioniForms = new OperazioniForms();

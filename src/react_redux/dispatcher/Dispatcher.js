@@ -2,7 +2,7 @@
 import store from "../store/store.js";
 // Slices Actions 
 import { stileSliceActions } from "../store/reducers/StileReducer.js";
-import { saloneSliceActions } from "../store/reducers/SaloneReducer.js";
+import { attivitaSliceActions } from "../store/reducers/AttivitaReducer.js";
 import { autenticazioneSliceActions } from "../store/reducers/AutenticazioneReducer.js";
 import { clienteSliceActions } from "../store/reducers/ClienteReducer.js";
 import { lavoroSliceActions } from "../store/reducers/LavoroReducer.js";
@@ -44,21 +44,21 @@ export class Dispatcher {
     }))
   }
 
-  // Salone
+  // Attivita
   modificaLingua() {
-    store.dispatch(saloneSliceActions.modificaLingua())
+    store.dispatch(attivitaSliceActions.modificaLingua())
   }
   modificaWidget(nomeWidget, tipoVisualizzazione) {
-    store.dispatch(saloneSliceActions.modificaWidget({
+    store.dispatch(attivitaSliceActions.modificaWidget({
       nomeWidget: nomeWidget,
       tipoVisualizzazione: tipoVisualizzazione,
     }))
   }
   widgetSelected() {
-    store.dispatch(saloneSliceActions.widgetSelected());
+    store.dispatch(attivitaSliceActions.widgetSelected());
   }
   widgetView() {
-    store.dispatch(saloneSliceActions.widgetView())
+    store.dispatch(attivitaSliceActions.widgetView())
   }
   azzeraListe() {
     this.aggiornaClienti(-1);

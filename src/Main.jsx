@@ -11,7 +11,7 @@ import store from "./react_redux/store/store.js";
 import App from "./react_redux/view/App.jsx";
 import Login from "./react_redux/view/autenticazione_view/Login.jsx";
 import Profilo from "./react_redux/view/autenticazione_view/Profilo.jsx";
-import Salone from "./react_redux/view/salone_view/Salone.jsx";
+import Attivita from "./react_redux/view/attivita_view/Attivita.jsx";
 import Clienti from "./react_redux/view/cliente_view/Clienti.jsx";
 import Servizi from "./react_redux/view/servizio_view/Servizi.jsx";
 import Spese from "./react_redux/view/spesa_view/Spese.jsx";
@@ -34,7 +34,7 @@ const Root = () => {
             <Route path="/servizi" element={<Servizi />} />
             <Route path="/lavori" element={<Lavori />} />
             <Route path="/spese" element={<Spese />} />
-            <Route path="/analisi" element={<Salone />} />
+            <Route path="/analisi" element={<Attivita />} />
           </>
         )}
       </Routes>

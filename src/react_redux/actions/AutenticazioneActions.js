@@ -7,8 +7,8 @@ import { controlloLogin, controlloProfilo } from "../../utils/Controlli";
 
 export class AutenticazioneActions {
   dispatcher
-  saloneState = useSelector((state) => state.salone.value);
-  lingua = this.saloneState.lingua;
+  attivitaState = useSelector((state) => state.attivita.value);
+  lingua = this.attivitaState.lingua;
 
   constructor() {
     this.dispatcher = new Dispatcher();

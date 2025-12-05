@@ -8,8 +8,8 @@ import { generaFileLavoriPDF, generaFileLavoriExcel } from "../../utils/File";
 
 export class LavoroActions {
   dispatcher;
-  saloneState = useSelector((state) => state.salone.value);
-  lingua = this.saloneState.lingua;
+  attivitaState = useSelector((state) => state.attivita.value);
+  lingua = this.attivitaState.lingua;
 
   constructor() {
     this.dispatcher = new Dispatcher();

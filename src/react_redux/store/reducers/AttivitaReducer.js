@@ -34,7 +34,7 @@ const saveToLocalStorage = (state) => {
   }
 };
 
-const name = "Salone";
+const name = "Attivita";
 
 const initialState = loadFromLocalStorage() || {
   value: {
@@ -122,20 +122,20 @@ const reducers = {
   },
 };
 
-const saloneSlice = createSlice({
+const attivitaSlice = createSlice({
   name: name, 
   initialState: initialState,
   reducers: reducers,
 });
 
-export const saloneSliceActions = {
-  modificaLingua: saloneSlice.actions.modificaLingua,
-  modificaWidget: saloneSlice.actions.modificaWidget,
-  widgetSelected: saloneSlice.actions.widgetSelected,
-  widgetView: saloneSlice.actions.widgetView
+export const attivitaSliceActions = {
+  modificaLingua: attivitaSlice.actions.modificaLingua,
+  modificaWidget: attivitaSlice.actions.modificaWidget,
+  widgetSelected: attivitaSlice.actions.widgetSelected,
+  widgetView: attivitaSlice.actions.widgetView
 };
 
-export const saloneReducer = saloneSlice.reducer;
+export const attivitaReducer = attivitaSlice.reducer;
 
 
 

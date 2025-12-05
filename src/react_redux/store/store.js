@@ -2,7 +2,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 // Slices Reducers
 import { stileReducer } from "./reducers/StileReducer";
-import { saloneReducer } from "./reducers/SaloneReducer";
+import { attivitaReducer } from "./reducers/AttivitaReducer";
 import { autenticazioneReducer } from "./reducers/AutenticazioneReducer";
 import { clienteReducer } from "./reducers/ClienteReducer";
 import { servizioReducer } from "./reducers/ServizioReducer";
@@ -13,7 +13,7 @@ const store = configureStore({
   reducer: {
     autenticazione: autenticazioneReducer,
     stile: stileReducer, 
-    salone: saloneReducer, 
+    attivita: attivitaReducer, 
     cliente: clienteReducer, 
     servizio: servizioReducer, 
     lavoro: lavoroReducer,

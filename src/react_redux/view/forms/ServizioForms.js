@@ -5,8 +5,8 @@ import { useSelector } from 'react-redux';
 import { controlloServizio } from "../../../utils/Controlli";
 
 export class ServizioForms {
-  saloneState = useSelector((state) => state.salone.value);
-  lingua = this.saloneState.lingua;
+  attivitaState = useSelector((state) => state.attivita.value);
+  lingua = this.attivitaState.lingua;
 
   constructor() {
 
@@ -69,8 +69,8 @@ export class ServizioForms {
   };
 
   getCampiServizioEsistente(servizi, item, handleOnChange, handleOnClick, handleOnBlur) {
-    const saloneState = useSelector((state) => state.salone.value);
-    const lingua = saloneState.lingua;
+    const attivitaState = useSelector((state) => state.attivita.value);
+    const lingua = attivitaState.lingua;
 
     const [errori, setErrori] = useState({
       errore_nome: "", 

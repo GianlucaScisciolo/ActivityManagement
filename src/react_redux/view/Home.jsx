@@ -8,7 +8,7 @@ import { Plus, Save } from 'lucide-react';
 import Header from "./components/Header";
 import { DragAndDropWidgetHomePage } from "./components/DragAndDrop";
 // Actions
-import { SaloneActions } from '../actions/SaloneActions';
+import { AttivitaActions } from '../actions/AttivitaActions';
 
 const styledIconNotSelected = `
   color: #FFFFFF;
@@ -35,7 +35,7 @@ const StyledSaveNotSelected = styled(Save)`
 
 
 const Home = () => {
-  const saloneActions = new SaloneActions();
+  const attivitaActions = new AttivitaActions();
   const autenticazioneState = useSelector((state) => state.autenticazione.value);
   const [plusCliccato, setPlusCliccato] = useState(false);
   const AddWidgetsTag = plusCliccato ? StyledSaveNotSelected : StyledPlusNotSelected;
@@ -58,7 +58,7 @@ const Home = () => {
                 borderRadius: "100%"
               }}
             >
-              <AddWidgetsTag className="right" onClick={(e) => saloneActions.scegliWidgets(e, setPlusCliccato, plusCliccato)} />
+              <AddWidgetsTag className="right" onClick={(e) => attivitaActions.scegliWidgets(e, setPlusCliccato, plusCliccato)} />
             </button>
           </div>
 

@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 // Actions
-import { SaloneActions } from '../../actions/SaloneActions';
+import { AttivitaActions } from '../../actions/AttivitaActions';
 // Riutilizzabile
 import { CardWidget, CardEntrateItems, CardUsciteItems, CardRicavi } from "../../../riutilizzabile/card_item/CardItem";
 
@@ -14,7 +14,7 @@ const DragAndDrop = ({ initialPositions, onClickWidget }) => {
   const [draggedElement, setDraggedElement] = useState(null);
   const gridSize = 310; 
   const gridHeight = 410; 
-  const saloneState = useSelector((state) => state.salone.value);
+  const attivitaState = useSelector((state) => state.attivita.value);
 
   const handleDragStart = (e, id) => {
     setDragging(true);
@@ -95,11 +95,11 @@ const DragAndDrop = ({ initialPositions, onClickWidget }) => {
 export default DragAndDrop;
 
 const onClickWidget = (e, widget, navigate) => {
-  const saloneActions = new SaloneActions();
+  const attivitaActions = new AttivitaActions();
   e.preventDefault();
   e.stopPropagation();
   if(widget.tipoVisualizzazione !== 2) {
-    saloneActions.modificaWidget(
+    attivitaActions.modificaWidget(
       widget.nome, 
       (widget.tipoVisualizzazione === 0 || widget.tipoVisualizzazione === 2) ? 1 : 0
     );
@@ -148,7 +148,7 @@ const WidgetTag = ({ widget, handleDragStart, handleDragEnd }) => {
 };
 
 export const DragAndDropWidgetHomePage = ({plusCliccato}) => {
-  const saloneState = useSelector((state) => state.salone.value);
+  const attivitaState = useSelector((state) => state.attivita.value);
   const [dragging, setDragging] = useState(false);
   const [offset, setOffset] = useState({ x: 0, y: 0 });
   const [draggedElement, setDraggedElement] = useState(null);
@@ -192,30 +192,30 @@ export const DragAndDropWidgetHomePage = ({plusCliccato}) => {
     >
       {(plusCliccato === true) ? (<>
         { /** Cliente **/}
-        <WidgetTag widget={saloneState.clienti} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
+        <WidgetTag widget={attivitaState.clienti} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
         { /** Servizio **/}
-        <WidgetTag widget={saloneState.servizi} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
+        <WidgetTag widget={attivitaState.servizi} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
         { /** Lavoro **/}
-        <WidgetTag widget={saloneState.lavori} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
+        <WidgetTag widget={attivitaState.lavori} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
         { /** Spesa **/}
-        <WidgetTag widget={saloneState.spese} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
+        <WidgetTag widget={attivitaState.spese} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
         { /** analisi **/}
-        <WidgetTag widget={saloneState.analisi} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
+        <WidgetTag widget={attivitaState.analisi} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
         { /** Profilo **/}
-        <WidgetTag widget={saloneState.profilo} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
+        <WidgetTag widget={attivitaState.profilo} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />
       </>) : (<>
         { /** Cliente **/}
-        {(saloneState.clienti.tipoVisualizzazione !== 0) && (<WidgetTag widget={saloneState.clienti} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
+        {(attivitaState.clienti.tipoVisualizzazione !== 0) && (<WidgetTag widget={attivitaState.clienti} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
         { /** Servizio **/}
-        {(saloneState.servizi.tipoVisualizzazione !== 0) && (<WidgetTag widget={saloneState.servizi} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
+        {(attivitaState.servizi.tipoVisualizzazione !== 0) && (<WidgetTag widget={attivitaState.servizi} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
         { /** Lavoro **/}
-        {(saloneState.lavori.tipoVisualizzazione !== 0) && (<WidgetTag widget={saloneState.lavori} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
+        {(attivitaState.lavori.tipoVisualizzazione !== 0) && (<WidgetTag widget={attivitaState.lavori} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
         { /** Spesa **/}
-        {(saloneState.spese.tipoVisualizzazione !== 0) && (<WidgetTag widget={saloneState.spese} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
+        {(attivitaState.spese.tipoVisualizzazione !== 0) && (<WidgetTag widget={attivitaState.spese} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
         { /** Analisi **/}
-        {(saloneState.analisi.tipoVisualizzazione !== 0) && (<WidgetTag widget={saloneState.analisi} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
+        {(attivitaState.analisi.tipoVisualizzazione !== 0) && (<WidgetTag widget={attivitaState.analisi} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
         { /** Profilo **/}
-        {(saloneState.profilo.tipoVisualizzazione !== 0) && (<WidgetTag widget={saloneState.profilo} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
+        {(attivitaState.profilo.tipoVisualizzazione !== 0) && (<WidgetTag widget={attivitaState.profilo} handleDragStart={handleDragStart} handleDragEnd={handleDragEnd} />)}
       </>)}
     </div>
   );

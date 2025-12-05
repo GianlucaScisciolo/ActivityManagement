@@ -7,7 +7,7 @@ import { OperazioniForms } from "../forms/OperazioniForms";
 import { ServizioForms } from "../forms/ServizioForms";
 // Actions
 import { ServizioActions } from "../../actions/ServizioActions";
-import { SaloneActions } from "../../actions/SaloneActions.js";
+import { AttivitaActions } from "../../actions/AttivitaActions.js";
 // Riutilizzabile
 import SearchAndInsertPage from "../../../riutilizzabile/SearchAndInsertPage.jsx";
 
@@ -56,8 +56,8 @@ const Servizi = () => {
   };
 
   useEffect(() => {
-    const saloneActions = new SaloneActions();
-    saloneActions.azzeraListe();
+    const attivitaActions = new AttivitaActions();
+    attivitaActions.azzeraListe();
   }, []);
 
   const campiNuovoServizio = servizioForms.getCampiNuovoServizio(

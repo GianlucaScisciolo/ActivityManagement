@@ -380,8 +380,8 @@ export function FormFileItems({campi, indici, ottieniFileRangePDF, ottieniFileRa
 }
 
 export function FormEntrateUscite({datiRicerca, setDatiRicerca, handleInputChange, eseguiRicerca}) {
-  const saloneState = useSelector((state) => state.salone.value);
-  const lingua = saloneState.lingua;
+  const attivitaState = useSelector((state) => state.attivita.value);
+  const lingua = attivitaState.lingua;
   let maxHeight = "2000px";
   return (
     <StyledComponents.StyledForm>

@@ -9,18 +9,18 @@ import { OperazioniForms } from '../forms/OperazioniForms';
 // Actions
 import { LavoroActions } from "../../actions/LavoroActions";
 import { SpesaActions } from "../../actions/SpesaActions";
-import { SaloneActions } from '../../actions/SaloneActions';
+import { AttivitaActions } from '../../actions/AttivitaActions';
 import { ServizioActions } from "../../actions/ServizioActions";
 // Riutilizzabile
 import { CardEntrateItems, CardEntrateItemsByName, CardUsciteItems, CardRicavi, CardEntrateUscite } from '../../../riutilizzabile/card_item/CardItem';
 import { FormEntrateUscite } from '../../../riutilizzabile/form_item/FormItem';
 import { RowEntrateUscite } from "../../../riutilizzabile/row_item/RowItem";
 
-const Salone = () => {
+const Attivita = () => {
   const stileState = useSelector((state) => state.stile.value);
   const lavoroActions = new LavoroActions();
   const spesaActions = new SpesaActions();
-  const saloneActions = new SaloneActions();
+  const attivitaActions = new AttivitaActions();
   const servizioActions = new ServizioActions();
   const [entrateLavori, setEntrateLavori] = useState(-1);
   const [usciteSpese, setUsciteSpese] = useState(-1);
@@ -112,4 +112,4 @@ const Salone = () => {
   );
 }
 
-export default Salone;
+export default Attivita;

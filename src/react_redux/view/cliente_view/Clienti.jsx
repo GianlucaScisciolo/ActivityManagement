@@ -7,14 +7,14 @@ import { OperazioniForms } from '../forms/OperazioniForms.js';
 import { ClienteForms } from '../forms/ClienteForms.js';
 // Actions
 import { ClienteActions } from "../../actions/ClienteActions.js";
-import { SaloneActions } from "../../actions/SaloneActions.js"
+import { AttivitaActions } from "../../actions/AttivitaActions.js"
 // Riutilizzabile
 import SearchAndInsertPage from '../../../riutilizzabile/SearchAndInsertPage.jsx';
 
 const Clienti = () => {
   const clienteState = useSelector((state) => state.cliente.value);
   const stileState = useSelector((state) => state.stile.value);
-  const saloneState = useSelector((state) => state.salone.value);
+  const attivitaState = useSelector((state) => state.attivita.value);
   const clienteActions = new ClienteActions();
   const clienteForms = new ClienteForms();
   const operazioniForms = new OperazioniForms();
@@ -61,8 +61,8 @@ const Clienti = () => {
   };
 
   useEffect(() => {
-    const saloneActions = new SaloneActions();
-    saloneActions.azzeraListe();
+    const attivitaActions = new AttivitaActions();
+    attivitaActions.azzeraListe();
   }, []);
   const campiNuovoCliente = clienteForms.getCampiNuovoCliente(nuovoCliente, (e) => operazioniForms.handleInputChange(e, setNuovoCliente), null, null)
   const campiRicercaClienti = clienteForms.getCampiRicercaClienti(datiRicerca, (e) => operazioniForms.handleInputChange(e, setDatiRicerca), null, null)

@@ -2,8 +2,8 @@
 import { useSelector } from 'react-redux';
 
 export class AutenticazioneForms {
-  saloneState = useSelector((state) => state.salone.value);
-  lingua = this.saloneState.lingua;
+  attivitaState = useSelector((state) => state.attivita.value);
+  lingua = this.attivitaState.lingua;
 
   constructor() {
     

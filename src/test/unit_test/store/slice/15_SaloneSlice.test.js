@@ -1,4 +1,4 @@
-import { saloneSliceReducer, saloneSliceActions } from "../../../../store/slice/SaloneSlice.js";
+import { attivitaSliceReducer, attivitaSliceActions } from "../../../../store/slice/AttivitaSlice.js";
 
 describe("Gestione LocalStorage", () => {
   beforeEach(() => {
@@ -10,17 +10,17 @@ describe("Gestione LocalStorage", () => {
 
   test("loadFromLocalStorage restituisce lo stato corretto", () => {
     global.localStorage.getItem.mockReturnValue(JSON.stringify({ username: "test", isLogged: true }));
-    expect(localStorage.getItem("saloneSession")).toEqual(JSON.stringify({ username: "test", isLogged: true }));
+    expect(localStorage.getItem("attivitaSession")).toEqual(JSON.stringify({ username: "test", isLogged: true }));
   });
 
   test("saveToLocalStorage salva correttamente", () => {
     const state = { value: { username: "test", isLogged: true } };
     global.localStorage.setItem.mockImplementation(() => {});
-    expect(() => localStorage.setItem("saloneSession", JSON.stringify(state))).not.toThrow();
+    expect(() => localStorage.setItem("attivitaSession", JSON.stringify(state))).not.toThrow();
   });
 });
 
-describe("saloneSlice reducer", () => {
+describe("attivitaSlice reducer", () => {
   const BC_NOT_SELECTED = "rgba(0, 0, 0, 0.5)";
   const BC_SELECTED = "#0050EF";
   const BC_VIEW = "rgba(0, 0, 0, 0.5)";
@@ -49,9 +49,9 @@ describe("saloneSlice reducer", () => {
           id: 5, tipo:"CardWidget", tipoVisualizzazione: 1,  nome: "spese", titolo: "Spese", 
           img: "spese.png", backgroundColor: BC_SELECTED, x: 1500, y: 100
         }, 
-        salone: {
-          id: 6, tipo:"CardWidget",  tipoVisualizzazione: 0, nome: "salone", titolo: "Salone", 
-          img: "salone.png", backgroundColor: BC_NOT_SELECTED, x: 1850, y: 100 
+        attivita: {
+          id: 6, tipo:"CardWidget",  tipoVisualizzazione: 0, nome: "attivita", titolo: "Attivita", 
+          img: "attivita.png", backgroundColor: BC_NOT_SELECTED, x: 1850, y: 100 
         }, 
         profilo: {
           id: 7, tipo:"CardWidget",  tipoVisualizzazione: 1, nome: "profilo", titolo: "Profilo", 
@@ -62,11 +62,11 @@ describe("saloneSlice reducer", () => {
   });
 
   test("test su 'modificaWidget'", () => {
-    const action = saloneSliceActions.modificaWidget({ 
+    const action = attivitaSliceActions.modificaWidget({ 
       nomeWidget: "spese", 
       tipoVisualizzazione: 1 
     });
-    const newState = saloneSliceReducer(initialState, action);
+    const newState = attivitaSliceReducer(initialState, action);
   
     expect(newState.value.spese).toEqual({
       id: 5, tipo:"CardWidget", tipoVisualizzazione: 1,  nome: "spese", titolo: "Spese", 
@@ -93,9 +93,9 @@ describe("saloneSlice reducer", () => {
       img: "prenotazione.png", backgroundColor: BC_NOT_SELECTED, x: 1150, y: 100
     });
 
-    expect(newState.value.salone).toEqual({
-      id: 6, tipo:"CardWidget",  tipoVisualizzazione: 0, nome: "salone", titolo: "Salone", 
-      img: "salone.png", backgroundColor: BC_NOT_SELECTED, x: 1850, y: 100 
+    expect(newState.value.attivita).toEqual({
+      id: 6, tipo:"CardWidget",  tipoVisualizzazione: 0, nome: "attivita", titolo: "Attivita", 
+      img: "attivita.png", backgroundColor: BC_NOT_SELECTED, x: 1850, y: 100 
     });
 
     expect(newState.value.profilo).toEqual({
@@ -105,8 +105,8 @@ describe("saloneSlice reducer", () => {
   });
 
   test("test su 'widgetSelected'", () => {
-    const action = saloneSliceActions.widgetSelected({});
-    const newState = saloneSliceReducer(initialState, action);
+    const action = attivitaSliceActions.widgetSelected({});
+    const newState = attivitaSliceReducer(initialState, action);
         
     expect(newState.value.clienti).toEqual({
       id: 1, tipo:"CardWidget", tipoVisualizzazione: 1,  nome: "clienti", titolo: "Clienti", 
@@ -133,9 +133,9 @@ describe("saloneSlice reducer", () => {
       img: "spese.png", backgroundColor: BC_SELECTED, x: 1500, y: 100
     });
 
-    expect(newState.value.salone).toEqual({
-      id: 6, tipo:"CardWidget",  tipoVisualizzazione: 0, nome: "salone", titolo: "Salone", 
-      img: "salone.png", backgroundColor: BC_NOT_SELECTED, x: 1850, y: 100 
+    expect(newState.value.attivita).toEqual({
+      id: 6, tipo:"CardWidget",  tipoVisualizzazione: 0, nome: "attivita", titolo: "Attivita", 
+      img: "attivita.png", backgroundColor: BC_NOT_SELECTED, x: 1850, y: 100 
     });
 
     expect(newState.value.profilo).toEqual({
@@ -145,8 +145,8 @@ describe("saloneSlice reducer", () => {
   });
 
   test("test su 'widgetView'", () => {
-    const action = saloneSliceActions.widgetView({});
-    const newState = saloneSliceReducer(initialState, action);
+    const action = attivitaSliceActions.widgetView({});
+    const newState = attivitaSliceReducer(initialState, action);
         
     expect(newState.value.clienti).toEqual({
       id: 1, tipo:"CardWidget", tipoVisualizzazione: 2,  nome: "clienti", titolo: "Clienti", 
@@ -173,9 +173,9 @@ describe("saloneSlice reducer", () => {
       img: "spese.png", backgroundColor: BC_VIEW, x: 1500, y: 100
     });
 
-    expect(newState.value.salone).toEqual({
-      id: 6, tipo:"CardWidget",  tipoVisualizzazione: 0, nome: "salone", titolo: "Salone", 
-      img: "salone.png", backgroundColor: BC_NOT_SELECTED, x: 1850, y: 100 
+    expect(newState.value.attivita).toEqual({
+      id: 6, tipo:"CardWidget",  tipoVisualizzazione: 0, nome: "attivita", titolo: "Attivita", 
+      img: "attivita.png", backgroundColor: BC_NOT_SELECTED, x: 1850, y: 100 
     });
 
     expect(newState.value.profilo).toEqual({
