@@ -1,8 +1,7 @@
 // React
 import React from "react";
 // Riutilizzabile
-import { FormNuovoItem } from "./form_item/FormItem";
-import { FormRicercaItems } from "./form_item/FormItem";
+import { FormNuovoItem, FormRicercaItems } from "./form_item/FormItem";
 import { CardNuovoItem, CardRicercaItems } from "./card_item/CardItem";
 import { RowNuovoItem, RowRicercaItems } from "./row_item/RowItem";
 import { OperazioniItems } from "../riutilizzabile/Operazioni";

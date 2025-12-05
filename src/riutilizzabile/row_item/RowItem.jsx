@@ -460,7 +460,7 @@ export function RowProfilo({campi, indici, eseguiModificaProfilo}) {
 }
 
 export function RowEntrateUscite({datiRicerca, setDatiRicerca, handleInputChange, eseguiRicerca}) {
-  const saloneState = useSelector((state) => state.saloneSliceReducer.value);
+  const saloneState = useSelector((state) => state.salone.value);
   const lingua = saloneState.lingua;
   let maxHeight = "2000px";
   return (

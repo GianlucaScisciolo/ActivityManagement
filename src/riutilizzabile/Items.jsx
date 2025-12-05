@@ -118,7 +118,7 @@ const OptionsServizi = ({ servizi, item, lavoroActions, sottoStringa, setServizi
 };
 
 export const Items = ({ tipoItem, items, setItems, selectOperation, emptyIsConsidered, campi, servizi, handleBlurItem, lavoroActions, tipoForm }) => {
-  const stileState = useSelector((state) => state.stileSliceReducer.value);
+  const stileState = useSelector((state) => state.stile.value);
   const ItemEsistenteTag = stileState.vistaItem === "card" ? CardItemEsistente : RowItemEsistente;
   
   if (tipoItem === "lavoro") {

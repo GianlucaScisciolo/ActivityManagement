@@ -1,7 +1,6 @@
 // React e Redux
 import { useSelector } from 'react-redux';
 import React, { useState } from 'react';
-import { faFilePdf, faFileExcel, faFile } from '@fortawesome/free-solid-svg-icons';
 // Riutilizzabile
 import StyledComponents from './StyledFormItem';
 import { 
@@ -9,7 +8,7 @@ import {
   OperazioniModificaProfilo, OperazioniFileItems, OperazioniItemEsistente, 
   OperazioniCambioTipoForm, OperazioniCambioTipoForm2 
 } from '../Operazioni';
-import { getPencilTag, getTrashTag, getSelectTag, getInputTag, getTextAreaTag } from '../Tags';
+import { getInputTag, getTextAreaTag } from '../Tags';
 
 export function CambioTipoForm({tipoForm, setTipoForm, StyledComponents}) {
   let maxHeight = "2000px";
@@ -381,7 +380,7 @@ export function FormFileItems({campi, indici, ottieniFileRangePDF, ottieniFileRa
 }
 
 export function FormEntrateUscite({datiRicerca, setDatiRicerca, handleInputChange, eseguiRicerca}) {
-  const saloneState = useSelector((state) => state.saloneSliceReducer.value);
+  const saloneState = useSelector((state) => state.salone.value);
   const lingua = saloneState.lingua;
   let maxHeight = "2000px";
   return (

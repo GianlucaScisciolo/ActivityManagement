@@ -2,9 +2,7 @@
 import Row from "react-bootstrap/esm/Row";
 import Col from "react-bootstrap/esm/Col";
 // Riutilizzabile
-import { 
-  getPencilTag, getTrashTag, getSelectTag, getInputTag, getTextAreaTag
-} from "./Tags";
+import { getPencilTag, getTrashTag } from "./Tags";
 // Icone
 import { faFilePdf, faFileExcel, faFile } from '@fortawesome/free-solid-svg-icons';
 
