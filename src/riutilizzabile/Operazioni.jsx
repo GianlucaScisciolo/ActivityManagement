@@ -6,6 +6,7 @@ import { getPencilTag, getTrashTag } from "./Tags";
 // Icone
 import { faFilePdf, faFileExcel, faFile } from '@fortawesome/free-solid-svg-icons';
 
+
 export function OperazioniNuovoItem({eseguiSalvataggio, vistaItem, StyledComponents}) {
   return (
     (vistaItem === "card" || vistaItem === "form") ? ( 
@@ -148,8 +149,8 @@ export function OperazioniFileItems({ ottieniFileRangePDF, ottieniFileRangeExcel
       <>
         <StyledComponents.StyledColOperazioni>
           <div style={{width: "100%"}}>
-            <StyledFileIconNotSelected icon={faFilePdf} className="left" style={{ marginRight: "50%" }} size="2xl" />
-            <StyledDownloadNotSelected size={StyledComponents.grandezzaIcona} className="rigth" onClick={ottieniFileRangePDF} />
+            <StyledComponents.StyledFileIconNotSelected icon={faFilePdf} className="left" style={{ marginRight: "50%" }} size="2xl" />
+            <StyledComponents.StyledDownloadNotSelected size={StyledComponents.grandezzaIcona} className="rigth" onClick={ottieniFileRangePDF} />
           </div>
         </StyledComponents.StyledColOperazioni>
         <StyledComponents.StyledColOperazioni>
@@ -262,7 +263,7 @@ export function OperazioniCambioTipoForm({ tipoForm, setTipoForm, StyledComponen
   );
 };
 
-export function OperazioniCambioTipoForm2({ tipoForm, setTipoForm, StyledComponents }) {
+export function OperazioniCambioTipoForm2({ elementi, tipoForm, setTipoForm, StyledComponents }) {
   const cambioTipoForm2 = (nuovoTipo) => {
     setTipoForm(nuovoTipo);
   }
@@ -271,57 +272,69 @@ export function OperazioniCambioTipoForm2({ tipoForm, setTipoForm, StyledCompone
     <StyledComponents.StyledListGroupItem 
       style={{ border: "5px solid #000000", backgroundColor: "#000000", paddingTop: "20px", paddingBottom: "20px" }} 
     >
-      {(tipoForm === "insert") && (
+      {(elementi.includes("insert") && tipoForm === "insert") && (
         <>
-          <StyledComponents.StyledSearchNotSelected2  
-            size={StyledComponents.grandezzaIcona} 
-            style={{ marginRight: "50px" }}  
-            onClick={() => cambioTipoForm2("search")} 
-          />
+          {elementi.includes("search") && (
+            <StyledComponents.StyledSearchNotSelected2  
+              size={StyledComponents.grandezzaIcona} 
+              style={{ marginRight: "50px" }}  
+              onClick={() => cambioTipoForm2("search")} 
+            />
+          )}
           <StyledComponents.StyledSaveSelected2 
             size={StyledComponents.grandezzaIcona} 
             style={{ marginRight: "50px" }} 
             onClick={() => cambioTipoForm2("insert")} 
           />
-          <StyledComponents.StyledFileIconNotSelected2 
-            icon={faFile} 
-            size="2xl"
-            onClick={() => cambioTipoForm2("file")} 
-          />
+          {elementi.includes("file") && (
+            <StyledComponents.StyledFileIconNotSelected2 
+              icon={faFile} 
+              size="2xl"
+              onClick={() => cambioTipoForm2("file")} 
+            />
+          )}
         </>
       )}
-      {(tipoForm === "search") && (
+      {(elementi.includes("search") && tipoForm === "search") && (
         <>
-          <StyledComponents.StyledSearchSelected2 
-            size={StyledComponents.grandezzaIcona} 
-            style={{ marginRight: "50px" }} 
-            onClick={() => cambioTipoForm2("search")} 
-          />
-          <StyledComponents.StyledSaveNotSelected2 
-            size={StyledComponents.grandezzaIcona} 
-            style={{ marginRight: "50px" }}
-            onClick={() => cambioTipoForm2("insert")} 
-          />
-          <StyledComponents.StyledFileIconNotSelected2 
-            icon={faFile} 
-            size="2xl" 
-            onClick={() => cambioTipoForm2("file")} 
-          />
-        </>
-      )}
-      {(tipoForm === "file") && (
-        <>
-          <StyledComponents.StyledSearchNotSelected2  
+          <StyledComponents.StyledSearchSelected2  
             size={StyledComponents.grandezzaIcona} 
             style={{ marginRight: "50px" }}  
             onClick={() => cambioTipoForm2("search")} 
           />
-          <StyledComponents.StyledSaveNotSelected2 
-            size={StyledComponents.grandezzaIcona} 
-            style={{ marginRight: "50px" }}
-            onClick={() => cambioTipoForm2("insert")} 
-          />
-          <StyledComponents.StyledFileIconSelected2 
+          {elementi.includes("insert") && (
+            <StyledComponents.StyledSaveNotSelected2 
+              size={StyledComponents.grandezzaIcona} 
+              style={{ marginRight: "50px" }} 
+              onClick={() => cambioTipoForm2("insert")} 
+            />
+          )}
+          {elementi.includes("file") && (
+            <StyledComponents.StyledFileIconNotSelected2 
+              icon={faFile} 
+              size="2xl"
+              onClick={() => cambioTipoForm2("file")} 
+            />
+          )}
+        </>
+      )}
+      {(elementi.includes("file") && tipoForm === "file") && (
+        <>
+          {elementi.includes("search") && (
+            <StyledComponents.StyledSearchNotSelected2  
+              size={StyledComponents.grandezzaIcona} 
+              style={{ marginRight: "50px" }}  
+              onClick={() => cambioTipoForm2("search")} 
+            />
+          )}
+          {elementi.includes("insert") && (
+            <StyledComponents.StyledSaveNotSelected2 
+              size={StyledComponents.grandezzaIcona} 
+              style={{ marginRight: "50px" }} 
+              onClick={() => cambioTipoForm2("insert")} 
+            />
+          )}
+          <StyledComponents.StyledFileIconNotSelected2 
             icon={faFile} 
             size="2xl"
             onClick={() => cambioTipoForm2("file")} 

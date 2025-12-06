@@ -10,12 +10,13 @@ import {
 } from '../Operazioni';
 import { getInputTag, getTextAreaTag } from '../Tags';
 
-export function CambioTipoForm({tipoForm, setTipoForm, StyledComponents}) {
+export function CambioTipoForm({elementi, tipoForm, setTipoForm, StyledComponents}) {
   let maxHeight = "2000px";
 
   return (
     <StyledComponents.StyledForm>
-      <OperazioniCambioTipoForm
+      <OperazioniCambioTipoForm2
+        elementi={elementi}
         tipoForm={tipoForm}
         setTipoForm={setTipoForm}
         StyledComponents={StyledComponents}
@@ -24,12 +25,13 @@ export function CambioTipoForm({tipoForm, setTipoForm, StyledComponents}) {
   );
 }
 
-export function CambioTipoForm2({tipoForm, setTipoForm, StyledComponents}) {
+export function CambioTipoForm2({elementi, tipoForm, setTipoForm, StyledComponents}) {
   let maxHeight = "2000px";
 
   return (
     <StyledComponents.StyledForm>
       <OperazioniCambioTipoForm2
+        elementi={elementi}
         tipoForm={tipoForm}
         setTipoForm={setTipoForm}
         StyledComponents={StyledComponents}

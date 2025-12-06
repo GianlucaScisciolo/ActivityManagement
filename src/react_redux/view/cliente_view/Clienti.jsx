@@ -10,6 +10,7 @@ import { ClienteActions } from "../../actions/ClienteActions.js";
 import { AttivitaActions } from "../../actions/AttivitaActions.js"
 // Riutilizzabile
 import SearchAndInsertPage from "../../../riutilizzabile/pagine_web/SearchAndInsertPage.jsx";
+import Pagina from '../../../riutilizzabile/pagine_web/Pagina.jsx';
 
 const Clienti = () => {
   const clienteState = useSelector((state) => state.cliente.value);
@@ -73,7 +74,7 @@ const Clienti = () => {
       
       <div className="main-content" />
       
-      <SearchAndInsertPage 
+      <Pagina 
         componenti={
           {
             // Items
@@ -104,6 +105,7 @@ const Clienti = () => {
             selectedIdsEliminazione: selectedIdsEliminazione, 
           }
         }
+        elementi={["search", "insert"]}
         vistaItem={stileState.vistaItem} 
         vistaForm={stileState.vistaForm}
       />

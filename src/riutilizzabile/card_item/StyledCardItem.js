@@ -211,6 +211,11 @@ export const StyledFileIconNotSelected = styled(FontAwesomeIcon)`
   color: #FFFFFF;
 `;
 
+export const StyledFileIconSelected2 = styled(FontAwesomeIcon)`
+  ${styledIconNotSelected}
+  color: #0050EF;
+`;
+
 export const StyledDownloadNotSelected = styled(Download)`
   ${styledIconNotSelected}
   transition: 0.5s all ease-out;
@@ -285,7 +290,7 @@ const StyledComponents = {
   StyledDownloadNotSelected, StyledTrashNotSelected2, StyledLoginNotSelected, StyledPencilNotSelected2, StyledSelectBlock, 
   StyledSelectModifica, StyledSelectElimina, StyledInputBlock, StyledInputModifica, StyledInputElimina, 
   StyledTextAreaBlock, StyledTextAreaModifica, StyledTextAreaElimina, StyledCard, StyledCardHeader, 
-  SlideContainer, StyledSpanErrore, StyledEuroNotSelected
+  SlideContainer, StyledSpanErrore, StyledEuroNotSelected, StyledFileIconSelected2
 };
 
 export default StyledComponents;

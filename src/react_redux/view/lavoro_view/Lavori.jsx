@@ -12,6 +12,7 @@ import { LavoroActions } from "../../actions/LavoroActions.js";
 import { AttivitaActions } from "../../actions/AttivitaActions.js";
 // Riutilizzabile
 import FileSearchAndInsertPage from "../../../riutilizzabile/pagine_web/FileSearchAndInsertPage.jsx";
+import Pagina from "../../../riutilizzabile/pagine_web/Pagina.jsx";
 
 const Lavori = () => {
   const lavoroActions = new LavoroActions();
@@ -324,7 +325,7 @@ const Lavori = () => {
       <Header />
 
       <div className="main-content" />
-      <FileSearchAndInsertPage 
+      <Pagina 
         componenti={
           {
             // Items
@@ -362,6 +363,7 @@ const Lavori = () => {
             totaleItems: getTotaleLavori(),
           }
         } 
+        elementi={["search", "insert", "file"]}
         vistaItem={stileState.vistaItem} 
         vistaForm={stileState.vistaForm}
       />

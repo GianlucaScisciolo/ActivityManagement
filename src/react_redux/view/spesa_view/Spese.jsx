@@ -10,6 +10,7 @@ import { SpesaActions } from "../../actions/SpesaActions";
 import { AttivitaActions } from "../../actions/AttivitaActions.js";
 // Riutilizzabile
 import FileSearchAndInsertPage from "../../../riutilizzabile/pagine_web/FileSearchAndInsertPage.jsx";
+import Pagina from "../../../riutilizzabile/pagine_web/Pagina.jsx";
 
 const Spese = () => {
   const spesaActions = new SpesaActions();
@@ -109,7 +110,7 @@ const Spese = () => {
 
       <div className="main-content" />
 
-      <FileSearchAndInsertPage 
+      <Pagina 
         componenti={ 
           {
             // Items
@@ -148,6 +149,7 @@ const Spese = () => {
             totaleItems: getTotaleSpese(),
           }
         }
+        elementi={["search", "insert", "file"]}
         vistaItem={stileState.vistaItem} 
         vistaForm={stileState.vistaForm}
       />
