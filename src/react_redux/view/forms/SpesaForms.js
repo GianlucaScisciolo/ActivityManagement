@@ -76,7 +76,7 @@ export class SpesaForms {
     };
   };
 
-  getCampiSpesaEsistente(nullo, item, handleOnChange, handleOnClick, handleOnBlur) {
+  getCampiSpesaEsistente(item, handleOnChange, handleOnClick, handleOnBlur) {
     const attivitaState = useSelector((state) => state.attivita.value);
     const lingua = attivitaState.lingua;
 

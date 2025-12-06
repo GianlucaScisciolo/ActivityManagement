@@ -6,12 +6,12 @@ import Col from 'react-bootstrap/esm/Col';
 // View
 import Header from "../components/Header.jsx";
 import { OperazioniForms } from "../forms/OperazioniForms.js";
-import { LavoroForms } from "../forms/LavoroForms.js";
+import { LavoroForms } from "../forms/LavoroForms";
 // Actions
 import { LavoroActions } from "../../actions/LavoroActions.js";
 import { AttivitaActions } from "../../actions/AttivitaActions.js";
 // Riutilizzabile
-import FileSearchAndInsertPage from "../../../riutilizzabile/FileSearchAndInsertPage.jsx";
+import FileSearchAndInsertPage from "../../../riutilizzabile/pagine_web/FileSearchAndInsertPage.jsx";
 
 const Lavori = () => {
   const lavoroActions = new LavoroActions();
@@ -324,7 +324,6 @@ const Lavori = () => {
       <Header />
 
       <div className="main-content" />
-      
       <FileSearchAndInsertPage 
         componenti={
           {
@@ -332,7 +331,6 @@ const Lavori = () => {
             tipoItem: "lavoro", 
             items: lavoroState.lavori, 
             setItems: null, 
-            servizi: servizi,
             // Stati 
             stileState: stileState,
             // Ations 
@@ -363,7 +361,9 @@ const Lavori = () => {
             visualizzazioneInformazioni: true,
             totaleItems: getTotaleLavori(),
           }
-        }
+        } 
+        vistaItem={stileState.vistaItem} 
+        vistaForm={stileState.vistaForm}
       />
     </>
   );

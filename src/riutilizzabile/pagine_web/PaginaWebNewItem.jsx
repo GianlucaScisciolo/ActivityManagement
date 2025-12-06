@@ -1,15 +1,13 @@
 // Riutilizzabile
-import { FormNuovoItem } from "./form_item/FormItem";
-import { CardNuovoItem } from "./card_item/CardItem";
-import { RowNuovoItem } from "./row_item/RowItem";
-import { OperazioniItems } from "./Operazioni";
-import { Items } from "./Items"
+import { FormNuovoItem } from "../form_item/FormItem";
+import { CardNuovoItem } from "../card_item/CardItem";
+import { RowNuovoItem } from "../row_item/RowItem";
+import { OperazioniItems } from "../Operazioni";
+import { Items } from "../Items"
 
-const PaginaWebNewItem = ({ componenti }) => {
-  const stileState = componenti.stileState;
-
-  const NuovoItemTag = (stileState.vistaForm === "form") ? FormNuovoItem : (
-    (stileState.vistaForm === "card") ? CardNuovoItem : RowNuovoItem
+const PaginaWebNewItem = ({ componenti, vistaItem, vistaForm }) => {
+  const NuovoItemTag = (vistaForm === "form") ? FormNuovoItem : (
+    (vistaForm === "card") ? CardNuovoItem : RowNuovoItem
   )
 
   return (
@@ -27,12 +25,10 @@ const PaginaWebNewItem = ({ componenti }) => {
         items={componenti.items} 
         setItems={componenti.setItems}
         selectOperation={componenti.selectOperation}
-        emptyIsConsidered={true} 
         campi={componenti.campiItemEsistente}
         indici={componenti.indiciItemEsistente}
-        servizi={componenti.servizi}
         handleBlurItem={componenti.handleBlurItem}
-        lavoroActions={componenti.lavoroActions}
+        vistaItem={vistaItem}
       />
 
       <br /> <br /> <br /> <br />

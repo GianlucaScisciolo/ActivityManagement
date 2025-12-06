@@ -5,6 +5,8 @@ import React, { useState } from 'react';
 import StyledComponents from './StyledRowItem';
 import { OperazioniNuovoItem, OperazioniCercaItems, OperazioniRicercaEntrateUscite, OperazioniLogin, OperazioniModificaProfilo, OperazioniFileItems, OperazioniItemEsistente } from '../Operazioni';
 import { getInputTag, getTextAreaTag } from '../Tags';
+// Utils
+import { handleChange, handleClick } from '../../utils/Handle';
 
 export function RowNuovoItem({campi, indici, eseguiSalvataggio}) {
   let InputTag = getInputTag(1, true, StyledComponents);
@@ -142,75 +144,7 @@ export function RowItemEsistente({ item, campi, indici, selectOperation, tipoIte
     e.preventDefault();
     alert(placeholder);
   }
-  
-  const handleChange = (e, index) => {
-    e.preventDefault();
-    const { name, value, id } = e.target;
-  
-    let modificabile = true;
-  
-    if([
-      "note_cliente", "note_servizio", "note_lavoro", "note_spesa" 
-    ].includes(id)) {
-      if(value.length > 200) {
-        modificabile = false;
-      }
-    }
-    else if([
-      "descrizione_spesa" 
-    ].includes(id)) {
-      if(value.length > 1000) {
-        modificabile = false;
-      }
-    }
-    else if([
-      "nome_servizio" 
-    ].includes(id)) {
-      if(value.length > 100) {
-        modificabile = false;
-      }
-    }
-    else if ([
-      "prezzo_servizio", "totale_spesa" 
-    ].includes(id)) {
-      const isDecimal = !isNaN(value) && Number(value) === parseFloat(value);
-      if (!isDecimal || value < 0) {
-        modificabile = false;
-      }
-    }
-    else if([
-      "email_cliente" 
-    ].includes(id)) {
-      if(value.length > 254) {
-        modificabile = false;
-      }
-    }
-    else if([
-      "contatto_cliente" 
-    ].includes(id)) {
-      if(value === "") {
-        modificabile = true;
-      }
-      else if (!(/^\d+$/.test(value)) || !((value.startsWith("0") && value.length <= 11) || (value.startsWith("3") && value.length <= 10))) {
-        modificabile = false;
-      }
-    }
     
-    // Aggiorna solo lo stato locale
-    if(modificabile === true) {
-      setLocalValues((prevValues) => ({
-        ...prevValues,
-        [index]: value,
-      }));
-    }
-  };
-  
-  const handleClick = (e) => {
-    if(["giorno_spesa", "giorno_lavoro"].includes(e.target.id)) {
-      e.target.type = "date";
-    }
-  }
-
   return (
     <StyledComponents.StyledRow>
       <OperazioniItemEsistente selectOperation={selectOperation} item={item} vistaItem={"row"} StyledComponents={StyledComponents} />
@@ -247,7 +181,7 @@ export function RowItemEsistente({ item, campi, indici, selectOperation, tipoIte
                   step={campi.step[i]}
                   value={localValues[i]}
                   placeholder={campi.placeholder[i]}
-                  onChange={(e) => handleChange(e, i)}
+                  onChange={(e) => handleChange(e, i, setLocalValues)}
                   onBlur={(e) => handleBlurItem(e, item)} 
                   onClick={(e) => handleClick(e)}
                   readOnly={item.tipo_selezione !== 1}
@@ -459,9 +393,7 @@ export function RowProfilo({campi, indici, eseguiModificaProfilo}) {
   );
 }
 
-export function RowEntrateUscite({datiRicerca, setDatiRicerca, handleInputChange, eseguiRicerca}) {
-  const attivitaState = useSelector((state) => state.attivita.value);
-  const lingua = attivitaState.lingua;
+export function RowEntrateUscite({datiRicerca, setDatiRicerca, handleInputChange, eseguiRicerca, lingua}) {
   let maxHeight = "2000px";
   return (
     <StyledComponents.StyledRow>

@@ -4,7 +4,7 @@ CREATE TABLE `utente` (
 	`username` VARCHAR(10) NOT NULL,
 	`password` VARCHAR(128) NOT NULL,
 	`salt_hex` VARCHAR(32) NOT NULL,
-	`ruolo` SET("Dipendente", "Amministratore") NOT NULL,
+	`ruolo` SET("Amministratore") NOT NULL,
 	`note` VARCHAR(200),
 
 	PRIMARY KEY(`username`)
@@ -23,6 +23,19 @@ CREATE TABLE `cliente` (
 	PRIMARY KEY(`id`)
 );
 
+CREATE TABLE `spesa` (
+	`id` INTEGER AUTO_INCREMENT NOT NULL, 
+	`nome` VARCHAR(50) NOT NULL, 
+	`giorno` DATE NOT NULL, 
+	`descrizione` VARCHAR(1000), 
+	`totale` DOUBLE NOT NULL, 
+	`note` VARCHAR(200), 
+    
+    UNIQUE(`nome`, `giorno`), 
+
+	PRIMARY KEY(`id`)
+);
+
 CREATE TABLE `lavoro` (
 	`id` INTEGER AUTO_INCREMENT NOT NULL,
 	`cliente` VARCHAR(500), 
@@ -37,21 +50,12 @@ CREATE TABLE `servizio` (
 	`id` INTEGER AUTO_INCREMENT NOT NULL, 
 	`nome` VARCHAR(100) NOT NULL, 
 	`prezzo` DOUBLE NOT NULL, 
+    `in_uso` BOOLEAN, 
 	`note` VARCHAR(200), 
-	`in_uso` BOOLEAN, 
+    
+    UNIQUE(`nome`), 
 
 	PRIMARY KEY(`id`) 
-);
-
-CREATE TABLE `spesa` (
-	`id` INTEGER AUTO_INCREMENT NOT NULL, 
-	`nome` VARCHAR(50) NOT NULL, 
-	`giorno` DATE NOT NULL, 
-	`descrizione` VARCHAR(1000), 
-	`totale` DOUBLE NOT NULL, 
-	`note` VARCHAR(200), 
-
-	PRIMARY KEY(`id`)
 );
 
 CREATE TABLE `collegamento` (
@@ -78,11 +82,12 @@ INSERT INTO `utente` (
 	`username`, `password`, `salt_hex`, `ruolo`, `note`
 ) VALUES ( 
 	"username", 
-    "f7687ff6a865350f3dd864b19465df2afe96b39863a1ee90b5abf7031b2dffd27fb070517ae703c1259cb62a2597130db093047627c4d0de7d446c38867a1a1a", 
-    "agOlMPnXA4lZSZ9i", 
+    "f9d2cb937f27244891760c87c2e22ad623194df0b21768754279fa13c0e728e1414531f59ac38b88daad4865c07e5e19ef62af414aa79d65a8deb59e85195d7f", 
+    "uRWQMUQ2n9akXfegQSjEXeyba3Fkyvje", 
     "Amministratore", 
     "Password attuale: Password10!!"
 );
+
 
 
 

@@ -9,7 +9,7 @@ import { SpesaForms } from "../forms/SpesaForms";
 import { SpesaActions } from "../../actions/SpesaActions";
 import { AttivitaActions } from "../../actions/AttivitaActions.js";
 // Riutilizzabile
-import FileSearchAndInsertPage from "../../../riutilizzabile/FileSearchAndInsertPage.jsx";
+import FileSearchAndInsertPage from "../../../riutilizzabile/pagine_web/FileSearchAndInsertPage.jsx";
 
 const Spese = () => {
   const spesaActions = new SpesaActions();
@@ -148,6 +148,8 @@ const Spese = () => {
             totaleItems: getTotaleSpese(),
           }
         }
+        vistaItem={stileState.vistaItem} 
+        vistaForm={stileState.vistaForm}
       />
     </>
   );

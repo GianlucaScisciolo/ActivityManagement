@@ -18,6 +18,7 @@ import { RowEntrateUscite } from "../../../riutilizzabile/row_item/RowItem";
 
 const Attivita = () => {
   const stileState = useSelector((state) => state.stile.value);
+  const attivitaState = useSelector((state) => state.attivita.value);
   const lavoroActions = new LavoroActions();
   const spesaActions = new SpesaActions();
   const attivitaActions = new AttivitaActions();
@@ -61,7 +62,8 @@ const Attivita = () => {
           datiRicerca={datiRicerca}
           setDatiRicerca={setDatiRicerca}
           handleInputChange={operazioniForms.handleInputChange}
-          eseguiRicerca={eseguiRicerca}
+          eseguiRicerca={eseguiRicerca} 
+          lingua={attivitaState.lingua}
         />
       )}
       {(stileState.vistaForm === "card") && (
@@ -70,7 +72,8 @@ const Attivita = () => {
             datiRicerca={datiRicerca}
             setDatiRicerca={setDatiRicerca}
             handleInputChange={operazioniForms.handleInputChange}
-            eseguiRicerca={eseguiRicerca}
+            eseguiRicerca={eseguiRicerca} 
+            lingua={attivitaState.lingua}
           />
         </center>
       )}
@@ -80,7 +83,8 @@ const Attivita = () => {
             datiRicerca={datiRicerca}
             setDatiRicerca={setDatiRicerca}
             handleInputChange={operazioniForms.handleInputChange}
-            eseguiRicerca={eseguiRicerca}
+            eseguiRicerca={eseguiRicerca} 
+            lingua={attivitaState.lingua}
           />
         </center>
       )}
@@ -90,19 +94,19 @@ const Attivita = () => {
       <center>
         <Row>
           {(entrateLavori.length > 0 && entrateLavori !== -1) ? (
-            <Col><CardEntrateItems entrateItems={entrateLavori} etichettaIta="Entrate lavori" etichettaEng="Revenue jobs" /></Col>
+            <Col><CardEntrateItems entrateItems={entrateLavori} lingua={attivitaState.lingua} etichettaIta="Entrate lavori" etichettaEng="Revenue jobs" /></Col>
           ) : (<Col></Col>)}
           {(usciteSpese.length > 0 && usciteSpese !== -1) ? (
-            <Col><CardUsciteItems usciteItems={usciteSpese} etichettaIta="Uscite spese" etichettaEng="Exit expenses" /></Col>
+            <Col><CardUsciteItems usciteItems={usciteSpese} lingua={attivitaState.lingua} etichettaIta="Uscite spese" etichettaEng="Exit expenses" /></Col>
           ) : (<Col></Col>)}
         </Row>
         <br /> <br /> <br /> <br />
         <Row>
           {(entrateServizi.length > 0 && entrateServizi !== -1) ? (
-            <Col><Col><CardEntrateItemsByName entrateItems={entrateServizi} tipoItemIta="SERVIZIO" tipoItemEng="SERVICE" etichettaIta="Entrate servizi" etichettaEng="Revenue services" /></Col></Col>
+            <Col><Col><CardEntrateItemsByName entrateItems={entrateServizi} lingua={attivitaState.lingua} tipoItemIta="SERVIZIO" tipoItemEng="SERVICE" etichettaIta="Entrate servizi" etichettaEng="Revenue services" /></Col></Col>
           ) : (<Col></Col>)}
           {((entrateLavori.length > 0 && entrateLavori !== -1) && (usciteSpese.length > 0 && usciteSpese !== -1)) ? (
-            <Col><CardRicavi entrate={entrateLavori} uscite={usciteSpese} /></Col>
+            <Col><CardRicavi entrate={entrateLavori} uscite={usciteSpese} lingua={attivitaState.lingua} /></Col>
           ) : (<Col></Col>)}
         </Row>
       </center>

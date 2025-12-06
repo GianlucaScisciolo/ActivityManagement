@@ -9,7 +9,7 @@ import { ServizioForms } from "../forms/ServizioForms";
 import { ServizioActions } from "../../actions/ServizioActions";
 import { AttivitaActions } from "../../actions/AttivitaActions.js";
 // Riutilizzabile
-import SearchAndInsertPage from "../../../riutilizzabile/SearchAndInsertPage.jsx";
+import SearchAndInsertPage from "../../../riutilizzabile/pagine_web/SearchAndInsertPage.jsx";
 
 const Servizi = () => {
   const servizioActions = new ServizioActions();
@@ -110,6 +110,8 @@ const Servizi = () => {
             selectedIdsEliminazione: selectedIdsEliminazione, 
           }
         }
+        vistaItem={stileState.vistaItem} 
+        vistaForm={stileState.vistaForm}
       />
     </>
   );

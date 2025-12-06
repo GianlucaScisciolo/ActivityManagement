@@ -1,27 +1,26 @@
 // React
 import {useState} from "react";
 // Riutilizzabile
-import { CambioTipoForm2, FormNuovoItem, FormRicercaItems, FormFileItems } from "./form_item/FormItem";
-import { CardNuovoItem, CardRicercaItems, CardFileItems, CardInformazioni } from "./card_item/CardItem";
-import { RowNuovoItem, RowRicercaItems, RowFileItems } from "./row_item/RowItem";
-import { OperazioniItems } from "./Operazioni";
-import { Items } from "./Items"
-import StyledComponents from "./form_item/StyledFormItem";
+import { CambioTipoForm2, FormNuovoItem, FormRicercaItems, FormFileItems } from "../form_item/FormItem";
+import { CardNuovoItem, CardRicercaItems, CardFileItems, CardInformazioni } from "../card_item/CardItem";
+import { RowNuovoItem, RowRicercaItems, RowFileItems } from "../row_item/RowItem";
+import { OperazioniItems } from "../Operazioni";
+import { Items } from "../Items"
+import StyledComponents from "../form_item/StyledFormItem";
 
-const FileSearchAndInsertPage = ({ componenti }) => {
-  const stileState = componenti.stileState;
+const FileSearchAndInsertPage = ({ componenti, vistaItem, vistaForm }) => {
   const [tipoForm, setTipoForm] = useState("search");
-
-  const NuovoItemTag = (stileState.vistaForm === "form") ? FormNuovoItem : (
-    (stileState.vistaForm === "card") ? CardNuovoItem : RowNuovoItem
+  
+  const NuovoItemTag = (vistaForm === "form") ? FormNuovoItem : (
+    (vistaForm === "card") ? CardNuovoItem : RowNuovoItem
   )
 
-  const RicercaItemsTag = (stileState.vistaForm === "form") ? FormRicercaItems : (
-    (stileState.vistaForm === "card") ? CardRicercaItems : RowRicercaItems
+  const RicercaItemsTag = (vistaForm === "form") ? FormRicercaItems : (
+    (vistaForm === "card") ? CardRicercaItems : RowRicercaItems
   )
 
-  const FormFileTag = (stileState.vistaForm === "form") ? FormFileItems : (
-    (stileState.vistaForm === "card") ? CardFileItems : RowFileItems
+  const FormFileTag = (vistaForm === "form") ? FormFileItems : (
+    (vistaForm === "card") ? CardFileItems : RowFileItems
   );
 
   return (
@@ -78,12 +77,10 @@ const FileSearchAndInsertPage = ({ componenti }) => {
             items={componenti.items} 
             setItems={componenti.setItems}
             selectOperation={componenti.selectOperation}
-            emptyIsConsidered={true} 
             campi={componenti.campiItemEsistente}
-            servizi={componenti.servizi}
             handleBlurItem={componenti.handleBlurItem}
-            lavoroActions={componenti.lavoroActions}
             tipoForm={tipoForm}
+            vistaItem={vistaItem}
           />
 
           <br /> <br /> <br /> <br />

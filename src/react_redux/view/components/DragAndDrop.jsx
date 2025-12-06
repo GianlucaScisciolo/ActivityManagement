@@ -77,13 +77,13 @@ const DragAndDrop = ({ initialPositions, onClickWidget }) => {
               )
             )}
             {(pos.tipo === "CardEntrateItems") && (
-              <CardEntrateItems entrateItems={pos.entrateLavori} etichettaIta="Entrate lavori" etichettaEng="Revenue jobs" />
+              <CardEntrateItems entrateItems={pos.entrateLavori} lingua={attivitaState.lingua} etichettaIta="Entrate lavori" etichettaEng="Revenue jobs" />
             )}
             {(pos.tipo === "CardUsciteSpese") && (
-              <CardUsciteItems usciteItems={pos.usciteSpese} etichettaIta="Uscite spese" etichettaEng="Exit expenses" />
+              <CardUsciteItems usciteItems={pos.usciteSpese} lingua={attivitaState.lingua} etichettaIta="Uscite spese" etichettaEng="Exit expenses" />
             )}
             {(pos.tipo === "CardRicavi") && (
-              <CardRicavi entrate={pos.entrateLavori} uscite={pos.usciteSpese} />
+              <CardRicavi entrate={pos.entrateLavori} uscite={pos.usciteSpese} lingua={attivitaState.lingua} />
             )}
           </div>
         ))}

@@ -1,20 +1,18 @@
 // React
 import React from "react";
 // Riutilizzabile
-import { FormNuovoItem, FormRicercaItems } from "./form_item/FormItem";
-import { CardNuovoItem, CardRicercaItems } from "./card_item/CardItem";
-import { RowNuovoItem, RowRicercaItems } from "./row_item/RowItem";
-import { OperazioniItems } from "../riutilizzabile/Operazioni";
+import { FormNuovoItem, FormRicercaItems } from "../form_item/FormItem";
+import { CardNuovoItem, CardRicercaItems } from "../card_item/CardItem";
+import { RowNuovoItem, RowRicercaItems } from "../row_item/RowItem";
+import { OperazioniItems } from "../Operazioni";
 import { Items } from "../view/components/Items";
 
-const PaginaWeb = ({ componenti }) => {
-  const stileState = componenti.stileState;
-
-  const NuovoItemTag = (stileState.vistaForm === "form") ? FormNuovoItem : (
-    (stileState.vistaForm === "card") ? CardNuovoItem : RowNuovoItem
+const PaginaWeb = ({ componenti, vistaItem, vistaForm }) => {
+  const NuovoItemTag = (vistaForm === "form") ? FormNuovoItem : (
+    (vistaForm === "card") ? CardNuovoItem : RowNuovoItem
   )
-  const RicercaItemsTag = (stileState.vistaForm === "form") ? FormRicercaItems : (
-    (stileState.vistaForm === "card") ? CardRicercaItems : RowRicercaItems
+  const RicercaItemsTag = (vistaForm === "form") ? FormRicercaItems : (
+    (vistaForm === "card") ? CardRicercaItems : RowRicercaItems
   )
 
   return (
@@ -42,12 +40,10 @@ const PaginaWeb = ({ componenti }) => {
                 items={value.items} 
                 setItems={value.set_items}
                 selectOperation={value.select_operation}
-                emptyIsConsidered={true} 
                 campi={value.campi}
                 indici={value.indici}
-                servizi={value.servizi}
                 handleBlurItem={value.handleBlurItem}
-                lavoroActions={value.lavoroActions} 
+                vistaItem={vistaItem}
               />
             )}                
             {(key === "operazioni_items") && (

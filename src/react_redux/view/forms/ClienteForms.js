@@ -72,7 +72,7 @@ export class ClienteForms {
     };
   };
 
-  getCampiClienteEsistente(servizi, item, handleOnChange, handleOnClick, handleOnBlur) {
+  getCampiClienteEsistente(item, handleOnChange, handleOnClick, handleOnBlur) {
     const attivitaState = useSelector((state) => state.attivita.value);
     const lingua = attivitaState.lingua;
     const [errori, setErrori] = useState({
@@ -84,7 +84,6 @@ export class ClienteForms {
     useEffect(() => {
       controlloCliente(item, setErrori, lingua);
     }, [item]);
-
 
     return {
       header: lingua === "italiano" ? "Cliente" : "Client", 
@@ -108,7 +107,7 @@ export class ClienteForms {
       onChange: handleOnChange, 
       onClick: handleOnClick, 
       onBlur: handleOnBlur
-    };
+    }
   };
 }
 

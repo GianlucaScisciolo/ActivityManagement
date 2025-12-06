@@ -1,4 +1,5 @@
-import { encryptPassword, generateRandomString, PEPPER_HEX } from "../src/utils/Sicurezza.js";
+// Utils
+//import { encryptPassword, generateRandomString, PEPPER_HEX } from "../src/utils/Sicurezza";
 
 export class AutenticazioneSQL {
   SQL_SELEZIONE_UTENTE = ` 

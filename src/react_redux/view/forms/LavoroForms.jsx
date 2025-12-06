@@ -1,6 +1,12 @@
 // React e Redux
+import React from 'react';
 import { useSelector } from 'react-redux';
 import { useEffect, useState } from "react";
+// View
+import { OptionsServizi } from './ServizioForms';
+// Actions
+import { LavoroActions } from "../../actions/LavoroActions";
+import { ServizioActions } from "../../actions/ServizioActions";
 // Utils
 import { controlloLavoro } from "../../../utils/Controlli";
 
@@ -68,17 +74,19 @@ export class LavoroForms {
     };
   };
 
-  getCampiLavoroEsistente(servizi, item, handleOnChange, handleOnClick, handleOnBlur) {
+  getCampiLavoroEsistente(item, handleOnChange, handleOnClick, handleOnBlur) {
     const attivitaState = useSelector((state) => state.attivita.value);
     const lingua = attivitaState.lingua;
-
+    const sottoStringa = item.servizio || "";
+    const optionsServiziVar = React.createElement(OptionsServizi, { item, sottoStringa, setServiziLavoro: null });
+    
     const [errori, setErrori] = useState({
       errore_cliente: "", 
       errore_servizi: "", 
       errore_totale: "", 
       errore_giorno: "", 
       errore_note: ""
-    }); 
+    });
     
     useEffect(() => {
       controlloLavoro(item, setErrori, lingua);
@@ -102,8 +110,8 @@ export class LavoroForms {
       ], 
       errore: [errori.errore_cliente, errori.errore_totale, errori.errore_giorno, errori.errore_note], 
       valoreModificabile: [false, true, true, true], 
-      options: [null, servizi, null, null],
-      onChange: handleOnChange, 
+      options: [null, optionsServiziVar, null],
+      onChange: handleOnChange,
       onClick: handleOnClick, 
       onBlur: handleOnBlur
     };

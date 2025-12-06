@@ -9,7 +9,7 @@ import { ClienteForms } from '../forms/ClienteForms.js';
 import { ClienteActions } from "../../actions/ClienteActions.js";
 import { AttivitaActions } from "../../actions/AttivitaActions.js"
 // Riutilizzabile
-import SearchAndInsertPage from '../../../riutilizzabile/SearchAndInsertPage.jsx';
+import SearchAndInsertPage from "../../../riutilizzabile/pagine_web/SearchAndInsertPage.jsx";
 
 const Clienti = () => {
   const clienteState = useSelector((state) => state.cliente.value);
@@ -104,6 +104,8 @@ const Clienti = () => {
             selectedIdsEliminazione: selectedIdsEliminazione, 
           }
         }
+        vistaItem={stileState.vistaItem} 
+        vistaForm={stileState.vistaForm}
       />
     </>
   );
