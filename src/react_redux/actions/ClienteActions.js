@@ -72,8 +72,8 @@ export class ClienteActions {
   }
 
   selezioneOperazioneCliente(
-    icon, item, selectedIdsModifica, setSelectedIdsModifica, selectedIdsEliminazione, setSelectedIdsEliminazione, 
-    setSelectedPencilCount, setSelectedTrashCount
+    icon, item, selectedIdsModifica, setSelectedIdsModifica, selectedIdsEliminazione, 
+    setSelectedIdsEliminazione, setSelectedPencilCount, setSelectedTrashCount
   ) {
     if(icon === "trash") {
       if(selectedIdsEliminazione.includes(item.id)) {

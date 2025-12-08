@@ -1,6 +1,6 @@
 // Store
 import store from "../store/store.js";
-// Slices Actions 
+// Reducers
 import { stileSliceActions } from "../store/reducers/StileReducer.js";
 import { attivitaSliceActions } from "../store/reducers/AttivitaReducer.js";
 import { autenticazioneSliceActions } from "../store/reducers/AutenticazioneReducer.js";

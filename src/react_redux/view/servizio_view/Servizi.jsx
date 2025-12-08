@@ -9,7 +9,7 @@ import { ServizioForms } from "../forms/ServizioForms";
 import { ServizioActions } from "../../actions/ServizioActions";
 import { AttivitaActions } from "../../actions/AttivitaActions.js";
 // Riutilizzabile
-import SearchAndInsertPage from "../../../riutilizzabile/pagine_web/SearchAndInsertPage.jsx";
+import PaginaWeb from "../../../riutilizzabile/pagine_web/PaginaWeb.jsx";
 
 const Servizi = () => {
   const servizioActions = new ServizioActions();
@@ -79,7 +79,7 @@ const Servizi = () => {
 
       <div className="main-content" />
       
-      <SearchAndInsertPage 
+      <PaginaWeb 
         componenti={ 
           {
             // Items
@@ -110,6 +110,7 @@ const Servizi = () => {
             selectedIdsEliminazione: selectedIdsEliminazione, 
           }
         }
+        elementi={["search", "insert"]}
         vistaItem={stileState.vistaItem} 
         vistaForm={stileState.vistaForm}
       />

@@ -1,65 +1,119 @@
 // React
-import React from "react";
+import {useState} from "react";
 // Riutilizzabile
-import { FormNuovoItem, FormRicercaItems } from "../form_item/FormItem";
-import { CardNuovoItem, CardRicercaItems } from "../card_item/CardItem";
-import { RowNuovoItem, RowRicercaItems } from "../row_item/RowItem";
+import { CambioTipoForm, CambioTipoForm2, FormNuovoItem, FormRicercaItems, FormFileItems } from "../form_item/FormItem";
+import { CardNuovoItem, CardRicercaItems, CardFileItems, CardInformazioni } from "../card_item/CardItem";
+import { RowNuovoItem, RowRicercaItems, RowFileItems } from "../row_item/RowItem";
 import { OperazioniItems } from "../Operazioni";
-import { Items } from "../view/components/Items";
+import { Items } from "../Items"
+import StyledComponents from "../form_item/StyledFormItem";
 
-const PaginaWeb = ({ componenti, vistaItem, vistaForm }) => {
+const PaginaWeb = ({componenti, elementi, vistaItem, vistaForm}) => {
+  const [tipoForm, setTipoForm] = useState("search");
+
   const NuovoItemTag = (vistaForm === "form") ? FormNuovoItem : (
     (vistaForm === "card") ? CardNuovoItem : RowNuovoItem
   )
+
   const RicercaItemsTag = (vistaForm === "form") ? FormRicercaItems : (
     (vistaForm === "card") ? CardRicercaItems : RowRicercaItems
   )
 
+  const FormFileTag = (vistaForm === "form") ? FormFileItems : (
+    (vistaForm === "card") ? CardFileItems : RowFileItems
+  );
+
   return (
     <>
-      {Object.entries(componenti).map(([key, value], index) => {
-        return (
-          <React.Fragment key={index}>
-            {(key === "nuovo_item") && (
+
+      <CambioTipoForm
+        elementi={elementi}
+        tipoForm={tipoForm}
+        setTipoForm={setTipoForm}
+        StyledComponents={StyledComponents}
+      />
+
+      <br /> <br /> <br /> <br />
+      {elementi.map((el, item) => (
+        <>
+          {el === "insert" && tipoForm === "insert" && (
+            <>
               <NuovoItemTag 
-                campi={value.campi}  
-                indici={value.indici} 
-                eseguiSalvataggio={value.handle_insert} 
+                campi={componenti.campiNuovoItem}  
+                indici={componenti.indiciNuovoItem} 
+                eseguiSalvataggio={componenti.handleInsert} 
               />
-            )}
-            {(key === "ricerca_items") && (
+
+              <br /> <br /> <br /> <br />
+            </>
+          )}
+          {el === "search" && tipoForm === "search" && (
+            <>
               <RicercaItemsTag 
-                campi={value.campi} 
-                indici={value.indici}
-                handleSearch={value.handle_search}
+                campi={componenti.campiRicercaItems}
+                indici={componenti.indiciRicercaItems}
+                handleSearch={componenti.handleSearch}
               />
-            )}
-            {(key === "items") && (
-              <Items 
-                tipoItem={value.tipo_item} 
-                items={value.items} 
-                setItems={value.set_items}
-                selectOperation={value.select_operation}
-                campi={value.campi}
-                indici={value.indici}
-                handleBlurItem={value.handleBlurItem}
-                vistaItem={vistaItem}
+              
+              <br /> <br /> <br /> <br />
+            </>
+          )}
+
+          {el === "file" && tipoForm === "file" && (
+            <>
+              <FormFileTag 
+                campi={componenti.campiFile} 
+                indici={componenti.indiciFile}
+                ottieniFileRangePDF={componenti.handleSearchRangeFilePDF}
+                ottieniFileRangeExcel={componenti.handleSearchRangeFileExcel}
+                eliminaItemsRange={componenti.handleDeleteRangeFile}
               />
-            )}                
-            {(key === "operazioni_items") && (
-              <OperazioniItems 
-                selectedIdsModifica={value.selected_ids_modifica}
-                selectedIdsEliminazione={value.selected_ids_eliminazione}
-                handleEdit={value.handle_edit}
-                handleDelete={value.handle_delete}
-              />
-            )}
-            <br /> <br /> <br /> <br />
-          </React.Fragment>
-        );
-      })}
+              
+              <br /> <br /> <br /> <br />
+            </>
+          )}
+        </>
+      ))}
+
+      {(tipoForm !== "file") && (
+        <>
+          <Items 
+            tipoItem={componenti.tipoItem} 
+            items={componenti.items} 
+            setItems={componenti.setItems}
+            selectOperation={componenti.selectOperation}
+            campi={componenti.campiItemEsistente}
+            handleBlurItem={componenti.handleBlurItem}
+            tipoForm={tipoForm}
+            vistaItem={vistaItem}
+          />
+
+          <br /> <br /> <br /> <br />
+
+          {componenti.visualizzazioneInformazioni === true && componenti.items.length > 0 && (
+            <>
+              <center>
+                <CardInformazioni 
+                  totaleItems={componenti.totaleItems}
+                />
+              </center>
+
+              <br /> <br /> <br /> <br />
+            </>
+          )}
+
+          <OperazioniItems 
+            selectedIdsModifica={componenti.selectedIdsModifica}
+            selectedIdsEliminazione={componenti.selectedIdsEliminazione}
+            handleEdit={componenti.handleEdit}
+            handleDelete={componenti.handleDelete}
+          />
+
+          <br /> <br /> <br /> <br />
+        </>
+      )}
     </>
-  );
+  )
 }
 
 export default PaginaWeb;

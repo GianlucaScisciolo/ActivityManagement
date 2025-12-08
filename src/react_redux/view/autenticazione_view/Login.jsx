@@ -17,16 +17,12 @@ const Login = () => {
   const autenticazioneActions = new AutenticazioneActions();
   const autenticazioneForms = new AutenticazioneForms();
   const operazioniForms = new OperazioniForms();
-  const [utente, setUtente] = useState(0);
-  const [aggiornamento1, setAggiornamento1] = useState(false);
-  const [aggiornamento2, setAggiornamento2] = useState(false);
   const [datiLogin, setDatiLogin] = useState({
     username: "", 
     password: "", 
     errore_username: "", 
     errore_password: ""
   });
-  const [aggiornamentoCompletato, setAggiornamentoCompletato] = useState(0);
   const navigate = useNavigate();
   const stileState = useSelector((state) => state.stile.value);
 

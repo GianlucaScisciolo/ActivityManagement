@@ -1,13 +1,12 @@
 // React e Redux
 import { createSlice } from "@reduxjs/toolkit";
-
-// Da rivedere
-import clienti from "../../view/img/img_widget/clienti.png";
-import servizi from '../../view/img/img_widget/servizi.png';
-import lavori from '../../view/img/img_widget/lavori.png';
-import spese from '../../view/img/img_widget/spese.png';
-import analisi from '../../view/img/img_widget/analisi.png';
-import profilo from '../../view/img/img_widget/profilo.png';
+// Store
+import clienti from "../img/img_widget/clienti.png";
+import servizi from '../img/img_widget/servizi.png';
+import lavori from '../img/img_widget/lavori.png';
+import spese from '../img/img_widget/spese.png';
+import analisi from '../img/img_widget/analisi.png';
+import profilo from '../img/img_widget/profilo.png';
 
 const BC_NOT_SELECTED = "rgba(0, 0, 0, 0.5)";
 const BC_SELECTED = "#0050EF";

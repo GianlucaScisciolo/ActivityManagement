@@ -90,7 +90,7 @@ export class LavoroActions {
     }
   }
   
-  async handleSearchLavoriRangeFile(e, tipoFile, setTipoFile, datiRicerca, lavori, setLavori) {
+  async handleSearchLavoriRangeFile(e, tipoFile, setTipoFile, datiRicerca, setLavori) {
     e.preventDefault();
 
     if (!confirm(this.lingua === "italiano" ? "Sei sicuro di voler ottenere il file?" : "Are you sure you want to get the file?")) {

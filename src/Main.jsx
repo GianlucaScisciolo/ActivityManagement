@@ -6,7 +6,6 @@ import { Provider, useSelector } from "react-redux";
 
 // Store
 import store from "./react_redux/store/store.js";
-
 // View
 import App from "./react_redux/view/App.jsx";
 import Login from "./react_redux/view/autenticazione_view/Login.jsx";

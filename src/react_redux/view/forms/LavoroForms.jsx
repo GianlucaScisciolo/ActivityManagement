@@ -3,7 +3,9 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { useEffect, useState } from "react";
 // View
-import { OptionsServizi } from './ServizioForms';
+import OptionsServiziLavoroEsistente from '../options/OptionsServiziLavoroEsistente';
+import OptionsClientiNuovoLavoro from '../options/OptionsClientiNuovoLavoro';
+import OptionsServiziNuovoLavoro from '../options/OptionsServiziNuovoLavoro';
 // Actions
 import { LavoroActions } from "../../actions/LavoroActions";
 import { ServizioActions } from "../../actions/ServizioActions";
@@ -12,13 +14,20 @@ import { controlloLavoro } from "../../../utils/Controlli";
 
 export class LavoroForms {
   attivitaState = useSelector((state) => state.attivita.value);
+  stileState = useSelector((state) => state.stile.value);
+  
   lingua = this.attivitaState.lingua;
+  
 
   constructor() {
 
   }
 
-  getCampiNuovoLavoro(item, clienti, servizi, handleOnChange, handleOnClick, handleOnBlur) {
+  getCampiNuovoLavoro(item, setItem, handleOnChange, handleOnClick, handleOnBlur) {
+    const classeFormWrapperCheckbox = (this.stileState.vistaForm === "form") ? "checkbox-wrapper-form" : "checkbox-wrapper";
+    const optionsClientiVar = React.createElement(OptionsClientiNuovoLavoro, { item, setItem, classeFormWrapperCheckbox })
+    const optionsServiziVar = React.createElement(OptionsServiziNuovoLavoro, { item, classeFormWrapperCheckbox });
+
     return {
       header: this.lingua === "italiano" ? "Nuovo lavoro" : "New job", 
       label: [
@@ -40,7 +49,7 @@ export class LavoroForms {
         this.lingua === "italiano" ? "Note" : "Notes",
       ],
       errore: [item.errore_cliente, item.errore_servizi, item.errore_giorno, item.errore_note], 
-      options: [clienti, servizi, null, null], 
+      options: [optionsClientiVar, optionsServiziVar, null, null], 
       onChange: handleOnChange, 
       onClick: handleOnClick, 
       onBlur: handleOnBlur
@@ -78,7 +87,7 @@ export class LavoroForms {
     const attivitaState = useSelector((state) => state.attivita.value);
     const lingua = attivitaState.lingua;
     const sottoStringa = item.servizio || "";
-    const optionsServiziVar = React.createElement(OptionsServizi, { item, sottoStringa, setServiziLavoro: null });
+    const optionsServiziVar = React.createElement(OptionsServiziLavoroEsistente, { item, sottoStringa, setServiziLavoro: null });
     
     const [errori, setErrori] = useState({
       errore_cliente: "", 
@@ -110,7 +119,7 @@ export class LavoroForms {
       ], 
       errore: [errori.errore_cliente, errori.errore_totale, errori.errore_giorno, errori.errore_note], 
       valoreModificabile: [false, true, true, true], 
-      options: [null, optionsServiziVar, null],
+      options: [null, optionsServiziVar, null], 
       onChange: handleOnChange,
       onClick: handleOnClick, 
       onBlur: handleOnBlur

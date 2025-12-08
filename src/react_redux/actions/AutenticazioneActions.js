@@ -44,7 +44,7 @@ export class AutenticazioneActions {
     }
   }
 
-  logout = () => {
+  logout() {
     this.dispatcher.eseguiLogout();
   }
 

@@ -9,8 +9,7 @@ import { SpesaForms } from "../forms/SpesaForms";
 import { SpesaActions } from "../../actions/SpesaActions";
 import { AttivitaActions } from "../../actions/AttivitaActions.js";
 // Riutilizzabile
-import FileSearchAndInsertPage from "../../../riutilizzabile/pagine_web/FileSearchAndInsertPage.jsx";
-import Pagina from "../../../riutilizzabile/pagine_web/Pagina.jsx";
+import PaginaWeb from "../../../riutilizzabile/pagine_web/PaginaWeb.jsx";
 
 const Spese = () => {
   const spesaActions = new SpesaActions();
@@ -110,7 +109,7 @@ const Spese = () => {
 
       <div className="main-content" />
 
-      <Pagina 
+      <PaginaWeb 
         componenti={ 
           {
             // Items

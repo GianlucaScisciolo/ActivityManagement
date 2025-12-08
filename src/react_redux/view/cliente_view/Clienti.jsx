@@ -4,13 +4,12 @@ import { useSelector } from 'react-redux';
 // View
 import Header from "../components/Header.jsx";
 import { OperazioniForms } from '../forms/OperazioniForms.js';
-import { ClienteForms } from '../forms/ClienteForms.js';
+import { ClienteForms } from '../forms/ClienteForms.jsx';
 // Actions
 import { ClienteActions } from "../../actions/ClienteActions.js";
 import { AttivitaActions } from "../../actions/AttivitaActions.js"
 // Riutilizzabile
-import SearchAndInsertPage from "../../../riutilizzabile/pagine_web/SearchAndInsertPage.jsx";
-import Pagina from '../../../riutilizzabile/pagine_web/Pagina.jsx';
+import PaginaWeb from '../../../riutilizzabile/pagine_web/PaginaWeb.jsx';
 
 const Clienti = () => {
   const clienteState = useSelector((state) => state.cliente.value);
@@ -74,7 +73,7 @@ const Clienti = () => {
       
       <div className="main-content" />
       
-      <Pagina 
+      <PaginaWeb 
         componenti={
           {
             // Items

@@ -1,19 +1,6 @@
 // React e Redux
 import { createSlice } from "@reduxjs/toolkit";
 
-const scomponiStringa = (stringa) => {
-  const indiceUltimaX = stringa.lastIndexOf(" x ");
-  const nome = stringa.substring(0, indiceUltimaX).trim();
-  let [quantita, prezzo] = stringa.substring(indiceUltimaX + 3).trim().split(" - ");
-  prezzo = prezzo.substring(0, prezzo.length - 2);
-  
-  return {
-    nome,
-    quantita: parseInt(quantita, 10),
-    prezzo: prezzo / quantita,
-  };
-};
-
 const name = "Lavoro";
 
 const initialState = {

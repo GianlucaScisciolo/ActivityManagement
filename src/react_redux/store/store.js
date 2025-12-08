@@ -1,6 +1,6 @@
 // React e Redux
 import { configureStore } from "@reduxjs/toolkit";
-// Slices Reducers
+// Reducers
 import { stileReducer } from "./reducers/StileReducer";
 import { attivitaReducer } from "./reducers/AttivitaReducer";
 import { autenticazioneReducer } from "./reducers/AutenticazioneReducer";
