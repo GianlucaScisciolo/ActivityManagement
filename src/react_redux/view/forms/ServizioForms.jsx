@@ -1,11 +1,8 @@
 // React e Redux
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useSelector } from 'react-redux';
-import { Row } from "react-bootstrap";
-import { Col } from "react-bootstrap";
 // Utils
 import { controlloServizio } from "../../../utils/Controlli";
-import { LavoroActions } from "../../actions/LavoroActions";
 
 export class ServizioForms {
   attivitaState = useSelector((state) => state.attivita.value);

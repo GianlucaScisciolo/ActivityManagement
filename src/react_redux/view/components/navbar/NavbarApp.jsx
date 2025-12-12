@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import Navbar from 'react-bootstrap/Navbar';
-// View
+// Views
 import negozio from "../../img/sfondi/negozio.jpg";
 import scrivania from "../../img/sfondi/scrivania.jpg";
 import legno from "../../img/sfondi/legno.jpg";

@@ -1,17 +1,19 @@
 // React e Redux
 import { useSelector } from 'react-redux';
-// Dispatcher
-import { Dispatcher } from "../dispatcher/Dispatcher";
+// Store
+import store from '../store/store';
+// Reducers
+import { autenticazioneSliceActions } from '../store/reducers/AutenticazioneReducer';
 // Utils
 import { controlloLogin, controlloProfilo } from "../../utils/Controlli";
 
 export class AutenticazioneActions {
-  dispatcher
+  
   attivitaState = useSelector((state) => state.attivita.value);
   lingua = this.attivitaState.lingua;
 
   constructor() {
-    this.dispatcher = new Dispatcher();
+    
   }
 
   async login(e, datiLogin, setDatiLogin, navigate) {
@@ -37,15 +39,20 @@ export class AutenticazioneActions {
         return;
       }
 
-      this.dispatcher.eseguiLogin(result.utente.username, result.utente.ruolo, result.utente.note);
+      store.dispatch(autenticazioneSliceActions.login({
+        username: datiLogin.username,
+        ruolo: datiLogin.ruolo,
+        note: datiLogin.note,
+      }));
+
       navigate("/");
     } else {
       alert(this.lingua === "italiano" ? "Errore durante il login, riprova più tardi." : "Error while logging in, please try again later.");
     }
   }
 
-  logout() {
-    this.dispatcher.eseguiLogout();
+  logout(e) {
+    store.dispatch(autenticazioneSliceActions.logout());
   }
 
   async modificaProfilo(e, autenticazioneSession, datiProfilo, setDatiProfilo) {
@@ -80,7 +87,11 @@ export class AutenticazioneActions {
           body: JSON.stringify(datiProfilo),
         });
         if (profileResponse.status === 200) {
-          this.dispatcher.eseguiLogin(datiProfilo.nuovo_username, autenticazioneSession.ruolo, datiProfilo.note)
+          store.dispatch(autenticazioneSliceActions.login({
+            username: datiProfilo.nuovo_username,
+            ruolo: autenticazioneSession.ruolo,
+            note: datiProfilo.note,
+          }));
           alert(this.lingua === "italiano" ? "Il profilo è stato modificato con successo." : "The profile was successfully modified.");
         } 
         else {

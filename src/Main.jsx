@@ -3,7 +3,6 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Provider, useSelector } from "react-redux";
-
 // Store
 import store from "./react_redux/store/store.js";
 // View

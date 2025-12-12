@@ -3,13 +3,12 @@ import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import Row from 'react-bootstrap/esm/Row';
 import Col from 'react-bootstrap/esm/Col';
-// View
+// Views
 import Header from "../components/Header";
 import { OperazioniForms } from '../forms/OperazioniForms';
 // Actions
 import { LavoroActions } from "../../actions/LavoroActions";
 import { SpesaActions } from "../../actions/SpesaActions";
-import { AttivitaActions } from '../../actions/AttivitaActions';
 import { ServizioActions } from "../../actions/ServizioActions";
 // Riutilizzabile
 import { CardEntrateItems, CardEntrateItemsByName, CardUsciteItems, CardRicavi, CardEntrateUscite } from '../../../riutilizzabile/card_item/CardItem';
@@ -21,7 +20,6 @@ const Attivita = () => {
   const attivitaState = useSelector((state) => state.attivita.value);
   const lavoroActions = new LavoroActions();
   const spesaActions = new SpesaActions();
-  const attivitaActions = new AttivitaActions();
   const servizioActions = new ServizioActions();
   const [entrateLavori, setEntrateLavori] = useState(-1);
   const [usciteSpese, setUsciteSpese] = useState(-1);

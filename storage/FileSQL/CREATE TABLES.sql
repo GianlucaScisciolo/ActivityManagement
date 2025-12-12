@@ -53,8 +53,6 @@ CREATE TABLE `servizio` (
     `in_uso` BOOLEAN, 
 	`note` VARCHAR(200), 
     
-    UNIQUE(`nome`), 
-
 	PRIMARY KEY(`id`) 
 );
 

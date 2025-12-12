@@ -1,18 +1,25 @@
 // React e Redux
 import { useSelector } from 'react-redux';
-// Dispatcher
-import { Dispatcher } from "../dispatcher/Dispatcher";
+// Store
+import store from '../store/store';
+// Reducers
+import { lavoroSliceActions } from '../store/reducers/LavoroReducer';
 // Utils
 import { controlloLavoro } from "../../utils/Controlli";
 import { generaFileLavoriPDF, generaFileLavoriExcel } from "../../utils/File";
 
 export class LavoroActions {
-  dispatcher;
   attivitaState = useSelector((state) => state.attivita.value);
   lingua = this.attivitaState.lingua;
 
   constructor() {
-    this.dispatcher = new Dispatcher();
+
+  }
+
+  azzeraLista() {
+    store.dispatch(lavoroSliceActions.aggiornaLavori({
+      lavori: -1,
+    }));
   }
   
   async inserimentoLavoro(e, servizi, clienti, nuovoLavoro, setNuovoLavoro) {
@@ -55,7 +62,11 @@ export class LavoroActions {
         nuovoLavoro.id = result.id;
         nuovoLavoro["collegamenti"] = result.collegamenti;
         nuovoLavoro["collegamenti_attuale"] = nuovoLavoro["collegamenti"];
-        this.dispatcher.inserimentoLavoro(nuovoLavoro);
+
+        store.dispatch(lavoroSliceActions.inserimentoLavoro({
+          nuovoLavoro: nuovoLavoro 
+        }))
+
         alert(this.lingua === "italiano" ? "L\'inserimento del lavoro è andato a buon fine." : "Job entry was successful.");
       }
       else if(response.status === 400) {
@@ -83,7 +94,10 @@ export class LavoroActions {
 
     if(response.status === 200) {
       const result = await response.json();
-      this.dispatcher.aggiornaLavori(result.items);
+      
+      store.dispatch(lavoroSliceActions.aggiornaLavori({
+        lavori: result.items,
+      }));
     }
     else {
       alert(this.lingua === "italiano" ? "Errore durante la ricerca dei lavori, riprova più tardi." : "Error during job research, please try again later.");
@@ -166,13 +180,25 @@ export class LavoroActions {
   ) {
     if(icon === "trash") {
       if(selectedIdsEliminazione.includes(item.id)) {
-        this.dispatcher.aggiornaTipoSelezioneLavoro(item.id, 0);
+        store.dispatch(lavoroSliceActions.aggiornaTipoSelezione({
+          id_lavoro: item.id, 
+          nuova_selezione: 0
+        }))
+
         setSelectedIdsEliminazione(prevIds => prevIds.filter(itemId => itemId !== item.id));
         setSelectedTrashCount(prevCount => Math.max(prevCount - 1, 0));
       }
       else {
-        this.dispatcher.getLavoroPrimaDellaModifica(item.id);
-        this.dispatcher.aggiornaTipoSelezioneLavoro(item.id, 2);
+        
+        store.dispatch(lavoroSliceActions.getLavoroPrimaDellaModifica({
+          id_lavoro: item.id,
+        }));
+
+        store.dispatch(lavoroSliceActions.aggiornaTipoSelezione({
+          id_lavoro: item.id, 
+          nuova_selezione: 2
+        }));
+
         setSelectedIdsEliminazione(prevIds => [...prevIds, item.id]);
         setSelectedTrashCount(prevCount => prevCount + 1);
         setSelectedIdsModifica(prevIdsModifica => prevIdsModifica.filter(itemId => itemId !== item.id));
@@ -181,13 +207,26 @@ export class LavoroActions {
     }
     else if(icon === "pencil") {
       if(selectedIdsModifica.includes(item.id)) {
-        this.dispatcher.getLavoroPrimaDellaModifica(item.id);
-        this.dispatcher.aggiornaTipoSelezioneLavoro(item.id, 0);
+        
+        store.dispatch(lavoroSliceActions.getLavoroPrimaDellaModifica({
+          id_lavoro: item.id,
+        }));
+
+        store.dispatch(lavoroSliceActions.aggiornaTipoSelezione({
+          id_lavoro: item.id, 
+          nuova_selezione: 0
+        }));
+
         setSelectedIdsModifica(prevIdsModifica => prevIdsModifica.filter(itemId => itemId !== item.id));
         setSelectedPencilCount(prevCount => Math.max(prevCount - 1, 0));
       }
       else {
-        this.dispatcher.aggiornaTipoSelezioneLavoro(item.id, 1);
+        
+        store.dispatch(lavoroSliceActions.aggiornaTipoSelezione({
+          id_lavoro: item.id, 
+          nuova_selezione: 1
+        }))
+
         setSelectedIdsModifica(prevIdsModifica => [...prevIdsModifica, item.id]);
         setSelectedPencilCount(prevCount => prevCount + 1);
         setSelectedIdsEliminazione(prevIds => prevIds.filter(itemId => itemId !== item.id));
@@ -241,14 +280,21 @@ export class LavoroActions {
         }
         lavoriAggiornati.push(lavoroAggiornato);
       }
-      this.dispatcher.aggiornaLavori(lavoriAggiornati);
+      
+      store.dispatch(lavoroSliceActions.aggiornaLavori({
+        lavori: lavoriAggiornati,
+      }));
 
       for(let id of idLavoriNonModificati) {
-        this.dispatcher.getLavoroPrimaDellaModifica(id);
+        store.dispatch(lavoroSliceActions.getLavoroPrimaDellaModifica({
+          id_lavoro: id
+        }));
       }
 
       for(let id of idLavoriModificati) {
-        this.dispatcher.getLavoroDopoLaModifica(id);
+        store.dispatch(lavoroSliceActions.getLavoroDopoLaModifica({
+          id_lavoro: id
+        }))
       }
 
       setSelectedIdsModifica([]);
@@ -261,7 +307,11 @@ export class LavoroActions {
   }
 
   aggiornaLavoro(id_lavoro, nome_attributo, nuovo_valore) {
-    this.dispatcher.aggiornaLavoro(id_lavoro, nome_attributo, nuovo_valore);
+    store.dispatch(lavoroSliceActions.aggiornaLavoro({
+      id_lavoro: id_lavoro, 
+      nome_attributo: nome_attributo, 
+      nuovo_valore: nuovo_valore
+    }))
   }
 
   async eliminaLavori(e, selectedIdsEliminazione, setSelectedIdsEliminazione, lavoroState) {
@@ -282,8 +332,12 @@ export class LavoroActions {
         },
         body: JSON.stringify(dati),
       });
-      if(response.status === 200) {          
-        this.dispatcher.aggiornaLavori(itemsRestanti);
+      if(response.status === 200) {  
+                
+        store.dispatch(lavoroSliceActions.aggiornaLavori({
+          lavori: itemsRestanti
+        }))
+
         setSelectedIdsEliminazione([]);
         alert(this.lingua === "italiano" ? "Eliminazione completata con successo." : "Elimination completed successfully.");
       }

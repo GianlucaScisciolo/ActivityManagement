@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Plus, Save } from 'lucide-react';
-// View
+// Views
 import Header from "./components/Header";
 import { DragAndDropWidgetHomePage } from "./components/DragAndDrop";
 // Actions

@@ -1,12 +1,10 @@
 // React e Redux
-import { useSelector } from 'react-redux';
 import React, { useState } from 'react';
 // Riutilizzabile
 import StyledComponents from './StyledRowItem';
 import { OperazioniNuovoItem, OperazioniCercaItems, OperazioniRicercaEntrateUscite, OperazioniLogin, OperazioniModificaProfilo, OperazioniFileItems, OperazioniItemEsistente } from '../Operazioni';
 import { getInputTag, getTextAreaTag } from '../Tags';
-// Utils
-import { handleChange, handleClick } from '../../utils/Handle';
+import { handleChange, handleClick } from '../Handle';
 
 export function RowNuovoItem({campi, indici, eseguiSalvataggio}) {
   let InputTag = getInputTag(1, true, StyledComponents);

@@ -1,17 +1,24 @@
 // React e Redux
 import { useSelector } from 'react-redux';
-// Dispatcher
-import { Dispatcher } from "../dispatcher/Dispatcher";
+// Store
+import store from '../store/store';
+// Reducers
+import { servizioSliceActions } from '../store/reducers/ServizioReducer';
 // Utils
 import { controlloServizio } from "../../utils/Controlli";
 
 export class ServizioActions {
-  dispatcher;
   attivitaState = useSelector((state) => state.attivita.value);
   lingua = this.attivitaState.lingua;
 
   constructor() {
-    this.dispatcher = new Dispatcher();
+    
+  }
+
+  azzeraLista() {
+    store.dispatch(servizioSliceActions.aggiornaServizi({
+      servizi: -1, 
+    }));
   }
 
   async inserisciServizio(e, nuovoServizio, setNuovoServizio) {
@@ -38,7 +45,11 @@ export class ServizioActions {
         nuovoServizio.id = result.id;
         nuovoServizio["in_uso"] = "Si";
         nuovoServizio["in_uso_attuale"] = "Si";
-        this.dispatcher.inserimentoServizio(nuovoServizio);
+
+        store.dispatch(servizioSliceActions.inserimentoServizio({
+          nuovoServizio: nuovoServizio
+        }));
+
         alert(this.lingua === "italiano" ? "L\'inserimento del servizio è andato a buon fine." : "Service entry was successful.");
       }
       else if(response.status === 400) {
@@ -66,7 +77,11 @@ export class ServizioActions {
 
     if(response.status === 200) {
       const result = await response.json();
-      this.dispatcher.aggiornaServizi(result.items);
+      
+      store.dispatch(servizioSliceActions.aggiornaServizi({
+        servizi: result.items, 
+      }));
+
     }
     else {
       alert(this.lingua === "italiano" ? "Errore durante la ricerca dei servizi, riprova più tardi." : "Error while searching for services, please try again later.");
@@ -79,13 +94,26 @@ export class ServizioActions {
   ) {
     if(icon === "trash") {
       if(selectedIdsEliminazione.includes(item.id)) {
-        this.dispatcher.aggiornaTipoSelezioneServizio(item.id, 0);
+        
+        store.dispatch(servizioSliceActions.aggiornaTipoSelezione({
+          id_servizio: item.id, 
+          nuova_selezione: 0
+        }));
+        
         setSelectedIdsEliminazione(prevIds => prevIds.filter(itemId => itemId !== item.id));
         setSelectedTrashCount(prevCount => Math.max(prevCount - 1, 0));
       }
       else {
-        this.dispatcher.getServizioPrimaDellaModifica(item.id);
-        this.dispatcher.aggiornaTipoSelezioneServizio(item.id, 2);
+        
+        store.dispatch(servizioSliceActions.getServizioPrimaDellaModifica({
+          id_servizio: item.id
+        }));
+
+        store.dispatch(servizioSliceActions.aggiornaTipoSelezione({
+          id_servizio: item.id, 
+          nuova_selezione: 2
+        }))
+        
         setSelectedIdsEliminazione(prevIds => [...prevIds, item.id]);
         setSelectedTrashCount(prevCount => prevCount + 1);
         setSelectedIdsModifica(prevIdsModifica => prevIdsModifica.filter(itemId => itemId !== item.id));
@@ -94,13 +122,25 @@ export class ServizioActions {
     }
     else if(icon === "pencil") {
       if(selectedIdsModifica.includes(item.id)) {
-        this.dispatcher.getServizioPrimaDellaModifica(item.id);
-        this.dispatcher.aggiornaTipoSelezioneServizio(item.id, 0);
+                
+        store.dispatch(servizioSliceActions.getServizioPrimaDellaModifica({
+          id_servizio: item.id
+        }));
+
+        store.dispatch(servizioSliceActions.aggiornaTipoSelezione({
+          id_servizio: item.id, 
+          nuova_selezione: 0
+        }))
+
         setSelectedIdsModifica(prevIdsModifica => prevIdsModifica.filter(itemId => itemId !== item.id));
         setSelectedPencilCount(prevCount => Math.max(prevCount - 1, 0));
       }
       else {
-        this.dispatcher.aggiornaTipoSelezioneServizio(item.id, 1);
+        store.dispatch(servizioSliceActions.aggiornaTipoSelezione({
+          id_servizio: item.id, 
+          nuova_selezione: 1
+        }));
+
         setSelectedIdsModifica(prevIdsModifica => [...prevIdsModifica, item.id]);
         setSelectedPencilCount(prevCount => prevCount + 1);
         setSelectedIdsEliminazione(prevIds => prevIds.filter(itemId => itemId !== item.id));
@@ -136,7 +176,11 @@ export class ServizioActions {
             const result = await response.json();
             let nuovoServizio = { ...serviziDaModificare[i] };
             nuovoServizio["id"] = result.id;
-            this.dispatcher.inserimentoServizio(nuovoServizio);
+            
+            store.dispatch(servizioSliceActions.inserimentoServizio({
+              nuovoServizio: nuovoServizio
+            }))
+
           }
           idServiziModificati.push(serviziDaModificare[i].id);
         }
@@ -158,14 +202,21 @@ export class ServizioActions {
         }
         serviziAggiornati.push(servizioAggiornato);
       }
-      this.dispatcher.aggiornaServizi(serviziAggiornati);
+      
+      store.dispatch(servizioSliceActions.aggiornaServizi({
+        servizi: serviziAggiornati, 
+      }))
 
       for(let id of idServiziNonModificati) {
-        this.dispatcher.getServizioPrimaDellaModifica(id);
+        store.dispatch(servizioSliceActions.getServizioPrimaDellaModifica({
+          id_servizio: id
+        }))
       }
 
       for(let id of idServiziModificati) {
-        this.dispatcher.getServizioDopoLaModifica(id);
+        store.dispatch(servizioSliceActions.getServizioDopoLaModifica({
+          id_servizio: id
+        }))
       }
       
       setSelectedIdsModifica([]);
@@ -178,7 +229,11 @@ export class ServizioActions {
   }
 
   aggiornaServizio(id_servizio, nome_attributo, nuovo_valore) {
-    this.dispatcher.aggiornaServizio(id_servizio, nome_attributo, nuovo_valore);
+    store.dispatch(servizioSliceActions.aggiornaServizio({
+      id_servizio: id_servizio,
+      nome_attributo: nome_attributo,
+      nuovo_valore: nuovo_valore
+    }));
   }
 
   async eliminaServizi(e, selectedIdsEliminazione, setSelectedIdsEliminazione, servizioState) {
@@ -200,7 +255,9 @@ export class ServizioActions {
         body: JSON.stringify(dati),
       });
       if(response.status === 200) {          
-        this.dispatcher.aggiornaServizi(itemsRestanti);
+        store.dispatch(servizioSliceActions.aggiornaServizi({
+          servizi: itemsRestanti, 
+        }))
         setSelectedIdsEliminazione([]);
         alert(this.lingua === "italiano" ? "Eliminazione completata con successo." : "Elimination completed successfully.");
       }

@@ -1,33 +1,10 @@
 // React
 import { useState, useEffect } from "react";
 
-const getAllClienti = async (setClienti) => {
-  const response = await fetch('/OTTIENI_TUTTI_GLI_ITEMS', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({tipo_item: "cliente"}),
-  });
-
-  if(response.status === 200) {
-    const result = await response.json();
-    setClienti(result.items);
-  }
-  else {
-    alert(attivitaState.lingua === "italiano" ? "Errore durante l\'ottenimento dei clienti per l\'inserimento di un nuovo lavoro, riprova più tardi." : "Error while obtaining clients for new job entry, try again later.");
-  }
-};
-
-const OptionsClientiNuovoLavoro = ({ item, setItem, classeFormWrapperCheckbox }) => {
-  const [clienti, setClienti] = useState(-1);
+const OptionsClientiNuovoLavoro = ({ clienti, item, setItem, classeFormWrapperCheckbox }) => {
   const [clientiSelezionati, setClientiSelezionati] = useState([]);
   const [clientiNonSelezionati, setClientiNonSelezionati] = useState(Object.values(clienti));
   
-  useEffect(() => {
-    getAllClienti(setClienti);
-  }, []);
-
   useEffect(() => {
     setClientiNonSelezionati(Object.values(clienti));
   }, [clienti]);

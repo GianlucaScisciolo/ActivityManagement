@@ -33,9 +33,9 @@ app.listen(3000, () => {
 /************************************************** Database **************************************************/
 
 const db = mysql.createConnection({
-  host: "host",
-  user: "user_db",
-  password: "password_db",
+  host: "localhost",
+  user: "root",
+  password: "utente",
   database: "activity_management"
 })
 

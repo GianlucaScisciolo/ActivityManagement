@@ -4,10 +4,9 @@ import { useSelector } from "react-redux";
 // View
 import Header from "../components/Header.jsx";
 import { OperazioniForms } from "../forms/OperazioniForms";
-import { SpesaForms } from "../forms/SpesaForms";
+import { SpesaForms } from "../forms/SpesaForms.js";
 // Actions
 import { SpesaActions } from "../../actions/SpesaActions";
-import { AttivitaActions } from "../../actions/AttivitaActions.js";
 // Riutilizzabile
 import PaginaWeb from "../../../riutilizzabile/pagine_web/PaginaWeb.jsx";
 
@@ -80,8 +79,7 @@ const Spese = () => {
   }
 
   useEffect(() => {
-    const attivitaActions = new AttivitaActions();
-    attivitaActions.azzeraListe();
+    spesaActions.azzeraLista();
   }, []);
 
   const campiNuovaSpesa = spesaForms.getCampiNuovaSpesa(

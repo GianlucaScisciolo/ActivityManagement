@@ -1,17 +1,24 @@
 // React e Redux
 import { useSelector } from 'react-redux';
-// Dispatcher
-import { Dispatcher } from "../dispatcher/Dispatcher";
+// Store
+import store from '../store/store';
+// Reducers
+import { clienteSliceActions } from '../store/reducers/ClienteReducer';
 // Utils
 import { controlloCliente } from "../../utils/Controlli";
 
 export class ClienteActions {
   attivitaState = useSelector((state) => state.attivita.value);
   lingua = this.attivitaState.lingua;
-
-  dispatcher;
+  
   constructor() {
-    this.dispatcher = new Dispatcher();
+
+  }
+
+  azzeraLista() {
+    store.dispatch(clienteSliceActions.aggiornaClienti({
+      clienti: -1, 
+    }));
   }
   
   async inserimentoCliente(e, nuovoCliente, setNuovoCliente) {
@@ -36,7 +43,11 @@ export class ClienteActions {
       if(response.status === 200) {
         const result = await response.json();
         nuovoCliente.id = result.id;
-        this.dispatcher.inserimentoCliente(nuovoCliente);
+        
+        store.dispatch(clienteSliceActions.inserimentoCliente({
+          nuovoCliente: nuovoCliente
+        }))
+        
         alert(this.lingua === "italiano" ? "L\'inserimento del cliente è andato a buon fine." : "Client input was successful.");
       }
       else if(response.status === 400) {
@@ -64,7 +75,11 @@ export class ClienteActions {
 
     if(response.status === 200) {
       const result = await response.json();
-      this.dispatcher.aggiornaClienti(result.items);
+      
+      store.dispatch(clienteSliceActions.aggiornaClienti({
+        clienti: result.items, 
+      }))
+
     }
     else {
       alert(this.lingua === "italiano" ? "Errore durante la ricerca dei clienti, riprova più tardi." : "Error while customer search, please try again later.");
@@ -77,13 +92,21 @@ export class ClienteActions {
   ) {
     if(icon === "trash") {
       if(selectedIdsEliminazione.includes(item.id)) {
-        this.dispatcher.aggiornaTipoSelezioneCliente(item.id, 0);
+        store.dispatch(clienteSliceActions.aggiornaTipoSelezione({
+          id_cliente: item.id, 
+          nuova_selezione: 0
+        }))
         setSelectedIdsEliminazione(prevIds => prevIds.filter(itemId => itemId !== item.id));
         setSelectedTrashCount(prevCount => Math.max(prevCount - 1, 0));
       }
       else {
-        this.dispatcher.getClientePrimaDellaModifica(item.id);
-        this.dispatcher.aggiornaTipoSelezioneCliente(item.id, 2);
+        store.dispatch(clienteSliceActions.getClientePrimaDellaModifica({
+          id_cliente: item.id,
+        }))
+        store.dispatch(clienteSliceActions.aggiornaTipoSelezione({
+          id_cliente: item.id, 
+          nuova_selezione: 2
+        }))
         setSelectedIdsEliminazione(prevIds => [...prevIds, item.id]);
         setSelectedTrashCount(prevCount => prevCount + 1);
         setSelectedIdsModifica(prevIdsModifica => prevIdsModifica.filter(itemId => itemId !== item.id));
@@ -92,13 +115,21 @@ export class ClienteActions {
     }
     else if(icon === "pencil") {
       if(selectedIdsModifica.includes(item.id)) {
-        this.dispatcher.getClientePrimaDellaModifica(item.id);
-        this.dispatcher.aggiornaTipoSelezioneCliente(item.id, 0);
+        store.dispatch(clienteSliceActions.getClientePrimaDellaModifica({
+          id_cliente: item.id,
+        }))
+        store.dispatch(clienteSliceActions.aggiornaTipoSelezione({
+          id_cliente: item.id, 
+          nuova_selezione: 0
+        }))
         setSelectedIdsModifica(prevIdsModifica => prevIdsModifica.filter(itemId => itemId !== item.id));
         setSelectedPencilCount(prevCount => Math.max(prevCount - 1, 0));
       }
       else {
-        this.dispatcher.aggiornaTipoSelezioneCliente(item.id, 1);
+        store.dispatch(clienteSliceActions.aggiornaTipoSelezione({
+          id_cliente: item.id, 
+          nuova_selezione: 1
+        }))
         setSelectedIdsModifica(prevIdsModifica => [...prevIdsModifica, item.id]);
         setSelectedPencilCount(prevCount => prevCount + 1);
         setSelectedIdsEliminazione(prevIds => prevIds.filter(itemId => itemId !== item.id));
@@ -150,14 +181,20 @@ export class ClienteActions {
         }
         clientiAggiornati.push(clienteAggiornato);
       }
-      this.dispatcher.aggiornaClienti(clientiAggiornati);
+      store.dispatch(clienteSliceActions.aggiornaClienti({
+        clienti: clientiAggiornati, 
+      }))
 
       for(let id of idClientiNonModificati) {
-        this.dispatcher.getClientePrimaDellaModifica(id);
+        store.dispatch(clienteSliceActions.getClientePrimaDellaModifica({
+          id_cliente: id,
+        }));
       }
 
       for(let id of idClientiModificati) {
-        this.dispatcher.getClienteDopoLaModifica(id);
+        store.dispatch(clienteSliceActions.getClienteDopoLaModifica({
+          id_cliente: id
+        }));
       }
 
       setSelectedIdsModifica([]);
@@ -170,7 +207,11 @@ export class ClienteActions {
   }
 
   aggiornaCliente(id_cliente, nome_attributo, nuovo_valore) {
-    this.dispatcher.aggiornaCliente(id_cliente, nome_attributo, nuovo_valore);
+    store.dispatch(clienteSliceActions.aggiornaCliente({
+      id_cliente: id_cliente,
+      nome_attributo: nome_attributo,
+      nuovo_valore: nuovo_valore,
+    }))
   }
 
   async eliminaClienti(e, selectedIdsEliminazione, setSelectedIdsEliminazione, clienteState) {
@@ -192,7 +233,9 @@ export class ClienteActions {
         body: JSON.stringify(dati),
       });
       if(response.status === 200) {
-        this.dispatcher.aggiornaClienti(itemsRestanti);
+        store.dispatch(clienteSliceActions.aggiornaClienti({
+          clienti: itemsRestanti, 
+        }))
         setSelectedIdsEliminazione([]);
         alert(this.lingua === "italiano" ? "Eliminazione completata con successo." : "Elimination completed successfully.");
       }

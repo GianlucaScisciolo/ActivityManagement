@@ -11,6 +11,6 @@ export const getQuantitaEntrateAnno = (entrata) => {
       parseInt(entrata.quantita_gennaio) + parseInt(entrata.quantita_febbraio) + parseInt(entrata.quantita_marzo) 
     + parseInt(entrata.quantita_aprile)  + parseInt(entrata.quantita_maggio)   + parseInt(entrata.quantita_giugno) 
     + parseInt(entrata.quantita_luglio)  + parseInt(entrata.quantita_agosto)   + parseInt(entrata.quantita_settembre) 
-    + parseInt(entrata.quantita_ottobre)  + parseInt(entrata.quantita_novembre)   + parseInt(entrata.quantita_dicembre) 
+    + parseInt(entrata.quantita_ottobre) + parseInt(entrata.quantita_novembre) + parseInt(entrata.quantita_dicembre) 
   ); 
 }

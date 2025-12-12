@@ -1,15 +1,13 @@
 // React e Redux
-import { useSelector } from 'react-redux';
 import React, { useState, useRef } from 'react';
 import { Card, Table } from 'react-bootstrap';
 // Riutilizzabile
 import StyledComponents from './StyledCardItem';
 import { OperazioniNuovoItem, OperazioniCercaItems, OperazioniRicercaEntrateUscite, OperazioniLogin, OperazioniModificaProfilo, OperazioniFileItems, OperazioniItemEsistente } from '../Operazioni';
 import { getInputTag, getTextAreaTag } from '../Tags';
-// Utils
-import { getColor } from '../../utils/Colori';
-import { getTotaleEntrateAnno, getQuantitaEntrateAnno } from '../../utils/Calcoli';
-import { handleChange, handleClick } from '../../utils/Handle';
+import { handleChange, handleClick } from '../Handle';
+import { getColor } from '../Colori';
+import { getTotaleEntrateAnno, getQuantitaEntrateAnno } from '../Calcoli';
 
 export function CardNuovoItem({campi, indici, eseguiSalvataggio}) {
   let maxHeight = "2000px";

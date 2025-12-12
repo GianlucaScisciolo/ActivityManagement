@@ -1,18 +1,24 @@
 // React e Redux
 import { useSelector } from 'react-redux';
-// Dispatcher 
-import { Dispatcher } from "../dispatcher/Dispatcher";
+// Store
+import store from '../store/store';
+// Reducers
+import { spesaSliceActions } from '../store/reducers/SpesaReducer';
 // Utils
 import { controlloSpesa } from "../../utils/Controlli";
 import { generaFileSpesePDF, generaFileSpeseExcel } from "../../utils/File";
 
 export class SpesaActions {
-  dispatcher;
   attivitaState = useSelector((state) => state.attivita.value);
   lingua = this.attivitaState.lingua;
 
   constructor() {
-    this.dispatcher = new Dispatcher();
+  }
+
+  azzeraLista() {
+    store.dispatch(spesaSliceActions.aggiornaSpese({
+      spese: -1,
+    }));
   }
 
   async inserimentoSpesa(e, nuovaSpesa, setNuovaSpesa) {
@@ -38,7 +44,11 @@ export class SpesaActions {
       if(response.status === 200) {
         const result = await response.json();
         nuovaSpesa.id = result.id;
-        this.dispatcher.inserimentoSpesa(nuovaSpesa);
+        
+        store.dispatch(spesaSliceActions.inserimentoSpesa({
+          nuovaSpesa: nuovaSpesa 
+        }))
+        
         alert(this.lingua === "italiano" ? "L\'inserimento della spesa è andato a buon fine." : "Expense entry was successful.");
       }
       else if(response.status === 400) {
@@ -67,7 +77,11 @@ export class SpesaActions {
 
       if(response.status === 200) {
         const result = await response.json();
-        this.dispatcher.aggiornaSpese(result.items);
+
+        store.dispatch(spesaSliceActions.aggiornaSpese({
+          spese: result.items,
+        }));
+
       }
       else {
         alert(this.lingua === "italiano" ? "Errore durante la ricerca delle spese, riprova più tardi." : "Error while searching expenses, please try again later.");
@@ -155,13 +169,24 @@ export class SpesaActions {
   ) {
     if(icon === "trash") {
       if(selectedIdsEliminazione.includes(item.id)) {
-        this.dispatcher.aggiornaTipoSelezioneSpesa(item.id, 0);
+        
+        store.dispatch(spesaSliceActions.aggiornaTipoSelezione({
+          id_spesa: item.id, 
+          nuova_selezione: 0
+        }));
+
         setSelectedIdsEliminazione(prevIds => prevIds.filter(itemId => itemId !== item.id));
         setSelectedTrashCount(prevCount => Math.max(prevCount - 1, 0));
       }
       else {
-        this.dispatcher.getSpesaPrimaDellaModifica(item.id);
-        this.dispatcher.aggiornaTipoSelezioneSpesa(item.id, 2);
+        
+        store.dispatch(spesaSliceActions.getSpesaPrimaDellaModifica({
+          id_spesa: item.id,
+        }))
+        store.dispatch(spesaSliceActions.aggiornaTipoSelezione({
+          id_spesa: item.id, 
+          nuova_selezione: 2
+        }))
         setSelectedIdsEliminazione(prevIds => [...prevIds, item.id]);
         setSelectedTrashCount(prevCount => prevCount + 1);
         setSelectedIdsModifica(prevIdsModifica => prevIdsModifica.filter(itemId => itemId !== item.id));
@@ -170,13 +195,26 @@ export class SpesaActions {
     }
     else if(icon === "pencil") {
       if(selectedIdsModifica.includes(item.id)) {
-        this.dispatcher.getSpesaPrimaDellaModifica(item.id);
-        this.dispatcher.aggiornaTipoSelezioneSpesa(item.id, 0);
+        
+        store.dispatch(spesaSliceActions.getSpesaPrimaDellaModifica({
+          id_spesa: item.id,
+        }));
+        
+        store.dispatch(spesaSliceActions.aggiornaTipoSelezione({
+          id_spesa: item.id, 
+          nuova_selezione: 0
+        }));
+        
         setSelectedIdsModifica(prevIdsModifica => prevIdsModifica.filter(itemId => itemId !== item.id));
         setSelectedPencilCount(prevCount => Math.max(prevCount - 1, 0));
       }
       else {
-        this.dispatcher.aggiornaTipoSelezioneSpesa(item.id, 1);
+        
+        store.dispatch(spesaSliceActions.aggiornaTipoSelezione({
+          id_spesa: item.id, 
+          nuova_selezione: 1
+        }));
+        
         setSelectedIdsModifica(prevIdsModifica => [...prevIdsModifica, item.id]);
         setSelectedPencilCount(prevCount => prevCount + 1);
         setSelectedIdsEliminazione(prevIds => prevIds.filter(itemId => itemId !== item.id));
@@ -228,13 +266,21 @@ export class SpesaActions {
         }
         speseAggiornate.push(spesaAggiornata);
       }
-      this.dispatcher.aggiornaSpese(speseAggiornate);
+      
+      store.dispatch(spesaSliceActions.aggiornaSpese({
+        spese: speseAggiornate,
+      }))
 
       for(let id of idSpeseNonModificate) {
-        this.dispatcher.getSpesaPrimaDellaModifica(id);
+        store.dispatch(spesaSliceActions.getSpesaPrimaDellaModifica({
+          id_spesa: id,
+        }))
       }
       for(let id of idSpeseModificate) {
-        this.dispatcher.getSpesaDopoLaModifica(id);
+        
+        store.dispatch(spesaSliceActions.getSpesaDopoLaModifica({
+          id_spesa: id
+        }))
       }
 
       setSelectedIdsModifica([]);
@@ -247,7 +293,12 @@ export class SpesaActions {
   };
 
   aggiornaSpesa(id_spesa, nome_attributo, nuovo_valore) {
-    this.dispatcher.aggiornaSpesa(id_spesa, nome_attributo, nuovo_valore);
+    
+    store.dispatch(spesaSliceActions.aggiornaSpesa({
+      id_spesa: id_spesa,
+      nome_attributo: nome_attributo,
+      nuovo_valore: nuovo_valore,
+    }))
   }
 
   async eliminaSpese(e, selectedIdsEliminazione, setSelectedIdsEliminazione, spesaState) {
@@ -270,7 +321,11 @@ export class SpesaActions {
           body: JSON.stringify(dati),
         });
         if(response.status === 200) {          
-          this.dispatcher.aggiornaSpese(itemsRestanti);
+          
+          store.dispatch(spesaSliceActions.aggiornaSpese({
+            spese: itemsRestanti,
+          }));
+          
           setSelectedIdsEliminazione([]);
           alert(this.lingua === "italiano" ? "Eliminazione completata con successo." : "Elimination completed successfully.");
         }

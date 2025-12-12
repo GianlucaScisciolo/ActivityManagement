@@ -2,10 +2,10 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-// View
+// Views
 import Header from "../components/Header";
 import { OperazioniForms } from '../forms/OperazioniForms';
-import { AutenticazioneForms } from "../forms/AutenticazioneForms";
+import { AutenticazioneForms } from '../forms/AutenticazioneForms';
 // Actions
 import { AutenticazioneActions } from "../../actions/AutenticazioneActions";
 // Riutilizzabile

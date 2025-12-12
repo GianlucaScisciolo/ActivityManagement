@@ -1,5 +1,3 @@
-// React e Redux
-import { useSelector } from "react-redux";
 // Riutilizzabile
 import { CardItemEsistente } from "./card_item/CardItem";
 import { RowItemEsistente } from "./row_item/RowItem";

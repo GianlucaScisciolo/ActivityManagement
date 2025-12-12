@@ -34,14 +34,14 @@ const initialState = loadFromLocalStorage() || {
 };
 
 const reducers = {
-  eseguiLogin: (state, action) => {
+  login: (state, action) => {
     state.value.username = action.payload.username;
     state.value.ruolo = action.payload.ruolo;
     state.value.note = action.payload.note;
     state.value.isLogged = true;  
     saveToLocalStorage(state);
   },
-  eseguiLogout: (state) => {
+  logout: (state) => {
     state.value.username = null;
     state.value.ruolo = "guest";
     state.value.note = null;
@@ -57,8 +57,8 @@ const autenticazioneSlice = createSlice({
 });
 
 export const autenticazioneSliceActions = {
-  eseguiLogin: autenticazioneSlice.actions.eseguiLogin,
-  eseguiLogout: autenticazioneSlice.actions.eseguiLogout,
+  login: autenticazioneSlice.actions.login,
+  logout: autenticazioneSlice.actions.logout,
 };
 
 export const autenticazioneReducer = autenticazioneSlice.reducer;

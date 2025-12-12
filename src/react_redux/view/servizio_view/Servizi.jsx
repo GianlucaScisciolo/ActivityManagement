@@ -4,10 +4,9 @@ import { useSelector } from "react-redux";
 // View
 import Header from "../components/Header.jsx";
 import { OperazioniForms } from "../forms/OperazioniForms";
-import { ServizioForms } from "../forms/ServizioForms";
+import { ServizioForms } from "../forms/ServizioForms.jsx";
 // Actions
 import { ServizioActions } from "../../actions/ServizioActions";
-import { AttivitaActions } from "../../actions/AttivitaActions.js";
 // Riutilizzabile
 import PaginaWeb from "../../../riutilizzabile/pagine_web/PaginaWeb.jsx";
 
@@ -56,8 +55,7 @@ const Servizi = () => {
   };
 
   useEffect(() => {
-    const attivitaActions = new AttivitaActions();
-    attivitaActions.azzeraListe();
+    servizioActions.azzeraLista();
   }, []);
 
   const campiNuovoServizio = servizioForms.getCampiNuovoServizio(

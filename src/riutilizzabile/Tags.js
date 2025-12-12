@@ -1,3 +1,6 @@
+// React
+import { Pencil, Trash2 } from "lucide-react";
+
 export function getPencilTag(tipoSelezione, StyledComponents) {
   return (tipoSelezione === 0 || tipoSelezione === 2) ? StyledComponents.StyledPencilNotSelected : (
     (tipoSelezione === 1) ? StyledComponents.StyledPencilSelected : Pencil

@@ -6,9 +6,6 @@ import { useEffect, useState } from "react";
 import OptionsServiziLavoroEsistente from '../options/OptionsServiziLavoroEsistente';
 import OptionsClientiNuovoLavoro from '../options/OptionsClientiNuovoLavoro';
 import OptionsServiziNuovoLavoro from '../options/OptionsServiziNuovoLavoro';
-// Actions
-import { LavoroActions } from "../../actions/LavoroActions";
-import { ServizioActions } from "../../actions/ServizioActions";
 // Utils
 import { controlloLavoro } from "../../../utils/Controlli";
 
@@ -23,10 +20,10 @@ export class LavoroForms {
 
   }
 
-  getCampiNuovoLavoro(item, setItem, handleOnChange, handleOnClick, handleOnBlur) {
+  getCampiNuovoLavoro(clienti, setClienti, servizi, setServizi, item, setItem, handleOnChange, handleOnClick, handleOnBlur) {
     const classeFormWrapperCheckbox = (this.stileState.vistaForm === "form") ? "checkbox-wrapper-form" : "checkbox-wrapper";
-    const optionsClientiVar = React.createElement(OptionsClientiNuovoLavoro, { item, setItem, classeFormWrapperCheckbox })
-    const optionsServiziVar = React.createElement(OptionsServiziNuovoLavoro, { item, classeFormWrapperCheckbox });
+    const optionsClientiVar = React.createElement(OptionsClientiNuovoLavoro, { clienti, item, setItem, classeFormWrapperCheckbox })
+    const optionsServiziVar = React.createElement(OptionsServiziNuovoLavoro, { servizi, setServizi, item, classeFormWrapperCheckbox });
 
     return {
       header: this.lingua === "italiano" ? "Nuovo lavoro" : "New job", 

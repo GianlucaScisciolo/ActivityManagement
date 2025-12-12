@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+// React e Redux
 import { Row } from "react-bootstrap";
 import { Col } from "react-bootstrap";
 
@@ -12,31 +12,7 @@ const aggiornaServizio = (id, parametro, nuovoValore, setServizi) => {
   );
 };
 
-const getAllServizi = async (setServizi) => {
-  const response = await fetch('/OTTIENI_TUTTI_GLI_ITEMS', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({tipo_item: "servizio"}),
-  });
-
-  if(response.status === 200) {
-    const result = await response.json();
-    setServizi(result.items);
-  }
-  else {
-    alert(attivitaState.lingua === "italiano" ? "Errore durante l\'ottenimento dei clienti per l\'inserimento di un nuovo lavoro, riprova più tardi." : "Error while obtaining clients for new job entry, try again later.");
-  }
-};
-
-const OptionsServiziNuovoLavoro = ({ item, classeFormWrapperCheckbox }) => {
-  useEffect(() => {
-    getAllServizi(setServizi);
-  }, []);
-
-  const [servizi, setServizi] = useState(-1);
-
+const OptionsServiziNuovoLavoro = ({ servizi, setServizi, item, classeFormWrapperCheckbox }) => {
   const optionStr = (servizio) => {
     return servizio.nome + " - " + servizio.prezzo + " €";
   }

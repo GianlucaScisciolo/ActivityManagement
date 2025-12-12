@@ -1,5 +1,25 @@
-// Utils
-//import { encryptPassword, generateRandomString, PEPPER_HEX } from "../src/utils/Sicurezza";
+// node_modules
+import CryptoJS from 'crypto-js';
+
+// Costante PEPPER_HEX
+const PEPPER_HEX = "13pmcWU1ZAjDFi22U6ANycDY0len2k5H";
+
+// Funzione per generare una stringa casuale
+const generateRandomString = (length) => {
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let result = '';
+  for (let i = 0; i < length; i++) {
+      const randomIndex = Math.floor(Math.random() * characters.length);
+      result += characters[randomIndex];
+  }
+  return result;
+}
+
+// Funzione per criptare la password
+const encryptPassword = (password, saltHex, pepperHex) => {
+  const hash = CryptoJS.SHA512(password + saltHex + pepperHex);
+  return hash.toString(CryptoJS.enc.Hex);
+}
 
 export class AutenticazioneSQL {
   SQL_SELEZIONE_UTENTE = ` 

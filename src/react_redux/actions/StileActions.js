@@ -1,24 +1,29 @@
 // React e Redux
 import { useSelector } from 'react-redux';
-// Dispatcher
-import { Dispatcher } from "../dispatcher/Dispatcher";
+// Store
+import store from '../store/store';
+// Reducers
+import { stileSliceActions } from '../store/reducers/StileReducer';
 
 export class StileActions {
-  dispatcher;
   attivitaState = useSelector((state) => state.attivita.value);
   lingua = this.attivitaState.lingua;
 
   constructor() {
-    this.dispatcher = new Dispatcher();
+    
   }
 
   cambioSfondo(tipoSfondo, sfondo) {
     switch(tipoSfondo) {
       case "img":
-        this.dispatcher.cambioImmagineSfondo(sfondo);
+        store.dispatch(stileSliceActions.cambioImmagineSfondo({
+          pathImg: sfondo
+        }));
         break;
       case "rgb": 
-        this.dispatcher.cambioColoreSfondo(sfondo);
+        store.dispatch(stileSliceActions.cambioColoreSfondo({
+          coloreRGB: sfondo
+        }));
         break;
       default:
         alert(this.lingua === "italiano" ? "Errore, tipo sfondo non valido." : "Error, invalid background type.");
@@ -28,10 +33,14 @@ export class StileActions {
 
   cambioVista(tipoElemento, tipoView) {
     if(tipoElemento === "item") {
-      this.dispatcher.cambioVistaItem(tipoView);
+      store.dispatch(stileSliceActions.cambioVistaItem({
+        vistaItem: tipoView
+      }));
     }
     else if(tipoElemento === "form") {
-      this.dispatcher.cambioVistaForm(tipoView);
+      store.dispatch(stileSliceActions.cambioVistaForm({
+        vistaForm: tipoView
+      }))
     }
     else {
       alert(this.lingua === "italiano" ? "Errore, tipo elemento non valido." : "Error, invalid element type.");

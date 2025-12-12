@@ -1,4 +1,4 @@
-// View
+// Views
 import Home from "./Home.jsx";
 
 function App() {

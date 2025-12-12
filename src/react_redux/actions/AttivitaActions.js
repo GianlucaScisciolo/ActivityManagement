@@ -1,39 +1,39 @@
-// Dispatcher
-import { Dispatcher } from "../dispatcher/Dispatcher";
+// Store
+import store from "../store/store";
+// Reducers
+import { attivitaSliceActions } from "../store/reducers/AttivitaReducer";
 
 export class AttivitaActions {
-  dispatcher;
+  
   constructor() {
-    this.dispatcher = new Dispatcher();
-  }
 
-  azzeraListe() {
-    this.dispatcher.azzeraListe();
   }
 
   async ricercaEntrateUsciteRicavi(e, datiRicerca) {
     e.preventDefault();
-    this.dispatcher.ricercaEntrateUsciteRicavi(datiRicerca);
   }
 
   scegliWidgets(e, setPlusCliccato, plusCliccato) {
     e.preventDefault();
     setPlusCliccato(!plusCliccato);
     if(plusCliccato === true) {
-      this.dispatcher.widgetView();
+      store.dispatch(attivitaSliceActions.widgetView())
     }
     else if(plusCliccato === false) {
-      this.dispatcher.widgetSelected();
+      store.dispatch(attivitaSliceActions.widgetSelected());
     }
   }
 
   modificaWidget(nomeWidget, tipoVisualizzazione) {
-    this.dispatcher.modificaWidget(nomeWidget, tipoVisualizzazione);
+    store.dispatch(attivitaSliceActions.modificaWidget({
+      nomeWidget: nomeWidget,
+      tipoVisualizzazione: tipoVisualizzazione,
+    }))
   }
 
   modificaLingua(e) {
     e.preventDefault();
-    this.dispatcher.modificaLingua();
+    store.dispatch(attivitaSliceActions.modificaLingua())
   }
 }
 

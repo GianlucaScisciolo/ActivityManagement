@@ -1,13 +1,12 @@
 // React e Redux
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-// View
+// Views
 import Header from "../components/Header.jsx";
 import { OperazioniForms } from '../forms/OperazioniForms.js';
 import { ClienteForms } from '../forms/ClienteForms.jsx';
 // Actions
 import { ClienteActions } from "../../actions/ClienteActions.js";
-import { AttivitaActions } from "../../actions/AttivitaActions.js"
 // Riutilizzabile
 import PaginaWeb from '../../../riutilizzabile/pagine_web/PaginaWeb.jsx';
 
@@ -61,8 +60,7 @@ const Clienti = () => {
   };
 
   useEffect(() => {
-    const attivitaActions = new AttivitaActions();
-    attivitaActions.azzeraListe();
+    clienteActions.azzeraLista();
   }, []);
   const campiNuovoCliente = clienteForms.getCampiNuovoCliente(nuovoCliente, (e) => operazioniForms.handleInputChange(e, setNuovoCliente), null, null)
   const campiRicercaClienti = clienteForms.getCampiRicercaClienti(datiRicerca, (e) => operazioniForms.handleInputChange(e, setDatiRicerca), null, null)

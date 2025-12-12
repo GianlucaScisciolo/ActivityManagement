@@ -4,12 +4,9 @@ import { useSelector } from "react-redux";
 // View
 import Header from "../components/Header.jsx";
 import { OperazioniForms } from "../forms/OperazioniForms.js";
-import { LavoroForms } from "../forms/LavoroForms";
-import OptionsClientiNuovoLavoro from "../options/OptionsClientiNuovoLavoro.jsx";
-import OptionsServiziNuovoLavoro from "../options/OptionsServiziNuovoLavoro.jsx";
+import { LavoroForms } from "../forms/LavoroForms.jsx";
 // Actions
 import { LavoroActions } from "../../actions/LavoroActions.js";
-import { AttivitaActions } from "../../actions/AttivitaActions.js";
 // Riutilizzabile
 import PaginaWeb from "../../../riutilizzabile/pagine_web/PaginaWeb.jsx";
 
@@ -87,11 +84,14 @@ const Lavori = () => {
   }
   
   useEffect(() => {
-    const attivitaActions = new AttivitaActions();
-    attivitaActions.azzeraListe();
+    lavoroActions.azzeraLista();
   }, []);
   
   const campiNuovoLavoro = lavoroForms.getCampiNuovoLavoro(
+    clienti, 
+    setClienti, 
+    servizi, 
+    setServizi, 
     nuovoLavoro, 
     setNuovoLavoro, 
     (e) => operazioniForms.handleInputChange(e, setNuovoLavoro), 
@@ -110,6 +110,50 @@ const Lavori = () => {
     (e) => operazioniForms.handleInputClick(e), 
     (e) => operazioniForms.handleInputBlur(e) 
   );
+
+  const getAllClienti = async (setClienti) => {
+    const response = await fetch('/OTTIENI_TUTTI_GLI_ITEMS', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({tipo_item: "cliente"}),
+    });
+
+    if(response.status === 200) {
+      const result = await response.json();
+      setClienti(result.items);
+    }
+    else {
+      alert(attivitaState.lingua === "italiano" ? "Errore durante l\'ottenimento dei clienti per l\'inserimento di un nuovo lavoro, riprova più tardi." : "Error while obtaining clients for new job entry, try again later.");
+    }
+  };
+
+  const getAllServizi = async (setServizi) => {
+    const response = await fetch('/OTTIENI_TUTTI_GLI_ITEMS', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({tipo_item: "servizio"}),
+    });
+
+    if(response.status === 200) {
+      const result = await response.json();
+      setServizi(result.items);
+    }
+    else {
+      alert(attivitaState.lingua === "italiano" ? "Errore durante l\'ottenimento dei clienti per l\'inserimento di un nuovo lavoro, riprova più tardi." : "Error while obtaining clients for new job entry, try again later.");
+    }
+  };
+
+  useEffect(() => {
+    getAllClienti(setClienti);
+  }, []);
+
+  useEffect(() => {
+    getAllServizi(setServizi);
+  }, []);
 
   return (
     <>

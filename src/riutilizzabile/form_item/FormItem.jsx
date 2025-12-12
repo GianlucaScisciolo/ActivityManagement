@@ -1,5 +1,4 @@
 // React e Redux
-import { useSelector } from 'react-redux';
 import React, { useState } from 'react';
 // Riutilizzabile
 import StyledComponents from './StyledFormItem';
