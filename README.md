@@ -24,10 +24,10 @@ Lo scopo del sistema è fornire un software in grado di gestire un'attività (at
 4. Modificare il seguente codice presente nel file **/storage/server.js**:
 ```js
 const db = mysql.createConnection({
-	host: "host", // riga 34 <-- modificare
-	user: "user_db", // riga 35 <-- modificare
-	password: "password_db", // riga 36 <-- modificare
-	database: "activity_management" // riga 37 <-- non modificare
+	host: "host", // riga 36 <-- modificare
+	user: "user_db", // riga 37 <-- modificare
+	password: "password_db", // riga 38 <-- modificare
+	database: "activity_management" // riga 39 <-- non modificare
 })
 ```
 con i propri dati per connettersi al database MySQL.
