@@ -63,7 +63,7 @@ const Clienti = () => {
     clienteActions.azzeraLista();
   }, []);
   const campiNuovoCliente = clienteForms.getCampiNuovoCliente(nuovoCliente, (e) => operazioniForms.handleInputChange(e, setNuovoCliente), null, null)
-  const campiRicercaClienti = clienteForms.getCampiRicercaClienti(datiRicerca, (e) => operazioniForms.handleInputChange(e, setDatiRicerca), null, null)
+  const campiRicercaClienti = clienteForms.getCampiRicercaClienti(datiRicerca, (e) => operazioniForms.handleInputChange(e, setDatiRicerca), null, null, attivitaState)
   
   return (
     <>
@@ -85,10 +85,10 @@ const Clienti = () => {
             lavoroActions: null, 
             // Handle operations
             handleBlurItem: handleBlurItem, 
-            handleInsert: (e) => clienteActions.inserimentoCliente(e, nuovoCliente, setNuovoCliente), 
-            handleSearch: (e) => clienteActions.ricercaClienti(e, datiRicerca), 
-            handleEdit: (e) => clienteActions.modificaClienti(e, selectedIdsModifica, setSelectedIdsModifica, clienteState),
-            handleDelete: (e) => clienteActions.eliminaClienti(e, selectedIdsEliminazione, setSelectedIdsEliminazione, clienteState),             
+            handleInsert: (e) => clienteActions.inserimentoCliente(e, nuovoCliente, setNuovoCliente, attivitaState.lingua), 
+            handleSearch: (e) => clienteActions.ricercaClienti(e, datiRicerca, attivitaState.lingua), 
+            handleEdit: (e) => clienteActions.modificaClienti(e, selectedIdsModifica, setSelectedIdsModifica, clienteState.clienti, attivitaState.lingua),
+            handleDelete: (e) => clienteActions.eliminaClienti(e, selectedIdsEliminazione, setSelectedIdsEliminazione, clienteState.clienti, attivitaState.lingua),             
             // Campi
             campiNuovoItem: campiNuovoCliente, 
             campiRicercaItems: campiRicercaClienti,

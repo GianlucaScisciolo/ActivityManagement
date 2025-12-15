@@ -1,9 +1,11 @@
 // React
-import React, { useState, useEffect } from "react";
+import { useState, useEffect, Fragment } from "react";
+import { useSelector } from "react-redux";
 import { Row } from "react-bootstrap";
 import { Col } from "react-bootstrap";
 // Actions
 import { LavoroActions } from "../../actions/LavoroActions";
+import { ServizioActions } from "../../actions/ServizioActions";
 
 const optionStr = (servizio) => {
   return `${servizio.nome} - ${servizio.prezzo} €`;
@@ -64,29 +66,13 @@ const aggiornaCollegamento = (servizi, item, lavoroActions, index, nuovoValore, 
 };
 
 const OptionsServiziLavoroEsistente = ({ item, sottoStringa, setServiziLavoro }) => {
+  const attivitaState = useSelector((state) => state.attivita.value);
   const lavoroActions = new LavoroActions();
+  const servizioActions = new ServizioActions();
   const [servizi, setServizi] = useState([]);
 
-  const getAllServizi = async () => {
-    const response = await fetch('/OTTIENI_TUTTI_GLI_ITEMS', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({tipo_item: "servizio"}),
-    });
-
-    if(response.status === 200) {
-      const result = await response.json();
-      setServizi(result.items);
-    }
-    else {
-      alert(attivitaState.lingua === "italiano" ? "Errore durante l\'ottenimento dei clienti per l\'inserimento di un nuovo lavoro, riprova più tardi." : "Error while obtaining clients for new job entry, try again later.");
-    }
-  };
-  
   useEffect(() => {
-    getAllServizi();
+    servizioActions.getAllServizi(setServizi, attivitaState.lingua);
   }, []);
   
   return (
@@ -97,7 +83,7 @@ const OptionsServiziLavoroEsistente = ({ item, sottoStringa, setServiziLavoro })
             const quantita = getQuantita(servizio, item);
             if( (servizio.in_uso === 1) || (servizio.in_uso === 0 && quantita > 0) ) {
               return (
-                <React.Fragment key={index}>
+                <Fragment key={index}>
                   <Row key={index} style={{ padding: "10px" }}>
                     <Col>
                       <label htmlFor={`servizio_${index}`}>{optionStr(servizio)}</label>
@@ -114,7 +100,7 @@ const OptionsServiziLavoroEsistente = ({ item, sottoStringa, setServiziLavoro })
                       />
                     </Col>
                   </Row>
-                </React.Fragment>
+                </Fragment>
               )
             }
           })}

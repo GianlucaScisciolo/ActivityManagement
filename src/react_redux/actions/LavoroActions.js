@@ -1,7 +1,5 @@
 // React e Redux
-import { useSelector } from 'react-redux';
-// Store
-import store from '../store/store';
+import { useDispatch } from 'react-redux';
 // Reducers
 import { lavoroSliceActions } from '../store/reducers/LavoroReducer';
 // Utils
@@ -9,22 +7,21 @@ import { controlloLavoro } from "../../utils/Controlli";
 import { generaFileLavoriPDF, generaFileLavoriExcel } from "../../utils/File";
 
 export class LavoroActions {
-  attivitaState = useSelector((state) => state.attivita.value);
-  lingua = this.attivitaState.lingua;
+  dispatch = useDispatch();
 
   constructor() {
 
   }
 
   azzeraLista() {
-    store.dispatch(lavoroSliceActions.aggiornaLavori({
+    this.dispatch(lavoroSliceActions.aggiornaLavori({
       lavori: -1,
     }));
   }
   
-  async inserimentoLavoro(e, servizi, clienti, nuovoLavoro, setNuovoLavoro) {
+  async inserimentoLavoro(e, servizi, clienti, nuovoLavoro, setNuovoLavoro, lingua) {
     e.preventDefault();
-    if (confirm(this.lingua === "italiano" ? "Sei sicuro di voler salvare il lavoro?" : "Are you sure you want to save the job?")) {
+    if (confirm(lingua === "italiano" ? "Sei sicuro di voler salvare il lavoro?" : "Are you sure you want to save the job?")) {
       nuovoLavoro.totale = 0;
       for(let servizio of servizi) {
         if(servizio.quantita > 0) {
@@ -41,7 +38,7 @@ export class LavoroActions {
       }
       nuovoLavoro["servizi"] = servizi;
       
-      if (controlloLavoro(nuovoLavoro, setNuovoLavoro, this.lingua) > 0) 
+      if (controlloLavoro(nuovoLavoro, setNuovoLavoro, lingua) > 0) 
         return;
 
       nuovoLavoro["giorno_attuale"] = nuovoLavoro["giorno"];
@@ -63,25 +60,25 @@ export class LavoroActions {
         nuovoLavoro["collegamenti"] = result.collegamenti;
         nuovoLavoro["collegamenti_attuale"] = nuovoLavoro["collegamenti"];
 
-        store.dispatch(lavoroSliceActions.inserimentoLavoro({
+        this.dispatch(lavoroSliceActions.inserimentoLavoro({
           nuovoLavoro: nuovoLavoro 
         }))
 
-        alert(this.lingua === "italiano" ? "L\'inserimento del lavoro è andato a buon fine." : "Job entry was successful.");
+        alert(lingua === "italiano" ? "L\'inserimento del lavoro è andato a buon fine." : "Job entry was successful.");
       }
       else if(response.status === 400) {
-        alert(this.lingua === "italiano" ? "Errore: lavoro gia\' presente." : "Error: job already present.")
+        alert(lingua === "italiano" ? "Errore: lavoro gia\' presente." : "Error: job already present.")
       }
       else {
-        alert(this.lingua === "italiano" ? "Errore durante il salvataggio del nuovo lavoro, riprova più tardi." : "Error while saving new job, try again later.");
+        alert(lingua === "italiano" ? "Errore durante il salvataggio del nuovo lavoro, riprova più tardi." : "Error while saving new job, try again later.");
       }
     }
     else {
-      alert(this.lingua === "italiano" ? "Salvataggio annullato." : "Saving Cancelled.");
+      alert(lingua === "italiano" ? "Salvataggio annullato." : "Saving Cancelled.");
     }
   }
 
-  async ricercaLavori(e, datiRicerca) {
+  async ricercaLavori(e, datiRicerca, lingua) {
     e.preventDefault();
     
     const response = await fetch('/VISUALIZZA_ITEMS', {
@@ -95,20 +92,20 @@ export class LavoroActions {
     if(response.status === 200) {
       const result = await response.json();
       
-      store.dispatch(lavoroSliceActions.aggiornaLavori({
+      this.dispatch(lavoroSliceActions.aggiornaLavori({
         lavori: result.items,
       }));
     }
     else {
-      alert(this.lingua === "italiano" ? "Errore durante la ricerca dei lavori, riprova più tardi." : "Error during job research, please try again later.");
+      alert(lingua === "italiano" ? "Errore durante la ricerca dei lavori, riprova più tardi." : "Error during job research, please try again later.");
     }
   }
   
-  async handleSearchLavoriRangeFile(e, tipoFile, setTipoFile, datiRicerca, setLavori) {
+  async handleSearchLavoriRangeFile(e, tipoFile, setTipoFile, datiRicerca, setLavori, lingua) {
     e.preventDefault();
 
-    if (!confirm(this.lingua === "italiano" ? "Sei sicuro di voler ottenere il file?" : "Are you sure you want to get the file?")) {
-      alert(this.lingua === "italiano" ? "Operazione annullata." : "Operation canceled.");
+    if (!confirm(lingua === "italiano" ? "Sei sicuro di voler ottenere il file?" : "Are you sure you want to get the file?")) {
+      alert(lingua === "italiano" ? "Operazione annullata." : "Operation canceled.");
       return;
     }
 
@@ -125,11 +122,11 @@ export class LavoroActions {
 
       if (!response.ok) {
         const errorData = await response.json();
-        let errorMessage = this.lingua === "italiano" ? "Errore durante il recupero dei dati." : "Error while data recovery.";
+        let errorMessage = lingua === "italiano" ? "Errore durante il recupero dei dati." : "Error while data recovery.";
         if (errorData && errorData.message) {
           errorMessage = errorData.message;
         }
-        console.error(this.lingua === "italiano" ? "Errore nella richiesta:" : "Error in request", errorMessage, response.status);
+        console.error(lingua === "italiano" ? "Errore nella richiesta:" : "Error in request", errorMessage, response.status);
         alert(errorMessage);
         return;
       }
@@ -138,19 +135,19 @@ export class LavoroActions {
       setLavori(result.items);
 
       if (tipoFile === "pdf") {
-        generaFileLavoriPDF(result.items, this.lingua);
+        generaFileLavoriPDF(result.items, lingua);
       }
       else {
-        generaFileLavoriExcel(result.items, this.lingua);
+        generaFileLavoriExcel(result.items, lingua);
       }
     } 
     catch (error) {
       console.error("Errore nella richiesta:", error);
-      alert(this.lingua === "italiano" ? "Errore sconosciuto durante il recupero dei dati. Verificare la connessione." : "Unknown error while data recovery. Check the connection.");
+      alert(lingua === "italiano" ? "Errore sconosciuto durante il recupero dei dati. Verificare la connessione." : "Unknown error while data recovery. Check the connection.");
     }
   }
 
-  async handleSearchEntrateLavori(setEntrateLavori, datiRicerca) {
+  async handleSearchEntrateLavori(setEntrateLavori, datiRicerca, lingua) {
     const dati = {
       tipo_item: "lavoro", 
       primo_anno: datiRicerca.primo_anno, 
@@ -170,7 +167,7 @@ export class LavoroActions {
       setEntrateLavori(result.items);
     }
     else {
-      alert(this.lingua === "italiano" ? "Errore durante la ricerca delle entrate dei lavori, riprova più tardi." : "Error while searching job entries, please try again later.");
+      alert(lingua === "italiano" ? "Errore durante la ricerca delle entrate dei lavori, riprova più tardi." : "Error while searching job entries, please try again later.");
     }
   };
 
@@ -180,7 +177,7 @@ export class LavoroActions {
   ) {
     if(icon === "trash") {
       if(selectedIdsEliminazione.includes(item.id)) {
-        store.dispatch(lavoroSliceActions.aggiornaTipoSelezione({
+        this.dispatch(lavoroSliceActions.aggiornaTipoSelezione({
           id_lavoro: item.id, 
           nuova_selezione: 0
         }))
@@ -190,11 +187,11 @@ export class LavoroActions {
       }
       else {
         
-        store.dispatch(lavoroSliceActions.getLavoroPrimaDellaModifica({
+        this.dispatch(lavoroSliceActions.getLavoroPrimaDellaModifica({
           id_lavoro: item.id,
         }));
 
-        store.dispatch(lavoroSliceActions.aggiornaTipoSelezione({
+        this.dispatch(lavoroSliceActions.aggiornaTipoSelezione({
           id_lavoro: item.id, 
           nuova_selezione: 2
         }));
@@ -208,11 +205,11 @@ export class LavoroActions {
     else if(icon === "pencil") {
       if(selectedIdsModifica.includes(item.id)) {
         
-        store.dispatch(lavoroSliceActions.getLavoroPrimaDellaModifica({
+        this.dispatch(lavoroSliceActions.getLavoroPrimaDellaModifica({
           id_lavoro: item.id,
         }));
 
-        store.dispatch(lavoroSliceActions.aggiornaTipoSelezione({
+        this.dispatch(lavoroSliceActions.aggiornaTipoSelezione({
           id_lavoro: item.id, 
           nuova_selezione: 0
         }));
@@ -222,7 +219,7 @@ export class LavoroActions {
       }
       else {
         
-        store.dispatch(lavoroSliceActions.aggiornaTipoSelezione({
+        this.dispatch(lavoroSliceActions.aggiornaTipoSelezione({
           id_lavoro: item.id, 
           nuova_selezione: 1
         }))
@@ -235,16 +232,16 @@ export class LavoroActions {
     }
   }
 
-  async modificaLavori(e, servizi, lavoriSession, selectedIdsModifica, setSelectedIdsModifica) {
+  async modificaLavori(e, servizi, lavoriSession, selectedIdsModifica, setSelectedIdsModifica, lingua) {
     e.preventDefault();
 
-    if (confirm(this.lingua === "italiano" ? "Sei sicuro di voler modificare i lavori?" : "Are you sure you want to edit the jobs?")) {
+    if (confirm(lingua === "italiano" ? "Sei sicuro di voler modificare i lavori?" : "Are you sure you want to edit the jobs?")) {
       let lavoriDaNonModificare = lavoriSession.lavori.filter(lavoro => !selectedIdsModifica.includes(lavoro.id));
       let lavoriDaModificare = lavoriSession.lavori.filter(lavoro => selectedIdsModifica.includes(lavoro.id));
 
       let idLavoriNonModificati = [];
       let idLavoriModificati = [];
-      let esitoModifica = this.lingua === "italiano" ? "Esito modifica:\n" : "Modification outcome:\n";
+      let esitoModifica = lingua === "italiano" ? "Esito modifica:\n" : "Modification outcome:\n";
       for(let i = 0; i < lavoriDaModificare.length; i++) {
         const dati = {
           tipo_item: "lavoro", 
@@ -259,15 +256,15 @@ export class LavoroActions {
           body: JSON.stringify(dati),
         });
         if(response.status === 200) {           
-          esitoModifica += this.lingua === "italiano" ? "Lavoro numero " + (i+1) + ": modifica avvenuta con successo.\n" : "Job number " + (i+1) + ": successful modification.\n";
+          esitoModifica += lingua === "italiano" ? "Lavoro numero " + (i+1) + ": modifica avvenuta con successo.\n" : "Job number " + (i+1) + ": successful modification.\n";
           idLavoriModificati.push(lavoriDaModificare[i].id);
         }
         else if(response.status === 400) {
-          esitoModifica += this.lingua === "italiano" ? "Lavoro numero " + (i+1) + ": errore durante la modifica: lavoro gia\' presente.\n" : "Job number " + (i+1) + ": Error while editing: job already present.\n";
+          esitoModifica += lingua === "italiano" ? "Lavoro numero " + (i+1) + ": errore durante la modifica: lavoro gia\' presente.\n" : "Job number " + (i+1) + ": Error while editing: job already present.\n";
           idLavoriNonModificati.push(lavoriDaModificare[i].id);
         }
         else {
-          esitoModifica += this.lingua === "italiano" ? "Lavoro numero " + (i+1) + ": errore durante la modifica.\n" : "Job number " + (i+1) + ": error while editing.\n";
+          esitoModifica += lingua === "italiano" ? "Lavoro numero " + (i+1) + ": errore durante la modifica.\n" : "Job number " + (i+1) + ": error while editing.\n";
           idLavoriNonModificati.push(lavoriDaModificare[i].id);
         }
       }
@@ -281,18 +278,18 @@ export class LavoroActions {
         lavoriAggiornati.push(lavoroAggiornato);
       }
       
-      store.dispatch(lavoroSliceActions.aggiornaLavori({
+      this.dispatch(lavoroSliceActions.aggiornaLavori({
         lavori: lavoriAggiornati,
       }));
 
       for(let id of idLavoriNonModificati) {
-        store.dispatch(lavoroSliceActions.getLavoroPrimaDellaModifica({
+        this.dispatch(lavoroSliceActions.getLavoroPrimaDellaModifica({
           id_lavoro: id
         }));
       }
 
       for(let id of idLavoriModificati) {
-        store.dispatch(lavoroSliceActions.getLavoroDopoLaModifica({
+        this.dispatch(lavoroSliceActions.getLavoroDopoLaModifica({
           id_lavoro: id
         }))
       }
@@ -302,28 +299,27 @@ export class LavoroActions {
       alert(esitoModifica);
     }
     else {
-      alert(this.lingua === "italiano" ? "Salvataggio annullato." : "Saving Cancelled.");
+      alert(lingua === "italiano" ? "Salvataggio annullato." : "Saving Cancelled.");
     }
   }
 
   aggiornaLavoro(id_lavoro, nome_attributo, nuovo_valore) {
-    store.dispatch(lavoroSliceActions.aggiornaLavoro({
+    this.dispatch(lavoroSliceActions.aggiornaLavoro({
       id_lavoro: id_lavoro, 
       nome_attributo: nome_attributo, 
       nuovo_valore: nuovo_valore
     }))
   }
 
-  async eliminaLavori(e, selectedIdsEliminazione, setSelectedIdsEliminazione, lavoroState) {
+  async eliminaLavori(e, selectedIdsEliminazione, setSelectedIdsEliminazione, lavori, lingua) {
     e.preventDefault();
-    if (confirm(this.lingua === "italiano" ? "Sei sicuro di voler eliminare i lavori?" : "Are you sure you want to eliminate jobs?")) {
+    if (confirm(lingua === "italiano" ? "Sei sicuro di voler eliminare i lavori?" : "Are you sure you want to eliminate jobs?")) {
       const dati = {
         tipo_item: "lavoro", 
         ids: selectedIdsEliminazione
       }
       
-      const itemsDaEliminare = (lavoroState.lavori && lavoroState.lavori !== -1) ? lavoroState.lavori.filter(lavoro => dati.ids.includes(lavoro.id)) : -1;
-      const itemsRestanti = (lavoroState.lavori && lavoroState.lavori !== -1) ? lavoroState.lavori.filter(lavoro => !dati.ids.includes(lavoro.id)) : -1;
+      const itemsRestanti = (lavori && lavori !== -1) ? lavori.filter(lavoro => !dati.ids.includes(lavoro.id)) : -1;
       
       const response = await fetch('/ELIMINA_ITEMS', {
         method: 'POST',
@@ -334,25 +330,25 @@ export class LavoroActions {
       });
       if(response.status === 200) {  
                 
-        store.dispatch(lavoroSliceActions.aggiornaLavori({
+        this.dispatch(lavoroSliceActions.aggiornaLavori({
           lavori: itemsRestanti
         }))
 
         setSelectedIdsEliminazione([]);
-        alert(this.lingua === "italiano" ? "Eliminazione completata con successo." : "Elimination completed successfully.");
+        alert(lingua === "italiano" ? "Eliminazione completata con successo." : "Elimination completed successfully.");
       }
       else {
-        alert(this.lingua === "italiano" ? "Errore durante l\'eliminazione dei lavori, riprova più tardi." : "Error while deleting jobs, try again later.");
+        alert(lingua === "italiano" ? "Errore durante l\'eliminazione dei lavori, riprova più tardi." : "Error while deleting jobs, try again later.");
       }
     }
     else {
-      alert(this.lingua === "italiano" ? "Eliminazione annullata." : "Elimination cancelled.");
+      alert(lingua === "italiano" ? "Eliminazione annullata." : "Elimination cancelled.");
     }
   }
 
-  async handleDeleteLavoriRangeFile(e, datiRicerca) {
+  async handleDeleteLavoriRangeFile(e, datiRicerca, lingua) {
     e.preventDefault();
-    if (confirm(this.lingua === "italiano" ? "Sei sicuro di voler eliminare i lavori?" : "Are you sure you want to eliminate jobs?")) {
+    if (confirm(lingua === "italiano" ? "Sei sicuro di voler eliminare i lavori?" : "Are you sure you want to eliminate jobs?")) {
       const dati = {
         tipo_item: "lavoro", 
         "primo_giorno": datiRicerca.primo_giorno, 
@@ -367,14 +363,14 @@ export class LavoroActions {
         body: JSON.stringify(dati),
       });
       if(response.status === 200) {
-        alert(this.lingua === "italiano" ? "Eliminazione completata con successo." : "Elimination completed successfully.");
+        alert(lingua === "italiano" ? "Eliminazione completata con successo." : "Elimination completed successfully.");
       }
       else {
-        alert(this.lingua === "italiano" ? "Errore durante l\'eliminazione dei lavori, riprova più tardi." : "Error while deleting jobs, try again later."); 
+        alert(lingua === "italiano" ? "Errore durante l\'eliminazione dei lavori, riprova più tardi." : "Error while deleting jobs, try again later."); 
       }
     }
     else {
-      alert(this.lingua === "italiano" ? "Eliminazione annullata." : "Elimination cancelled.");
+      alert(lingua === "italiano" ? "Eliminazione annullata." : "Elimination cancelled.");
     }
   }
 }

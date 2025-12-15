@@ -1,30 +1,45 @@
 // React e Redux
-import { useSelector } from 'react-redux';
-// Store
-import store from '../store/store';
+import { useDispatch } from 'react-redux';
 // Reducers
 import { servizioSliceActions } from '../store/reducers/ServizioReducer';
 // Utils
 import { controlloServizio } from "../../utils/Controlli";
 
 export class ServizioActions {
-  attivitaState = useSelector((state) => state.attivita.value);
-  lingua = this.attivitaState.lingua;
+  dispatch = useDispatch();
 
   constructor() {
     
   }
 
   azzeraLista() {
-    store.dispatch(servizioSliceActions.aggiornaServizi({
+    this.dispatch(servizioSliceActions.aggiornaServizi({
       servizi: -1, 
     }));
   }
 
-  async inserisciServizio(e, nuovoServizio, setNuovoServizio) {
+  async getAllServizi(setServizi, lingua) {
+    const response = await fetch('/OTTIENI_TUTTI_GLI_ITEMS', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({tipo_item: "servizio"}),
+    });
+
+    if(response.status === 200) {
+      const result = await response.json();
+      setServizi(result.items);
+    }
+    else {
+      alert(lingua === "italiano" ? "Errore durante l\'ottenimento dei clienti per l\'inserimento di un nuovo lavoro, riprova più tardi." : "Error while obtaining clients for new job entry, try again later.");
+    }
+  };
+
+  async inserisciServizio(e, nuovoServizio, setNuovoServizio, lingua) {
     e.preventDefault();
-    if (confirm(this.lingua === "italiano" ? "Sei sicuro di voler salvare il servizio?" : "Are you sure you want to save the service?")) {
-      if (controlloServizio(nuovoServizio, setNuovoServizio, this.lingua) > 0) 
+    if (confirm(lingua === "italiano" ? "Sei sicuro di voler salvare il servizio?" : "Are you sure you want to save the service?")) {
+      if (controlloServizio(nuovoServizio, setNuovoServizio, lingua) > 0) 
         return;
 
       nuovoServizio["nome_attuale"] = nuovoServizio["nome"];
@@ -46,25 +61,25 @@ export class ServizioActions {
         nuovoServizio["in_uso"] = "Si";
         nuovoServizio["in_uso_attuale"] = "Si";
 
-        store.dispatch(servizioSliceActions.inserimentoServizio({
+        this.dispatch(servizioSliceActions.inserimentoServizio({
           nuovoServizio: nuovoServizio
         }));
 
-        alert(this.lingua === "italiano" ? "L\'inserimento del servizio è andato a buon fine." : "Service entry was successful.");
+        alert(lingua === "italiano" ? "L\'inserimento del servizio è andato a buon fine." : "Service entry was successful.");
       }
       else if(response.status === 400) {
-        alert(this.lingua === "italiano" ? "Errore: servizio gia\' presente." : "Error: service already present.")
+        alert(lingua === "italiano" ? "Errore: servizio gia\' presente." : "Error: service already present.")
       }
       else {
-        alert(this.lingua === "italiano" ? "Errore durante il salvataggio del nuovo servizio, riprova più tardi." : "Error while saving the new service, please try again later.");
+        alert(lingua === "italiano" ? "Errore durante il salvataggio del nuovo servizio, riprova più tardi." : "Error while saving the new service, please try again later.");
       }
     }
     else {
-      alert(this.lingua === "italiano" ? "Salvataggio annullato." : "Saving Cancelled.");
+      alert(lingua === "italiano" ? "Salvataggio annullato." : "Saving Cancelled.");
     }
   };
 
-  async ricercaServizi(e, datiRicerca) {
+  async ricercaServizi(e, datiRicerca, lingua) {
     e.preventDefault();
         
     const response = await fetch('/VISUALIZZA_ITEMS', {
@@ -78,13 +93,13 @@ export class ServizioActions {
     if(response.status === 200) {
       const result = await response.json();
       
-      store.dispatch(servizioSliceActions.aggiornaServizi({
+      this.dispatch(servizioSliceActions.aggiornaServizi({
         servizi: result.items, 
       }));
 
     }
     else {
-      alert(this.lingua === "italiano" ? "Errore durante la ricerca dei servizi, riprova più tardi." : "Error while searching for services, please try again later.");
+      alert(lingua === "italiano" ? "Errore durante la ricerca dei servizi, riprova più tardi." : "Error while searching for services, please try again later.");
     }
   }
 
@@ -95,7 +110,7 @@ export class ServizioActions {
     if(icon === "trash") {
       if(selectedIdsEliminazione.includes(item.id)) {
         
-        store.dispatch(servizioSliceActions.aggiornaTipoSelezione({
+        this.dispatch(servizioSliceActions.aggiornaTipoSelezione({
           id_servizio: item.id, 
           nuova_selezione: 0
         }));
@@ -105,11 +120,11 @@ export class ServizioActions {
       }
       else {
         
-        store.dispatch(servizioSliceActions.getServizioPrimaDellaModifica({
+        this.dispatch(servizioSliceActions.getServizioPrimaDellaModifica({
           id_servizio: item.id
         }));
 
-        store.dispatch(servizioSliceActions.aggiornaTipoSelezione({
+        this.dispatch(servizioSliceActions.aggiornaTipoSelezione({
           id_servizio: item.id, 
           nuova_selezione: 2
         }))
@@ -123,11 +138,11 @@ export class ServizioActions {
     else if(icon === "pencil") {
       if(selectedIdsModifica.includes(item.id)) {
                 
-        store.dispatch(servizioSliceActions.getServizioPrimaDellaModifica({
+        this.dispatch(servizioSliceActions.getServizioPrimaDellaModifica({
           id_servizio: item.id
         }));
 
-        store.dispatch(servizioSliceActions.aggiornaTipoSelezione({
+        this.dispatch(servizioSliceActions.aggiornaTipoSelezione({
           id_servizio: item.id, 
           nuova_selezione: 0
         }))
@@ -136,7 +151,7 @@ export class ServizioActions {
         setSelectedPencilCount(prevCount => Math.max(prevCount - 1, 0));
       }
       else {
-        store.dispatch(servizioSliceActions.aggiornaTipoSelezione({
+        this.dispatch(servizioSliceActions.aggiornaTipoSelezione({
           id_servizio: item.id, 
           nuova_selezione: 1
         }));
@@ -149,15 +164,15 @@ export class ServizioActions {
     }
   }
 
-  async modificaServizi(e, serviziSession, selectedIdsModifica, setSelectedIdsModifica) {
+  async modificaServizi(e, serviziSession, selectedIdsModifica, setSelectedIdsModifica, lingua) {
     e.preventDefault();
-    if (confirm(this.lingua === "italiano" ? "Sei sicuro di voler modificare i servizi?" : "Are you sure you want to modify the services?")) {
+    if (confirm(lingua === "italiano" ? "Sei sicuro di voler modificare i servizi?" : "Are you sure you want to modify the services?")) {
       let serviziDaNonModificare = serviziSession.servizi.filter(servizio => !selectedIdsModifica.includes(servizio.id));
       let serviziDaModificare = serviziSession.servizi.filter(servizio => selectedIdsModifica.includes(servizio.id)); 
       
       let idServiziNonModificati = [];
       let idServiziModificati = [];
-      let esitoModifica = this.lingua === "italiano" ? "Esito modifica:\n" : "Modification outcome:\n";
+      let esitoModifica = lingua === "italiano" ? "Esito modifica:\n" : "Modification outcome:\n";
       for(let i = 0; i < serviziDaModificare.length; i++) {
         const dati = {
           tipo_item: "servizio", 
@@ -171,13 +186,13 @@ export class ServizioActions {
           body: JSON.stringify(dati),
         });
         if(response.status === 200) {           
-          esitoModifica += this.lingua === "italiano" ? "Servizio numero " + (i+1) + ": modifica avvenuta con successo.\n" : "Service number " + (i+1) + ": successful modification..\n";
+          esitoModifica += lingua === "italiano" ? "Servizio numero " + (i+1) + ": modifica avvenuta con successo.\n" : "Service number " + (i+1) + ": successful modification..\n";
           if(serviziDaModificare[i].prezzo !== serviziDaModificare[i].prezzo_attuale) {
             const result = await response.json();
             let nuovoServizio = { ...serviziDaModificare[i] };
             nuovoServizio["id"] = result.id;
             
-            store.dispatch(servizioSliceActions.inserimentoServizio({
+            this.dispatch(servizioSliceActions.inserimentoServizio({
               nuovoServizio: nuovoServizio
             }))
 
@@ -185,11 +200,11 @@ export class ServizioActions {
           idServiziModificati.push(serviziDaModificare[i].id);
         }
         else if(response.status === 400) {
-          esitoModifica += this.lingua === "italiano" ? "Servizio numero " + (i+1) + ": errore durante la modifica: servizio gia\' presente.\n" : "Service number " + (i+1) + ": Error while editing: service already present.\n";
+          esitoModifica += lingua === "italiano" ? "Servizio numero " + (i+1) + ": errore durante la modifica: servizio gia\' presente.\n" : "Service number " + (i+1) + ": Error while editing: service already present.\n";
           idServiziNonModificati.push(serviziDaModificare[i].id);
         }
         else {
-          esitoModifica += this.lingua === "italiano" ? "Servizio numero " + (i+1) + ": errore durante la modifica.\n" : "Service number " + (i+1) + ": error while editing.\n";
+          esitoModifica += lingua === "italiano" ? "Servizio numero " + (i+1) + ": errore durante la modifica.\n" : "Service number " + (i+1) + ": error while editing.\n";
           idServiziNonModificati.push(serviziDaModificare[i].id);
         }
       }
@@ -203,18 +218,18 @@ export class ServizioActions {
         serviziAggiornati.push(servizioAggiornato);
       }
       
-      store.dispatch(servizioSliceActions.aggiornaServizi({
+      this.dispatch(servizioSliceActions.aggiornaServizi({
         servizi: serviziAggiornati, 
       }))
 
       for(let id of idServiziNonModificati) {
-        store.dispatch(servizioSliceActions.getServizioPrimaDellaModifica({
+        this.dispatch(servizioSliceActions.getServizioPrimaDellaModifica({
           id_servizio: id
         }))
       }
 
       for(let id of idServiziModificati) {
-        store.dispatch(servizioSliceActions.getServizioDopoLaModifica({
+        this.dispatch(servizioSliceActions.getServizioDopoLaModifica({
           id_servizio: id
         }))
       }
@@ -224,28 +239,27 @@ export class ServizioActions {
       alert(esitoModifica);
     }
     else {
-      alert(this.lingua === "italiano" ? "Salvataggio annullato." : "Saving Cancelled.");
+      alert(lingua === "italiano" ? "Salvataggio annullato." : "Saving Cancelled.");
     }
   }
 
   aggiornaServizio(id_servizio, nome_attributo, nuovo_valore) {
-    store.dispatch(servizioSliceActions.aggiornaServizio({
+    this.dispatch(servizioSliceActions.aggiornaServizio({
       id_servizio: id_servizio,
       nome_attributo: nome_attributo,
       nuovo_valore: nuovo_valore
     }));
   }
 
-  async eliminaServizi(e, selectedIdsEliminazione, setSelectedIdsEliminazione, servizioState) {
+  async eliminaServizi(e, selectedIdsEliminazione, setSelectedIdsEliminazione, servizi, lingua) {
     e.preventDefault();
-    if (confirm(this.lingua === "italiano" ? "Sei sicuro di voler eliminare i servizi? Tutti i lavori presenti attualmente nel database verranno modificati eliminando i servizi selezionati." : "Are you sure you want to delete the services? All jobs currently in the database will be modified by deleting the selected services.")) {
+    if (confirm(lingua === "italiano" ? "Sei sicuro di voler eliminare i servizi? Tutti i lavori presenti attualmente nel database verranno modificati eliminando i servizi selezionati." : "Are you sure you want to delete the services? All jobs currently in the database will be modified by deleting the selected services.")) {
       const dati = {
         tipo_item: "servizio", 
         ids: selectedIdsEliminazione
       }
       
-      const itemsDaEliminare = (servizioState.servizi && servizioState.servizi !== -1) ? servizioState.servizi.filter(servizio => dati.ids.includes(servizio.id)) : -1;
-      const itemsRestanti = (servizioState.servizi && servizioState.servizi !== -1) ? servizioState.servizi.filter(servizio => !dati.ids.includes(servizio.id)) : -1;
+      const itemsRestanti = (servizi && servizi !== -1) ? servizi.filter(servizio => !dati.ids.includes(servizio.id)) : -1;
       
       const response = await fetch('/ELIMINA_ITEMS', {
         method: 'POST',
@@ -255,22 +269,22 @@ export class ServizioActions {
         body: JSON.stringify(dati),
       });
       if(response.status === 200) {          
-        store.dispatch(servizioSliceActions.aggiornaServizi({
+        this.dispatch(servizioSliceActions.aggiornaServizi({
           servizi: itemsRestanti, 
-        }))
+        }));
         setSelectedIdsEliminazione([]);
-        alert(this.lingua === "italiano" ? "Eliminazione completata con successo." : "Elimination completed successfully.");
+        alert(lingua === "italiano" ? "Eliminazione completata con successo." : "Elimination completed successfully.");
       }
       else {
-        alert(this.lingua === "italiano" ? "Errore durante l\'eliminazione dei servizi, riprova più tardi." : "Error while deleting services, try again later.");
+        alert(lingua === "italiano" ? "Errore durante l\'eliminazione dei servizi, riprova più tardi." : "Error while deleting services, try again later.");
       }
     }
     else {
-      alert(this.lingua === "italiano" ? "Eliminazione annullata." : "Elimination cancelled.");
+      alert(lingua === "italiano" ? "Eliminazione annullata." : "Elimination cancelled.");
     }
   }
 
-  async handleSearchEntrateServizi(setEntrateServizi, datiRicerca) {
+  async handleSearchEntrateServizi(setEntrateServizi, datiRicerca, lingua) {
     const dati = {
       tipo_item: "servizio", 
       primo_anno: datiRicerca.primo_anno, 
@@ -290,7 +304,7 @@ export class ServizioActions {
       setEntrateServizi(result.items);
     }
     else {
-      alert(this.lingua === "italiano" ? "Errore durante la ricerca delle entrate dei servizi, riprova più tardi." : "Error while searching for service entries, please try again later.");
+      alert(lingua === "italiano" ? "Errore durante la ricerca delle entrate dei servizi, riprova più tardi." : "Error while searching for service entries, please try again later.");
     }
   };
 }

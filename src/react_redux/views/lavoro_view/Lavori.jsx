@@ -7,11 +7,15 @@ import { OperazioniForms } from "../forms/OperazioniForms.js";
 import { LavoroForms } from "../forms/LavoroForms.jsx";
 // Actions
 import { LavoroActions } from "../../actions/LavoroActions.js";
+import { ClienteActions } from "../../actions/ClienteActions.js";
+import { ServizioActions } from "../../actions/ServizioActions.js";
 // Riutilizzabile
 import PaginaWeb from "../../../riutilizzabile/pagine_web/PaginaWeb.jsx";
 
 const Lavori = () => {
   const lavoroActions = new LavoroActions();
+  const clienteActions = new ClienteActions();
+  const servizioActions = new ServizioActions();
   const lavoroForms = new LavoroForms();
   const operazioniForms = new OperazioniForms();
   const lavoroState = useSelector((state) => state.lavoro.value);
@@ -111,48 +115,12 @@ const Lavori = () => {
     (e) => operazioniForms.handleInputBlur(e) 
   );
 
-  const getAllClienti = async (setClienti) => {
-    const response = await fetch('/OTTIENI_TUTTI_GLI_ITEMS', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({tipo_item: "cliente"}),
-    });
-
-    if(response.status === 200) {
-      const result = await response.json();
-      setClienti(result.items);
-    }
-    else {
-      alert(attivitaState.lingua === "italiano" ? "Errore durante l\'ottenimento dei clienti per l\'inserimento di un nuovo lavoro, riprova più tardi." : "Error while obtaining clients for new job entry, try again later.");
-    }
-  };
-
-  const getAllServizi = async (setServizi) => {
-    const response = await fetch('/OTTIENI_TUTTI_GLI_ITEMS', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({tipo_item: "servizio"}),
-    });
-
-    if(response.status === 200) {
-      const result = await response.json();
-      setServizi(result.items);
-    }
-    else {
-      alert(attivitaState.lingua === "italiano" ? "Errore durante l\'ottenimento dei clienti per l\'inserimento di un nuovo lavoro, riprova più tardi." : "Error while obtaining clients for new job entry, try again later.");
-    }
-  };
-
   useEffect(() => {
-    getAllClienti(setClienti);
+    clienteActions.getAllClienti(setClienti, attivitaState.lingua);
   }, []);
 
   useEffect(() => {
-    getAllServizi(setServizi);
+    servizioActions.getAllServizi(setServizi, attivitaState.lingua);
   }, []);
 
   return (
@@ -173,13 +141,13 @@ const Lavori = () => {
             lavoroActions: lavoroActions,
             // Handle operations 
             handleBlurItem: handleBlurItem, 
-            handleInsert: (e) => lavoroActions.inserimentoLavoro(e, servizi, clienti, nuovoLavoro, setNuovoLavoro), 
-            handleSearch: (e) => lavoroActions.ricercaLavori(e, datiRicerca), 
-            handleEdit: (e) => lavoroActions.modificaLavori(e, servizi, lavoroState, selectedIdsModifica, setSelectedIdsModifica), 
-            handleDelete: (e) => lavoroActions.eliminaLavori(e, selectedIdsEliminazione, setSelectedIdsEliminazione, lavoroState), 
-            handleSearchRangeFilePDF: (e) => lavoroActions.handleSearchLavoriRangeFile(e, "pdf", setTipoFile, datiRicerca, setLavori), 
-            handleSearchRangeFileExcel: (e) => lavoroActions.handleSearchLavoriRangeFile(e, "excel", setTipoFile, datiRicerca, setLavori), 
-            handleDeleteRangeFile: (e) => lavoroActions.handleDeleteLavoriRangeFile(e, datiRicerca), 
+            handleInsert: (e) => lavoroActions.inserimentoLavoro(e, servizi, clienti, nuovoLavoro, setNuovoLavoro, attivitaState.lingua), 
+            handleSearch: (e) => lavoroActions.ricercaLavori(e, datiRicerca, attivitaState.lingua), 
+            handleEdit: (e) => lavoroActions.modificaLavori(e, servizi, lavoroState, selectedIdsModifica, setSelectedIdsModifica, attivitaState.lingua), 
+            handleDelete: (e) => lavoroActions.eliminaLavori(e, selectedIdsEliminazione, setSelectedIdsEliminazione, lavoroState.lavori, attivitaState.lingua), 
+            handleSearchRangeFilePDF: (e) => lavoroActions.handleSearchLavoriRangeFile(e, "pdf", setTipoFile, datiRicerca, setLavori, attivitaState.lingua), 
+            handleSearchRangeFileExcel: (e) => lavoroActions.handleSearchLavoriRangeFile(e, "excel", setTipoFile, datiRicerca, setLavori, attivitaState.lingua), 
+            handleDeleteRangeFile: (e) => lavoroActions.handleDeleteLavoriRangeFile(e, datiRicerca, attivitaState.lingua), 
             // Campi
             campiNuovoItem: campiNuovoLavoro,
             campiRicercaItems: campiRicercaLavori, 

@@ -1,5 +1,5 @@
 // React e Redux
-import React, { useState } from 'react';
+import { useState, Fragment } from 'react';
 // Riutilizzabile
 import StyledComponents from './StyledFormItem';
 import { 
@@ -53,7 +53,7 @@ export function FormNuovoItem({campi, indici, eseguiSalvataggio}) {
             : getTextAreaTag(1, true, StyledComponents);
 
           return ( 
-            <React.Fragment key={i}>
+            <Fragment key={i}>
               <StyledComponents.StyledLabel htmlFor={campi.name[i]}>{campi.label[i]}</StyledComponents.StyledLabel>
               {(campi.name[i] === "prezzo") ? (
                 <StyledComponents.StyledRow>
@@ -117,7 +117,7 @@ export function FormNuovoItem({campi, indici, eseguiSalvataggio}) {
                 </>
               )}
               {(campi.errore[i] !== "") && (<StyledComponents.StyledSpanErrore>{campi.errore[i]}</StyledComponents.StyledSpanErrore>)}
-            </React.Fragment>
+            </Fragment>
           );
         })}
         <br /> <br />
@@ -146,7 +146,7 @@ export function FormRicercaItems({campi, indici, handleSearch}) {
             getTextAreaTag(1, true, StyledComponents)
           );
           return ( 
-            <React.Fragment key={i}>
+            <Fragment key={i}>
               <StyledComponents.StyledLabel htmlFor={campi.name[i]}>{campi.label[i]}</StyledComponents.StyledLabel>
               <NomeTag 
                 key={i}
@@ -161,7 +161,7 @@ export function FormRicercaItems({campi, indici, handleSearch}) {
                 onClick={campi.onClick}
                 onBlur={campi.onBlur}
               />
-            </React.Fragment>
+            </Fragment>
           );
         })}
         <br /> <br />
@@ -197,7 +197,7 @@ export function FormLogin({campi, indici, eseguiLogin}) {
           );
           const StyledEyeTag = (inputType === "password") ? StyledComponents.StyledEyeClosedNotSelected : StyledComponents.StyledEyeOpenNotSelected;
           return ( 
-            <React.Fragment key={i}>
+            <Fragment key={i}>
               <StyledComponents.StyledLabel htmlFor={campi.name[i]}>{campi.label[i]}</StyledComponents.StyledLabel>
               <StyledComponents.StyledRow>
                 <NomeTag 
@@ -232,7 +232,7 @@ export function FormLogin({campi, indici, eseguiLogin}) {
               {campi.options[i]}
 
               {(campi.errore[i]) && (<StyledComponents.StyledSpanErrore>{campi.errore[i]}</StyledComponents.StyledSpanErrore>)}
-            </React.Fragment>
+            </Fragment>
           );
         })}
         <br /> <br />
@@ -281,7 +281,7 @@ export function FormProfilo({campi, indici, eseguiModificaProfilo}) {
             ) ? StyledComponents.StyledEyeClosedNotSelected : StyledComponents.StyledEyeOpenNotSelected
           );
           return ( 
-            <React.Fragment key={i}>
+            <Fragment key={i}>
               <StyledComponents.StyledLabel htmlFor={campi.name[i]}>{campi.label[i]}</StyledComponents.StyledLabel>
               <StyledComponents.StyledRow>
                 <NomeTag 
@@ -319,7 +319,7 @@ export function FormProfilo({campi, indici, eseguiModificaProfilo}) {
               {campi.options[i]}
 
               {(campi.errore[i]) && (<StyledComponents.StyledSpanErrore>{campi.errore[i]}</StyledComponents.StyledSpanErrore>)}
-            </React.Fragment>
+            </Fragment>
           );
         })}
         <br /> <br />
@@ -349,7 +349,7 @@ export function FormFileItems({campi, indici, ottieniFileRangePDF, ottieniFileRa
             getTextAreaTag(1, true, StyledComponents)
           );
           return ( 
-            <React.Fragment key={i}>
+            <Fragment key={i}>
               <StyledComponents.StyledLabel htmlFor={campi.name[i]}>{campi.label[i]}</StyledComponents.StyledLabel>
               <NomeTag 
                 key={i}
@@ -364,7 +364,7 @@ export function FormFileItems({campi, indici, ottieniFileRangePDF, ottieniFileRa
                 onClick={campi.onClick}
                 onBlur={campi.onBlur}
               />
-            </React.Fragment>
+            </Fragment>
           );
         })}
         <br /> <br />

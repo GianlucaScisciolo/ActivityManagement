@@ -1,5 +1,5 @@
 // React e Redux
-import React, { useState } from 'react';
+import { useState, Fragment } from 'react';
 // Riutilizzabile
 import StyledComponents from './StyledRowItem';
 import { OperazioniNuovoItem, OperazioniCercaItems, OperazioniRicercaEntrateUscite, OperazioniLogin, OperazioniModificaProfilo, OperazioniFileItems, OperazioniItemEsistente } from '../Operazioni';
@@ -23,7 +23,7 @@ export function RowNuovoItem({campi, indici, eseguiSalvataggio}) {
           getTextAreaTag(1, true, StyledComponents)
         );
         return ( 
-          <React.Fragment key={i}>
+          <Fragment key={i}>
             <StyledComponents.StyledCol>
               <div style={{width: "100%"}}>
                 <StyledComponents.StyledRow>
@@ -56,7 +56,7 @@ export function RowNuovoItem({campi, indici, eseguiSalvataggio}) {
                 {(campi.errore[i] !== "") && (<StyledComponents.StyledSpanErrore>{campi.errore[i]}</StyledComponents.StyledSpanErrore>)}
               </div>
             </StyledComponents.StyledCol>
-          </React.Fragment>
+          </Fragment>
         );
       })}
     </StyledComponents.StyledRow>
@@ -90,7 +90,7 @@ export function RowRicercaItems({campi, indici, handleSearch}) {
           getTextAreaTag(1, true, StyledComponents)
         );
         return ( 
-          <React.Fragment key={i}>
+          <Fragment key={i}>
             <StyledComponents.StyledCol>
               <div style={{width: "100%"}}>
                 <StyledComponents.StyledRow>
@@ -125,7 +125,7 @@ export function RowRicercaItems({campi, indici, handleSearch}) {
                 </StyledComponents.StyledRow>
               </div>
             </StyledComponents.StyledCol>
-          </React.Fragment>
+          </Fragment>
         );
       })} 
     </StyledComponents.StyledRow>
@@ -166,7 +166,7 @@ export function RowItemEsistente({ item, campi, indici, selectOperation, tipoIte
           getTextAreaTag(campi.tipoSelezione, campi.valoreModificabile[i], StyledComponents)
         );
         return ( 
-          <React.Fragment key={i}>
+          <Fragment key={i}>
             <StyledComponents.StyledCol>
             <div style={{width: "100%"}}>
               <StyledComponents.StyledRow>
@@ -196,7 +196,7 @@ export function RowItemEsistente({ item, campi, indici, selectOperation, tipoIte
               {(campi.errore[i]) && (<StyledComponents.StyledSpanErrore>{campi.errore[i]}</StyledComponents.StyledSpanErrore>)}
             </div>
             </StyledComponents.StyledCol>
-          </React.Fragment>
+          </Fragment>
         );
       })}
     </StyledComponents.StyledRow>
@@ -223,7 +223,7 @@ export function RowFileItems({campi, indici, ottieniFileRangePDF, ottieniFileRan
           getTextAreaTag(1, true, StyledComponents)
         );
         return ( 
-          <React.Fragment key={i}>
+          <Fragment key={i}>
             <StyledComponents.StyledCol>
               <div style={{width: "100%"}}>
                 <StyledComponents.StyledRow>
@@ -243,7 +243,7 @@ export function RowFileItems({campi, indici, ottieniFileRangePDF, ottieniFileRan
                 </StyledComponents.StyledRow>
               </div>
             </StyledComponents.StyledCol>
-          </React.Fragment>
+          </Fragment>
         );
       })}
     </StyledComponents.StyledRow>
@@ -272,7 +272,7 @@ export function RowLogin({campi, indici, eseguiLogin}) {
         );
         const StyledEyeTag = (inputType === "password") ? StyledComponents.StyledEyeClosedNotSelected : StyledComponents.StyledEyeOpenNotSelected;
         return ( 
-          <React.Fragment key={i}>
+          <Fragment key={i}>
             <StyledComponents.StyledCol>
               <div style={{width: "100%"}}>
                 <StyledComponents.StyledRow>
@@ -306,7 +306,7 @@ export function RowLogin({campi, indici, eseguiLogin}) {
                 {(campi.errore[i]) && (<StyledComponents.StyledSpanErrore>{campi.errore[i]}</StyledComponents.StyledSpanErrore>)}
               </div>
             </StyledComponents.StyledCol>
-          </React.Fragment>
+          </Fragment>
         );
       })}
     </StyledComponents.StyledRow>
@@ -347,7 +347,7 @@ export function RowProfilo({campi, indici, eseguiModificaProfilo}) {
         );
 
         return ( 
-          <React.Fragment key={i}>
+          <Fragment key={i}>
             <StyledComponents.StyledCol>
               <div style={{width: "100%"}}>
                 <StyledComponents.StyledRow>
@@ -384,7 +384,7 @@ export function RowProfilo({campi, indici, eseguiModificaProfilo}) {
                 {(campi.errore[i]) && (<StyledComponents.StyledSpanErrore>{campi.errore[i]}</StyledComponents.StyledSpanErrore>)}
               </div>
             </StyledComponents.StyledCol>
-          </React.Fragment>
+          </Fragment>
         );
       })}
     </StyledComponents.StyledRow>

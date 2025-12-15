@@ -1,4 +1,5 @@
 // React e Redux
+import { Fragment } from "react";
 import { Row } from "react-bootstrap";
 import { Col } from "react-bootstrap";
 
@@ -27,7 +28,7 @@ const OptionsServiziNuovoLavoro = ({ servizi, setServizi, item, classeFormWrappe
             {servizi.filter(servizio => 
               optionStr(servizio).toLowerCase().includes(sottoStringa.toLowerCase())
             ).map((servizio, index) => (
-              <React.Fragment key={index}>
+              <Fragment key={index}>
                 {servizio.in_uso === 1 && (
                   <Row style={{padding: "10px"}}>
                     <Col>
@@ -55,7 +56,7 @@ const OptionsServiziNuovoLavoro = ({ servizi, setServizi, item, classeFormWrappe
                     </Col>
                   </Row>
                 )}
-              </React.Fragment>
+              </Fragment>
             ))}
           </div>
         </>

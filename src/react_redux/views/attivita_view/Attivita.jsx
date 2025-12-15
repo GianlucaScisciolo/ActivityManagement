@@ -39,13 +39,13 @@ const Attivita = () => {
     setEntrateLavori([]);
     setEntrateServizi([]);
     setUsciteSpese([]);
-    lavoroActions.handleSearchEntrateLavori(setEntrateLavori, datiRicerca);
+    lavoroActions.handleSearchEntrateLavori(setEntrateLavori, datiRicerca, attivitaState.lingua);
   };
   
   useEffect(() => {
     if(entrateLavori.length > 0) {
       spesaActions.handleSearchUsciteSpese(setUsciteSpese, datiRicerca);
-      servizioActions.handleSearchEntrateServizi(setEntrateServizi, datiRicerca); 
+      servizioActions.handleSearchEntrateServizi(setEntrateServizi, datiRicerca, attivitaState.lingua); 
     }
   }, [entrateLavori]);
 

@@ -25,6 +25,7 @@ const Login = () => {
   });
   const navigate = useNavigate();
   const stileState = useSelector((state) => state.stile.value);
+  const attivitaState = useSelector((state) => state.attivita.value)
 
   const LoginTag = (stileState.vistaForm === "form") ? FormLogin : (
     (stileState.vistaForm === "card") ? CardLogin : RowLogin
@@ -39,7 +40,7 @@ const Login = () => {
       <LoginTag 
         campi={campiLogin}
         indici={[...Array(campiLogin.label.length).keys()]}
-        eseguiLogin={(e) => autenticazioneActions.login(e, datiLogin, setDatiLogin, navigate)} 
+        eseguiLogin={(e) => autenticazioneActions.login(e, datiLogin, setDatiLogin, navigate, attivitaState.lingua)} 
       />
     </>
   );

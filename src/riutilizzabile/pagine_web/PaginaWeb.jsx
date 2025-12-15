@@ -1,5 +1,5 @@
 // React
-import {useState} from "react";
+import {useState, Fragment } from "react";
 // Riutilizzabile
 import { CambioTipoForm, CambioTipoForm2, FormNuovoItem, FormRicercaItems, FormFileItems } from "../form_item/FormItem";
 import { CardNuovoItem, CardRicercaItems, CardFileItems, CardInformazioni } from "../card_item/CardItem";
@@ -35,7 +35,7 @@ const PaginaWeb = ({componenti, elementi, vistaItem, vistaForm}) => {
 
       <br /> <br /> <br /> <br />
       {elementi.map((el, item) => (
-        <>
+        <Fragment key={item}>
           {el === "insert" && tipoForm === "insert" && (
             <>
               <NuovoItemTag 
@@ -72,7 +72,7 @@ const PaginaWeb = ({componenti, elementi, vistaItem, vistaForm}) => {
               <br /> <br /> <br /> <br />
             </>
           )}
-        </>
+        </Fragment>
       ))}
 
       {(tipoForm !== "file") && (

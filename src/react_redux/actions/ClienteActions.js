@@ -1,30 +1,45 @@
 // React e Redux
-import { useSelector } from 'react-redux';
-// Store
-import store from '../store/store';
+import { useDispatch } from 'react-redux';
 // Reducers
 import { clienteSliceActions } from '../store/reducers/ClienteReducer';
 // Utils
 import { controlloCliente } from "../../utils/Controlli";
 
 export class ClienteActions {
-  attivitaState = useSelector((state) => state.attivita.value);
-  lingua = this.attivitaState.lingua;
-  
-  constructor() {
+  dispatch = useDispatch();
 
+  constructor() {
+    
   }
 
   azzeraLista() {
-    store.dispatch(clienteSliceActions.aggiornaClienti({
+    this.dispatch(clienteSliceActions.aggiornaClienti({
       clienti: -1, 
     }));
   }
+
+  async getAllClienti(setClienti, lingua) {
+    const response = await fetch('/OTTIENI_TUTTI_GLI_ITEMS', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({tipo_item: "cliente"}),
+    });
+
+    if(response.status === 200) {
+      const result = await response.json();
+      setClienti(result.items);
+    }
+    else {
+      alert(lingua === "italiano" ? "Errore durante l\'ottenimento dei clienti per l\'inserimento di un nuovo lavoro, riprova più tardi." : "Error while obtaining clients for new job entry, try again later.");
+    }
+  }
   
-  async inserimentoCliente(e, nuovoCliente, setNuovoCliente) {
+  async inserimentoCliente(e, nuovoCliente, setNuovoCliente, lingua) {
     e.preventDefault();
-    if (confirm(this.lingua === "italiano" ? "Sei sicuro di voler salvare il cliente?" : "Are you sure you want to save the client?")) {
-      if (controlloCliente(nuovoCliente, setNuovoCliente, this.lingua) > 0) 
+    if (confirm(lingua === "italiano" ? "Sei sicuro di voler salvare il cliente?" : "Are you sure you want to save the client?")) {
+      if (controlloCliente(nuovoCliente, setNuovoCliente, lingua) > 0) 
         return;
 
       nuovoCliente["giorno_attuale"] = nuovoCliente["giorno"];
@@ -44,25 +59,25 @@ export class ClienteActions {
         const result = await response.json();
         nuovoCliente.id = result.id;
         
-        store.dispatch(clienteSliceActions.inserimentoCliente({
+        this.dispatch(clienteSliceActions.inserimentoCliente({
           nuovoCliente: nuovoCliente
         }))
         
-        alert(this.lingua === "italiano" ? "L\'inserimento del cliente è andato a buon fine." : "Client input was successful.");
+        alert(lingua === "italiano" ? "L\'inserimento del cliente è andato a buon fine." : "Client input was successful.");
       }
       else if(response.status === 400) {
-        alert(this.lingua === "italiano" ? "Errore: cliente gia\' presente." : "Error: client already present.")
+        alert(lingua === "italiano" ? "Errore: cliente gia\' presente." : "Error: client already present.")
       }
       else {
-        alert(this.lingua === "italiano" ? "Errore durante il salvataggio del nuovo cliente, riprova più tardi." : "Error while saving new client, please try again later.");
+        alert(lingua === "italiano" ? "Errore durante il salvataggio del nuovo cliente, riprova più tardi." : "Error while saving new client, please try again later.");
       }
     }
     else {
-      alert(this.lingua === "italiano" ? "Salvataggio annullato." : "Saving Cancelled.");
+      alert(lingua === "italiano" ? "Salvataggio annullato." : "Saving Cancelled.");
     }
   }
 
-  async ricercaClienti(e, datiRicerca) {
+  async ricercaClienti(e, datiRicerca, lingua) {
     e.preventDefault();
         
     const response = await fetch('/VISUALIZZA_ITEMS', {
@@ -76,13 +91,13 @@ export class ClienteActions {
     if(response.status === 200) {
       const result = await response.json();
       
-      store.dispatch(clienteSliceActions.aggiornaClienti({
+      this.dispatch(clienteSliceActions.aggiornaClienti({
         clienti: result.items, 
       }))
 
     }
     else {
-      alert(this.lingua === "italiano" ? "Errore durante la ricerca dei clienti, riprova più tardi." : "Error while customer search, please try again later.");
+      alert(lingua === "italiano" ? "Errore durante la ricerca dei clienti, riprova più tardi." : "Error while customer search, please try again later.");
     }
   }
 
@@ -92,7 +107,7 @@ export class ClienteActions {
   ) {
     if(icon === "trash") {
       if(selectedIdsEliminazione.includes(item.id)) {
-        store.dispatch(clienteSliceActions.aggiornaTipoSelezione({
+        this.dispatch(clienteSliceActions.aggiornaTipoSelezione({
           id_cliente: item.id, 
           nuova_selezione: 0
         }))
@@ -100,10 +115,10 @@ export class ClienteActions {
         setSelectedTrashCount(prevCount => Math.max(prevCount - 1, 0));
       }
       else {
-        store.dispatch(clienteSliceActions.getClientePrimaDellaModifica({
+        this.dispatch(clienteSliceActions.getClientePrimaDellaModifica({
           id_cliente: item.id,
         }))
-        store.dispatch(clienteSliceActions.aggiornaTipoSelezione({
+        this.dispatch(clienteSliceActions.aggiornaTipoSelezione({
           id_cliente: item.id, 
           nuova_selezione: 2
         }))
@@ -115,10 +130,10 @@ export class ClienteActions {
     }
     else if(icon === "pencil") {
       if(selectedIdsModifica.includes(item.id)) {
-        store.dispatch(clienteSliceActions.getClientePrimaDellaModifica({
+        this.dispatch(clienteSliceActions.getClientePrimaDellaModifica({
           id_cliente: item.id,
         }))
-        store.dispatch(clienteSliceActions.aggiornaTipoSelezione({
+        this.dispatch(clienteSliceActions.aggiornaTipoSelezione({
           id_cliente: item.id, 
           nuova_selezione: 0
         }))
@@ -126,7 +141,7 @@ export class ClienteActions {
         setSelectedPencilCount(prevCount => Math.max(prevCount - 1, 0));
       }
       else {
-        store.dispatch(clienteSliceActions.aggiornaTipoSelezione({
+        this.dispatch(clienteSliceActions.aggiornaTipoSelezione({
           id_cliente: item.id, 
           nuova_selezione: 1
         }))
@@ -138,14 +153,14 @@ export class ClienteActions {
     }
   }
 
-  async modificaClienti(e, selectedIdsModifica, setSelectedIdsModifica, clienteState) {
+  async modificaClienti(e, selectedIdsModifica, setSelectedIdsModifica, clienti, lingua) {
     e.preventDefault();
-    if (confirm(this.lingua === "italiano" ? "Sei sicuro di voler modificare i clienti?" : "Are you sure you want to edit the clients?")) {
-      let clientiDaNonModificare = clienteState.clienti.filter(cliente => !selectedIdsModifica.includes(cliente.id));
-      let clientiDaModificare = clienteState.clienti.filter(cliente => selectedIdsModifica.includes(cliente.id));
+    if (confirm(lingua === "italiano" ? "Sei sicuro di voler modificare i clienti?" : "Are you sure you want to edit the clients?")) {
+      let clientiDaNonModificare = clienti.filter(cliente => !selectedIdsModifica.includes(cliente.id));
+      let clientiDaModificare = clienti.filter(cliente => selectedIdsModifica.includes(cliente.id));
       let idClientiNonModificati = [];
       let idClientiModificati = [];
-      let esitoModifica = this.lingua === "italiano" ? "Esito modifica:\n" : "Modification outcome:\n";
+      let esitoModifica = lingua === "italiano" ? "Esito modifica:\n" : "Modification outcome:\n";
             
       for(let i = 0; i < clientiDaModificare.length; i++) {
         const dati = {
@@ -160,39 +175,39 @@ export class ClienteActions {
           body: JSON.stringify(dati),
         });
         if(response.status === 200) {           
-          esitoModifica += this.lingua === "italiano" ? "Cliente numero " + (i+1) + ": modifica avvenuta con successo.\n" : "Client number " + (i+1) + ": successful modification.\n";
+          esitoModifica += lingua === "italiano" ? "Cliente numero " + (i+1) + ": modifica avvenuta con successo.\n" : "Client number " + (i+1) + ": successful modification.\n";
           idClientiModificati.push(clientiDaModificare[i].id);
         }
         else if(response.status === 400) {
-          esitoModifica += this.lingua === "italiano" ? "Cliente numero " + (i+1) + ": errore durante la modifica: cliente gia\' presente.\n" : "Client number " + (i+1) + ": error while editing: client already present.\n";
+          esitoModifica += lingua === "italiano" ? "Cliente numero " + (i+1) + ": errore durante la modifica: cliente gia\' presente.\n" : "Client number " + (i+1) + ": error while editing: client already present.\n";
           idClientiNonModificati.push(clientiDaModificare[i].id);
         }
         else {
-          esitoModifica += this.lingua === "italiano" ? "Cliente numero " + (i+1) + ": errore durante la modifica.\n" : "Client number " + (i+1) + ": error while editing.\n";
+          esitoModifica += lingua === "italiano" ? "Cliente numero " + (i+1) + ": errore durante la modifica.\n" : "Client number " + (i+1) + ": error while editing.\n";
           idClientiNonModificati.push(clientiDaModificare[i].id);
         }
       }
 
       let clientiAggiornati = [];
-      for (let i = 0; i < clienteState.clienti.length; i++) {
-        let clienteAggiornato = { ...clienteState.clienti[i] };
+      for (let i = 0; i < clienti.length; i++) {
+        let clienteAggiornato = { ...clienti[i] };
         if(clienteAggiornato.tipo_selezione === 1) {
           clienteAggiornato.tipo_selezione = 0;
         }
         clientiAggiornati.push(clienteAggiornato);
       }
-      store.dispatch(clienteSliceActions.aggiornaClienti({
+      this.dispatch(clienteSliceActions.aggiornaClienti({
         clienti: clientiAggiornati, 
       }))
 
       for(let id of idClientiNonModificati) {
-        store.dispatch(clienteSliceActions.getClientePrimaDellaModifica({
+        this.dispatch(clienteSliceActions.getClientePrimaDellaModifica({
           id_cliente: id,
         }));
       }
 
       for(let id of idClientiModificati) {
-        store.dispatch(clienteSliceActions.getClienteDopoLaModifica({
+        this.dispatch(clienteSliceActions.getClienteDopoLaModifica({
           id_cliente: id
         }));
       }
@@ -202,28 +217,27 @@ export class ClienteActions {
       alert(esitoModifica);
     }
     else {
-      alert(this.lingua === "italiano" ? "Salvataggio annullato." : "Saving cancelled.");
+      alert(lingua === "italiano" ? "Salvataggio annullato." : "Saving cancelled.");
     }
   }
 
   aggiornaCliente(id_cliente, nome_attributo, nuovo_valore) {
-    store.dispatch(clienteSliceActions.aggiornaCliente({
+    this.dispatch(clienteSliceActions.aggiornaCliente({
       id_cliente: id_cliente,
       nome_attributo: nome_attributo,
       nuovo_valore: nuovo_valore,
     }))
   }
 
-  async eliminaClienti(e, selectedIdsEliminazione, setSelectedIdsEliminazione, clienteState) {
+  async eliminaClienti(e, selectedIdsEliminazione, setSelectedIdsEliminazione, clienti, lingua) {
     e.preventDefault();
-    if (confirm(this.lingua === "italiano" ? "Sei sicuro di voler eliminare i clienti?" : "Are you sure you want to eliminate clients?")) {
+    if (confirm(lingua === "italiano" ? "Sei sicuro di voler eliminare i clienti?" : "Are you sure you want to eliminate clients?")) {
       const dati = {
         tipo_item: "cliente", 
         ids: selectedIdsEliminazione
       }
 
-      const itemsDaEliminare = (clienteState.clienti && clienteState.clienti !== -1) ? clienteState.clienti.filter(cliente => dati.ids.includes(cliente.id)) : -1;
-      const itemsRestanti = (clienteState.clienti && clienteState.clienti !== -1) ? clienteState.clienti.filter(cliente => !dati.ids.includes(cliente.id)) : -1;
+      const itemsRestanti = (clienti && clienti !== -1) ? clienti.filter(cliente => !dati.ids.includes(cliente.id)) : -1;
       
       const response = await fetch('/ELIMINA_ITEMS', {
         method: 'POST',
@@ -233,18 +247,18 @@ export class ClienteActions {
         body: JSON.stringify(dati),
       });
       if(response.status === 200) {
-        store.dispatch(clienteSliceActions.aggiornaClienti({
+        this.dispatch(clienteSliceActions.aggiornaClienti({
           clienti: itemsRestanti, 
         }))
         setSelectedIdsEliminazione([]);
-        alert(this.lingua === "italiano" ? "Eliminazione completata con successo." : "Elimination completed successfully.");
+        alert(lingua === "italiano" ? "Eliminazione completata con successo." : "Elimination completed successfully.");
       }
       else {
-        alert(this.lingua === "italiano" ? "Errore durante l\'eliminazione dei clienti, riprova più tardi." : "Error while deleting clients, try again later.");
+        alert(lingua === "italiano" ? "Errore durante l\'eliminazione dei clienti, riprova più tardi." : "Error while deleting clients, try again later.");
       }
     }
     else {
-      alert(this.lingua === "italiano" ? "Eliminazione annullata." : "Elimination cancelled.");
+      alert(lingua === "italiano" ? "Eliminazione annullata." : "Elimination cancelled.");
     }
   }
 }

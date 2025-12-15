@@ -6,14 +6,14 @@ import { Provider, useSelector } from "react-redux";
 // Store
 import store from "./react_redux/store/store.js";
 // View
-import App from "./react_redux/view/App.jsx";
-import Login from "./react_redux/view/autenticazione_view/Login.jsx";
-import Profilo from "./react_redux/view/autenticazione_view/Profilo.jsx";
-import Attivita from "./react_redux/view/attivita_view/Attivita.jsx";
-import Clienti from "./react_redux/view/cliente_view/Clienti.jsx";
-import Servizi from "./react_redux/view/servizio_view/Servizi.jsx";
-import Spese from "./react_redux/view/spesa_view/Spese.jsx";
-import Lavori from "./react_redux/view/lavoro_view/Lavori.jsx";
+import App from "./react_redux/views/App.jsx";
+import Login from "./react_redux/views/autenticazione_view/Login.jsx";
+import Profilo from "./react_redux/views/autenticazione_view/Profilo.jsx";
+import Attivita from "./react_redux/views/attivita_view/Attivita.jsx";
+import Clienti from "./react_redux/views/cliente_view/Clienti.jsx";
+import Servizi from "./react_redux/views/servizio_view/Servizi.jsx";
+import Spese from "./react_redux/views/spesa_view/Spese.jsx";
+import Lavori from "./react_redux/views/lavoro_view/Lavori.jsx";
 
 const Root = () => {
   const autenticazioneState = useSelector((state) => state.autenticazione.value);

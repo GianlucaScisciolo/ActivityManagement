@@ -16,6 +16,7 @@ const Spese = () => {
   const operazioniForms = new OperazioniForms();
   const spesaState = useSelector((state) => state.spesa.value);
   const stileState = useSelector((state) => state.stile.value);
+  const attivitaState = useSelector((state) => state.attivita.value);
   
   const [spese, setSpese] = useState(-1);
   const [tipoFile, setTipoFile] = useState("");
@@ -121,13 +122,13 @@ const Spese = () => {
             lavoroActions: null, 
             // Handle operations
             handleBlurItem: handleBlurItem, 
-            handleInsert: (e) => spesaActions.inserimentoSpesa(e, nuovaSpesa, setNuovaSpesa), 
-            handleSearch: (e) => spesaActions.ricercaSpese(e, datiRicerca), 
-            handleEdit:   (e) => spesaActions.modificaSpese(e, spesaState, selectedIdsModifica, setSelectedIdsModifica),  
-            handleDelete: (e) => spesaActions.eliminaSpese(e, selectedIdsEliminazione, setSelectedIdsEliminazione, spesaState), 
-            handleSearchRangeFilePDF: (e) => spesaActions.handleSearchSpeseRangeFile(e, "pdf", setTipoFile, datiRicerca, spese, setSpese),
-            handleSearchRangeFileExcel: (e) => spesaActions.handleSearchSpeseRangeFile(e, "excel", setTipoFile, datiRicerca, spese, setSpese),
-            handleDeleteRangeFile: (e) => spesaActions.handleDeleteSpeseRangeFile(e, datiRicerca),
+            handleInsert: (e) => spesaActions.inserimentoSpesa(e, nuovaSpesa, setNuovaSpesa, attivitaState.lingua), 
+            handleSearch: (e) => spesaActions.ricercaSpese(e, datiRicerca, attivitaState.lingua), 
+            handleEdit:   (e) => spesaActions.modificaSpese(e, spesaState, selectedIdsModifica, setSelectedIdsModifica, attivitaState.lingua),  
+            handleDelete: (e) => spesaActions.eliminaSpese(e, selectedIdsEliminazione, setSelectedIdsEliminazione, spesaState.spese, attivitaState.lingua), 
+            handleSearchRangeFilePDF: (e) => spesaActions.handleSearchSpeseRangeFile(e, "pdf", setTipoFile, datiRicerca, spese, setSpese, attivitaState.lingua),
+            handleSearchRangeFileExcel: (e) => spesaActions.handleSearchSpeseRangeFile(e, "excel", setTipoFile, datiRicerca, spese, setSpese, attivitaState.lingua),
+            handleDeleteRangeFile: (e) => spesaActions.handleDeleteSpeseRangeFile(e, datiRicerca, attivitaState.lingua),
             // Campi
             campiNuovoItem: campiNuovaSpesa, 
             campiRicercaItems: campiRicercaSpese,

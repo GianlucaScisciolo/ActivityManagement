@@ -16,6 +16,7 @@ const Servizi = () => {
   const operazioniForms = new OperazioniForms();
   const servizioState = useSelector((state) => state.servizio.value);
   const stileState = useSelector((state) => state.stile.value);
+  const attivitaState = useSelector((state) => state.attivita.value);
 
   const [selectedTrashCount, setSelectedTrashCount] = useState(0);
   const [selectedPencilCount, setSelectedPencilCount] = useState(0);
@@ -91,10 +92,10 @@ const Servizi = () => {
             lavoroActions: null, 
             // Handle operations
             handleBlurItem: handleBlurItem, 
-            handleInsert: (e) => servizioActions.inserisciServizio(e, nuovoServizio, setNuovoServizio), 
-            handleSearch: (e) => servizioActions.ricercaServizi(e, datiRicerca), 
-            handleEdit:   (e) => servizioActions.modificaServizi(e, servizioState, selectedIdsModifica, setSelectedIdsModifica), 
-            handleDelete: (e) => servizioActions.eliminaServizi(e, selectedIdsEliminazione, setSelectedIdsEliminazione, servizioState), 
+            handleInsert: (e) => servizioActions.inserisciServizio(e, nuovoServizio, setNuovoServizio, attivitaState.lingua), 
+            handleSearch: (e) => servizioActions.ricercaServizi(e, datiRicerca, attivitaState.lingua), 
+            handleEdit:   (e) => servizioActions.modificaServizi(e, servizioState, selectedIdsModifica, setSelectedIdsModifica, attivitaState.lingua), 
+            handleDelete: (e) => servizioActions.eliminaServizi(e, selectedIdsEliminazione, setSelectedIdsEliminazione, servizioState.servizi, attivitaState.lingua), 
             // Campi
             campiNuovoItem: campiNuovoServizio, 
             campiRicercaItems: campiRicercaServizi,

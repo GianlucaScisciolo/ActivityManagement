@@ -1,9 +1,10 @@
-// Store
-import store from "../store/store";
+// React e Redux
+import { useDispatch } from "react-redux";
 // Reducers
 import { attivitaSliceActions } from "../store/reducers/AttivitaReducer";
 
 export class AttivitaActions {
+  dispatch = useDispatch();
   
   constructor() {
 
@@ -17,15 +18,15 @@ export class AttivitaActions {
     e.preventDefault();
     setPlusCliccato(!plusCliccato);
     if(plusCliccato === true) {
-      store.dispatch(attivitaSliceActions.widgetView())
+      this.dispatch(attivitaSliceActions.widgetView())
     }
     else if(plusCliccato === false) {
-      store.dispatch(attivitaSliceActions.widgetSelected());
+      this.dispatch(attivitaSliceActions.widgetSelected());
     }
   }
 
   modificaWidget(nomeWidget, tipoVisualizzazione) {
-    store.dispatch(attivitaSliceActions.modificaWidget({
+    this.dispatch(attivitaSliceActions.modificaWidget({
       nomeWidget: nomeWidget,
       tipoVisualizzazione: tipoVisualizzazione,
     }))
@@ -33,7 +34,7 @@ export class AttivitaActions {
 
   modificaLingua(e) {
     e.preventDefault();
-    store.dispatch(attivitaSliceActions.modificaLingua())
+    this.dispatch(attivitaSliceActions.modificaLingua())
   }
 }
 

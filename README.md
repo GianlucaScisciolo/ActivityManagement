@@ -33,9 +33,9 @@ const db = mysql.createConnection({
 con i propri dati per connettersi al database MySQL.
 ## Creazione DataDase "activity_management":
 1. Aprire MySQL Workbench.
-2. Eseguire lo script **CREATE DATABASE.sql** presente nella cartella **/storage/FileSQL** per creare il database.
-3. Eseguire lo script **CREATE TABLES.sql** presente nella cartella **/storage/FileSQL** per creare le tabelle del database.
-4. Se c'è bisogno di eliminare il database, eseguire lo script **DROP DATABASE.sql** presente nella cartella **/storage/FileSQL**.
+2. Eseguire lo script **CREATE DATABASE.sql** presente nella cartella **/storage/file_sql** per creare il database.
+3. Eseguire lo script **CREATE TABLES.sql** presente nella cartella **/storage/file_sql** per creare le tabelle del database.
+4. Se c'è bisogno di eliminare il database, eseguire lo script **DROP DATABASE.sql** presente nella cartella **/storage/file_sql**.
 # Esecuzione WebApp "ActivityManagement"
 1. Eseguire il seguente comando: `npm run start-all`.
 	- Dopo aver eseguito il comando, se va a buon fine, dovrebbe comparire nel terminale l'url per eseguire la web-app, ovvero, il seguente: `http://localhost:5173/`.

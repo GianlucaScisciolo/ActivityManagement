@@ -1,49 +1,46 @@
 // React e Redux
-import { useSelector } from 'react-redux';
-// Store
-import store from '../store/store';
+import { useDispatch } from 'react-redux';
 // Reducers
 import { stileSliceActions } from '../store/reducers/StileReducer';
 
 export class StileActions {
-  attivitaState = useSelector((state) => state.attivita.value);
-  lingua = this.attivitaState.lingua;
+  dispatch = useDispatch();
 
   constructor() {
     
   }
 
-  cambioSfondo(tipoSfondo, sfondo) {
+  cambioSfondo(tipoSfondo, sfondo, lingua) {
     switch(tipoSfondo) {
       case "img":
-        store.dispatch(stileSliceActions.cambioImmagineSfondo({
+        this.dispatch(stileSliceActions.cambioImmagineSfondo({
           pathImg: sfondo
         }));
         break;
       case "rgb": 
-        store.dispatch(stileSliceActions.cambioColoreSfondo({
+        this.dispatch(stileSliceActions.cambioColoreSfondo({
           coloreRGB: sfondo
         }));
         break;
       default:
-        alert(this.lingua === "italiano" ? "Errore, tipo sfondo non valido." : "Error, invalid background type.");
+        alert(lingua === "italiano" ? "Errore, tipo sfondo non valido." : "Error, invalid background type.");
         break;
     }
   }
 
-  cambioVista(tipoElemento, tipoView) {
+  cambioVista(tipoElemento, tipoView, lingua) {
     if(tipoElemento === "item") {
-      store.dispatch(stileSliceActions.cambioVistaItem({
+      this.dispatch(stileSliceActions.cambioVistaItem({
         vistaItem: tipoView
       }));
     }
     else if(tipoElemento === "form") {
-      store.dispatch(stileSliceActions.cambioVistaForm({
+      this.dispatch(stileSliceActions.cambioVistaForm({
         vistaForm: tipoView
       }))
     }
     else {
-      alert(this.lingua === "italiano" ? "Errore, tipo elemento non valido." : "Error, invalid element type.");
+      alert(lingua === "italiano" ? "Errore, tipo elemento non valido." : "Error, invalid element type.");
     }
   }
 }

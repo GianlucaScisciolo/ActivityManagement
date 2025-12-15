@@ -1,5 +1,5 @@
 // React e Redux
-import React, { useState, useRef } from 'react';
+import { useState, useRef, Fragment } from 'react';
 import { Card, Table } from 'react-bootstrap';
 // Riutilizzabile
 import StyledComponents from './StyledCardItem';
@@ -27,7 +27,7 @@ export function CardNuovoItem({campi, indici, eseguiSalvataggio}) {
               getTextAreaTag(1, true, StyledComponents)
             );
             return ( 
-              <React.Fragment key={i}>
+              <Fragment key={i}>
                 <StyledComponents.StyledRow>
                   <NomeTag 
                     rows={1}
@@ -45,7 +45,7 @@ export function CardNuovoItem({campi, indici, eseguiSalvataggio}) {
                   {campi.options[i]}
                 </StyledComponents.StyledRow>
                 {(campi.errore[i] !== "") && (<StyledComponents.StyledSpanErrore>{campi.errore[i]}</StyledComponents.StyledSpanErrore>)}
-              </React.Fragment>
+              </Fragment>
             );
           })}
         </StyledComponents.SlideContainer>
@@ -81,7 +81,7 @@ export function CardRicercaItems({campi, indici, handleSearch}) {
               getTextAreaTag(1, true, StyledComponents)
             );
             return ( 
-              <React.Fragment key={i}>
+              <Fragment key={i}>
                 <StyledComponents.StyledRow>
                   <NomeTag 
                     rows={1}
@@ -96,7 +96,7 @@ export function CardRicercaItems({campi, indici, handleSearch}) {
                     onContextMenu={(e) => handleRightClick(e, campi.placeholder[i])}
                   />
                 </StyledComponents.StyledRow>
-              </React.Fragment>
+              </Fragment>
             );
           })}
         </StyledComponents.SlideContainer>
@@ -134,7 +134,7 @@ export function CardItemEsistente({ item, campi, indici, selectOperation, handle
             : getTextAreaTag(campi.tipoSelezione, campi.valoreModificabile[i], StyledComponents);
 
           return (
-            <React.Fragment key={`input-${i}`}>
+            <Fragment key={`input-${i}`}>
               <StyledComponents.StyledRow>
                 <NomeTag
                   ref={(el) => (inputRefs.current[i] = el)} // Assegna il riferimento
@@ -154,7 +154,7 @@ export function CardItemEsistente({ item, campi, indici, selectOperation, handle
                 {campi.options[i]}
               </StyledComponents.StyledRow>
               {(campi.errore[i]) && (<StyledComponents.StyledSpanErrore>{campi.errore[i]}</StyledComponents.StyledSpanErrore>)}
-            </React.Fragment>
+            </Fragment>
           );
         })}
       </StyledComponents.SlideContainer>
@@ -181,7 +181,7 @@ export function CardFileItems({campi, indici, ottieniFileRangePDF, ottieniFileRa
               getTextAreaTag(1, true, StyledComponents)
             );
             return ( 
-              <React.Fragment key={i}>
+              <Fragment key={i}>
                 <NomeTag 
                   key={i}
                   rows={1}
@@ -196,7 +196,7 @@ export function CardFileItems({campi, indici, ottieniFileRangePDF, ottieniFileRa
                   onBlur={campi.onBlur}
                   onContextMenu={(e) => handleRightClick(e, campi.placeholder[i])}
                 />
-              </React.Fragment>
+              </Fragment>
             );
           })}
         </StyledComponents.SlideContainer>
@@ -237,7 +237,7 @@ export function CardLogin({campi, indici, eseguiLogin}) {
             );
             const StyledEyeTag = (inputType === "password") ? StyledComponents.StyledEyeClosedNotSelected : StyledComponents.StyledEyeOpenNotSelected;
             return ( 
-              <React.Fragment key={i}>
+              <Fragment key={i}>
                 <StyledComponents.StyledRow>
                   <NomeTag 
                     style={(campi.name[i] === "password") ? {maxWidth:"80%"} : null}
@@ -268,7 +268,7 @@ export function CardLogin({campi, indici, eseguiLogin}) {
                 </StyledComponents.StyledRow>
                 {campi.options[i]}
                 {(campi.errore[i]) && (<StyledComponents.StyledSpanErrore>{campi.errore[i]}</StyledComponents.StyledSpanErrore>)}
-              </React.Fragment>
+              </Fragment>
             );
           })}
         </StyledComponents.SlideContainer>
@@ -318,7 +318,7 @@ export function CardProfilo({campi, indici, eseguiModificaProfilo}) {
               ) ? StyledComponents.StyledEyeClosedNotSelected : StyledComponents.StyledEyeOpenNotSelected
             );
             return ( 
-              <React.Fragment key={i}>
+              <Fragment key={i}>
                 <StyledComponents.StyledRow>
                   <NomeTag 
                     style={(campi.name[i].includes("password")) ? {maxWidth:"80%"} : null}
@@ -353,7 +353,7 @@ export function CardProfilo({campi, indici, eseguiModificaProfilo}) {
                 {campi.options[i]}
 
                 {(campi.errore[i]) && (<StyledComponents.StyledSpanErrore>{campi.errore[i]}</StyledComponents.StyledSpanErrore>)}
-              </React.Fragment>
+              </Fragment>
             );
           })}
         </StyledComponents.SlideContainer>
@@ -530,7 +530,7 @@ export function CardEntrateItemsByName({ entrateItems, lingua, tipoItemIta, tipo
           <thead></thead>
           <tbody>
             {entrateItems.map((entrata, i) => (
-              <React.Fragment key={i}>
+              <Fragment key={i}>
                 {(i === 0 || entrateItems[i].anno !== entrateItems[i-1].anno) && (
                   <>
                     <tr><th colSpan={14}>{lingua==="italiano" ? "ANNO" : "YEAR"} = {entrata.anno}</th></tr>
@@ -596,7 +596,7 @@ export function CardEntrateItemsByName({ entrateItems, lingua, tipoItemIta, tipo
                     x {getQuantitaEntrateAnno(entrata)} = {parseFloat(getTotaleEntrateAnno(entrata)).toFixed(2) + " €"}
                   </td>
                 </tr>
-              </React.Fragment>
+              </Fragment>
             ))}
           </tbody>
         </Table>
