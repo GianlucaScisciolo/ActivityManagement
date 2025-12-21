@@ -223,7 +223,6 @@ export class SpesaActions {
   async modificaSpese(e, speseSession, selectedIdsModifica, setSelectedIdsModifica, lingua) {
     e.preventDefault();
     if (confirm(lingua === "italiano" ? "Sei sicuro di voler modificare le spese?" : "Are you sure you want to edit the expenses?")) {
-      let speseDaNonModificare = speseSession.spese.filter(spesa => !selectedIdsModifica.includes(spesa.id));
       let speseDaModificare = speseSession.spese.filter(spesa => selectedIdsModifica.includes(spesa.id)); 
       
       let idSpeseNonModificate = [];

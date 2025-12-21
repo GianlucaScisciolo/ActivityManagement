@@ -145,12 +145,15 @@ export class SpesaSQL {
   }
 
   params_modifica_spesa(params) {
+    const totale = (typeof params.totale === "string" && params.totale.includes("€")) 
+      ? params.totale.substring(0, params.totale.length - 1).trim() 
+      : params.totale;
     return [
-      `${params.descrizione}`, 
-      `${params.totale}`, 
-      `${params.giorno}`, 
-      `${params.note}`, 
-      `${params.id}` 
+      `${params.descrizione}`,
+      `${totale}`,
+      `${params.giorno}`,
+      `${params.note}`,
+      `${params.id}`
     ];
   }
 
