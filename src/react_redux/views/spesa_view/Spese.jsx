@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 // View
 import Header from "../components/Header.jsx";
 import { OperazioniForms } from "../forms/OperazioniForms";
-import { SpesaForms } from "../forms/SpesaForms.js";
+import { SpesaForms } from "../forms/SpesaForms";
 // Actions
 import { SpesaActions } from "../../actions/SpesaActions";
 // Riutilizzabile

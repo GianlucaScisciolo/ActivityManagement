@@ -3,8 +3,8 @@ import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 // Views
 import Header from "../components/Header.jsx";
-import { OperazioniForms } from '../forms/OperazioniForms.js';
-import { ClienteForms } from '../forms/ClienteForms.jsx';
+import { OperazioniForms } from '../forms/OperazioniForms';
+import { ClienteForms } from '../forms/ClienteForms';
 // Actions
 import { ClienteActions } from "../../actions/ClienteActions.js";
 // Riutilizzabile
