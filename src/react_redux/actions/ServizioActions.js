@@ -164,11 +164,10 @@ export class ServizioActions {
     }
   }
 
-  async modificaServizi(e, serviziSession, selectedIdsModifica, setSelectedIdsModifica, lingua) {
+  async modificaServizi(e, servizi, selectedIdsModifica, setSelectedIdsModifica, lingua) {
     e.preventDefault();
     if (confirm(lingua === "italiano" ? "Sei sicuro di voler modificare i servizi?" : "Are you sure you want to modify the services?")) {
-      let serviziDaNonModificare = serviziSession.servizi.filter(servizio => !selectedIdsModifica.includes(servizio.id));
-      let serviziDaModificare = serviziSession.servizi.filter(servizio => selectedIdsModifica.includes(servizio.id)); 
+      let serviziDaModificare = servizi.filter(servizio => selectedIdsModifica.includes(servizio.id)); 
       
       let idServiziNonModificati = [];
       let idServiziModificati = [];
@@ -210,8 +209,8 @@ export class ServizioActions {
       }
 
       let serviziAggiornati = [];
-      for (let i = 0; i < serviziSession.servizi.length; i++) {
-        let servizioAggiornato = { ...serviziSession.servizi[i] };
+      for (let i = 0; i < servizi.length; i++) {
+        let servizioAggiornato = { ...servizi[i] };
         if(servizioAggiornato.tipo_selezione === 1) {
           servizioAggiornato.tipo_selezione = 0;
         }

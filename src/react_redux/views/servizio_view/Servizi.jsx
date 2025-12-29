@@ -94,7 +94,7 @@ const Servizi = () => {
             handleBlurItem: handleBlurItem, 
             handleInsert: (e) => servizioActions.inserisciServizio(e, nuovoServizio, setNuovoServizio, attivitaState.lingua), 
             handleSearch: (e) => servizioActions.ricercaServizi(e, datiRicerca, attivitaState.lingua), 
-            handleEdit:   (e) => servizioActions.modificaServizi(e, servizioState, selectedIdsModifica, setSelectedIdsModifica, attivitaState.lingua), 
+            handleEdit:   (e) => servizioActions.modificaServizi(e, servizioState.servizi, selectedIdsModifica, setSelectedIdsModifica, attivitaState.lingua), 
             handleDelete: (e) => servizioActions.eliminaServizi(e, selectedIdsEliminazione, setSelectedIdsEliminazione, servizioState.servizi, attivitaState.lingua), 
             // Campi
             campiNuovoItem: campiNuovoServizio, 

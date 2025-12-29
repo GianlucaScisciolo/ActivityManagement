@@ -232,12 +232,11 @@ export class LavoroActions {
     }
   }
 
-  async modificaLavori(e, servizi, lavoriSession, selectedIdsModifica, setSelectedIdsModifica, lingua) {
+  async modificaLavori(e, servizi, lavori, selectedIdsModifica, setSelectedIdsModifica, lingua) {
     e.preventDefault();
 
     if (confirm(lingua === "italiano" ? "Sei sicuro di voler modificare i lavori?" : "Are you sure you want to edit the jobs?")) {
-      let lavoriDaNonModificare = lavoriSession.lavori.filter(lavoro => !selectedIdsModifica.includes(lavoro.id));
-      let lavoriDaModificare = lavoriSession.lavori.filter(lavoro => selectedIdsModifica.includes(lavoro.id));
+      let lavoriDaModificare = lavori.filter(lavoro => selectedIdsModifica.includes(lavoro.id));
 
       let idLavoriNonModificati = [];
       let idLavoriModificati = [];
@@ -270,8 +269,8 @@ export class LavoroActions {
       }
 
       let lavoriAggiornati = [];
-      for (let i = 0; i < lavoriSession.lavori.length; i++) {
-        let lavoroAggiornato = { ...lavoriSession.lavori[i] };
+      for (let i = 0; i < lavori.length; i++) {
+        let lavoroAggiornato = { ...lavori[i] };
         if(lavoroAggiornato.tipo_selezione === 1) {
           lavoroAggiornato.tipo_selezione = 0;
         }

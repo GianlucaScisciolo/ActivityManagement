@@ -124,7 +124,7 @@ const Spese = () => {
             handleBlurItem: handleBlurItem, 
             handleInsert: (e) => spesaActions.inserimentoSpesa(e, nuovaSpesa, setNuovaSpesa, attivitaState.lingua), 
             handleSearch: (e) => spesaActions.ricercaSpese(e, datiRicerca, attivitaState.lingua), 
-            handleEdit:   (e) => spesaActions.modificaSpese(e, spesaState, selectedIdsModifica, setSelectedIdsModifica, attivitaState.lingua),  
+            handleEdit:   (e) => spesaActions.modificaSpese(e, spesaState.spese, selectedIdsModifica, setSelectedIdsModifica, attivitaState.lingua),  
             handleDelete: (e) => spesaActions.eliminaSpese(e, selectedIdsEliminazione, setSelectedIdsEliminazione, spesaState.spese, attivitaState.lingua), 
             handleSearchRangeFilePDF: (e) => spesaActions.handleSearchSpeseRangeFile(e, "pdf", setTipoFile, datiRicerca, spese, setSpese, attivitaState.lingua),
             handleSearchRangeFileExcel: (e) => spesaActions.handleSearchSpeseRangeFile(e, "excel", setTipoFile, datiRicerca, spese, setSpese, attivitaState.lingua),

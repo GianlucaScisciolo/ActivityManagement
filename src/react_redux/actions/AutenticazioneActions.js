@@ -53,11 +53,11 @@ export class AutenticazioneActions {
     navigate("/");
   }
 
-  async modificaProfilo(e, autenticazioneSession, datiProfilo, setDatiProfilo, lingua) {
+  async modificaProfilo(e, username, ruolo, datiProfilo, setDatiProfilo, lingua) {
     e.preventDefault();
     if (confirm(lingua === "italiano" ? "Sei sicuro di voler modificare il profilo?" : "Are you sure you want to edit your profile?")) {
       const datiLogin = {
-        username: autenticazioneSession.username,
+        username: username,
         password: ""
       };
       const loginResponse = await fetch('/LOGIN', {
@@ -87,7 +87,7 @@ export class AutenticazioneActions {
         if (profileResponse.status === 200) {
           this.dispatch(autenticazioneSliceActions.login({
             username: datiProfilo.nuovo_username,
-            ruolo: autenticazioneSession.ruolo,
+            ruolo: ruolo,
             note: datiProfilo.note,
           }));
           alert(lingua === "italiano" ? "Il profilo è stato modificato con successo." : "The profile was successfully modified.");

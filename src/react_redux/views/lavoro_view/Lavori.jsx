@@ -143,7 +143,7 @@ const Lavori = () => {
             handleBlurItem: handleBlurItem, 
             handleInsert: (e) => lavoroActions.inserimentoLavoro(e, servizi, clienti, nuovoLavoro, setNuovoLavoro, attivitaState.lingua), 
             handleSearch: (e) => lavoroActions.ricercaLavori(e, datiRicerca, attivitaState.lingua), 
-            handleEdit: (e) => lavoroActions.modificaLavori(e, servizi, lavoroState, selectedIdsModifica, setSelectedIdsModifica, attivitaState.lingua), 
+            handleEdit: (e) => lavoroActions.modificaLavori(e, servizi, lavoroState.lavori, selectedIdsModifica, setSelectedIdsModifica, attivitaState.lingua), 
             handleDelete: (e) => lavoroActions.eliminaLavori(e, selectedIdsEliminazione, setSelectedIdsEliminazione, lavoroState.lavori, attivitaState.lingua), 
             handleSearchRangeFilePDF: (e) => lavoroActions.handleSearchLavoriRangeFile(e, "pdf", setTipoFile, datiRicerca, setLavori, attivitaState.lingua), 
             handleSearchRangeFileExcel: (e) => lavoroActions.handleSearchLavoriRangeFile(e, "excel", setTipoFile, datiRicerca, setLavori, attivitaState.lingua), 
